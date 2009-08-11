@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  template="WEB-INF/facelets/layout.xhtml">
+
+<ui:define name="head">
+</ui:define>
+
+<ui:define name="title">Home page</ui:define>
+
+<ui:define name="body">
+
+<h:form>
+
+<h1>Hello Yuri Voloshenyuk!</h1>
+
+<h2>This is a JSF GAE application.</h2>
+
+<h:outputText value="#{testBean.text}" />
+
+<h:commandButton value="OK" action="#{testBean.changeText}" />
+
+</h:form>
+
+</ui:define>
+
+</ui:composition>

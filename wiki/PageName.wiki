@@ -1,0 +1,11 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+What about using Maven 2 for build project's build. 
+
+
+= Details =
+
+
+*I suggest to avoid binding IDE and project and add one "abstract" level - to use maven 2 for building and everybody can bind maven to his IDE.*

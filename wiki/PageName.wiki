@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+Maven2 for project build.
 
 = Introduction =
 

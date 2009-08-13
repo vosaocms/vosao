@@ -12,6 +12,6 @@
            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
-    <bean id="testBean" class="TestBean" init-method="init"/>
+    <bean id="testBean" class="test.TestBean" init-method="init"/>
 
 </beans>

@@ -1,0 +1,10 @@
+#labels Featured
+= Feature list =
+
+  * Store page content
+  * Hierarchical pages with parent and child relationship 
+  * Custom themes for pages with page binding
+  * Global site configuration panel
+  * Site configuration panel security
+  * Editable resources (images, css, js, other files types)
+  * Feedback forms 

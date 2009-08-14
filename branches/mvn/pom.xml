@@ -279,5 +279,9 @@
             <id>datanucleus</id>
             <url>http://www.datanucleus.org/downloads/maven2</url>
         </repository>
+        <repository>
+            <id>yasurvey-maven-repo</id>
+            <url>http://yasurvey-maven-repo.googlecode.com/svn/trunk</url>
+        </repository>
     </repositories>
 </project>

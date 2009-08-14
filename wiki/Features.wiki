@@ -3,6 +3,7 @@
 
   * Store page content
   * Hierarchical pages with parent and child relationship 
+  * Friendly URLs for page
   * Custom themes for pages with page binding
   * Global site configuration panel
   * Site configuration panel security

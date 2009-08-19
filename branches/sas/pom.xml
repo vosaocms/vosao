@@ -256,7 +256,7 @@
                     <mappingIncludes>**/*.class</mappingIncludes>
                     <verbose>true</verbose>
                     <enhancerName>ASM</enhancerName>
-                    <api>JPA</api>
+                    <api>JDO</api>
                 </configuration>
                 <executions>
                     <execution>

@@ -12,6 +12,48 @@
            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
-    <bean id="testBean" class="TestBean" init-method="init"/>
+
+    <!-- Persistence -->
+
+    <bean id="persistenceManagerFactory"  
+        class="org.springframework.orm.jdo.LocalPersistenceManagerFactoryBean">  
+        <property name="persistenceManagerFactoryName" value="transactions-optional" />
+    </bean>  
+
+    <bean id="persistenceManagerFactoryProxy" 
+        class="org.springframework.orm.jdo.TransactionAwarePersistenceManagerFactoryProxy">  
+        <property name="targetPersistenceManagerFactory" ref="persistenceManagerFactory" />  
+        <property name="allowCreate" value="true" />  
+    </bean>  
+   
+    <bean id="transactionManager"
+        class="org.springframework.orm.jdo.JdoTransactionManager">  
+        <property name="persistenceManagerFactory" ref="persistenceManagerFactoryProxy" />  
+    </bean>
+
+    <!-- Transactions -->
+
+    <!-- tx:advice id="txAdvice">
+        <tx:attributes>
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="daoMethods" expression="execution(* org.vosao.dao.*.*(..))" />  
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="daoMethods" />  
+    </aop:config--> 
+    
+    <!-- DAO -->
+    
+    <bean id="pageDao" class="org.vosao.dao.impl.PageDaoImpl" scope="singleton">  
+        <property name="persistenceManagerFactory" ref="persistenceManagerFactoryProxy"/>  
+    </bean>
+    
+    <!-- JSF beans -->
+
+    <bean id="testBean" class="TestBean" init-method="init">
+        <property name="pageDao" ref="pageDao" />
+    </bean>
 
 </beans>

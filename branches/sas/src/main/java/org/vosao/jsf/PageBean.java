@@ -10,7 +10,7 @@ import org.vosao.entity.PageEntity;
 public class PageBean implements Serializable {
 
 	private List<PageEntity> list;
-	
+	private PageEntity current;
 	private Dao dao;
 	private Business business;
 	
@@ -19,6 +19,7 @@ public class PageBean implements Serializable {
 	public void init() {
 		list = getDao().getPageDao().select();
 		beanSession = getBusiness().getUserPreferences().getPageBeanSession();
+		current = new PageEntity();
 	}
 
 	public void addPage() {
@@ -28,6 +29,13 @@ public class PageBean implements Serializable {
 	public void cancelEdit() {
 		beanSession.setEdit(false);
 	}
+	
+	public void update() {
+		getDao().getPageDao().save(current);
+		list.add(current);
+		beanSession.setEdit(false);
+	}
+	
 	
 	
 	public Dao getDao() {
@@ -52,6 +60,14 @@ public class PageBean implements Serializable {
 
 	public boolean isEdit() {
 		return beanSession.isEdit();
+	}
+
+	public PageEntity getCurrent() {
+		return current;
+	}
+
+	public void setCurrent(PageEntity current) {
+		this.current = current;
 	}
 	
 }

@@ -47,6 +47,20 @@
 
 <h2>Page edit</h2>
 
+<div>
+    <label>Title</label>
+    <h:inputText value="#{pageBean.current.title}" />
+</div>
+<div>
+    <label>Friendly URL</label>
+    <h:inputText value="#{pageBean.current.friendlyURL}" />
+</div>
+<div>
+    <label>Content</label>
+    <h:inputTextarea rows="10" cols="20" value="#{pageBean.current.content}" />
+</div>
+
+<h:commandButton value="Save" action="#{pageBean.update}" />
 <h:commandButton value="Cancel" action="#{pageBean.cancelEdit}" />
 
 </h:panelGroup>

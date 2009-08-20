@@ -12,7 +12,6 @@
            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
-
     <!-- Persistence -->
 
     <bean id="persistenceManagerFactory"  
@@ -30,6 +29,8 @@
         </property>
     </bean>  
 
+    <!-- Transactions -->
+
     <!-- bean id="persistenceManagerFactoryProxy" 
         class="org.springframework.orm.jdo.TransactionAwarePersistenceManagerFactoryProxy">  
         <property name="targetPersistenceManagerFactory" ref="persistenceManagerFactory" />  
@@ -40,8 +41,6 @@
         class="org.springframework.orm.jdo.JdoTransactionManager">  
         <property name="persistenceManagerFactory" ref="persistenceManagerFactoryProxy" />  
     </bean-->
-
-    <!-- Transactions -->
 
     <!-- tx:advice id="txAdvice">
         <tx:attributes>
@@ -56,14 +55,34 @@
     
     <!-- DAO -->
     
-    <bean id="pageDao" class="org.vosao.dao.impl.PageDaoImpl" scope="singleton">  
+    <bean id="pageDao" class="org.vosao.dao.impl.PageDaoImpl">  
         <property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>  
     </bean>
     
+    <bean id="dao" class="org.vosao.dao.impl.DaoImpl">  
+        <property name="pageDao" ref="pageDao"/>  
+    </bean>
+
+    <!-- Session beans -->
+
+    <bean id="userPreferences" class="org.vosao.business.UserPreferences" 
+        scope="session">
+        <aop:scoped-proxy/>
+    </bean>    
+
+    <!-- Business -->
+
+    <bean id="business" class="org.vosao.business.impl.BusinessImpl">  
+        <property name="userPreferences" ref="userPreferences"/>  
+    </bean>
+
     <!-- JSF beans -->
 
-    <bean id="testBean" class="TestBean" init-method="init" scope="request">
-        <property name="pageDao" ref="pageDao" />
+    <bean id="testBean" class="org.vosao.jsf.TestBean" 
+        init-method="init" scope="request">
+        <property name="dao" ref="dao" />
+        <property name="business" ref="business" />
     </bean>
+    
 
 </beans>

@@ -10,4 +10,9 @@
 
 	<sessions-enabled>true</sessions-enabled>
 	
+	<static-files>
+        <include path="/static/**.*" />
+    </static-files>
+	
+	
 </appengine-web-app>

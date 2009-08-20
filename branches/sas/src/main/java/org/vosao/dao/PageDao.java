@@ -1,6 +1,12 @@
 package org.vosao.dao;
 
+import java.util.List;
+
 import javax.jdo.PersistenceManagerFactory;
+
+import org.vosao.entity.PageEntity;
+
+import com.google.appengine.api.datastore.Key;
 
 public interface PageDao {
 
@@ -8,6 +14,10 @@ public interface PageDao {
 	
 	PersistenceManagerFactory getPersistenceManagerFactory();
 
-	void test();
+	void save(final PageEntity page);
+	
+	PageEntity getByKey(final Key key);
+
+	List<PageEntity> select();
 	
 }

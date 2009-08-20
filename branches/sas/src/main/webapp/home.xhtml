@@ -20,7 +20,27 @@
 
 <h:outputText value="#{testBean.text}" />
 
-<h:commandButton value="OK" action="#{testBean.changeText}" />
+<h:commandButton value="Change text" action="#{testBean.changeText}" />
+<h:commandButton value="Add page" action="#{testBean.addPage}" />
+
+<h:dataTable value="#{testBean.pages}" var="page">
+    <h:column>
+        <f:facet name="header" >id</f:facet>    
+        <h:outputText value="#{page.key}"/>
+    </h:column>
+    <h:column>
+        <f:facet name="header" >Title</f:facet>    
+        <h:outputText value="#{page.title}"/>
+    </h:column>
+    <h:column>
+        <f:facet name="header" >Content</f:facet>    
+        <h:outputText value="#{page.content}"/>
+    </h:column>
+    <h:column>
+        <f:facet name="header" >Friendly URL</f:facet>    
+        <h:outputText value="#{page.friendlyURL}"/>
+    </h:column>
+</h:dataTable>
 
 </h:form>
 

@@ -17,19 +17,29 @@
 
     <bean id="persistenceManagerFactory"  
         class="org.springframework.orm.jdo.LocalPersistenceManagerFactoryBean">  
-        <property name="persistenceManagerFactoryName" value="transactions-optional" />
+        <!-- property name="persistenceManagerFactoryName" value="transactions-optional" /-->
+        <property name="jdoProperties">
+            <props>
+                <prop key="javax.jdo.PersistenceManagerFactoryClass">org.datanucleus.store.appengine.jdo.DatastoreJDOPersistenceManagerFactory</prop>
+                <prop key="javax.jdo.option.ConnectionURL">appengine</prop>
+                <prop key="javax.jdo.option.NontransactionalRead">true</prop>
+                <prop key="javax.jdo.option.NontransactionalWrite">true</prop>
+                <prop key="javax.jdo.option.RetainValues">true</prop>
+                <prop key="datanucleus.appengine.autoCreateDatastoreTxns">true</prop>
+            </props>
+        </property>
     </bean>  
 
-    <bean id="persistenceManagerFactoryProxy" 
+    <!-- bean id="persistenceManagerFactoryProxy" 
         class="org.springframework.orm.jdo.TransactionAwarePersistenceManagerFactoryProxy">  
         <property name="targetPersistenceManagerFactory" ref="persistenceManagerFactory" />  
         <property name="allowCreate" value="true" />  
-    </bean>  
+    </bean-->  
    
-    <bean id="transactionManager"
+    <!-- bean id="transactionManager"
         class="org.springframework.orm.jdo.JdoTransactionManager">  
         <property name="persistenceManagerFactory" ref="persistenceManagerFactoryProxy" />  
-    </bean>
+    </bean-->
 
     <!-- Transactions -->
 
@@ -47,12 +57,12 @@
     <!-- DAO -->
     
     <bean id="pageDao" class="org.vosao.dao.impl.PageDaoImpl" scope="singleton">  
-        <property name="persistenceManagerFactory" ref="persistenceManagerFactoryProxy"/>  
+        <property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>  
     </bean>
     
     <!-- JSF beans -->
 
-    <bean id="testBean" class="TestBean" init-method="init">
+    <bean id="testBean" class="TestBean" init-method="init" scope="request">
         <property name="pageDao" ref="pageDao" />
     </bean>
 

@@ -1,8 +1,12 @@
 package org.vosao.dao.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
-import javax.jdo.Transaction;
 
 import org.springframework.orm.jdo.PersistenceManagerFactoryUtils;
 import org.vosao.dao.PageDao;
@@ -25,29 +29,44 @@ public class PageDaoImpl implements PageDao {
 	private PersistenceManager getPersistenceManager() {  
 		return PersistenceManagerFactoryUtils  
 	    		.getPersistenceManager(pmf, true);
-		//return PMF.get().getPersistenceManager();
-		
 	} 
 
-	public void test() {
+	public void save(final PageEntity page) {
 		PersistenceManager pm = getPersistenceManager();
-		//Transaction tx = pm.currentTransaction();
 		try {
-			//tx.begin();
-			
-			PageEntity page = new PageEntity("Page title", 
-				"Page content", "/mypage", null);
 			pm.makePersistent(page);
-			page.setTitle("Test title2");
-			pm.makePersistent(page);
-			//tx.commit();
 		}
 		finally {
-			//if (tx.isActive()) {
-			//	tx.rollback();
-			//}
 			pm.close();
 		}
 	}
+	
+	public PageEntity getByKey(final Key key) {
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			return (PageEntity)pm.getObjectById(key);
+		}
+		finally {
+			pm.close();
+		}
+	}
+	
+	public List<PageEntity> select() {
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			String query = "select from " + PageEntity.class.getName();
+			return copy((List<PageEntity>)pm.newQuery(query).execute());
+		}
+		finally {
+			pm.close();
+		}
+	}
+	
+	private static <T> List<T> copy(final List<T> list) {
+		List<T> result = new ArrayList<T>();
+		result.addAll(list);
+		return result;
+	}
+	
 
 }

@@ -167,6 +167,11 @@
             <artifactId>commons-collections</artifactId>
             <version>3.2</version>
         </dependency>
+        <dependency>
+            <groupId>commons-digester</groupId>
+            <artifactId>commons-digester</artifactId>
+            <version>1.8.1</version>
+        </dependency>
 
         <!-- JSF 1.2 -->
 
@@ -184,6 +189,12 @@
             <groupId>com.sun.facelets</groupId>
             <artifactId>jsf-facelets</artifactId>
             <version>1.1.14</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ocpsoft</groupId>
+            <artifactId>ocpsoft-pretty-faces</artifactId>
+            <version>1.2.2</version>
         </dependency>
 
         <!-- javax-el -->

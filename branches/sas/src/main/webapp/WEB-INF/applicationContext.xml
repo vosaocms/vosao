@@ -31,6 +31,8 @@
 
     <!-- Transactions -->
 
+    <!-- AOP is not working on GAE 1.2.2 waiting for fix -->
+
     <!-- bean id="persistenceManagerFactoryProxy" 
         class="org.springframework.orm.jdo.TransactionAwarePersistenceManagerFactoryProxy">  
         <property name="targetPersistenceManagerFactory" ref="persistenceManagerFactory" />  
@@ -39,10 +41,10 @@
    
     <!-- bean id="transactionManager"
         class="org.springframework.orm.jdo.JdoTransactionManager">  
-        <property name="persistenceManagerFactory" ref="persistenceManagerFactoryProxy" />  
-    </bean-->
+        <property name="persistenceManagerFactory" ref="persistenceManagerFactory" />  
+    </bean>
 
-    <!-- tx:advice id="txAdvice">
+    <tx:advice id="txAdvice">
         <tx:attributes>
             <tx:method name="*"/>
         </tx:attributes>
@@ -51,7 +53,11 @@
     <aop:config>
         <aop:pointcut id="daoMethods" expression="execution(* org.vosao.dao.*.*(..))" />  
         <aop:advisor advice-ref="txAdvice" pointcut-ref="daoMethods" />  
-    </aop:config--> 
+    </aop:config> 
+
+    <bean
+        id="org.springframework.context.annotation.internalPersistenceAnnotationProcessor"
+        class="java.lang.String" /-->
     
     <!-- DAO -->
     
@@ -84,5 +90,10 @@
         <property name="business" ref="business" />
     </bean>
     
+    <bean id="pageBean" class="org.vosao.jsf.PageBean" 
+        init-method="init" scope="request">
+        <property name="dao" ref="dao" />
+        <property name="business" ref="business" />
+    </bean>
 
 </beans>

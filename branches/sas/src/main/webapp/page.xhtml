@@ -8,24 +8,18 @@
 <ui:define name="head">
 </ui:define>
 
-<ui:define name="title">Home page</ui:define>
+<ui:define name="title">Page CRUD demo</ui:define>
 
 <ui:define name="body">
 
 <h:form>
 
-<h1>Hello Yuri Voloshenyuk!</h1>
+<h1>Pages CRUD demo</h1>
 
-<h2>This is a Mavenized JSF GAE application!</h2>
+<h:panelGroup rendered="#{!pageBean.edit}">
 
-<a href="/page">Page CRUD demo</a><br/>
-
-<h:outputText value="#{testBean.text}" />
-
-<h:commandButton value="Change text" action="#{testBean.changeText}" />
-<h:commandButton value="Add page" action="#{testBean.addPage}" />
-
-<h:dataTable value="#{testBean.pages}" var="page">
+<h2>Pages list</h2>
+<h:dataTable value="#{pageBean.list}" var="page">
     <h:column>
         <f:facet name="header" >id</f:facet>    
         <h:outputText value="#{page.key}"/>
@@ -44,7 +38,19 @@
     </h:column>
 </h:dataTable>
 
-<img src="/static/images/picture.jpg" />
+<h:commandButton value="Add page" action="#{pageBean.addPage}" />
+
+</h:panelGroup>
+
+
+<h:panelGroup rendered="#{pageBean.edit}">
+
+<h2>Page edit</h2>
+
+<h:commandButton value="Cancel" action="#{pageBean.cancelEdit}" />
+
+</h:panelGroup>
+
 
 </h:form>
 

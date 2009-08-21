@@ -10,13 +10,4 @@
 		<view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
 	</application>
 
-    <!-- navigation-rule>
-        <from-view-id>*</from-view-id>
-        <navigation-case>
-            <from-outcome>pageList</from-outcome>
-            <to-view-id>/page.jsf</to-view-id>
-            <redirect/>
-        </navigation-case>
-    </navigation-rule-->
-
 </faces-config>

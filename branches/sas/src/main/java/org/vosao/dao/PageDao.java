@@ -2,15 +2,9 @@ package org.vosao.dao;
 
 import java.util.List;
 
-import javax.jdo.PersistenceManagerFactory;
-
 import org.vosao.entity.PageEntity;
 
-public interface PageDao {
-
-	void setPersistenceManagerFactory(PersistenceManagerFactory factory);
-	
-	PersistenceManagerFactory getPersistenceManagerFactory();
+public interface PageDao extends AbstractDao {
 
 	void save(final PageEntity page);
 	

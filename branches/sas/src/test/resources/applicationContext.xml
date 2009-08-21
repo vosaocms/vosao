@@ -16,7 +16,6 @@
 
     <bean id="persistenceManagerFactory"  
         class="org.springframework.orm.jdo.LocalPersistenceManagerFactoryBean">  
-        <!-- property name="persistenceManagerFactoryName" value="transactions-optional" /-->
         <property name="jdoProperties">
             <props>
                 <prop key="javax.jdo.PersistenceManagerFactoryClass">org.datanucleus.store.appengine.jdo.DatastoreJDOPersistenceManagerFactory</prop>
@@ -62,12 +61,20 @@
     
     <!-- DAO -->
     
-    <bean id="pageDao" class="org.vosao.dao.impl.PageDaoImpl">  
+    <bean id="abstractDao" abstract="true"
+        class="org.vosao.dao.impl.AbstractDaoImpl">
         <property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>  
     </bean>
     
+    <bean id="pageDao" class="org.vosao.dao.impl.PageDaoImpl"
+        parent="abstractDao" />  
+    
+    <bean id="fileDao" class="org.vosao.dao.impl.FileDaoImpl"
+        parent="abstractDao" />  
+    
     <bean id="dao" class="org.vosao.dao.impl.DaoImpl">  
         <property name="pageDao" ref="pageDao"/>  
+        <property name="fileDao" ref="fileDao"/>  
     </bean>
 
     <!-- Session beans -->

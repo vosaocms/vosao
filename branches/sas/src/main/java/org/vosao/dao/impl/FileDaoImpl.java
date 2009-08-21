@@ -40,8 +40,7 @@ public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 		try {
 			String query = "select from " + FileEntity.class.getName();
 			List<FileEntity> result = (List<FileEntity>)pm.newQuery(query).execute();
-			result.size();
-			return result;
+			return copy(result);
 		}
 		finally {
 			pm.close();

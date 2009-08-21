@@ -3,6 +3,7 @@ package org.vosao.dao;
 import java.util.List;
 
 import org.vosao.entity.FileEntity;
+import org.vosao.entity.PageEntity;
 
 public class FileDaoTest extends AbstractDaoTest {
 
@@ -59,6 +60,17 @@ public class FileDaoTest extends AbstractDaoTest {
 		getDao().getFileDao().save(file2);
 		FileEntity file3 = getDao().getFileDao().getById(file.getId());
 		assertEquals("update", file3.getTitle());
+	}
+	
+	public void testResultList() {
+		addFile("title1", "test.bat1", "text/plain", "file content1".getBytes());
+		addFile("title2", "test.bat2", "text/plain", "file content2".getBytes());
+		addFile("title3", "test.bat3", "text/plain", "file content3".getBytes());
+		List<FileEntity> list = getDao().getFileDao().select();
+		FileEntity file = new FileEntity("title4", "test.bat4", "text/plain", 
+				"file content4".getBytes());
+		list.add(file);
+		assertEquals(4, list.size());
 	}
 	
 }

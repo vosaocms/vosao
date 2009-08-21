@@ -40,8 +40,7 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		try {
 			String query = "select from " + PageEntity.class.getName();
 			List<PageEntity> result = (List<PageEntity>)pm.newQuery(query).execute();
-			result.size();
-			return result;
+			return copy(result);
 		}
 		finally {
 			pm.close();

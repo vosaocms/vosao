@@ -1,5 +1,8 @@
 package org.vosao.dao.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
@@ -23,4 +26,11 @@ public class AbstractDaoImpl implements AbstractDao {
 	    		.getPersistenceManager(pmf, true);
 	} 
 
+	protected <T> List<T> copy(final List<T> list) {
+		List<T> result = new ArrayList<T>();
+		result.addAll(list);
+		return result;
+	}
+	
+	
 }

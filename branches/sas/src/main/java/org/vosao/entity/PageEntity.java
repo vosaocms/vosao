@@ -8,11 +8,13 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.google.appengine.api.datastore.Text;
+
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class PageEntity implements Serializable {
 
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 4L;
 
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -21,8 +23,8 @@ public class PageEntity implements Serializable {
 	@Persistent
 	private String title;
 	
-	@Persistent
-	private String content;
+	@Persistent(defaultFetchGroup = "true")
+	private Text content;
 	
 	@Persistent
 	private String friendlyURL;
@@ -37,7 +39,7 @@ public class PageEntity implements Serializable {
 			String friendlyURL, Long parent) {
 		this();
 		this.title = title;
-		this.content = content;
+		this.content = new Text(content);
 		this.friendlyURL = friendlyURL;
 		this.parent = parent;
 	}
@@ -66,11 +68,14 @@ public class PageEntity implements Serializable {
 	}
 	
 	public String getContent() {
-		return content;
+		if (content == null) {
+			return null;
+		}
+		return content.getValue();
 	}
 	
 	public void setContent(String content) {
-		this.content = content;
+		this.content = new Text(content);
 	}
 	
 	public String getFriendlyURL() {

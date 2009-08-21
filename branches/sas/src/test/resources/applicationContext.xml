@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+    <!-- Persistence -->
+
+    <bean id="persistenceManagerFactory"  
+        class="org.springframework.orm.jdo.LocalPersistenceManagerFactoryBean">  
+        <!-- property name="persistenceManagerFactoryName" value="transactions-optional" /-->
+        <property name="jdoProperties">
+            <props>
+                <prop key="javax.jdo.PersistenceManagerFactoryClass">org.datanucleus.store.appengine.jdo.DatastoreJDOPersistenceManagerFactory</prop>
+                <prop key="javax.jdo.option.ConnectionURL">appengine</prop>
+                <prop key="javax.jdo.option.NontransactionalRead">true</prop>
+                <prop key="javax.jdo.option.NontransactionalWrite">true</prop>
+                <prop key="javax.jdo.option.RetainValues">true</prop>
+                <prop key="datanucleus.appengine.autoCreateDatastoreTxns">true</prop>
+            </props>
+        </property>
+    </bean>  
+
+    <!-- Transactions -->
+
+    <!-- AOP is not working on GAE 1.2.2 waiting for fix -->
+
+    <!-- bean id="persistenceManagerFactoryProxy" 
+        class="org.springframework.orm.jdo.TransactionAwarePersistenceManagerFactoryProxy">  
+        <property name="targetPersistenceManagerFactory" ref="persistenceManagerFactory" />  
+        <property name="allowCreate" value="true" />  
+    </bean-->  
+   
+    <!-- bean id="transactionManager"
+        class="org.springframework.orm.jdo.JdoTransactionManager">  
+        <property name="persistenceManagerFactory" ref="persistenceManagerFactory" />  
+    </bean>
+
+    <tx:advice id="txAdvice">
+        <tx:attributes>
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="daoMethods" expression="execution(* org.vosao.dao.*.*(..))" />  
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="daoMethods" />  
+    </aop:config> 
+
+    <bean
+        id="org.springframework.context.annotation.internalPersistenceAnnotationProcessor"
+        class="java.lang.String" /-->
+    
+    <!-- DAO -->
+    
+    <bean id="pageDao" class="org.vosao.dao.impl.PageDaoImpl">  
+        <property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>  
+    </bean>
+    
+    <bean id="dao" class="org.vosao.dao.impl.DaoImpl">  
+        <property name="pageDao" ref="pageDao"/>  
+    </bean>
+
+    <!-- Session beans -->
+
+    <bean id="userPreferences" class="org.vosao.business.UserPreferences" 
+        scope="session">
+        <aop:scoped-proxy/>
+    </bean>    
+
+    <!-- Business -->
+
+    <bean id="business" class="org.vosao.business.impl.BusinessImpl">  
+        <property name="userPreferences" ref="userPreferences"/>  
+    </bean>
+
+    <!-- JSF beans -->
+
+    <bean id="testBean" class="org.vosao.jsf.TestBean" 
+        init-method="init" scope="request">
+        <property name="dao" ref="dao" />
+        <property name="business" ref="business" />
+    </bean>
+    
+    <bean id="pageBean" class="org.vosao.jsf.PageBean" 
+        init-method="init" scope="request">
+        <property name="dao" ref="dao" />
+        <property name="business" ref="business" />
+    </bean>
+
+</beans>

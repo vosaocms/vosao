@@ -1,5 +1,7 @@
 package org.vosao.entity;
 
+import java.io.Serializable;
+
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
@@ -10,10 +12,13 @@ import com.google.appengine.api.datastore.Key;
 
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class PageEntity {
+public class PageEntity implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Key key;
+    private Long id;
 	
 	@Persistent
 	private String title;
@@ -39,12 +44,12 @@ public class PageEntity {
 		this.parent = parent;
 	}
 	
-	public Key getKey() {
-		return key;
+	public Long getId() {
+		return id;
 	}
 	
-	public void setKey(Key key) {
-		this.key = key;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	public String getTitle() {

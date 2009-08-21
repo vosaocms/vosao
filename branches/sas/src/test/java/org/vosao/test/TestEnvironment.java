@@ -1,5 +1,6 @@
-package com;
+package org.vosao.test;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.google.apphosting.api.ApiProxy;
@@ -14,7 +15,7 @@ class TestEnvironment implements ApiProxy.Environment {
      * @return app id
      */
     public String getAppId() {
-        return "m2";
+        return "Unit Tests";
     }
 
     /**
@@ -30,15 +31,15 @@ class TestEnvironment implements ApiProxy.Environment {
     }
 
     public String getRequestNamespace() {
-        return null;
+        return "";
     }
 
     public String getDefaultNamespace() {
-        return null;
+        return "";
     }
 
     public String getAuthDomain() {
-        return null;
+        return "gmail.com";
     }
 
     public boolean isLoggedIn() {
@@ -46,15 +47,17 @@ class TestEnvironment implements ApiProxy.Environment {
     }
 
     public String getEmail() {
-        return null;
+        return "gmail.com";
     }
 
     public boolean isAdmin() {
         return false;
     }
 
-	public Map<String, Object> getAttributes() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Map<String, Object> getAttributes() {
+        Map<String, Object> map = new HashMap<String, Object> ();
+        return map;
+    } 	
 }
+

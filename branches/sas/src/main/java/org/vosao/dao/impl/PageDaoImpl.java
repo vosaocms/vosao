@@ -39,10 +39,10 @@ public class PageDaoImpl implements PageDao {
 		}
 	}
 	
-	public PageEntity getByKey(final Key key) {
+	public PageEntity getById(final Long id) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
-			return (PageEntity)pm.getObjectById(key);
+			return pm.getObjectById(PageEntity.class, id);
 		}
 		finally {
 			pm.close();
@@ -65,6 +65,27 @@ public class PageDaoImpl implements PageDao {
 		result.addAll(list);
 		return result;
 	}
+
+	public void remove(final Long id) {
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			pm.deletePersistent(pm.getObjectById(PageEntity.class, id));
+		}
+		finally {
+			pm.close();
+		}
+	}
 	
+	public void remove(final List<Long> ids) {
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			for (Long id : ids) {
+				pm.deletePersistent(pm.getObjectById(PageEntity.class, id));
+			}
+		}
+		finally {
+			pm.close();
+		}
+	}
 
 }

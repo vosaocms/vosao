@@ -21,8 +21,12 @@
 <h2>Pages list</h2>
 <h:dataTable value="#{pageBean.list}" var="page">
     <h:column>
+        <f:facet name="header"></f:facet>    
+        <h:selectBooleanCheckbox value="#{pageBean.selected[page.id]}"/>
+    </h:column>
+    <h:column>
         <f:facet name="header" >id</f:facet>    
-        <h:outputText value="#{page.key}"/>
+        <h:outputText value="#{page.id}"/>
     </h:column>
     <h:column>
         <f:facet name="header" >Title</f:facet>    
@@ -39,6 +43,7 @@
 </h:dataTable>
 
 <h:commandButton value="Add page" action="#{pageBean.addPage}" />
+<h:commandButton value="Delete" action="#{pageBean.delete}" />
 
 </h:panelGroup>
 

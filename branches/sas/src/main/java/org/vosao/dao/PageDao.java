@@ -6,8 +6,6 @@ import javax.jdo.PersistenceManagerFactory;
 
 import org.vosao.entity.PageEntity;
 
-import com.google.appengine.api.datastore.Key;
-
 public interface PageDao {
 
 	void setPersistenceManagerFactory(PersistenceManagerFactory factory);
@@ -16,8 +14,13 @@ public interface PageDao {
 
 	void save(final PageEntity page);
 	
-	PageEntity getByKey(final Key key);
+	PageEntity getById(final Long id);
 
 	List<PageEntity> select();
+	
+	void remove(final Long id);
+	
+	void remove(final List<Long> ids);
+	
 	
 }

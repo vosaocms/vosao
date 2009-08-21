@@ -8,13 +8,11 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import com.google.appengine.api.datastore.Key;
-
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class PageEntity implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -30,18 +28,25 @@ public class PageEntity implements Serializable {
 	private String friendlyURL;
 	
 	@Persistent
-	private Key parent;
+	private Long parent;
 	
 	public PageEntity() {
 	}
 	
 	public PageEntity(String title, String content,
-			String friendlyURL, Key parent) {
+			String friendlyURL, Long parent) {
 		this();
 		this.title = title;
 		this.content = content;
 		this.friendlyURL = friendlyURL;
 		this.parent = parent;
+	}
+	
+	public void copy(final PageEntity page) {
+		setTitle(page.getTitle());
+		setContent(page.getContent());
+		setFriendlyURL(page.getFriendlyURL());
+		setParent(page.getParent());		
 	}
 	
 	public Long getId() {
@@ -76,11 +81,11 @@ public class PageEntity implements Serializable {
 		this.friendlyURL = friendlyURL;
 	}
 
-	public Key getParent() {
+	public Long getParent() {
 		return parent;
 	}
 
-	public void setParent(Key parent) {
+	public void setParent(Long parent) {
 		this.parent = parent;
 	}
 }

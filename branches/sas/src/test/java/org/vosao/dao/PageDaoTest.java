@@ -4,12 +4,10 @@ import java.util.List;
 
 import org.vosao.entity.PageEntity;
 
-import com.google.appengine.api.datastore.Key;
-
 public class PageDaoTest extends AbstractDaoTest {
 
 	private PageEntity addPage(final String title, final String content, 
-			final String url,final Key parent) {
+			final String url,final Long parent) {
 		PageEntity page = new PageEntity(title, content, url, parent);
 		getDao().getPageDao().save(page);
 		return page;
@@ -39,6 +37,15 @@ public class PageDaoTest extends AbstractDaoTest {
 		List<PageEntity> pages = getDao().getPageDao().select();
 		assertEquals(3, pages.size());
 	}	
+	
+	public void testUpdate() {
+		PageEntity page = addPage("title1", "content1", "/url1", null);
+		PageEntity page2 = getDao().getPageDao().getById(page.getId());
+		page2.setTitle("update");
+		getDao().getPageDao().save(page2);
+		PageEntity page3 = getDao().getPageDao().getById(page.getId());
+		assertEquals("update", page3.getTitle());
+	}
 	
 	
 }

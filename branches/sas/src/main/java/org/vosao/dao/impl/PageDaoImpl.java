@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.annotations.FetchPlan;
 
 import org.springframework.orm.jdo.PersistenceManagerFactoryUtils;
 import org.vosao.dao.PageDao;
@@ -32,7 +33,13 @@ public class PageDaoImpl implements PageDao {
 	public void save(final PageEntity page) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
-			pm.makePersistent(page);
+			if (page.getId() != null) {
+				PageEntity p = pm.getObjectById(PageEntity.class, page.getId());
+				p.copy(page);
+			}
+			else {
+				pm.makePersistent(page);
+			}
 		}
 		finally {
 			pm.close();

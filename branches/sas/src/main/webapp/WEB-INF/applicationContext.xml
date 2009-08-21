@@ -25,6 +25,7 @@
                 <prop key="javax.jdo.option.NontransactionalWrite">true</prop>
                 <prop key="javax.jdo.option.RetainValues">true</prop>
                 <prop key="datanucleus.appengine.autoCreateDatastoreTxns">true</prop>
+                <!-- prop key="datanucleus.DetachOnClose">true</prop-->
             </props>
         </property>
     </bean>  

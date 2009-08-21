@@ -12,13 +12,14 @@ import org.vosao.entity.PageEntity;
 
 public class PageBean implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	
 	private List<PageEntity> list;
 	private PageEntity current;
 	private Dao dao;
 	private Business business;
 	private Map<Long, Boolean> selected;
+	private Long id;
 	
 	private PageBeanSession beanSession;
 	
@@ -44,17 +45,19 @@ public class PageBean implements Serializable {
 		beanSession.setEdit(true);
 	}
 	
-	public void cancelEdit() {
+	public String cancelEdit() {
 		beanSession.setEdit(false);
+		return "pretty:page";
 	}
 	
-	public void update() {
+	public String update() {
 		getDao().getPageDao().save(current);
 		list.add(current);
 		beanSession.setEdit(false);
+		return "pretty:page";
 	}
 	
-	public void delete() {
+	public String delete() {
 		List<Long> ids = new ArrayList<Long>();
 		for (Long id : selected.keySet()) {
 			if (selected.get(id)) {
@@ -63,6 +66,15 @@ public class PageBean implements Serializable {
 		}
 		getDao().getPageDao().remove(ids);
 		initList();
+		return "pretty:page";
+	}
+	
+	public void edit() {
+		if (id != null) {
+			current = getDao().getPageDao().getById(id);
+			beanSession.setNewEntity(false);
+			beanSession.setEdit(true);
+		}
 	}
 	
 	public Dao getDao() {
@@ -103,6 +115,14 @@ public class PageBean implements Serializable {
 
 	public void setSelected(Map<Long, Boolean> selected) {
 		this.selected = selected;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 }

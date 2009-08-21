@@ -35,5 +35,12 @@
         <pattern> /page </pattern>
         <view-id> /page.jsf </view-id>
     </url-mapping>
+    <url-mapping id="pageEdit">
+        <pattern>
+            /page/edit/#{pageBean.id}
+        </pattern>
+        <view-id>/page.jsf</view-id>
+        <action>#{pageBean.edit}</action>
+    </url-mapping>
     
 </pretty-config>

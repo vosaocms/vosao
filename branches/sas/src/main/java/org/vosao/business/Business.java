@@ -1,5 +1,6 @@
 package org.vosao.business;
 
+
 public interface Business {
 	
 	UserPreferences getUserPreferences();

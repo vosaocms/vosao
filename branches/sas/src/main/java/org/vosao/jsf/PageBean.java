@@ -21,11 +21,8 @@ public class PageBean implements Serializable {
 	private Map<Long, Boolean> selected;
 	private Long id;
 	
-	private PageBeanSession beanSession;
-	
 	public void init() {
 		initList();
-		beanSession = getBusiness().getUserPreferences().getPageBeanSession();
 		current = new PageEntity();
 		initSelected();
 	}
@@ -42,18 +39,18 @@ public class PageBean implements Serializable {
 	}
 	
 	public void addPage() {
-		beanSession.setEdit(true);
+		getBeanSession().setEdit(true);
 	}
 	
 	public String cancelEdit() {
-		beanSession.setEdit(false);
+		getBeanSession().setEdit(false);
 		return "pretty:page";
 	}
 	
 	public String update() {
 		getDao().getPageDao().save(current);
 		list.add(current);
-		beanSession.setEdit(false);
+		getBeanSession().setEdit(false);
 		return "pretty:page";
 	}
 	
@@ -72,9 +69,13 @@ public class PageBean implements Serializable {
 	public void edit() {
 		if (id != null) {
 			current = getDao().getPageDao().getById(id);
-			beanSession.setNewEntity(false);
-			beanSession.setEdit(true);
+			getBeanSession().setNewEntity(false);
+			getBeanSession().setEdit(true);
 		}
+	}
+	
+	public void list() {
+		getBeanSession().setEdit(false);
 	}
 	
 	public Dao getDao() {
@@ -98,7 +99,7 @@ public class PageBean implements Serializable {
 	}
 
 	public boolean isEdit() {
-		return beanSession.isEdit();
+		return getBeanSession().isEdit();
 	}
 
 	public PageEntity getCurrent() {
@@ -123,6 +124,14 @@ public class PageBean implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public PageBeanSession getBeanSession() {
+		String name = PageBeanSession.class.getName();
+		if (JSFUtil.getSessionObject(name) == null) {
+			JSFUtil.setSessionObject(name, new PageBeanSession());
+		}
+		return (PageBeanSession)JSFUtil.getSessionObject(name);
 	}
 	
 }

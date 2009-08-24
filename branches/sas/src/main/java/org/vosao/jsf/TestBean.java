@@ -1,4 +1,5 @@
 package org.vosao.jsf;
+
 import java.io.Serializable;
 import java.util.List;
 

@@ -54,7 +54,6 @@ class TestEnvironment implements ApiProxy.Environment {
         return false;
     }
 
-    @Override
     public Map<String, Object> getAttributes() {
         Map<String, Object> map = new HashMap<String, Object> ();
         return map;

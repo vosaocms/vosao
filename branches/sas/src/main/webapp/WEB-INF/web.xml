@@ -56,6 +56,13 @@
         <param-value>true</param-value>
     </context-param>
 
+    <!-- Sessions clearing -->
+    <servlet>
+        <servlet-name>ClearSession</servlet-name>
+        <servlet-class>org.vosao.servlet.ClearSessionServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
     <!-- GAE JSF stuff -->
     
     <!-- context-param>

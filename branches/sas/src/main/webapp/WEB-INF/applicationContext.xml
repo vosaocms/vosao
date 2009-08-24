@@ -78,16 +78,16 @@
     </bean>
 
     <!-- Session beans -->
-
-    <bean id="userPreferences" class="org.vosao.business.UserPreferences" 
+    <!-- AOP doesn't work!!! -->
+    <!-- bean id="userPreferences" class="org.vosao.business.UserPreferences" 
         scope="session">
         <aop:scoped-proxy/>
-    </bean>    
+    </bean-->    
 
     <!-- Business -->
 
     <bean id="business" class="org.vosao.business.impl.BusinessImpl">  
-        <property name="userPreferences" ref="userPreferences"/>  
+        <!-- property name="userPreferences" ref="userPreferences"/-->  
     </bean>
 
     <!-- JSF beans -->

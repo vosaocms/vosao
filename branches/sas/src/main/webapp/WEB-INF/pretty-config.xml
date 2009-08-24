@@ -34,6 +34,7 @@
     <url-mapping id="page">
         <pattern> /page </pattern>
         <view-id> /page.jsf </view-id>
+        <action>#{pageBean.list}</action>
     </url-mapping>
     <url-mapping id="pageEdit">
         <pattern>

@@ -98,14 +98,6 @@
         <!-- property name="userPreferences" ref="userPreferences"/-->  
     </bean>
 
-    <!-- Setup -->
-    
-    <!--bean id="setupBean" class="org.vosao.business.impl.SetupBeanImpl"
-        init-method="setup">
-        <property name="dao" ref="dao"/>  
-        <property name="business" ref="business"/>  
-    </bean-->    
-
     <!-- JSF beans -->
 
     <bean id="abstractJSFBean" abstract="true"

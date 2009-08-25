@@ -4,17 +4,17 @@ import java.util.List;
 
 import org.vosao.entity.FileEntity;
 
+import com.google.appengine.api.datastore.Key;
+
 public interface FileDao extends AbstractDao {
 
 	void save(final FileEntity page);
 	
-	FileEntity getById(final Long id);
+	FileEntity getById(final Key id);
 
-	List<FileEntity> select();
+	void remove(final Key id);
 	
-	void remove(final Long id);
-	
-	void remove(final List<Long> ids);
+	void remove(final List<Key> ids);
 	
 	
 }

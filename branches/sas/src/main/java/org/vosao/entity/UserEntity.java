@@ -14,7 +14,7 @@ import org.vosao.enums.UserRole;
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class UserEntity implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)

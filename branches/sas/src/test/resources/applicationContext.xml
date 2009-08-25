@@ -72,12 +72,16 @@
     <bean id="fileDao" class="org.vosao.dao.impl.FileDaoImpl"
         parent="abstractDao" />  
     
+    <bean id="folderDao" class="org.vosao.dao.impl.FolderDaoImpl"
+        parent="abstractDao" />  
+
     <bean id="userDao" class="org.vosao.dao.impl.UserDaoImpl"
         parent="abstractDao" />  
 
     <bean id="dao" class="org.vosao.dao.impl.DaoImpl">  
         <property name="pageDao" ref="pageDao"/>  
         <property name="fileDao" ref="fileDao"/>  
+        <property name="folderDao" ref="folderDao"/>  
         <property name="userDao" ref="userDao"/>  
     </bean>
 
@@ -94,18 +98,32 @@
         <!-- property name="userPreferences" ref="userPreferences"/-->  
     </bean>
 
+    <!-- Setup -->
+    
+    <!--bean id="setupBean" class="org.vosao.business.impl.SetupBeanImpl"
+        init-method="setup">
+        <property name="dao" ref="dao"/>  
+        <property name="business" ref="business"/>  
+    </bean-->    
+
     <!-- JSF beans -->
 
-    <bean id="testBean" class="org.vosao.jsf.TestBean" 
-        init-method="init" scope="request">
-        <property name="dao" ref="dao" />
-        <property name="business" ref="business" />
+    <bean id="abstractJSFBean" abstract="true"
+        class="org.vosao.jsf.AbstractJSFBean">
+        <property name="dao" ref="dao"/>  
+        <property name="business" ref="business"/>  
     </bean>
+
+    <bean id="testBean" class="org.vosao.jsf.TestBean" 
+        init-method="init" scope="request" 
+        parent="abstractJSFBean" />
     
     <bean id="pageBean" class="org.vosao.jsf.PageBean" 
-        init-method="init" scope="request">
-        <property name="dao" ref="dao" />
-        <property name="business" ref="business" />
-    </bean>
+        init-method="init" scope="request"
+        parent="abstractJSFBean" />
+
+    <bean id="loginBean" class="org.vosao.jsf.LoginBean" 
+        scope="request"
+        parent="abstractJSFBean" />
 
 </beans>

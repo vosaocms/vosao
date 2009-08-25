@@ -6,6 +6,9 @@ import javax.jdo.PersistenceManager;
 
 import org.vosao.dao.FileDao;
 import org.vosao.entity.FileEntity;
+import org.vosao.entity.FolderEntity;
+
+import com.google.appengine.api.datastore.Key;
 
 public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 
@@ -17,7 +20,9 @@ public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 				p.copy(entity);
 			}
 			else {
-				pm.makePersistent(entity);
+				FolderEntity folder = pm.getObjectById(FolderEntity.class, 
+						entity.getFolder().getId());
+				folder.addFile(entity);
 			}
 		}
 		finally {
@@ -25,7 +30,7 @@ public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 		}
 	}
 	
-	public FileEntity getById(final Long id) {
+	public FileEntity getById(final Key id) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			return pm.getObjectById(FileEntity.class, id);
@@ -35,19 +40,7 @@ public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 		}
 	}
 	
-	public List<FileEntity> select() {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + FileEntity.class.getName();
-			List<FileEntity> result = (List<FileEntity>)pm.newQuery(query).execute();
-			return copy(result);
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	public void remove(final Long id) {
+	public void remove(final Key id) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			pm.deletePersistent(pm.getObjectById(FileEntity.class, id));
@@ -57,10 +50,10 @@ public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 		}
 	}
 	
-	public void remove(final List<Long> ids) {
+	public void remove(final List<Key> ids) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
-			for (Long id : ids) {
+			for (Key id : ids) {
 				pm.deletePersistent(pm.getObjectById(FileEntity.class, id));
 			}
 		}

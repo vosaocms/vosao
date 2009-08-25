@@ -8,6 +8,9 @@ public interface Dao {
 	FileDao getFileDao();
 	void setFileDao(final FileDao fileDao);
 
+	FolderDao getFolderDao();
+	void setFolderDao(final FolderDao folderDao);
+
 	UserDao getUserDao();
 	void setUserDao(final UserDao userDao);
 	

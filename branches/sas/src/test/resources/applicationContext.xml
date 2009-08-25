@@ -72,9 +72,13 @@
     <bean id="fileDao" class="org.vosao.dao.impl.FileDaoImpl"
         parent="abstractDao" />  
     
+    <bean id="userDao" class="org.vosao.dao.impl.UserDaoImpl"
+        parent="abstractDao" />  
+
     <bean id="dao" class="org.vosao.dao.impl.DaoImpl">  
         <property name="pageDao" ref="pageDao"/>  
         <property name="fileDao" ref="fileDao"/>  
+        <property name="userDao" ref="userDao"/>  
     </bean>
 
     <!-- Session beans -->

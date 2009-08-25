@@ -33,4 +33,13 @@ public class BusinessImpl implements Business {
 				aUserPreferences);
 	}
 
+	public UserPreferences getUserPreferences(final HttpServletRequest request) {
+		String name = UserPreferences.class.getName();
+		HttpSession session = request.getSession(true);
+		if (session.getAttribute(name) == null) {
+			session.setAttribute(name, new UserPreferences());
+		}
+		return (UserPreferences)session.getAttribute(name);
+	}
+	
 }

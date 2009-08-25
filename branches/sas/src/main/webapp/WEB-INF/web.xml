@@ -15,7 +15,8 @@
         <param-value>/WEB-INF/applicationContext.xml</param-value>
     </context-param>
 
-    <!-- spring Listener -->
+    <!-- Spring Listener -->
+    
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
@@ -24,6 +25,17 @@
             org.springframework.web.context.request.RequestContextListener
         </listener-class>
     </listener>
+
+    <!-- AuthenticationFilter -->
+    
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>org.vosao.filter.AuthenticationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/cms/*</url-pattern>
+    </filter-mapping>    
 
     <!-- Pretty Faces -->
     
@@ -34,6 +46,9 @@
     <filter-mapping>
         <filter-name>Pretty Filter</filter-name>
         <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>ERROR</dispatcher>
     </filter-mapping>
 
     <!-- JSF -->
@@ -56,13 +71,6 @@
         <param-value>true</param-value>
     </context-param>
 
-    <!-- Sessions clearing -->
-    <servlet>
-        <servlet-name>ClearSession</servlet-name>
-        <servlet-class>org.vosao.servlet.ClearSessionServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
     <!-- GAE JSF stuff -->
     
     <!-- context-param>
@@ -81,6 +89,7 @@
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>client</param-value>
     </context-param-->
+    
     
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>

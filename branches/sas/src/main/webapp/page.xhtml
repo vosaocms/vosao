@@ -28,55 +28,13 @@
     
 </ui:define>
 
-<ui:define name="title">Page CRUD demo</ui:define>
+<ui:define name="title">Page</ui:define>
 
 <ui:define name="body">
 
-<div class="debug">
-    pageSessionBean : #{pageBean.beanSession}<br/>
-    isEdit : #{pageBean.edit}   
-</div>
-
-
 <h:form>
 
-<h1>Pages CRUD demo</h1>
-
-<h:panelGroup rendered="#{!pageBean.edit}">
-
-<h2>Pages list</h2>
-<h:dataTable value="#{pageBean.list}" var="page">
-    <h:column>
-        <f:facet name="header"></f:facet>    
-        <h:selectBooleanCheckbox value="#{pageBean.selected[page.id]}"/>
-    </h:column>
-    <h:column>
-        <f:facet name="header" >id</f:facet>    
-        <h:outputText value="#{page.id}"/>
-    </h:column>
-    <h:column>
-        <f:facet name="header" >Title</f:facet>    
-        <a href="/page/edit/#{page.id}"><h:outputText value="#{page.title}"/></a>
-    </h:column>
-    <h:column>
-        <f:facet name="header" >Content</f:facet>    
-        <h:outputText value="#{page.content}" escape="true"/>
-    </h:column>
-    <h:column>
-        <f:facet name="header" >Friendly URL</f:facet>    
-        <h:outputText value="#{page.friendlyURL}"/>
-    </h:column>
-</h:dataTable>
-
-<h:commandButton value="Add page" action="#{pageBean.addPage}" />
-<h:commandButton value="Delete" action="#{pageBean.delete}" />
-
-</h:panelGroup>
-
-
-<h:panelGroup rendered="#{pageBean.edit}">
-
-<h2>Page edit</h2>
+<h1>Page</h1>
 
 <div>
     <label>Title</label>
@@ -93,9 +51,6 @@
 
 <h:commandButton value="Save" action="#{pageBean.update}" />
 <h:commandButton value="Cancel" action="#{pageBean.cancelEdit}" />
-
-</h:panelGroup>
-
 
 </h:form>
 

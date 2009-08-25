@@ -8,35 +8,30 @@
 <ui:define name="head">
 </ui:define>
 
-<ui:define name="title">Home page</ui:define>
+<ui:define name="title">Pages</ui:define>
 
 <ui:define name="body">
 
 <h:form>
 
-<h1>Hello Yuri Voloshenyuk!</h1>
+<h1>Pages</h1>
 
-<h2>This is a Mavenized JSF GAE application!</h2>
-
-<a href="/cms/pages">Page CRUD demo (admin@test.com:admin)</a><br/>
-
-<h:outputText value="#{testBean.text}" />
-
-<h:commandButton value="Change text" action="#{testBean.changeText}" />
-<h:commandButton value="Add page" action="#{testBean.addPage}" />
-
-<h:dataTable value="#{testBean.pages}" var="page">
+<h:dataTable value="#{pageBean.list}" var="page">
+    <h:column>
+        <f:facet name="header"></f:facet>    
+        <h:selectBooleanCheckbox value="#{pageBean.selected[page.id]}"/>
+    </h:column>
     <h:column>
         <f:facet name="header" >id</f:facet>    
         <h:outputText value="#{page.id}"/>
     </h:column>
     <h:column>
         <f:facet name="header" >Title</f:facet>    
-        <h:outputText value="#{page.title}"/>
+        <a href="page/edit/#{page.id}"><h:outputText value="#{page.title}"/></a>
     </h:column>
     <h:column>
         <f:facet name="header" >Content</f:facet>    
-        <h:outputText value="#{page.content}"/>
+        <h:outputText value="#{page.content}" escape="true"/>
     </h:column>
     <h:column>
         <f:facet name="header" >Friendly URL</f:facet>    
@@ -44,7 +39,8 @@
     </h:column>
 </h:dataTable>
 
-<img src="/static/images/picture.jpg" />
+<h:commandButton value="Add page" action="#{pageBean.addPage}" />
+<h:commandButton value="Delete" action="#{pageBean.delete}" />
 
 </h:form>
 

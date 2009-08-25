@@ -1,17 +1,21 @@
-package org.vosao.servlet;
+package org.vosao.business.impl;
 
 import java.util.Collections;
+import java.util.List;
 
 import javax.cache.Cache;
 import javax.cache.CacheException;
 import javax.cache.CacheFactory;
 import javax.cache.CacheManager;
 import javax.cache.CacheStatistics;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.business.Business;
+import org.vosao.business.SetupBean;
+import org.vosao.dao.Dao;
+import org.vosao.entity.UserEntity;
+import org.vosao.enums.UserRole;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -19,11 +23,23 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 
-public class ClearSessionServlet extends HttpServlet {
+public class SetupBeanImpl implements SetupBean {
 
-	private static final long serialVersionUID = 1L;
+	private static Log log = LogFactory.getLog(SetupBeanImpl.class);
+
+	private Dao dao;
+	private Business business;
 	
-	private static Log log = LogFactory.getLog(ClearSessionServlet.class);
+	public void setup() {
+		log.info("setup...");
+		clearSessions();
+		try {
+			clearCache();
+		} catch (CacheException e) {
+			log.error(e);
+		}
+		initUsers();
+	}
 	
 	private void clearSessions() {
         DatastoreService datastore = DatastoreServiceFactory
@@ -45,19 +61,30 @@ public class ClearSessionServlet extends HttpServlet {
         cache.clear();
 	} 
 
-	@Override
-	public void init() {
-		try {
-			super.init();
-		} catch (ServletException e1) {
-			e1.printStackTrace();
-		}
-		clearSessions();
-		try {
-			clearCache();
-		} catch (CacheException e) {
-			e.printStackTrace();
+	private void initUsers() {
+		List<UserEntity> admins = getDao().getUserDao().getByRole(UserRole.ADMIN);
+		if (admins.size() == 0) {
+			UserEntity admin = new UserEntity("admin", "admin", "admin@test.com", 
+					UserRole.ADMIN);
+			getDao().getUserDao().save(admin);
+	        log.info("Adding admin user admin@test.com.");
 		}
 	}
 
+	public Dao getDao() {
+		return dao;
+	}
+
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
+
+	public Business getBusiness() {
+		return business;
+	}
+
+	public void setBusiness(Business business) {
+		this.business = business;
+	}
+	
 }

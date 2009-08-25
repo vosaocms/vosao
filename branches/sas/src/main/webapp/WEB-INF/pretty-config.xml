@@ -4,44 +4,25 @@
     xsi:schemaLocation="http://ocpsoft.com/prettyfaces-xsd 
     http://ocpsoft.com/xml/ns/prettyfaces/pretty-1.0.xsd">
     
-    <!-- 
-    <url-mapping id="login">
-        <pattern> /login </pattern>
-        <view-id> /faces/login.jsf </view-id>
+    <url-mapping id="pages">
+        <pattern> /cms/pages </pattern>
+        <view-id> /pageList.jsf </view-id>
     </url-mapping>
-    <url-mapping id="home">
-        <pattern> /home </pattern>
-        <query-param name="displayWelcomeMessage">#{homeBean.displayWelcomeMessage}</query-param>
-        <view-id> #{homeBean.getViewPath} </view-id>
-    </url-mapping>
-    <url-mapping id="viewStory">
-        <pattern> 
-            /story/#{myBean.currentStoryId}/ 
-        </pattern>
-        <query-param name="commentText" decode="false">#{myBean.commentText}</query-param>
-        <view-id> /faces/story/viewStory.jsf </view-id>
-        <action onPostback="false">#{myBean.loadStory}</action>
-    </url-mapping>
-    <url-mapping id="viewComment">
-        <pattern>
-            /story/#{myBean.currentStoryId}/#{myBean.commentId}
-        </pattern>
-        <view-id>/faces/story/comment.jsf</view-id>
-        <action>#{myBean.loadComment}</action>
-    </url-mapping>
-    -->
-
-    <url-mapping id="page">
-        <pattern> /page </pattern>
-        <view-id> /page.jsf </view-id>
-        <action>#{pageBean.list}</action>
-    </url-mapping>
+    
     <url-mapping id="pageEdit">
-        <pattern>
-            /page/edit/#{pageBean.id}
-        </pattern>
+        <pattern> /cms/page/edit/#{pageBean.id} </pattern>
         <view-id>/page.jsf</view-id>
         <action>#{pageBean.edit}</action>
+    </url-mapping>
+
+    <url-mapping id="pageCreate">
+        <pattern> /cms/page/create </pattern>
+        <view-id>/page.jsf</view-id>
+    </url-mapping>
+
+    <url-mapping id="login">
+        <pattern> /login </pattern>
+        <view-id> /login.jsf </view-id>
     </url-mapping>
     
 </pretty-config>

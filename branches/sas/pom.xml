@@ -200,7 +200,7 @@
         <dependency>
             <groupId>com.ocpsoft</groupId>
             <artifactId>ocpsoft-pretty-faces</artifactId>
-            <version>1.2.4_GA</version>
+            <version>1.2.5_GA</version>
         </dependency>
 
         <!-- javax-el -->
@@ -306,6 +306,10 @@
         <repository>
             <id>yasurvey-maven-repo</id>
             <url>http://yasurvey-maven-repo.googlecode.com/svn/trunk</url>
+        </repository>
+        <repository>
+            <id>ocpsoft.com</id>
+            <url>http://ocpsoft.com/repository/</url>
         </repository>
     </repositories>
 </project>

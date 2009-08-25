@@ -5,19 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.vosao.business.Business;
-import org.vosao.dao.Dao;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vosao.entity.PageEntity;
 
 
-public class PageBean implements Serializable {
+public class PageBean extends AbstractJSFBean implements Serializable {
 
 	private static final long serialVersionUID = 2L;
+	private static Log log = LogFactory.getLog(PageBean.class);
 	
 	private List<PageEntity> list;
 	private PageEntity current;
-	private Dao dao;
-	private Business business;
 	private Map<Long, Boolean> selected;
 	private Long id;
 	
@@ -38,20 +37,22 @@ public class PageBean implements Serializable {
 		}
 	}
 	
-	public void addPage() {
+	public String addPage() {
 		getBeanSession().setEdit(true);
+		return "pretty:pageCreate";
 	}
 	
 	public String cancelEdit() {
 		getBeanSession().setEdit(false);
-		return "pretty:page";
+		return "pretty:pages";
 	}
 	
 	public String update() {
+		log.info("update record " + current.getTitle());
 		getDao().getPageDao().save(current);
 		list.add(current);
 		getBeanSession().setEdit(false);
-		return "pretty:page";
+		return "pretty:pages";
 	}
 	
 	public String delete() {
@@ -63,7 +64,7 @@ public class PageBean implements Serializable {
 		}
 		getDao().getPageDao().remove(ids);
 		initList();
-		return "pretty:page";
+		return "pretty:pages";
 	}
 	
 	public void edit() {
@@ -78,26 +79,10 @@ public class PageBean implements Serializable {
 		getBeanSession().setEdit(false);
 	}
 	
-	public Dao getDao() {
-		return dao;
-	}
-
-	public void setDao(Dao dao) {
-		this.dao = dao;
-	}
-
 	public List<PageEntity> getList() {
 		return list;
 	}
 	
-	public Business getBusiness() {
-		return business;
-	}
-
-	public void setBusiness(Business business) {
-		this.business = business;
-	}
-
 	public boolean isEdit() {
 		return getBeanSession().isEdit();
 	}

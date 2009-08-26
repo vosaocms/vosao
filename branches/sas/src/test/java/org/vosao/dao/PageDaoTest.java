@@ -69,5 +69,14 @@ public class PageDaoTest extends AbstractDaoTest {
 		assertEquals(2, pages.size());
 	}	
 	
+	public void testGetByUrl() {
+		PageEntity root = addPage("root", "root content1", "/", null);
+		addPage("title1", "content1", "/url1", root);
+		addPage("title2", "content2", "/url2", null);
+		addPage("title3", "content3", "/url3", root);
+		PageEntity page = getDao().getPageDao().getByUrl("/url3");
+		assertNotNull(page);
+		assertEquals("title3", page.getTitle());
+	}	
 	
 }

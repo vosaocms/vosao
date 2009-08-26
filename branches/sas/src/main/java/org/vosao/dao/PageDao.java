@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.vosao.entity.PageEntity;
 
-import com.google.appengine.api.datastore.Key;
-
 public interface PageDao extends AbstractDao {
 
 	void save(final PageEntity page);
@@ -13,6 +11,8 @@ public interface PageDao extends AbstractDao {
 	PageEntity getById(final String id);
 
 	List<PageEntity> getByParent(final String id);
+
+	PageEntity getByUrl(final String url);
 
 	List<PageEntity> select();
 	

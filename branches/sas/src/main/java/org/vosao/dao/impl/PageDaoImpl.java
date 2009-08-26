@@ -84,5 +84,22 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 			pm.close();
 		}
 	}
+
+	public PageEntity getByUrl(final String url) {
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			String query = "select from " + PageEntity.class.getName()
+			    + " where friendlyURL == pUrl parameters String pUrl";
+			List<PageEntity> result = (List<PageEntity>)pm.newQuery(query)
+				.execute(url);
+			if (result.size() > 0) {
+				return result.get(0);
+			}
+			return null;
+		}
+		finally {
+			pm.close();
+		}
+	}
 	
 }

@@ -10,5 +10,9 @@ public interface Business {
 	UserPreferences getUserPreferences(final HttpServletRequest request);
 
 	void setUserPreferences(final UserPreferences userPreferences);
+
+	PageBusiness getPageBusiness();
+	
+	void setPageBusiness(final PageBusiness bean);
 	
 }

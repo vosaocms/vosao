@@ -6,6 +6,15 @@
   template="WEB-INF/facelets/layout.xhtml">
 
 <ui:define name="head">
+    <script src="/static/js/jquery.treeview.pack.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/static/css/jquery.treeview.css" type="text/css" />
+
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#pages-tree").treeview();
+    });
+    </script>
+    
 </ui:define>
 
 <ui:define name="title">Pages</ui:define>
@@ -16,31 +25,9 @@
 
 <h1>Pages</h1>
 
-<h:dataTable value="#{pageBean.list}" var="page">
-    <h:column>
-        <f:facet name="header"></f:facet>    
-        <h:selectBooleanCheckbox value="#{pageBean.selected[page.id]}"/>
-    </h:column>
-    <h:column>
-        <f:facet name="header" >id</f:facet>    
-        <h:outputText value="#{page.id}"/>
-    </h:column>
-    <h:column>
-        <f:facet name="header" >Title</f:facet>    
-        <a href="page/edit/#{page.id}"><h:outputText value="#{page.title}"/></a>
-    </h:column>
-    <h:column>
-        <f:facet name="header" >Content</f:facet>    
-        <h:outputText value="#{page.content}" escape="true"/>
-    </h:column>
-    <h:column>
-        <f:facet name="header" >Friendly URL</f:facet>    
-        <h:outputText value="#{page.friendlyURL}"/>
-    </h:column>
-</h:dataTable>
-
-<h:commandButton value="Add page" action="#{pageBean.addPage}" />
-<h:commandButton value="Delete" action="#{pageBean.delete}" />
+<ul id="pages-tree">
+    <h:outputText value="#{pageBean.tree}" escape="false" />
+</ul>
 
 </h:form>
 

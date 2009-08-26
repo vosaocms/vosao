@@ -53,6 +53,29 @@
 <h:commandButton value="Save" action="#{pageBean.update}" />
 <h:commandButton value="Cancel" action="#{pageBean.cancelEdit}" />
 
+<h:panelGroup rendered="#{pageBean.showChildren}">
+<h2>Children pages</h2>
+
+<h:dataTable value="#{pageBean.children}" var="page">
+    <h:column>
+        <f:facet name="header"></f:facet>    
+        <h:selectBooleanCheckbox value="#{pageBean.selected[page.id]}"/>
+    </h:column>
+    <h:column>
+        <f:facet name="header" >Title</f:facet>    
+        <a href="page/edit/#{page.id}"><h:outputText value="#{page.title}"/></a>
+    </h:column>
+    <h:column>
+        <f:facet name="header" >Friendly URL</f:facet>    
+        <h:outputText value="#{page.friendlyURL}"/>
+    </h:column>
+</h:dataTable>
+
+<h:commandButton value="Add child page" action="#{pageBean.addChild}" />
+<h:commandButton value="Delete pages" action="#{pageBean.delete}" />
+
+</h:panelGroup>
+
 </h:form>
 
 </ui:define>

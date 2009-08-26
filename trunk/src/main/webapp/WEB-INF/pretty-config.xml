@@ -1,0 +1,28 @@
+<pretty-config
+    xmlns="http://ocpsoft.com/prettyfaces-xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://ocpsoft.com/prettyfaces-xsd 
+    http://ocpsoft.com/xml/ns/prettyfaces/pretty-1.0.xsd">
+    
+    <url-mapping id="pages">
+        <pattern> /cms/pages </pattern>
+        <view-id> /pageList.jsf </view-id>
+    </url-mapping>
+    
+    <url-mapping id="pageEdit">
+        <pattern> /cms/page/edit/#{pageBean.id} </pattern>
+        <view-id>/page.jsf</view-id>
+        <action>#{pageBean.edit}</action>
+    </url-mapping>
+
+    <url-mapping id="pageCreate">
+        <pattern> /cms/page/create </pattern>
+        <view-id>/page.jsf</view-id>
+    </url-mapping>
+
+    <url-mapping id="login">
+        <pattern> /login </pattern>
+        <view-id> /login.jsf </view-id>
+    </url-mapping>
+    
+</pretty-config>

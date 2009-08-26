@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  template="WEB-INF/facelets/layout.xhtml">
+
+<ui:define name="head">
+</ui:define>
+
+<ui:define name="title">Pages</ui:define>
+
+<ui:define name="body">
+
+<h:form>
+
+<h1>Pages</h1>
+
+<h:dataTable value="#{pageBean.list}" var="page">
+    <h:column>
+        <f:facet name="header"></f:facet>    
+        <h:selectBooleanCheckbox value="#{pageBean.selected[page.id]}"/>
+    </h:column>
+    <h:column>
+        <f:facet name="header" >id</f:facet>    
+        <h:outputText value="#{page.id}"/>
+    </h:column>
+    <h:column>
+        <f:facet name="header" >Title</f:facet>    
+        <a href="page/edit/#{page.id}"><h:outputText value="#{page.title}"/></a>
+    </h:column>
+    <h:column>
+        <f:facet name="header" >Content</f:facet>    
+        <h:outputText value="#{page.content}" escape="true"/>
+    </h:column>
+    <h:column>
+        <f:facet name="header" >Friendly URL</f:facet>    
+        <h:outputText value="#{page.friendlyURL}"/>
+    </h:column>
+</h:dataTable>
+
+<h:commandButton value="Add page" action="#{pageBean.addPage}" />
+<h:commandButton value="Delete" action="#{pageBean.delete}" />
+
+</h:form>
+
+</ui:define>
+
+</ui:composition>

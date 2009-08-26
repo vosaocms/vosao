@@ -7,6 +7,8 @@ import javax.jdo.PersistenceManager;
 import org.vosao.dao.PageDao;
 import org.vosao.entity.PageEntity;
 
+import com.google.appengine.api.datastore.Key;
+
 public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 
 	public void save(final PageEntity page) {
@@ -25,7 +27,7 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		}
 	}
 	
-	public PageEntity getById(final Long id) {
+	public PageEntity getById(final String id) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			return pm.getObjectById(PageEntity.class, id);
@@ -47,7 +49,7 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		}
 	}
 	
-	public void remove(final Long id) {
+	public void remove(final String id) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			pm.deletePersistent(pm.getObjectById(PageEntity.class, id));
@@ -57,10 +59,10 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		}
 	}
 	
-	public void remove(final List<Long> ids) {
+	public void remove(final List<String> ids) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
-			for (Long id : ids) {
+			for (String id : ids) {
 				pm.deletePersistent(pm.getObjectById(PageEntity.class, id));
 			}
 		}
@@ -69,4 +71,18 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		}
 	}
 
+	public List<PageEntity> getByParent(final String id) {
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			String query = "select from " + PageEntity.class.getName()
+			    + " where parent == pParent parameters String pParent";
+			List<PageEntity> result = (List<PageEntity>)pm.newQuery(query)
+				.execute(id);
+			return copy(result);
+		}
+		finally {
+			pm.close();
+		}
+	}
+	
 }

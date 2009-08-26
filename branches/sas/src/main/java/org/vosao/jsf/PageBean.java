@@ -9,6 +9,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.entity.PageEntity;
 
+import com.google.appengine.api.datastore.Key;
+
 
 public class PageBean extends AbstractJSFBean implements Serializable {
 
@@ -17,8 +19,8 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	
 	private List<PageEntity> list;
 	private PageEntity current;
-	private Map<Long, Boolean> selected;
-	private Long id;
+	private Map<String, Boolean> selected;
+	private String id;
 	
 	public void init() {
 		initList();
@@ -31,7 +33,7 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	}
 
 	private void initSelected() {
-		selected = new HashMap<Long, Boolean>();
+		selected = new HashMap<String, Boolean>();
 		for (PageEntity page : list) {
 			selected.put(page.getId(), false);
 		}
@@ -56,8 +58,8 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	}
 	
 	public String delete() {
-		List<Long> ids = new ArrayList<Long>();
-		for (Long id : selected.keySet()) {
+		List<String> ids = new ArrayList<String>();
+		for (String id : selected.keySet()) {
 			if (selected.get(id)) {
 				ids.add(id);
 			}
@@ -95,19 +97,19 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 		this.current = current;
 	}
 
-	public Map<Long, Boolean> getSelected() {
+	public Map<String, Boolean> getSelected() {
 		return selected;
 	}
 
-	public void setSelected(Map<Long, Boolean> selected) {
+	public void setSelected(Map<String, Boolean> selected) {
 		this.selected = selected;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

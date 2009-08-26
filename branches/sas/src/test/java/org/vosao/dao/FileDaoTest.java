@@ -89,5 +89,19 @@ public class FileDaoTest extends AbstractDaoTest {
 		list.add(file);
 		assertEquals(4, list.size());
 	}
+
+	public void testDelete() {
+		FolderEntity folder = addFolder("test");
+		addFile("title1", "test.bat1", "text/plain", "file content1".getBytes(), folder);
+		FileEntity file = addFile("title2", "test.bat2", "text/plain", "file content2".getBytes(), folder);
+		addFile("title3", "test.bat3", "text/plain", "file content3".getBytes(), folder);
+		folder = getDao().getFolderDao().getById(folder.getId());
+		assertEquals(3, folder.getFiles().size());
+		getDao().getFileDao().remove(file.getId());
+		folder = getDao().getFolderDao().getById(folder.getId());
+		List<FileEntity> list = folder.getFiles();
+		assertEquals(2, list.size());
+	}
+	
 	
 }

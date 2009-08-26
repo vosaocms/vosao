@@ -2,6 +2,7 @@ package org.vosao.entity;
 
 import java.io.Serializable;
 
+import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
@@ -14,11 +15,12 @@ import com.google.appengine.api.datastore.Text;
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class PageEntity implements Serializable {
 
-	private static final long serialVersionUID = 4L;
+	private static final long serialVersionUID = 5L;
 
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Long id;
+    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
+    private String id;
 	
 	@Persistent
 	private String title;
@@ -30,18 +32,18 @@ public class PageEntity implements Serializable {
 	private String friendlyURL;
 	
 	@Persistent
-	private Long parent;
+	private String parent;
 	
 	public PageEntity() {
 	}
 	
 	public PageEntity(String title, String content,
-			String friendlyURL, Long parent) {
+			String friendlyURL, String aParent) {
 		this();
 		this.title = title;
 		this.content = new Text(content);
 		this.friendlyURL = friendlyURL;
-		this.parent = parent;
+		this.parent = aParent;
 	}
 	
 	public void copy(final PageEntity page) {
@@ -51,11 +53,11 @@ public class PageEntity implements Serializable {
 		setParent(page.getParent());		
 	}
 	
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 	
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	
@@ -86,11 +88,12 @@ public class PageEntity implements Serializable {
 		this.friendlyURL = friendlyURL;
 	}
 
-	public Long getParent() {
+	public String getParent() {
 		return parent;
 	}
 
-	public void setParent(Long parent) {
+	public void setParent(String parent) {
 		this.parent = parent;
 	}
+
 }

@@ -8,6 +8,7 @@ public class PageBeanSession implements Serializable {
 	
 	private boolean edit;
 	private boolean newEntity;
+	private String parent;
 	
 	public PageBeanSession () {
 		edit = false;
@@ -28,6 +29,14 @@ public class PageBeanSession implements Serializable {
 
 	public void setNewEntity(boolean newEntity) {
 		this.newEntity = newEntity;
+	}
+
+	public String getParent() {
+		return parent;
+	}
+
+	public void setParent(String parent) {
+		this.parent = parent;
 	}
 	
 	

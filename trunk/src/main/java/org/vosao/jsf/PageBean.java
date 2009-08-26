@@ -7,9 +7,8 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.business.PageDecorator;
 import org.vosao.entity.PageEntity;
-
-import com.google.appengine.api.datastore.Key;
 
 
 public class PageBean extends AbstractJSFBean implements Serializable {
@@ -21,15 +20,22 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	private PageEntity current;
 	private Map<String, Boolean> selected;
 	private String id;
+	private PageDecorator root;
+	private List<PageEntity> children;
 	
 	public void init() {
 		initList();
 		current = new PageEntity();
 		initSelected();
+		initDecorator();
 	}
 	
 	private void initList() {
 		list = getDao().getPageDao().select();
+	}
+	
+	private void initDecorator() {
+		root = getBusiness().getPageBusiness().getTree(list);
 	}
 
 	private void initSelected() {
@@ -39,9 +45,10 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 		}
 	}
 	
-	public String addPage() {
-		getBeanSession().setEdit(true);
-		return "pretty:pageCreate";
+	private void initChildren() {
+		if (current != null) {
+			children = getDao().getPageDao().getByParent(current.getId());
+		}
 	}
 	
 	public String cancelEdit() {
@@ -50,10 +57,14 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	}
 	
 	public String update() {
-		log.info("update record " + current.getTitle());
+		//log.info("update record " + current.getTitle());
+		if (current.getId() == null) {
+			current.setParent(getBeanSession().getParent());
+		}
 		getDao().getPageDao().save(current);
 		list.add(current);
 		getBeanSession().setEdit(false);
+		initDecorator();
 		return "pretty:pages";
 	}
 	
@@ -72,6 +83,7 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	public void edit() {
 		if (id != null) {
 			current = getDao().getPageDao().getById(id);
+			initChildren();
 			getBeanSession().setNewEntity(false);
 			getBeanSession().setEdit(true);
 		}
@@ -80,6 +92,13 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	public void list() {
 		getBeanSession().setEdit(false);
 	}
+	
+	public String addChild() {
+		getBeanSession().setEdit(true);
+		getBeanSession().setParent(current.getId());
+		return "pretty:pageCreate";
+	}
+	
 	
 	public List<PageEntity> getList() {
 		return list;
@@ -119,6 +138,47 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 			JSFUtil.setSessionObject(name, new PageBeanSession());
 		}
 		return (PageBeanSession)JSFUtil.getSessionObject(name);
+	}
+
+	public String getTree() {
+		if (root != null) {
+			return renderPageTree(root).toString();
+		}
+		else {
+			return "empty tree";
+		}
+	}
+	
+	private static StringBuffer renderPageTree(final PageDecorator page) {
+		StringBuffer result = new StringBuffer();
+		result.append("<li><a href=\"page/edit/")
+			.append(page.getPage().getId())
+			.append("\">")
+			.append(page.getPage().getTitle())
+			.append("</a>");
+		if (page.getChildren().size() > 0) {
+			result.append("<ul>");
+		}
+		for (PageDecorator child : page.getChildren()) {
+			result.append(renderPageTree(child));
+		}
+		if (page.getChildren().size() > 0) {
+			result.append("</ul>");
+		}
+		result.append("</li>");
+		return result;
+	}
+
+	public List<PageEntity> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<PageEntity> children) {
+		this.children = children;
+	}
+	
+	public boolean isShowChildren() {
+		return children != null;
 	}
 	
 }

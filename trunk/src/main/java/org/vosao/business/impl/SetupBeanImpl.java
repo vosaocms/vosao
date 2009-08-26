@@ -76,8 +76,9 @@ public class SetupBeanImpl implements SetupBean {
 	private void initPages() {
 		List<PageEntity> roots = getDao().getPageDao().getByParent(null);
 		if (roots.size() == 0) {
-			PageEntity root = new PageEntity("root", "<h1>Hello World!</h1><p>This is a site root page</p><p><a href=\"/cms\">CMS Configuration</p>", "/", null);
+			PageEntity root = new PageEntity("root", "<h1>Hello World!</h1><p>This is a site root page</p><p><a href=\"/cms/pages\">CMS Configuration</p>", "/", null);
 			getDao().getPageDao().save(root);
+	        log.info("Adding root page.");
 		}
 	}
 	

@@ -24,40 +24,9 @@
                 <prop key="javax.jdo.option.NontransactionalWrite">true</prop>
                 <prop key="javax.jdo.option.RetainValues">true</prop>
                 <prop key="datanucleus.appengine.autoCreateDatastoreTxns">true</prop>
-                <!-- prop key="datanucleus.DetachOnClose">true</prop-->
             </props>
         </property>
     </bean>  
-
-    <!-- Transactions -->
-
-    <!-- AOP is not working on GAE 1.2.2 waiting for fix -->
-
-    <!-- bean id="persistenceManagerFactoryProxy" 
-        class="org.springframework.orm.jdo.TransactionAwarePersistenceManagerFactoryProxy">  
-        <property name="targetPersistenceManagerFactory" ref="persistenceManagerFactory" />  
-        <property name="allowCreate" value="true" />  
-    </bean-->  
-   
-    <!-- bean id="transactionManager"
-        class="org.springframework.orm.jdo.JdoTransactionManager">  
-        <property name="persistenceManagerFactory" ref="persistenceManagerFactory" />  
-    </bean>
-
-    <tx:advice id="txAdvice">
-        <tx:attributes>
-            <tx:method name="*"/>
-        </tx:attributes>
-    </tx:advice>
-
-    <aop:config>
-        <aop:pointcut id="daoMethods" expression="execution(* org.vosao.dao.*.*(..))" />  
-        <aop:advisor advice-ref="txAdvice" pointcut-ref="daoMethods" />  
-    </aop:config> 
-
-    <bean
-        id="org.springframework.context.annotation.internalPersistenceAnnotationProcessor"
-        class="java.lang.String" /-->
     
     <!-- DAO -->
     
@@ -85,17 +54,18 @@
         <property name="userDao" ref="userDao"/>  
     </bean>
 
-    <!-- Session beans -->
-    <!-- AOP doesn't work!!! -->
-    <!-- bean id="userPreferences" class="org.vosao.business.UserPreferences" 
-        scope="session">
-        <aop:scoped-proxy/>
-    </bean-->    
-
     <!-- Business -->
 
+    <bean id="abstractBusiness" abstract="true"
+        class="org.vosao.business.impl.AbstractBusinessImpl">
+        <property name="dao" ref="dao"/>  
+    </bean>
+    
+    <bean id="pageBusiness" class="org.vosao.business.impl.PageBusinessImpl"
+        parent="abstractBusiness" />  
+
     <bean id="business" class="org.vosao.business.impl.BusinessImpl">  
-        <!-- property name="userPreferences" ref="userPreferences"/-->  
+        <property name="pageBusiness" ref="pageBusiness"/>  
     </bean>
 
     <!-- JSF beans -->

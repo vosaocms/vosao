@@ -53,12 +53,12 @@ public class SiteFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse)response;
         String url = httpRequest.getServletPath();
         if (isSkipUrl(url)) {
-            log.info("skip url " + url);
+            //log.info("skip url " + url);
             chain.doFilter(request, response);
             return;
         }
         if (isSiteUrl(url)) {
-            log.info("render url " + url);
+            //log.info("render url " + url);
         	renderPage(httpRequest, httpResponse, url);
         	return;
         }

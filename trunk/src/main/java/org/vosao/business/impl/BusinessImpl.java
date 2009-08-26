@@ -4,22 +4,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.vosao.business.Business;
+import org.vosao.business.PageBusiness;
 import org.vosao.business.UserPreferences;
 import org.vosao.jsf.JSFUtil;
 
 public class BusinessImpl implements Business {
 
-	/*private UserPreferences userPreferences;
-	
-	public UserPreferences getUserPreferences() {
-		return userPreferences;
-	}
+	private PageBusiness pageBusiness;
 
-	public void setUserPreferences(UserPreferences aUserPreferences) {
-		userPreferences = aUserPreferences;
-	}*/
-	
-	
 	public UserPreferences getUserPreferences() {
 		String name = UserPreferences.class.getName();
 		if (JSFUtil.getSessionObject(name) == null) {
@@ -41,5 +33,15 @@ public class BusinessImpl implements Business {
 		}
 		return (UserPreferences)session.getAttribute(name);
 	}
+
+	
+	public PageBusiness getPageBusiness() {
+		return pageBusiness;
+	}
+
+	public void setPageBusiness(PageBusiness bean) {
+		pageBusiness = bean;
+	}
+	
 	
 }

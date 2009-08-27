@@ -1,5 +1,6 @@
 package org.vosao.business.impl;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.UserRole;
+import org.vosao.jsf.JSFUtil;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -76,7 +78,14 @@ public class SetupBeanImpl implements SetupBean {
 	private void initPages() {
 		List<PageEntity> roots = getDao().getPageDao().getByParent(null);
 		if (roots.size() == 0) {
-			PageEntity root = new PageEntity("root", "<h1>Hello World!</h1><p>This is a site root page</p><p><a href=\"/cms/pages\">CMS Configuration</p>", "/", null);
+			String content = "Hello!";
+			try {
+				content = JSFUtil.getTextResource("org/vosao/resources/html/root.html");
+			}
+			catch(IOException e) {
+		        log.error("Can't read default root page." + e);
+			}
+			PageEntity root = new PageEntity("root", content, "/", null);
 			getDao().getPageDao().save(root);
 	        log.info("Adding root page.");
 		}

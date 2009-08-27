@@ -8,45 +8,16 @@
 <ui:define name="head">
 </ui:define>
 
-<ui:define name="title">Home page</ui:define>
+<ui:define name="title">VOSAO CMS</ui:define>
 
 <ui:define name="body">
 
-<h:form>
-
-<h1>Hello Yuri Voloshenyuk!</h1>
-
-<h2>This is a Mavenized JSF GAE application!</h2>
-
-<a href="/cms/pages">Page CRUD demo (admin@test.com:admin)</a><br/>
-
-<h:outputText value="#{testBean.text}" />
-
-<h:commandButton value="Change text" action="#{testBean.changeText}" />
-<h:commandButton value="Add page" action="#{testBean.addPage}" />
-
-<h:dataTable value="#{testBean.pages}" var="page">
-    <h:column>
-        <f:facet name="header" >id</f:facet>    
-        <h:outputText value="#{page.id}"/>
-    </h:column>
-    <h:column>
-        <f:facet name="header" >Title</f:facet>    
-        <h:outputText value="#{page.title}"/>
-    </h:column>
-    <h:column>
-        <f:facet name="header" >Content</f:facet>    
-        <h:outputText value="#{page.content}"/>
-    </h:column>
-    <h:column>
-        <f:facet name="header" >Friendly URL</f:facet>    
-        <h:outputText value="#{page.friendlyURL}"/>
-    </h:column>
-</h:dataTable>
-
-<img src="/static/images/picture.jpg" />
-
-</h:form>
+<ul>
+    <li><a href="/cms/pages">Content pages</a></li>
+    <li><a href="/cms/templates">Design templates</a></li>
+    <li><a href="/cms/images">Image gallery</a></li>
+    <li><a href="/cms/files">File resources storage</a></li>
+</ul>
 
 </ui:define>
 

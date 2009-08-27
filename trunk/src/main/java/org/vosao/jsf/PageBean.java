@@ -1,4 +1,5 @@
 package org.vosao.jsf;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -93,6 +94,10 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	public String addChild() {
 		getBeanSession().setParent(current.getId());
 		return "pretty:pageCreate";
+	}
+	
+	public void preview() throws IOException {
+		JSFUtil.redirect(current.getFriendlyURL());
 	}
 	
 	

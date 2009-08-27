@@ -9,4 +9,6 @@ public interface PageBusiness {
 
 	PageDecorator getTree(final List<PageEntity> pages);
 	
+	String render(final PageEntity page);
+	
 }

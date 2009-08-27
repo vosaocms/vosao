@@ -66,7 +66,7 @@
     </bean>
     
     <bean id="pageBusiness" class="org.vosao.business.impl.PageBusinessImpl"
-        parent="abstractBusiness" />  
+        init-method="init" parent="abstractBusiness" />  
 
     <bean id="business" class="org.vosao.business.impl.BusinessImpl">  
         <property name="pageBusiness" ref="pageBusiness"/>  
@@ -80,11 +80,11 @@
         <property name="business" ref="business"/>  
     </bean>
 
-    <bean id="testBean" class="org.vosao.jsf.TestBean" 
-        init-method="init" scope="request" 
-        parent="abstractJSFBean" />
-    
     <bean id="pageBean" class="org.vosao.jsf.PageBean" 
+        init-method="init" scope="request"
+        parent="abstractJSFBean" />
+
+    <bean id="templateBean" class="org.vosao.jsf.TemplateBean" 
         init-method="init" scope="request"
         parent="abstractJSFBean" />
 

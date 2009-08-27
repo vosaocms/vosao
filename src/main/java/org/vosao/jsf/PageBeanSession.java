@@ -11,6 +11,10 @@ public class PageBeanSession implements Serializable {
 	public PageBeanSession () {
 	}
 
+	public PageBeanSession (final String aParent) {
+		parent = aParent;
+	}
+
 	public String getParent() {
 		return parent;
 	}

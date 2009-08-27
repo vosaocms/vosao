@@ -22,6 +22,8 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	private String id;
 	private PageDecorator root;
 	private List<PageEntity> children;
+
+	private PageBeanSession beanSession;
 	
 	public void init() {
 		initList();
@@ -127,11 +129,11 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	}
 
 	public PageBeanSession getBeanSession() {
-		String name = PageBeanSession.class.getName();
-		if (JSFUtil.getSessionObject(name) == null) {
-			JSFUtil.setSessionObject(name, new PageBeanSession());
-		}
-		return (PageBeanSession)JSFUtil.getSessionObject(name);
+		return beanSession;
+	}
+
+	public void setBeanSession(PageBeanSession beanSession) {
+		this.beanSession = beanSession;
 	}
 
 	public String getTree() {

@@ -13,9 +13,9 @@ import com.google.appengine.api.datastore.Text;
 
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class PageEntity implements Serializable {
+public class TemplateEntity implements Serializable {
 
-	private static final long serialVersionUID = 6L;
+	private static final long serialVersionUID = 1L;
 
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -28,39 +28,18 @@ public class PageEntity implements Serializable {
 	@Persistent(defaultFetchGroup = "true")
 	private Text content;
 	
-	@Persistent
-	private String friendlyURL;
-	
-	@Persistent
-	private String parent;
-	
-	@Persistent
-	private String template;
-	
-	public PageEntity() {
+	public TemplateEntity() {
 	}
 	
-	public PageEntity(String title, String content,
-			String friendlyURL, String aParent, String aTemplate) {
-		this(title, content, friendlyURL, aParent);
-		template = aTemplate;
-	}
-
-	public PageEntity(String title, String content,
-			String friendlyURL, String aParent) {
+	public TemplateEntity(String title, String content) {
 		this();
 		this.title = title;
 		this.content = new Text(content);
-		this.friendlyURL = friendlyURL;
-		this.parent = aParent;
 	}
 	
-	public void copy(final PageEntity page) {
-		setTitle(page.getTitle());
-		setContent(page.getContent());
-		setFriendlyURL(page.getFriendlyURL());
-		setParent(page.getParent());
-		setTemplate(page.getTemplate());
+	public void copy(final TemplateEntity entity) {
+		setTitle(entity.getTitle());
+		setContent(entity.getContent());
 	}
 	
 	public String getId() {
@@ -88,30 +67,6 @@ public class PageEntity implements Serializable {
 	
 	public void setContent(String content) {
 		this.content = new Text(content);
-	}
-	
-	public String getFriendlyURL() {
-		return friendlyURL;
-	}
-	
-	public void setFriendlyURL(String friendlyURL) {
-		this.friendlyURL = friendlyURL;
-	}
-
-	public String getParent() {
-		return parent;
-	}
-
-	public void setParent(String parent) {
-		this.parent = parent;
-	}
-
-	public String getTemplate() {
-		return template;
-	}
-
-	public void setTemplate(String template) {
-		this.template = template;
 	}
 
 }

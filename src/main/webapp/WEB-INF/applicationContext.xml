@@ -47,11 +47,15 @@
     <bean id="userDao" class="org.vosao.dao.impl.UserDaoImpl"
         parent="abstractDao" />  
 
+    <bean id="templateDao" class="org.vosao.dao.impl.TemplateDaoImpl"
+        parent="abstractDao" />  
+
     <bean id="dao" class="org.vosao.dao.impl.DaoImpl">  
         <property name="pageDao" ref="pageDao"/>  
         <property name="fileDao" ref="fileDao"/>  
         <property name="folderDao" ref="folderDao"/>  
         <property name="userDao" ref="userDao"/>  
+        <property name="templateDao" ref="templateDao"/>  
     </bean>
 
     <!-- Business -->

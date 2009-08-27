@@ -52,7 +52,6 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	}
 	
 	public String cancelEdit() {
-		getBeanSession().setEdit(false);
 		return "pretty:pages";
 	}
 	
@@ -63,7 +62,6 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 		}
 		getDao().getPageDao().save(current);
 		list.add(current);
-		getBeanSession().setEdit(false);
 		initDecorator();
 		return "pretty:pages";
 	}
@@ -84,17 +82,13 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 		if (id != null) {
 			current = getDao().getPageDao().getById(id);
 			initChildren();
-			getBeanSession().setNewEntity(false);
-			getBeanSession().setEdit(true);
 		}
 	}
 	
 	public void list() {
-		getBeanSession().setEdit(false);
 	}
 	
 	public String addChild() {
-		getBeanSession().setEdit(true);
 		getBeanSession().setParent(current.getId());
 		return "pretty:pageCreate";
 	}
@@ -105,7 +99,7 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	}
 	
 	public boolean isEdit() {
-		return getBeanSession().isEdit();
+		return current.getId() != null;
 	}
 
 	public PageEntity getCurrent() {

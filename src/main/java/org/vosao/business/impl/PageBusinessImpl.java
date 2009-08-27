@@ -12,7 +12,7 @@ import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.vosao.business.PageBusiness;
-import org.vosao.business.PageDecorator;
+import org.vosao.business.decorators.PageDecorator;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 

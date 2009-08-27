@@ -2,20 +2,21 @@ package org.vosao.dao;
 
 import java.util.List;
 
-import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 
 public interface FolderDao extends AbstractDao {
 
 	void save(final FolderEntity page);
 	
-	FolderEntity getById(final Long id);
+	FolderEntity getById(final String id);
+
+	List<FolderEntity> getByParent(final String id);
 
 	List<FolderEntity> select();
 	
-	void remove(final Long id);
+	void remove(final String id);
 	
-	void remove(final List<Long> ids);
+	void remove(final List<String> ids);
 	
 	
 }

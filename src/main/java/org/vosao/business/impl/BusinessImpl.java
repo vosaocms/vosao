@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.vosao.business.Business;
+import org.vosao.business.FolderBusiness;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.UserPreferences;
 import org.vosao.jsf.JSFUtil;
@@ -11,6 +12,7 @@ import org.vosao.jsf.JSFUtil;
 public class BusinessImpl implements Business {
 
 	private PageBusiness pageBusiness;
+	private FolderBusiness folderBusiness;
 
 	public UserPreferences getUserPreferences() {
 		String name = UserPreferences.class.getName();
@@ -43,5 +45,12 @@ public class BusinessImpl implements Business {
 		pageBusiness = bean;
 	}
 	
+	public FolderBusiness getFolderBusiness() {
+		return folderBusiness;
+	}
+
+	public void setFolderBusiness(FolderBusiness bean) {
+		folderBusiness = bean;
+	}
 	
 }

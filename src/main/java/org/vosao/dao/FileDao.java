@@ -10,11 +10,11 @@ public interface FileDao extends AbstractDao {
 
 	void save(final FileEntity page);
 	
-	FileEntity getById(final Key id);
+	FileEntity getById(final String id);
 
-	void remove(final Key id);
+	void remove(final String id);
 	
-	void remove(final List<Key> ids);
+	void remove(final List<String> ids);
 	
 	
 }

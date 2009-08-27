@@ -1,4 +1,4 @@
-package org.vosao.business;
+package org.vosao.business.decorators;
 
 import java.util.ArrayList;
 import java.util.List;

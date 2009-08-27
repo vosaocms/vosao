@@ -64,4 +64,8 @@ public class JSFUtil {
 		return buf.toString();
 	}
 	
+	public static String getParameter(final String name) {
+		return getRequest().getParameter(name);
+	}
+	
 }

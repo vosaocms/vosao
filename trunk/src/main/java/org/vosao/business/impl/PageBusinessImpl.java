@@ -25,7 +25,9 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			}
 			else {
 				PageDecorator parent = buf.get(page.getPage().getParent());
-				parent.getChildren().add(page);
+				if (parent != null) {
+					parent.getChildren().add(page);
+				}
 			}
 		}
 		return root;

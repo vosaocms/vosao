@@ -6,10 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.model.SelectItem;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.PageDecorator;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.TemplateEntity;
 
 
 public class PageBean extends AbstractJSFBean implements Serializable {
@@ -23,12 +26,22 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	private String id;
 	private PageDecorator root;
 	private List<PageEntity> children;
+	private List<SelectItem> templates;
 
 	public void init() {
 		initList();
 		current = new PageEntity();
 		initSelected();
 		initDecorator();
+		initTemplates();
+	}
+	
+	private void initTemplates() {
+		List<TemplateEntity> templateList = getDao().getTemplateDao().select();
+		templates = new ArrayList<SelectItem>();
+		for (TemplateEntity t : templateList) {
+			templates.add(new SelectItem(t.getId(), t.getTitle()));
+		}
 	}
 	
 	private void initList() {
@@ -180,6 +193,14 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	public void setParent(String parent) {
 		String name = this.getClass().getName() + "parent";
 		JSFUtil.setSessionObject(name, parent);
+	}
+
+	public List<SelectItem> getTemplates() {
+		return templates;
+	}
+
+	public void setTemplates(List<SelectItem> templates) {
+		this.templates = templates;
 	}
 	
 }

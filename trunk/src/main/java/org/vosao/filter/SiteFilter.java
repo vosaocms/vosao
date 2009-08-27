@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.vosao.business.Business;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
 
@@ -29,6 +30,7 @@ public class SiteFilter implements Filter {
     private ServletContext servletContext = null;
   
     private Dao dao;
+    private Business business;
     private PageEntity page;
     
     public SiteFilter() {
@@ -43,6 +45,9 @@ public class SiteFilter implements Filter {
         dao = (Dao)WebApplicationContextUtils
         	.getRequiredWebApplicationContext(servletContext)
     		.getBean("dao");
+        business = (Business)WebApplicationContextUtils
+    		.getRequiredWebApplicationContext(servletContext)
+    		.getBean("business");
     }
     
     public void doFilter(ServletRequest request, ServletResponse response, 
@@ -88,7 +93,9 @@ public class SiteFilter implements Filter {
     private void renderPage(HttpServletRequest request, 
     		HttpServletResponse response, final String url) throws IOException {
     	Writer out = response.getWriter();
-    	out.write(page.getContent());
+    	String content = business.getPageBusiness().render(page);
+    	out.write(content);
     }
+
     
 }

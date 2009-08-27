@@ -203,6 +203,12 @@
             <version>1.2.5_GA</version>
         </dependency>
 
+        <dependency>
+            <groupId>velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.5</version>
+        </dependency>
+
         <!-- javax-el -->
 
         <dependency>

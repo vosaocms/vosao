@@ -46,6 +46,12 @@
     <h:inputText value="#{pageBean.current.friendlyURL}" />
 </div>
 <div>
+    <label>Template</label>
+    <h:selectOneMenu value="#{pageBean.current.template}">
+        <f:selectItems value="#{pageBean.templates}" />
+    </h:selectOneMenu>
+</div>
+<div>
     <label>Content</label>
     <h:inputTextarea rows="20" cols="80" value="#{pageBean.current.content}" />
 </div>

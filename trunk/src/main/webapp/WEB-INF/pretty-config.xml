@@ -5,29 +5,49 @@
     http://ocpsoft.com/xml/ns/prettyfaces/pretty-1.0.xsd">
     
     <url-mapping id="login">
-        <pattern> /login </pattern>
-        <view-id> /login.jsf </view-id>
+        <pattern>/login</pattern>
+        <view-id>/login.jsf</view-id>
     </url-mapping>
 
     <url-mapping id="cms">
-        <pattern> /cms </pattern>
-        <view-id> /home.jsf </view-id>
+        <pattern>/cms</pattern>
+        <view-id>/home.jsf</view-id>
     </url-mapping>
 
+    <!-- Pages -->
+
     <url-mapping id="pages">
-        <pattern> /cms/pages </pattern>
-        <view-id> /pageList.jsf </view-id>
+        <pattern>/cms/pages</pattern>
+        <view-id>/pageList.jsf</view-id>
     </url-mapping>
     
     <url-mapping id="pageEdit">
-        <pattern> /cms/page/edit/#{pageBean.id} </pattern>
+        <pattern>/cms/page/edit/#{pageBean.id}</pattern>
         <view-id>/page.jsf</view-id>
         <action>#{pageBean.edit}</action>
     </url-mapping>
 
     <url-mapping id="pageCreate">
-        <pattern> /cms/page/create </pattern>
+        <pattern>/cms/page/create</pattern>
         <view-id>/page.jsf</view-id>
+    </url-mapping>
+
+    <!-- Templates -->
+
+    <url-mapping id="templates">
+        <pattern>/cms/templates</pattern>
+        <view-id>/templateList.jsf</view-id>
+    </url-mapping>
+    
+    <url-mapping id="templateEdit">
+        <pattern>/cms/template/edit/#{templateBean.id}</pattern>
+        <view-id>/template.jsf</view-id>
+        <action>#{templateBean.edit}</action>
+    </url-mapping>
+
+    <url-mapping id="templateCreate">
+        <pattern>/cms/template/create</pattern>
+        <view-id>/template.jsf</view-id>
     </url-mapping>
     
 </pretty-config>

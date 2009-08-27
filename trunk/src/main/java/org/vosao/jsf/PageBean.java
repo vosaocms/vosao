@@ -24,8 +24,6 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	private PageDecorator root;
 	private List<PageEntity> children;
 
-	private PageBeanSession beanSession;
-	
 	public void init() {
 		initList();
 		current = new PageEntity();
@@ -61,7 +59,7 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	public String update() {
 		//log.info("update record " + current.getTitle());
 		if (current.getId() == null) {
-			current.setParent(getBeanSession().getParent());
+			current.setParent(getParent());
 		}
 		getDao().getPageDao().save(current);
 		list.add(current);
@@ -92,7 +90,7 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	}
 	
 	public String addChild() {
-		getBeanSession().setParent(current.getId());
+		setParent(current.getId());
 		return "pretty:pageCreate";
 	}
 	
@@ -131,14 +129,6 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public PageBeanSession getBeanSession() {
-		return beanSession;
-	}
-
-	public void setBeanSession(PageBeanSession beanSession) {
-		this.beanSession = beanSession;
 	}
 
 	public String getTree() {
@@ -180,6 +170,16 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	
 	public boolean isShowChildren() {
 		return children != null;
+	}
+
+	public String getParent() {
+		String name = this.getClass().getName() + "parent";
+		return (String)JSFUtil.getSessionObject(name);
+	}
+
+	public void setParent(String parent) {
+		String name = this.getClass().getName() + "parent";
+		JSFUtil.setSessionObject(name, parent);
 	}
 	
 }

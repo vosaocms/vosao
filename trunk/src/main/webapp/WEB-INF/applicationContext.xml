@@ -80,16 +80,9 @@
         init-method="init" scope="request" 
         parent="abstractJSFBean" />
     
-    <bean id="pageBeanSession" class="org.vosao.jsf.PageBeanSession" 
-        scope="session">
-        <aop:scoped-proxy/>
-    </bean>    
-
     <bean id="pageBean" class="org.vosao.jsf.PageBean" 
         init-method="init" scope="request"
-        parent="abstractJSFBean">
-        <property name="beanSession" ref="pageBeanSession"/>
-    </bean>    
+        parent="abstractJSFBean" />
 
     <bean id="loginBean" class="org.vosao.jsf.LoginBean" 
         scope="request"

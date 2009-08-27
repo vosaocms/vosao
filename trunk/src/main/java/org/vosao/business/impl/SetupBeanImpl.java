@@ -15,6 +15,7 @@ import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.business.SetupBean;
 import org.vosao.dao.Dao;
+import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.UserRole;
@@ -43,6 +44,7 @@ public class SetupBeanImpl implements SetupBean {
 		}
 		initUsers();
 		initPages();
+		initFolders();
 	}
 	
 	private void clearSessions() {
@@ -88,6 +90,15 @@ public class SetupBeanImpl implements SetupBean {
 			PageEntity root = new PageEntity("root", content, "/", null);
 			getDao().getPageDao().save(root);
 	        log.info("Adding root page.");
+		}
+	}
+
+	private void initFolders() {
+		List<FolderEntity> roots = getDao().getFolderDao().getByParent(null);
+		if (roots.size() == 0) {
+			FolderEntity root = new FolderEntity("root", null);
+			getDao().getFolderDao().save(root);
+	        log.info("Adding root folder.");
 		}
 	}
 	

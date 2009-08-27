@@ -8,8 +8,6 @@ import org.vosao.dao.FileDao;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 
-import com.google.appengine.api.datastore.Key;
-
 public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 
 	public void save(final FileEntity entity) {
@@ -30,7 +28,7 @@ public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 		}
 	}
 	
-	public FileEntity getById(final Key id) {
+	public FileEntity getById(final String id) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			return pm.getObjectById(FileEntity.class, id);
@@ -40,7 +38,7 @@ public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 		}
 	}
 	
-	public void remove(final Key id) {
+	public void remove(final String id) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			pm.deletePersistent(pm.getObjectById(FileEntity.class, id));
@@ -50,10 +48,10 @@ public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 		}
 	}
 	
-	public void remove(final List<Key> ids) {
+	public void remove(final List<String> ids) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
-			for (Key id : ids) {
+			for (String id : ids) {
 				pm.deletePersistent(pm.getObjectById(FileEntity.class, id));
 			}
 		}

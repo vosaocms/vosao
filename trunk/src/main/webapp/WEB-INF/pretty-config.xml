@@ -49,5 +49,23 @@
         <pattern>/cms/template/create</pattern>
         <view-id>/template.jsf</view-id>
     </url-mapping>
+
+    <!-- Folders -->
+
+    <url-mapping id="folders">
+        <pattern>/cms/folders</pattern>
+        <view-id>/folderList.jsf</view-id>
+    </url-mapping>
+    
+    <url-mapping id="folderEdit">
+        <pattern>/cms/folder/edit/#{folderBean.id}</pattern>
+        <view-id>/folder.jsf</view-id>
+        <action>#{folderBean.edit}</action>
+    </url-mapping>
+
+    <url-mapping id="folderCreate">
+        <pattern>/cms/folder/create</pattern>
+        <view-id>/folder.jsf</view-id>
+    </url-mapping>
     
 </pretty-config>

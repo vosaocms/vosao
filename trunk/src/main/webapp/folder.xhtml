@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  template="WEB-INF/facelets/layout.xhtml">
+
+<ui:define name="head">
+</ui:define>
+
+<ui:define name="title">Folder</ui:define>
+
+<ui:define name="body">
+
+<h:form>
+
+<h1>Folder</h1>
+
+<div>
+    <label>Name</label>
+    <h:inputText value="#{folderBean.current.name}" />
+</div>
+
+<h:commandButton value="Save" action="#{folderBean.update}" />
+<h:commandButton value="Cancel" action="#{folderBean.cancelEdit}" />
+
+<h:panelGroup rendered="#{folderBean.showChildren}">
+<h2>Children folders</h2>
+
+<h:dataTable value="#{folderBean.children}" var="r">
+    <h:column>
+        <f:facet name="header"></f:facet>    
+        <h:selectBooleanCheckbox value="#{folderBean.selected[r.id]}"/>
+    </h:column>
+    <h:column>
+        <f:facet name="header" >Name</f:facet>    
+        <a href="/cms/folder/edit/#{r.id}"><h:outputText value="#{r.name}"/></a>
+    </h:column>
+</h:dataTable>
+
+<h:commandButton value="Add child folder" action="#{folderBean.addChild}" />
+<h:commandButton value="Delete folders" action="#{folderBean.delete}" />
+
+</h:panelGroup>
+
+</h:form>
+
+</ui:define>
+
+</ui:composition>

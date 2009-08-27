@@ -11,5 +11,8 @@ public interface Business {
 
 	PageBusiness getPageBusiness();
 	void setPageBusiness(final PageBusiness bean);
+
+	FolderBusiness getFolderBusiness();
+	void setFolderBusiness(final FolderBusiness bean);
 	
 }

@@ -2,6 +2,7 @@ package org.vosao.business;
 
 import java.util.List;
 
+import org.vosao.business.decorators.PageDecorator;
 import org.vosao.entity.PageEntity;
 
 

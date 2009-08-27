@@ -1,5 +1,4 @@
 package org.vosao.jsf;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,63 +9,53 @@ import javax.faces.model.SelectItem;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vosao.business.decorators.PageDecorator;
-import org.vosao.entity.PageEntity;
-import org.vosao.entity.TemplateEntity;
+import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.entity.FolderEntity;
 
 
-public class PageBean extends AbstractJSFBean implements Serializable {
+public class FolderBean extends AbstractJSFBean implements Serializable {
 
 	private static final long serialVersionUID = 2L;
-	private static Log log = LogFactory.getLog(PageBean.class);
+	private static Log log = LogFactory.getLog(FolderBean.class);
 	
-	private List<PageEntity> list;
-	private PageEntity current;
+	private List<FolderEntity> list;
+	private FolderEntity current;
 	private Map<String, Boolean> selected;
 	private String id;
-	private PageDecorator root;
-	private List<PageEntity> children;
+	private TreeItemDecorator<FolderEntity> root;
+	private List<FolderEntity> children;
 	private List<SelectItem> templates;
 
 	public void init() {
 		initList();
-		current = new PageEntity();
+		current = new FolderEntity();
 		initSelected();
 		initDecorator();
-		initTemplates();
-	}
-	
-	private void initTemplates() {
-		List<TemplateEntity> templateList = getDao().getTemplateDao().select();
-		templates = new ArrayList<SelectItem>();
-		for (TemplateEntity t : templateList) {
-			templates.add(new SelectItem(t.getId(), t.getTitle()));
-		}
 	}
 	
 	private void initList() {
-		list = getDao().getPageDao().select();
+		list = getDao().getFolderDao().select();
 	}
 	
 	private void initDecorator() {
-		root = getBusiness().getPageBusiness().getTree(list);
+		root = getBusiness().getFolderBusiness().getTree(list);
 	}
 
 	private void initSelected() {
 		selected = new HashMap<String, Boolean>();
-		for (PageEntity page : list) {
-			selected.put(page.getId(), false);
+		for (FolderEntity folder : list) {
+			selected.put(folder.getId(), false);
 		}
 	}
 	
 	private void initChildren() {
 		if (current != null) {
-			children = getDao().getPageDao().getByParent(current.getId());
+			children = getDao().getFolderDao().getByParent(current.getId());
 		}
 	}
 	
 	public String cancelEdit() {
-		return "pretty:pages";
+		return "pretty:folders";
 	}
 	
 	public String update() {
@@ -74,10 +63,10 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 		if (current.getId() == null) {
 			current.setParent(getParent());
 		}
-		getDao().getPageDao().save(current);
+		getDao().getFolderDao().save(current);
 		list.add(current);
 		initDecorator();
-		return "pretty:pages";
+		return "pretty:folders";
 	}
 	
 	public String delete() {
@@ -87,14 +76,14 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 				ids.add(id);
 			}
 		}
-		getDao().getPageDao().remove(ids);
+		getDao().getFolderDao().remove(ids);
 		initList();
-		return "pretty:pages";
+		return "pretty:folders";
 	}
 	
 	public void edit() {
 		if (id != null) {
-			current = getDao().getPageDao().getById(id);
+			current = getDao().getFolderDao().getById(id);
 			initChildren();
 		}
 	}
@@ -104,15 +93,12 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	
 	public String addChild() {
 		setParent(current.getId());
-		return "pretty:pageCreate";
-	}
-	
-	public void preview() throws IOException {
-		JSFUtil.redirect(current.getFriendlyURL());
+		return "pretty:folderCreate";
 	}
 	
 	
-	public List<PageEntity> getList() {
+	
+	public List<FolderEntity> getList() {
 		return list;
 	}
 	
@@ -120,11 +106,11 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 		return current.getId() != null;
 	}
 
-	public PageEntity getCurrent() {
+	public FolderEntity getCurrent() {
 		return current;
 	}
 
-	public void setCurrent(PageEntity current) {
+	public void setCurrent(FolderEntity current) {
 		this.current = current;
 	}
 
@@ -146,38 +132,39 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 
 	public String getTree() {
 		if (root != null) {
-			return renderPageTree(root).toString();
+			return renderFolderTree(root).toString();
 		}
 		else {
 			return "empty tree";
 		}
 	}
 	
-	private static StringBuffer renderPageTree(final PageDecorator page) {
+	private static StringBuffer renderFolderTree(
+			final TreeItemDecorator<FolderEntity> folder) {
 		StringBuffer result = new StringBuffer();
-		result.append("<li><a href=\"page/edit/")
-			.append(page.getPage().getId())
+		result.append("<li><a href=\"folder/edit/")
+			.append(folder.getEntity().getId())
 			.append("\">")
-			.append(page.getPage().getTitle())
+			.append(folder.getEntity().getName())
 			.append("</a>");
-		if (page.getChildren().size() > 0) {
+		if (folder.getChildren().size() > 0) {
 			result.append("<ul>");
 		}
-		for (PageDecorator child : page.getChildren()) {
-			result.append(renderPageTree(child));
+		for (TreeItemDecorator<FolderEntity> child : folder.getChildren()) {
+			result.append(renderFolderTree(child));
 		}
-		if (page.getChildren().size() > 0) {
+		if (folder.getChildren().size() > 0) {
 			result.append("</ul>");
 		}
 		result.append("</li>");
 		return result;
 	}
 
-	public List<PageEntity> getChildren() {
+	public List<FolderEntity> getChildren() {
 		return children;
 	}
 
-	public void setChildren(List<PageEntity> children) {
+	public void setChildren(List<FolderEntity> children) {
 		this.children = children;
 	}
 	

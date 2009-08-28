@@ -6,6 +6,16 @@
   template="WEB-INF/facelets/layout.xhtml">
 
 <ui:define name="head">
+
+<script type="text/javascript">
+
+function onUpload() {
+    $("#file-upload").show();
+    return false;	
+}
+
+</script>
+
 </ui:define>
 
 <ui:define name="title">Folder</ui:define>
@@ -24,8 +34,32 @@
 <h:commandButton value="Save" action="#{folderBean.update}" />
 <h:commandButton value="Cancel" action="#{folderBean.cancelEdit}" />
 
+<h:panelGroup rendered="#{folderBean.showFiles}">
+<h2>Files</h2>
+
+<h:dataTable value="#{folderBean.current.files}" var="r">
+    <h:column>
+        <f:facet name="header"></f:facet>    
+        <h:selectBooleanCheckbox value="#{folderBean.fileSelected[r.id]}"/>
+    </h:column>
+    <h:column>
+        <f:facet name="header" >Title</f:facet>    
+        <h:outputText value="#{r.title}"/>
+    </h:column>
+    <h:column>
+        <f:facet name="header" >Name</f:facet>    
+        <h:outputText value="#{r.file.filename}"/>
+    </h:column>
+</h:dataTable>
+
+<input type="button" onclick="onUpload()" value="Upload file" />
+<h:commandButton value="Delete files" action="#{folderBean.deleteFiles}" />
+
+</h:panelGroup>
+
+
 <h:panelGroup rendered="#{folderBean.showChildren}">
-<h2>Children folders</h2>
+<h2>Subfolders</h2>
 
 <h:dataTable value="#{folderBean.children}" var="r">
     <h:column>
@@ -44,6 +78,16 @@
 </h:panelGroup>
 
 </h:form>
+
+<div id="file-upload" style="display:none">
+<form action="/cms/upload" method="post" enctype="multipart/form-data">
+    File upload:
+    <input type="hidden" name="folderId" value="#{folderBean.current.id}" />
+    <input type="file" name="uploadFile" />
+    <input type="submit" value="Send" />
+</form>
+</div>
+
 
 </ui:define>
 

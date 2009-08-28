@@ -24,7 +24,11 @@ import org.vosao.entity.PageEntity;
 public class SiteFilter implements Filter {
     
     private static final Log log = LogFactory.getLog(SiteFilter.class);
-	public static final String[] SKIP_URLS = {"/cms","/static","/login"};
+	public static final String[] SKIP_URLS = {
+		"/cms",
+		"/static",
+		"/login",
+		"/file"};
     
     private FilterConfig config = null;
     private ServletContext servletContext = null;

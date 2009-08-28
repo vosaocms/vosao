@@ -7,5 +7,5 @@
   * Custom themes for pages with page binding
   * Global site configuration panel
   * Site configuration panel security
-  * Editable resources (images, css, js, other files types)
+  * Resources management (images, css, js, other files types)
   * Feedback forms 

@@ -54,6 +54,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			TemplateEntity template = getDao().getTemplateDao().getById(
 					page.getTemplate());
 			VelocityContext context = new VelocityContext();
+			context.put("pageTitle", page.getTitle());
 			context.put("pageContent", page.getContent());
 			StringWriter wr = new StringWriter();
 			String log = null;

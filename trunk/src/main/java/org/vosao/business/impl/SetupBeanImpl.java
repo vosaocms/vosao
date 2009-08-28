@@ -17,6 +17,7 @@ import org.vosao.business.SetupBean;
 import org.vosao.dao.Dao;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.TemplateEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.UserRole;
 import org.vosao.jsf.JSFUtil;
@@ -44,6 +45,7 @@ public class SetupBeanImpl implements SetupBean {
 		}
 		initUsers();
 		initPages();
+		initTemplates();
 		initFolders();
 	}
 	
@@ -90,6 +92,22 @@ public class SetupBeanImpl implements SetupBean {
 			PageEntity root = new PageEntity("root", content, "/", null);
 			getDao().getPageDao().save(root);
 	        log.info("Adding root page.");
+		}
+	}
+
+	private void initTemplates() {
+		List<TemplateEntity> list = getDao().getTemplateDao().select();
+		if (list.size() == 0) {
+			String content = "$pageContent";
+			try {
+				content = JSFUtil.getTextResource("org/vosao/resources/html/simple.html");
+			}
+			catch(IOException e) {
+		        log.error("Can't read default template." + e);
+			}
+			TemplateEntity root = new TemplateEntity("Simple", content);
+			getDao().getTemplateDao().save(root);
+	        log.info("Adding default template.");
 		}
 	}
 

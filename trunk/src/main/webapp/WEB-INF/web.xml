@@ -89,6 +89,28 @@
         <param-value>client</param-value>
     </context-param>
 
+    <!-- File upload servlet -->
+
+    <servlet>
+        <servlet-name>FileUpload</servlet-name>
+        <servlet-class>org.vosao.servlet.FileUploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FileUpload</servlet-name>
+        <url-pattern>/cms/upload</url-pattern>
+    </servlet-mapping>
+
+    <!-- File download servlet -->
+
+    <servlet>
+        <servlet-name>FileDownload</servlet-name>
+        <servlet-class>org.vosao.servlet.FileDownloadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FileDownload</servlet-name>
+        <url-pattern>/file/*</url-pattern>
+    </servlet-mapping>
+
     <!-- GAE JSF stuff -->
     
     <!-- context-param>

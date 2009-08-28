@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.faces.model.SelectItem;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.decorators.TreeItemDecorator;
@@ -16,7 +17,7 @@ import org.vosao.entity.FolderEntity;
 
 public class FolderBean extends AbstractJSFBean implements Serializable {
 
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 	private static Log log = LogFactory.getLog(FolderBean.class);
 	
 	private List<FolderEntity> list;
@@ -81,6 +82,9 @@ public class FolderBean extends AbstractJSFBean implements Serializable {
 		//log.info("update record " + current.getTitle());
 		if (current.getId() == null) {
 			current.setParent(getParent());
+		}
+		if (StringUtils.isEmpty(current.getName())) {
+			current.setName(current.getTitle().toLowerCase().replaceAll(" ", "_"));
 		}
 		getDao().getFolderDao().save(current);
 		list.add(current);
@@ -177,7 +181,7 @@ public class FolderBean extends AbstractJSFBean implements Serializable {
 		result.append("<li><a href=\"folder/edit/")
 			.append(folder.getEntity().getId())
 			.append("\">")
-			.append(folder.getEntity().getName())
+			.append(folder.getEntity().getTitle())
 			.append("</a>");
 		if (folder.getChildren().size() > 0) {
 			result.append("<ul>");

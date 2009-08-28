@@ -36,4 +36,9 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 		return root;
 	}
 
+	@Override
+	public TreeItemDecorator<FolderEntity> getTree() {
+		return getTree(getDao().getFolderDao().select());
+	}
+	
 }

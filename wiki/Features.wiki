@@ -8,4 +8,5 @@
   * Global site configuration panel
   * Site configuration panel security
   * Resources management (images, css, js, other files types)
+  * Site import/export (content and all resources)
   * Feedback forms 

@@ -9,5 +9,7 @@ import org.vosao.entity.FolderEntity;
 public interface FolderBusiness {
 
 	TreeItemDecorator<FolderEntity> getTree(final List<FolderEntity> list);
+
+	TreeItemDecorator<FolderEntity> getTree();
 	
 }

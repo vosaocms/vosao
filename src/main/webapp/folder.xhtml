@@ -27,7 +27,11 @@ function onUpload() {
 <h1>Folder</h1>
 
 <div>
-    <label>Name</label>
+    <label>Title</label>
+    <h:inputText value="#{folderBean.current.title}" />
+</div>
+<div>
+    <label>Name for URL</label>
     <h:inputText value="#{folderBean.current.name}" />
 </div>
 
@@ -67,8 +71,12 @@ function onUpload() {
         <h:selectBooleanCheckbox value="#{folderBean.selected[r.id]}"/>
     </h:column>
     <h:column>
+        <f:facet name="header" >Title</f:facet>    
+        <a href="/cms/folder/edit/#{r.id}"><h:outputText value="#{r.title}"/></a>
+    </h:column>
+    <h:column>
         <f:facet name="header" >Name</f:facet>    
-        <a href="/cms/folder/edit/#{r.id}"><h:outputText value="#{r.name}"/></a>
+        <h:outputText value="#{r.name}"/>
     </h:column>
 </h:dataTable>
 

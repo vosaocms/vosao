@@ -114,7 +114,7 @@ public class SetupBeanImpl implements SetupBean {
 	private void initFolders() {
 		List<FolderEntity> roots = getDao().getFolderDao().getByParent(null);
 		if (roots.size() == 0) {
-			FolderEntity root = new FolderEntity("root", null);
+			FolderEntity root = new FolderEntity("/", null);
 			getDao().getFolderDao().save(root);
 	        log.info("Adding root folder.");
 		}

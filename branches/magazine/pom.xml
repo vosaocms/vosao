@@ -7,7 +7,12 @@
   <version>0.1</version>
   <name>magazine Maven Webapp</name>
   <url>http://maven.apache.org</url>
-  <dependencies>
+
+
+
+
+
+    <dependencies>
 
         <!--unit test related dependencies-->
 
@@ -195,13 +200,9 @@
 
     </dependencies>
 
-    <properties>
-        <project_charset>UTF-8</project_charset>
-    </properties>
-
     <!-- Build Settings -->
     <build>
-        <finalName>vosaocms</finalName>
+        <finalName>magazine</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -225,6 +226,26 @@
             </testResource>
         </testResources>
         <plugins>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0-alpha-1</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>pom.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -233,6 +254,7 @@
                     <target>1.5</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -240,6 +262,7 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>

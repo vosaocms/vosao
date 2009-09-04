@@ -1,0 +1,44 @@
+= Resources feature =
+
+Resources organization.
+
+All resource files are organized into tree.
+
+Every theme and page has it's own private resource space.
+Every theme and page has unique url name: (about, services) 
+
+{{{
+/-
+  |- pages /-
+  |          |- about /-
+  |          |          |- info.pdf
+  |          |          |- bucklet.doc
+  |          |          |- about1.swf
+  |          |          |- about-logo.jpg
+  |          |
+  |          |- services /-
+  |                       |- services.pdf
+  |                       |- services_logo.png
+  |          
+  |- themes /-
+  |          |- simple /-
+  |          |          |- logo.jpg
+  |          |          |- style.css
+  |          |
+  |          | - complex /-
+  |                       |- css /-
+  |                       |       |- style.css
+  |                       |       |- forms.css
+  |                       |       |- table.css
+  |                       |       
+  |                       |- images /-
+  |                       |          |- logo.png
+  |                       |          |-  adv1.swf
+  |                       |
+  |                       |- js /-
+  |                              |- jquery.js
+  |                              |- jquery,forms.js
+  |                              |- jquery.tree.js
+  |                              |- main.js
+  |
+}}}

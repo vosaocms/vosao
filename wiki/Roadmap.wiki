@@ -14,9 +14,9 @@ Create pilot project. Test all required libraries in GAE/J environment.
 
 == 01.06.2010 CEO and advertising ==
 
- - create vosaoproject.org site running on vosao cms.
- - create themes library for users
- - create several commercial projects using vosao cms.
+ * create vosaoproject.org site running on vosao cms.
+ * create themes library for users
+ * create several commercial projects using vosao cms.
 
 
 == 01.01.2011 Refactoring & support ==

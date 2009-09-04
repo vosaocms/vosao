@@ -1,7 +1,7 @@
 #labels Featured
 = Feature list =
 
-  * Store hierarchical pages conten with parent and child relationship 
+  * Store hierarchical pages content with parent and child relationship 
   * Friendly URLs for page
   * Custom themes for pages with page binding
   * Global site configuration panel

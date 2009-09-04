@@ -5,6 +5,6 @@
   * Friendly URLs for page
   * Custom themes for pages with page binding
   * Global site configuration panel
-  * Resources management (images, css, js, other files types)
+  * [FeatureResources Resources management (images, css, js, other files types)]
   * Site import/export (content and all resources)
   * Feedback forms 

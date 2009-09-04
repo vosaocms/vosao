@@ -1,0 +1,61 @@
+= Import/Export feature =
+
+Requirements for import/export operations:
+ * complete site with themes
+ * complete site without themes
+ * single theme
+
+
+ Complete site = content tree + content child resources
+
+ Content child resources are placed to /files/page/page_path
+
+ Theme = theme content + theme child resources
+
+ Theme child resources are placed to /files/theme/uniqe_theme_name/
+
+
+== Import/export file format ==
+
+Zip archive with following structure:
+{{{
+/-
+ |- content.xml
+ |- theme /-
+ |         |- theme_name /-
+ |                        |- description.xml
+ |                        |- content.html
+ |                        |- any_other_theme_files_and_folders
+ |
+ |- any_other_page_files_and_folders
+}}}
+
+content.xml
+{{{
+<site>
+  <config>
+    <google-analytics>ETF-342343</google-analytics>
+  </config>
+  <pages>
+    <page name="/" title="root">
+      <content>root page content</content>
+      <page name="about" title="About page">
+        <content>about page content</content>
+      </page>
+      <page name="services" title="Services page">
+        <content>services page content</content>
+      </page>
+    </page>
+  </pages>
+</site>
+}}}
+
+description.xml
+{{{
+<theme>
+  <title>My first theme</title>
+  <name>first</name>
+</theme>
+}}}
+
+any_other_files_and_folders will be places to /files/theme/theme_name

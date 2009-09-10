@@ -31,16 +31,19 @@
         <a href="/cms/folders">Resources</a>
     </div>
     <div id="rightmenu">
-        admin | <a href="/cms/logout">Logout</a>
+        <h:outputText value="#{loginBean.currentUser.email}" /> 
+        | <a href="/cms/logout">Logout</a>
     </div>
     <span class="clear">&#160;</span>
 </div>
 
-<div class="messages">
-    <h:messages />
-</div>
+<div id="wrapper">
+    <div class="messages">
+        <h:messages errorClass="error-msg" infoClass="info-msg" />
+    </div>
 
-<ui:insert name="body" />
+    <ui:insert name="body" />
+</div>
 
 </body>
 

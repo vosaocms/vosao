@@ -4,6 +4,10 @@
     font-family: arial, sans-serif;
 }
 
+h1, h2 {
+	margin: 20px 0;
+}
+
 a, a:visited {
 	color: blue;
 }
@@ -30,3 +34,44 @@ a:hover {
 .clear {
     clear: both;
 }
+
+#wrapper {
+	margin: 20px;
+}
+
+.messages .error-msg {
+	color: red;
+	list-style-type: none;
+}
+.messages .info-msg {
+    color: green;
+    list-style-type: none;
+}
+
+/* forms */
+label {
+    width: 100px;
+    height: 20px;
+    float: left;
+}
+.form-row {
+	padding: 2px 0;
+}
+.form-table {
+	min-width: 200px; 
+}
+.form-table td {
+	padding: 2px 4px;
+}	
+
+/* Tabs */
+ul.tab {
+	list-style-type: none;
+}
+ul.tab li {
+    display: inline;
+}
+.active-tab {
+	color: blue;
+}
+

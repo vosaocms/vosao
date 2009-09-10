@@ -24,11 +24,11 @@
 
 <h1>Page</h1>
 
-<div>
+<div class="form-row">
     <label>Title</label>
     <h:inputText value="#{pageBean.current.title}" />
 </div>
-<div>
+<div class="form-row">
     <label>Friendly URL &#160;</label>
     <h:panelGroup rendered="#{pageBean.editURL}">    
         <h:outputText value="#{pageBean.current.parentFriendlyURL}/" />
@@ -38,25 +38,27 @@
         <h:outputText value="#{pageBean.current.friendlyURL}" />
     </h:panelGroup>
 </div>
-<div>
+<div class="form-row">
     <label>Template</label>
     <h:selectOneMenu value="#{pageBean.current.template}">
         <f:selectItems value="#{pageBean.templates}" />
     </h:selectOneMenu>
 </div>
-<div>
-    <label>Content</label>
+<div class="form-row">
     <h:inputTextarea id="content" rows="20" cols="80" value="#{pageBean.current.content}" />
 </div>
 
-<h:commandButton value="Save" action="#{pageBean.update}" />
-<h:commandButton value="Preview" action="#{pageBean.preview}" />
-<h:commandButton value="Cancel" action="#{pageBean.cancelEdit}" />
+<div class="buttons">
+    <h:commandButton value="Save" action="#{pageBean.update}" />
+    <h:commandButton value="Preview" action="#{pageBean.preview}" 
+        rendered="#{pageBean.edit}"/>
+    <h:commandButton value="Cancel" action="#{pageBean.cancelEdit}" />
+</div>    
 
 <h:panelGroup rendered="#{pageBean.showChildren}">
 <h2>Children pages</h2>
 
-<h:dataTable value="#{pageBean.children}" var="page">
+<h:dataTable value="#{pageBean.children}" var="page" styleClass="form-table">
     <h:column>
         <f:facet name="header"></f:facet>    
         <h:selectBooleanCheckbox value="#{pageBean.selected[page.id]}"/>

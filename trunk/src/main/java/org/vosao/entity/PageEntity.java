@@ -113,5 +113,45 @@ public class PageEntity implements Serializable {
 	public void setTemplate(String template) {
 		this.template = template;
 	}
+	
+	public String getParentFriendlyURL() {
+		if (getFriendlyURL() == null) {
+			return "";
+		}
+		int lastSlash = getFriendlyURL().lastIndexOf('/');
+		if (lastSlash == 0 || lastSlash == -1) {
+			return "";
+		}
+		return getFriendlyURL().substring(0, lastSlash);
+	}
+
+	public void setParentFriendlyURL(final String url) {
+		if (getFriendlyURL() == null) {
+			setFriendlyURL(url);
+		}
+		else {
+			setFriendlyURL(url + "/" + getPageFriendlyURL());
+		}
+	}
+
+	public String getPageFriendlyURL() {
+		if (getFriendlyURL() == null) {
+			return "";
+		}
+		int lastSlash = getFriendlyURL().lastIndexOf('/');
+		if (getFriendlyURL().equals("/") || lastSlash == -1) {
+			return "";
+		}
+		return getFriendlyURL().substring(lastSlash + 1, getFriendlyURL().length());
+	}
+
+	public void setPageFriendlyURL(final String url) {
+		if (getFriendlyURL() == null) {
+			setFriendlyURL(url);
+		}
+		else {
+			setFriendlyURL(getParentFriendlyURL() + "/" + url);
+		}
+	}
 
 }

@@ -42,8 +42,14 @@
     <h:inputText value="#{pageBean.current.title}" />
 </div>
 <div>
-    <label>Friendly URL</label>
-    <h:inputText value="#{pageBean.current.friendlyURL}" />
+    <label>Friendly URL &#160;</label>
+    <h:panelGroup rendered="#{pageBean.editURL}">    
+        <h:outputText value="#{pageBean.current.parentFriendlyURL}/" />
+        <h:inputText value="#{pageBean.current.pageFriendlyURL}" />
+    </h:panelGroup>
+    <h:panelGroup rendered="#{!pageBean.editURL}">    
+        <h:outputText value="#{pageBean.current.friendlyURL}" />
+    </h:panelGroup>
 </div>
 <div>
     <label>Template</label>

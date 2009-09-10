@@ -31,6 +31,12 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	public void init() {
 		initList();
 		current = new PageEntity();
+		if (getParentURL() == null || getParentURL().equals("/")) {
+			current.setFriendlyURL("/");
+		}
+		else {
+			current.setFriendlyURL(getParentURL() + "/");
+		}
 		initSelected();
 		initDecorator();
 		initTemplates();
@@ -70,14 +76,21 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	}
 	
 	public String update() {
-		//log.info("update record " + current.getTitle());
-		if (current.getId() == null) {
-			current.setParent(getParent());
+		List<String> errors = getBusiness().getPageBusiness()
+			.validateBeforeUpdate(current);
+		if (errors.size() == 0) {
+			if (current.getId() == null) {
+				current.setParent(getParent());
+			}
+			getDao().getPageDao().save(current);
+			list.add(current);
+			initDecorator();
+			return "pretty:pages";
 		}
-		getDao().getPageDao().save(current);
-		list.add(current);
-		initDecorator();
-		return "pretty:pages";
+		else {
+			JSFUtil.addErrorMessages(errors);
+			return null;
+		}
 	}
 	
 	public String delete() {
@@ -104,6 +117,7 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	
 	public String addChild() {
 		setParent(current.getId());
+		setParentURL(current.getFriendlyURL());
 		return "pretty:pageCreate";
 	}
 	
@@ -195,6 +209,16 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 		JSFUtil.setSessionObject(name, parent);
 	}
 
+	public String getParentURL() {
+		String name = this.getClass().getName() + "parentURL";
+		return (String)JSFUtil.getSessionObject(name);
+	}
+
+	public void setParentURL(String parent) {
+		String name = this.getClass().getName() + "parentURL";
+		JSFUtil.setSessionObject(name, parent);
+	}
+
 	public List<SelectItem> getTemplates() {
 		return templates;
 	}
@@ -203,4 +227,7 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 		this.templates = templates;
 	}
 	
+	public boolean isEditURL() {
+		return !isEdit() || (children != null && children.size() == 0); 
+	}
 }

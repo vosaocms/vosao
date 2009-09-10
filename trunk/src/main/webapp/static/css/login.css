@@ -1,0 +1,28 @@
+label {
+	width: 100px;
+	height: 20px;
+	float: left;
+}
+
+#content {
+	margin: 0 auto;
+	width: 700px;
+    margin-top: 100px;
+}
+
+#memo {
+	float: left;
+}
+
+#login-form {
+	float: right;
+	border: 1px solid #a5c4d5;
+	padding: 10px;
+	background-color: #d3e8f4;
+}
+
+#login-form h3, #login-form h4 {
+	text-align: center;
+    margin: 10px 0;
+}
+

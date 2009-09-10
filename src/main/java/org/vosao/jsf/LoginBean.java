@@ -62,5 +62,9 @@ public class LoginBean extends AbstractJSFBean implements Serializable {
 		this.password = password;
 	}
 	
+	public UserEntity getCurrentUser() {
+		return getBusiness().getUserPreferences().getUser();
+	}
+	
 	
 }

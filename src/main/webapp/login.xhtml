@@ -3,18 +3,27 @@
   xmlns:ui="http://java.sun.com/jsf/facelets"
   xmlns:h="http://java.sun.com/jsf/html"
   xmlns:f="http://java.sun.com/jsf/core"
-  template="WEB-INF/facelets/layout.xhtml">
+  template="WEB-INF/facelets/login-layout.xhtml">
 
 <ui:define name="head">
+    <link rel="stylesheet" href="/static/css/login.css" type="text/css" />
 </ui:define>
 
 <ui:define name="title">Login page</ui:define>
 
 <ui:define name="body">
 
+<div id="content">
+<div id="memo">
+    <img src="/static/images/login-logo.jpg" />
+    <p>Sign in to change site content.</p>
+</div>
+
+<div id="login-form">
 <h:form>
 
-<h1>VOSAO CMS Login</h1>
+<h4>Sign in with your</h4>
+<h3>Vosao CMS account</h3>
 
 <div>
     <label>Email</label>
@@ -24,11 +33,14 @@
     <label>Password</label>
     <h:inputSecret value="#{loginBean.password}" />
 </div>
-
-<h:commandButton value="Login" action="#{loginBean.login}" />
+<div>
+    <label></label>
+    <h:commandButton value="Login" action="#{loginBean.login}" />
+</div>    
 
 </h:form>
-
+</div>
+</div>
 </ui:define>
 
 </ui:composition>

@@ -39,6 +39,13 @@ public class LoginBean extends AbstractJSFBean implements Serializable {
 		response.sendRedirect(originalView);
 	}
 
+	public void logout() throws IOException {
+		getBusiness().getUserPreferences().setUser(null);
+		HttpServletResponse response = (HttpServletResponse) FacesContext
+				.getCurrentInstance().getExternalContext().getResponse();
+		response.sendRedirect("/");
+	}
+	
 	public String getEmail() {
 		return email;
 	}

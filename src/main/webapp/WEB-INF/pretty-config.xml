@@ -9,6 +9,12 @@
         <view-id>/login.jsf</view-id>
     </url-mapping>
 
+    <url-mapping id="logout">
+        <pattern>/cms/logout</pattern>
+        <view-id>/login.jsf</view-id>
+        <action>#{loginBean.logout}</action>
+    </url-mapping>
+
     <url-mapping id="cms">
         <pattern>/cms</pattern>
         <view-id>/home.jsf</view-id>

@@ -1,1 +1,32 @@
-/**/
+* {
+	margin: 0;
+	padding: 0;
+    font-family: arial, sans-serif;
+}
+
+a, a:visited {
+	color: blue;
+}
+a:hover {
+    color: #148fd5;
+}
+
+
+#topbar {
+	border-bottom: 1px solid #a5c4d5;
+	padding: 4px;
+}
+#leftmenu {
+	float: left;
+}
+#rightmenu {
+    float: right;
+}
+#topbar #leftmenu a, #topbar #rightmenu a {
+	padding: 2px 4px;
+	margin-left: 2px;
+}
+
+.clear {
+    clear: both;
+}

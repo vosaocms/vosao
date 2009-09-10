@@ -2,6 +2,7 @@ package org.vosao.business.impl;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,8 @@ import org.vosao.business.PageBusiness;
 import org.vosao.business.decorators.PageDecorator;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
+
+import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 
 public class PageBusinessImpl extends AbstractBusinessImpl 
 	implements PageBusiness {
@@ -75,5 +78,32 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			return page.getContent();
 		}
 	}
+	
+	@Override
+	public List<String> validateBeforeUpdate(final PageEntity page) {
+		List<String> errors = new ArrayList<String>();
+		if (page.getId() == null) {
+			PageEntity myPage = getDao().getPageDao().getByUrl(
+					page.getFriendlyURL());
+			if (myPage != null) {
+				errors.add("Page with such friendly URL already exists");
+			}
+		}
+		if (StringUtil.isEmpty(page.getFriendlyURL())) {
+			errors.add("Friendly URL is empty");
+		}
+		if (!page.getFriendlyURL().equals("/") 
+			&& StringUtil.isEmpty(page.getPageFriendlyURL())) {
+			errors.add("Friendly URL is empty");
+		}
+		if (StringUtil.isEmpty(page.getTitle())) {
+			errors.add("Title is empty");
+		}
+		if (StringUtil.isEmpty(page.getContent())) {
+			errors.add("Content is empty");
+		}
+		return errors;
+	}
+
 
 }

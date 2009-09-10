@@ -12,4 +12,5 @@ public interface PageBusiness {
 	
 	String render(final PageEntity page);
 	
+	List<String> validateBeforeUpdate(final PageEntity page);
 }

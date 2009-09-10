@@ -310,8 +310,8 @@
             <url>http://www.datanucleus.org/downloads/maven2</url>
         </repository>
         <repository>
-            <id>yasurvey-maven-repo</id>
-            <url>http://yasurvey-maven-repo.googlecode.com/svn/trunk</url>
+            <id>vosao-maven-repo</id>
+            <url>http://vosao.googlecode.com/svn/repository</url>
         </repository>
         <repository>
             <id>ocpsoft.com</id>

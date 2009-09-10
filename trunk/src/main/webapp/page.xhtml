@@ -6,14 +6,21 @@
   template="WEB-INF/facelets/layout.xhtml">
 
 <ui:define name="head">
- 
+    <script type="text/javascript" src="/static/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript">
+    $(function(){
+    	CKEDITOR.replace('form:content');
+    });    
+    
+    </script>
+    
 </ui:define>
 
 <ui:define name="title">Page</ui:define>
 
 <ui:define name="body">
 
-<h:form>
+<h:form id="form">
 
 <h1>Page</h1>
 
@@ -39,7 +46,7 @@
 </div>
 <div>
     <label>Content</label>
-    <h:inputTextarea rows="20" cols="80" value="#{pageBean.current.content}" />
+    <h:inputTextarea id="content" rows="20" cols="80" value="#{pageBean.current.content}" />
 </div>
 
 <h:commandButton value="Save" action="#{pageBean.update}" />

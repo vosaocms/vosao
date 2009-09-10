@@ -6,6 +6,7 @@
     <artifactId>cms</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
+    
     <dependencies>
 
         <!--unit test related dependencies-->
@@ -16,24 +17,26 @@
             <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
+
 		<dependency>
             <groupId>com.google.appengine</groupId>
-            <artifactId>appengine-api-1.0-stubs</artifactId>
-            <version>1.2.2</version>
+            <artifactId>appengine-api-stubs</artifactId>
+            <version>1.2.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.google.appengine</groupId>
-            <artifactId>appengine-api-1.0-runtime</artifactId>
-            <version>1.2.2</version>
+            <artifactId>appengine-local-runtime</artifactId>
+            <version>1.2.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.google.appengine</groupId>
-            <artifactId>appengine-tools-sdk</artifactId>
-            <version>1.2.2</version>
+            <artifactId>appengine-tools-api</artifactId>
+            <version>1.2.5</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
@@ -60,41 +63,13 @@
         
         <dependency>
             <groupId>com.google.appengine</groupId>
-            <artifactId>appengine-api-1.0-sdk</artifactId>
-            <version>1.2.2</version>
+            <artifactId>all</artifactId>
+            <version>1.2.5</version>
+            <type>pom</type>
         </dependency>
-        <dependency>
-            <groupId>com.google.appengine.orm</groupId>
-            <artifactId>datanucleus-appengine</artifactId>
-            <version>1.0.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-jta_1.1_spec</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-jpa_3.0_spec</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.jdo</groupId>
-            <artifactId>jdo2-api</artifactId>
-            <version>2.3-ea</version>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-core</artifactId>
-            <version>1.1.4</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-jpa</artifactId>
-            <version>1.1.4</version>
-        </dependency>
+        
         <!--jstl -->
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
@@ -231,28 +206,6 @@
     <!-- Build Settings -->
     <build>
         <finalName>vosaocms</finalName>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </resource>
-        </resources>
-        <testResources>
-            <testResource>
-                <directory>src/test/resources</directory>
-            </testResource>
-            <testResource>
-                <directory>src/test/java</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </testResource>
-        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -263,25 +216,9 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <skip>false</skip>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <configuration>
-                    <outputEncoding>${project_charset}</outputEncoding>
-                    <inputEncoding>${project_charset}</inputEncoding>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <groupId>org.datanucleus</groupId>
                 <artifactId>maven-datanucleus-plugin</artifactId>
-                <version>1.1.0</version>
+                <version>1.1.3</version>
                 <configuration>
                     <mappingIncludes>**/*.class</mappingIncludes>
                     <verbose>true</verbose>
@@ -297,9 +234,16 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
+    
+    <pluginRepositories>
+        <pluginRepository>
+            <id>datanucleus</id>
+            <url>http://www.datanucleus.org/downloads/maven2</url>
+        </pluginRepository>
+    </pluginRepositories>
+    
     <repositories>
         <repository>
             <id>mvnsearch</id>

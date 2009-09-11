@@ -10,12 +10,14 @@
 <script type="text/javascript">
 
 function onImport() {
-    $("#import-block").show();
+    $("#import-dialog").dialog("open");
 }
-
 function onImportCancel() {
-    $("#import-block").hide();
+    $("#import-dialog").dialog("close");
 }
+$(function(){
+	$("#import-dialog").dialog({ width: 400, autoOpen: false });
+});
 
 </script>
 
@@ -49,9 +51,16 @@ function onImportCancel() {
 
 </h:form>
 
-<div id="import-block" style="display:none">
-Here will be import form
-    <input type="button" onclick="onImportCancel()" value="Cancel" />
+<div id="import-dialog" title="Import themes" style="display:none">
+<form action="/cms/upload" method="post" enctype="multipart/form-data">
+    File upload:
+    <input type="hidden" name="folderId" value="#{folderBean.current.id}" />
+    <input type="file" name="uploadFile" />
+    <div class="buttons">
+        <input type="submit" value="Send" />
+        <input type="button" onclick="onImportCancel()" value="Cancel" />
+    </div>    
+</form>
 </div>
 
 </ui:define>

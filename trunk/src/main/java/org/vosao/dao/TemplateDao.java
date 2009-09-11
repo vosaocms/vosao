@@ -10,6 +10,8 @@ public interface TemplateDao extends AbstractDao {
 	
 	TemplateEntity getById(final String id);
 
+	TemplateEntity getByUrl(final String url);
+
 	List<TemplateEntity> select();
 	
 	void remove(final String id);

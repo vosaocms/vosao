@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.context.FacesContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
@@ -48,10 +49,17 @@ public class TemplateBean extends AbstractJSFBean implements Serializable {
 	}
 	
 	public String update() {
-		//log.info("update record " + current.getTitle());
-		getDao().getTemplateDao().save(current);
-		list.add(current);
-		return "pretty:templates";
+		List<String> errors = getBusiness().getTemplateBusiness()
+				.validateBeforeUpdate(current);
+		if (errors.isEmpty()) {
+			getDao().getTemplateDao().save(current);
+			list.add(current);
+			return "pretty:templates";
+		}
+		else {
+			JSFUtil.addErrorMessages(errors);
+			return null;
+		}
 	}
 	
 	public String delete() {
@@ -102,6 +110,7 @@ public class TemplateBean extends AbstractJSFBean implements Serializable {
 		out.write(file);
 		out.flush();
 		out.close();
+		FacesContext.getCurrentInstance().responseComplete();
 	}
 	
 	public List<TemplateEntity> getList() {

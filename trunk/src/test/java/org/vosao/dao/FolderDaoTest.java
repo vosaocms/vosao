@@ -61,5 +61,21 @@ public class FolderDaoTest extends AbstractDaoTest {
 		List<FolderEntity> list = getDao().getFolderDao().getByParent(root.getId());
 		assertEquals(2, list.size());
 	}	
+
+	public void testGetByParentName() {
+		FolderEntity root = addFolder("root", null);
+		addFolder("title1", root.getId());
+		addFolder("title2", null);
+		addFolder("title3", root.getId());
+		FolderEntity result = getDao().getFolderDao().getByParentName(
+				root.getId(), "title1");
+		assertNotNull(result);
+		assertEquals("title1", result.getName());
+		result = getDao().getFolderDao().getByParentName(root.getId(), "title3");
+		assertNotNull(result);
+		assertEquals("title3", result.getName());
+		result = getDao().getFolderDao().getByParentName(root.getId(), "title2");
+		assertNull(result);
+	}	
 	
 }

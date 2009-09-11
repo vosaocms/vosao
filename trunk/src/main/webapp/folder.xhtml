@@ -14,6 +14,10 @@ function onUpload() {
     return false;	
 }
 
+$(function() {
+    $("#tabs").tabs();
+});
+
 </script>
 
 </ui:define>
@@ -24,24 +28,39 @@ function onUpload() {
 
 <h:form>
 
-<h1>Folder</h1>
+<div id="tabs">
+<ul>
+    <li><a href="#tab-1">Folder</a></li>
+<h:panelGroup rendered="#{folderBean.showFiles}">
+    <li><a href="#tab-2">Files</a></li>
+</h:panelGroup>
+<h:panelGroup rendered="#{folderBean.showChildren}">
+    <li><a href="#tab-3">Subfolders</a></li>
+</h:panelGroup>
+</ul>
 
-<div>
+<div id="tab-1">
+
+<div class="form-row">
     <label>Title</label>
     <h:inputText value="#{folderBean.current.title}" />
 </div>
-<div>
+<div class="form-row">
     <label>Name for URL</label>
     <h:inputText value="#{folderBean.current.name}" />
 </div>
+<div class="buttons">
+    <h:commandButton value="Save" action="#{folderBean.update}" />
+    <h:commandButton value="Cancel" action="#{folderBean.cancelEdit}" />
+</div>    
 
-<h:commandButton value="Save" action="#{folderBean.update}" />
-<h:commandButton value="Cancel" action="#{folderBean.cancelEdit}" />
+</div>
 
 <h:panelGroup rendered="#{folderBean.showFiles}">
-<h2>Files</h2>
+<div id="tab-2">
 
-<h:dataTable value="#{folderBean.current.files}" var="r">
+<h:dataTable value="#{folderBean.current.files}" var="r"
+    styleClass="form-table">
     <h:column>
         <f:facet name="header"></f:facet>    
         <h:selectBooleanCheckbox value="#{folderBean.fileSelected[r.id]}"/>
@@ -55,17 +74,19 @@ function onUpload() {
         <h:outputText value="#{r.file.filename}"/>
     </h:column>
 </h:dataTable>
+<div class="buttons">
+    <input type="button" onclick="onUpload()" value="Upload file" />
+    <h:commandButton value="Delete files" action="#{folderBean.deleteFiles}" />
+</div>
 
-<input type="button" onclick="onUpload()" value="Upload file" />
-<h:commandButton value="Delete files" action="#{folderBean.deleteFiles}" />
-
+</div>
 </h:panelGroup>
 
-
 <h:panelGroup rendered="#{folderBean.showChildren}">
-<h2>Subfolders</h2>
+<div id="tab-3">
 
-<h:dataTable value="#{folderBean.children}" var="r">
+<h:dataTable value="#{folderBean.children}" var="r"
+    styleClass="form-table">
     <h:column>
         <f:facet name="header"></f:facet>    
         <h:selectBooleanCheckbox value="#{folderBean.selected[r.id]}"/>
@@ -79,11 +100,15 @@ function onUpload() {
         <h:outputText value="#{r.name}"/>
     </h:column>
 </h:dataTable>
+<div class="buttons">
+    <h:commandButton value="Add child folder" action="#{folderBean.addChild}" />
+    <h:commandButton value="Delete folders" action="#{folderBean.delete}" />
+</div>    
 
-<h:commandButton value="Add child folder" action="#{folderBean.addChild}" />
-<h:commandButton value="Delete folders" action="#{folderBean.delete}" />
-
+</div>
 </h:panelGroup>
+
+</div>
 
 </h:form>
 

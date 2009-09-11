@@ -1,5 +1,6 @@
 package org.vosao.business.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FolderEntity;
+import org.vosao.entity.TemplateEntity;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 
@@ -71,5 +73,22 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 		return null;
 	}
 
+	public List<String> validateBeforeUpdate(final FolderEntity folder) {
+		List<String> errors = new ArrayList<String>();
+		if (folder.getId() == null) {
+			FolderEntity myFolder = getDao().getFolderDao().getByParentName(
+					folder.getParent(), folder.getName());
+			if (myFolder != null) {
+				errors.add("Folder with such name already exists");
+			}
+		}
+		if (StringUtil.isEmpty(folder.getTitle())) {
+			errors.add("Title is empty");
+		}
+		if (StringUtil.isEmpty(folder.getName())) {
+			errors.add("Name is empty");
+		}
+		return errors;
+	}
 	
 }

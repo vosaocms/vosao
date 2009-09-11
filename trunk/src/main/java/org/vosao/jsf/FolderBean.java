@@ -79,17 +79,21 @@ public class FolderBean extends AbstractJSFBean implements Serializable {
 	}
 	
 	public String update() {
-		//log.info("update record " + current.getTitle());
 		if (current.getId() == null) {
 			current.setParent(getParent());
 		}
-		if (StringUtils.isEmpty(current.getName())) {
-			current.setName(current.getTitle().toLowerCase().replaceAll(" ", "_"));
+		List<String> errors = getBusiness().getFolderBusiness()
+				.validateBeforeUpdate(current);
+		if (errors.isEmpty()) {
+			getDao().getFolderDao().save(current);
+			list.add(current);
+			initDecorator();
+			return "pretty:folders";
 		}
-		getDao().getFolderDao().save(current);
-		list.add(current);
-		initDecorator();
-		return "pretty:folders";
+		else {
+			JSFUtil.addErrorMessages(errors);
+			return null;
+		}
 	}
 	
 	public String delete() {

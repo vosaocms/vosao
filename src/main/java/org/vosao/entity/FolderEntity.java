@@ -49,6 +49,11 @@ public class FolderEntity implements Serializable {
 		parent = aParent;
 	}
 
+	public FolderEntity(String aTitle, String aName, String aParent) {
+		this(aName, aParent);
+		title = aTitle;
+	}
+
 	public void copy(final FolderEntity entity) {
 		setName(entity.getName());
 		setTitle(entity.getTitle());

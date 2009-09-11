@@ -105,7 +105,7 @@ public class SetupBeanImpl implements SetupBean {
 			catch(IOException e) {
 		        log.error("Can't read default template." + e);
 			}
-			TemplateEntity root = new TemplateEntity("Simple", content);
+			TemplateEntity root = new TemplateEntity("Simple", content, "simple");
 			getDao().getTemplateDao().save(root);
 	        log.info("Adding default template.");
 		}
@@ -114,9 +114,13 @@ public class SetupBeanImpl implements SetupBean {
 	private void initFolders() {
 		List<FolderEntity> roots = getDao().getFolderDao().getByParent(null);
 		if (roots.size() == 0) {
+	        log.info("Adding default folders.");
 			FolderEntity root = new FolderEntity("/", null);
 			getDao().getFolderDao().save(root);
-	        log.info("Adding root folder.");
+			FolderEntity theme = new FolderEntity("Themes resources", "theme", root.getId());
+			getDao().getFolderDao().save(theme);
+			FolderEntity simple = new FolderEntity("Simple", "simple", theme.getId());
+			getDao().getFolderDao().save(simple);
 		}
 	}
 	

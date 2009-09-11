@@ -15,4 +15,6 @@ public interface Business {
 	FolderBusiness getFolderBusiness();
 	void setFolderBusiness(final FolderBusiness bean);
 	
+	TemplateBusiness getTemplateBusiness();
+	void setTemplateBusiness(final TemplateBusiness bean);
 }

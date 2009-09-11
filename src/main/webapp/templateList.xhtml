@@ -6,6 +6,19 @@
   template="WEB-INF/facelets/layout.xhtml">
 
 <ui:define name="head">
+
+<script type="text/javascript">
+
+function onImport() {
+    $("#import-block").show();
+}
+
+function onImportCancel() {
+    $("#import-block").hide();
+}
+
+</script>
+
 </ui:define>
 
 <ui:define name="title">Templates</ui:define>
@@ -16,7 +29,8 @@
 
 <h1>Templates</h1>
 
-<h:dataTable value="#{templateBean.list}" var="template">
+<h:dataTable value="#{templateBean.list}" var="template"
+    styleClass="form-table">
     <h:column>
         <f:facet name="header"></f:facet>    
         <h:selectBooleanCheckbox value="#{templateBean.selected[template.id]}"/>
@@ -26,11 +40,19 @@
         <a href="/cms/template/edit/#{template.id}"><h:outputText value="#{template.title}"/></a>
     </h:column>
 </h:dataTable>
-
-<h:commandButton value="Add" action="#{templateBean.add}" />
-<h:commandButton value="Delete" action="#{templateBean.delete}" />
+<div class="buttons">
+    <h:commandButton value="Add" action="#{templateBean.add}" />
+    <h:commandButton value="Delete" action="#{templateBean.delete}" />
+    <h:commandButton value="Export" action="#{templateBean.export}" />
+    <input type="button" onclick="onImport()" value="Import" />
+</div>
 
 </h:form>
+
+<div id="import-block" style="display:none">
+Here will be import form
+    <input type="button" onclick="onImportCancel()" value="Cancel" />
+</div>
 
 </ui:define>
 

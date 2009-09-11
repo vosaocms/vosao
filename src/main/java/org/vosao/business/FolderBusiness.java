@@ -12,4 +12,7 @@ public interface FolderBusiness {
 
 	TreeItemDecorator<FolderEntity> getTree();
 	
+	TreeItemDecorator<FolderEntity> findFolderByPath(
+			final TreeItemDecorator<FolderEntity> root, final String path);
+	
 }

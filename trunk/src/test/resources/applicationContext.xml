@@ -66,10 +66,20 @@
     </bean>
     
     <bean id="pageBusiness" class="org.vosao.business.impl.PageBusinessImpl"
+        init-method="init" parent="abstractBusiness" />  
+
+    <bean id="folderBusiness" class="org.vosao.business.impl.FolderBusinessImpl"
         parent="abstractBusiness" />  
+
+    <bean id="templateBusiness" class="org.vosao.business.impl.TemplateBusinessImpl"
+        parent="abstractBusiness">  
+        <property name="folderBusiness" ref="folderBusiness"/>  
+    </bean>    
 
     <bean id="business" class="org.vosao.business.impl.BusinessImpl">  
         <property name="pageBusiness" ref="pageBusiness"/>  
+        <property name="folderBusiness" ref="folderBusiness"/>  
+        <property name="templateBusiness" ref="templateBusiness"/>  
     </bean>
 
     <!-- JSF beans -->
@@ -80,11 +90,15 @@
         <property name="business" ref="business"/>  
     </bean>
 
-    <bean id="testBean" class="org.vosao.jsf.TestBean" 
-        init-method="init" scope="request" 
-        parent="abstractJSFBean" />
-    
     <bean id="pageBean" class="org.vosao.jsf.PageBean" 
+        init-method="init" scope="request"
+        parent="abstractJSFBean" />
+
+    <bean id="folderBean" class="org.vosao.jsf.FolderBean" 
+        init-method="init" scope="request"
+        parent="abstractJSFBean" />
+
+    <bean id="templateBean" class="org.vosao.jsf.TemplateBean" 
         init-method="init" scope="request"
         parent="abstractJSFBean" />
 

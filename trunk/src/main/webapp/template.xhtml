@@ -16,16 +16,22 @@
 
 <h1>Template</h1>
 
-<div>
+<div class="form-row">
     <label>Title</label>
     <h:inputText value="#{templateBean.current.title}" />
 </div>
-<div>
+<div class="form-row">
+    <label>URL name</label>
+    <h:inputText value="#{templateBean.current.url}" />
+</div>
+<div class="form-row">
     <h:inputTextarea rows="20" cols="80" value="#{templateBean.current.content}" />
 </div>
 
-<h:commandButton value="Save" action="#{templateBean.update}" />
-<h:commandButton value="Cancel" action="#{templateBean.cancelEdit}" />
+<div class="buttons">
+    <h:commandButton value="Save" action="#{templateBean.update}" />
+    <h:commandButton value="Cancel" action="#{templateBean.cancelEdit}" />
+</div>
 
 </h:form>
 

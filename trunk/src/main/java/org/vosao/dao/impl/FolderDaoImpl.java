@@ -6,7 +6,6 @@ import javax.jdo.PersistenceManager;
 
 import org.vosao.dao.FolderDao;
 import org.vosao.entity.FolderEntity;
-import org.vosao.entity.PageEntity;
 
 public class FolderDaoImpl extends AbstractDaoImpl implements FolderDao {
 

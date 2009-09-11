@@ -8,6 +8,8 @@ import org.vosao.business.FolderBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FolderEntity;
 
+import com.google.appengine.repackaged.com.google.common.base.StringUtil;
+
 public class FolderBusinessImpl extends AbstractBusinessImpl 
 	implements FolderBusiness {
 
@@ -40,5 +42,34 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 	public TreeItemDecorator<FolderEntity> getTree() {
 		return getTree(getDao().getFolderDao().select());
 	}
+	
+	@Override
+	public TreeItemDecorator<FolderEntity> findFolderByPath(
+			TreeItemDecorator<FolderEntity> root, final String path) {
+		String[] names = path.split("/");
+		TreeItemDecorator<FolderEntity> current = root;
+		for (String name : names) {
+			if (!StringUtil.isEmpty(name)) {
+				TreeItemDecorator<FolderEntity> child = findByChildName(
+					current, name);
+				if (child == null) {
+					return null;
+				}
+				current = child;
+			}
+		}
+		return current;
+	}
+	
+	private TreeItemDecorator<FolderEntity> findByChildName(
+			final TreeItemDecorator<FolderEntity> folder, final String name) {
+		for (TreeItemDecorator<FolderEntity> child : folder.getChildren()) {
+			if (child.getEntity().getName().equals(name)) {
+				return child;
+			}
+		}
+		return null;
+	}
+
 	
 }

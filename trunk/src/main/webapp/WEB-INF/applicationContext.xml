@@ -71,9 +71,15 @@
     <bean id="folderBusiness" class="org.vosao.business.impl.FolderBusinessImpl"
         parent="abstractBusiness" />  
 
+    <bean id="templateBusiness" class="org.vosao.business.impl.TemplateBusinessImpl"
+        parent="abstractBusiness">  
+        <property name="folderBusiness" ref="folderBusiness"/>  
+    </bean>    
+
     <bean id="business" class="org.vosao.business.impl.BusinessImpl">  
         <property name="pageBusiness" ref="pageBusiness"/>  
         <property name="folderBusiness" ref="folderBusiness"/>  
+        <property name="templateBusiness" ref="templateBusiness"/>  
     </bean>
 
     <!-- JSF beans -->

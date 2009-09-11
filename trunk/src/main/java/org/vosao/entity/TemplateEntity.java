@@ -25,12 +25,20 @@ public class TemplateEntity implements Serializable {
 	@Persistent
 	private String title;
 	
+	@Persistent
+	private String url;
+
 	@Persistent(defaultFetchGroup = "true")
 	private Text content;
 	
 	public TemplateEntity() {
 	}
 	
+	public TemplateEntity(String title, String content, String url) {
+		this(title, content);
+		this.url = url;
+	}
+
 	public TemplateEntity(String title, String content) {
 		this();
 		this.title = title;
@@ -40,6 +48,7 @@ public class TemplateEntity implements Serializable {
 	public void copy(final TemplateEntity entity) {
 		setTitle(entity.getTitle());
 		setContent(entity.getContent());
+		setUrl(entity.getUrl());
 	}
 	
 	public String getId() {
@@ -67,6 +76,14 @@ public class TemplateEntity implements Serializable {
 	
 	public void setContent(String content) {
 		this.content = new Text(content);
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 }

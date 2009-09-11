@@ -17,6 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.vosao.business.Business;
+import org.vosao.business.SetupBean;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
 
@@ -28,7 +29,8 @@ public class SiteFilter implements Filter {
 		"/cms",
 		"/static",
 		"/login",
-		"/file"};
+		"/file",
+		"/init"};
     
     private FilterConfig config = null;
     private ServletContext servletContext = null;
@@ -61,6 +63,19 @@ public class SiteFilter implements Filter {
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
         HttpServletResponse httpResponse = (HttpServletResponse)response;
         String url = httpRequest.getServletPath();
+        if (!business.isInitialized() && !url.equals("/init")) {
+        	httpResponse.sendRedirect("/init");
+        	return;
+        }
+        if (!business.isInitialized() && url.equals("/init")) {
+            SetupBean setupBean = (SetupBean)WebApplicationContextUtils
+            	.getRequiredWebApplicationContext(servletContext)
+            	.getBean("setupBean");
+        	setupBean.setup();
+        	business.setInitialized(true);        	
+        	httpResponse.sendRedirect("/");
+        	return;
+        }
         if (isSkipUrl(url)) {
             //log.info("skip url " + url);
             chain.doFilter(request, response);

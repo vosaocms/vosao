@@ -14,8 +14,7 @@
 
     <!-- Setup -->
     
-    <bean id="setupBean" class="org.vosao.business.impl.SetupBeanImpl"
-        init-method="setup">
+    <bean id="setupBean" class="org.vosao.business.impl.SetupBeanImpl">
         <property name="dao" ref="dao"/>  
         <property name="business" ref="business"/>  
     </bean>    

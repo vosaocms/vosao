@@ -50,7 +50,7 @@ a:hover {
 
 /* forms */
 label {
-    width: 100px;
+    width: 200px;
     height: 20px;
     float: left;
 }
@@ -64,14 +64,7 @@ label {
 	padding: 2px 4px;
 }	
 
-/* Tabs */
-ul.tab {
-	list-style-type: none;
-}
-ul.tab li {
-    display: inline;
-}
-.active-tab {
-	color: blue;
+.buttons {
+	margin: 20px 0;
 }
 

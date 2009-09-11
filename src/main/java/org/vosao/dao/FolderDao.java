@@ -12,6 +12,8 @@ public interface FolderDao extends AbstractDao {
 
 	List<FolderEntity> getByParent(final String id);
 
+	FolderEntity getByParentName(final String parentid, final String name);
+	
 	List<FolderEntity> select();
 	
 	void remove(final String id);

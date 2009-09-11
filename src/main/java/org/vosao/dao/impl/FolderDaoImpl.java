@@ -85,4 +85,25 @@ public class FolderDaoImpl extends AbstractDaoImpl implements FolderDao {
 		}
 	}
 	
+	public FolderEntity getByParentName(final String parentId, 
+			final String name) {
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			String query = "select from " + FolderEntity.class.getName()
+			    + " where parent == pParent && name == pName " 
+			    + "parameters String pParent, String pName";
+			List<FolderEntity> result = (List<FolderEntity>)pm.newQuery(query)
+				.execute(parentId, name);
+			if (result.size() == 0) {
+				return null;
+			}
+			return result.get(0);
+		}
+		finally {
+			pm.close();
+		}
+		
+	}
+
+	
 }

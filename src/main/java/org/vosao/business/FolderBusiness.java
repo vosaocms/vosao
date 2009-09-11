@@ -15,4 +15,5 @@ public interface FolderBusiness {
 	TreeItemDecorator<FolderEntity> findFolderByPath(
 			final TreeItemDecorator<FolderEntity> root, final String path);
 	
+	List<String> validateBeforeUpdate(final FolderEntity folder);
 }

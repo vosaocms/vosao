@@ -6,13 +6,16 @@
   template="WEB-INF/facelets/layout.xhtml">
 
 <ui:define name="head">
-    <script type="text/javascript" src="/static/ckeditor/ckeditor.js"></script>
-    <script type="text/javascript">
+
+  <script type="text/javascript" src="/static/ckeditor/ckeditor.js"></script>
+  <script type="text/javascript">
     $(function(){
     	CKEDITOR.replace('form:content');
     });    
-    
-    </script>
+    $(function() {
+        $("#tabs").tabs();
+    });
+  </script>
     
 </ui:define>
 
@@ -22,7 +25,15 @@
 
 <h:form id="form">
 
-<h1>Page</h1>
+<div id="tabs">
+<ul>
+    <li><a href="#tab-1">Page</a></li>
+    <h:panelGroup rendered="#{pageBean.showChildren}">
+    <li><a href="#tab-2">Children pages</a></li>
+    </h:panelGroup>    
+</ul>
+
+<div id="tab-1">
 
 <div class="form-row">
     <label>Title</label>
@@ -55,8 +66,11 @@
     <h:commandButton value="Cancel" action="#{pageBean.cancelEdit}" />
 </div>    
 
+</div>
+
 <h:panelGroup rendered="#{pageBean.showChildren}">
-<h2>Children pages</h2>
+
+<div id="tab-2">
 
 <h:dataTable value="#{pageBean.children}" var="page" styleClass="form-table">
     <h:column>
@@ -72,11 +86,16 @@
         <h:outputText value="#{page.friendlyURL}"/>
     </h:column>
 </h:dataTable>
+<div class="buttons">
+    <h:commandButton value="Add child page" action="#{pageBean.addChild}" />
+    <h:commandButton value="Delete pages" action="#{pageBean.delete}" />
+</div>    
 
-<h:commandButton value="Add child page" action="#{pageBean.addChild}" />
-<h:commandButton value="Delete pages" action="#{pageBean.delete}" />
+</div>
 
 </h:panelGroup>
+
+</div>
 
 </h:form>
 

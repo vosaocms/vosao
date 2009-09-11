@@ -54,7 +54,7 @@ description.xml
 {{{
 <theme>
   <title>My first theme</title>
-  <name>first</name>
+  <url>first</url>
 </theme>
 }}}
 

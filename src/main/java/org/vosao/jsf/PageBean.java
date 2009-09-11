@@ -78,7 +78,7 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	public String update() {
 		List<String> errors = getBusiness().getPageBusiness()
 			.validateBeforeUpdate(current);
-		if (errors.size() == 0) {
+		if (errors.isEmpty()) {
 			if (current.getId() == null) {
 				current.setParent(getParent());
 			}

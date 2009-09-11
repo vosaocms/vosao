@@ -60,7 +60,7 @@ public class JSFUtil {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		StringBuffer buf = new StringBuffer();
 		while(reader.ready()) {
-			buf.append(reader.readLine());
+			buf.append(reader.readLine()).append("\n");
 		}
 		return buf.toString();
 	}

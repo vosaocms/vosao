@@ -12,4 +12,5 @@ public interface TemplateBusiness {
 	
 	byte[] createExportFile(final List<TemplateEntity> list) throws IOException;
 	
+	List<String> validateBeforeUpdate(final TemplateEntity template);
 }

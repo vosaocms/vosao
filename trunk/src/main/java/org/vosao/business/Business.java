@@ -5,6 +5,9 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface Business {
 	
+	boolean isInitialized();
+	void setInitialized(boolean value);
+	
 	UserPreferences getUserPreferences();
 	UserPreferences getUserPreferences(final HttpServletRequest request);
 	void setUserPreferences(final UserPreferences userPreferences);

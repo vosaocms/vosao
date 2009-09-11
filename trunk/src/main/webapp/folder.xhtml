@@ -10,12 +10,15 @@
 <script type="text/javascript">
 
 function onUpload() {
-    $("#file-upload").show();
+    $("#file-upload").dialog("open");
     return false;	
 }
-
+function onFileUploadCancel() {
+	$("#file-upload").dialog("close");
+}
 $(function() {
     $("#tabs").tabs();
+    $("#file-upload").dialog({ width: 400, autoOpen: false });
 });
 
 </script>
@@ -112,12 +115,15 @@ $(function() {
 
 </h:form>
 
-<div id="file-upload" style="display:none">
+<div id="file-upload" title="Upload file to folder" style="display:none">
 <form action="/cms/upload" method="post" enctype="multipart/form-data">
     File upload:
     <input type="hidden" name="folderId" value="#{folderBean.current.id}" />
     <input type="file" name="uploadFile" />
-    <input type="submit" value="Send" />
+    <div class="buttons">
+        <input type="submit" value="Send" />
+        <input type="button" onclick="onFileUploadCancel()" value="Cancel" />
+    </div>    
 </form>
 </div>
 

@@ -104,7 +104,7 @@ public class TemplateBean extends AbstractJSFBean implements Serializable {
 		response.addHeader("Content-Disposition", "attachment; filename=\"" 
 				+ downloadFile + "\"");
 		ServletOutputStream out = response.getOutputStream();
-		byte[] file = getBusiness().getTemplateBusiness().createExportFile(
+		byte[] file = getBusiness().getImportExportBusiness().createExportFile(
 				selectedTemplates);
 		response.setContentLength(file.length);
 		out.write(file);

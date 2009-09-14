@@ -1,8 +1,13 @@
 package org.vosao.servlet;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +21,7 @@ import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dom4j.DocumentException;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 
@@ -32,6 +38,10 @@ public class FileUploadServlet extends BaseSpringServlet {
 	private static final long MAX_SIZE = 5000000;
 
 	private static final String FOLDER_PARAM = "folderId";
+	
+	private static final String FILE_TYPE_PARAM = "fileType";
+	private static final String FILE_TYPE_RESOURCE = "resource";
+	private static final String FILE_TYPE_IMPORT = "import";
 
 	private static final String SUCCESS_MESSAGE = "{success:'%s'}";
 	private static final String FOLDER_NOT_FOUND = "Folder not found";
@@ -54,20 +64,19 @@ public class FileUploadServlet extends BaseSpringServlet {
 				InputStream stream = null;
 				InputStream filestream = null;
 				byte[] fileData = null;
+				Map<String, String> parameters = new HashMap<String, String>();
 				while (iter.hasNext()) {
 					FileItemStream item = iter.next();
 					stream = item.openStream();
 					if (item.isFormField()) {
-						if (item.getFieldName().equals(FOLDER_PARAM)) {
-							folder = Streams.asString(stream, "UTF-8");
-							log.info("folderId " + folder);
-						}
+						parameters.put(item.getFieldName(), 
+								Streams.asString(stream, "UTF-8"));
 					} else {
 						imageFileItem = item;
 						fileData = readFileStream(stream);
 					}
 				}
-				json = processFile(imageFileItem, fileData, getFolder(folder));
+				json = processFile(imageFileItem, fileData, parameters);
 			} catch (FileUploadException e) {
 				log.error(PARSE_REQUEST_ERROR);
 				throw new UploadException(PARSE_REQUEST_ERROR);
@@ -82,6 +91,27 @@ public class FileUploadServlet extends BaseSpringServlet {
 		// log.info(json);
 	}
 
+	private String processFile(FileItemStream fileItem, byte[] data, 
+			Map<String, String> parameters) throws UploadException {
+		
+		if (!parameters.containsKey(FILE_TYPE_PARAM)) {
+			throw new UploadException("File type was not specified");
+		}
+		String fileType = parameters.get(FILE_TYPE_PARAM);
+		if (fileType.equals(FILE_TYPE_RESOURCE)) {
+			if (!parameters.containsKey(FOLDER_PARAM)) {
+				throw new UploadException("Folder parameter was not specified");
+			}
+			return processResourceFile(fileItem, data, 
+					getFolder(parameters.get(FOLDER_PARAM)));
+		}
+		if (fileType.equals(FILE_TYPE_IMPORT)) {
+			return processImportFile(fileItem, data);
+		}
+		return null;
+	}
+	
+	
 	/**
 	 * Process uploaded file.
 	 * 
@@ -91,7 +121,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 	 *            - mulitpart item.
 	 * @return Status string.
 	 */
-	private String processFile(FileItemStream imageItem, byte[] data, 
+	private String processResourceFile(FileItemStream imageItem, byte[] data, 
 			FolderEntity folder) throws UploadException {
 
 		String path = imageItem.getName();
@@ -133,5 +163,27 @@ public class FileUploadServlet extends BaseSpringServlet {
 		}
 		return folder;
 	}
+
+	private String processImportFile(FileItemStream fileItem, byte[] data) 
+		throws UploadException {
+
+		log.info("Process import file filename " + fileItem.getName());
+		String message = null;
+		ByteArrayInputStream inputData = new ByteArrayInputStream(data);
+		try {
+			ZipInputStream in = new ZipInputStream(inputData);
+			getBusiness().getImportExportBusiness().importThemes(in);
+			message = String.format(SUCCESS_MESSAGE, "Imported.");
+			in.close();
+		}
+		catch (IOException e) {
+			throw new UploadException(e.getMessage());
+		}
+		catch (DocumentException e) {
+			throw new UploadException(e.getMessage());
+		}
+		return message;
+	}
+
 	
 }

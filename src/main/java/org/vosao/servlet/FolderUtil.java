@@ -2,7 +2,10 @@ package org.vosao.servlet;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.zip.ZipEntry;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
@@ -14,12 +17,19 @@ import org.vosao.entity.FolderEntity;
  */
 public class FolderUtil {
 	
+	private static Log logger = LogFactory.getLog(FolderUtil.class);
+	
 	public static String[] getPathChain(final String path) 
 			throws UnsupportedEncodingException {
         String[] chain = path.split("/");
 		return Arrays.copyOfRange(chain, 1, chain.length);
 	}
 	
+	public static String[] getPathChain(final ZipEntry entry) 
+			throws UnsupportedEncodingException {
+		return getPathChain("/" + entry.getName());
+	}
+
 	public static String[] getFolderChain(final String[] chain) {
 		return Arrays.copyOfRange(chain, 0, chain.length - 1);
 	}
@@ -57,6 +67,33 @@ public class FolderUtil {
 		}
 		return null;
 	}
+
+	public static String getFolderName(final String path) {
+		String[] chain;
+		try {
+			chain = getPathChain(path);
+		} catch (UnsupportedEncodingException e) {
+			logger.error(e.getMessage());
+			return null;
+		}
+		if (chain.length > 0) {
+			return chain[chain.length-1];
+		}
+		return null;
+	}
 	
+	public static String getFilePath(final String path) {
+		int s = path.lastIndexOf("/");
+		return path.substring(0, s);
+	}
+	
+	public static String getFilePath(final ZipEntry entry) {
+		return getFilePath("/" + entry.getName());
+	}
+
+	public static String getFileExt(final String path) {
+		int s = path.lastIndexOf(".");
+		return path.substring(s + 1, path.length());
+	}
 	
 }

@@ -5,8 +5,8 @@ import javax.servlet.http.HttpSession;
 
 import org.vosao.business.Business;
 import org.vosao.business.FolderBusiness;
+import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.PageBusiness;
-import org.vosao.business.SetupBean;
 import org.vosao.business.TemplateBusiness;
 import org.vosao.business.UserPreferences;
 import org.vosao.jsf.JSFUtil;
@@ -18,6 +18,7 @@ public class BusinessImpl implements Business {
 	private PageBusiness pageBusiness;
 	private FolderBusiness folderBusiness;
 	private TemplateBusiness templateBusiness;
+	private ImportExportBusiness importExportBusiness;
 
 	public UserPreferences getUserPreferences() {
 		String name = UserPreferences.class.getName();
@@ -64,6 +65,14 @@ public class BusinessImpl implements Business {
 
 	public void setTemplateBusiness(TemplateBusiness bean) {
 		templateBusiness = bean;
+	}
+
+	public ImportExportBusiness getImportExportBusiness() {
+		return importExportBusiness;
+	}
+
+	public void setImportExportBusiness(ImportExportBusiness bean) {
+		importExportBusiness = bean;
 	}
 
 	public boolean isInitialized() {

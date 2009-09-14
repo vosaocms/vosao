@@ -1,5 +1,6 @@
 package org.vosao.business;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.vosao.business.decorators.TreeItemDecorator;
@@ -16,4 +17,12 @@ public interface FolderBusiness {
 			final TreeItemDecorator<FolderEntity> root, final String path);
 	
 	List<String> validateBeforeUpdate(final FolderEntity folder);
+	
+	/**
+	 * Create all directories in the path.
+	 * @param path - directories path.
+	 * @throws UnsupportedEncodingException
+	 */
+	void createFolder(final String path) throws UnsupportedEncodingException; 
+	
 }

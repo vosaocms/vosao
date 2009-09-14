@@ -118,6 +118,7 @@ $(function() {
 <div id="file-upload" title="Upload file to folder" style="display:none">
 <form action="/cms/upload" method="post" enctype="multipart/form-data">
     File upload:
+    <input type="hidden" name="fileType" value="resource" />
     <input type="hidden" name="folderId" value="#{folderBean.current.id}" />
     <input type="file" name="uploadFile" />
     <div class="buttons">

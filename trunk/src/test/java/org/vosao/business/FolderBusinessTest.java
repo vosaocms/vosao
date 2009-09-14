@@ -1,5 +1,7 @@
 package org.vosao.business;
 
+import java.io.UnsupportedEncodingException;
+
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FolderEntity;
 
@@ -58,5 +60,30 @@ public class FolderBusinessTest extends AbstractBusinessTest {
 			"/images/logos/vosao1");
 		assertNull(result);
 	}	
-	
+
+	public void testCreateFolder() throws UnsupportedEncodingException {
+		addFolder("/", null);
+		getBusiness().getFolderBusiness().createFolder("/one/two/free/four");
+		TreeItemDecorator<FolderEntity> treeRoot = getBusiness()
+			.getFolderBusiness().getTree();
+		TreeItemDecorator<FolderEntity> folder = getBusiness()
+			.getFolderBusiness().findFolderByPath(treeRoot,	"/one");
+		assertNotNull(folder);
+		assertEquals("one", folder.getEntity().getName());
+
+		folder = getBusiness().getFolderBusiness().findFolderByPath(treeRoot, 
+				"/one/two");
+		assertNotNull(folder);
+		assertEquals("two", folder.getEntity().getName());
+
+		folder = getBusiness().getFolderBusiness().findFolderByPath(treeRoot, 
+			"/one/two/free");
+		assertNotNull(folder);
+		assertEquals("free", folder.getEntity().getName());
+
+		folder = getBusiness().getFolderBusiness().findFolderByPath(treeRoot, 
+			"/one/two/free/four");
+		assertNotNull(folder);
+		assertEquals("four", folder.getEntity().getName());
+	}
 }

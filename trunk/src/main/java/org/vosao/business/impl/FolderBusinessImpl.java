@@ -1,20 +1,26 @@
 package org.vosao.business.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
+import org.vosao.servlet.FolderUtil;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 
 public class FolderBusinessImpl extends AbstractBusinessImpl 
 	implements FolderBusiness {
 
+	private static final Log logger = LogFactory.getLog(FolderBusinessImpl.class);
+	
 	@Override
 	public TreeItemDecorator<FolderEntity> getTree(
 			final List<FolderEntity> folders) {
@@ -89,6 +95,30 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 			errors.add("Name is empty");
 		}
 		return errors;
+	}
+
+	@Override
+	public void createFolder(String path) throws UnsupportedEncodingException {
+		logger.info("createFolder " + path);
+		TreeItemDecorator<FolderEntity> root = getTree();
+		String[] chain = FolderUtil.getPathChain(path);
+		String currentDir = "";
+		FolderEntity parent = root.getEntity();
+		for (String dir : chain) {
+			currentDir += "/" + dir;
+			TreeItemDecorator<FolderEntity> folder = findFolderByPath(root, 
+					currentDir);
+			if (folder == null) {
+				FolderEntity newFolder = new FolderEntity(dir);
+				newFolder.setParent(parent.getId());
+				getDao().getFolderDao().save(newFolder);
+				parent = newFolder;
+			}
+			else {
+				parent = folder.getEntity();
+			}
+		}
+		
 	}
 	
 }

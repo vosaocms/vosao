@@ -54,7 +54,7 @@ $(function(){
 <div id="import-dialog" title="Import themes" style="display:none">
 <form action="/cms/upload" method="post" enctype="multipart/form-data">
     File upload:
-    <input type="hidden" name="folderId" value="#{folderBean.current.id}" />
+    <input type="hidden" name="fileType" value="import" />
     <input type="file" name="uploadFile" />
     <div class="buttons">
         <input type="submit" value="Send" />

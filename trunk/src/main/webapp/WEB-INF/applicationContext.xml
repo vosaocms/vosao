@@ -72,6 +72,9 @@
         parent="abstractBusiness" />  
 
     <bean id="templateBusiness" class="org.vosao.business.impl.TemplateBusinessImpl"
+        parent="abstractBusiness" />  
+
+    <bean id="importExportBusiness" class="org.vosao.business.impl.ImportExportBusinessImpl"
         parent="abstractBusiness">  
         <property name="folderBusiness" ref="folderBusiness"/>  
     </bean>    
@@ -80,6 +83,7 @@
         <property name="pageBusiness" ref="pageBusiness"/>  
         <property name="folderBusiness" ref="folderBusiness"/>  
         <property name="templateBusiness" ref="templateBusiness"/>  
+        <property name="importExportBusiness" ref="importExportBusiness"/>  
     </bean>
 
     <!-- JSF beans -->

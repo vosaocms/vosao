@@ -105,5 +105,23 @@ public class FolderEntity implements Serializable {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
+	public boolean isFileExists(final String name) {
+		for (FileEntity file : files) {
+			if (file.getFile().getFilename().equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public FileEntity findFile(final String name) {
+		for (FileEntity file : files) {
+			if (file.getFile().getFilename().equals(name)) {
+				return file;
+			}
+		}
+		return null;
+	}
 
 }

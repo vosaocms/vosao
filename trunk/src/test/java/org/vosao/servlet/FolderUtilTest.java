@@ -29,4 +29,15 @@ public class FolderUtilTest extends TestCase {
 		assertEquals("free", folderChain[2]);
 	}
 	
+	public void testGetFileExt() {
+		assertEquals("zip", FolderUtil.getFileExt("/home/x/file.zip"));
+	}
+
+	public void testGetFilePath() {
+		assertEquals("/home/x", FolderUtil.getFilePath("/home/x/file.zip"));
+	}
+
+	public void testGetFolderName() {
+		assertEquals("file", FolderUtil.getFolderName("/home/x/file"));
+	}
 }

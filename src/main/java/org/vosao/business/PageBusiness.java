@@ -2,13 +2,13 @@ package org.vosao.business;
 
 import java.util.List;
 
-import org.vosao.business.decorators.PageDecorator;
+import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.PageEntity;
 
 
 public interface PageBusiness {
 
-	PageDecorator getTree(final List<PageEntity> pages);
+	TreeItemDecorator<PageEntity> getTree(final List<PageEntity> pages);
 	
 	String render(final PageEntity page);
 	

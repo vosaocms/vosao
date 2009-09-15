@@ -24,6 +24,8 @@ import org.vosao.entity.FolderEntity;
  */
 public class FileDownloadServlet extends BaseSpringServlet {
 	
+	private static final long CACHE_LIMIT = 1048576;
+	
 	private static final long serialVersionUID = 6098745782027999297L;
 	private static final Log log = LogFactory.getLog(FileDownloadServlet.class);
 
@@ -49,7 +51,9 @@ public class FileDownloadServlet extends BaseSpringServlet {
 				.getTree();
 		FileEntity file = FolderUtil.getFile(tree, folderChain, filename);
 		if (file != null) {
-			getBusiness().getCache().put(request.getPathInfo(), file);
+			if (file.getFile().getContent().length < CACHE_LIMIT) {
+				getBusiness().getCache().put(request.getPathInfo(), file);
+			}
 			sendFile(file, response);
 		}
 		else {

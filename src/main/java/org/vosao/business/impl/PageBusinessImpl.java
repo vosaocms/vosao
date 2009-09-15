@@ -13,7 +13,7 @@ import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.vosao.business.PageBusiness;
-import org.vosao.business.decorators.PageDecorator;
+import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 
@@ -30,21 +30,24 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	}
 	
 	@Override
-	public PageDecorator getTree(final List<PageEntity> pages) {
-		Map<String, PageDecorator> buf = new HashMap<String, PageDecorator>();
+	public TreeItemDecorator<PageEntity> getTree(final List<PageEntity> pages) {
+		Map<String, TreeItemDecorator<PageEntity>> buf = 
+				new HashMap<String, TreeItemDecorator<PageEntity>>();
 		for (PageEntity page : pages) {
-			buf.put(page.getId(), new PageDecorator(page));
+			buf.put(page.getId(), new TreeItemDecorator<PageEntity>(page, null));
 		}
-		PageDecorator root = null;
+		TreeItemDecorator<PageEntity> root = null;
 		for (String id : buf.keySet()) {
-			PageDecorator page = buf.get(id);
-			if (page.getPage().getParent() == null) {
+			TreeItemDecorator<PageEntity> page = buf.get(id);
+			if (page.getEntity().getParent() == null) {
 				root = page;
 			}
 			else {
-				PageDecorator parent = buf.get(page.getPage().getParent());
+				TreeItemDecorator<PageEntity> parent = buf.get(page.getEntity()
+						.getParent());
 				if (parent != null) {
 					parent.getChildren().add(page);
+					page.setParent(parent);
 				}
 			}
 		}

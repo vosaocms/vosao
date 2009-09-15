@@ -10,7 +10,7 @@ import javax.faces.model.SelectItem;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vosao.business.decorators.PageDecorator;
+import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 
@@ -24,7 +24,7 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	private PageEntity current;
 	private Map<String, Boolean> selected;
 	private String id;
-	private PageDecorator root;
+	private TreeItemDecorator<PageEntity> root;
 	private List<PageEntity> children;
 	private List<SelectItem> templates;
 
@@ -167,17 +167,18 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 		}
 	}
 	
-	private static StringBuffer renderPageTree(final PageDecorator page) {
+	private static StringBuffer renderPageTree(
+			final TreeItemDecorator<PageEntity> page) {
 		StringBuffer result = new StringBuffer();
 		result.append("<li><a href=\"page/edit/")
-			.append(page.getPage().getId())
+			.append(page.getEntity().getId())
 			.append("\">")
-			.append(page.getPage().getTitle())
+			.append(page.getEntity().getTitle())
 			.append("</a>");
 		if (page.getChildren().size() > 0) {
 			result.append("<ul>");
 		}
-		for (PageDecorator child : page.getChildren()) {
+		for (TreeItemDecorator<PageEntity> child : page.getChildren()) {
 			result.append(renderPageTree(child));
 		}
 		if (page.getChildren().size() > 0) {

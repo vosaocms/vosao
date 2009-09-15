@@ -1,7 +1,6 @@
 package org.vosao.filter;
 
 import java.io.IOException;
-import java.io.Writer;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -12,34 +11,29 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.vosao.business.Business;
-import org.vosao.dao.Dao;
-import org.vosao.entity.PageEntity;
+import org.vosao.business.SetupBean;
 
 
-public class SiteFilter implements Filter {
+public class InitFilter implements Filter {
     
     private static final Log log = LogFactory.getLog(SiteFilter.class);
-	public static final String[] SKIP_URLS = {
-		"/cms",
-		"/static",
-		"/login",
-		"/file",
-		"/init",
-		"/initCron"};
+
+    private static final String SESSION_INITURL_PARAM = "initUrl";
+    private static final String INIT_URL = "/init";
+    private static final String INIT_CRON_URL = "/initCron";
     
     private FilterConfig config = null;
     private ServletContext servletContext = null;
   
-    private Dao dao;
     private Business business;
-    private PageEntity page;
     
-    public SiteFilter() {
+    public InitFilter() {
     }
   
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -48,9 +42,6 @@ public class SiteFilter implements Filter {
     }
     
     private void prepare() {
-        dao = (Dao)WebApplicationContextUtils
-        	.getRequiredWebApplicationContext(servletContext)
-    		.getBean("dao");
         business = (Business)WebApplicationContextUtils
     		.getRequiredWebApplicationContext(servletContext)
     		.getBean("business");
@@ -62,15 +53,32 @@ public class SiteFilter implements Filter {
     	prepare();
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
         HttpServletResponse httpResponse = (HttpServletResponse)response;
+    	HttpSession session = httpRequest.getSession(true); 
         String url = httpRequest.getServletPath();
-        if (isSkipUrl(url)) {
-            //log.info("skip url " + url);
-            chain.doFilter(request, response);
-            return;
+        if (!business.isInitialized() && !url.equals(INIT_URL)) {
+        	session.setAttribute(SESSION_INITURL_PARAM, url);
+        	httpResponse.sendRedirect(INIT_URL);
+        	return;
         }
-        if (isSiteUrl(url)) {
-            //log.info("render url " + url);
-        	renderPage(httpRequest, httpResponse, url);
+        if (!business.isInitialized() && url.equals(INIT_URL)) {
+        	String initUrl = "/";
+        	if (session.getAttribute(SESSION_INITURL_PARAM) != null) {
+            	initUrl = (String) session.getAttribute(SESSION_INITURL_PARAM);
+        	}
+            SetupBean setupBean = (SetupBean)WebApplicationContextUtils
+            	.getRequiredWebApplicationContext(servletContext)
+            	.getBean("setupBean");
+        	setupBean.setup();
+        	business.setInitialized(true);        	
+        	httpResponse.sendRedirect(initUrl);
+        	return;
+        }
+        if (!business.isInitialized() && url.equals(INIT_CRON_URL)) {
+            SetupBean setupBean = (SetupBean)WebApplicationContextUtils
+            	.getRequiredWebApplicationContext(servletContext)
+            	.getBean("setupBean");
+        	setupBean.setup();
+        	business.setInitialized(true);        	
         	return;
         }
         chain.doFilter(request, response);
@@ -78,30 +86,5 @@ public class SiteFilter implements Filter {
     
     public void destroy() {
     }
-
-    private static boolean isSkipUrl(final String url) {
-    	for (String u : SKIP_URLS) {
-    		if (url.startsWith(u)) {
-    			return true;
-    		}
-    	}
-    	return false;
-    }
-    
-    private boolean isSiteUrl(final String url) {
-    	page = dao.getPageDao().getByUrl(url);
-    	if (page != null) {
-        	return true;
-    	}
-    	return false;
-    }
-    
-    private void renderPage(HttpServletRequest request, 
-    		HttpServletResponse response, final String url) throws IOException {
-    	Writer out = response.getWriter();
-    	String content = business.getPageBusiness().render(page);
-    	out.write(content);
-    }
-
     
 }

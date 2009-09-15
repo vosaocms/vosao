@@ -46,7 +46,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 	private static final String FILE_TYPE_RESOURCE = "resource";
 	private static final String FILE_TYPE_IMPORT = "import";
 
-	private static final String SUCCESS_MESSAGE = "{success:'%s'}";
+	private static final String JSON_MESSAGE = "{result:'%s', message:'%s'}";
 	private static final String FOLDER_NOT_FOUND = "Folder not found";
 	private static final String FOLDER_ID_IS_NULL = "Folder id is null";
 	private static final String PARSE_REQUEST_ERROR = "Parse request error";
@@ -85,7 +85,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 				throw new UploadException(PARSE_REQUEST_ERROR);
 			}
 		} catch (UploadException e) {
-			json = "{error:'" + e.getMessage() + "'}";
+			json = getJSONMessage("error", e.getMessage()); 
 			log.error(json);
 		}
 		response.setContentType("text/plain");
@@ -94,6 +94,10 @@ public class FileUploadServlet extends BaseSpringServlet {
 		// log.info(json);
 	}
 
+	private String getJSONMessage(final String result, final String message) {
+		return String.format(JSON_MESSAGE, result, message);
+	}
+	
 	private String processFile(FileItemStream fileItem, byte[] data, 
 			Map<String, String> parameters) throws UploadException {
 		
@@ -140,7 +144,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 				MimeType.getContentTypeByExt(ext), new Date(), data, folder);
 		getDao().getFileDao().save(file);
 		log.info("created fileEntity id=" + file.getId());
-		message = String.format(SUCCESS_MESSAGE, file.getId());
+		message = getJSONMessage("success", file.getId());
 		return message;
 	}
 
@@ -182,7 +186,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 			List<String> files = getBusiness().getImportExportBusiness()
 					.importThemes(in);
 			clearResourcesCache(files);
-			message = String.format(SUCCESS_MESSAGE, "Imported.");
+			message = String.format(JSON_MESSAGE, "Imported.");
 			in.close();
 		}
 		catch (IOException e) {

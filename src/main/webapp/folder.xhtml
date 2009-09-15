@@ -7,6 +7,8 @@
 
 <ui:define name="head">
 
+    <script src="/static/js/jquery.form.js" language="javascript" />
+
 <script type="text/javascript">
 
 function onUpload() {
@@ -20,6 +22,25 @@ $(function() {
     $("#tabs").tabs();
     $("#file-upload").dialog({ width: 400, autoOpen: false });
 });
+
+$(document).ready(function() {
+    $('#upload').ajaxForm(afterUpload);
+/*    $('#upload').ajaxForm({
+        dataType:'json',
+        success: afterUpload
+    });*/ 
+});
+
+function afterUpload(result) {
+    alert(result);
+    if (result.result == 'success') {
+        alert('File was successfully uploaded.');
+        window.location.reload();
+    }
+    else {
+        alert('Error occured during file upload. ' + result.message);
+    }
+}
 
 function onTestJSON() {
 	var jsonrpc = new JSONRpcClient("/JSON-RPC/")
@@ -124,7 +145,7 @@ function onTestJSON() {
 </h:form>
 
 <div id="file-upload" title="Upload file to folder" style="display:none">
-<form action="/cms/upload" method="post" enctype="multipart/form-data">
+<form id="upload" action="/cms/upload" method="post" enctype="multipart/form-data">
     File upload:
     <input type="hidden" name="fileType" value="resource" />
     <input type="hidden" name="folderId" value="#{folderBean.current.id}" />
@@ -133,7 +154,6 @@ function onTestJSON() {
         <input type="submit" value="Send" />
         <input type="button" onclick="onFileUploadCancel()" value="Cancel" />
     </div>
-    
     <div>
         Result: <span id="result"></span>
         <a href="#" onclick="onTestJSON()">Test JSON-RPC</a>    

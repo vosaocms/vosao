@@ -3,6 +3,8 @@ package org.vosao.business.impl;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -112,7 +114,9 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		}
 	}
 
-	public void importThemes(ZipInputStream in) throws IOException, DocumentException {
+	public List<String> importThemes(ZipInputStream in) throws IOException, 
+			DocumentException {
+		List<String> result = new ArrayList<String>();
 		ZipEntry entry;
 		byte[] buffer = new byte[4096];
 		while((entry = in.getNextEntry()) != null) {
@@ -133,10 +137,11 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 					createThemeByContent(entry, data.toString("UTF-8"));
 				}
 				else {
-					importResourceFile(entry, data.toByteArray());
+					result.add(importResourceFile(entry, data.toByteArray()));
 				}
 			}
 		}
+		return result;
 	}
 	
 	private boolean isThemeDescription(final ZipEntry entry) 
@@ -207,7 +212,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		getDao().getTemplateDao().save(theme);
 	}
 	
-	private void importResourceFile(final ZipEntry entry, byte[] data) 
+	private String importResourceFile(final ZipEntry entry, byte[] data) 
 			throws UnsupportedEncodingException {
 		
 		String[] chain = FolderUtil.getPathChain(entry);
@@ -223,14 +228,15 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		if (folderEntity.isFileExists(fileName)) {
 			FileEntity fileEntity = folderEntity.findFile(fileName);
 			fileEntity.getFile().setContent(data);
-			// TODO add mdtime change
+			fileEntity.getFile().setMdtime(new Date());
 			getDao().getFileDao().save(fileEntity);
 		}
 		else {
 			FileEntity fileEntity = new FileEntity(fileName, fileName, 
-					contentType, data, folderEntity);
+					contentType, new Date(), data, folderEntity);
 			getDao().getFileDao().save(fileEntity);
 		}
+		return "/" + entry.getName();
 	}
 
 	

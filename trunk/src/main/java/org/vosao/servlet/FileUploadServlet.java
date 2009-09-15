@@ -4,7 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -22,6 +24,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.DocumentException;
+import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 
@@ -116,9 +119,9 @@ public class FileUploadServlet extends BaseSpringServlet {
 	 * Process uploaded file.
 	 * 
 	 * @param request
-	 *            - Http reauest.
+	 *            - Http request.
 	 * @param item
-	 *            - mulitpart item.
+	 *            - multipart item.
 	 * @return Status string.
 	 */
 	private String processResourceFile(FileItemStream imageItem, byte[] data, 
@@ -126,11 +129,15 @@ public class FileUploadServlet extends BaseSpringServlet {
 
 		String path = imageItem.getName();
 		String filename = FilenameUtils.getName(path);
+		String cacheUrl = getBusiness().getFolderBusiness()
+				.getFolderPath(folder) + "/" + filename;
+		getBusiness().getCache().remove(cacheUrl);
+		log.info("Clear cache " + cacheUrl);
 		String ext = FilenameUtils.getExtension(path);
 		log.info("path " + path + " filename " + filename + " ext " + ext);
 		String message = null;
 		FileEntity file = new FileEntity(filename, filename, 
-				MimeType.getContentTypeByExt(ext), data, folder);
+				MimeType.getContentTypeByExt(ext), new Date(), data, folder);
 		getDao().getFileDao().save(file);
 		log.info("created fileEntity id=" + file.getId());
 		message = String.format(SUCCESS_MESSAGE, file.getId());
@@ -172,7 +179,9 @@ public class FileUploadServlet extends BaseSpringServlet {
 		ByteArrayInputStream inputData = new ByteArrayInputStream(data);
 		try {
 			ZipInputStream in = new ZipInputStream(inputData);
-			getBusiness().getImportExportBusiness().importThemes(in);
+			List<String> files = getBusiness().getImportExportBusiness()
+					.importThemes(in);
+			clearResourcesCache(files);
 			message = String.format(SUCCESS_MESSAGE, "Imported.");
 			in.close();
 		}
@@ -183,6 +192,13 @@ public class FileUploadServlet extends BaseSpringServlet {
 			throw new UploadException(e.getMessage());
 		}
 		return message;
+	}
+
+	private void clearResourcesCache(List<String> files) {
+		for (String file : files) {
+			getBusiness().getCache().remove(file);
+			log.info("Clear cache " + file);
+		}
 	}
 
 	

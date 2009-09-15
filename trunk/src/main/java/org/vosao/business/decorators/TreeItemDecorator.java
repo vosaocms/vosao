@@ -7,17 +7,19 @@ public class TreeItemDecorator<T> {
 
 	private T entity;
 	private List<TreeItemDecorator<T>> children;
+	private TreeItemDecorator<T> parent;
 	
-	public TreeItemDecorator(T anEntity) {
-		super();
-		this.entity = anEntity;
-		this.children = new ArrayList<TreeItemDecorator<T>>();
+	public TreeItemDecorator(T anEntity, TreeItemDecorator<T> aParent) {
+		entity = anEntity;
+		children = new ArrayList<TreeItemDecorator<T>>();
+		parent = aParent;
 	}
 
-	public TreeItemDecorator(T anEntity, List<TreeItemDecorator<T>> children) {
-		super();
-		this.entity = anEntity;
-		this.children = children;
+	public TreeItemDecorator(T anEntity, TreeItemDecorator<T> aParent, 
+			List<TreeItemDecorator<T>> aChildren) {
+		entity = anEntity;
+		children = aChildren;
+		parent = aParent;
 	}
 	
 	public T getEntity() {
@@ -26,6 +28,14 @@ public class TreeItemDecorator<T> {
 	
 	public List<TreeItemDecorator<T>> getChildren() {
 		return children;
+	}
+
+	public TreeItemDecorator<T> getParent() {
+		return parent;
+	}
+
+	public void setParent(TreeItemDecorator<T> parent) {
+		this.parent = parent;
 	}
 	
 	

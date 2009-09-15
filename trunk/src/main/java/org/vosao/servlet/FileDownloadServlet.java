@@ -2,7 +2,11 @@ package org.vosao.servlet;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.util.Collections;
 
+import javax.cache.Cache;
+import javax.cache.CacheException;
+import javax.cache.CacheManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +36,12 @@ public class FileDownloadServlet extends BaseSpringServlet {
 			response.getWriter().append("file was not specified");
 			return;
 		}
+		
+		if (isInCache(request.getPathInfo())) {
+			sendFromCache(request, response);
+			return;
+		}
+		
 		String[] folderChain = FolderUtil.getFolderChain(chain);
 		String filename = chain[chain.length-1];
 		
@@ -39,17 +49,8 @@ public class FileDownloadServlet extends BaseSpringServlet {
 				.getTree();
 		FileEntity file = FolderUtil.getFile(tree, folderChain, filename);
 		if (file != null) {
-	        log.info("found file " + file.getFile().getFilename() + " "  
-	        		+ file.getFile().getMimeType() + " "
-	        		+ file.getFile().getContent().length);
-			response.setHeader("Content-type", file.getFile().getMimeType());
-			response.setHeader("Content-Length", String.valueOf(
-					file.getFile().getContent().length));
-			BufferedOutputStream output = new BufferedOutputStream(
-					response.getOutputStream());
-			output.write(file.getFile().getContent());
-			output.flush();
-			output.close();
+			getBusiness().getCache().put(request.getPathInfo(), file);
+			sendFile(file, response);
 		}
 		else {
 	        log.info("file " + request.getPathInfo() + " was not found");
@@ -58,5 +59,28 @@ public class FileDownloadServlet extends BaseSpringServlet {
 		}
 	}
 	
+	private boolean isInCache(final String path) {
+		return getBusiness().getCache().containsKey(path);
+	}
+	
+	private void sendFromCache(HttpServletRequest request, 
+			HttpServletResponse response) throws IOException {
+        log.info("taking from memcache " + request.getPathInfo());
+		FileEntity file = (FileEntity) getBusiness().getCache().get(
+				request.getPathInfo());
+		sendFile(file, response);
+	}
+	
+	private void sendFile(final FileEntity file, HttpServletResponse response) 
+			throws IOException {
+		response.setHeader("Content-type", file.getFile().getMimeType());
+		response.setHeader("Content-Length", String.valueOf(
+				file.getFile().getContent().length));
+		BufferedOutputStream output = new BufferedOutputStream(
+				response.getOutputStream());
+		output.write(file.getFile().getContent());
+		output.flush();
+		output.close();
+	}
 	
 }

@@ -21,6 +21,14 @@ $(function() {
     $("#file-upload").dialog({ width: 400, autoOpen: false });
 });
 
+function onTestJSON() {
+	var jsonrpc = new JSONRpcClient("/JSON-RPC/")
+	var result = jsonrpc.testService.test("Hello from client!");
+    alert(result);
+	$("#result").text(result);
+	return false;
+}
+
 </script>
 
 </ui:define>
@@ -124,6 +132,11 @@ $(function() {
     <div class="buttons">
         <input type="submit" value="Send" />
         <input type="button" onclick="onFileUploadCancel()" value="Cancel" />
+    </div>
+    
+    <div>
+        Result: <span id="result"></span>
+        <a href="#" onclick="onTestJSON()">Test JSON-RPC</a>    
     </div>    
 </form>
 </div>

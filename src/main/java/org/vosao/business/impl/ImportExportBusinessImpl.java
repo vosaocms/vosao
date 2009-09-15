@@ -125,6 +125,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 				while ((len = in.read(buffer)) > 0) {
 					data.write(buffer, 0, len);
 				}
+				in.closeEntry(); //TODO test!
 				if (isThemeDescription(entry)) {
 					createThemeByDescription(entry, data.toString("UTF-8"));
 				}

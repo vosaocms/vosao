@@ -87,6 +87,16 @@
         <property name="importExportBusiness" ref="importExportBusiness"/>  
     </bean>
 
+    <!-- JSON services -->
+
+    <bean id="testService" class="org.vosao.service.impl.TestServiceImpl">  
+    </bean>    
+
+    <bean id="service" class="org.vosao.service.impl.ServiceImpl"
+        init-method="init">  
+        <property name="testService" ref="testService"/>  
+    </bean>
+
     <!-- JSF beans -->
 
     <bean id="abstractJSFBean" abstract="true"

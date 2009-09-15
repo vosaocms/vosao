@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jabsorb.JSONRPCBridge;
 import org.vosao.business.Business;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.ImportExportBusiness;

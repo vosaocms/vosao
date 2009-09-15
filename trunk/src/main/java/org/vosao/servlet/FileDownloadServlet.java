@@ -39,14 +39,20 @@ public class FileDownloadServlet extends BaseSpringServlet {
 				.getTree();
 		FileEntity file = FolderUtil.getFile(tree, folderChain, filename);
 		if (file != null) {
+	        log.info("found file " + file.getFile().getFilename() + " "  
+	        		+ file.getFile().getMimeType() + " "
+	        		+ file.getFile().getContent().length);
 			response.setHeader("Content-type", file.getFile().getMimeType());
 			response.setHeader("Content-Length", String.valueOf(
 					file.getFile().getContent().length));
 			BufferedOutputStream output = new BufferedOutputStream(
 					response.getOutputStream());
 			output.write(file.getFile().getContent());
+			output.flush();
+			output.close();
 		}
 		else {
+	        log.info("file " + request.getPathInfo() + " was not found");
 			response.getWriter().append("file " + request.getPathInfo() 
 					+ " was not found");
 		}

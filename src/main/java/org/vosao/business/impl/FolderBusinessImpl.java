@@ -27,7 +27,8 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 		Map<String, TreeItemDecorator<FolderEntity>> buf = 
 			new HashMap<String, TreeItemDecorator<FolderEntity>>();
 		for (FolderEntity page : folders) {
-			buf.put(page.getId(), new TreeItemDecorator<FolderEntity>(page));
+			buf.put(page.getId(), new TreeItemDecorator<FolderEntity>(page, 
+					null));
 		}
 		TreeItemDecorator<FolderEntity> root = null;
 		for (String id : buf.keySet()) {
@@ -40,6 +41,7 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 						folder.getEntity().getParent());
 				if (parent != null) {
 					parent.getChildren().add(folder);
+					folder.setParent(parent);
 				}
 			}
 		}
@@ -119,6 +121,36 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 			}
 		}
 		
+	}
+
+	@Override
+	public String getFolderPath(FolderEntity folder) {
+		TreeItemDecorator<FolderEntity> root = getTree();
+		return getFolderPath(folder, root);
+	}
+
+	@Override
+	public String getFolderPath(FolderEntity folder,
+			TreeItemDecorator<FolderEntity> root) {
+		
+		Map<String, TreeItemDecorator<FolderEntity>> buf = 
+			new HashMap<String, TreeItemDecorator<FolderEntity>>();
+		addItemToMap(buf, root);
+		TreeItemDecorator<FolderEntity> folderItem = buf.get(folder.getId());
+		String result = "";
+		while (folderItem.getParent() != null) {
+			result = "/" + folderItem.getEntity().getName() + result;			
+			folderItem = folderItem.getParent(); 
+		}
+		return result;
+	}
+	
+	private void addItemToMap(Map<String, TreeItemDecorator<FolderEntity>> map,
+			TreeItemDecorator<FolderEntity> item) {
+		map.put(item.getEntity().getId(), item);
+		for (TreeItemDecorator<FolderEntity> child : item.getChildren()) {
+			addItemToMap(map, child);
+		}
 	}
 	
 }

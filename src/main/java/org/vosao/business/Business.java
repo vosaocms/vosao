@@ -1,5 +1,6 @@
 package org.vosao.business;
 
+import javax.cache.Cache;
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -23,5 +24,7 @@ public interface Business {
 
 	ImportExportBusiness getImportExportBusiness();
 	void setImportExportBusiness(final ImportExportBusiness bean);
+	
+	Cache getCache();
 	
 }

@@ -1,5 +1,6 @@
 package org.vosao.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.vosao.entity.FileEntity;
@@ -16,7 +17,8 @@ public class FileDaoTest extends AbstractDaoTest {
 	private FileEntity addFile(final String title, final String name, 
 			final String contentType,final byte[] data, 
 			final FolderEntity folder) {
-		FileEntity file = new FileEntity(title, name, contentType, data, folder);
+		FileEntity file = new FileEntity(title, name, contentType, new Date(),
+				data, folder);
 		folder.addFile(file);
 		getDao().getFileDao().save(file);
 		return file;
@@ -85,7 +87,7 @@ public class FileDaoTest extends AbstractDaoTest {
 		folder = getDao().getFolderDao().getById(folder.getId());
 		List<FileEntity> list = folder.getFiles();
 		FileEntity file = new FileEntity("title4", "test.bat4", "text/plain", 
-				"file content4".getBytes(), folder);
+				new Date(), "file content4".getBytes(), folder);
 		list.add(file);
 		assertEquals(4, list.size());
 	}

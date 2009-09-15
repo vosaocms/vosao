@@ -14,6 +14,11 @@ public interface ImportExportBusiness {
 	
 	byte[] createExportFile(final List<TemplateEntity> list) throws IOException;
 	
-	void importThemes(ZipInputStream in) throws IOException, DocumentException;
+	/**
+	 * Import themes from zip file.
+	 * @return list of imported resources.
+	 */
+	List<String> importThemes(ZipInputStream in) throws IOException,
+		DocumentException;
 	
 }

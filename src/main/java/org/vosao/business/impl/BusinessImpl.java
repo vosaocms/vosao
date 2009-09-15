@@ -1,8 +1,15 @@
 package org.vosao.business.impl;
 
+import java.util.Collections;
+
+import javax.cache.Cache;
+import javax.cache.CacheException;
+import javax.cache.CacheManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.ImportExportBusiness;
@@ -10,16 +17,29 @@ import org.vosao.business.PageBusiness;
 import org.vosao.business.TemplateBusiness;
 import org.vosao.business.UserPreferences;
 import org.vosao.jsf.JSFUtil;
+import org.vosao.servlet.FileDownloadServlet;
 
 public class BusinessImpl implements Business {
 
+	private static final Log log = LogFactory.getLog(BusinessImpl.class);
+
 	private boolean initialized;
+	private Cache cache;
 	
 	private PageBusiness pageBusiness;
 	private FolderBusiness folderBusiness;
 	private TemplateBusiness templateBusiness;
 	private ImportExportBusiness importExportBusiness;
 
+	public void init() {
+		try {
+            cache = CacheManager.getInstance().getCacheFactory().createCache(
+            		Collections.emptyMap());
+        } catch (CacheException e) {
+            log.error("Can't init cache manager.");
+        }
+	}
+	
 	public UserPreferences getUserPreferences() {
 		String name = UserPreferences.class.getName();
 		if (JSFUtil.getSessionObject(name) == null) {
@@ -81,6 +101,16 @@ public class BusinessImpl implements Business {
 
 	public void setInitialized(boolean initialized) {
 		this.initialized = initialized;
+	}
+
+
+	public Cache getCache() {
+		return cache;
+	}
+
+
+	public void setCache(Cache cache) {
+		this.cache = cache;
 	}
 	
 }

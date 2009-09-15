@@ -1,6 +1,7 @@
 package org.vosao.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -43,8 +44,9 @@ public class FileEntity implements Serializable {
 	}
 	
 	public FileEntity(String aTitle, String aName, String aContentType,
-			byte[] aData, FolderEntity folder) {
-		this(aTitle, new DownloadableFile(aName, aContentType, aData), folder);
+			Date mdtime, byte[] aData, FolderEntity folder) {
+		this(aTitle, new DownloadableFile(aName, aContentType, mdtime, aData), 
+				folder);
 	}
 	
 	public void copy(final FileEntity entity) {

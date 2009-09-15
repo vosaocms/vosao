@@ -25,4 +25,8 @@ public interface FolderBusiness {
 	 */
 	void createFolder(final String path) throws UnsupportedEncodingException; 
 	
+	String getFolderPath(final FolderEntity folder);
+	String getFolderPath(final FolderEntity folder, 
+			TreeItemDecorator<FolderEntity> root);
+	
 }

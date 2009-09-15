@@ -86,4 +86,29 @@ public class FolderBusinessTest extends AbstractBusinessTest {
 		assertNotNull(folder);
 		assertEquals("four", folder.getEntity().getName());
 	}
+	
+	/**
+	 * /images/
+	 *        /logos/
+	 *              /vosao 
+	 *        
+	 *        /photos
+	 *        /test
+	 */
+	public void testGetFolderPath() {
+		FolderEntity root = addFolder("/", null);
+		FolderEntity images = addFolder("images", root.getId());
+		FolderEntity logos = addFolder("logos", images.getId());
+		FolderEntity photos = addFolder("photos", images.getId());
+		FolderEntity test = addFolder("test", images.getId());
+		FolderEntity vosao = addFolder("vosao", logos.getId());
+		assertEquals("/images", getBusiness().getFolderBusiness()
+				.getFolderPath(images));
+		assertEquals("/images/logos", getBusiness().getFolderBusiness()
+				.getFolderPath(logos));
+		assertEquals("/images/logos/vosao", getBusiness().getFolderBusiness()
+				.getFolderPath(vosao));
+		assertEquals("/images/photos", getBusiness().getFolderBusiness()
+				.getFolderPath(photos));
+	}
 }

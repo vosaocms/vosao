@@ -1,6 +1,8 @@
 #labels Featured
 = Project roadmap =
 
+== Project start 14.08.2009 ==
+
 == 01.10.2009 Technology investiagtion. ==
 
 Create pilot project. Test all required libraries in GAE/J environment.

@@ -55,6 +55,15 @@ public class InitFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse)response;
     	HttpSession session = httpRequest.getSession(true); 
         String url = httpRequest.getServletPath();
+        if (!business.isInitialized() && url.equals(INIT_CRON_URL)) {
+            SetupBean setupBean = (SetupBean)WebApplicationContextUtils
+            	.getRequiredWebApplicationContext(servletContext)
+            	.getBean("setupBean");
+        	setupBean.setup();
+        	business.setInitialized(true);
+        	writeOk(httpResponse);
+        	return;
+        }
         if (!business.isInitialized() && !url.equals(INIT_URL)) {
         	session.setAttribute(SESSION_INITURL_PARAM, url);
         	httpResponse.sendRedirect(INIT_URL);
@@ -73,18 +82,13 @@ public class InitFilter implements Filter {
         	httpResponse.sendRedirect(initUrl);
         	return;
         }
-        if (!business.isInitialized() && url.equals(INIT_CRON_URL)) {
-            SetupBean setupBean = (SetupBean)WebApplicationContextUtils
-            	.getRequiredWebApplicationContext(servletContext)
-            	.getBean("setupBean");
-        	setupBean.setup();
-        	business.setInitialized(true);        	
-        	return;
-        }
         chain.doFilter(request, response);
     }
     
     public void destroy() {
     }
     
+    private void writeOk(HttpServletResponse response) throws IOException {
+    	response.getWriter().append("OK");
+    }
 }

@@ -11,6 +11,15 @@
 
 <script type="text/javascript">
 
+$(function() {
+    $("#tabs").tabs();
+    $("#file-upload").dialog({ width: 400, autoOpen: false });
+});
+
+$(document).ready(function () {
+    $('#upload').ajaxForm(afterUpload);
+});
+
 function onUpload() {
     $("#file-upload").dialog("open");
     return false;	
@@ -18,36 +27,21 @@ function onUpload() {
 function onFileUploadCancel() {
 	$("#file-upload").dialog("close");
 }
-$(function() {
-    $("#tabs").tabs();
-    $("#file-upload").dialog({ width: 400, autoOpen: false });
-});
 
-$(document).ready(function() {
-    $('#upload').ajaxForm(afterUpload);
-/*    $('#upload').ajaxForm({
-        dataType:'json',
-        success: afterUpload
-    });*/ 
-});
-
-function afterUpload(result) {
-    alert(result);
-    if (result.result == 'success') {
-        alert('File was successfully uploaded.');
-        window.location.reload();
+function afterUpload(data) {
+    var s = data.split('::');
+    var result = s[1];
+    var msg = s[2]; 
+    if (result == 'success') {
+        msg = 'File was successfully uploaded.';
     }
-    else {
-        alert('Error occured during file upload. ' + result.message);
-    }
+    $("#file-upload").dialog("close");
+    $("#afterUpload-dialog .message").text(msg);
+    $("#afterUpload-dialog").dialog();
 }
 
-function onTestJSON() {
-	var jsonrpc = new JSONRpcClient("/JSON-RPC/")
-	var result = jsonrpc.testService.test("Hello from client!");
-    alert(result);
-	$("#result").text(result);
-	return false;
+function onAfterUploadOk() {
+	window.location.reload();
 }
 
 </script>
@@ -150,15 +144,18 @@ function onTestJSON() {
     <input type="hidden" name="fileType" value="resource" />
     <input type="hidden" name="folderId" value="#{folderBean.current.id}" />
     <input type="file" name="uploadFile" />
-    <div class="buttons">
+    <div class="buttons-dlg">
         <input type="submit" value="Send" />
         <input type="button" onclick="onFileUploadCancel()" value="Cancel" />
     </div>
-    <div>
-        Result: <span id="result"></span>
-        <a href="#" onclick="onTestJSON()">Test JSON-RPC</a>    
-    </div>    
 </form>
+</div>
+
+<div id="afterUpload-dialog" style="display:none" title="Status window">
+    <p class="message"></p>
+    <div class="buttons-dlg">
+        <input type="button" onclick="onAfterUploadOk()" value="OK" />
+    </div>
 </div>
 
 

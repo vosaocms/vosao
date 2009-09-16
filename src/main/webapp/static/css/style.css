@@ -67,4 +67,8 @@ label {
 .buttons {
 	margin: 20px 0;
 }
+.buttons-dlg {
+    margin: 20px 0;
+    text-align: center;
+}
 

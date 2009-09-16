@@ -6,18 +6,45 @@
   template="WEB-INF/facelets/layout.xhtml">
 
 <ui:define name="head">
+    
+    <script src="/static/js/jquery.form.js" language="javascript" />
 
 <script type="text/javascript">
+
+$(function(){
+    $("#import-dialog").dialog({ width: 400, autoOpen: false });
+});
+
+$(document).ready(function () {
+    $('#upload').ajaxForm(afterUpload);
+});
+
+function afterUpload(data) {
+    var s = data.split('::');
+    var result = s[1];
+    var msg = s[2]; 
+    if (result == 'success') {
+        msg = 'Success. File was successfully imported.';
+    }
+    else {
+        msg = "Error. " + msg;
+    }   
+    $("#import-dialog").dialog("close");
+    $("#afterUpload-dialog .message").text(msg);
+    $("#afterUpload-dialog").dialog();
+}
 
 function onImport() {
     $("#import-dialog").dialog("open");
 }
+
 function onImportCancel() {
     $("#import-dialog").dialog("close");
 }
-$(function(){
-	$("#import-dialog").dialog({ width: 400, autoOpen: false });
-});
+
+function onAfterUploadOk() {
+    window.location.reload();
+}
 
 </script>
 
@@ -52,16 +79,24 @@ $(function(){
 </h:form>
 
 <div id="import-dialog" title="Import themes" style="display:none">
-<form action="/cms/upload" method="post" enctype="multipart/form-data">
+<form id="upload" action="/cms/upload" method="post" enctype="multipart/form-data">
     File upload:
     <input type="hidden" name="fileType" value="import" />
     <input type="file" name="uploadFile" />
-    <div class="buttons">
+    <div class="buttons-dlg">
         <input type="submit" value="Send" />
         <input type="button" onclick="onImportCancel()" value="Cancel" />
     </div>    
 </form>
 </div>
+
+<div id="afterUpload-dialog" style="display:none" title="Status window">
+    <p class="message"></p>
+    <div class="buttons-dlg">
+        <input type="button" onclick="onAfterUploadOk()" value="OK" />
+    </div>
+</div>
+
 
 </ui:define>
 

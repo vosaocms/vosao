@@ -46,7 +46,8 @@ public class FileUploadServlet extends BaseSpringServlet {
 	private static final String FILE_TYPE_RESOURCE = "resource";
 	private static final String FILE_TYPE_IMPORT = "import";
 
-	private static final String JSON_MESSAGE = "{result:'%s', message:'%s'}";
+	private static final String TEXT_MESSAGE = "::%s::%s::";
+
 	private static final String FOLDER_NOT_FOUND = "Folder not found";
 	private static final String FOLDER_ID_IS_NULL = "Folder id is null";
 	private static final String PARSE_REQUEST_ERROR = "Parse request error";
@@ -85,7 +86,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 				throw new UploadException(PARSE_REQUEST_ERROR);
 			}
 		} catch (UploadException e) {
-			json = getJSONMessage("error", e.getMessage()); 
+			json = getMessage("error", e.getMessage()); 
 			log.error(json);
 		}
 		response.setContentType("text/plain");
@@ -94,8 +95,8 @@ public class FileUploadServlet extends BaseSpringServlet {
 		// log.info(json);
 	}
 
-	private String getJSONMessage(final String result, final String message) {
-		return String.format(JSON_MESSAGE, result, message);
+	private String getMessage(final String result, final String message) {
+		return String.format(TEXT_MESSAGE, result, message);
 	}
 	
 	private String processFile(FileItemStream fileItem, byte[] data, 
@@ -144,7 +145,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 				MimeType.getContentTypeByExt(ext), new Date(), data, folder);
 		getDao().getFileDao().save(file);
 		log.info("created fileEntity id=" + file.getId());
-		message = getJSONMessage("success", file.getId());
+		message = getMessage("success", file.getId());
 		return message;
 	}
 
@@ -178,7 +179,11 @@ public class FileUploadServlet extends BaseSpringServlet {
 	private String processImportFile(FileItemStream fileItem, byte[] data) 
 		throws UploadException {
 
-		log.info("Process import file filename " + fileItem.getName());
+		log.debug("Process import file filename " + fileItem.getName());
+		String ext = FolderUtil.getFileExt(fileItem.getName());
+		if (!ext.toLowerCase().equals("zip")) {
+			throw new UploadException("Wrong file extension.");
+		}
 		String message = null;
 		ByteArrayInputStream inputData = new ByteArrayInputStream(data);
 		try {
@@ -186,7 +191,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 			List<String> files = getBusiness().getImportExportBusiness()
 					.importThemes(in);
 			clearResourcesCache(files);
-			message = String.format(JSON_MESSAGE, "Imported.");
+			message = getMessage("success", "Imported.");
 			in.close();
 		}
 		catch (IOException e) {
@@ -201,7 +206,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 	private void clearResourcesCache(List<String> files) {
 		for (String file : files) {
 			getBusiness().getCache().remove(file);
-			log.info("Clear cache " + file);
+			log.debug("Clear cache " + file);
 		}
 	}
 

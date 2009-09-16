@@ -37,12 +37,12 @@ content.xml
     <google-analytics>ETF-342343</google-analytics>
   </config>
   <pages>
-    <page url="/" title="root">
+    <page url="/" title="root" theme="simple">
       <content>root page content</content>
       <page name="about" title="About page">
         <content>about page content</content>
       </page>
-      <page url="/services" title="Services page">
+      <page url="/services" title="Services page" theme="custom">
         <content>services page content</content>
       </page>
     </page>

@@ -50,12 +50,16 @@
     <bean id="templateDao" class="org.vosao.dao.impl.TemplateDaoImpl"
         parent="abstractDao" />  
 
+    <bean id="configDao" class="org.vosao.dao.impl.ConfigDaoImpl"
+        parent="abstractDao" />  
+
     <bean id="dao" class="org.vosao.dao.impl.DaoImpl">  
         <property name="pageDao" ref="pageDao"/>  
         <property name="fileDao" ref="fileDao"/>  
         <property name="folderDao" ref="folderDao"/>  
         <property name="userDao" ref="userDao"/>  
         <property name="templateDao" ref="templateDao"/>  
+        <property name="configDao" ref="configDao"/>  
     </bean>
 
     <!-- Business -->
@@ -80,12 +84,16 @@
         <property name="pageBusiness" ref="pageBusiness"/>  
     </bean>    
 
+    <bean id="configBusiness" class="org.vosao.business.impl.ConfigBusinessImpl"
+        parent="abstractBusiness" />  
+
     <bean id="business" class="org.vosao.business.impl.BusinessImpl"
         init-method="init">  
         <property name="pageBusiness" ref="pageBusiness"/>  
         <property name="folderBusiness" ref="folderBusiness"/>  
         <property name="templateBusiness" ref="templateBusiness"/>  
         <property name="importExportBusiness" ref="importExportBusiness"/>  
+        <property name="configBusiness" ref="configBusiness"/>  
     </bean>
 
     <!-- JSON services -->
@@ -119,7 +127,7 @@
         parent="abstractJSFBean" />
 
     <bean id="configBean" class="org.vosao.jsf.ConfigBean" 
-        scope="request"
+        init-method="init" scope="request"
         parent="abstractJSFBean" />
 
     <bean id="loginBean" class="org.vosao.jsf.LoginBean" 

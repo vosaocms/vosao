@@ -12,8 +12,24 @@ public interface ImportExportBusiness {
 	void setFolderBusiness(FolderBusiness bean);
 	FolderBusiness getFolderBusiness();
 	
+	void setPageBusiness(PageBusiness bean);
+	PageBusiness getPageBusiness();
+
+	/**
+	 * Create export file with selected themes.
+	 * @param list - selected themes.
+	 * @return zip file as byte array
+	 * @throws IOException
+	 */
 	byte[] createExportFile(final List<TemplateEntity> list) throws IOException;
-	
+
+	/**
+	 * Create export file for whole site.
+	 * @return zip file as byte array
+	 * @throws IOException
+	 */
+	byte[] createExportFile() throws IOException;
+
 	/**
 	 * Import themes from zip file.
 	 * @return list of imported resources.

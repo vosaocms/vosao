@@ -108,5 +108,9 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		return errors;
 	}
 
+	@Override
+	public TreeItemDecorator<PageEntity> getTree() {
+		return getTree(getDao().getPageDao().select());
+	}
 
 }

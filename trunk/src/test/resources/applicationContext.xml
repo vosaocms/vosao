@@ -69,9 +69,6 @@
         <property name="dao" ref="dao"/>  
     </bean>
     
-    <bean id="pageBusiness" class="org.vosao.business.impl.PageBusinessImpl"
-        init-method="init" parent="abstractBusiness" />  
-
     <bean id="folderBusiness" class="org.vosao.business.impl.FolderBusinessImpl"
         parent="abstractBusiness" />  
 
@@ -86,6 +83,11 @@
 
     <bean id="configBusiness" class="org.vosao.business.impl.ConfigBusinessImpl"
         parent="abstractBusiness" />  
+
+    <bean id="pageBusiness" class="org.vosao.business.impl.PageBusinessImpl"
+        init-method="init" parent="abstractBusiness">
+        <property name="configBusiness" ref="configBusiness"/>  
+    </bean>      
 
     <bean id="business" class="org.vosao.business.impl.BusinessImpl"
         init-method="init">  

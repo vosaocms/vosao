@@ -44,9 +44,10 @@ public class SetupBeanImpl implements SetupBean {
 			log.error(e);
 		}
 		initUsers();
-		initPages();
 		initTemplates();
+		initPages();
 		initFolders();
+		initConfigs();
 	}
 	
 	private void clearSessions() {
@@ -89,7 +90,9 @@ public class SetupBeanImpl implements SetupBean {
 			catch(IOException e) {
 		        log.error("Can't read default root page." + e);
 			}
-			PageEntity root = new PageEntity("root", content, "/", null);
+			TemplateEntity template = getDao().getTemplateDao().getByUrl("simple");
+			PageEntity root = new PageEntity("root", content, "/", null, 
+					template.getId());
 			getDao().getPageDao().save(root);
 	        log.info("Adding root page.");
 		}
@@ -98,7 +101,7 @@ public class SetupBeanImpl implements SetupBean {
 	private void initTemplates() {
 		List<TemplateEntity> list = getDao().getTemplateDao().select();
 		if (list.size() == 0) {
-			String content = "$pageContent";
+			String content = "$page.content";
 			try {
 				content = JSFUtil.getTextResource("org/vosao/resources/html/simple.html");
 			}
@@ -138,6 +141,11 @@ public class SetupBeanImpl implements SetupBean {
 
 	public void setBusiness(Business business) {
 		this.business = business;
+	}
+
+	private void initConfigs() {
+        log.info("Adding configs.");
+		getBusiness().getConfigBusiness().setGoogleAnalyticsId("");
 	}
 	
 }

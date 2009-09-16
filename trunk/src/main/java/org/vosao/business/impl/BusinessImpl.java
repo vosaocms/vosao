@@ -12,6 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jabsorb.JSONRPCBridge;
 import org.vosao.business.Business;
+import org.vosao.business.ConfigBusiness;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.PageBusiness;
@@ -31,6 +32,7 @@ public class BusinessImpl implements Business {
 	private FolderBusiness folderBusiness;
 	private TemplateBusiness templateBusiness;
 	private ImportExportBusiness importExportBusiness;
+	private ConfigBusiness configBusiness;
 
 	public void init() {
 		try {
@@ -113,5 +115,13 @@ public class BusinessImpl implements Business {
 	public void setCache(Cache cache) {
 		this.cache = cache;
 	}
+	
+	public ConfigBusiness getConfigBusiness() {
+		return configBusiness;
+	}
+	public void setConfigBusiness(ConfigBusiness bean) {
+		configBusiness = bean;
+	}
+	
 	
 }

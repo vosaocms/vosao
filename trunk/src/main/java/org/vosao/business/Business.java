@@ -26,5 +26,9 @@ public interface Business {
 	void setImportExportBusiness(final ImportExportBusiness bean);
 	
 	Cache getCache();
+	void setCache(Cache cache);
+
+	ConfigBusiness getConfigBusiness();
+	void setConfigBusiness(final ConfigBusiness bean);
 	
 }

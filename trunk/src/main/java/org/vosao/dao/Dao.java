@@ -16,5 +16,8 @@ public interface Dao {
 
 	TemplateDao getTemplateDao();
 	void setTemplateDao(final TemplateDao templateDao);
+
+	ConfigDao getConfigDao();
+	void setConfigDao(final ConfigDao configDao);
 	
 }

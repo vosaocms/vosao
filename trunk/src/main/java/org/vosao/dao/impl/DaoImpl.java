@@ -1,5 +1,6 @@
 package org.vosao.dao.impl;
 
+import org.vosao.dao.ConfigDao;
 import org.vosao.dao.Dao;
 import org.vosao.dao.FileDao;
 import org.vosao.dao.FolderDao;
@@ -14,6 +15,7 @@ public class DaoImpl implements Dao {
 	private FolderDao folderDao;
 	private UserDao userDao;
 	private TemplateDao templateDao;
+	private ConfigDao configDao;
 	
 	public PageDao getPageDao() {
 		return pageDao;
@@ -50,6 +52,14 @@ public class DaoImpl implements Dao {
 	
 	public void setTemplateDao(TemplateDao templateDao) {
 		this.templateDao = templateDao;
+	}
+
+	public ConfigDao getConfigDao() {
+		return configDao;
+	}
+	
+	public void setConfigDao(ConfigDao configDao) {
+		this.configDao = configDao;
 	}
 	
 }

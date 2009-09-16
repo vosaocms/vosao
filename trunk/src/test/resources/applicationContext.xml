@@ -50,12 +50,16 @@
     <bean id="templateDao" class="org.vosao.dao.impl.TemplateDaoImpl"
         parent="abstractDao" />  
 
+    <bean id="configDao" class="org.vosao.dao.impl.ConfigDaoImpl"
+        parent="abstractDao" />  
+
     <bean id="dao" class="org.vosao.dao.impl.DaoImpl">  
         <property name="pageDao" ref="pageDao"/>  
         <property name="fileDao" ref="fileDao"/>  
         <property name="folderDao" ref="folderDao"/>  
         <property name="userDao" ref="userDao"/>  
         <property name="templateDao" ref="templateDao"/>  
+        <property name="configDao" ref="configDao"/>  
     </bean>
 
     <!-- Business -->
@@ -77,7 +81,11 @@
     <bean id="importExportBusiness" class="org.vosao.business.impl.ImportExportBusinessImpl"
         parent="abstractBusiness">  
         <property name="folderBusiness" ref="folderBusiness"/>  
+        <property name="pageBusiness" ref="pageBusiness"/>  
     </bean>    
+
+    <bean id="configBusiness" class="org.vosao.business.impl.ConfigBusinessImpl"
+        parent="abstractBusiness" />  
 
     <bean id="business" class="org.vosao.business.impl.BusinessImpl"
         init-method="init">  
@@ -85,6 +93,17 @@
         <property name="folderBusiness" ref="folderBusiness"/>  
         <property name="templateBusiness" ref="templateBusiness"/>  
         <property name="importExportBusiness" ref="importExportBusiness"/>  
+        <property name="configBusiness" ref="configBusiness"/>  
+    </bean>
+
+    <!-- JSON services -->
+
+    <bean id="testService" class="org.vosao.service.impl.TestServiceImpl">  
+    </bean>    
+
+    <bean id="service" class="org.vosao.service.impl.ServiceImpl"
+        init-method="init">  
+        <property name="testService" ref="testService"/>  
     </bean>
 
     <!-- JSF beans -->
@@ -104,6 +123,10 @@
         parent="abstractJSFBean" />
 
     <bean id="templateBean" class="org.vosao.jsf.TemplateBean" 
+        init-method="init" scope="request"
+        parent="abstractJSFBean" />
+
+    <bean id="configBean" class="org.vosao.jsf.ConfigBean" 
         init-method="init" scope="request"
         parent="abstractJSFBean" />
 

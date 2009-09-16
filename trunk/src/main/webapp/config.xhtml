@@ -59,7 +59,13 @@ function onAfterUploadOk() {
 
 <h1>Site configuration</h1>
 
+<div class="form-row">
+    <label>Google Analytics ID</label>
+    <h:inputText value="#{configBean.googleAnalyticsId}" />
+</div>
+
 <div class="buttons">
+    <h:commandButton value="Save" action="#{configBean.save}" />
     <h:commandButton value="Export" action="#{configBean.export}" />
     <input type="button" onclick="onImport()" value="Import" />
 </div>

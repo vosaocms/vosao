@@ -7,22 +7,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.vosao.business.ConfigBusiness;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 
-import com.google.appengine.repackaged.com.google.common.base.StringUtil;
-
 public class PageBusinessImpl extends AbstractBusinessImpl 
 	implements PageBusiness {
 
 	VelocityEngine ve;
+	ConfigBusiness configBusiness;
 
 	public void init() throws Exception {
 		ve = new VelocityEngine();
@@ -67,7 +68,8 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			String log = null;
 			try {
 				ve.evaluate(context, wr, log, template.getContent());
-				return wr.toString();
+				String resultPage = wr.toString();
+				return pagePostProcess(resultPage);
 			} catch (ParseErrorException e) {
 				return e.toString();
 			} catch (MethodInvocationException e) {
@@ -79,7 +81,36 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			}
 		}
 		else {
-			return page.getContent();
+			return pagePostProcess(page.getContent());
+		}
+	}
+	
+	private static String getGoogleAnalyticsCode(final String id) { 
+		return  
+		"<!-- Google Analytics -->\n"
+		+ "<script type=\"text/javascript\">\n"
+	    + "var gaJsHost = ((\"https:\" == document.location.protocol) ? \"https://ssl.\" : \"http://www.\");\n"
+        + "document.write(unescape(\"%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E\"));\n"
+	    + "</script>\n"
+	    + "<script type=\"text/javascript\">\n"
+	    + "var pageTracker = _gat._getTracker(\"" + id +"\");\n"
+	    + "pageTracker._trackPageview();\n"
+	    + "</script>\n"
+	    + "</html>";
+	}
+	
+	private String pagePostProcess(final String page) {
+		if (!StringUtils.isEmpty(getConfigBusiness().getGoogleAnalyticsId())) {
+			String id = getConfigBusiness().getGoogleAnalyticsId();
+			String htmlTag = "</html>";
+			if (page.indexOf("</HTML>") != -1) {
+				htmlTag = "</HTML>";
+			}
+			return StringUtils.replace(page, htmlTag, 
+					getGoogleAnalyticsCode(id));
+		}
+		else {
+			return page;
 		}
 	}
 	
@@ -93,17 +124,17 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 				errors.add("Page with such friendly URL already exists");
 			}
 		}
-		if (StringUtil.isEmpty(page.getFriendlyURL())) {
+		if (StringUtils.isEmpty(page.getFriendlyURL())) {
 			errors.add("Friendly URL is empty");
 		}
 		if (!page.getFriendlyURL().equals("/") 
-			&& StringUtil.isEmpty(page.getPageFriendlyURL())) {
+			&& StringUtils.isEmpty(page.getPageFriendlyURL())) {
 			errors.add("Friendly URL is empty");
 		}
-		if (StringUtil.isEmpty(page.getTitle())) {
+		if (StringUtils.isEmpty(page.getTitle())) {
 			errors.add("Title is empty");
 		}
-		if (StringUtil.isEmpty(page.getContent())) {
+		if (StringUtils.isEmpty(page.getContent())) {
 			errors.add("Content is empty");
 		}
 		return errors;
@@ -112,6 +143,16 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	@Override
 	public TreeItemDecorator<PageEntity> getTree() {
 		return getTree(getDao().getPageDao().select());
+	}
+
+	@Override
+	public ConfigBusiness getConfigBusiness() {
+		return configBusiness;
+	}
+
+	@Override
+	public void setConfigBusiness(ConfigBusiness bean) {
+		configBusiness = bean;		
 	}
 
 }

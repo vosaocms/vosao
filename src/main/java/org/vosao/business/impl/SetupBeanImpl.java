@@ -10,6 +10,7 @@ import javax.cache.CacheFactory;
 import javax.cache.CacheManager;
 import javax.cache.CacheStatistics;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
@@ -108,8 +109,8 @@ public class SetupBeanImpl implements SetupBean {
 			catch(IOException e) {
 		        log.error("Can't read default template." + e);
 			}
-			TemplateEntity root = new TemplateEntity("Simple", content, "simple");
-			getDao().getTemplateDao().save(root);
+			TemplateEntity template = new TemplateEntity("Simple", content, "simple");
+			getDao().getTemplateDao().save(template);
 	        log.info("Adding default template.");
 		}
 	}
@@ -144,8 +145,11 @@ public class SetupBeanImpl implements SetupBean {
 	}
 
 	private void initConfigs() {
-        log.info("Adding configs.");
-		getBusiness().getConfigBusiness().setGoogleAnalyticsId("");
+		if (StringUtils.isEmpty(getBusiness().getConfigBusiness()
+				.getGoogleAnalyticsId())) {
+	        log.info("Adding google analytic config.");
+	        getBusiness().getConfigBusiness().setGoogleAnalyticsId("");
+		}
 	}
 	
 }

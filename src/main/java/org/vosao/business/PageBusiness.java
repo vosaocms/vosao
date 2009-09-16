@@ -8,6 +8,9 @@ import org.vosao.entity.PageEntity;
 
 public interface PageBusiness {
 
+	ConfigBusiness getConfigBusiness();
+	void setConfigBusiness(ConfigBusiness bean);
+	
 	TreeItemDecorator<PageEntity> getTree(final List<PageEntity> pages);
 	
 	TreeItemDecorator<PageEntity> getTree();

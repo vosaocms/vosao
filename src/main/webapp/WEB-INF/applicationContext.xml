@@ -77,6 +77,7 @@
     <bean id="importExportBusiness" class="org.vosao.business.impl.ImportExportBusinessImpl"
         parent="abstractBusiness">  
         <property name="folderBusiness" ref="folderBusiness"/>  
+        <property name="pageBusiness" ref="pageBusiness"/>  
     </bean>    
 
     <bean id="business" class="org.vosao.business.impl.BusinessImpl"
@@ -115,6 +116,10 @@
 
     <bean id="templateBean" class="org.vosao.jsf.TemplateBean" 
         init-method="init" scope="request"
+        parent="abstractJSFBean" />
+
+    <bean id="configBean" class="org.vosao.jsf.ConfigBean" 
+        scope="request"
         parent="abstractJSFBean" />
 
     <bean id="loginBean" class="org.vosao.jsf.LoginBean" 

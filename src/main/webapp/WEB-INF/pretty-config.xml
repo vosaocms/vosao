@@ -20,6 +20,11 @@
         <view-id>/home.jsf</view-id>
     </url-mapping>
 
+    <url-mapping id="config">
+        <pattern>/cms/config</pattern>
+        <view-id>/config.jsf</view-id>
+    </url-mapping>
+
     <!-- Pages -->
 
     <url-mapping id="pages">

@@ -15,6 +15,9 @@ public interface ImportExportBusiness {
 	void setPageBusiness(PageBusiness bean);
 	PageBusiness getPageBusiness();
 
+	void setConfigBusiness(ConfigBusiness bean);
+	ConfigBusiness getConfigBusiness();
+
 	/**
 	 * Create export file with selected themes.
 	 * @param list - selected themes.

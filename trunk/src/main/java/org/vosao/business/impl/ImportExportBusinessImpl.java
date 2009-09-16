@@ -18,6 +18,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.vosao.business.ConfigBusiness;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.PageBusiness;
@@ -38,6 +39,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 	
 	private FolderBusiness folderBusiness;
 	private PageBusiness pageBusiness;
+	private ConfigBusiness configBusiness;
 	
 	public void setFolderBusiness(FolderBusiness bean) {
 		folderBusiness = bean;
@@ -279,12 +281,19 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 	private String createContentExportXML() {
 		Document doc = DocumentHelper.createDocument();
 		Element root = doc.addElement("site");
+		Element config = root.addElement("config");
+		createConfigXML(config);
 		Element pages = root.addElement("pages");
 		TreeItemDecorator<PageEntity> pageRoot = getPageBusiness().getTree();
 		createPageXML(pageRoot, pages);
 		return doc.asXML();
 	}
 	
+	private void createConfigXML(Element config) {
+		Element googleAnalytics = config.addElement("google-analytics");
+		googleAnalytics.setText(getConfigBusiness().getGoogleAnalyticsId());
+	}
+
 	private void createPageXML(TreeItemDecorator<PageEntity> page,
 			Element root) {
 		Element pageElement = root.addElement("page"); 
@@ -333,6 +342,9 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
             if (element.getName().equals("pages")) {
             	createPages(element);
             }
+            if (element.getName().equals("config")) {
+            	createConfigs(element);
+            }
         }
 	}
 	
@@ -374,6 +386,25 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
             	createPage(element, page);
             }
 		}
+	}
+
+	private void createConfigs(Element configElement) {
+		for (Iterator<Element> i = configElement.elementIterator(); i.hasNext(); ) {
+            Element element = i.next();
+            if (element.getName().equals("google-analytics")) {
+            	getConfigBusiness().setGoogleAnalyticsId(element.getText());
+            }
+		}
+	}
+
+	@Override
+	public ConfigBusiness getConfigBusiness() {
+		return configBusiness;
+	}
+
+	@Override
+	public void setConfigBusiness(ConfigBusiness bean) {
+		configBusiness = bean;
 	}
 	
 }

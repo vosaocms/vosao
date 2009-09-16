@@ -75,12 +75,6 @@
     <bean id="templateBusiness" class="org.vosao.business.impl.TemplateBusinessImpl"
         parent="abstractBusiness" />  
 
-    <bean id="importExportBusiness" class="org.vosao.business.impl.ImportExportBusinessImpl"
-        parent="abstractBusiness">  
-        <property name="folderBusiness" ref="folderBusiness"/>  
-        <property name="pageBusiness" ref="pageBusiness"/>  
-    </bean>    
-
     <bean id="configBusiness" class="org.vosao.business.impl.ConfigBusinessImpl"
         parent="abstractBusiness" />  
 
@@ -88,6 +82,13 @@
         init-method="init" parent="abstractBusiness">
         <property name="configBusiness" ref="configBusiness"/>  
     </bean>      
+
+    <bean id="importExportBusiness" class="org.vosao.business.impl.ImportExportBusinessImpl"
+        parent="abstractBusiness">  
+        <property name="folderBusiness" ref="folderBusiness"/>  
+        <property name="pageBusiness" ref="pageBusiness"/>  
+        <property name="configBusiness" ref="configBusiness"/>  
+    </bean>    
 
     <bean id="business" class="org.vosao.business.impl.BusinessImpl"
         init-method="init">  

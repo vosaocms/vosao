@@ -35,6 +35,8 @@ content.xml
 <site>
   <config>
     <google-analytics>ETF-342343</google-analytics>
+    <email>support@site.com</email>
+    <domain>site.com</domain>
   </config>
   <pages>
     <page url="/" title="root" theme="simple">

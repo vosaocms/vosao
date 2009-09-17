@@ -28,6 +28,9 @@ public class ConfigDaoImpl extends AbstractDaoImpl implements ConfigDao {
 	}
 	
 	public ConfigEntity getById(final Long id) {
+		if (id == null) {
+			return null;
+		}
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			return pm.getObjectById(ConfigEntity.class, id);
@@ -69,6 +72,9 @@ public class ConfigDaoImpl extends AbstractDaoImpl implements ConfigDao {
 	}
 
 	public void remove(final Long id) {
+		if (id == null) {
+			return;
+		}
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			pm.deletePersistent(pm.getObjectById(ConfigEntity.class, id));

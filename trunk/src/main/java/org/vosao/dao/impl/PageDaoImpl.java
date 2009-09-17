@@ -28,6 +28,9 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 	}
 	
 	public PageEntity getById(final String id) {
+		if (id == null) {
+			return null;
+		}
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			return pm.getObjectById(PageEntity.class, id);
@@ -50,6 +53,9 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 	}
 	
 	public void remove(final String id) {
+		if (id == null) {
+			return;
+		}
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			pm.deletePersistent(pm.getObjectById(PageEntity.class, id));

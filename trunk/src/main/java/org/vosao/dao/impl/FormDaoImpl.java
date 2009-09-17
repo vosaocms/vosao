@@ -28,6 +28,9 @@ public class FormDaoImpl extends AbstractDaoImpl implements FormDao {
 	
 	@Override
 	public FormEntity getById(final String id) {
+		if (id == null) {
+			return null;
+		}
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			return pm.getObjectById(FormEntity.class, id);
@@ -72,6 +75,9 @@ public class FormDaoImpl extends AbstractDaoImpl implements FormDao {
 
 	@Override
 	public void remove(final String id) {
+		if (id == null) {
+			return;
+		}
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			pm.deletePersistent(pm.getObjectById(FormEntity.class, id));

@@ -86,7 +86,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 				throw new UploadException(PARSE_REQUEST_ERROR);
 			}
 		} catch (UploadException e) {
-			json = getMessage("error", e.getMessage()); 
+			json = createMessage("error", e.getMessage()); 
 			log.error(json);
 		}
 		response.setContentType("text/plain");
@@ -95,7 +95,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 		// log.info(json);
 	}
 
-	private String getMessage(final String result, final String message) {
+	private String createMessage(final String result, final String message) {
 		return String.format(TEXT_MESSAGE, result, message);
 	}
 	
@@ -145,7 +145,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 				MimeType.getContentTypeByExt(ext), new Date(), data, folder);
 		getDao().getFileDao().save(file);
 		log.info("created fileEntity id=" + file.getId());
-		message = getMessage("success", file.getId());
+		message = createMessage("success", file.getId());
 		return message;
 	}
 
@@ -189,9 +189,9 @@ public class FileUploadServlet extends BaseSpringServlet {
 		try {
 			ZipInputStream in = new ZipInputStream(inputData);
 			List<String> files = getBusiness().getImportExportBusiness()
-					.importThemes(in);
+					.importZip(in);
 			clearResourcesCache(files);
-			message = getMessage("success", "Imported.");
+			message = createMessage("success", "Imported.");
 			in.close();
 		}
 		catch (IOException e) {

@@ -35,10 +35,13 @@ public class FormEntity implements Serializable {
 	public FormEntity() {
 	}
 	
-	public FormEntity(String aName, String aEmail) {
+	public FormEntity(String aName, String aEmail, String aTitle, 
+			String aSubject) {
 		this();
 		name = aName;
 		email = aEmail;
+		title = aTitle;
+		letterSubject = aSubject;
 	}
 	
 	public void copy(final FormEntity entity) {

@@ -4,13 +4,17 @@ import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.faces.component.html.HtmlMessage;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import org.vosao.entity.FormEntity;
 import org.vosao.service.FormService;
@@ -52,18 +56,22 @@ public class FormServiceImpl extends AbstractServiceImpl
 		return result.toString();
 	}
 
-	private String sendEmail(final String msgBody, final String subject, 
+	private String sendEmail(final String htmlBody, final String subject, 
 			final String fromAddress, final String fromText, 
 			final String toAddress) {
 		Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
         try {
-            Message msg = new MimeMessage(session);
+        	Multipart mp = new MimeMultipart();
+        	MimeBodyPart htmlPart = new MimeBodyPart();
+            htmlPart.setContent(htmlBody, "text/html");
+            mp.addBodyPart(htmlPart);
+        	MimeMessage msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress(fromAddress, fromText));
             msg.addRecipient(Message.RecipientType.TO,
                              new InternetAddress(toAddress, toAddress));
             msg.setSubject(subject);
-            msg.setText(msgBody);
+            msg.setContent(mp);
             Transport.send(msg);
             return null;
         } catch (AddressException e) {

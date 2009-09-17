@@ -11,7 +11,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
@@ -25,6 +24,7 @@ import org.vosao.business.PageBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
+import org.vosao.entity.FormEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.servlet.FolderUtil;
@@ -128,7 +128,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		}
 	}
 
-	public List<String> importThemes(ZipInputStream in) throws IOException, 
+	public List<String> importZip(ZipInputStream in) throws IOException, 
 			DocumentException {
 		List<String> result = new ArrayList<String>();
 		ZipEntry entry;
@@ -286,6 +286,8 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		Element pages = root.addElement("pages");
 		TreeItemDecorator<PageEntity> pageRoot = getPageBusiness().getTree();
 		createPageXML(pageRoot, pages);
+		Element forms = root.addElement("forms");
+		createFormsXML(forms);
 		return doc.asXML();
 	}
 	
@@ -316,6 +318,21 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		}
 	}
 
+	private void createFormsXML(Element formsElement) {
+		List<FormEntity> list = getDao().getFormDao().select();
+		for (FormEntity form : list) {
+			createFormXML(formsElement, form);
+		}
+	}
+
+	private void createFormXML(Element formsElement, final FormEntity form) {
+		Element formElement = formsElement.addElement("form");
+		formElement.addAttribute("name", form.getName());
+		formElement.addAttribute("title", form.getTitle());
+		formElement.addAttribute("email", form.getEmail());
+		formElement.addAttribute("letterSubject", form.getLetterSubject());
+	}
+	
 	private void addContentResources(final ZipOutputStream out) 
 			throws IOException {
 		
@@ -348,6 +365,9 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
             }
             if (element.getName().equals("config")) {
             	createConfigs(element);
+            }
+            if (element.getName().equals("forms")) {
+            	createForms(element);
             }
         }
 	}
@@ -405,6 +425,21 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
             	getConfigBusiness().setSiteDomain(element.getText());
             }
 		}
+	}
+
+	private void createForms(Element formsElement) {
+		for (Iterator<Element> i = formsElement.elementIterator(); i.hasNext(); ) {
+            Element element = i.next();
+            if (element.getName().equals("form")) {
+            	String name = element.attributeValue("name");
+            	String title = element.attributeValue("title");
+            	String email = element.attributeValue("email");
+            	String letterSubject = element.attributeValue("letterSubject");
+            	FormEntity form = new FormEntity(name, email, title, 
+            			letterSubject);
+            	getDao().getFormDao().save(form);
+            }
+		}		
 	}
 
 	@Override

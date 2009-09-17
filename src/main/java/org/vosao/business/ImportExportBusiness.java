@@ -34,10 +34,10 @@ public interface ImportExportBusiness {
 	byte[] createExportFile() throws IOException;
 
 	/**
-	 * Import themes from zip file.
+	 * Import site data from zip file.
 	 * @return list of imported resources.
 	 */
-	List<String> importThemes(ZipInputStream in) throws IOException,
+	List<String> importZip(ZipInputStream in) throws IOException,
 		DocumentException;
 	
 }

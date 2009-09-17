@@ -29,6 +29,9 @@ public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 	}
 	
 	public FileEntity getById(final String id) {
+		if (id == null) {
+			return null;
+		}
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			return pm.getObjectById(FileEntity.class, id);
@@ -39,6 +42,9 @@ public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 	}
 	
 	public void remove(final String id) {
+		if (id == null) {
+			return;
+		}
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			pm.deletePersistent(pm.getObjectById(FileEntity.class, id));

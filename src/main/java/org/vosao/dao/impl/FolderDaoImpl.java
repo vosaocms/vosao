@@ -27,6 +27,9 @@ public class FolderDaoImpl extends AbstractDaoImpl implements FolderDao {
 	}
 	
 	public FolderEntity getById(final String id) {
+		if (id == null) {
+			return null;
+		}
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			return pm.getObjectById(FolderEntity.class, id);
@@ -50,6 +53,9 @@ public class FolderDaoImpl extends AbstractDaoImpl implements FolderDao {
 	}
 	
 	public void remove(final String id) {
+		if (id == null) {
+			return;
+		}
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			pm.deletePersistent(pm.getObjectById(FolderEntity.class, id));

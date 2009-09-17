@@ -27,6 +27,9 @@ public class TemplateDaoImpl extends AbstractDaoImpl implements TemplateDao {
 	}
 	
 	public TemplateEntity getById(final String id) {
+		if (id == null) {
+			return null;
+		}
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			return pm.getObjectById(TemplateEntity.class, id);
@@ -49,6 +52,9 @@ public class TemplateDaoImpl extends AbstractDaoImpl implements TemplateDao {
 	}
 	
 	public void remove(final String id) {
+		if (id == null) {
+			return;
+		}
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			pm.deletePersistent(pm.getObjectById(TemplateEntity.class, id));

@@ -19,5 +19,8 @@ public interface Dao {
 
 	ConfigDao getConfigDao();
 	void setConfigDao(final ConfigDao configDao);
+
+	FormDao getFormDao();
+	void setFormDao(final FormDao formDao);
 	
 }

@@ -4,6 +4,7 @@ import org.vosao.dao.ConfigDao;
 import org.vosao.dao.Dao;
 import org.vosao.dao.FileDao;
 import org.vosao.dao.FolderDao;
+import org.vosao.dao.FormDao;
 import org.vosao.dao.PageDao;
 import org.vosao.dao.TemplateDao;
 import org.vosao.dao.UserDao;
@@ -16,6 +17,7 @@ public class DaoImpl implements Dao {
 	private UserDao userDao;
 	private TemplateDao templateDao;
 	private ConfigDao configDao;
+	private FormDao formDao;
 	
 	public PageDao getPageDao() {
 		return pageDao;
@@ -60,6 +62,12 @@ public class DaoImpl implements Dao {
 	
 	public void setConfigDao(ConfigDao configDao) {
 		this.configDao = configDao;
+	}
+	public FormDao getFormDao() {
+		return formDao;
+	}
+	public void setFormDao(FormDao formDao) {
+		this.formDao = formDao;
 	}
 	
 }

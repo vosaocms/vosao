@@ -14,6 +14,7 @@ import org.jabsorb.JSONRPCBridge;
 import org.vosao.business.Business;
 import org.vosao.business.ConfigBusiness;
 import org.vosao.business.FolderBusiness;
+import org.vosao.business.FormBusiness;
 import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.TemplateBusiness;
@@ -33,6 +34,7 @@ public class BusinessImpl implements Business {
 	private TemplateBusiness templateBusiness;
 	private ImportExportBusiness importExportBusiness;
 	private ConfigBusiness configBusiness;
+	private FormBusiness formBusiness;
 
 	public void init() {
 		try {
@@ -106,11 +108,9 @@ public class BusinessImpl implements Business {
 		this.initialized = initialized;
 	}
 
-
 	public Cache getCache() {
 		return cache;
 	}
-
 
 	public void setCache(Cache cache) {
 		this.cache = cache;
@@ -121,6 +121,14 @@ public class BusinessImpl implements Business {
 	}
 	public void setConfigBusiness(ConfigBusiness bean) {
 		configBusiness = bean;
+	}
+
+	public FormBusiness getFormBusiness() {
+		return formBusiness;
+	}
+
+	public void setFormBusiness(FormBusiness formBusiness) {
+		this.formBusiness = formBusiness;
 	}
 	
 	

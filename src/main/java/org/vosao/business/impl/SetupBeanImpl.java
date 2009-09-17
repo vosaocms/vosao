@@ -145,10 +145,17 @@ public class SetupBeanImpl implements SetupBean {
 	}
 
 	private void initConfigs() {
-		if (StringUtils.isEmpty(getBusiness().getConfigBusiness()
-				.getGoogleAnalyticsId())) {
-	        log.info("Adding google analytic config.");
+		if (getBusiness().getConfigBusiness().getGoogleAnalyticsId() == null) {
+	        log.info("Adding google analytics config.");
 	        getBusiness().getConfigBusiness().setGoogleAnalyticsId("");
+		}
+		if (getBusiness().getConfigBusiness().getSiteEmail() == null) {
+	        log.info("Adding site email config.");
+	        getBusiness().getConfigBusiness().setSiteEmail("");
+		}
+		if (getBusiness().getConfigBusiness().getSiteDomain() == null) {
+	        log.info("Adding site domain config.");
+	        getBusiness().getConfigBusiness().setSiteDomain("");
 		}
 	}
 	

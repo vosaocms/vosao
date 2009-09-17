@@ -53,6 +53,9 @@
     <bean id="configDao" class="org.vosao.dao.impl.ConfigDaoImpl"
         parent="abstractDao" />  
 
+    <bean id="formDao" class="org.vosao.dao.impl.FormDaoImpl"
+        parent="abstractDao" />  
+
     <bean id="dao" class="org.vosao.dao.impl.DaoImpl">  
         <property name="pageDao" ref="pageDao"/>  
         <property name="fileDao" ref="fileDao"/>  
@@ -60,6 +63,7 @@
         <property name="userDao" ref="userDao"/>  
         <property name="templateDao" ref="templateDao"/>  
         <property name="configDao" ref="configDao"/>  
+        <property name="formDao" ref="formDao"/>  
     </bean>
 
     <!-- Business -->
@@ -75,19 +79,23 @@
     <bean id="templateBusiness" class="org.vosao.business.impl.TemplateBusinessImpl"
         parent="abstractBusiness" />  
 
-    <bean id="importExportBusiness" class="org.vosao.business.impl.ImportExportBusinessImpl"
-        parent="abstractBusiness">  
-        <property name="folderBusiness" ref="folderBusiness"/>  
-        <property name="pageBusiness" ref="pageBusiness"/>  
-    </bean>    
-
     <bean id="configBusiness" class="org.vosao.business.impl.ConfigBusinessImpl"
+        parent="abstractBusiness" />  
+
+    <bean id="formBusiness" class="org.vosao.business.impl.FormBusinessImpl"
         parent="abstractBusiness" />  
 
     <bean id="pageBusiness" class="org.vosao.business.impl.PageBusinessImpl"
         init-method="init" parent="abstractBusiness">
         <property name="configBusiness" ref="configBusiness"/>  
     </bean>      
+
+    <bean id="importExportBusiness" class="org.vosao.business.impl.ImportExportBusinessImpl"
+        parent="abstractBusiness">  
+        <property name="folderBusiness" ref="folderBusiness"/>  
+        <property name="pageBusiness" ref="pageBusiness"/>  
+        <property name="configBusiness" ref="configBusiness"/>  
+    </bean>    
 
     <bean id="business" class="org.vosao.business.impl.BusinessImpl"
         init-method="init">  
@@ -96,16 +104,26 @@
         <property name="templateBusiness" ref="templateBusiness"/>  
         <property name="importExportBusiness" ref="importExportBusiness"/>  
         <property name="configBusiness" ref="configBusiness"/>  
+        <property name="formBusiness" ref="formBusiness"/>  
     </bean>
 
-    <!-- JSON services -->
+    <!-- JSON-RPC services -->
 
-    <bean id="testService" class="org.vosao.service.impl.TestServiceImpl">  
-    </bean>    
+    <bean id="abstractService" abstract="true"
+        class="org.vosao.service.impl.AbstractServiceImpl">
+        <property name="dao" ref="dao"/>  
+        <property name="business" ref="business"/>  
+    </bean>
+
+    <bean id="testService" class="org.vosao.service.impl.TestServiceImpl" />  
+
+    <bean id="formService" class="org.vosao.service.impl.FormServiceImpl"
+        parent="abstractService" />  
 
     <bean id="service" class="org.vosao.service.impl.ServiceImpl"
         init-method="init">  
         <property name="testService" ref="testService"/>  
+        <property name="formService" ref="formService"/>  
     </bean>
 
     <!-- JSF beans -->
@@ -134,6 +152,10 @@
 
     <bean id="loginBean" class="org.vosao.jsf.LoginBean" 
         scope="request"
+        parent="abstractJSFBean" />
+
+    <bean id="formBean" class="org.vosao.jsf.FormBean" 
+        init-method="init" scope="request"
         parent="abstractJSFBean" />
 
 </beans>

@@ -30,5 +30,8 @@ public interface Business {
 
 	ConfigBusiness getConfigBusiness();
 	void setConfigBusiness(final ConfigBusiness bean);
+
+	FormBusiness getFormBusiness();
+	void setFormBusiness(final FormBusiness bean);
 	
 }

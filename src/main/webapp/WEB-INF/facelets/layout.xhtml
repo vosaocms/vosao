@@ -13,9 +13,9 @@
     </title>
 
     <link rel="stylesheet" href="/static/css/jquery-ui/redmond/jquery-ui.css" type="text/css" />
-    <script src="/static/js/jquery.js" language="javascript" />
-    <script src="/static/js/jquery-ui.js" language="javascript" />
-    <script src="/static/js/jsonrpc.js" language="javascript" />
+    <script src="/static/js/jquery.js" language="javascript"></script>
+    <script src="/static/js/jquery-ui.js" language="javascript"></script>
+    <script src="/static/js/jsonrpc.js" language="javascript"></script>
 
     <ui:insert name="head"></ui:insert>
 
@@ -28,11 +28,12 @@
 <div id="topbar">
 
     <div id="leftmenu">
-        Vosao CMS
+        <a href="/cms">Vosao</a> CMS
         <a href="/cms/pages">Content</a>
         <a href="/cms/templates">Templates</a>
         <a href="/cms/folders">Resources</a>
         <a href="/cms/config">Configuration</a>
+        <a href="/cms/plugins">Plugins</a>
     </div>
     <div id="rightmenu">
         <h:outputText value="#{loginBean.currentUser.email}" /> 

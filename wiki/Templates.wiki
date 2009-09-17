@@ -35,4 +35,6 @@ $page.content
 
 *Helper service*
 
- * service.findPage(path) - find page by friendly url
+ * service.findPage(url) - find page by friendly url
+ * service.findPageChildren(url) - find all child pages of specified page by url
+

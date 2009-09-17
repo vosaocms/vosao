@@ -18,16 +18,20 @@ import org.vosao.business.PageBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
+import org.vosao.velocity.VelocityService;
+import org.vosao.velocity.impl.VelocityServiceImpl;
 
 public class PageBusinessImpl extends AbstractBusinessImpl 
 	implements PageBusiness {
 
 	VelocityEngine ve;
 	ConfigBusiness configBusiness;
+	VelocityService velocityService;
 
 	public void init() throws Exception {
 		ve = new VelocityEngine();
 		ve.init();
+		velocityService = new VelocityServiceImpl(getDao());
 	}
 	
 	@Override
@@ -64,6 +68,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			context.put("page", page);
 			Map<String, String> config = getDao().getConfigDao().getConfig();
 			context.put("config", config);
+			context.put("service", getVelocityService());
 			StringWriter wr = new StringWriter();
 			String log = null;
 			try {
@@ -155,4 +160,8 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		configBusiness = bean;		
 	}
 
+	private VelocityService getVelocityService() {
+        return velocityService;
+	}
+	
 }

@@ -1,3 +1,38 @@
 =Templates=
 
 Templates in VosaoCMS are used to arrange web design with page content.
+
+For templates rendering Vosao uses Velocity engine.
+
+Basic simple template looks like:
+{{{
+<html>
+<head>
+  <title>$page.title</title>
+</head>  
+<body>
+
+$page.content
+
+</body>
+
+</html>
+}}}
+
+=== Template variables ===
+
+*Current page*
+
+ * page.title  
+ * page.friendlyUrl
+ * page.content
+
+*Site global configuration*
+
+ * config.googleAnalyticsId
+ * config.siteEmail
+ * config.siteDomain
+
+*Helper service*
+
+ * service.findPage(path) - find page by friendly url

@@ -98,6 +98,8 @@ public class SiteFilter implements Filter {
     
     private void renderPage(HttpServletRequest request, 
     		HttpServletResponse response, final String url) throws IOException {
+    	response.setContentType("text/html");
+    	response.setCharacterEncoding("UTF-8");
     	Writer out = response.getWriter();
     	String content = business.getPageBusiness().render(page);
     	out.write(content);

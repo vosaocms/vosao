@@ -25,6 +25,11 @@
         <view-id>/config.jsf</view-id>
     </url-mapping>
 
+    <url-mapping id="plugins">
+        <pattern>/cms/plugins</pattern>
+        <view-id>/plugins.jsf</view-id>
+    </url-mapping>
+
     <!-- Pages -->
 
     <url-mapping id="pages">
@@ -78,5 +83,24 @@
         <pattern>/cms/folder/create</pattern>
         <view-id>/folder.jsf</view-id>
     </url-mapping>
+
+    <!-- Forms -->
+
+    <url-mapping id="forms">
+        <pattern>/cms/forms</pattern>
+        <view-id>/formList.jsf</view-id>
+    </url-mapping>
+    
+    <url-mapping id="formEdit">
+        <pattern>/cms/form/edit/#{formBean.id}</pattern>
+        <view-id>/form.jsf</view-id>
+        <action>#{formBean.edit}</action>
+    </url-mapping>
+
+    <url-mapping id="formCreate">
+        <pattern>/cms/form/create</pattern>
+        <view-id>/form.jsf</view-id>
+    </url-mapping>
+
     
 </pretty-config>

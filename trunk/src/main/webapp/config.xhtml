@@ -64,6 +64,16 @@ function onAfterUploadOk() {
     <h:inputText value="#{configBean.googleAnalyticsId}" />
 </div>
 
+<div class="form-row">
+    <label>Site email address</label>
+    <h:inputText value="#{configBean.siteEmail}" />
+</div>
+
+<div class="form-row">
+    <label>Site domain</label>
+    <h:inputText value="#{configBean.siteDomain}" />
+</div>
+
 <div class="buttons">
     <h:commandButton value="Save" action="#{configBean.save}" />
     <h:commandButton value="Export" action="#{configBean.export}" />

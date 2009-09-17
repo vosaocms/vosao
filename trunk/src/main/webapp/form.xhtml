@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  template="WEB-INF/facelets/layout.xhtml">
+
+<ui:define name="head">
+</ui:define>
+
+<ui:define name="title">Form</ui:define>
+
+<ui:define name="body">
+
+<h:form>
+
+<h1>Form</h1>
+
+<div class="form-row">
+    <label>Title</label>
+    <h:inputText value="#{formBean.current.title}" />
+</div>
+<div class="form-row">
+    <label>Name</label>
+    <h:inputText value="#{formBean.current.name}" />
+</div>
+<div class="form-row">
+    <label>Email address</label>
+    <h:inputText value="#{formBean.current.email}" />
+</div>
+<div class="form-row">
+    <label>Letter subject</label>
+    <h:inputText value="#{formBean.current.letterSubject}" />
+</div>
+
+<div class="buttons">
+    <h:commandButton value="Save" action="#{formBean.update}" />
+    <h:commandButton value="Cancel" action="#{formBean.cancelEdit}" />
+</div>
+
+</h:form>
+
+</ui:define>
+
+</ui:composition>

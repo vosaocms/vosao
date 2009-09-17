@@ -17,10 +17,14 @@ public class ConfigBean extends AbstractJSFBean implements Serializable {
 	private static Log log = LogFactory.getLog(ConfigBean.class);
 	
 	private String googleAnalyticsId;
+	private String siteEmail;
+	private String siteDomain;
 	
 	public void init() {
 		googleAnalyticsId = getBusiness().getConfigBusiness()
 				.getGoogleAnalyticsId();
+		siteEmail = getBusiness().getConfigBusiness().getSiteEmail();
+		siteDomain = getBusiness().getConfigBusiness().getSiteDomain();
 	}
 	
 	public void export() throws IOException {
@@ -42,6 +46,8 @@ public class ConfigBean extends AbstractJSFBean implements Serializable {
 	public void save() {
 		getBusiness().getConfigBusiness().setGoogleAnalyticsId(
 				googleAnalyticsId);
+		getBusiness().getConfigBusiness().setSiteEmail(siteEmail);
+		getBusiness().getConfigBusiness().setSiteDomain(siteDomain);
 	}
 
 	public String getGoogleAnalyticsId() {
@@ -50,6 +56,22 @@ public class ConfigBean extends AbstractJSFBean implements Serializable {
 
 	public void setGoogleAnalyticsId(String googleAnalyticsId) {
 		this.googleAnalyticsId = googleAnalyticsId;
+	}
+
+	public String getSiteEmail() {
+		return siteEmail;
+	}
+
+	public void setSiteEmail(String siteEmail) {
+		this.siteEmail = siteEmail;
+	}
+
+	public String getSiteDomain() {
+		return siteDomain;
+	}
+
+	public void setSiteDomain(String siteDomain) {
+		this.siteDomain = siteDomain;
 	}
 	
 }

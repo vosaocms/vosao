@@ -292,6 +292,10 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 	private void createConfigXML(Element config) {
 		Element googleAnalytics = config.addElement("google-analytics");
 		googleAnalytics.setText(getConfigBusiness().getGoogleAnalyticsId());
+		Element siteEmail = config.addElement("email");
+		siteEmail.setText(getConfigBusiness().getSiteEmail());
+		Element siteDomain = config.addElement("domain");
+		siteDomain.setText(getConfigBusiness().getSiteDomain());
 	}
 
 	private void createPageXML(TreeItemDecorator<PageEntity> page,
@@ -393,6 +397,12 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
             Element element = i.next();
             if (element.getName().equals("google-analytics")) {
             	getConfigBusiness().setGoogleAnalyticsId(element.getText());
+            }
+            if (element.getName().equals("email")) {
+            	getConfigBusiness().setSiteEmail(element.getText());
+            }
+            if (element.getName().equals("domain")) {
+            	getConfigBusiness().setSiteDomain(element.getText());
             }
 		}
 	}

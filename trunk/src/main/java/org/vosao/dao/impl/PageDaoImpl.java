@@ -81,7 +81,8 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			String query = "select from " + PageEntity.class.getName()
-			    + " where parent == pParent parameters String pParent";
+			    + " where parent == pParent" 
+			    + " parameters String pParent";
 			List<PageEntity> result = (List<PageEntity>)pm.newQuery(query)
 				.execute(id);
 			return copy(result);

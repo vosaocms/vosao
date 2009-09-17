@@ -1,6 +1,7 @@
 package org.vosao.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -15,7 +16,7 @@ import com.google.appengine.api.datastore.Text;
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class PageEntity implements Serializable {
 
-	private static final long serialVersionUID = 6L;
+	private static final long serialVersionUID = 7L;
 
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -37,9 +38,20 @@ public class PageEntity implements Serializable {
 	@Persistent
 	private String template;
 	
+	@Persistent
+	private Date publishDate;
+	
 	public PageEntity() {
+		publishDate = new Date();
 	}
 	
+	public PageEntity(String title, String content,
+			String friendlyURL, String aParent, String aTemplate,
+			Date publish) {
+		this(title, content, friendlyURL, aParent, aTemplate);
+		publishDate = publish;
+	}
+
 	public PageEntity(String title, String content,
 			String friendlyURL, String aParent, String aTemplate) {
 		this(title, content, friendlyURL, aParent);
@@ -61,6 +73,7 @@ public class PageEntity implements Serializable {
 		setFriendlyURL(page.getFriendlyURL());
 		setParent(page.getParent());
 		setTemplate(page.getTemplate());
+		setPublishDate(page.getPublishDate());
 	}
 	
 	public String getId() {
@@ -152,6 +165,14 @@ public class PageEntity implements Serializable {
 		else {
 			setFriendlyURL(getParentFriendlyURL() + "/" + url);
 		}
+	}
+
+	public Date getPublishDate() {
+		return publishDate;
+	}
+
+	public void setPublishDate(Date publishDate) {
+		this.publishDate = publishDate;
 	}
 
 }

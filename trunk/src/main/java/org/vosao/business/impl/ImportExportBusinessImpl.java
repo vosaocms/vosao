@@ -3,6 +3,8 @@ package org.vosao.business.impl;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -305,6 +307,8 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		Element pageElement = root.addElement("page"); 
 		pageElement.addAttribute("url", page.getEntity().getFriendlyURL());
 		pageElement.addAttribute("title", page.getEntity().getTitle());
+		pageElement.addAttribute("publishDate", 
+				page.getEntity().getPublishDate().toString());
 		TemplateEntity template = getDao().getTemplateDao().getById(
 				page.getEntity().getTemplate());
 		if (template != null) {
@@ -387,6 +391,20 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		String title = pageElement.attributeValue("title");
 		String url = pageElement.attributeValue("url");
 		String themeUrl = pageElement.attributeValue("theme");
+		Date publishDate = new Date();
+		if (pageElement.attributeValue("theme") != null) {
+			try {
+				publishDate = DateFormat.getInstance().parse(
+					pageElement.attributeValue("theme"));
+			} catch (ParseException e) {
+				logger.error("Wrong date format" + pageElement.attributeValue("theme"));
+			}
+		}
+		TemplateEntity template = getDao().getTemplateDao().getByUrl(themeUrl);
+		String templateId = null;
+		if (template != null) {
+			templateId = template.getId();
+		}
 		String content = "";
 		for (Iterator<Element> i = pageElement.elementIterator(); i.hasNext(); ) {
             Element element = i.next();
@@ -395,7 +413,8 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
             	break;
             }
 		}
-		PageEntity newPage = new PageEntity(title, content, url, parentId);
+		PageEntity newPage = new PageEntity(title, content, url, parentId, 
+				templateId, publishDate);
 		PageEntity page = getDao().getPageDao().getByUrl(url);
 		if (page != null) {
 			page.copy(newPage);

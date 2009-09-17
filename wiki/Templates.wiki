@@ -1,0 +1,3 @@
+=Templates=
+
+Templates in VosaoCMS are used to arrange web design with page content.

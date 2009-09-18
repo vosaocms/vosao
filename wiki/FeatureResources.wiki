@@ -9,7 +9,7 @@ Every theme and page has unique url name: (about, services)
 
 {{{
 /-
-  |- pages /-
+  |- page /-
   |          |- about /-
   |          |          |- info.pdf
   |          |          |- bucklet.doc
@@ -20,7 +20,7 @@ Every theme and page has unique url name: (about, services)
   |                       |- services.pdf
   |                       |- services_logo.png
   |          
-  |- themes /-
+  |- theme /-
   |          |- simple /-
   |          |          |- logo.jpg
   |          |          |- style.css

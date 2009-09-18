@@ -2,7 +2,7 @@
 
 Requirements for import/export operations:
  * complete site with themes
- * one or several theme
+ * one or several themes
 
 
  Complete site = content tree + content child resources

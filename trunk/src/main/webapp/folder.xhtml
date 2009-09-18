@@ -85,7 +85,7 @@ function onAfterUploadOk() {
 <h:panelGroup rendered="#{folderBean.showFiles}">
 <div id="tab-2">
 
-<h:dataTable value="#{folderBean.current.files}" var="r"
+<h:dataTable value="#{folderBean.files}" var="r"
     styleClass="form-table">
     <h:column>
         <f:facet name="header"></f:facet>    
@@ -97,7 +97,7 @@ function onAfterUploadOk() {
     </h:column>
     <h:column>
         <f:facet name="header" >Name</f:facet>    
-        <h:outputText value="#{r.file.filename}"/>
+        <h:outputText value="#{r.filename}"/>
     </h:column>
 </h:dataTable>
 <div class="buttons">

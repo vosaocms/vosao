@@ -6,7 +6,6 @@ import javax.jdo.PersistenceManager;
 
 import org.vosao.dao.FileDao;
 import org.vosao.entity.FileEntity;
-import org.vosao.entity.FolderEntity;
 
 public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 
@@ -18,9 +17,7 @@ public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 				p.copy(entity);
 			}
 			else {
-				FolderEntity folder = pm.getObjectById(FolderEntity.class, 
-						entity.getFolder().getId());
-				folder.addFile(entity);
+				pm.makePersistent(entity);
 			}
 		}
 		finally {
@@ -65,5 +62,41 @@ public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 			pm.close();
 		}
 	}
+
+	@Override
+	public List<FileEntity> getByFolder(String folderId) {
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			String query = "select from " + FileEntity.class.getName()
+			    + " where folderId == pFolderId parameters String pFolderId";
+			List<FileEntity> result = (List<FileEntity>)pm.newQuery(query)
+				.execute(folderId);
+			return copy(result);
+		}
+		finally {
+			pm.close();
+		}
+	}
+
+	@Override
+	public FileEntity getByName(String folderId, String name) {
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			String query = "select from " + FileEntity.class.getName()
+			    + " where folderId == pFolderId && filename == pName" 
+			    + " parameters String pFolderId, String pName";
+			List<FileEntity> result = (List<FileEntity>)pm.newQuery(query)
+				.execute(folderId, name);
+			if (result.size() > 0) {
+				return result.get(0);
+			}
+			return null;
+		}
+		finally {
+			pm.close();
+		}
+	}
+	
+	
 
 }

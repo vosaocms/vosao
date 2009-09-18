@@ -22,6 +22,7 @@ public class FolderBean extends AbstractJSFBean implements Serializable {
 	
 	private List<FolderEntity> list;
 	private FolderEntity current;
+	private List<FileEntity> files;
 	private Map<String, Boolean> selected;
 	private String id;
 	private TreeItemDecorator<FolderEntity> root;
@@ -42,9 +43,21 @@ public class FolderBean extends AbstractJSFBean implements Serializable {
 	}
 
 	private void initCurrent() {
-		current = new FolderEntity();
 		if (getCurrentId() != null) {
 			current = getDao().getFolderDao().getById(getCurrentId());
+		}
+		else {
+			current = new FolderEntity();
+		}
+		initFiles();
+	}
+	
+	private void initFiles() {
+		if (current != null) {
+			files = getDao().getFileDao().getByFolder(current.getId());
+		}
+		else {
+			files = new ArrayList<FileEntity>();
 		}
 	}
 	
@@ -68,7 +81,7 @@ public class FolderBean extends AbstractJSFBean implements Serializable {
 	private void initFileSelected() {
 		fileSelected = new HashMap<String, Boolean>();
 		if (current != null) {
-			for (FileEntity file : current.getFiles()) {
+			for (FileEntity file : files) {
 				fileSelected.put(file.getId(), false);
 			}
 		}
@@ -111,7 +124,7 @@ public class FolderBean extends AbstractJSFBean implements Serializable {
 	public void edit() {
 		if (id != null) {
 			setCurrentId(id);
-			current = getDao().getFolderDao().getById(id);
+			initCurrent();
 			initChildren();
 		}
 	}
@@ -250,6 +263,14 @@ public class FolderBean extends AbstractJSFBean implements Serializable {
 
 	public void setFileSelected(Map<String, Boolean> fileSelected) {
 		this.fileSelected = fileSelected;
+	}
+
+	public List<FileEntity> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<FileEntity> files) {
+		this.files = files;
 	}
 	
 }

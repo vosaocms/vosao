@@ -34,20 +34,6 @@ public class FolderUtil {
 		return Arrays.copyOfRange(chain, 0, chain.length - 1);
 	}
 	
-	public static FileEntity getFile(final TreeItemDecorator<FolderEntity> tree,
-			final String[] chain, final String filename) {
-
-		FolderEntity folder = getFolder(chain, 0, tree);
-		if (folder != null) {
-			for(FileEntity file : folder.getFiles()) {
-				if (file.getFile().getFilename().equals(filename)) {
-					return file;
-				}
-			}
-		}
-		return null;
-	}
-	
 	private static FolderEntity getFolder(final String[] chain, final int index, 
 			final TreeItemDecorator<FolderEntity> tree) {
 

@@ -2,17 +2,16 @@
 
 Requirements for import/export operations:
  * complete site with themes
- * complete site without themes
- * single theme
+ * one or several theme
 
 
  Complete site = content tree + content child resources
 
- Content child resources are placed to /files/page/page_path
+ Content child resources are placed to /page/page_path and are available as url /file/page/page_path
 
  Theme = theme content + theme child resources
 
- Theme child resources are placed to /files/theme/uniqe_theme_name/
+ Theme child resources are placed to /theme/uniqe_theme_name/inside_theme_path and are available as url /file/theme/unique_theme_name/inside_theme_path
 
 
 == Import/export file format ==
@@ -27,7 +26,7 @@ Zip archive with following structure:
  |                        |- content.html
  |                        |- any_other_theme_files_and_folders
  |
- |- any_other_page_files_and_folders
+ |- page /- any_other_page_files_and_folders
 }}}
 
 content.xml

@@ -1,0 +1,1 @@
+mvn -Dappname=yvosao clean package

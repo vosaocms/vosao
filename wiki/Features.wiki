@@ -7,4 +7,5 @@
   * Global site configuration panel
   * [FeatureResources Resources management (images, css, js, other files types)]
   * [ImportExport Site import/export (content and all resources)]
-  * Feedback forms 
+  * Feedback forms
+  * Text resource files editor 

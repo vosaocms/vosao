@@ -18,8 +18,7 @@ public class FileDaoTest extends AbstractDaoTest {
 			final String contentType,final byte[] data, 
 			final FolderEntity folder) {
 		FileEntity file = new FileEntity(title, name, contentType, new Date(),
-				data, folder);
-		folder.addFile(file);
+				data, folder.getId());
 		getDao().getFileDao().save(file);
 		return file;
 	}
@@ -29,8 +28,9 @@ public class FileDaoTest extends AbstractDaoTest {
 		addFile("title", "test.bat", "text/plain", "file content".getBytes(), 
 				folder);
 		folder = getDao().getFolderDao().getById(folder.getId());
-		assertEquals(1, folder.getFiles().size());
-		FileEntity file1 = folder.getFiles().get(0);
+		List<FileEntity> files = getDao().getFileDao().getByFolder(folder.getId());
+		assertEquals(1, files.size());
+		FileEntity file1 = files.get(0);
 		assertEquals("title", file1.getTitle());
 	}	
 	
@@ -42,7 +42,7 @@ public class FileDaoTest extends AbstractDaoTest {
 		assertEquals(file.getTitle(), file2.getTitle());
 		assertNotNull("blob data not null", file2.getFile());
 		assertEquals(file.getFile().getMimeType(), file2.getFile().getMimeType());
-		assertEquals(file.getFile().getFilename(), file2.getFile().getFilename());
+		assertEquals(file.getFilename(), file2.getFilename());
 	}	
 	
 	public void testBlobStore() {
@@ -64,7 +64,8 @@ public class FileDaoTest extends AbstractDaoTest {
 		addFile("title2", "test.bat2", "text/plain", "file content2".getBytes(), folder);
 		addFile("title3", "test.bat3", "text/plain", "file content3".getBytes(), folder);
 		folder = getDao().getFolderDao().getById(folder.getId());
-		List<FileEntity> files = folder.getFiles();
+		List<FileEntity> files = getDao().getFileDao().getByFolder(
+				folder.getId());
 		assertEquals(3, files.size());
 	}	
 	
@@ -85,9 +86,9 @@ public class FileDaoTest extends AbstractDaoTest {
 		addFile("title2", "test.bat2", "text/plain", "file content2".getBytes(), folder);
 		addFile("title3", "test.bat3", "text/plain", "file content3".getBytes(), folder);
 		folder = getDao().getFolderDao().getById(folder.getId());
-		List<FileEntity> list = folder.getFiles();
+		List<FileEntity> list = getDao().getFileDao().getByFolder(folder.getId());
 		FileEntity file = new FileEntity("title4", "test.bat4", "text/plain", 
-				new Date(), "file content4".getBytes(), folder);
+				new Date(), "file content4".getBytes(), folder.getId());
 		list.add(file);
 		assertEquals(4, list.size());
 	}
@@ -98,12 +99,26 @@ public class FileDaoTest extends AbstractDaoTest {
 		FileEntity file = addFile("title2", "test.bat2", "text/plain", "file content2".getBytes(), folder);
 		addFile("title3", "test.bat3", "text/plain", "file content3".getBytes(), folder);
 		folder = getDao().getFolderDao().getById(folder.getId());
-		assertEquals(3, folder.getFiles().size());
+		List<FileEntity> files = getDao().getFileDao().getByFolder(folder.getId());
+		assertEquals(3, files.size());
 		getDao().getFileDao().remove(file.getId());
 		folder = getDao().getFolderDao().getById(folder.getId());
-		List<FileEntity> list = folder.getFiles();
+		List<FileEntity> list = getDao().getFileDao().getByFolder(folder.getId());
 		assertEquals(2, list.size());
 	}
 	
+	public void testGetByName() {
+		FolderEntity folder = addFolder("test");
+		addFile("title1", "test.bat1", "text/plain", "file content1".getBytes(), 
+				folder);
+		addFile("title2", "test.bat2", "text/plain", "file content2".getBytes(), 
+				folder);
+		addFile("title3", "test.bat3", "text/plain", "file content3".getBytes(), 
+				folder);
+		FileEntity file = getDao().getFileDao().getByName(folder.getId(), 
+				"test.bat2");
+		assertNotNull(file);
+		assertEquals("test.bat2", file.getFilename());
+	}	
 	
 }

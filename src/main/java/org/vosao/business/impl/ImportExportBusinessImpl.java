@@ -80,11 +80,11 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		addThemeResources(out, theme);		
 		String descriptionName = themeFolder + "description.xml";
 		out.putNextEntry(new ZipEntry(descriptionName));
-		out.write(createThemeExportXML(theme).getBytes());
+		out.write(createThemeExportXML(theme).getBytes("UTF-8"));
 		out.closeEntry();
 		String contentName = themeFolder + "content.html";
 		out.putNextEntry(new ZipEntry(contentName));
-		out.write(theme.getContent().getBytes());
+		out.write(theme.getContent().getBytes("UTF-8"));
 		out.closeEntry();
 	}
 
@@ -122,8 +122,10 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 			addResourcesFromFolder(out, child, 
 					path + child.getEntity().getName() + "/");
 		}
-		for (FileEntity file : folder.getEntity().getFiles()) {
-			String filePath = path + file.getFile().getFilename();
+		List<FileEntity> files = getDao().getFileDao().getByFolder(
+				folder.getEntity().getId());
+		for (FileEntity file : files) {
+			String filePath = path + file.getFilename();
 			out.putNextEntry(new ZipEntry(filePath));
 			out.write(file.getFile().getContent());
 			out.closeEntry();
@@ -244,15 +246,16 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 				folderPath).getEntity(); 
 		String contentType = MimeType.getContentTypeByExt(
 				FolderUtil.getFileExt(fileName));
-		if (folderEntity.isFileExists(fileName)) {
-			FileEntity fileEntity = folderEntity.findFile(fileName);
+		FileEntity fileEntity = getDao().getFileDao().getByName(
+				folderEntity.getId(), fileName);
+		if (fileEntity != null) {
 			fileEntity.getFile().setContent(data);
 			fileEntity.getFile().setMdtime(new Date());
 			getDao().getFileDao().save(fileEntity);
 		}
 		else {
-			FileEntity fileEntity = new FileEntity(fileName, fileName, 
-					contentType, new Date(), data, folderEntity);
+			fileEntity = new FileEntity(fileName, fileName, 
+					contentType, new Date(), data, folderEntity.getId());
 			getDao().getFileDao().save(fileEntity);
 		}
 		return "/" + entry.getName();
@@ -275,7 +278,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 	private void exportContent(final ZipOutputStream out) throws IOException {
 		String contentName = "content.xml";
 		out.putNextEntry(new ZipEntry(contentName));
-		out.write(createContentExportXML().getBytes());
+		out.write(createContentExportXML().getBytes("UTF-8"));
 		out.closeEntry();
 		addContentResources(out);
 	}
@@ -307,8 +310,10 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		Element pageElement = root.addElement("page"); 
 		pageElement.addAttribute("url", page.getEntity().getFriendlyURL());
 		pageElement.addAttribute("title", page.getEntity().getTitle());
-		pageElement.addAttribute("publishDate", 
+		if (page.getEntity().getPublishDate() != null) {
+			pageElement.addAttribute("publishDate", 
 				page.getEntity().getPublishDate().toString());
+		}
 		TemplateEntity template = getDao().getTemplateDao().getById(
 				page.getEntity().getTemplate());
 		if (template != null) {

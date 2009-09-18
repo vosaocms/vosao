@@ -1,8 +1,6 @@
 package org.vosao.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -31,11 +29,7 @@ public class FolderEntity implements Serializable {
 	@Persistent
 	private String parent;
 	
-	@Persistent(mappedBy = "folder", defaultFetchGroup = "true")
-	private List<FileEntity> files;
-
 	public FolderEntity() {
-		files = new ArrayList<FileEntity>();
 	}
 	
 	public FolderEntity(String aName) {
@@ -58,7 +52,6 @@ public class FolderEntity implements Serializable {
 		setName(entity.getName());
 		setTitle(entity.getTitle());
 		setParent(entity.getParent());
-		setFiles(entity.getFiles());
 	}
 	
 	public String getId() {
@@ -77,19 +70,6 @@ public class FolderEntity implements Serializable {
 		this.name = name;
 	}
 
-	public List<FileEntity> getFiles() {
-		return files;
-	}
-
-	public void setFiles(List<FileEntity> files) {
-		this.files = files;
-	}
-
-	public void addFile(final FileEntity file) {
-		file.setFolder(this);
-		files.add(file);
-	}
-
 	public String getParent() {
 		return parent;
 	}
@@ -104,24 +84,6 @@ public class FolderEntity implements Serializable {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-	
-	public boolean isFileExists(final String name) {
-		for (FileEntity file : files) {
-			if (file.getFile().getFilename().equals(name)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public FileEntity findFile(final String name) {
-		for (FileEntity file : files) {
-			if (file.getFile().getFilename().equals(name)) {
-				return file;
-			}
-		}
-		return null;
 	}
 
 }

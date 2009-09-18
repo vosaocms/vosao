@@ -44,12 +44,15 @@ public class FileDownloadServlet extends BaseSpringServlet {
 			return;
 		}
 		
-		String[] folderChain = FolderUtil.getFolderChain(chain);
 		String filename = chain[chain.length-1];
 		
 		TreeItemDecorator<FolderEntity> tree = getBusiness().getFolderBusiness()
 				.getTree();
-		FileEntity file = FolderUtil.getFile(tree, folderChain, filename);
+		TreeItemDecorator<FolderEntity> folder = getBusiness().getFolderBusiness()
+				.findFolderByPath(tree, FolderUtil.getFilePath(
+						request.getPathInfo()));
+		FileEntity file = getDao().getFileDao().getByName(
+				folder.getEntity().getId(), filename); 
 		if (file != null) {
 			if (file.getFile().getContent().length < CACHE_LIMIT) {
 				getBusiness().getCache().put(request.getPathInfo(), file);

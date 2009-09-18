@@ -10,13 +10,11 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import com.google.appengine.api.datastore.Key;
-
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class FileEntity implements Serializable {
 
-	private static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 4L;
 
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -30,27 +28,32 @@ public class FileEntity implements Serializable {
 	private DownloadableFile file;
 
 	@Persistent
-	private FolderEntity folder;	
+	private String filename;	
+
+	@Persistent
+	private String folderId;	
 	
 	public FileEntity() {
 	}
 	
-	public FileEntity(String aTitle, DownloadableFile aFile, 
-			FolderEntity aFolder) {
+	public FileEntity(String aTitle, String aName, DownloadableFile aFile, 
+			String aFolderId) {
 		this();
 		title = aTitle;
+		filename = aName;
 		file = aFile;
-		folder = aFolder;
+		folderId = aFolderId;
 	}
 	
 	public FileEntity(String aTitle, String aName, String aContentType,
-			Date mdtime, byte[] aData, FolderEntity folder) {
-		this(aTitle, new DownloadableFile(aName, aContentType, mdtime, aData), 
+			Date mdtime, byte[] aData, String folder) {
+		this(aTitle, aName, new DownloadableFile(aContentType, mdtime, aData), 
 				folder);
 	}
 	
 	public void copy(final FileEntity entity) {
 		setTitle(entity.getTitle());
+		setFilename(entity.getFilename());
 		setFile(entity.getFile());
 	}
 	
@@ -78,12 +81,20 @@ public class FileEntity implements Serializable {
 		this.file = file;
 	}
 
-	public FolderEntity getFolder() {
-		return folder;
+	public String getFolderId() {
+		return folderId;
 	}
 
-	public void setFolder(FolderEntity folder) {
-		this.folder = folder;
+	public void setFolderId(String folderId) {
+		this.folderId = folderId;
+	}
+
+	public String getFilename() {
+		return filename;
+	}
+	
+	public void setFilename(String filename) {
+		this.filename = filename;
 	}
 
 }

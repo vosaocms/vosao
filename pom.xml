@@ -263,6 +263,19 @@
                     </execution>
                 </executions>
             </plugin>
+	    <plugin>
+	      <groupId>org.apache.maven.plugins</groupId>
+	      <artifactId>maven-war-plugin</artifactId>
+	      <configuration>
+	        <webResources>
+	          <resource>
+	            <directory>src/main/webresources</directory>
+	            <filtering>true</filtering>
+	          </resource>
+	        </webResources>
+	      </configuration>
+	    </plugin>
+
         </plugins>
     </build>
     

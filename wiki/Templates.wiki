@@ -37,4 +37,10 @@ $page.content
 
  * service.findPage(url) - find page by friendly url
  * service.findPageChildren(url) - find all child pages of specified page by url
-
+   _usage example_
+   {{{
+     #foreach($p in $service.findPageChildren("/blogs")
+       <h1 class="blog-title">$p.title</h1>
+       <div class="blog-entry">$p.content</div>
+     #end
+   }}}

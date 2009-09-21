@@ -47,6 +47,12 @@ public class FileDownloadServlet extends BaseSpringServlet {
 		TreeItemDecorator<FolderEntity> folder = getBusiness().getFolderBusiness()
 				.findFolderByPath(tree, FolderUtil.getFilePath(
 						request.getPathInfo()));
+		if (folder == null) {
+	        log.info("folder " + request.getPathInfo() + " was not found");
+			response.getWriter().append("folder " + request.getPathInfo() 
+					+ " was not found");
+			return;
+		}
 		FileEntity file = getDao().getFileDao().getByName(
 				folder.getEntity().getId(), filename); 
 		if (file != null) {

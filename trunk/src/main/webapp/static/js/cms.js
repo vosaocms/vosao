@@ -9,3 +9,7 @@ function errorMessage(message) {
 function javaList(array) {
 	return {javaClass: 'java.util.ArrayList', list: array};
 }
+
+function javaMap(aMap) {
+	return {javaClass: 'java.util.HashMap', map: aMap};
+}

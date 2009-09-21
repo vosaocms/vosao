@@ -1,6 +1,9 @@
 package org.vosao.jsf;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -240,5 +243,17 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	
 	public boolean isEditURL() {
 		return !isEdit() || (children != null && children.size() == 0); 
+	}
+
+	public String getPublishDate() {
+		if (current == null) {
+			return null;
+		}
+		Format f = new SimpleDateFormat("DD.MM.YYYY");
+		return f.format(current.getPublishDate());
+	}
+
+	public void setPublishDate(String publishDate) {
+		// TODO this.publishDate = publishDate;
 	}
 }

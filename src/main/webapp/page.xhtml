@@ -28,8 +28,9 @@
 <div id="tabs">
 <ul>
     <li><a href="#tab-1">Page</a></li>
+    <li><a href="#tab-2">Content</a></li>
     <h:panelGroup rendered="#{pageBean.showChildren}">
-    <li><a href="#tab-2">Children pages</a></li>
+    <li><a href="#tab-3">Children pages</a></li>
     </h:panelGroup>    
 </ul>
 
@@ -56,6 +57,22 @@
     </h:selectOneMenu>
 </div>
 <div class="form-row">
+    <label>Publication date</label>
+    <h:inputText value="#{pageBean.publishDate}" />
+</div>
+
+<div class="buttons">
+    <h:commandButton value="Save" action="#{pageBean.update}" />
+    <h:commandButton value="Preview" action="#{pageBean.preview}" 
+        rendered="#{pageBean.edit}"/>
+    <h:commandButton value="Cancel" action="#{pageBean.cancelEdit}" />
+</div>    
+
+</div>
+
+<div id="tab-3">
+
+<div class="form-row">
     <h:inputTextarea id="content" rows="20" cols="80" value="#{pageBean.current.content}" />
 </div>
 
@@ -70,7 +87,7 @@
 
 <h:panelGroup rendered="#{pageBean.showChildren}">
 
-<div id="tab-2">
+<div id="tab-3">
 
 <h:dataTable value="#{pageBean.children}" var="page" styleClass="form-table">
     <h:column>

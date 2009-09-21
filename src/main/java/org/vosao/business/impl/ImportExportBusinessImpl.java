@@ -116,24 +116,24 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 	 * Add files from resource folder to zip archive.
 	 * @param out - zip output stream
 	 * @param folder - folder tree item
-	 * @param path - folder path under which resources will be placed to zip. 
-	 * 	             Should end with / symbol.
+	 * @param zipPath - folder path under which resources will be placed to zip. 
+	 * 	             Should not start with / symbol and should end with / symbol.
 	 * @throws IOException
 	 */
 	private void addResourcesFromFolder(final ZipOutputStream out, 
-			final TreeItemDecorator<FolderEntity> folder, final String path) 
+			final TreeItemDecorator<FolderEntity> folder, final String zipPath) 
 		throws IOException {
 		
-		out.putNextEntry(new ZipEntry(path));
+		out.putNextEntry(new ZipEntry(zipPath));
 		out.closeEntry();
 		for (TreeItemDecorator<FolderEntity> child : folder.getChildren()) {
 			addResourcesFromFolder(out, child, 
-					path + child.getEntity().getName() + "/");
+					zipPath + child.getEntity().getName() + "/");
 		}
 		List<FileEntity> files = getDao().getFileDao().getByFolder(
 				folder.getEntity().getId());
 		for (FileEntity file : files) {
-			String filePath = path + file.getFilename();
+			String filePath = zipPath + file.getFilename();
 			out.putNextEntry(new ZipEntry(filePath));
 			out.write(getDao().getFileDao().getFileContent(file));
 			out.closeEntry();
@@ -361,7 +361,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		if (folder == null) {
 			return;
 		}
-		addResourcesFromFolder(out, folder, "/page/"); 
+		addResourcesFromFolder(out, folder, "page/"); 
 	}
 
 	private boolean isSiteContent(final ZipEntry entry) 

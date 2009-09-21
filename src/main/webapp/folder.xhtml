@@ -11,9 +11,17 @@
 
 <script type="text/javascript">
 
+var jsonrpc;
+var folderId = '#{folderBean.current.id}';
+var files = '';
+
+// <!--
+
 $(function() {
     $("#tabs").tabs();
     $("#file-upload").dialog({ width: 400, autoOpen: false });
+    jsonrpc = new JSONRpcClient("/JSON-RPC/");
+    loadFiles();
 });
 
 $(document).ready(function () {
@@ -41,9 +49,23 @@ function afterUpload(data) {
 }
 
 function onAfterUploadOk() {
-	window.location.reload();
+    $("#afterUpload-dialog").dialog("close");
+	loadFiles();
 }
 
+function loadFiles() {
+	files = jsonrpc.fileService.getByFolder(folderId);
+    var html = "<table class=\"form-table\">";
+	for (i=0; i < files.list.length; i++) {
+	    var file = files.list[i];
+	    var item = "<tr><td>" + file.filename + "</td><td>" + file.mimeType 
+	        + "</td><td>" + file.size + " bytes</td></tr>";
+        html += item;
+	}
+	html += "</table>";
+	$("#filesTable").html(html);
+}
+// -->
 </script>
 
 </ui:define>
@@ -84,27 +106,11 @@ function onAfterUploadOk() {
 
 <h:panelGroup rendered="#{folderBean.showFiles}">
 <div id="tab-2">
-
-<h:dataTable value="#{folderBean.files}" var="r"
-    styleClass="form-table">
-    <h:column>
-        <f:facet name="header"></f:facet>    
-        <h:selectBooleanCheckbox value="#{folderBean.fileSelected[r.id]}"/>
-    </h:column>
-    <h:column>
-        <f:facet name="header" >Title</f:facet>    
-        <h:outputText value="#{r.title}"/>
-    </h:column>
-    <h:column>
-        <f:facet name="header" >Name</f:facet>    
-        <h:outputText value="#{r.filename}"/>
-    </h:column>
-</h:dataTable>
-<div class="buttons">
-    <input type="button" onclick="onUpload()" value="Upload file" />
-    <h:commandButton value="Delete files" action="#{folderBean.deleteFiles}" />
-</div>
-
+    <div id="filesTable"> </div>
+    <div class="buttons">
+        <input type="button" onclick="onUpload()" value="Upload file" />
+        <h:commandButton value="Delete files" action="#{folderBean.deleteFiles}" />
+    </div>
 </div>
 </h:panelGroup>
 

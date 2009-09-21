@@ -1,8 +1,10 @@
 package org.vosao.dao;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.vosao.entity.FileChunkEntity;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 
@@ -17,9 +19,10 @@ public class FileDaoTest extends AbstractDaoTest {
 	private FileEntity addFile(final String title, final String name, 
 			final String contentType,final byte[] data, 
 			final FolderEntity folder) {
-		FileEntity file = new FileEntity(title, name, contentType, new Date(),
-				data, folder.getId());
+		FileEntity file = new FileEntity(title, name, folder.getId(), 
+				contentType, new Date(), data.length);
 		getDao().getFileDao().save(file);
+		getDao().getFileDao().saveFileContent(file, data);
 		return file;
 	}
 	
@@ -39,22 +42,22 @@ public class FileDaoTest extends AbstractDaoTest {
 		FileEntity file = addFile("title", "test.bat", "text/plain", 
 				"file content".getBytes(), folder);
 		FileEntity file2 = getDao().getFileDao().getById(file.getId());
+		assertNotNull("blob data not null", file2);
 		assertEquals(file.getTitle(), file2.getTitle());
-		assertNotNull("blob data not null", file2.getFile());
-		assertEquals(file.getFile().getMimeType(), file2.getFile().getMimeType());
+		assertEquals(file.getMimeType(), file2.getMimeType());
 		assertEquals(file.getFilename(), file2.getFilename());
 	}	
 	
 	public void testBlobStore() {
 		FolderEntity folder = addFolder("test");
-		FileEntity file = addFile("title", "test.bat", "text/plain", 
-				"file content".getBytes(), folder);
+		byte[] c = "file content".getBytes();
+		FileEntity file = addFile("title", "test.bat", "text/plain", c, folder);
 		FileEntity file2 = getDao().getFileDao().getById(file.getId());
-		assertNotNull("blob data not null", file2.getFile());
-		assertNotNull("blob data not null", file2.getFile().getContent());
-		for (int i=0; i < file.getFile().getContent().length; i++) {
-			assertEquals(file.getFile().getContent()[i], 
-					file2.getFile().getContent()[i]);
+		byte[] content = getDao().getFileDao().getFileContent(file2);
+		assertNotNull("blob data not null", file2);
+		assertNotNull("blob data not null", content);
+		for (int i=0; i < content.length; i++) {
+			assertEquals(content[i], c[i]);
 		}
 	}	
 
@@ -80,19 +83,6 @@ public class FileDaoTest extends AbstractDaoTest {
 		assertEquals("update", file3.getTitle());
 	}
 	
-	public void testResultList() {
-		FolderEntity folder = addFolder("test");
-		addFile("title1", "test.bat1", "text/plain", "file content1".getBytes(), folder);
-		addFile("title2", "test.bat2", "text/plain", "file content2".getBytes(), folder);
-		addFile("title3", "test.bat3", "text/plain", "file content3".getBytes(), folder);
-		folder = getDao().getFolderDao().getById(folder.getId());
-		List<FileEntity> list = getDao().getFileDao().getByFolder(folder.getId());
-		FileEntity file = new FileEntity("title4", "test.bat4", "text/plain", 
-				new Date(), "file content4".getBytes(), folder.getId());
-		list.add(file);
-		assertEquals(4, list.size());
-	}
-
 	public void testDelete() {
 		FolderEntity folder = addFolder("test");
 		addFile("title1", "test.bat1", "text/plain", "file content1".getBytes(), folder);
@@ -120,5 +110,33 @@ public class FileDaoTest extends AbstractDaoTest {
 		assertNotNull(file);
 		assertEquals("test.bat2", file.getFilename());
 	}	
+	
+	public void testSaveFileEntity() {
+		FolderEntity folder = addFolder("test");
+		byte[] content = new byte[1200000];
+		Arrays.fill(content, (byte)123);
+		FileEntity file = addFile("title1", "test.bat1", "text/plain", content, 
+				folder);
+		byte[] content1 = getDao().getFileDao().getFileContent(file);
+		assertEquals(content.length, content1.length);
+		
+	}
+
+	public void testCreateChunks() {
+		FolderEntity folder = addFolder("test");
+		byte[] content = new byte[200000];
+		Arrays.fill(content, (byte)123);
+		FileEntity file = new FileEntity("title1", "test.bat1", folder.getId(),
+				"text/plain", new Date(), content.length);
+		List<FileChunkEntity> list = getDao().getFileDao().createChunks(file, 
+				content);
+		assertNotNull(list);
+		assertEquals(1, list.size());
+		content = new byte[1200000];
+		Arrays.fill(content, (byte)100);
+		list = getDao().getFileDao().createChunks(file, content);
+		assertNotNull(list);
+		assertEquals(2, list.size());
+	}
 	
 }

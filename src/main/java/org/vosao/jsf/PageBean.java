@@ -125,6 +125,15 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 		JSFUtil.redirect(current.getFriendlyURL());
 	}
 	
+	public String addChildParam() {
+		if (id != null) {
+			current = getDao().getPageDao().getById(id);
+			initChildren();
+		}
+		setParent(current.getId());
+		setParentURL(current.getFriendlyURL());
+		return "pretty:pageCreate";
+	}
 	
 	public List<PageEntity> getList() {
 		return list;
@@ -170,11 +179,12 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	private static StringBuffer renderPageTree(
 			final TreeItemDecorator<PageEntity> page) {
 		StringBuffer result = new StringBuffer();
-		result.append("<li><a href=\"page/edit/")
-			.append(page.getEntity().getId())
-			.append("\">")
-			.append(page.getEntity().getTitle())
-			.append("</a>");
+		String editPageLink = "<a href=\"page/edit/" + page.getEntity().getId()
+			+ "\">" + page.getEntity().getTitle() + "</a>";
+		String addChildParamLink = "&nbsp;<a title=\"Add child\" href=\"/cms/page/createChild/"
+			+ page.getEntity().getId() + "\">+</a>";
+		
+		result.append("<li>").append(editPageLink).append(addChildParamLink);
 		if (page.getChildren().size() > 0) {
 			result.append("<ul>");
 		}

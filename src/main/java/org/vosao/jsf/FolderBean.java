@@ -149,6 +149,15 @@ public class FolderBean extends AbstractJSFBean implements Serializable {
 		initCurrent();
 		initChildren();
 	}
+
+	public String addChildParam() {
+		if (id != null) {
+			current = getDao().getFolderDao().getById(id);
+		}
+		setParent(current.getId());
+		setCurrentId(null);
+		return "pretty:folderCreate";
+	}
 	
 	
 	public List<FolderEntity> getList() {
@@ -195,11 +204,14 @@ public class FolderBean extends AbstractJSFBean implements Serializable {
 	private static StringBuffer renderFolderTree(
 			final TreeItemDecorator<FolderEntity> folder) {
 		StringBuffer result = new StringBuffer();
-		result.append("<li><a href=\"folder/edit/")
-			.append(folder.getEntity().getId())
-			.append("\">")
-			.append(folder.getEntity().getTitle())
-			.append("</a>");
+		String editFolderLink = "<a href=\"folder/edit/" 
+			+ folder.getEntity().getId() + "\">" + folder.getEntity().getTitle()
+			+ "</a>";
+		String addChildParamLink = "&nbsp;<a title=\"Add child\" href=\"/cms/folder/createChild/"
+			+ folder.getEntity().getId() + "\">+</a>";
+		
+		result.append("<li>").append(editFolderLink).append(addChildParamLink);
+		
 		if (folder.getChildren().size() > 0) {
 			result.append("<ul>");
 		}

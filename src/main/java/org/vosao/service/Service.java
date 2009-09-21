@@ -7,5 +7,8 @@ public interface Service {
 
 	FormService getFormService();
 	void setFormService(FormService bean);
+
+	FileService getFileService();
+	void setFileService(FileService bean);
 	
 }

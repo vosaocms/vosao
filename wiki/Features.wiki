@@ -8,4 +8,6 @@
   * [FeatureResources Resources management (images, css, js, other files types)]
   * [ImportExport Site import/export (content and all resources)]
   * Feedback forms
-  * Text resource files editor 
+  * Text resource files editor
+  * Captcha service
+  * Adding comments to pages 

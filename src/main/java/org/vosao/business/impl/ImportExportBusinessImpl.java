@@ -112,6 +112,14 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		addResourcesFromFolder(out, themeFolder, getThemePath(theme)); 
 	}
 
+	/**
+	 * Add files from resource folder to zip archive.
+	 * @param out - zip output stream
+	 * @param folder - folder tree item
+	 * @param path - folder path under which resources will be placed to zip. 
+	 * 	             Should end with / symbol.
+	 * @throws IOException
+	 */
 	private void addResourcesFromFolder(final ZipOutputStream out, 
 			final TreeItemDecorator<FolderEntity> folder, final String path) 
 		throws IOException {
@@ -351,7 +359,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		if (folder == null) {
 			return;
 		}
-		addResourcesFromFolder(out, folder, "/page"); 
+		addResourcesFromFolder(out, folder, "/page/"); 
 	}
 
 	private boolean isSiteContent(final ZipEntry entry) 

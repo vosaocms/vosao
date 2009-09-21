@@ -2,6 +2,7 @@ package org.vosao.dao;
 
 import java.util.List;
 
+import org.vosao.entity.FileChunkEntity;
 import org.vosao.entity.FileEntity;
 
 public interface FileDao extends AbstractDao {
@@ -18,5 +19,10 @@ public interface FileDao extends AbstractDao {
 	
 	void remove(final List<String> ids);
 	
+	void saveFileContent(final FileEntity file, byte[] content);
+	
+	byte[] getFileContent(final FileEntity file);
+	
+	List<FileChunkEntity> createChunks(FileEntity file,	byte[] content);
 	
 }

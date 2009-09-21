@@ -24,37 +24,42 @@ public class FileEntity implements Serializable {
 	@Persistent
 	private String title;
 	
-	@Persistent(serialized = "true", defaultFetchGroup = "true")
-	private DownloadableFile file;
-
 	@Persistent
 	private String filename;	
 
 	@Persistent
 	private String folderId;	
+
+	@Persistent
+	private String mimeType;
+    
+	@Persistent
+	private Date mdtime;
 	
+	@Persistent
+	private int size;
+
 	public FileEntity() {
 	}
 	
-	public FileEntity(String aTitle, String aName, DownloadableFile aFile, 
-			String aFolderId) {
+	public FileEntity(String aTitle, String aName, String aFolderId,
+			String aMimeType, Date aMdttime, int aSize) {
 		this();
 		title = aTitle;
 		filename = aName;
-		file = aFile;
 		folderId = aFolderId;
-	}
-	
-	public FileEntity(String aTitle, String aName, String aContentType,
-			Date mdtime, byte[] aData, String folder) {
-		this(aTitle, aName, new DownloadableFile(aContentType, mdtime, aData), 
-				folder);
+		mimeType = aMimeType;
+		mdtime = aMdttime;
+		size = aSize;
 	}
 	
 	public void copy(final FileEntity entity) {
 		setTitle(entity.getTitle());
 		setFilename(entity.getFilename());
-		setFile(entity.getFile());
+		setFolderId(entity.getFolderId());
+		setMdtime(entity.getMdtime());
+		setMimeType(entity.getMimeType());
+		setSize(entity.getSize());
 	}
 	
 	public String getId() {
@@ -73,14 +78,6 @@ public class FileEntity implements Serializable {
 		this.title = title;
 	}
 
-	public DownloadableFile getFile() {
-		return file;
-	}
-
-	public void setFile(DownloadableFile file) {
-		this.file = file;
-	}
-
 	public String getFolderId() {
 		return folderId;
 	}
@@ -95,6 +92,30 @@ public class FileEntity implements Serializable {
 	
 	public void setFilename(String filename) {
 		this.filename = filename;
+	}
+
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
+	}
+
+	public Date getMdtime() {
+		return mdtime;
+	}
+
+	public void setMdtime(Date mdtime) {
+		this.mdtime = mdtime;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
 	}
 
 }

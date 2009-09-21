@@ -135,7 +135,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		for (FileEntity file : files) {
 			String filePath = path + file.getFilename();
 			out.putNextEntry(new ZipEntry(filePath));
-			out.write(file.getFile().getContent());
+			out.write(getDao().getFileDao().getFileContent(file));
 			out.closeEntry();
 		}
 	}
@@ -257,14 +257,16 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		FileEntity fileEntity = getDao().getFileDao().getByName(
 				folderEntity.getId(), fileName);
 		if (fileEntity != null) {
-			fileEntity.getFile().setContent(data);
-			fileEntity.getFile().setMdtime(new Date());
+			fileEntity.setMdtime(new Date());
+			fileEntity.setSize(data.length);
 			getDao().getFileDao().save(fileEntity);
+			getDao().getFileDao().saveFileContent(fileEntity, data);
 		}
 		else {
-			fileEntity = new FileEntity(fileName, fileName, 
-					contentType, new Date(), data, folderEntity.getId());
+			fileEntity = new FileEntity(fileName, fileName, folderEntity.getId(),
+					contentType, new Date(), data.length);
 			getDao().getFileDao().save(fileEntity);
+			
 		}
 		return "/" + entry.getName();
 	}

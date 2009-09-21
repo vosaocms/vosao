@@ -48,6 +48,12 @@
         <view-id>/page.jsf</view-id>
     </url-mapping>
 
+    <url-mapping id="pageCreateChild">
+        <pattern>/cms/page/createChild/#{pageBean.id}</pattern>
+        <view-id>/page.jsf</view-id>
+        <action>#{pageBean.addChildParam}</action>
+    </url-mapping>
+
     <!-- Templates -->
 
     <url-mapping id="templates">
@@ -82,6 +88,12 @@
     <url-mapping id="folderCreate">
         <pattern>/cms/folder/create</pattern>
         <view-id>/folder.jsf</view-id>
+    </url-mapping>
+
+    <url-mapping id="folderCreateChild">
+        <pattern>/cms/folder/createChild/#{folderBean.id}</pattern>
+        <view-id>/folder.jsf</view-id>
+        <action>#{folderBean.addChildParam}</action>
     </url-mapping>
 
     <!-- Forms -->

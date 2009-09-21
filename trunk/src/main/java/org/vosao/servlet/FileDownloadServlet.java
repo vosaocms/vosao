@@ -2,11 +2,7 @@ package org.vosao.servlet;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.util.Collections;
 
-import javax.cache.Cache;
-import javax.cache.CacheException;
-import javax.cache.CacheManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,7 +50,7 @@ public class FileDownloadServlet extends BaseSpringServlet {
 		FileEntity file = getDao().getFileDao().getByName(
 				folder.getEntity().getId(), filename); 
 		if (file != null) {
-			if (file.getFile().getContent().length < CACHE_LIMIT) {
+			if (file.getSize() < CACHE_LIMIT) {
 				getBusiness().getCache().put(request.getPathInfo(), file);
 			}
 			sendFile(file, response);
@@ -80,12 +76,11 @@ public class FileDownloadServlet extends BaseSpringServlet {
 	
 	private void sendFile(final FileEntity file, HttpServletResponse response) 
 			throws IOException {
-		response.setHeader("Content-type", file.getFile().getMimeType());
-		response.setHeader("Content-Length", String.valueOf(
-				file.getFile().getContent().length));
+		response.setHeader("Content-type", file.getMimeType());
+		response.setHeader("Content-Length", String.valueOf(file.getSize()));
 		BufferedOutputStream output = new BufferedOutputStream(
 				response.getOutputStream());
-		output.write(file.getFile().getContent());
+		output.write(getDao().getFileDao().getFileContent(file));
 		output.flush();
 		output.close();
 	}

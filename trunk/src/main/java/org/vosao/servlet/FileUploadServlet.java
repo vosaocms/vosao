@@ -141,10 +141,10 @@ public class FileUploadServlet extends BaseSpringServlet {
 		String ext = FilenameUtils.getExtension(path);
 		log.info("path " + path + " filename " + filename + " ext " + ext);
 		String message = null;
-		FileEntity file = new FileEntity(filename, filename, 
-				MimeType.getContentTypeByExt(ext), new Date(), data, 
-				folder.getId());
+		FileEntity file = new FileEntity(filename, filename, folder.getId(),
+				MimeType.getContentTypeByExt(ext), new Date(), data.length);
 		getDao().getFileDao().save(file);
+		getDao().getFileDao().saveFileContent(file, data);
 		log.info("created fileEntity id=" + file.getId());
 		message = createMessage("success", file.getId());
 		return message;

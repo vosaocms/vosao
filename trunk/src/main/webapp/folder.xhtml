@@ -17,20 +17,25 @@ var files = '';
 
 // <!--
 
-$(function() {
-    $("#tabs").tabs();
-    $("#file-upload").dialog({ width: 400, autoOpen: false });
-    jsonrpc = new JSONRpcClient("/JSON-RPC/");
-    loadFiles();
-});
-
 $(document).ready(function () {
     $('#upload').ajaxForm(afterUpload);
 });
 
+$(function() {
+    $("#tabs").tabs();
+    $("#file-upload").dialog({ width: 400, autoOpen: false });
+    jsonrpc = new JSONRpcClient(jsonInitCallback, "/JSON-RPC/");
+});
+
+function jsonInitCallback(result, e) {
+    if (e) {
+        errorMessage("Error dusing initializing JSON-RPC." + e);
+    }
+    loadFiles();
+}
+
 function onUpload() {
     $("#file-upload").dialog("open");
-    return false;	
 }
 function onFileUploadCancel() {
 	$("#file-upload").dialog("close");
@@ -41,30 +46,61 @@ function afterUpload(data) {
     var result = s[1];
     var msg = s[2]; 
     if (result == 'success') {
-        msg = 'File was successfully uploaded.';
+        infoMessage('File was successfully uploaded.');
+        loadFiles();
+    }
+    else {
+        errorMessage("Error during uploading file. " + msg);
     }
     $("#file-upload").dialog("close");
-    $("#afterUpload-dialog .message").text(msg);
-    $("#afterUpload-dialog").dialog();
-}
-
-function onAfterUploadOk() {
-    $("#afterUpload-dialog").dialog("close");
-	loadFiles();
 }
 
 function loadFiles() {
-	files = jsonrpc.fileService.getByFolder(folderId);
-    var html = "<table class=\"form-table\">";
-	for (i=0; i < files.list.length; i++) {
-	    var file = files.list[i];
-	    var item = "<tr><td>" + file.filename + "</td><td>" + file.mimeType 
-	        + "</td><td>" + file.size + " bytes</td></tr>";
-        html += item;
-	}
-	html += "</table>";
-	$("#filesTable").html(html);
+	jsonrpc.fileService.getByFolder(loadFilesCallback, folderId);
 }
+
+function loadFilesCallback(r) {
+    files = r
+    var html = "<table class=\"form-table\">";
+    for (i = 0; i < files.list.length; i++) {
+        var file = files.list[i];
+        var item = "<tr><td>"
+            + "<input type=\"checkbox\" name=\"item" + i + "\" value=\"" + file.id + "\"/></td><td>" 
+            + file.filename + "</td><td>" 
+            + file.mimeType + "</td><td>" 
+            + file.size + " bytes</td></tr>";
+        html += item;
+    }
+    html += "</table>";
+    $("#filesTable").html(html);
+}
+
+function getCheckedFilesIds() {
+    var result = [];
+    var i = 0;
+	$("#form input[type=checkbox]:checked").each(function() {
+        result[i++] = this.value;
+    });
+    return result; 
+}
+
+function onDeleteFiles() {
+    var ids = javaList(getCheckedFilesIds());
+    if (ids.list.length > 0) {
+        jsonrpc.fileService.deleteFiles(deleteFilesCallback, ids);
+    }
+}
+
+function deleteFilesCallback(r) {
+    if (r.result == "success") {
+        loadFiles();
+        infoMessage("Files was successfully deleted.");
+    }
+    else {
+        errorMessage("Error during deleting files. " + r.messsage);
+    }
+}
+
 // -->
 </script>
 
@@ -74,7 +110,7 @@ function loadFiles() {
 
 <ui:define name="body">
 
-<h:form>
+<h:form id="form">
 
 <div id="tabs">
 <ul>
@@ -109,7 +145,7 @@ function loadFiles() {
     <div id="filesTable"> </div>
     <div class="buttons">
         <input type="button" onclick="onUpload()" value="Upload file" />
-        <h:commandButton value="Delete files" action="#{folderBean.deleteFiles}" />
+        <input type="button" onclick="onDeleteFiles()" value="Delete files" />
     </div>
 </div>
 </h:panelGroup>
@@ -155,13 +191,6 @@ function loadFiles() {
         <input type="button" onclick="onFileUploadCancel()" value="Cancel" />
     </div>
 </form>
-</div>
-
-<div id="afterUpload-dialog" style="display:none" title="Status window">
-    <p class="message"></p>
-    <div class="buttons-dlg">
-        <input type="button" onclick="onAfterUploadOk()" value="OK" />
-    </div>
 </div>
 
 

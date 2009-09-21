@@ -174,5 +174,5 @@ public class PageEntity implements Serializable {
 	public void setPublishDate(Date publishDate) {
 		this.publishDate = publishDate;
 	}
-
+	
 }

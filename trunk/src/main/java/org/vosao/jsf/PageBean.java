@@ -1,10 +1,9 @@
 package org.vosao.jsf;
 import java.io.IOException;
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.Format;
-import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,7 @@ import org.apache.commons.logging.LogFactory;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
-
+import org.vosao.utils.DateUtil;
 
 public class PageBean extends AbstractJSFBean implements Serializable {
 
@@ -30,10 +29,13 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	private TreeItemDecorator<PageEntity> root;
 	private List<PageEntity> children;
 	private List<SelectItem> templates;
+	private String publishDate;
+	private Date dPublishDate;
 
 	public void init() {
 		initList();
 		current = new PageEntity();
+		publishDate = null;
 		if (getParentURL() == null || getParentURL().equals("/")) {
 			current.setFriendlyURL("/");
 		}
@@ -78,10 +80,23 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 		return "pretty:pages";
 	}
 	
+	private List<String> validate() {
+		List<String> result = new ArrayList<String>();
+		try {
+			dPublishDate = DateUtil.toDate(publishDate);
+		}
+		catch (ParseException e) {
+			result.add("Date has a wrong format (must be DD.MM.YYYY)");
+		}
+		return result;
+	}
+	
 	public String update() {
 		List<String> errors = getBusiness().getPageBusiness()
 			.validateBeforeUpdate(current);
+		errors.addAll(validate());
 		if (errors.isEmpty()) {
+			current.setPublishDate(dPublishDate);
 			if (current.getId() == null) {
 				current.setParent(getParent());
 			}
@@ -111,6 +126,7 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	public void edit() {
 		if (id != null) {
 			current = getDao().getPageDao().getById(id);
+			publishDate = DateUtil.toString(current.getPublishDate());
 			initChildren();
 		}
 	}
@@ -246,14 +262,10 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	}
 
 	public String getPublishDate() {
-		if (current == null) {
-			return null;
-		}
-		Format f = new SimpleDateFormat("DD.MM.YYYY");
-		return f.format(current.getPublishDate());
+		return publishDate;
 	}
 
-	public void setPublishDate(String publishDate) {
-		// TODO this.publishDate = publishDate;
+	public void setPublishDate(String aPublishDate) {
+		publishDate = aPublishDate;
 	}
 }

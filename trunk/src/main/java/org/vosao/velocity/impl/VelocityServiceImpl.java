@@ -53,12 +53,12 @@ public class VelocityServiceImpl implements VelocityService {
 					return 0;
 				}
 				if (d1 == null) {
-					return 1;
-				}
-				if (d2 == null) {
 					return -1;
 				}
-				return d1.compareTo(d2);
+				if (d2 == null) {
+					return 1;
+				}
+				return -1 * d1.compareTo(d2);
 			}
 			
 		});

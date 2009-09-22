@@ -157,6 +157,10 @@ public class SetupBeanImpl implements SetupBean {
 	        log.info("Adding site domain config.");
 	        getBusiness().getConfigBusiness().setSiteDomain("");
 		}
+		if (getBusiness().getConfigBusiness().getEditExt() == null) {
+	        log.info("Adding edit extensions.");
+	        getBusiness().getConfigBusiness().setEditExt("css,js,xml");
+		}
 	}
 	
 }

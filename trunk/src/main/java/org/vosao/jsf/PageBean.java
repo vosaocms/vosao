@@ -35,7 +35,7 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	public void init() {
 		initList();
 		current = new PageEntity();
-		publishDate = null;
+		publishDate = DateUtil.toString(current.getPublishDate());
 		if (getParentURL() == null || getParentURL().equals("/")) {
 			current.setFriendlyURL("/");
 		}

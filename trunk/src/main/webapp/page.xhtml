@@ -11,10 +11,9 @@
   <script type="text/javascript">
     $(function(){
     	CKEDITOR.replace('form:content');
-    });    
-    $(function() {
         $("#tabs").tabs();
-    });
+        $(".datepicker").datepicker({dateFormat:'dd.mm.yy'});
+    });    
   </script>
     
 </ui:define>
@@ -38,13 +37,13 @@
 
 <div class="form-row">
     <label>Title</label>
-    <h:inputText value="#{pageBean.current.title}" />
+    <h:inputText value="#{pageBean.current.title}" size="40"/>
 </div>
 <div class="form-row">
     <label>Friendly URL &#160;</label>
     <h:panelGroup rendered="#{pageBean.editURL}">    
         <h:outputText value="#{pageBean.current.parentFriendlyURL}/" />
-        <h:inputText value="#{pageBean.current.pageFriendlyURL}" />
+        <h:inputText value="#{pageBean.current.pageFriendlyURL}" size="40"/>
     </h:panelGroup>
     <h:panelGroup rendered="#{!pageBean.editURL}">    
         <h:outputText value="#{pageBean.current.friendlyURL}" />
@@ -58,7 +57,7 @@
 </div>
 <div class="form-row">
     <label>Publication date</label>
-    <h:inputText value="#{pageBean.publishDate}" />
+    <h:inputText value="#{pageBean.publishDate}" styleClass="datepicker" size="8"/>
 </div>
 
 <div class="buttons">

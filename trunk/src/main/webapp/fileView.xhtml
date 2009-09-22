@@ -33,27 +33,39 @@ $(function() {
 
 <div id="tab-1">
 
-<div class="form-row">
+<div style="float:left">
+ <div class="form-row">
     <label>Title</label>
     <h:inputText value="#{fileBean.current.title}" />
-</div>
-<div class="form-row">
+ </div>
+ <div class="form-row">
     <label>Name</label>
     <h:inputText value="#{fileBean.current.filename}" />
-</div>
-<div class="form-row">
+ </div>
+ <div class="form-row">
     <label>Content type</label>
     <h:outputText value="#{fileBean.current.mimeType}" />
-</div>
-<div class="form-row">
+ </div>
+ <div class="form-row">
     <label>Size</label>
     <h:outputText value="#{fileBean.current.size}" />
-</div>
-<div class="buttons">
+ </div>
+ <div class="form-row">
+    <label>Exrernal link</label>
+    <h:outputText value="#{fileBean.fileLink}" />
+ </div>
+ <div class="buttons">
     <h:commandButton value="Save" action="#{fileBean.update}" />
     <h:commandButton value="Cancel" action="#{fileBean.cancelEdit}" />
-</div>    
+ </div>    
+</div>
 
+<h:panelGroup rendered="#{fileBean.imageContent}">
+<div style="float:left">
+  <img src="#{fileBean.fileLink}" />
+</div>
+</h:panelGroup>
+<div style="clear:both"> </div>
 </div>
 
 <h:panelGroup rendered="#{fileBean.editContent}">

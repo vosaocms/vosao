@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.entity.FileEntity;
+import org.vosao.entity.FolderEntity;
 import org.vosao.servlet.FolderUtil;
 
 
@@ -16,6 +17,7 @@ public class FileBean extends AbstractJSFBean implements Serializable {
 	private static Log log = LogFactory.getLog(FileBean.class);
 	
 	private FileEntity current;
+	private FolderEntity folder;
 	private String id;
 	private String content;
 
@@ -34,6 +36,7 @@ public class FileBean extends AbstractJSFBean implements Serializable {
 					JSFUtil.addErrorMessage("Encoding error while getting file content");
 				}
 			}
+			folder = getDao().getFolderDao().getById(current.getFolderId());
 		}
 		else {
 			current = new FileEntity();
@@ -117,6 +120,26 @@ public class FileBean extends AbstractJSFBean implements Serializable {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	private static final String[] IMAGE_EXTENSIONS = {"jpg","jpeg","png","ico",
+		"gif"};
+	
+	public boolean isImageContent() {
+		for (String ext : IMAGE_EXTENSIONS) {
+			if (FolderUtil.getFileExt(current.getFilename()).equals(ext)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public String getFileLink() {
+		if (folder != null) {
+			return "/file" + getBusiness().getFolderBusiness()
+				.getFolderPath(folder) + "/" + current.getFilename();
+		}
+		return "";
 	}
 	
 }

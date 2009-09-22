@@ -24,5 +24,7 @@ public interface FileDao extends AbstractDao {
 	byte[] getFileContent(final FileEntity file);
 	
 	List<FileChunkEntity> createChunks(FileEntity file,	byte[] content);
-	
+
+	void removeByFolder(final String folderId);
+
 }

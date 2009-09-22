@@ -95,7 +95,7 @@ public class FolderBean extends AbstractJSFBean implements Serializable {
 				ids.add(id);
 			}
 		}
-		getDao().getFolderDao().remove(ids);
+		getBusiness().getFolderBusiness().recursiveRemove(ids);
 		initList();
 		return "pretty:folders";
 	}

@@ -85,6 +85,9 @@
     <bean id="formBusiness" class="org.vosao.business.impl.FormBusinessImpl"
         parent="abstractBusiness" />  
 
+    <bean id="fileBusiness" class="org.vosao.business.impl.FileBusinessImpl"
+        parent="abstractBusiness" />  
+
     <bean id="pageBusiness" class="org.vosao.business.impl.PageBusinessImpl"
         init-method="init" parent="abstractBusiness">
         <property name="configBusiness" ref="configBusiness"/>  
@@ -105,6 +108,7 @@
         <property name="importExportBusiness" ref="importExportBusiness"/>  
         <property name="configBusiness" ref="configBusiness"/>  
         <property name="formBusiness" ref="formBusiness"/>  
+        <property name="fileBusiness" ref="fileBusiness"/>  
     </bean>
 
     <!-- JSON-RPC services -->
@@ -159,6 +163,10 @@
         parent="abstractJSFBean" />
 
     <bean id="formBean" class="org.vosao.jsf.FormBean" 
+        init-method="init" scope="request"
+        parent="abstractJSFBean" />
+
+    <bean id="fileBean" class="org.vosao.jsf.FileBean" 
         init-method="init" scope="request"
         parent="abstractJSFBean" />
 

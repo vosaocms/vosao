@@ -13,6 +13,7 @@ public class ConfigBusinessImpl extends AbstractBusinessImpl
 	private static final String GOOGLE_ANALYTICS_ID_PARAM = "googleAnalyticsId";
 	private static final String SITE_EMAIL_PARAM = "siteEmail";
 	private static final String SITE_DOMAIN_PARAM = "siteDomain";
+	private static final String EDIT_EXT = "editExt";
 	
 	private String getConfigParam(final String name) {
 		ConfigEntity config = getDao().getConfigDao().getByName(name);
@@ -61,6 +62,16 @@ public class ConfigBusinessImpl extends AbstractBusinessImpl
 	@Override
 	public void setSiteDomain(String domain) {
 		setConfigParam(SITE_DOMAIN_PARAM, domain);
+	}
+
+	@Override
+	public String getEditExt() {
+		return getConfigParam(EDIT_EXT);
+	}
+
+	@Override
+	public void setEditExt(String value) {
+		setConfigParam(EDIT_EXT, value);
 	}
 	
 	

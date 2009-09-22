@@ -74,6 +74,11 @@ function onAfterUploadOk() {
     <h:inputText value="#{configBean.siteDomain}" />
 </div>
 
+<div class="form-row">
+    <label>Editable resource files extensions</label>
+    <h:inputText value="#{configBean.editExt}" />
+</div>
+
 <div class="buttons">
     <h:commandButton value="Save" action="#{configBean.save}" />
     <h:commandButton value="Export" action="#{configBean.export}" />

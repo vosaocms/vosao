@@ -12,6 +12,7 @@
 	
 	<static-files>
         <include path="/static/**.*" />
+        <include path="/*.ico" />
     </static-files>
 	
 </appengine-web-app>

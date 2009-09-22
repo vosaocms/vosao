@@ -30,7 +30,8 @@ public class SiteFilter implements Filter {
 		"/login",
 		"/file",
 		"/init",
-		"/initCron"};
+		"/initCron",
+		"/JSON-RPC"};
     
     private FilterConfig config = null;
     private ServletContext servletContext = null;
@@ -64,16 +65,14 @@ public class SiteFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse)response;
         String url = httpRequest.getServletPath();
         if (isSkipUrl(url)) {
-            //log.info("skip url " + url);
             chain.doFilter(request, response);
             return;
         }
         if (isSiteUrl(url)) {
-            //log.info("render url " + url);
         	renderPage(httpRequest, httpResponse, url);
         	return;
         }
-        chain.doFilter(request, response);
+        httpResponse.sendRedirect("/");
     }
     
     public void destroy() {

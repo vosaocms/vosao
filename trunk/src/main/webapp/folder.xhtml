@@ -31,7 +31,9 @@ function jsonInitCallback(result, e) {
     if (e) {
         errorMessage("Error dusing initializing JSON-RPC." + e);
     }
-    loadFiles();
+    else {
+        loadFiles();
+    }
 }
 
 function onUpload() {

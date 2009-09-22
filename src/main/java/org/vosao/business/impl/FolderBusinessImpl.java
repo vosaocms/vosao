@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.FolderBusiness;
@@ -100,8 +101,16 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 	}
 
 	@Override
-	public void createFolder(String path) throws UnsupportedEncodingException {
-		logger.info("createFolder " + path);
+	public void createFolder(String aPath) throws UnsupportedEncodingException {
+		logger.info("createFolder " + aPath);
+		if (StringUtils.isEmpty(aPath)) {
+			return;
+		}
+		String path = aPath; 
+		if (!aPath.equals("/") && aPath.charAt(aPath.length() - 1) == '/') {
+			path = aPath.substring(0, aPath.length() - 1);
+		}
+		logger.info("normalized " + path);
 		TreeItemDecorator<FolderEntity> root = getTree();
 		String[] chain = FolderUtil.getPathChain(path);
 		String currentDir = "";

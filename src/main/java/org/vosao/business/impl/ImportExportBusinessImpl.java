@@ -3,7 +3,6 @@ package org.vosao.business.impl;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +30,7 @@ import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.servlet.FolderUtil;
 import org.vosao.servlet.MimeType;
+import org.vosao.utils.DateUtil;
 
 public class ImportExportBusinessImpl extends AbstractBusinessImpl 
 	implements ImportExportBusiness {
@@ -76,7 +76,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 	private void exportTheme(final ZipOutputStream out, 
 			final TemplateEntity theme) throws IOException {
 
-		String themeFolder = getThemePath(theme);
+		String themeFolder = getThemeZipPath(theme);
 		addThemeResources(out, theme);		
 		String descriptionName = themeFolder + "description.xml";
 		out.putNextEntry(new ZipEntry(descriptionName));
@@ -88,10 +88,14 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		out.closeEntry();
 	}
 
-	private static String getThemePath(final TemplateEntity theme) {
+	private static String getThemeZipPath(final TemplateEntity theme) {
 		return THEME_FOLDER + theme.getUrl() + "/";
 	}
 	
+	private static String getThemePath(final TemplateEntity theme) {
+		return "/" + THEME_FOLDER + theme.getUrl();
+	}
+
 	private String createThemeExportXML(final TemplateEntity theme) {
 		Document doc = DocumentHelper.createDocument();
 		Element root = doc.addElement("theme");
@@ -109,7 +113,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		if (themeFolder == null) {
 			return;
 		}
-		addResourcesFromFolder(out, themeFolder, getThemePath(theme)); 
+		addResourcesFromFolder(out, themeFolder, getThemeZipPath(theme)); 
 	}
 
 	/**
@@ -155,11 +159,10 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 				while ((len = in.read(buffer)) > 0) {
 					data.write(buffer, 0, len);
 				}
-				in.closeEntry(); 
 				if (isSiteContent(entry)) {
 					createSiteContent(entry, data.toString("UTF-8"));
 				}
-				if (isThemeDescription(entry)) {
+				else if (isThemeDescription(entry)) {
 					createThemeByDescription(entry, data.toString("UTF-8"));
 				}
 				else if (isThemeContent(entry)) {
@@ -247,7 +250,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		String[] chain = FolderUtil.getPathChain(entry);
 		String folderPath = FolderUtil.getFilePath(entry);
 		String fileName = chain[chain.length - 1];
-		logger.debug("importResourceFile: " + folderPath + " " + fileName);
+		logger.debug("importResourceFile: " + folderPath + " " + fileName + " " + data.length);
 		getFolderBusiness().createFolder(folderPath);
 		TreeItemDecorator<FolderEntity> root = getFolderBusiness().getTree();
 		FolderEntity folderEntity = getFolderBusiness().findFolderByPath(root, 
@@ -259,15 +262,13 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		if (fileEntity != null) {
 			fileEntity.setMdtime(new Date());
 			fileEntity.setSize(data.length);
-			getDao().getFileDao().save(fileEntity);
-			getDao().getFileDao().saveFileContent(fileEntity, data);
 		}
 		else {
 			fileEntity = new FileEntity(fileName, fileName, folderEntity.getId(),
 					contentType, new Date(), data.length);
-			getDao().getFileDao().save(fileEntity);
-			
 		}
+		getDao().getFileDao().save(fileEntity);
+		getDao().getFileDao().saveFileContent(fileEntity, data);
 		return "/" + entry.getName();
 	}
 
@@ -322,7 +323,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		pageElement.addAttribute("title", page.getEntity().getTitle());
 		if (page.getEntity().getPublishDate() != null) {
 			pageElement.addAttribute("publishDate", 
-				page.getEntity().getPublishDate().toString());
+				DateUtil.toString(page.getEntity().getPublishDate()));
 		}
 		TemplateEntity template = getDao().getTemplateDao().getById(
 				page.getEntity().getTemplate());
@@ -407,12 +408,13 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		String url = pageElement.attributeValue("url");
 		String themeUrl = pageElement.attributeValue("theme");
 		Date publishDate = new Date();
-		if (pageElement.attributeValue("theme") != null) {
+		if (pageElement.attributeValue("publishDate") != null) {
 			try {
-				publishDate = DateFormat.getInstance().parse(
-					pageElement.attributeValue("theme"));
+				publishDate = DateUtil.toDate(
+						pageElement.attributeValue("publishDate"));
 			} catch (ParseException e) {
-				logger.error("Wrong date format" + pageElement.attributeValue("theme"));
+				logger.error("Wrong date format " 
+						+ pageElement.attributeValue("publishDate") + " " + title);
 			}
 		}
 		TemplateEntity template = getDao().getTemplateDao().getByUrl(themeUrl);

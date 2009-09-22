@@ -19,12 +19,14 @@ public class ConfigBean extends AbstractJSFBean implements Serializable {
 	private String googleAnalyticsId;
 	private String siteEmail;
 	private String siteDomain;
+	private String editExt;
 	
 	public void init() {
 		googleAnalyticsId = getBusiness().getConfigBusiness()
 				.getGoogleAnalyticsId();
 		siteEmail = getBusiness().getConfigBusiness().getSiteEmail();
 		siteDomain = getBusiness().getConfigBusiness().getSiteDomain();
+		editExt = getBusiness().getConfigBusiness().getEditExt();
 	}
 	
 	public void export() throws IOException {
@@ -48,6 +50,8 @@ public class ConfigBean extends AbstractJSFBean implements Serializable {
 				googleAnalyticsId);
 		getBusiness().getConfigBusiness().setSiteEmail(siteEmail);
 		getBusiness().getConfigBusiness().setSiteDomain(siteDomain);
+		getBusiness().getConfigBusiness().setEditExt(editExt);
+		JSFUtil.addInfoMessage("Configuration was successfully saved.");
 	}
 
 	public String getGoogleAnalyticsId() {
@@ -72,6 +76,14 @@ public class ConfigBean extends AbstractJSFBean implements Serializable {
 
 	public void setSiteDomain(String siteDomain) {
 		this.siteDomain = siteDomain;
+	}
+
+	public String getEditExt() {
+		return editExt;
+	}
+
+	public void setEditExt(String editExt) {
+		this.editExt = editExt;
 	}
 	
 }

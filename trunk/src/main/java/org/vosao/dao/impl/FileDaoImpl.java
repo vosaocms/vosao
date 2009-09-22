@@ -216,7 +216,7 @@ public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			for (FileChunkEntity entity : chunks) {
-				pm.deletePersistent(pm.getObjectById(FileEntity.class, 
+				pm.deletePersistent(pm.getObjectById(FileChunkEntity.class, 
 						entity.getId()));
 			}
 		}

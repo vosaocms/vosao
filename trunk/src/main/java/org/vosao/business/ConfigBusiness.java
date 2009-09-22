@@ -12,4 +12,6 @@ public interface ConfigBusiness {
 	String getSiteDomain();
 	void setSiteDomain(final String domain);
 	
+	String getEditExt();
+	void setEditExt(final String value);
 }

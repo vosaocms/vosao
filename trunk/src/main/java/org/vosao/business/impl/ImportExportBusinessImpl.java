@@ -314,6 +314,8 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		siteEmail.setText(getConfigBusiness().getSiteEmail());
 		Element siteDomain = config.addElement("domain");
 		siteDomain.setText(getConfigBusiness().getSiteDomain());
+		Element editExt = config.addElement("edit-ext");
+		editExt.setText(getConfigBusiness().getEditExt());
 	}
 
 	private void createPageXML(TreeItemDecorator<PageEntity> page,
@@ -459,6 +461,9 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
             }
             if (element.getName().equals("domain")) {
             	getConfigBusiness().setSiteDomain(element.getText());
+            }
+            if (element.getName().equals("edit-ext")) {
+            	getConfigBusiness().setEditExt(element.getText());
             }
 		}
 	}

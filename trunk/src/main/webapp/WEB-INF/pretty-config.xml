@@ -114,5 +114,12 @@
         <view-id>/form.jsf</view-id>
     </url-mapping>
 
+    <!-- File view -->
+
+    <url-mapping id="fileEdit">
+        <pattern>/cms/file/edit/#{fileBean.id}</pattern>
+        <view-id>/fileView.jsf</view-id>
+        <action>#{fileBean.edit}</action>
+    </url-mapping>
     
 </pretty-config>

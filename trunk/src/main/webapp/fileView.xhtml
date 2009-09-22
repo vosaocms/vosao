@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  template="WEB-INF/facelets/layout.xhtml">
+
+<ui:define name="head">
+
+<script type="text/javascript">
+// <!--
+$(function() {
+    $("#tabs").tabs();
+});
+//-->
+</script>
+
+</ui:define>
+
+<ui:define name="title">File view</ui:define>
+
+<ui:define name="body">
+
+<h:form id="form">
+
+<div id="tabs">
+<ul>
+    <li><a href="#tab-1">File</a></li>
+<h:panelGroup rendered="#{fileBean.editContent}">
+    <li><a href="#tab-2">Content</a></li>
+</h:panelGroup>
+</ul>
+
+<div id="tab-1">
+
+<div class="form-row">
+    <label>Title</label>
+    <h:inputText value="#{fileBean.current.title}" />
+</div>
+<div class="form-row">
+    <label>Name</label>
+    <h:inputText value="#{fileBean.current.filename}" />
+</div>
+<div class="form-row">
+    <label>Content type</label>
+    <h:outputText value="#{fileBean.current.mimeType}" />
+</div>
+<div class="form-row">
+    <label>Size</label>
+    <h:outputText value="#{fileBean.current.size}" />
+</div>
+<div class="buttons">
+    <h:commandButton value="Save" action="#{fileBean.update}" />
+    <h:commandButton value="Cancel" action="#{fileBean.cancelEdit}" />
+</div>    
+
+</div>
+
+<h:panelGroup rendered="#{fileBean.editContent}">
+<div id="tab-2">
+
+<div class="form-row">
+    <h:inputTextarea id="content" rows="20" cols="80" value="#{fileBean.content}" />
+</div>
+<div class="buttons">
+    <h:commandButton value="Save" action="#{fileBean.updateContent}" />
+    <h:commandButton value="Cancel" action="#{fileBean.cancelEdit}" />
+</div>    
+
+</div>
+</h:panelGroup>
+
+</div>
+
+
+</h:form>
+
+</ui:define>
+
+</ui:composition>

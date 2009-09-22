@@ -66,8 +66,10 @@ function loadFilesCallback(r) {
     var html = "<table class=\"form-table\">";
     for (i = 0; i < files.list.length; i++) {
         var file = files.list[i];
+        var fileTitle = "<a href=\"/cms/file/edit/" + file.id + "\">" + file.title + "</a>";
         var item = "<tr><td>"
             + "<input type=\"checkbox\" name=\"item" + i + "\" value=\"" + file.id + "\"/></td><td>" 
+            + fileTitle + "</td><td>" 
             + file.filename + "</td><td>" 
             + file.mimeType + "</td><td>" 
             + file.size + " bytes</td></tr>";

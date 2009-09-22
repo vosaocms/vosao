@@ -29,4 +29,5 @@ public interface FolderBusiness {
 	String getFolderPath(final FolderEntity folder, 
 			TreeItemDecorator<FolderEntity> root);
 	
+	void recursiveRemove(final List<String> folderIds);
 }

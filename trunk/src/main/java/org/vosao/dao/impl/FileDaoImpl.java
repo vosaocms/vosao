@@ -43,24 +43,34 @@ public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 		}
 	}
 	
-	public void remove(final String id) {
-		if (id == null) {
+	public void remove(final String fileId) {
+		if (fileId == null) {
 			return;
 		}
 		PersistenceManager pm = getPersistenceManager();
 		try {
-			pm.deletePersistent(pm.getObjectById(FileEntity.class, id));
+			removeChunks(pm, fileId);
+			pm.deletePersistent(pm.getObjectById(FileEntity.class, fileId));
 		}
 		finally {
 			pm.close();
+		}
+	}
+
+	private void removeChunks(PersistenceManager pm, final String fileId) {
+		List<FileChunkEntity> chunks = getByFile(fileId);
+		for (FileChunkEntity chunk : chunks) {
+			pm.deletePersistent(pm.getObjectById(FileChunkEntity.class, 
+					chunk.getId()));
 		}
 	}
 	
 	public void remove(final List<String> ids) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
-			for (String id : ids) {
-				pm.deletePersistent(pm.getObjectById(FileEntity.class, id));
+			for (String fileId : ids) {
+				removeChunks(pm, fileId);
+				pm.deletePersistent(pm.getObjectById(FileEntity.class, fileId));
 			}
 		}
 		finally {
@@ -213,6 +223,16 @@ public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 		finally {
 			pm.close();
 		}
+	}
+
+	@Override
+	public void removeByFolder(String folderId) {
+		List<FileEntity> files = getByFolder(folderId);
+		List<String> ids = new ArrayList<String>();
+		for (FileEntity file : files) {
+			ids.add(file.getId());
+		}
+		remove(ids);
 	}
 	
 

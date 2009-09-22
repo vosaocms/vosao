@@ -11,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.servlet.FolderUtil;
@@ -160,6 +161,27 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 		for (TreeItemDecorator<FolderEntity> child : item.getChildren()) {
 			addItemToMap(map, child);
 		}
+	}
+
+	@Override
+	public void recursiveRemove(List<String> folderIds) {
+		for (String id : folderIds) {
+			FolderEntity folder = getDao().getFolderDao().getById(id);
+			if (id != null) {
+				recursiveRemove(folder);
+			}
+		}
+		
+	}
+	
+	private void recursiveRemove(final FolderEntity folder) {
+		List<FolderEntity> children = getDao().getFolderDao().getByParent(
+				folder.getId());
+		for (FolderEntity child : children) {
+			recursiveRemove(child);
+		}
+		getDao().getFileDao().removeByFolder(folder.getId());
+		getDao().getFolderDao().remove(folder.getId());
 	}
 	
 }

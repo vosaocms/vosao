@@ -25,6 +25,7 @@ public class SiteFilter implements Filter {
     
     private static final Log log = LogFactory.getLog(SiteFilter.class);
 	public static final String[] SKIP_URLS = {
+		"/_ah",
 		"/cms",
 		"/static",
 		"/login",

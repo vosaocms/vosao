@@ -13,3 +13,7 @@ function javaList(array) {
 function javaMap(aMap) {
 	return {javaClass: 'java.util.HashMap', map: aMap};
 }
+
+function urlFromTitle(title) {
+    return title.toLowerCase().replace(/\W/g, '-');
+}

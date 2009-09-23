@@ -21,9 +21,7 @@
             var url = $(".form-url").val();
             var title = $(".form-title").val();
             if (url == "") {
-                var newUrl = title.toLowerCase()
-                    .replace(/ |\.|\,|\:|\;|\!|\?|\(|\)/g, '-');
-                $(".form-url").val(newUrl);
+                $(".form-url").val(urlFromTitle(title));
             }
         }
     }

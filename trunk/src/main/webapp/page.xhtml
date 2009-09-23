@@ -9,11 +9,25 @@
 
   <script type="text/javascript" src="/static/ckeditor/ckeditor.js"></script>
   <script type="text/javascript">
+
     $(function(){
     	CKEDITOR.replace('form:content');
         $("#tabs").tabs();
         $(".datepicker").datepicker({dateFormat:'dd.mm.yy'});
-    });    
+    });
+
+    function onTitleChange() {
+        if ($(".form-url").length == 1) {
+            var url = $(".form-url").val();
+            var title = $(".form-title").val();
+            if (url == "") {
+                var newUrl = title.toLowerCase()
+                    .replace(/ |\.|\,|\:|\;|\!|\?|\(|\)/g, '-');
+                $(".form-url").val(newUrl);
+            }
+        }
+    }
+        
   </script>
     
 </ui:define>
@@ -37,13 +51,14 @@
 
 <div class="form-row">
     <label>Title</label>
-    <h:inputText value="#{pageBean.current.title}" size="40"/>
+    <h:inputText styleClass="form-title" value="#{pageBean.current.title}" size="40" 
+        onchange="onTitleChange()"/>
 </div>
 <div class="form-row">
     <label>Friendly URL &#160;</label>
     <h:panelGroup rendered="#{pageBean.editURL}">    
         <h:outputText value="#{pageBean.current.parentFriendlyURL}/" />
-        <h:inputText value="#{pageBean.current.pageFriendlyURL}" size="40"/>
+        <h:inputText styleClass="form-url" value="#{pageBean.current.pageFriendlyURL}" size="40"/>
     </h:panelGroup>
     <h:panelGroup rendered="#{!pageBean.editURL}">    
         <h:outputText value="#{pageBean.current.friendlyURL}" />

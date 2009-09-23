@@ -11,7 +11,8 @@
   <script type="text/javascript">
 
     $(function(){
-    	CKEDITOR.replace('form:content');
+    	CKEDITOR.replace('form:content',
+    	    {height: 480});
         $("#tabs").tabs();
         $(".datepicker").datepicker({dateFormat:'dd.mm.yy'});
     });

@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import javax.servlet.ServletException;
@@ -24,7 +23,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.DocumentException;
-import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 
@@ -137,15 +135,24 @@ public class FileUploadServlet extends BaseSpringServlet {
 		String cacheUrl = getBusiness().getFolderBusiness()
 				.getFolderPath(folder) + "/" + filename;
 		getBusiness().getCache().remove(cacheUrl);
-		log.info("Clear cache " + cacheUrl);
+		log.debug("Clear cache " + cacheUrl);
 		String ext = FilenameUtils.getExtension(path);
-		log.info("path " + path + " filename " + filename + " ext " + ext);
+		log.debug("path " + path + " filename " + filename + " ext " + ext);
 		String message = null;
-		FileEntity file = new FileEntity(filename, filename, folder.getId(),
+		FileEntity file = getDao().getFileDao().getByName(folder.getId(), 
+				filename);
+		if (file == null) {
+			file = new FileEntity(filename, filename, folder.getId(),
 				MimeType.getContentTypeByExt(ext), new Date(), data.length);
+			log.debug("created file " + file.getFilename());
+		}
+		else {
+			log.debug("updated file " + file.getFilename());
+			file.setMdtime(new Date());
+			file.setSize(data.length);
+		}
 		getDao().getFileDao().save(file);
 		getDao().getFileDao().saveFileContent(file, data);
-		log.info("created fileEntity id=" + file.getId());
 		message = createMessage("success", file.getId());
 		return message;
 	}
@@ -165,7 +172,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 	private FolderEntity getFolder(final String folderId)
 			throws UploadException {
 		
-		log.info("getFolder " + folderId);
+		log.debug("getFolder " + folderId);
 
 		if (folderId == null) {
 			throw new UploadException(FOLDER_ID_IS_NULL);

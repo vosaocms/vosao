@@ -126,7 +126,6 @@ public class FolderBean extends AbstractJSFBean implements Serializable {
 		return "pretty:folderCreate";
 	}
 	
-	
 	public List<FolderEntity> getList() {
 		return list;
 	}

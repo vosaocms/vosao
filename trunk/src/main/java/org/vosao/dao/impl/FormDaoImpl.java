@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 
+import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.FormDao;
 import org.vosao.entity.FormEntity;
 
@@ -34,6 +35,9 @@ public class FormDaoImpl extends AbstractDaoImpl implements FormDao {
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			return pm.getObjectById(FormEntity.class, id);
+		}
+		catch (NucleusObjectNotFoundException e) {
+			return null;
 		}
 		finally {
 			pm.close();

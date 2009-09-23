@@ -42,6 +42,8 @@ $(function() {
     <label>Name</label>
     <h:inputText value="#{fileBean.current.filename}" />
  </div>
+ 
+ <h:panelGroup rendered="#{fileBean.edit}">
  <div class="form-row">
     <label>Content type</label>
     <h:outputText value="#{fileBean.current.mimeType}" />
@@ -53,7 +55,14 @@ $(function() {
  <div class="form-row">
     <label>Exrernal link</label>
     <h:outputText value="#{fileBean.fileLink}" />
+       
  </div>
+ <div class="form-row">
+    <label> </label>
+    <a href="#{fileBean.fileLink}">Download</a>
+ </div>
+ </h:panelGroup>
+  
  <div class="buttons">
     <h:commandButton value="Save" action="#{fileBean.update}" />
     <h:commandButton value="Cancel" action="#{fileBean.cancelEdit}" />
@@ -75,7 +84,7 @@ $(function() {
     <h:inputTextarea id="content" rows="20" cols="80" value="#{fileBean.content}" />
 </div>
 <div class="buttons">
-    <h:commandButton value="Save" action="#{fileBean.updateContent}" />
+    <h:commandButton value="Save" action="#{fileBean.update}" />
     <h:commandButton value="Cancel" action="#{fileBean.cancelEdit}" />
 </div>    
 

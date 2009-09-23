@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 
+import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.FileDao;
 import org.vosao.entity.FileChunkEntity;
 import org.vosao.entity.FileEntity;
@@ -37,6 +38,9 @@ public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			return pm.getObjectById(FileEntity.class, id);
+		}
+		catch (NucleusObjectNotFoundException e) {
+			return null;
 		}
 		finally {
 			pm.close();

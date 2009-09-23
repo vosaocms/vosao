@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 
+import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.TemplateDao;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
@@ -33,6 +34,9 @@ public class TemplateDaoImpl extends AbstractDaoImpl implements TemplateDao {
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			return pm.getObjectById(TemplateEntity.class, id);
+		}
+		catch (NucleusObjectNotFoundException e) {
+			return null;
 		}
 		finally {
 			pm.close();

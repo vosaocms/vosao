@@ -23,20 +23,20 @@ $page.content
 
 *Current page*
 
- * String page.title  
- * String page.friendlyUrl
- * String page.content
+ * _String_ page.title  
+ * _String_ page.friendlyUrl
+ * _String_ page.content
 
 *Site global configuration*
 
- * String config.googleAnalyticsId
- * String config.siteEmail
- * String config.siteDomain
+ * _String_ config.googleAnalyticsId
+ * _String_ config.siteEmail
+ * _String_ config.siteDomain
 
 *Helper service*
 
- * Page service.findPage(url) - find page by friendly url
- * List<Pages> service.findPageChildren(url) - find all child pages of specified page by url
+ * _Page_ service.findPage(url) - find page by friendly url
+ * _List of Page_ service.findPageChildren(url) - find all child pages of specified page by url
    _usage example_
    {{{
      #foreach($p in $service.findPageChildren("/blogs")

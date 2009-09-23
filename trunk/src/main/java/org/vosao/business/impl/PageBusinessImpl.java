@@ -139,7 +139,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		if (StringUtils.isEmpty(page.getTitle())) {
 			errors.add("Title is empty");
 		}
-		if (StringUtils.isEmpty(page.getContent())) {
+		if (page.getContent() == null) {
 			errors.add("Content is empty");
 		}
 		return errors;

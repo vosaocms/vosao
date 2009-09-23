@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.jdo.PersistenceManager;
 
+import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.ConfigDao;
 import org.vosao.entity.ConfigEntity;
 
@@ -34,6 +35,9 @@ public class ConfigDaoImpl extends AbstractDaoImpl implements ConfigDao {
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			return pm.getObjectById(ConfigEntity.class, id);
+		}
+		catch (NucleusObjectNotFoundException e) {
+			return null;
 		}
 		finally {
 			pm.close();

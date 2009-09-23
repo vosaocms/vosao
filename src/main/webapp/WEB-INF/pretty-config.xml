@@ -116,10 +116,21 @@
 
     <!-- File view -->
 
+    <url-mapping id="fileCreate">
+        <pattern>/cms/file/create/#{fileBean.folderId}</pattern>
+        <view-id>/fileView.jsf</view-id>
+        <action>#{fileBean.create}</action>
+    </url-mapping>
+
     <url-mapping id="fileEdit">
         <pattern>/cms/file/edit/#{fileBean.id}</pattern>
         <view-id>/fileView.jsf</view-id>
         <action>#{fileBean.edit}</action>
     </url-mapping>
     
+    <url-mapping id="fileUpdate">
+        <pattern>/cms/file/update</pattern>
+        <view-id>/fileView.jsf</view-id>
+    </url-mapping>
+
 </pretty-config>

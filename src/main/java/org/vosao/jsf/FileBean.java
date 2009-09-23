@@ -9,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.servlet.FolderUtil;
+import org.vosao.servlet.MimeType;
 
 
 public class FileBean extends AbstractJSFBean implements Serializable {
@@ -19,6 +20,7 @@ public class FileBean extends AbstractJSFBean implements Serializable {
 	private FileEntity current;
 	private FolderEntity folder;
 	private String id;
+	private String folderId;
 	private String content;
 
 	public void init() {
@@ -26,20 +28,24 @@ public class FileBean extends AbstractJSFBean implements Serializable {
 	}
 	
 	private void initCurrent() {
+		content = "";
+		current = new FileEntity();
+		current.setFolderId(folderId);
 		if (getCurrentId() != null) {
 			current = getDao().getFileDao().getById(getCurrentId());
-			if (isEditContent()) {
-				try {
-					content = new String(getDao().getFileDao()
-							.getFileContent(current), "UTF-8");
-				} catch (UnsupportedEncodingException e) {
-					JSFUtil.addErrorMessage("Encoding error while getting file content");
+			if (current != null) {
+				if (isEditContent()) {
+					try {
+						content = new String(getDao().getFileDao()
+								.getFileContent(current), "UTF-8");
+					} catch (UnsupportedEncodingException e) {
+						JSFUtil.addErrorMessage("Encoding error while getting file content");
+					}
 				}
 			}
-			folder = getDao().getFolderDao().getById(current.getFolderId());
 		}
-		else {
-			current = new FileEntity();
+		if (current.getFolderId() != null) {
+			folder = getDao().getFolderDao().getById(current.getFolderId());
 		}
 	}
 	
@@ -47,27 +53,31 @@ public class FileBean extends AbstractJSFBean implements Serializable {
 		return "pretty:folders";
 	}
 	
-	public void update() {
-		if (current.getId() != null) {
-			List<String> errors = getBusiness().getFileBusiness()
-				.validateBeforeUpdate(current);
-			if (errors.isEmpty()) {
-				getDao().getFileDao().save(current);
-				JSFUtil.addInfoMessage("File was successfully saved.");
-			}
-			else {
-				JSFUtil.addErrorMessages(errors);
-			}
+	public String update() {
+		List<String> errors = getBusiness().getFileBusiness()
+			.validateBeforeUpdate(current);
+		if (errors.isEmpty()) {
+			byte[] data = content.getBytes(); 
+			current.setMdtime(new Date());
+			current.setSize(data.length);
+			current.setMimeType(MimeType.getContentTypeByExt(
+					FolderUtil.getFileExt(current.getFilename())));
+			getDao().getFileDao().save(current);
+			getDao().getFileDao().saveFileContent(current, data);
+			setCurrentId(current.getId());
+			initCurrent();
+			JSFUtil.addInfoMessage("File was successfully saved.");
+			return "pretty:fileUpdate";
+		}
+		else {
+			JSFUtil.addErrorMessages(errors);
+			return null;
 		}
 	}
 	
-	public void updateContent() {
-		byte[] data = content.getBytes(); 
-		current.setMdtime(new Date());
-		current.setSize(data.length);
-		getDao().getFileDao().save(current);
-		getDao().getFileDao().saveFileContent(current, data);
-		JSFUtil.addInfoMessage("Content was successfully saved.");
+	public void create() {
+		setCurrentId(null);
+		initCurrent();
 	}
 	
 	public void edit() {
@@ -104,6 +114,9 @@ public class FileBean extends AbstractJSFBean implements Serializable {
 	}
 	
 	public boolean isEditContent() {
+		if (current.getId() == null) {
+			return false;
+		}
 		String editExt = getBusiness().getConfigBusiness().getEditExt();
 		String[] exts = editExt.split(",");
 		for (String ext : exts) {
@@ -126,6 +139,9 @@ public class FileBean extends AbstractJSFBean implements Serializable {
 		"gif"};
 	
 	public boolean isImageContent() {
+		if (current.getId() == null) {
+			return false;
+		}
 		for (String ext : IMAGE_EXTENSIONS) {
 			if (FolderUtil.getFileExt(current.getFilename()).equals(ext)) {
 				return true;
@@ -140,6 +156,18 @@ public class FileBean extends AbstractJSFBean implements Serializable {
 				.getFolderPath(folder) + "/" + current.getFilename();
 		}
 		return "";
+	}
+
+	public String getFolderId() {
+		return folderId;
+	}
+
+	public void setFolderId(String folderId) {
+		this.folderId = folderId;
+	}
+	
+	public boolean isEdit() {
+		return current.getId() != null;
 	}
 	
 }

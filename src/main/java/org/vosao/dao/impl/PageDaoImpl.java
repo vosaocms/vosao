@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 
+import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.PageDao;
 import org.vosao.entity.PageEntity;
 
@@ -34,6 +35,9 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			return pm.getObjectById(PageEntity.class, id);
+		}
+		catch (NucleusObjectNotFoundException e) {
+			return null;
 		}
 		finally {
 			pm.close();

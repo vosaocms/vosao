@@ -105,6 +105,10 @@ function deleteFilesCallback(r) {
     }
 }
 
+function onCreateFile() {
+    location.href = "/cms/file/create/" + folderId;
+}
+
 // -->
 </script>
 
@@ -148,8 +152,10 @@ function deleteFilesCallback(r) {
 <div id="tab-2">
     <div id="filesTable"> </div>
     <div class="buttons">
+        <input type="button" value="Create file" onclick="onCreateFile()" />
         <input type="button" onclick="onUpload()" value="Upload file" />
         <input type="button" onclick="onDeleteFiles()" value="Delete files" />
+        <h:commandButton value="Cancel" action="#{folderBean.cancelEdit}" />
     </div>
 </div>
 </h:panelGroup>
@@ -175,6 +181,7 @@ function deleteFilesCallback(r) {
 <div class="buttons">
     <h:commandButton value="Add child folder" action="#{folderBean.addChild}" />
     <h:commandButton value="Delete folders" action="#{folderBean.delete}" />
+    <h:commandButton value="Cancel" action="#{folderBean.cancelEdit}" />
 </div>    
 
 </div>

@@ -3,6 +3,7 @@ package org.vosao.business.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.FileBusiness;
@@ -24,7 +25,10 @@ public class FileBusinessImpl extends AbstractBusinessImpl
 		else {
 			FileEntity file = getDao().getFileDao().getByName(
 					entity.getFolderId(), entity.getFilename());
-			if (!file.getId().equals(entity.getId())) {
+			if ((StringUtils.isEmpty(entity.getId()) && file != null)
+				||
+				(!StringUtils.isEmpty(entity.getId()) 
+				 && !file.getId().equals(entity.getId())) ) {
 				errors.add("File with such name already exists in this folder");
 			}
 		}

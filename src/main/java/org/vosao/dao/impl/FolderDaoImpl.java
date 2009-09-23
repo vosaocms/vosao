@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 
+import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.FolderDao;
 import org.vosao.entity.FolderEntity;
 
@@ -33,6 +34,9 @@ public class FolderDaoImpl extends AbstractDaoImpl implements FolderDao {
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			return pm.getObjectById(FolderEntity.class, id);
+		}
+		catch (NucleusObjectNotFoundException e) {
+			return null;
 		}
 		finally {
 			pm.close();

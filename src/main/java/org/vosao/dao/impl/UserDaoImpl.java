@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 
+import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.UserDao;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.UserRole;
@@ -30,6 +31,9 @@ public class UserDaoImpl extends AbstractDaoImpl implements UserDao {
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			return pm.getObjectById(UserEntity.class, id);
+		}
+		catch (NucleusObjectNotFoundException e) {
+			return null;
 		}
 		finally {
 			pm.close();

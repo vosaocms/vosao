@@ -109,6 +109,14 @@ function onCreateFile() {
     location.href = "/cms/file/create/" + folderId;
 }
 
+function onTitleChange() {
+    var url = $(".form-url").val();
+    var title = $(".form-title").val();
+    if (url == "") {
+        $(".form-url").val(urlFromTitle(title));
+    }
+}
+
 // -->
 </script>
 
@@ -135,11 +143,12 @@ function onCreateFile() {
 
 <div class="form-row">
     <label>Title</label>
-    <h:inputText value="#{folderBean.current.title}" />
+    <h:inputText value="#{folderBean.current.title}" styleClass="form-title"
+        onchange="onTitleChange()" />
 </div>
 <div class="form-row">
     <label>Name for URL</label>
-    <h:inputText value="#{folderBean.current.name}" />
+    <h:inputText value="#{folderBean.current.name}" styleClass="form-url"/>
 </div>
 <div class="buttons">
     <h:commandButton value="Save" action="#{folderBean.update}" />

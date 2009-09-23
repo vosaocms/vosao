@@ -21,9 +21,10 @@ public interface FolderBusiness {
 	/**
 	 * Create all directories in the path.
 	 * @param path - directories path.
+	 * @return last folder in the path.
 	 * @throws UnsupportedEncodingException
 	 */
-	void createFolder(final String path) throws UnsupportedEncodingException; 
+	FolderEntity createFolder(final String path) throws UnsupportedEncodingException; 
 	
 	String getFolderPath(final FolderEntity folder);
 	String getFolderPath(final FolderEntity folder, 

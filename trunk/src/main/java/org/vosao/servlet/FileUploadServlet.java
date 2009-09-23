@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.zip.ZipInputStream;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
@@ -25,6 +27,8 @@ import org.apache.commons.logging.LogFactory;
 import org.dom4j.DocumentException;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
+import org.vosao.entity.PageEntity;
+import org.vosao.jsf.PageBean;
 
 /**
  * Servlet for uploading images into database.
@@ -53,10 +57,12 @@ public class FileUploadServlet extends BaseSpringServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
+		HttpSession session = request.getSession(true);
 		ServletFileUpload upload = new ServletFileUpload();
 		upload.setFileSizeMax(MAX_SIZE);
 		upload.setHeaderEncoding("UTF-8");
-		String json = null;
+		String message = null;
+		Map<String, String> parameters = new HashMap<String, String>();
 		try {
 			FileItemIterator iter;
 			try {
@@ -66,7 +72,9 @@ public class FileUploadServlet extends BaseSpringServlet {
 				InputStream stream = null;
 				InputStream filestream = null;
 				byte[] fileData = null;
-				Map<String, String> parameters = new HashMap<String, String>();
+				parameters.put(PageBean.IMAGE_UPLOAD_PAGE_ID, 
+						(String)session.getAttribute(
+								PageBean.IMAGE_UPLOAD_PAGE_ID));
 				while (iter.hasNext()) {
 					FileItemStream item = iter.next();
 					stream = item.openStream();
@@ -78,19 +86,23 @@ public class FileUploadServlet extends BaseSpringServlet {
 						fileData = readFileStream(stream);
 					}
 				}
-				json = processFile(imageFileItem, fileData, parameters);
+				message = processFile(imageFileItem, fileData, parameters);
 			} catch (FileUploadException e) {
 				log.error(PARSE_REQUEST_ERROR);
 				throw new UploadException(PARSE_REQUEST_ERROR);
 			}
 		} catch (UploadException e) {
-			json = createMessage("error", e.getMessage()); 
-			log.error(json);
+			message = createMessage("error", e.getMessage()); 
+			log.error(message);
 		}
-		response.setContentType("text/plain");
+		if (isCKeditorUpload(parameters)) {
+			response.setContentType("text/html");
+		}
+		else {
+			response.setContentType("text/plain");
+		}
 		response.setStatus(200);
-		response.getWriter().write(json);
-		// log.info(json);
+		response.getWriter().write(message);
 	}
 
 	private String createMessage(final String result, final String message) {
@@ -101,14 +113,20 @@ public class FileUploadServlet extends BaseSpringServlet {
 			Map<String, String> parameters) throws UploadException {
 		
 		if (!parameters.containsKey(FILE_TYPE_PARAM)) {
-			throw new UploadException("File type was not specified");
+			if (!parameters.containsKey(PageBean.IMAGE_UPLOAD_PAGE_ID)) {
+				throw new UploadException("File type was not specified");
+			}
+			else {
+				return processResourceFileCKeditor(fileItem, data, 
+						parameters.get(PageBean.IMAGE_UPLOAD_PAGE_ID));
+			}
 		}
 		String fileType = parameters.get(FILE_TYPE_PARAM);
 		if (fileType.equals(FILE_TYPE_RESOURCE)) {
 			if (!parameters.containsKey(FOLDER_PARAM)) {
 				throw new UploadException("Folder parameter was not specified");
 			}
-			return processResourceFile(fileItem, data, 
+			return processResourceFileJSON(fileItem, data, 
 					getFolder(parameters.get(FOLDER_PARAM)));
 		}
 		if (fileType.equals(FILE_TYPE_IMPORT)) {
@@ -118,7 +136,15 @@ public class FileUploadServlet extends BaseSpringServlet {
 	}
 	
 	
+	private String processResourceFileJSON(FileItemStream imageItem, byte[] data, 
+			FolderEntity folder) throws UploadException {
+		FileEntity file = processResourceFile(imageItem, data, folder);
+		String message = createMessage("success", file.getId());
+		return message;
+	}
+	
 	/**
+	 * 
 	 * Process uploaded file.
 	 * 
 	 * @param request
@@ -127,7 +153,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 	 *            - multipart item.
 	 * @return Status string.
 	 */
-	private String processResourceFile(FileItemStream imageItem, byte[] data, 
+	private FileEntity processResourceFile(FileItemStream imageItem, byte[] data, 
 			FolderEntity folder) throws UploadException {
 
 		String path = imageItem.getName();
@@ -153,8 +179,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 		}
 		getDao().getFileDao().save(file);
 		getDao().getFileDao().saveFileContent(file, data);
-		message = createMessage("success", file.getId());
-		return message;
+		return file;
 	}
 
 	private byte[] readFileStream(final InputStream stream) throws IOException {
@@ -218,5 +243,36 @@ public class FileUploadServlet extends BaseSpringServlet {
 		}
 	}
 
+	/**
+	 * Process uploaded file from CKeditor upload tab.
+	 * 
+	 * @return Status string.
+	 */
+	private String processResourceFileCKeditor(FileItemStream imageItem, 
+			byte[] data, String pageId) throws UploadException {
+		
+		PageEntity page = getDao().getPageDao().getById(pageId);
+		if (page == null) {
+			throw new UploadException("Page not found id = " + pageId);
+		}
+		FolderEntity folder;
+		String folderPath = "/page" + page.getFriendlyURL();
+		try {
+			folder = getBusiness().getFolderBusiness().createFolder(folderPath);
+		} catch (UnsupportedEncodingException e) {
+			throw new UploadException("Can't create folder for path " 
+					+ page.getFriendlyURL() + " " + e.getMessage());
+		}
+		FileEntity file = processResourceFile(imageItem, data, folder);
+		return "<script type=\"text/javascript\">"
+		     + " window.parent.CKEDITOR.tools.callFunction(1,"
+		     + "'/file" + folderPath + file.getFilename() + "');"
+		     + "</script>";
+	}
+	
+	private boolean isCKeditorUpload(Map<String, String> parameters) {
+		return !parameters.containsKey(FILE_TYPE_PARAM) && 
+			parameters.containsKey(PageBean.IMAGE_UPLOAD_PAGE_ID);
+	}
 	
 }

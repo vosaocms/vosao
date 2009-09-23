@@ -19,6 +19,8 @@ import org.vosao.utils.DateUtil;
 
 public class PageBean extends AbstractJSFBean implements Serializable {
 
+	public static final String IMAGE_UPLOAD_PAGE_ID = "imageUploadPageId";
+	
 	private static final long serialVersionUID = 2L;
 	private static Log log = LogFactory.getLog(PageBean.class);
 	
@@ -35,6 +37,7 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	public void init() {
 		initList();
 		current = new PageEntity();
+		current.setContent("");
 		publishDate = DateUtil.toString(current.getPublishDate());
 		if (getParentURL() == null || getParentURL().equals("/")) {
 			current.setFriendlyURL("/");
@@ -128,6 +131,7 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 			current = getDao().getPageDao().getById(id);
 			publishDate = DateUtil.toString(current.getPublishDate());
 			initChildren();
+			setImageUploadPageId(id);
 		}
 	}
 	
@@ -247,6 +251,10 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	public void setParentURL(String parent) {
 		String name = this.getClass().getName() + "parentURL";
 		JSFUtil.setSessionObject(name, parent);
+	}
+
+	public void setImageUploadPageId(String id) {
+		JSFUtil.setSessionObject(IMAGE_UPLOAD_PAGE_ID, id);
 	}
 
 	public List<SelectItem> getTemplates() {

@@ -11,8 +11,10 @@
   <script type="text/javascript">
 
     $(function(){
-    	CKEDITOR.replace('form:content',
-    	    {height: 480});
+    	CKEDITOR.replace('form:content', {
+        	height: 480,
+    		filebrowserUploadUrl : '/cms/upload'
+        });
         $("#tabs").tabs();
         $(".datepicker").datepicker({dateFormat:'dd.mm.yy'});
     });
@@ -40,7 +42,9 @@
 <div id="tabs">
 <ul>
     <li><a href="#tab-1">Page</a></li>
+    <h:panelGroup rendered="#{pageBean.edit}">
     <li><a href="#tab-2">Content</a></li>
+    </h:panelGroup>
     <h:panelGroup rendered="#{pageBean.showChildren}">
     <li><a href="#tab-3">Children pages</a></li>
     </h:panelGroup>    
@@ -83,6 +87,7 @@
 
 </div>
 
+<h:panelGroup rendered="#{pageBean.edit}">
 <div id="tab-2">
 
 <div class="form-row">
@@ -97,9 +102,9 @@
 </div>    
 
 </div>
+</h:panelGroup>
 
 <h:panelGroup rendered="#{pageBean.showChildren}">
-
 <div id="tab-3">
 
 <h:dataTable value="#{pageBean.children}" var="page" styleClass="form-table">
@@ -122,7 +127,6 @@
 </div>    
 
 </div>
-
 </h:panelGroup>
 
 </div>

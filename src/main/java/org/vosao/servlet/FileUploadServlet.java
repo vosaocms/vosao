@@ -270,25 +270,32 @@ public class FileUploadServlet extends BaseSpringServlet {
 	 * @return Status string.
 	 */
 	private String processResourceFileCKeditor(FileItemStream imageItem, 
-			byte[] data, String pageId) throws UploadException {
-		
-		PageEntity page = getDao().getPageDao().getById(pageId);
-		if (page == null) {
-			throw new UploadException("Page not found id = " + pageId);
-		}
-		FolderEntity folder;
-		String folderPath = "/page" + page.getFriendlyURL();
+			byte[] data, String pageId) {
 		try {
-			folder = getBusiness().getFolderBusiness().createFolder(folderPath);
-		} catch (UnsupportedEncodingException e) {
-			throw new UploadException("Can't create folder for path " 
+			PageEntity page = getDao().getPageDao().getById(pageId);
+			if (page == null) {
+				throw new UploadException("Page not found id = " + pageId);
+			}
+			FolderEntity folder;
+			String folderPath = "/page" + page.getFriendlyURL();
+			try {
+				folder = getBusiness().getFolderBusiness().createFolder(folderPath);
+			} catch (UnsupportedEncodingException e) {
+				throw new UploadException("Can't create folder for path " 
 					+ page.getFriendlyURL() + " " + e.getMessage());
+			}
+			FileEntity file = processResourceFile(imageItem, data, folder);
+			return "<script type=\"text/javascript\">"
+				+ " window.parent.CKEDITOR.tools.callFunction(1,"
+				+ "'/file" + folderPath + file.getFilename() + "');"
+				+ "</script>";
 		}
-		FileEntity file = processResourceFile(imageItem, data, folder);
-		return "<script type=\"text/javascript\">"
-		     + " window.parent.CKEDITOR.tools.callFunction(1,"
-		     + "'/file" + folderPath + file.getFilename() + "');"
-		     + "</script>";
+		catch (UploadException e) {
+			return "<script type=\"text/javascript\">"
+				+ " window.parent.CKEDITOR.tools.callFunction(1,'',"
+				+ "'" + e.getMessage() + "');"
+				+ "</script>";
+		}
 	}
 	
 	private boolean isCKeditorUpload(Map<String, String> parameters) {

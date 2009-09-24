@@ -61,9 +61,12 @@
                 var result = "";
                 for (i = 0; i < files.list.length; i++) {
                     var file = files.list[i];
-                    var fileLink = "<a href=\"#\" onclick=\"onFileSelected('"
-                        + file.id + "')\">" + file.title + "</a>";
-                    result += "<li>" + fileLink + "</li>\n";
+                    var title = " title=\"" + file.title + "\"";
+                    var onClick = " onclick=\"onFileSelected('" + file.id + "')\"";
+                    result += "<li><div class=\"file-border\"" + onClick 
+                        + title 
+                        + "><div class=\"file-thumbnail\"> </div>" + file.filename 
+                        + "</div></li>\n";
                 }
                 $("#files").html(result);            	
             }, folderId);    
@@ -93,6 +96,7 @@
     <ul id="files">
     </ul>
 </div>
+<div class="clear"> </div>
 
 </ui:define>
 

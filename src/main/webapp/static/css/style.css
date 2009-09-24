@@ -77,13 +77,33 @@ label {
 	float: left;
 	width: 300px;
 	border-right: 1px solid #a5c4d5;
+	margin-right: 10px;
 }
 .browser-files {
-    float: left;
-    padding-left: 10px;
+	margin-left: 310px;
 }
 .browser-files li {
 	list-style-type: none;
 	padding: 0;
 	margin: 0;
+	float: left;
+}
+.file-border {
+	width: 160px;
+	text-align: center;
+	background-color: #eee;
+	margin: 5px;
+    border: 1px solid #a5c4d5;
+    font-size: 11px;
+    overflow: hidden;
+    cursor: pointer;
+}
+.file-border:hover {
+	border: 1px solid orange;
+}
+.file-thumbnail {
+    background-color: silver;
+    width: 140px;
+    height: 120px;
+    padding: 0 10px;
 }

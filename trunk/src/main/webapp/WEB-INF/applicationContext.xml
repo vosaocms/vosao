@@ -119,19 +119,20 @@
         <property name="business" ref="business"/>  
     </bean>
 
-    <bean id="testService" class="org.vosao.service.impl.TestServiceImpl" />  
-
     <bean id="formService" class="org.vosao.service.impl.FormServiceImpl"
         parent="abstractService" />  
 
     <bean id="fileService" class="org.vosao.service.impl.FileServiceImpl"
         parent="abstractService" />  
 
+    <bean id="folderService" class="org.vosao.service.impl.FolderServiceImpl"
+        parent="abstractService" />
+          
     <bean id="service" class="org.vosao.service.impl.ServiceImpl"
         init-method="init">  
-        <property name="testService" ref="testService"/>  
         <property name="formService" ref="formService"/>  
         <property name="fileService" ref="fileService"/>  
+        <property name="folderService" ref="folderService"/>  
     </bean>
 
     <!-- JSF beans -->

@@ -72,3 +72,18 @@ label {
     text-align: center;
 }
 
+/* file browser */
+.browser-folders {
+	float: left;
+	width: 300px;
+	border-right: 1px solid #a5c4d5;
+}
+.browser-files {
+    float: left;
+    padding-left: 10px;
+}
+.browser-files li {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}

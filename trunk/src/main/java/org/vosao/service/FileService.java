@@ -32,4 +32,6 @@ public interface FileService extends AbstractService {
 
 	ServiceResponse deleteFiles(final List<String> fileIds);
 	
+	String getFilePath(final String fileId);
+	
 }

@@ -24,6 +24,7 @@ package org.vosao.service.impl;
 import java.util.List;
 
 import org.vosao.entity.FileEntity;
+import org.vosao.entity.FolderEntity;
 import org.vosao.service.FileService;
 import org.vosao.service.ServiceResponse;
 
@@ -39,6 +40,18 @@ public class FileServiceImpl extends AbstractServiceImpl
 	public ServiceResponse deleteFiles(List<String> fileIds) {
 		getDao().getFileDao().remove(fileIds);
 		return new ServiceResponse("success", "Files was successfully deleted.");
+	}
+
+	@Override
+	public String getFilePath(String fileId) {
+		FileEntity file = getDao().getFileDao().getById(fileId);
+		if (file != null) {
+			FolderEntity folder = getDao().getFolderDao().getById(
+					file.getFolderId());
+			return "/file" + getBusiness().getFolderBusiness().getFolderPath(
+					folder) + "/" + file.getFilename();
+		}
+		return "";
 	}
 
 }

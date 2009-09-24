@@ -13,7 +13,8 @@
     $(function(){
     	CKEDITOR.replace('form:content', {
         	height: 480,
-    		filebrowserUploadUrl : '/cms/upload'
+    		filebrowserUploadUrl : '/cms/upload',
+            filebrowserBrowseUrl : '/cms/fileBrowser'
         });
         $("#tabs").tabs();
         $(".datepicker").datepicker({dateFormat:'dd.mm.yy'});

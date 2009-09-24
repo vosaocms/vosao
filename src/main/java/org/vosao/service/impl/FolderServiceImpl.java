@@ -19,10 +19,19 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service;
+package org.vosao.service.impl;
 
-public interface TestService {
-	
-	String test(final String param);
-	
+import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.entity.FolderEntity;
+import org.vosao.service.FolderService;
+
+public class FolderServiceImpl extends AbstractServiceImpl 
+		implements FolderService {
+
+	@Override
+	public TreeItemDecorator<FolderEntity> getTree() {
+		return getBusiness().getFolderBusiness().getTree();
+	}
+
+
 }

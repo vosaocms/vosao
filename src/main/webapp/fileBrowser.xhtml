@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  template="WEB-INF/facelets/simple-layout.xhtml">
+
+<ui:define name="head">
+
+    <script src="/static/js/jquery.treeview.pack.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/static/css/jquery.treeview.css" type="text/css" />
+
+    <script type="text/javascript">
+        // <!--
+
+        var jsonrpc;
+
+        $(document).ready(function(){
+            jsonrpc = new JSONRpcClient(jsonInitCallback, "/JSON-RPC/");
+        });
+
+        function jsonInitCallback(result, e) {
+            if (e) {
+                errorMessage("Error dusing initializing JSON-RPC." + e);
+            }
+            else {
+                loadFolderTree();
+            }
+        }
+
+        function loadFolderTree() {
+            jsonrpc.folderService.getTree(function(rootItem) {
+                $("#folders-tree").html(renderFolderList(rootItem));        
+            	$("#folders-tree").treeview();
+            });
+        }
+
+        /**
+         * Render ul/li list for folder item and subitems.
+         * @param item - java class TreeItemDecorator<FolderEntity>
+         */
+        function renderFolderList(item) {
+        	var titleLink = "<a href=\"#\" onclick=\"onFolderSelected('" 
+            	+ item.entity.id + "')\">" + item.entity.title
+        	    + "</a>";
+            var s = "<li>" + titleLink;
+            if (item.children.list.length > 0) {
+                s += "<ul>\n";
+                for (i = 0; i < item.children.list.length; i++) {
+                    var childItem = item.children.list[i];
+                    s += renderFolderList(childItem);
+                }
+                s += "</ul>\n";
+            }
+            s += "</li>\n"
+            return s;
+        }
+
+        function onFolderSelected(folderId) {
+            jsonrpc.fileService.getByFolder(function(files) {
+                var result = "";
+                for (i = 0; i < files.list.length; i++) {
+                    var file = files.list[i];
+                    var fileLink = "<a href=\"#\" onclick=\"onFileSelected('"
+                        + file.id + "')\">" + file.title + "</a>";
+                    result += "<li>" + fileLink + "</li>\n";
+                }
+                $("#files").html(result);            	
+            }, folderId);    
+        }
+
+        function onFileSelected(fileId) {
+            jsonrpc.fileService.getFilePath(function(path) {
+            	window.opener.CKEDITOR.tools.callFunction(1, path);
+                window.close();                
+            }, fileId);
+        } 
+
+        //-->
+     </script>
+
+</ui:define>
+
+<ui:define name="title">File browser</ui:define>
+
+<ui:define name="body">
+
+<div class="browser-folders">
+    <ul id="folders-tree">
+    </ul>
+</div>
+<div class="browser-files">
+    <ul id="files">
+    </ul>
+</div>
+
+</ui:define>
+
+</ui:composition>

@@ -30,6 +30,11 @@
         <view-id>/plugins.jsf</view-id>
     </url-mapping>
 
+    <url-mapping id="fileBrowser">
+        <pattern>/cms/fileBrowser</pattern>
+        <view-id>/fileBrowser.jsf</view-id>
+    </url-mapping>
+
     <!-- Pages -->
 
     <url-mapping id="pages">

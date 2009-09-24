@@ -287,7 +287,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 			FileEntity file = processResourceFile(imageItem, data, folder);
 			return "<script type=\"text/javascript\">"
 				+ " window.parent.CKEDITOR.tools.callFunction(1,"
-				+ "'/file" + folderPath + file.getFilename() + "');"
+				+ "'/file" + folderPath + "/" + file.getFilename() + "');"
 				+ "</script>";
 		}
 		catch (UploadException e) {

@@ -53,11 +53,11 @@ public class FileBean extends AbstractJSFBean implements Serializable {
 		return "pretty:folders";
 	}
 	
-	public String update() {
+	public String update() throws UnsupportedEncodingException {
 		List<String> errors = getBusiness().getFileBusiness()
 			.validateBeforeUpdate(current);
 		if (errors.isEmpty()) {
-			byte[] data = content.getBytes(); 
+			byte[] data = content.getBytes("UTF-8"); 
 			current.setMdtime(new Date());
 			current.setSize(data.length);
 			current.setMimeType(MimeType.getContentTypeByExt(

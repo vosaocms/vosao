@@ -20,3 +20,10 @@
     margin: 10px 0;
 }
 
+.version {
+	position: fixed;
+	bottom: 0;
+	font-size: 10px;
+	width: 700px;
+	text-align: center;
+}

@@ -1,21 +1,29 @@
 #labels Featured
-= Project roadmap =
+= Project road map =
 
 == Project start 14.08.2009 ==
 
-== 01.10.2009 Technology investiagtion. ==
+== 01.10.2009 Technology investigation. ==
 
+Version 0.1
 Create pilot project. Test all required libraries in GAE/J environment.
 
 
-== 01.10.2009 Creating user interface ==
+== 01.11.2009 Creating user interface ==
+
+Version 0.2
+Develop CMS look&feel. Create all user interface elements.
 
 
 == 01.02.2010 Creating working 1.0 version ==
 
+Version 1.0
+Stable production ready release. 
+
 
 == 01.06.2010 CEO and advertising ==
 
+ * create bug fixing support 1.0.X releases
  * create vosaoproject.org site running on vosao cms.
  * create themes library for users
  * create several commercial projects using vosao cms.
@@ -23,4 +31,5 @@ Create pilot project. Test all required libraries in GAE/J environment.
 
 == 01.01.2011 Refactoring & support ==
 
-Add small features without complete system redesign.
+Version 2.0
+ * Implementing more features.

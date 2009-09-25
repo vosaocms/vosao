@@ -33,5 +33,14 @@ public class FolderServiceImpl extends AbstractServiceImpl
 		return getBusiness().getFolderBusiness().getTree();
 	}
 
+	@Override
+	public String getFolderPath(final String folderId) {
+		FolderEntity folder = getDao().getFolderDao().getById(folderId);
+		if (folder != null) {
+			return getBusiness().getFolderBusiness().getFolderPath(folder);
+		}
+		return null;
+	}
+
 
 }

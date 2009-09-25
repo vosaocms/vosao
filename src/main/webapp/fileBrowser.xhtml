@@ -57,15 +57,22 @@
         }
 
         function onFolderSelected(folderId) {
+            var folderPath = jsonrpc.folderService.getFolderPath(folderId);
             jsonrpc.fileService.getByFolder(function(files) {
                 var result = "";
                 for (i = 0; i < files.list.length; i++) {
                     var file = files.list[i];
                     var title = " title=\"" + file.title + "\"";
                     var onClick = " onclick=\"onFileSelected('" + file.id + "')\"";
+                    var thumbnail = '';
+                    if (isImage(file.filename)) {
+                        thumbnail = '<img width="160" height="120" src="/file' + folderPath + '/'
+                            + file.filename + '" />';
+                    }
                     result += "<li><div class=\"file-border\"" + onClick 
                         + title 
-                        + "><div class=\"file-thumbnail\"> </div>" + file.filename 
+                        + "><div class=\"file-thumbnail\">" + thumbnail 
+                        + "</div>" + file.filename 
                         + "</div></li>\n";
                 }
                 $("#files").html(result);            	
@@ -95,8 +102,8 @@
 <div class="browser-files">
     <ul id="files">
     </ul>
+    <div class="clear"> </div>
 </div>
-<div class="clear"> </div>
 
 </ui:define>
 

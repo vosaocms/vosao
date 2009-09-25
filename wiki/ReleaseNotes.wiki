@@ -1,5 +1,5 @@
 #labels Featured
 = Release Notes =
 
-== 0.0.1 version 25.09.2009 ==
+== version 0.0.1 25.09.2009 ==
  * first prototype release 

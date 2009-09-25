@@ -36,7 +36,7 @@ $page.content
 *Helper service*
 
  * _Page_ service.findPage(url) - find page by friendly url
- * _List of Page_ service.findPageChildren(url) - find all child pages of specified page by url
+ * _List of Page_ service.findPageChildren(url) - find all child pages of specified page by url ordered by publish date.
    _usage example_
    {{{
      #foreach($p in $service.findPageChildren("/blogs")

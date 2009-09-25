@@ -4,7 +4,7 @@
   * Store hierarchical pages content with parent/child relationship 
   * Friendly URL for page
   * CKeditor 3.0 integration with upload and file browser 
-  * [Templates Custom templates for pages with template binding to page]
+  * [Templates Custom design themes for pages with theme binding to page]
   * Global site configuration panel
   * [FeatureResources Resources management (images, css, js, other files types)]
   * [ImportExport Site import/export (content and all resources)]

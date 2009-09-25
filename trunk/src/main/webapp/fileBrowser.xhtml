@@ -42,7 +42,6 @@
          * @param item - java class TreeItemDecorator<FolderEntity>
          */
         function renderFolderList(item) {
-            alert(item.entity.title + " " + item.children.list.length);
          	var titleLink = "<a href=\"#\" onclick=\"onFolderSelected('" 
             	+ item.entity.id + "')\">" + item.entity.title
         	    + "</a>";

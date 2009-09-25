@@ -28,7 +28,6 @@ import java.util.zip.ZipEntry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.decorators.TreeItemDecorator;
-import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 
 /**
@@ -42,7 +41,10 @@ public class FolderUtil {
 	
 	public static String[] getPathChain(final String path) 
 			throws UnsupportedEncodingException {
-        String[] chain = path.split("/");
+        if (path == null) {
+        	return new String[]{};
+        }
+		String[] chain = path.split("/");
 		return Arrays.copyOfRange(chain, 1, chain.length);
 	}
 	

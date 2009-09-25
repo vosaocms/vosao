@@ -14,6 +14,7 @@
         // <!--
 
         var jsonrpc;
+        var rootFolder;
 
         $(document).ready(function(){
             jsonrpc = new JSONRpcClient(jsonInitCallback, "/JSON-RPC/");
@@ -30,6 +31,7 @@
 
         function loadFolderTree() {
             jsonrpc.folderService.getTree(function(rootItem) {
+                rootFolder = rootItem;
                 $("#folders-tree").html(renderFolderList(rootItem));        
             	$("#folders-tree").treeview();
             });
@@ -40,13 +42,14 @@
          * @param item - java class TreeItemDecorator<FolderEntity>
          */
         function renderFolderList(item) {
-        	var titleLink = "<a href=\"#\" onclick=\"onFolderSelected('" 
+            alert(item.entity.title + " " + item.children.list.length);
+         	var titleLink = "<a href=\"#\" onclick=\"onFolderSelected('" 
             	+ item.entity.id + "')\">" + item.entity.title
         	    + "</a>";
             var s = "<li>" + titleLink;
             if (item.children.list.length > 0) {
                 s += "<ul>\n";
-                for (i = 0; i < item.children.list.length; i++) {
+                for (var i = 0; i < item.children.list.length; i++) {
                     var childItem = item.children.list[i];
                     s += renderFolderList(childItem);
                 }

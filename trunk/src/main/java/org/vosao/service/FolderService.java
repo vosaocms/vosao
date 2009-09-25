@@ -29,4 +29,6 @@ public interface FolderService extends AbstractService {
 	
 	TreeItemDecorator<FolderEntity> getTree();
 	
+	String getFolderPath(final String folderId);
+	
 }

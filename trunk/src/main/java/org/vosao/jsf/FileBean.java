@@ -160,19 +160,11 @@ public class FileBean extends AbstractJSFBean implements Serializable {
 		this.content = content;
 	}
 
-	private static final String[] IMAGE_EXTENSIONS = {"jpg","jpeg","png","ico",
-		"gif"};
-	
 	public boolean isImageContent() {
 		if (current.getId() == null) {
 			return false;
 		}
-		for (String ext : IMAGE_EXTENSIONS) {
-			if (FolderUtil.getFileExt(current.getFilename()).equals(ext)) {
-				return true;
-			}
-		}
-		return false;
+		return current.isImage();
 	}
 	
 	public String getFileLink() {

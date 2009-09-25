@@ -31,11 +31,16 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import org.vosao.servlet.FolderUtil;
+
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class FileEntity implements Serializable {
 
 	private static final long serialVersionUID = 4L;
+
+	private static final String[] IMAGE_EXTENSIONS = {"jpg","jpeg","png","ico",
+	"gif"};
 
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -138,5 +143,15 @@ public class FileEntity implements Serializable {
 	public void setSize(int size) {
 		this.size = size;
 	}
+
+	public boolean isImage() {
+		for (String ext : IMAGE_EXTENSIONS) {
+			if (FolderUtil.getFileExt(getFilename()).equals(ext)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 
 }

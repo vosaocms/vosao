@@ -17,3 +17,12 @@ function javaMap(aMap) {
 function urlFromTitle(title) {
     return title.toLowerCase().replace(/\W/g, '-');
 }
+
+function isImage(filename) {
+    var ext = getFileExt(filename);
+	return ext.toLowerCase().match(/gif|jpg|jpeg|png|ico/) != null;
+}
+
+function getFileExt(filename) {
+	return filename.substring(filename.lastIndexOf('.') + 1, filename.length);
+}

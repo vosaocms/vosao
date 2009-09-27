@@ -35,6 +35,8 @@ public class ConfigBusinessImpl extends AbstractBusinessImpl
 	private static final String SITE_EMAIL_PARAM = "siteEmail";
 	private static final String SITE_DOMAIN_PARAM = "siteDomain";
 	private static final String EDIT_EXT = "editExt";
+	private static final String RECAPTCHA_PRIVATE_KEY = "recaptchaPrivateKey";
+	private static final String RECAPTCHA_PUBLIC_KEY = "recaptchaPublicKey";
 	
 	private String getConfigParam(final String name) {
 		ConfigEntity config = getDao().getConfigDao().getByName(name);
@@ -93,6 +95,26 @@ public class ConfigBusinessImpl extends AbstractBusinessImpl
 	@Override
 	public void setEditExt(String value) {
 		setConfigParam(EDIT_EXT, value);
+	}
+
+	@Override
+	public String getRecaptchaPrivateKey() {
+		return getConfigParam(RECAPTCHA_PRIVATE_KEY);
+	}
+
+	@Override
+	public void setRecaptchaPrivateKey(String value) {
+		setConfigParam(RECAPTCHA_PRIVATE_KEY, value);
+	}
+
+	@Override
+	public String getRecaptchaPublicKey() {
+		return getConfigParam(RECAPTCHA_PUBLIC_KEY);
+	}
+
+	@Override
+	public void setRecaptchaPublicKey(String value) {
+		setConfigParam(RECAPTCHA_PUBLIC_KEY, value);
 	}
 	
 	

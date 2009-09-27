@@ -35,4 +35,11 @@ public interface ConfigBusiness {
 	
 	String getEditExt();
 	void setEditExt(final String value);
+
+	String getRecaptchaPrivateKey();
+	void setRecaptchaPrivateKey(final String value);
+
+	String getRecaptchaPublicKey();
+	void setRecaptchaPublicKey(final String value);
+	
 }

@@ -329,14 +329,30 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 	}
 	
 	private void createConfigXML(Element config) {
-		Element googleAnalytics = config.addElement("google-analytics");
-		googleAnalytics.setText(getConfigBusiness().getGoogleAnalyticsId());
-		Element siteEmail = config.addElement("email");
-		siteEmail.setText(getConfigBusiness().getSiteEmail());
-		Element siteDomain = config.addElement("domain");
-		siteDomain.setText(getConfigBusiness().getSiteDomain());
-		Element editExt = config.addElement("edit-ext");
-		editExt.setText(getConfigBusiness().getEditExt());
+		if (getConfigBusiness().getGoogleAnalyticsId() != null) {
+			Element googleAnalytics = config.addElement("google-analytics");
+			googleAnalytics.setText(getConfigBusiness().getGoogleAnalyticsId());
+		}
+		if (getConfigBusiness().getSiteEmail() != null) {
+			Element siteEmail = config.addElement("email");
+			siteEmail.setText(getConfigBusiness().getSiteEmail());
+		}
+		if (getConfigBusiness().getSiteDomain() != null) {
+			Element siteDomain = config.addElement("domain");
+			siteDomain.setText(getConfigBusiness().getSiteDomain());
+		}
+		if (getConfigBusiness().getEditExt() != null) {
+			Element editExt = config.addElement("edit-ext");
+			editExt.setText(getConfigBusiness().getEditExt());
+		}
+		if (getConfigBusiness().getRecaptchaPrivateKey() != null) {
+			Element recaptcha = config.addElement("recaptchaPrivateKey");
+			recaptcha.setText(getConfigBusiness().getRecaptchaPrivateKey());
+		}
+		if (getConfigBusiness().getRecaptchaPublicKey() != null) {
+			Element elem = config.addElement("recaptchaPublicKey");
+			elem.setText(getConfigBusiness().getRecaptchaPublicKey());
+		}
 	}
 
 	private void createPageXML(TreeItemDecorator<PageEntity> page,
@@ -485,6 +501,12 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
             }
             if (element.getName().equals("edit-ext")) {
             	getConfigBusiness().setEditExt(element.getText());
+            }
+            if (element.getName().equals("recaptchaPrivateKey")) {
+            	getConfigBusiness().setRecaptchaPrivateKey(element.getText());
+            }
+            if (element.getName().equals("recaptchaPublicKey")) {
+            	getConfigBusiness().setRecaptchaPublicKey(element.getText());
             }
 		}
 	}

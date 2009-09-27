@@ -41,6 +41,8 @@ public class ConfigBean extends AbstractJSFBean implements Serializable {
 	private String siteEmail;
 	private String siteDomain;
 	private String editExt;
+	private String recaptchaPrivateKey;
+	private String recaptchaPublicKey;
 	
 	public void init() {
 		googleAnalyticsId = getBusiness().getConfigBusiness()
@@ -48,6 +50,10 @@ public class ConfigBean extends AbstractJSFBean implements Serializable {
 		siteEmail = getBusiness().getConfigBusiness().getSiteEmail();
 		siteDomain = getBusiness().getConfigBusiness().getSiteDomain();
 		editExt = getBusiness().getConfigBusiness().getEditExt();
+		recaptchaPrivateKey = getBusiness().getConfigBusiness()
+			.getRecaptchaPrivateKey();
+		recaptchaPublicKey = getBusiness().getConfigBusiness()
+			.getRecaptchaPublicKey();
 	}
 	
 	public void export() throws IOException {
@@ -72,6 +78,10 @@ public class ConfigBean extends AbstractJSFBean implements Serializable {
 		getBusiness().getConfigBusiness().setSiteEmail(siteEmail);
 		getBusiness().getConfigBusiness().setSiteDomain(siteDomain);
 		getBusiness().getConfigBusiness().setEditExt(editExt);
+		getBusiness().getConfigBusiness().setRecaptchaPrivateKey(
+				recaptchaPrivateKey);
+		getBusiness().getConfigBusiness().setRecaptchaPublicKey(
+				recaptchaPublicKey);
 		JSFUtil.addInfoMessage("Configuration was successfully saved.");
 	}
 
@@ -107,4 +117,19 @@ public class ConfigBean extends AbstractJSFBean implements Serializable {
 		this.editExt = editExt;
 	}
 	
+	public String getRecaptchaPrivateKey() {
+		return recaptchaPrivateKey;
+	}
+
+	public void setRecaptchaPrivateKey(String recaptcha) {
+		this.recaptchaPrivateKey = recaptcha;
+	}
+
+	public String getRecaptchaPublicKey() {
+		return recaptchaPublicKey;
+	}
+
+	public void setRecaptchaPublicKey(String recaptchaPublicKey) {
+		this.recaptchaPublicKey = recaptchaPublicKey;
+	}
 }

@@ -23,9 +23,22 @@ package org.vosao.service;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 public interface FormService extends AbstractService {
 	
 	ServiceResponse send(final String name, Map<String, String> params);
 	
+	/**
+	 * Send enered form. Protected by reCaptcha service.
+	 * @param name - form name
+	 * @param params-form parameters
+	 * @param challenge - recaptcha challenge
+	 * @param response - recaptcha response
+	 * @return - service response.
+	 */
+	ServiceResponse send(final String name, Map<String, String> params,
+			final String challenge, final String response, 
+			HttpServletRequest request);
 }

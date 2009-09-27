@@ -36,6 +36,11 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.servlet.http.HttpServletRequest;
+
+import net.tanesha.recaptcha.ReCaptcha;
+import net.tanesha.recaptcha.ReCaptchaFactory;
+import net.tanesha.recaptcha.ReCaptchaResponse;
 
 import org.vosao.entity.FormEntity;
 import org.vosao.service.FormService;
@@ -102,6 +107,28 @@ public class FormServiceImpl extends AbstractServiceImpl
         } catch (UnsupportedEncodingException e) {
         	return e.getMessage();
 		}		
+	}
+
+	@Override
+	public ServiceResponse send(String name, Map<String, String> params,
+			String challenge, String response, HttpServletRequest request) {
+
+		ReCaptcha captcha = ReCaptchaFactory.newReCaptcha(
+				getBusiness().getConfigBusiness().getRecaptchaPublicKey(), 
+				getBusiness().getConfigBusiness().getRecaptchaPrivateKey(), 
+				false);
+        String address = request.getRemoteAddr();
+		ReCaptchaResponse recaptchaResponse = captcha.checkAnswer(address, 
+				challenge, response);
+		ServiceResponse result = new ServiceResponse(); 
+        if (recaptchaResponse.isValid()) {
+            return send(name, params);
+        }
+        else {
+                result.setResult("error");
+                result.setMessage(recaptchaResponse.getErrorMessage());
+        }
+		return result;
 	}
 	
 

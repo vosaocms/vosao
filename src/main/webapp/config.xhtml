@@ -8,6 +8,7 @@
 <ui:define name="head">
     
     <script src="/static/js/jquery.form.js" language="javascript" />
+    <link rel="stylesheet" href="/static/css/config.css" type="text/css" />
 
 <script type="text/javascript">
 
@@ -72,6 +73,16 @@ function onAfterUploadOk() {
 <div class="form-row">
     <label>Site domain</label>
     <h:inputText value="#{configBean.siteDomain}" />
+</div>
+
+<div class="form-row">
+    <label>reCaptcha service public key</label>
+    <h:inputText value="#{configBean.recaptchaPublicKey}" />
+</div>
+
+<div class="form-row">
+    <label>reCaptcha service private key</label>
+    <h:inputText value="#{configBean.recaptchaPrivateKey}" />
 </div>
 
 <div class="form-row">

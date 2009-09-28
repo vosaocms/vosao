@@ -45,8 +45,8 @@ public class InitFilter implements Filter {
     
     private static final Log log = LogFactory.getLog(SiteFilter.class);
 
-    private static final String SESSION_INITURL_PARAM = "initUrl";
-    private static final String INIT_URL = "/init";
+    //private static final String SESSION_INITURL_PARAM = "initUrl";
+    //private static final String INIT_URL = "/init";
     private static final String INIT_CRON_URL = "/initCron";
     
     private FilterConfig config = null;
@@ -74,7 +74,7 @@ public class InitFilter implements Filter {
     	prepare();
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
         HttpServletResponse httpResponse = (HttpServletResponse)response;
-    	HttpSession session = httpRequest.getSession(true); 
+    	//HttpSession session = httpRequest.getSession(true); 
         String url = httpRequest.getServletPath();
         if (!business.isInitialized() && url.equals(INIT_CRON_URL)) {
             SetupBean setupBean = (SetupBean)WebApplicationContextUtils
@@ -85,7 +85,7 @@ public class InitFilter implements Filter {
         	writeOk(httpResponse);
         	return;
         }
-        if (!business.isInitialized() && !url.equals(INIT_URL)) {
+        /*if (!business.isInitialized() && !url.equals(INIT_URL)) {
         	session.setAttribute(SESSION_INITURL_PARAM, url);
         	httpResponse.sendRedirect(INIT_URL);
         	return;
@@ -102,7 +102,7 @@ public class InitFilter implements Filter {
         	business.setInitialized(true);        	
         	httpResponse.sendRedirect(initUrl);
         	return;
-        }
+        }*/
         chain.doFilter(request, response);
     }
     
@@ -110,6 +110,8 @@ public class InitFilter implements Filter {
     }
     
     private void writeOk(HttpServletResponse response) throws IOException {
-    	response.getWriter().append("OK");
+    	response.setContentType("text/html");
+    	response.setCharacterEncoding("UTF-8");
+    	response.getWriter().append("<html><body>OK</body></html>");
     }
 }

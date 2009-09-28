@@ -56,6 +56,9 @@
     <bean id="formDao" class="org.vosao.dao.impl.FormDaoImpl"
         parent="abstractDao" />  
 
+    <bean id="commentDao" class="org.vosao.dao.impl.CommentDaoImpl"
+        parent="abstractDao" />  
+
     <bean id="dao" class="org.vosao.dao.impl.DaoImpl">  
         <property name="pageDao" ref="pageDao"/>  
         <property name="fileDao" ref="fileDao"/>  
@@ -64,6 +67,7 @@
         <property name="templateDao" ref="templateDao"/>  
         <property name="configDao" ref="configDao"/>  
         <property name="formDao" ref="formDao"/>  
+        <property name="commentDao" ref="commentDao"/>  
     </bean>
 
     <!-- Business -->

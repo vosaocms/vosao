@@ -21,30 +21,20 @@
 
 package org.vosao.dao;
 
-public interface Dao {
+import java.util.List;
 
-	PageDao getPageDao();
-	void setPageDao(final PageDao pageDao);
+import org.vosao.entity.CommentEntity;
+
+public interface CommentDao extends AbstractDao {
+
+	void save(final CommentEntity page);
 	
-	FileDao getFileDao();
-	void setFileDao(final FileDao fileDao);
+	CommentEntity getById(final String id);
 
-	FolderDao getFolderDao();
-	void setFolderDao(final FolderDao folderDao);
+	List<CommentEntity> getByPage(final String pageId);
 
-	UserDao getUserDao();
-	void setUserDao(final UserDao userDao);
-
-	TemplateDao getTemplateDao();
-	void setTemplateDao(final TemplateDao templateDao);
-
-	ConfigDao getConfigDao();
-	void setConfigDao(final ConfigDao configDao);
-
-	FormDao getFormDao();
-	void setFormDao(final FormDao formDao);
+	void remove(final String id);
 	
-	CommentDao getCommentDao();
-	void setCommentDao(final CommentDao bean);
-
+	void remove(final List<String> ids);
+	
 }

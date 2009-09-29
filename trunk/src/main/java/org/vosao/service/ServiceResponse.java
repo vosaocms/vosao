@@ -26,10 +26,21 @@ import java.util.List;
 
 public class ServiceResponse {
 
+	public static String ERROR_RESULT = "error";
+	public static String SUCCESS_RESULT = "success";
+	
 	private String result;
 	private String message;
 	private List<String> messages;
 	
+	public static ServiceResponse createErrorResponse(final String msg) {
+		return new ServiceResponse(ERROR_RESULT, msg);
+	}
+	
+	public static ServiceResponse createSuccessResponse(final String msg) {
+		return new ServiceResponse(SUCCESS_RESULT, msg);
+	}
+
 	public ServiceResponse() {
 		messages = new ArrayList<String>();
 	}

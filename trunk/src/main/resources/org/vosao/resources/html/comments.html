@@ -1,0 +1,79 @@
+#set ( $comments = $service.getCommentsByPage($page.id))
+<div class="comments">
+  <div class="comments-label">Comments $comments.size()</div>
+
+  <div class="comments-block" style="display:none">
+
+  <div class="comments-list">
+  #foreach( $comment in $comments )
+  <div class="comment">
+    <div class="comment-author">$comment.name</div>
+    <div class="comment-date">$comment.publishDateTime</div>
+    <div class="comment-content">$comment.content</div>
+  </div> 
+  #end
+  </div>
+
+  <div id="messages">&nbsp;</div>
+  <form id="comment-form">
+    <div><label>Name</label><input type="text" name="name"/></div>
+    <div><label>Comment</label><textarea name="comment" cols="40" rows="6"></textarea></div>
+    <div id="recaptcha">&nbsp;</div>
+    <div><input type="button" onclick="onAddComment()" value="Add comment"/></div>
+  </form>
+
+  </div>
+<script type="text/javascript">
+
+var jsonrpc;
+
+$(function() {
+  jsonrpc = new JSONRpcClient("/JSON-RPC/");
+  Recaptcha.create('$config.recaptchaPublicKey',
+    'recaptcha', {
+        theme:'red', 
+        callback: Recaptcha.focus_response_field});
+  $(".comments-label").click(function() {
+    $(".comments-block").slideToggle('slow');
+  });
+
+});
+
+function onAddComment() {
+    var name = $("#comment-form input[name=name]").val();
+    var comment = $("#comment-form textarea[name=comment]").val();
+    var pageId = '$page.id';
+    var data = jsonrpc.commentService.addComment(name, comment, pageId,
+        Recaptcha.get_challenge(), Recaptcha.get_response());
+    if (data.result == 'success') {
+        $("#messages").html('<ul><li class="infoMessage">Comment was successfully added.</li></ul>');
+        $("#comment-form textarea[name=comment]").val('');
+        loadComments(pageId);
+    }
+    else {
+        var msg = data.message;
+        if (msg == "incorrect-captcha-sol") {
+            msg = "incorrect captcha solution";
+        }
+        $("#messages").html('<ul><li class="errorMessage">Error. ' + msg + '</li></ul>');
+    }
+    Recaptcha.reload();  
+}
+
+function loadComments(pageId) {
+    jsonrpc.commentService.getByPage(function(r) {
+        var s = "";
+        if (r.list.length > 0) {
+            for (var i = 0; i < r.list.length; i++) {
+                var comment = r.list[i];
+                s += '<div class="comment"><div class="comment-author">' + comment.name 
+                    + '</div><div class="comment-date">' + comment.publishDateTime 
+                    + '</div><div class="comment-content">' + comment.content
+                    + '</div></div>';
+            }    
+        }
+        $(".comments-list").html(s);
+  }, pageId);
+}
+
+</script>

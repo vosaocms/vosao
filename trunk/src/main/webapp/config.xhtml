@@ -14,6 +14,7 @@
 
 $(function(){
     $("#import-dialog").dialog({ width: 400, autoOpen: false });
+    $("#tabs").tabs();
 });
 
 $(document).ready(function () {
@@ -57,37 +58,43 @@ function onAfterUploadOk() {
 <ui:define name="body">
 
 <h:form>
+<div id="tabs">
 
-<h1>Site configuration</h1>
+<ul>
+    <li><a href="#tab-1">Site configuration</a></li>
+    <li><a href="#tab-2">Comments</a></li>
+</ul>
+
+<div id="tab-1">
 
 <div class="form-row">
     <label>Google Analytics ID</label>
-    <h:inputText value="#{configBean.googleAnalyticsId}" />
+    <h:inputText value="#{configBean.config.googleAnalyticsId}" />
 </div>
 
 <div class="form-row">
     <label>Site owner email</label>
-    <h:inputText value="#{configBean.siteEmail}" />
+    <h:inputText value="#{configBean.config.siteEmail}" />
 </div>
 
 <div class="form-row">
     <label>Site domain</label>
-    <h:inputText value="#{configBean.siteDomain}" />
+    <h:inputText value="#{configBean.config.siteDomain}" />
 </div>
 
 <div class="form-row">
     <label>reCaptcha service public key</label>
-    <h:inputText value="#{configBean.recaptchaPublicKey}" />
+    <h:inputText value="#{configBean.config.recaptchaPublicKey}" />
 </div>
 
 <div class="form-row">
     <label>reCaptcha service private key</label>
-    <h:inputText value="#{configBean.recaptchaPrivateKey}" />
+    <h:inputText value="#{configBean.config.recaptchaPrivateKey}" />
 </div>
 
 <div class="form-row">
     <label>Editable resource files extensions</label>
-    <h:inputText value="#{configBean.editExt}" />
+    <h:inputText value="#{configBean.config.editExt}" />
 </div>
 
 <div class="buttons">
@@ -96,6 +103,27 @@ function onAfterUploadOk() {
     <input type="button" onclick="onImport()" value="Import" />
 </div>
 
+</div>
+
+<div id="tab-2">
+
+<div class="form-row">
+    <label>Comments notification email</label>
+    <h:inputText value="#{configBean.config.commentsEmail}" />
+</div>
+
+<div class="form-row">
+    <label>Comments template</label>
+    <h:inputTextarea value="#{configBean.config.commentsTemplate}" cols="80" rows="20"/>
+</div>
+
+<div class="buttons">
+    <h:commandButton value="Save" action="#{configBean.save}" />
+</div>
+
+</div>
+
+</div>
 </h:form>
 
 <div id="import-dialog" title="Import site" style="display:none">

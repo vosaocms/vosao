@@ -37,6 +37,10 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.vosao.business.ConfigBusiness;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.business.impl.pagefilter.GoogleAnalyticsPageFilter;
+import org.vosao.business.impl.pagefilter.JavaScriptPageFilter;
+import org.vosao.business.impl.pagefilter.PageFilter;
+import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.velocity.VelocityService;
@@ -86,9 +90,10 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			TemplateEntity template = getDao().getTemplateDao().getById(
 					page.getTemplate());
 			VelocityContext context = new VelocityContext();
-			context.put("page", page);
-			Map<String, String> config = getDao().getConfigDao().getConfig();
-			context.put("config", config);
+			context.put("page", new PageRenderDecorator(page, 
+					getConfigBusiness(), this));
+			ConfigEntity configEntity = getConfigBusiness().getConfig();
+			context.put("config", configEntity.getConfigMap());
 			context.put("service", getVelocityService());
 			StringWriter wr = new StringWriter();
 			String log = null;
@@ -111,35 +116,22 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		}
 	}
 	
-	private static String getGoogleAnalyticsCode(final String id) { 
-		return  
-		"<!-- Google Analytics -->\n"
-		+ "<script type=\"text/javascript\">\n"
-	    + "var gaJsHost = ((\"https:\" == document.location.protocol) ? \"https://ssl.\" : \"http://www.\");\n"
-        + "document.write(unescape(\"%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E\"));\n"
-	    + "</script>\n"
-	    + "<script type=\"text/javascript\">\n"
-	    + "var pageTracker = _gat._getTracker(\"" + id +"\");\n"
-	    + "pageTracker._trackPageview();\n"
-	    + "</script>\n"
-	    + "</html>";
-	}
-	
 	private String pagePostProcess(final String page) {
-		if (!StringUtils.isEmpty(getConfigBusiness().getGoogleAnalyticsId())) {
-			String id = getConfigBusiness().getGoogleAnalyticsId();
-			String htmlTag = "</html>";
-			if (page.indexOf("</HTML>") != -1) {
-				htmlTag = "</HTML>";
-			}
-			return StringUtils.replace(page, htmlTag, 
-					getGoogleAnalyticsCode(id));
+		List<PageFilter> filters = createFilters();
+		String result = page;
+		for (PageFilter filter : filters) {
+			result = filter.apply(result);
 		}
-		else {
-			return page;
-		}
+		return result;
 	}
 	
+	private List<PageFilter> createFilters() {
+		List<PageFilter> result = new ArrayList<PageFilter>();
+		result.add(new GoogleAnalyticsPageFilter(configBusiness, this));
+		result.add(new JavaScriptPageFilter(configBusiness, this));
+		return result;
+	}
+
 	@Override
 	public List<String> validateBeforeUpdate(final PageEntity page) {
 		List<String> errors = new ArrayList<String>();
@@ -183,6 +175,29 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 
 	private VelocityService getVelocityService() {
         return velocityService;
+	}
+
+	@Override
+	public String render(String template, PageEntity page) {
+		VelocityContext context = new VelocityContext();
+		context.put("page", page);
+		ConfigEntity config = getConfigBusiness().getConfig();
+		context.put("config", config.getConfigMap());
+		context.put("service", getVelocityService());
+		StringWriter wr = new StringWriter();
+		String log = null;
+		try {
+			ve.evaluate(context, wr, log, template);
+			return wr.toString();
+		} catch (ParseErrorException e) {
+			return e.toString();
+		} catch (MethodInvocationException e) {
+			return e.toString();
+		} catch (ResourceNotFoundException e) {
+			return e.toString();
+		} catch (IOException e) {
+			return e.toString();
+		}
 	}
 	
 }

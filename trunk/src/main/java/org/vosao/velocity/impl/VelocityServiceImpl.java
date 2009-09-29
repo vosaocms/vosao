@@ -28,7 +28,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.vosao.dao.Dao;
+import org.vosao.entity.CommentEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.service.impl.vo.CommentVO;
 import org.vosao.velocity.VelocityService;
 
 public class VelocityServiceImpl implements VelocityService {
@@ -84,6 +86,15 @@ public class VelocityServiceImpl implements VelocityService {
 			
 		});
 		return result;
+	}
+
+	@Override
+	public List<CommentVO> getCommentsByPage(String pageId) {
+		PageEntity page = getDao().getPageDao().getById(pageId);
+		if (page != null) {
+			return CommentVO.create(getDao().getCommentDao().getByPage(pageId));
+		}
+		return Collections.emptyList();
 	}
 
 }

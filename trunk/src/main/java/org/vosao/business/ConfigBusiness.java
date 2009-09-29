@@ -21,25 +21,11 @@
 
 package org.vosao.business;
 
+import org.vosao.entity.ConfigEntity;
+
 
 public interface ConfigBusiness {
 
-	String getGoogleAnalyticsId();
-	void setGoogleAnalyticsId(final String id);
-
-	String getSiteEmail();
-	void setSiteEmail(final String email);
-
-	String getSiteDomain();
-	void setSiteDomain(final String domain);
-	
-	String getEditExt();
-	void setEditExt(final String value);
-
-	String getRecaptchaPrivateKey();
-	void setRecaptchaPrivateKey(final String value);
-
-	String getRecaptchaPublicKey();
-	void setRecaptchaPublicKey(final String value);
+	ConfigEntity getConfig();
 	
 }

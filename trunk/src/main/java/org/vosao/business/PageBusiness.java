@@ -36,7 +36,20 @@ public interface PageBusiness {
 	
 	TreeItemDecorator<PageEntity> getTree();
 
+	/**
+	 * Render page with page bound template. With applied postProcessing and 
+	 * using PageRenderDecorator.
+	 * @param page - page to render
+	 * @return rendered html.
+	 */
 	String render(final PageEntity page);
+	
+	/**
+	 * Render page to template. 
+	 * @param page - page to render
+	 * @return rendered html.
+	 */
+	String render(final String template, final PageEntity page);
 	
 	List<String> validateBeforeUpdate(final PageEntity page);
 }

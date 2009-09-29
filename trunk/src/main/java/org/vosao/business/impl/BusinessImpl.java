@@ -32,6 +32,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
+import org.vosao.business.CommentBusiness;
 import org.vosao.business.ConfigBusiness;
 import org.vosao.business.FileBusiness;
 import org.vosao.business.FolderBusiness;
@@ -56,6 +57,7 @@ public class BusinessImpl implements Business {
 	private ConfigBusiness configBusiness;
 	private FormBusiness formBusiness;
 	private FileBusiness fileBusiness;
+	private CommentBusiness commentBusiness;
 
 	public void init() {
 		try {
@@ -179,6 +181,16 @@ public class BusinessImpl implements Business {
 	@Override
 	public void setFileBusiness(FileBusiness bean) {
 		fileBusiness = bean;		
+	}
+
+	@Override
+	public CommentBusiness getCommentBusiness() {
+		return commentBusiness;
+	}
+
+	@Override
+	public void setCommentBusiness(CommentBusiness bean) {
+		commentBusiness = bean;
 	}
 	
 	

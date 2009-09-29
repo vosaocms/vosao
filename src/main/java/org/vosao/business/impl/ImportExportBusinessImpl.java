@@ -282,7 +282,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		FileEntity fileEntity = getDao().getFileDao().getByName(
 				folderEntity.getId(), fileName);
 		if (fileEntity != null) {
-			fileEntity.setMdtime(new Date());
+			fileEntity.setLastModifiedTime(new Date());
 			fileEntity.setSize(data.length);
 		}
 		else {

@@ -33,6 +33,7 @@ import org.apache.commons.logging.LogFactory;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
+import org.vosao.utils.DateUtil;
 
 /**
  * Servlet for download files from database.
@@ -80,7 +81,7 @@ public class FileDownloadServlet extends BaseSpringServlet {
 			if (file.getSize() < CACHE_LIMIT) {
 				getBusiness().getCache().put(request.getPathInfo(), file);
 			}
-			sendFile(file, response);
+			sendFile(file, request, response);
 		}
 		else {
 	        log.info("file " + request.getPathInfo() + " was not found");
@@ -98,18 +99,29 @@ public class FileDownloadServlet extends BaseSpringServlet {
         log.info("taking from memcache " + request.getPathInfo());
 		FileEntity file = (FileEntity) getBusiness().getCache().get(
 				request.getPathInfo());
-		sendFile(file, response);
+		sendFile(file, request, response);
 	}
 	
-	private void sendFile(final FileEntity file, HttpServletResponse response) 
+	private void sendFile(final FileEntity file, HttpServletRequest request,
+			HttpServletResponse response) 
 			throws IOException {
-		response.setHeader("Content-type", file.getMimeType());
-		response.setHeader("Content-Length", String.valueOf(file.getSize()));
-		BufferedOutputStream output = new BufferedOutputStream(
-				response.getOutputStream());
-		output.write(getDao().getFileDao().getFileContent(file));
-		output.flush();
-		output.close();
+		if(DateUtil.toHeaderString(file.getLastModifiedTime()).equals(
+				request.getHeader("If-Modified-Since"))){
+			response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+			return;
+		}
+		else {
+			response.setHeader("Content-type", file.getMimeType());
+			
+			response.setHeader("Content-Length", String.valueOf(file.getSize()));
+			response.setHeader("Last-Modified", 
+					DateUtil.toHeaderString(file.getLastModifiedTime()));
+			BufferedOutputStream output = new BufferedOutputStream(
+					response.getOutputStream());
+			output.write(getDao().getFileDao().getFileContent(file));
+			output.flush();
+			output.close();
+		}
 	}
 	
 }

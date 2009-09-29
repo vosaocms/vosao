@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.entity.ConfigEntity;
 import org.vosao.servlet.MimeType;
 
 
@@ -37,23 +38,10 @@ public class ConfigBean extends AbstractJSFBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static Log log = LogFactory.getLog(ConfigBean.class);
 	
-	private String googleAnalyticsId;
-	private String siteEmail;
-	private String siteDomain;
-	private String editExt;
-	private String recaptchaPrivateKey;
-	private String recaptchaPublicKey;
+	private ConfigEntity config;
 	
 	public void init() {
-		googleAnalyticsId = getBusiness().getConfigBusiness()
-				.getGoogleAnalyticsId();
-		siteEmail = getBusiness().getConfigBusiness().getSiteEmail();
-		siteDomain = getBusiness().getConfigBusiness().getSiteDomain();
-		editExt = getBusiness().getConfigBusiness().getEditExt();
-		recaptchaPrivateKey = getBusiness().getConfigBusiness()
-			.getRecaptchaPrivateKey();
-		recaptchaPublicKey = getBusiness().getConfigBusiness()
-			.getRecaptchaPublicKey();
+		config = getBusiness().getConfigBusiness().getConfig();
 	}
 	
 	public void export() throws IOException {
@@ -73,63 +61,16 @@ public class ConfigBean extends AbstractJSFBean implements Serializable {
 	}
 	
 	public void save() {
-		getBusiness().getConfigBusiness().setGoogleAnalyticsId(
-				googleAnalyticsId);
-		getBusiness().getConfigBusiness().setSiteEmail(siteEmail);
-		getBusiness().getConfigBusiness().setSiteDomain(siteDomain);
-		getBusiness().getConfigBusiness().setEditExt(editExt);
-		getBusiness().getConfigBusiness().setRecaptchaPrivateKey(
-				recaptchaPrivateKey);
-		getBusiness().getConfigBusiness().setRecaptchaPublicKey(
-				recaptchaPublicKey);
+		getDao().getConfigDao().save(config);		
 		JSFUtil.addInfoMessage("Configuration was successfully saved.");
 	}
 
-	public String getGoogleAnalyticsId() {
-		return googleAnalyticsId;
+	public ConfigEntity getConfig() {
+		return config;
 	}
 
-	public void setGoogleAnalyticsId(String googleAnalyticsId) {
-		this.googleAnalyticsId = googleAnalyticsId;
-	}
-
-	public String getSiteEmail() {
-		return siteEmail;
-	}
-
-	public void setSiteEmail(String siteEmail) {
-		this.siteEmail = siteEmail;
-	}
-
-	public String getSiteDomain() {
-		return siteDomain;
-	}
-
-	public void setSiteDomain(String siteDomain) {
-		this.siteDomain = siteDomain;
-	}
-
-	public String getEditExt() {
-		return editExt;
-	}
-
-	public void setEditExt(String editExt) {
-		this.editExt = editExt;
+	public void setConfig(ConfigEntity config) {
+		this.config = config;
 	}
 	
-	public String getRecaptchaPrivateKey() {
-		return recaptchaPrivateKey;
-	}
-
-	public void setRecaptchaPrivateKey(String recaptcha) {
-		this.recaptchaPrivateKey = recaptcha;
-	}
-
-	public String getRecaptchaPublicKey() {
-		return recaptchaPublicKey;
-	}
-
-	public void setRecaptchaPublicKey(String recaptchaPublicKey) {
-		this.recaptchaPublicKey = recaptchaPublicKey;
-	}
 }

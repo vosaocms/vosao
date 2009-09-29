@@ -56,6 +56,9 @@ public class CommentEntity implements Serializable {
 	@Persistent
 	private Date publishDate;
 	
+	@Persistent
+	private boolean disabled;
+
 	public CommentEntity() {
 		publishDate = new Date();
 	}
@@ -66,6 +69,7 @@ public class CommentEntity implements Serializable {
 		setContent(aContent);
 		setPublishDate(aPublishDate);
 		setPageId(aPageId);
+		setDisabled(false);
 	}
 
 	public void copy(final CommentEntity entity) {
@@ -73,6 +77,7 @@ public class CommentEntity implements Serializable {
 		setContent(entity.getContent());
 		setPublishDate(entity.getPublishDate());
 		setPageId(entity.getPageId());
+		setDisabled(entity.isDisabled());
 	}
 	
 	public String getId() {
@@ -116,6 +121,14 @@ public class CommentEntity implements Serializable {
 
 	public void setPageId(String pageId) {
 		this.pageId = pageId;
+	}
+
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
 	}
 	
 }

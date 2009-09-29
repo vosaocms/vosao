@@ -85,6 +85,10 @@ public class InitFilter implements Filter {
         	writeOk(httpResponse);
         	return;
         }
+        if (url.equals(INIT_CRON_URL)) {
+        	writeOk(httpResponse);
+        	return;
+        }
         /*if (!business.isInitialized() && !url.equals(INIT_URL)) {
         	session.setAttribute(SESSION_INITURL_PARAM, url);
         	httpResponse.sendRedirect(INIT_URL);
@@ -112,6 +116,6 @@ public class InitFilter implements Filter {
     private void writeOk(HttpServletResponse response) throws IOException {
     	response.setContentType("text/html");
     	response.setCharacterEncoding("UTF-8");
-    	response.getWriter().append("<html><body>OK</body></html>");
+    	response.getWriter().append("<html><body>Setup successfully completed.</body></html>");
     }
 }

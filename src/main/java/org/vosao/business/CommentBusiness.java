@@ -19,28 +19,14 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.utils;
+package org.vosao.business;
 
-import java.text.Format;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.vosao.entity.CommentEntity;
+import org.vosao.entity.PageEntity;
 
-public class DateUtil {
+public interface CommentBusiness {
 
-	private static final Format formatter = new SimpleDateFormat("dd.MM.yyyy");
-	private static final Format dateTimeFormatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-	
-	public static String toString(final Date date) {
-		return formatter.format(date);
-	}
-	
-	public static String dateTimeToString(final Date date) {
-		return dateTimeFormatter.format(date);
-	}
-	
-	public static Date toDate(final String str) throws ParseException {
-		return (Date) formatter.parseObject(str);
-	}
+	CommentEntity addComment(final String name, final String content, 
+			final PageEntity page);
 	
 }

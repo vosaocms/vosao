@@ -44,6 +44,7 @@ import org.vosao.business.FolderBusiness;
 import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FormEntity;
@@ -328,30 +329,39 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		return doc.asXML();
 	}
 	
-	private void createConfigXML(Element config) {
-		if (getConfigBusiness().getGoogleAnalyticsId() != null) {
-			Element googleAnalytics = config.addElement("google-analytics");
-			googleAnalytics.setText(getConfigBusiness().getGoogleAnalyticsId());
+	private void createConfigXML(Element configElement) {
+		ConfigEntity config = getConfigBusiness().getConfig();
+		if (config.getGoogleAnalyticsId() != null) {
+			Element googleAnalytics = configElement.addElement("google-analytics");
+			googleAnalytics.setText(config.getGoogleAnalyticsId());
 		}
-		if (getConfigBusiness().getSiteEmail() != null) {
-			Element siteEmail = config.addElement("email");
-			siteEmail.setText(getConfigBusiness().getSiteEmail());
+		if (config.getSiteEmail() != null) {
+			Element siteEmail = configElement.addElement("email");
+			siteEmail.setText(config.getSiteEmail());
 		}
-		if (getConfigBusiness().getSiteDomain() != null) {
-			Element siteDomain = config.addElement("domain");
-			siteDomain.setText(getConfigBusiness().getSiteDomain());
+		if (config.getSiteDomain() != null) {
+			Element siteDomain = configElement.addElement("domain");
+			siteDomain.setText(config.getSiteDomain());
 		}
-		if (getConfigBusiness().getEditExt() != null) {
-			Element editExt = config.addElement("edit-ext");
-			editExt.setText(getConfigBusiness().getEditExt());
+		if (config.getEditExt() != null) {
+			Element editExt = configElement.addElement("edit-ext");
+			editExt.setText(config.getEditExt());
 		}
-		if (getConfigBusiness().getRecaptchaPrivateKey() != null) {
-			Element recaptcha = config.addElement("recaptchaPrivateKey");
-			recaptcha.setText(getConfigBusiness().getRecaptchaPrivateKey());
+		if (config.getRecaptchaPrivateKey() != null) {
+			Element recaptcha = configElement.addElement("recaptchaPrivateKey");
+			recaptcha.setText(config.getRecaptchaPrivateKey());
 		}
-		if (getConfigBusiness().getRecaptchaPublicKey() != null) {
-			Element elem = config.addElement("recaptchaPublicKey");
-			elem.setText(getConfigBusiness().getRecaptchaPublicKey());
+		if (config.getRecaptchaPublicKey() != null) {
+			Element elem = configElement.addElement("recaptchaPublicKey");
+			elem.setText(config.getRecaptchaPublicKey());
+		}
+		if (config.getCommentsEmail() != null) {
+			Element elem = configElement.addElement("commentsEmail");
+			elem.setText(config.getCommentsEmail());
+		}
+		if (config.getCommentsTemplate() != null) {
+			Element elem = configElement.addElement("commentsTemplate");
+			elem.setText(config.getCommentsTemplate());
 		}
 	}
 
@@ -360,6 +370,8 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		Element pageElement = root.addElement("page"); 
 		pageElement.addAttribute("url", page.getEntity().getFriendlyURL());
 		pageElement.addAttribute("title", page.getEntity().getTitle());
+		pageElement.addAttribute("commentsEnabled", String.valueOf(
+				page.getEntity().isCommentsEnabled()));
 		if (page.getEntity().getPublishDate() != null) {
 			pageElement.addAttribute("publishDate", 
 				DateUtil.toString(page.getEntity().getPublishDate()));
@@ -446,6 +458,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		String title = pageElement.attributeValue("title");
 		String url = pageElement.attributeValue("url");
 		String themeUrl = pageElement.attributeValue("theme");
+		String commentsEnabled = pageElement.attributeValue("commentsEnabled");
 		Date publishDate = new Date();
 		if (pageElement.attributeValue("publishDate") != null) {
 			try {
@@ -471,6 +484,9 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		}
 		PageEntity newPage = new PageEntity(title, content, url, parentId, 
 				templateId, publishDate);
+		if (commentsEnabled != null) {
+			newPage.setCommentsEnabled(Boolean.valueOf(commentsEnabled));
+		}
 		PageEntity page = getDao().getPageDao().getByUrl(url);
 		if (page != null) {
 			page.copy(newPage);
@@ -488,27 +504,35 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 	}
 
 	private void createConfigs(Element configElement) {
+		ConfigEntity config = getConfigBusiness().getConfig();
 		for (Iterator<Element> i = configElement.elementIterator(); i.hasNext(); ) {
             Element element = i.next();
             if (element.getName().equals("google-analytics")) {
-            	getConfigBusiness().setGoogleAnalyticsId(element.getText());
+            	config.setGoogleAnalyticsId(element.getText());
             }
             if (element.getName().equals("email")) {
-            	getConfigBusiness().setSiteEmail(element.getText());
+            	config.setSiteEmail(element.getText());
             }
             if (element.getName().equals("domain")) {
-            	getConfigBusiness().setSiteDomain(element.getText());
+            	config.setSiteDomain(element.getText());
             }
             if (element.getName().equals("edit-ext")) {
-            	getConfigBusiness().setEditExt(element.getText());
+            	config.setEditExt(element.getText());
             }
             if (element.getName().equals("recaptchaPrivateKey")) {
-            	getConfigBusiness().setRecaptchaPrivateKey(element.getText());
+            	config.setRecaptchaPrivateKey(element.getText());
             }
             if (element.getName().equals("recaptchaPublicKey")) {
-            	getConfigBusiness().setRecaptchaPublicKey(element.getText());
+            	config.setRecaptchaPublicKey(element.getText());
+            }
+            if (element.getName().equals("commentsEmail")) {
+            	config.setCommentsEmail(element.getText());
+            }
+            if (element.getName().equals("commentsTemplate")) {
+            	config.setCommentsTemplate(element.getText());
             }
 		}
+		getDao().getConfigDao().save(config);
 	}
 
 	private void createForms(Element formsElement) {

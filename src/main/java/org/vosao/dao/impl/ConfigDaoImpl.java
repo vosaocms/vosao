@@ -21,18 +21,21 @@
 
 package org.vosao.dao.impl;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.jdo.PersistenceManager;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.ConfigDao;
 import org.vosao.entity.ConfigEntity;
 
 public class ConfigDaoImpl extends AbstractDaoImpl implements ConfigDao {
 
+	private static final Log logger = LogFactory.getLog(ConfigDaoImpl.class);
+	
+	@Override
 	public void save(final ConfigEntity entity) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
@@ -49,6 +52,7 @@ public class ConfigDaoImpl extends AbstractDaoImpl implements ConfigDao {
 		}
 	}
 	
+	@Override
 	public ConfigEntity getById(final Long id) {
 		if (id == null) {
 			return null;
@@ -65,6 +69,7 @@ public class ConfigDaoImpl extends AbstractDaoImpl implements ConfigDao {
 		}
 	}
 	
+	@Override
 	public List<ConfigEntity> select() {
 		PersistenceManager pm = getPersistenceManager();
 		try {
@@ -77,25 +82,7 @@ public class ConfigDaoImpl extends AbstractDaoImpl implements ConfigDao {
 		}
 	}
 	
-	public ConfigEntity getByName(final String name) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + ConfigEntity.class.getName() 
-					+ " where name == pName parameters String pName";
-			List<ConfigEntity> result = (List<ConfigEntity>)pm.newQuery(query)
-					.execute(name);
-			if (result.size() == 0) {
-				return null;
-			}
-			else {
-				return result.get(0);
-			}
-		}
-		finally {
-			pm.close();
-		}
-	}
-
+	@Override
 	public void remove(final Long id) {
 		if (id == null) {
 			return;
@@ -109,6 +96,7 @@ public class ConfigDaoImpl extends AbstractDaoImpl implements ConfigDao {
 		}
 	}
 	
+	@Override
 	public void remove(final List<Long> ids) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
@@ -122,13 +110,13 @@ public class ConfigDaoImpl extends AbstractDaoImpl implements ConfigDao {
 	}
 
 	@Override
-	public Map<String, String> getConfig() {
+	public ConfigEntity getConfig() {
 		List<ConfigEntity> list = select();
-		Map<String, String> result = new HashMap<String, String>(); 
-		for (ConfigEntity config : list) {
-			result.put(config.getName(), config.getValue());
+		if (list.size() > 0) {
+			return list.get(0);
 		}
-		return result;
+		logger.error("Config for site was not found!");
+		return new ConfigEntity();
 	}
 
 }

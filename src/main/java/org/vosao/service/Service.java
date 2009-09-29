@@ -32,4 +32,7 @@ public interface Service {
 	FolderService getFolderService();
 	void setFolderService(FolderService bean);
 	
+	CommentService getCommentService();
+	void setCommentService(CommentService bean);
+
 }

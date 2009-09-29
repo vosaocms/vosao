@@ -132,11 +132,15 @@
     <bean id="folderService" class="org.vosao.service.impl.FolderServiceImpl"
         parent="abstractService" />
           
+    <bean id="commentService" class="org.vosao.service.impl.CommentServiceImpl"
+        parent="abstractService" />
+
     <bean id="service" class="org.vosao.service.impl.ServiceImpl"
         init-method="init">  
         <property name="formService" ref="formService"/>  
         <property name="fileService" ref="fileService"/>  
         <property name="folderService" ref="folderService"/>  
+        <property name="commentService" ref="commentService"/>  
     </bean>
 
     <!-- JSF beans -->

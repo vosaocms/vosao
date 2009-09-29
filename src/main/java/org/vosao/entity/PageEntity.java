@@ -62,6 +62,10 @@ public class PageEntity implements Serializable {
 	@Persistent
 	private Date publishDate;
 	
+	@Persistent
+	private boolean commentsEnabled;
+	
+	
 	public PageEntity() {
 		publishDate = new Date();
 	}
@@ -88,13 +92,14 @@ public class PageEntity implements Serializable {
 		this.parent = aParent;
 	}
 	
-	public void copy(final PageEntity page) {
-		setTitle(page.getTitle());
-		setContent(page.getContent());
-		setFriendlyURL(page.getFriendlyURL());
-		setParent(page.getParent());
-		setTemplate(page.getTemplate());
-		setPublishDate(page.getPublishDate());
+	public void copy(final PageEntity entity) {
+		setTitle(entity.getTitle());
+		setContent(entity.getContent());
+		setFriendlyURL(entity.getFriendlyURL());
+		setParent(entity.getParent());
+		setTemplate(entity.getTemplate());
+		setPublishDate(entity.getPublishDate());
+		setCommentsEnabled(entity.isCommentsEnabled());
 	}
 	
 	public String getId() {
@@ -194,6 +199,14 @@ public class PageEntity implements Serializable {
 
 	public void setPublishDate(Date publishDate) {
 		this.publishDate = publishDate;
+	}
+
+	public boolean isCommentsEnabled() {
+		return commentsEnabled;
+	}
+
+	public void setCommentsEnabled(boolean commentsEnabled) {
+		this.commentsEnabled = commentsEnabled;
 	}
 	
 }

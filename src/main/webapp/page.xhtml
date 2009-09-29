@@ -76,6 +76,10 @@
     <label>Publication date</label>
     <h:inputText value="#{pageBean.publishDate}" styleClass="datepicker" size="8"/>
 </div>
+<div class="form-row">
+    <label>Enable comments</label>
+    <h:selectBooleanCheckbox value="#{pageBean.current.commentsEnabled}" />
+</div>
 
 <div class="buttons">
     <h:commandButton value="Save" action="#{pageBean.update}" />

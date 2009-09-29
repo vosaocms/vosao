@@ -37,6 +37,7 @@ import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.business.SetupBean;
 import org.vosao.dao.Dao;
+import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
@@ -166,22 +167,24 @@ public class SetupBeanImpl implements SetupBean {
 	}
 
 	private void initConfigs() {
-		if (getBusiness().getConfigBusiness().getGoogleAnalyticsId() == null) {
-	        log.info("Adding google analytics config.");
-	        getBusiness().getConfigBusiness().setGoogleAnalyticsId("");
+		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
+		if (config.getId() == null || config.getId() == 0) {
+	        config.setGoogleAnalyticsId("");
+	        config.setSiteEmail("");
+	        config.setSiteDomain("");
+	        config.setEditExt("css,js,xml");
+			String url = "org/vosao/resources/html/comments.html";
+			String template = "Error during load resources " + url;
+			try {
+				template = JSFUtil.getTextResource(url);
+			}
+			catch(IOException e) {
+				log.error("Can't read comments template." + e);
+			}
+	        config.setCommentsTemplate(template);
+	        getDao().getConfigDao().save(config);
 		}
-		if (getBusiness().getConfigBusiness().getSiteEmail() == null) {
-	        log.info("Adding site email config.");
-	        getBusiness().getConfigBusiness().setSiteEmail("");
-		}
-		if (getBusiness().getConfigBusiness().getSiteDomain() == null) {
-	        log.info("Adding site domain config.");
-	        getBusiness().getConfigBusiness().setSiteDomain("");
-		}
-		if (getBusiness().getConfigBusiness().getEditExt() == null) {
-	        log.info("Adding edit extensions.");
-	        getBusiness().getConfigBusiness().setEditExt("css,js,xml");
-		}
+		
 	}
 	
 }

@@ -21,26 +21,24 @@
 
 package org.vosao.utils;
 
-import java.text.Format;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
 
-public class DateUtil {
+import net.tanesha.recaptcha.ReCaptcha;
+import net.tanesha.recaptcha.ReCaptchaFactory;
+import net.tanesha.recaptcha.ReCaptchaResponse;
 
-	private static final Format formatter = new SimpleDateFormat("dd.MM.yyyy");
-	private static final Format dateTimeFormatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-	
-	public static String toString(final Date date) {
-		return formatter.format(date);
-	}
-	
-	public static String dateTimeToString(final Date date) {
-		return dateTimeFormatter.format(date);
-	}
-	
-	public static Date toDate(final String str) throws ParseException {
-		return (Date) formatter.parseObject(str);
+public class RecaptchaUtil {
+
+	public static ReCaptchaResponse check(
+			final String publicKey,
+			final String privateKey, 
+			final String challenge, 
+			final String response, HttpServletRequest request) {
+
+		ReCaptcha captcha = ReCaptchaFactory.newReCaptcha(publicKey, 
+				privateKey, false);
+		String address = request.getRemoteAddr();
+		return captcha.checkAnswer(address,	challenge, response);
 	}
 	
 }

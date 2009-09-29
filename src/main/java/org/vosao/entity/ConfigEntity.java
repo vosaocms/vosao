@@ -22,6 +22,8 @@
 package org.vosao.entity;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -29,34 +31,88 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.google.appengine.api.datastore.Text;
+
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class ConfigEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	public static final String GOOGLE_ANALYTICS_ID_PARAM = "googleAnalyticsId";
+	public static final String SITE_EMAIL = "siteEmail";
+	public static final String SITE_DOMAIN = "siteDomain";
+	public static final String EDIT_EXT = "editExt";
+	public static final String RECAPTCHA_PRIVATE_KEY = "recaptchaPrivateKey";
+	public static final String RECAPTCHA_PUBLIC_KEY = "recaptchaPublicKey";
+	public static final String COMMENTS_EMAIL = "commentsEmail";
+	public static final String COMMENTS_TEMPLATE = "commentsTemplate";
+
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Long id;
 	
 	@Persistent
-	private String name;
+	private String googleAnalyticsId;
+
+	@Persistent
+	private String siteEmail;
+
+	@Persistent
+	private String siteDomain;
 	
 	@Persistent
-	private String value;
+	private String editExt;
+
+	@Persistent
+	private String recaptchaPrivateKey;
+
+	@Persistent
+	private String recaptchaPublicKey;
+
+	@Persistent
+	private String commentsEmail;
+
+	@Persistent(defaultFetchGroup = "true")
+	private Text commentsTemplate;
+	
 
 	public ConfigEntity() {
 	}
 	
-	public ConfigEntity(String aName, String aValue) {
-		this();
-		name = aName;
-		value = aValue;
+	public void copy(final ConfigEntity entity) {
+		setCommentsEmail(entity.getCommentsEmail());
+		setCommentsTemplate(entity.getCommentsTemplate());
+		setEditExt(entity.getEditExt());
+		setGoogleAnalyticsId(entity.getGoogleAnalyticsId());
+		setRecaptchaPrivateKey(entity.getRecaptchaPrivateKey());
+		setRecaptchaPublicKey(entity.getRecaptchaPublicKey());
+		setSiteDomain(entity.getSiteDomain());
+		setSiteEmail(entity.getSiteEmail());
 	}
 	
-	public void copy(final ConfigEntity entity) {
-		setName(entity.getName());
-		setValue(entity.getValue());
+	/**
+	 * Get all configs with values.
+	 * @return configs with not null values.
+	 */
+	public Map<String, String> getConfigMap() {
+		Map<String, String> result = new HashMap<String, String>();
+		result.put(COMMENTS_EMAIL, getNotNull(getCommentsEmail()));
+		result.put(COMMENTS_TEMPLATE, getNotNull(getCommentsTemplate()));
+		result.put(EDIT_EXT, getNotNull(getEditExt()));
+		result.put(GOOGLE_ANALYTICS_ID_PARAM, getNotNull(getGoogleAnalyticsId()));
+		result.put(RECAPTCHA_PRIVATE_KEY, getNotNull(getRecaptchaPrivateKey()));
+		result.put(RECAPTCHA_PUBLIC_KEY, getNotNull(getRecaptchaPublicKey()));
+		result.put(SITE_DOMAIN, getNotNull(getSiteDomain()));
+		result.put(SITE_EMAIL, getNotNull(getSiteEmail()));
+		return result;
+	}
+
+	private String getNotNull(String value) {
+		if (value != null) {
+			return value;
+		}
+		return "";
 	}
 	
 	public Long getId() {
@@ -66,21 +122,72 @@ public class ConfigEntity implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	public String getValue() {
-		return value;
-	}
-	
-	public void setValue(String aValue) {
-		value = aValue;
+
+	public String getGoogleAnalyticsId() {
+		return googleAnalyticsId;
 	}
 
-	public String getName() {
-		return name;
+	public void setGoogleAnalyticsId(String googleAnalyticsId) {
+		this.googleAnalyticsId = googleAnalyticsId;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public String getSiteEmail() {
+		return siteEmail;
+	}
+
+	public void setSiteEmail(String siteEmail) {
+		this.siteEmail = siteEmail;
+	}
+
+	public String getSiteDomain() {
+		return siteDomain;
+	}
+
+	public void setSiteDomain(String siteDomain) {
+		this.siteDomain = siteDomain;
+	}
+
+	public String getEditExt() {
+		return editExt;
+	}
+
+	public void setEditExt(String editExt) {
+		this.editExt = editExt;
+	}
+
+	public String getRecaptchaPrivateKey() {
+		return recaptchaPrivateKey;
+	}
+
+	public void setRecaptchaPrivateKey(String recaptchaPrivateKey) {
+		this.recaptchaPrivateKey = recaptchaPrivateKey;
+	}
+
+	public String getRecaptchaPublicKey() {
+		return recaptchaPublicKey;
+	}
+
+	public void setRecaptchaPublicKey(String recaptchaPublicKey) {
+		this.recaptchaPublicKey = recaptchaPublicKey;
+	}
+
+	public String getCommentsEmail() {
+		return commentsEmail;
+	}
+
+	public void setCommentsEmail(String commentsEmail) {
+		this.commentsEmail = commentsEmail;
+	}
+
+	public String getCommentsTemplate() {
+		if (commentsTemplate == null) {
+			return null;
+		}
+		return commentsTemplate.getValue();
+	}
+
+	public void setCommentsTemplate(String commentsTemplate) {
+		this.commentsTemplate = new Text(commentsTemplate);
 	}
 	
 }

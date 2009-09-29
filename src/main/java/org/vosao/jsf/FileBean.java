@@ -142,7 +142,8 @@ public class FileBean extends AbstractJSFBean implements Serializable {
 		if (current.getId() == null) {
 			return false;
 		}
-		String editExt = getBusiness().getConfigBusiness().getEditExt();
+		String editExt = getBusiness().getConfigBusiness().getConfig()
+				.getEditExt();
 		String[] exts = editExt.split(",");
 		for (String ext : exts) {
 			if (FolderUtil.getFileExt(current.getFilename()).equals(ext)) {

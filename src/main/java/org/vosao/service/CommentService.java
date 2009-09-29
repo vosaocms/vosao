@@ -19,28 +19,32 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.utils;
+package org.vosao.service;
 
-import java.text.Format;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 
-public class DateUtil {
+import javax.servlet.http.HttpServletRequest;
 
-	private static final Format formatter = new SimpleDateFormat("dd.MM.yyyy");
-	private static final Format dateTimeFormatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+import org.vosao.service.impl.vo.CommentVO;
+
+
+public interface CommentService extends AbstractService {
 	
-	public static String toString(final Date date) {
-		return formatter.format(date);
-	}
-	
-	public static String dateTimeToString(final Date date) {
-		return dateTimeFormatter.format(date);
-	}
-	
-	public static Date toDate(final String str) throws ParseException {
-		return (Date) formatter.parseObject(str);
-	}
+	List<CommentVO> getByPage(final String pageId);
+
+	/**
+	 * Add comment to page. Protected by reCaptcha service.
+	 * @param name - user name
+	 * @param params - form parameters
+	 * @param challenge - recaptcha challenge
+	 * @param response - recaptcha response
+	 * @return - service response.
+	 */
+	ServiceResponse addComment(final String name, 
+			final String comment, 
+			final String pageId,
+			final String challenge, 
+			final String response, 
+			HttpServletRequest request);
 	
 }

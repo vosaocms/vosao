@@ -58,6 +58,9 @@ public class LoginBean extends AbstractJSFBean implements Serializable {
 				AuthenticationFilter.ORIGINAL_VIEW_KEY);
 		request.getSession().removeAttribute(
 				AuthenticationFilter.ORIGINAL_VIEW_KEY);
+		if (originalView.equals("/login")) {
+			originalView = "/cms";
+		}
 		response.sendRedirect(originalView);
 	}
 

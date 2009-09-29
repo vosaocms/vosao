@@ -19,28 +19,12 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.utils;
+package org.vosao.service;
 
-import java.text.Format;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+public class ServiceException extends Exception {
 
-public class DateUtil {
+	public ServiceException(final String msg) {
+	    super(msg);
+	}
 
-	private static final Format formatter = new SimpleDateFormat("dd.MM.yyyy");
-	private static final Format dateTimeFormatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-	
-	public static String toString(final Date date) {
-		return formatter.format(date);
-	}
-	
-	public static String dateTimeToString(final Date date) {
-		return dateTimeFormatter.format(date);
-	}
-	
-	public static Date toDate(final String str) throws ParseException {
-		return (Date) formatter.parseObject(str);
-	}
-	
 }

@@ -24,6 +24,7 @@ package org.vosao.service.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jabsorb.JSONRPCBridge;
+import org.vosao.service.CommentService;
 import org.vosao.service.FileService;
 import org.vosao.service.FolderService;
 import org.vosao.service.FormService;
@@ -36,6 +37,7 @@ public class ServiceImpl implements Service {
 	private FormService formService;
 	private FileService fileService;
 	private FolderService folderService;
+	private CommentService commentService;
 	
 	public void init() {
 		JSONRPCBridge.getGlobalBridge().registerObject("formService", 
@@ -44,6 +46,8 @@ public class ServiceImpl implements Service {
 				fileService);
 		JSONRPCBridge.getGlobalBridge().registerObject("folderService", 
 				folderService);
+		JSONRPCBridge.getGlobalBridge().registerObject("commentService", 
+				commentService);
 	}
 	
 	@Override
@@ -74,6 +78,16 @@ public class ServiceImpl implements Service {
 	@Override
 	public void setFolderService(FolderService bean) {
 		folderService = bean;
+	}
+
+	@Override
+	public CommentService getCommentService() {
+		return commentService;
+	}
+
+	@Override
+	public void setCommentService(CommentService bean) {
+		commentService = bean;		
 	}
 
 }

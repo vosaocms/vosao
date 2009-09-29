@@ -19,28 +19,37 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.utils;
+package org.vosao.business.impl.pagefilter;
 
-import java.text.Format;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.vosao.business.ConfigBusiness;
+import org.vosao.business.PageBusiness;
 
-public class DateUtil {
+public abstract class AbstractPageFilter implements PageFilter {
 
-	private static final Format formatter = new SimpleDateFormat("dd.MM.yyyy");
-	private static final Format dateTimeFormatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+	private ConfigBusiness configBusiness;
+	private PageBusiness pageBusiness;
 	
-	public static String toString(final Date date) {
-		return formatter.format(date);
+	public AbstractPageFilter(ConfigBusiness configBusiness,
+			PageBusiness pageBusiness) {
+		super();
+		this.configBusiness = configBusiness;
+		this.pageBusiness = pageBusiness;
+	}
+
+	public ConfigBusiness getConfigBusiness() {
+		return configBusiness;
 	}
 	
-	public static String dateTimeToString(final Date date) {
-		return dateTimeFormatter.format(date);
+	public void setConfigBusiness(ConfigBusiness configBusiness) {
+		this.configBusiness = configBusiness;
 	}
 	
-	public static Date toDate(final String str) throws ParseException {
-		return (Date) formatter.parseObject(str);
+	public PageBusiness getPageBusiness() {
+		return pageBusiness;
+	}
+	
+	public void setPageBusiness(PageBusiness pageBusiness) {
+		this.pageBusiness = pageBusiness;
 	}
 	
 }

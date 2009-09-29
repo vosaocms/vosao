@@ -35,6 +35,11 @@
         <view-id>/fileBrowser.jsf</view-id>
     </url-mapping>
 
+    <url-mapping id="profile">
+        <pattern>/cms/profile</pattern>
+        <view-id>/profile.jsf</view-id>
+    </url-mapping>
+
     <!-- Pages -->
 
     <url-mapping id="pages">

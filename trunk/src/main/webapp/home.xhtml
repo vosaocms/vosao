@@ -12,13 +12,39 @@
 
 <ui:define name="body">
 
-<ul>
-    <li><a href="/cms/pages">Content pages</a></li>
-    <li><a href="/cms/templates">Design templates</a></li>
-    <li><a href="/cms/folders">File resources storage</a></li>
-    <li><a href="/cms/config">Site configuration</a></li>
-    <li><a href="/cms/plugins">Plugins</a></li>
-</ul>
+<div id="main-panel">
+    <div>
+        <img src="/static/images/document_edit.png" />
+        <a href="/cms/pages">Content pages</a>
+        <p>Here you can edit site content. All content viewed as a tree of pages.
+           You can change various page properties including design template 
+           binding. 
+        </p>
+    </div>
+    <div>
+        <img src="/static/images/file_edit.png" />
+        <a href="/cms/templates">Design templates</a>
+        <p>Here you can edit design templates. Site can have several design 
+           templates. For every page you can select separate template.</p>
+    </div>
+    <div>
+        <img src="/static/images/diskette.png" />
+        <a href="/cms/folders">File resources storage</a>
+        <p>Here you can edit site resources. Resource could be any file
+           including those used in design templates or referenced from pages</p>
+    </div>
+    <div>
+        <img src="/static/images/computer.png" />
+        <a href="/cms/config">Site configuration</a>
+        <p>Here you can change site configuration. Site domain, email,
+           Google Analytics Id, comments template, comments email.</p>
+    </div>
+    <div>
+        <img src="/static/images/shoppingcart.png" />
+        <a href="/cms/plugins">Plugins</a>
+        <p>Various plugins configuration. Forms.</p>
+    </div>
+</div>
 
 </ui:define>
 

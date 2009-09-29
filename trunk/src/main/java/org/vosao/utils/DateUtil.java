@@ -30,6 +30,7 @@ public class DateUtil {
 
 	private static final Format formatter = new SimpleDateFormat("dd.MM.yyyy");
 	private static final Format dateTimeFormatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+	private static final Format headerFormatter = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z");
 	
 	public static String toString(final Date date) {
 		return formatter.format(date);
@@ -42,5 +43,10 @@ public class DateUtil {
 	public static Date toDate(final String str) throws ParseException {
 		return (Date) formatter.parseObject(str);
 	}
+
+	public static String toHeaderString(final Date date) {
+		return headerFormatter.format(date);
+	}
+	
 	
 }

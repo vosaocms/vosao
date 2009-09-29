@@ -60,7 +60,7 @@ public class FileEntity implements Serializable {
 	private String mimeType;
     
 	@Persistent
-	private Date mdtime;
+	private Date lastModifiedTime;
 	
 	@Persistent
 	private int size;
@@ -75,7 +75,7 @@ public class FileEntity implements Serializable {
 		filename = aName;
 		folderId = aFolderId;
 		mimeType = aMimeType;
-		mdtime = aMdttime;
+		lastModifiedTime = aMdttime;
 		size = aSize;
 	}
 	
@@ -83,7 +83,7 @@ public class FileEntity implements Serializable {
 		setTitle(entity.getTitle());
 		setFilename(entity.getFilename());
 		setFolderId(entity.getFolderId());
-		setMdtime(entity.getMdtime());
+		setLastModifiedTime(entity.getLastModifiedTime());
 		setMimeType(entity.getMimeType());
 		setSize(entity.getSize());
 	}
@@ -128,12 +128,12 @@ public class FileEntity implements Serializable {
 		this.mimeType = mimeType;
 	}
 
-	public Date getMdtime() {
-		return mdtime;
+	public Date getLastModifiedTime() {
+		return lastModifiedTime;
 	}
 
-	public void setMdtime(Date mdtime) {
-		this.mdtime = mdtime;
+	public void setLastModifiedTime(Date aLastModifiedTime) {
+		this.lastModifiedTime = aLastModifiedTime;
 	}
 
 	public int getSize() {

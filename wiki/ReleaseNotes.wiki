@@ -1,7 +1,7 @@
 #labels Featured
 = Release Notes =
 
-== version 0.0.2 02.10.2009
+== version 0.0.2 02.10.2009 ==
 
 Version upgrade steps:
 

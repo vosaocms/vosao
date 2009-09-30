@@ -209,4 +209,17 @@ public class PageEntity implements Serializable {
 		this.commentsEnabled = commentsEnabled;
 	}
 	
+	public boolean equals(Object object) {
+		if (object instanceof PageEntity) {
+			PageEntity entity = (PageEntity)object;
+			if (getId() == null && entity.getId() == null) {
+				return true;
+			}
+			if (getId() != null && getId().equals(entity.getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }

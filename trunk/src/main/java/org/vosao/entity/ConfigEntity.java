@@ -189,5 +189,19 @@ public class ConfigEntity implements Serializable {
 	public void setCommentsTemplate(String commentsTemplate) {
 		this.commentsTemplate = new Text(commentsTemplate);
 	}
+
+	public boolean equals(Object object) {
+		if (object instanceof ConfigEntity) {
+			ConfigEntity entity = (ConfigEntity)object;
+			if (getId() == null && entity.getId() == null) {
+				return true;
+			}
+			if (getId() != null && getId().equals(entity.getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	
 }

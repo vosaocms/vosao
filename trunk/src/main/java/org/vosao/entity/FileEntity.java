@@ -153,5 +153,17 @@ public class FileEntity implements Serializable {
 		return false;
 	}
 	
+	public boolean equals(Object object) {
+		if (object instanceof FileEntity) {
+			FileEntity entity = (FileEntity)object;
+			if (getId() == null && entity.getId() == null) {
+				return true;
+			}
+			if (getId() != null && getId().equals(entity.getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 }

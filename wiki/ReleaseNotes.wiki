@@ -1,5 +1,25 @@
 #labels Featured
 = Release Notes =
 
+== version 0.0.2 02.09.2009
+
+Version upgrade steps:
+
+ # In application running previous version make site export
+ # Upload version 0.0.2 and select it as the default version
+ # Completely clear the database
+ # run setup url /setup
+ # Import previously exported site 
+
+Implemented and fixed issues:
+
+ # [http://code.google.com/p/vosao/issues/detail?id=8&can=1 Add resources caching on client side.]
+ # [http://code.google.com/p/vosao/issues/detail?id=23&can=1 Add captcha service]
+ # [http://code.google.com/p/vosao/issues/detail?id=24&can=1 Add anonymous comments feature to pages.]
+ # [http://code.google.com/p/vosao/issues/detail?id=28&can=1 Add profile dialog ]
+ # [http://code.google.com/p/vosao/issues/detail?id=31&can=1 Implement autosave for page and template editor]
+ # [http://code.google.com/p/vosao/issues/detail?id=32&can=1 Add export from folder. ]
+
+
 == version 0.0.1 25.09.2009 ==
  * first prototype release 

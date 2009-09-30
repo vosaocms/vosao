@@ -51,8 +51,8 @@ public class SiteFilter implements Filter {
 		"/static",
 		"/login",
 		"/file",
-		"/init",
-		"/initCron",
+		"/setup",
+		"/hotCron",
 		"/JSON-RPC"};
     
     private FilterConfig config = null;

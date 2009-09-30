@@ -47,7 +47,6 @@ public class BusinessImpl implements Business {
 
 	private static final Log log = LogFactory.getLog(BusinessImpl.class);
 
-	private boolean initialized;
 	private Cache cache;
 	
 	private PageBusiness pageBusiness;
@@ -132,16 +131,6 @@ public class BusinessImpl implements Business {
 	@Override
 	public void setImportExportBusiness(ImportExportBusiness bean) {
 		importExportBusiness = bean;
-	}
-
-	@Override
-	public boolean isInitialized() {
-		return initialized;
-	}
-
-	@Override
-	public void setInitialized(boolean initialized) {
-		this.initialized = initialized;
 	}
 
 	@Override

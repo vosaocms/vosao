@@ -3,6 +3,13 @@
 
 == version 0.0.2 02.10.2009 ==
 
+In this version database schema was changes ans unfortunately complete database clear is required. Please follow these instructions to upgrade running sites.
+
+Clean installation:
+
+ # Upload version 0.0.2 and select it as the default version
+ # run setup url /setup
+
 Version upgrade steps:
 
  # In application running previous version make site export

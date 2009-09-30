@@ -11,7 +11,6 @@
 
 <script type="text/javascript">
 
-var jsonrpc;
 var folderId = '#{folderBean.current.id}';
 var files = '';
 
@@ -24,17 +23,8 @@ $(document).ready(function () {
 $(function() {
     $("#tabs").tabs();
     $("#file-upload").dialog({ width: 400, autoOpen: false });
-    jsonrpc = new JSONRpcClient(jsonInitCallback, "/JSON-RPC/");
+    initJSONRpc(loadFiles);
 });
-
-function jsonInitCallback(result, e) {
-    if (e) {
-        errorMessage("Error dusing initializing JSON-RPC." + e);
-    }
-    else {
-        loadFiles();
-    }
-}
 
 function onUpload() {
     $("#file-upload").dialog("open");

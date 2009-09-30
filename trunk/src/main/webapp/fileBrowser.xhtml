@@ -13,21 +13,11 @@
     <script type="text/javascript">
         // <!--
 
-        var jsonrpc;
         var rootFolder;
 
         $(document).ready(function(){
-            jsonrpc = new JSONRpcClient(jsonInitCallback, "/JSON-RPC/");
+            initJSONRpc(loadFolderTree);
         });
-
-        function jsonInitCallback(result, e) {
-            if (e) {
-                errorMessage("Error dusing initializing JSON-RPC." + e);
-            }
-            else {
-                loadFolderTree();
-            }
-        }
 
         function loadFolderTree() {
             jsonrpc.folderService.getTree(function(rootItem) {

@@ -28,6 +28,7 @@ import org.vosao.service.CommentService;
 import org.vosao.service.FileService;
 import org.vosao.service.FolderService;
 import org.vosao.service.FormService;
+import org.vosao.service.PageService;
 import org.vosao.service.Service;
 
 public class ServiceImpl implements Service {
@@ -38,6 +39,7 @@ public class ServiceImpl implements Service {
 	private FileService fileService;
 	private FolderService folderService;
 	private CommentService commentService;
+	private PageService pageService;
 	
 	public void init() {
 		JSONRPCBridge.getGlobalBridge().registerObject("formService", 
@@ -48,6 +50,8 @@ public class ServiceImpl implements Service {
 				folderService);
 		JSONRPCBridge.getGlobalBridge().registerObject("commentService", 
 				commentService);
+		JSONRPCBridge.getGlobalBridge().registerObject("pageService", 
+				pageService);
 	}
 	
 	@Override
@@ -88,6 +92,16 @@ public class ServiceImpl implements Service {
 	@Override
 	public void setCommentService(CommentService bean) {
 		commentService = bean;		
+	}
+
+	@Override
+	public PageService getPageService() {
+		return pageService;
+	}
+
+	@Override
+	public void setPageService(PageService bean) {
+		pageService = bean;		
 	}
 
 }

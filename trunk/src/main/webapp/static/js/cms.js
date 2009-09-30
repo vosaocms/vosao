@@ -26,3 +26,18 @@ function isImage(filename) {
 function getFileExt(filename) {
 	return filename.substring(filename.lastIndexOf('.') + 1, filename.length);
 }
+
+var jsonrpc;
+
+function initJSONRpc(func) {
+    jsonrpc = new JSONRpcClient(function(result, e) {
+        if (e) {
+            errorMessage("Error dusing initializing JSON-RPC." + e);
+        }
+        else {
+            if (func != undefined) {
+                func();
+            }
+        }
+    }, "/JSON-RPC/");
+}

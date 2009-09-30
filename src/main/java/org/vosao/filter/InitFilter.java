@@ -32,12 +32,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.vosao.business.Business;
 import org.vosao.business.SetupBean;
 
 
@@ -45,15 +43,12 @@ public class InitFilter implements Filter {
     
     private static final Log log = LogFactory.getLog(SiteFilter.class);
 
-    //private static final String SESSION_INITURL_PARAM = "initUrl";
-    //private static final String INIT_URL = "/init";
-    private static final String INIT_CRON_URL = "/initCron";
+    private static final String SETUP_URL = "/setup";
+    private static final String HOT_CRON_URL = "/hotCron";
     
     private FilterConfig config = null;
     private ServletContext servletContext = null;
   
-    private Business business;
-    
     public InitFilter() {
     }
   
@@ -62,60 +57,34 @@ public class InitFilter implements Filter {
         servletContext = config.getServletContext();
     }
     
-    private void prepare() {
-        business = (Business)WebApplicationContextUtils
-    		.getRequiredWebApplicationContext(servletContext)
-    		.getBean("business");
-    }
-    
     public void doFilter(ServletRequest request, ServletResponse response, 
-        FilterChain chain) throws IOException, ServletException {
-        
-    	prepare();
+    		FilterChain chain) throws IOException, ServletException {
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
         HttpServletResponse httpResponse = (HttpServletResponse)response;
-    	//HttpSession session = httpRequest.getSession(true); 
         String url = httpRequest.getServletPath();
-        if (!business.isInitialized() && url.equals(INIT_CRON_URL)) {
+        if (url.equals(SETUP_URL)) {
             SetupBean setupBean = (SetupBean)WebApplicationContextUtils
             	.getRequiredWebApplicationContext(servletContext)
             	.getBean("setupBean");
         	setupBean.setup();
-        	business.setInitialized(true);
-        	writeOk(httpResponse);
+        	writeContent(httpResponse, "Setup was successfully completed.");
         	return;
         }
-        if (url.equals(INIT_CRON_URL)) {
-        	writeOk(httpResponse);
+        if (url.equals(HOT_CRON_URL)) {
+        	writeContent(httpResponse, "OK");
         	return;
         }
-        /*if (!business.isInitialized() && !url.equals(INIT_URL)) {
-        	session.setAttribute(SESSION_INITURL_PARAM, url);
-        	httpResponse.sendRedirect(INIT_URL);
-        	return;
-        }
-        if (!business.isInitialized() && url.equals(INIT_URL)) {
-        	String initUrl = "/";
-        	if (session.getAttribute(SESSION_INITURL_PARAM) != null) {
-            	initUrl = (String) session.getAttribute(SESSION_INITURL_PARAM);
-        	}
-            SetupBean setupBean = (SetupBean)WebApplicationContextUtils
-            	.getRequiredWebApplicationContext(servletContext)
-            	.getBean("setupBean");
-        	setupBean.setup();
-        	business.setInitialized(true);        	
-        	httpResponse.sendRedirect(initUrl);
-        	return;
-        }*/
         chain.doFilter(request, response);
     }
     
     public void destroy() {
     }
     
-    private void writeOk(HttpServletResponse response) throws IOException {
+    private void writeContent(HttpServletResponse response, String content)
+    		throws IOException {
     	response.setContentType("text/html");
     	response.setCharacterEncoding("UTF-8");
-    	response.getWriter().append("<html><body>Setup successfully completed.</body></html>");
+    	response.getWriter().append("<html><body>" + content + "</body></html>");
     }
+    
 }

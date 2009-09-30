@@ -107,4 +107,17 @@ public class FolderEntity implements Serializable {
 		this.title = title;
 	}
 
+	public boolean equals(Object object) {
+		if (object instanceof FolderEntity) {
+			FolderEntity entity = (FolderEntity)object;
+			if (getId() == null && entity.getId() == null) {
+				return true;
+			}
+			if (getId() != null && getId().equals(entity.getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }

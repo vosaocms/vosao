@@ -107,4 +107,17 @@ public class TemplateEntity implements Serializable {
 		this.url = url;
 	}
 
+	public boolean equals(Object object) {
+		if (object instanceof TemplateEntity) {
+			TemplateEntity entity = (TemplateEntity)object;
+			if (getId() == null && entity.getId() == null) {
+				return true;
+			}
+			if (getId() != null && getId().equals(entity.getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }

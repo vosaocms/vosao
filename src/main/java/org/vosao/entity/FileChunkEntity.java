@@ -100,4 +100,17 @@ public class FileChunkEntity implements Serializable {
 		this.fileId = fileId;
 	}
 	
+	public boolean equals(Object object) {
+		if (object instanceof FileChunkEntity) {
+			FileChunkEntity entity = (FileChunkEntity)object;
+			if (getId() == null && entity.getId() == null) {
+				return true;
+			}
+			if (getId() != null && getId().equals(entity.getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }

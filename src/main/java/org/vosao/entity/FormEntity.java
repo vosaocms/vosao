@@ -111,5 +111,18 @@ public class FormEntity implements Serializable {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
+	public boolean equals(Object object) {
+		if (object instanceof FormEntity) {
+			FormEntity entity = (FormEntity)object;
+			if (getId() == null && entity.getId() == null) {
+				return true;
+			}
+			if (getId() != null && getId().equals(entity.getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 }

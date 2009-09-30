@@ -20,13 +20,17 @@
  */
 package org.vosao.jsf;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -34,6 +38,7 @@ import org.apache.commons.logging.LogFactory;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
+import org.vosao.servlet.MimeType;
 
 
 public class FolderBean extends AbstractJSFBean implements Serializable {
@@ -146,6 +151,24 @@ public class FolderBean extends AbstractJSFBean implements Serializable {
 		setCurrentId(null);
 		return "pretty:folderCreate";
 	}
+	
+	public void export() throws IOException {
+		log.debug("Exporting folder " + current.getName());
+		HttpServletResponse response = JSFUtil.getResponse();
+		response.setContentType(MimeType.getContentTypeByExt("zip"));
+		String downloadFile = "exportFolder.zip";
+		response.addHeader("Content-Disposition", "attachment; filename=\"" 
+				+ downloadFile + "\"");
+		ServletOutputStream out = response.getOutputStream();
+		byte[] file = getBusiness().getImportExportBusiness().createExportFile(
+				current);
+		response.setContentLength(file.length);
+		out.write(file);
+		out.flush();
+		out.close();
+		FacesContext.getCurrentInstance().responseComplete();
+	}
+	
 	
 	public List<FolderEntity> getList() {
 		return list;

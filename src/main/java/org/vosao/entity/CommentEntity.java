@@ -131,4 +131,17 @@ public class CommentEntity implements Serializable {
 		this.disabled = disabled;
 	}
 	
+	public boolean equals(Object object) {
+		if (object instanceof CommentEntity) {
+			CommentEntity entity = (CommentEntity)object;
+			if (getId() == null && entity.getId() == null) {
+				return true;
+			}
+			if (getId() != null && getId().equals(entity.getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }

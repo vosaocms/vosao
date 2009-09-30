@@ -12,7 +12,7 @@
            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
-    <!-- Persistence -->
+    <!--======================== Persistence ================================-->
 
     <bean id="persistenceManagerFactory"  
         class="org.springframework.orm.jdo.LocalPersistenceManagerFactoryBean">  
@@ -28,7 +28,7 @@
         </property>
     </bean>  
     
-    <!-- DAO -->
+    <!--============================== DAO ==================================-->
     
     <bean id="abstractDao" abstract="true"
         class="org.vosao.dao.impl.AbstractDaoImpl">
@@ -70,7 +70,7 @@
         <property name="commentDao" ref="commentDao"/>  
     </bean>
 
-    <!-- Business -->
+    <!--=========================== Business ================================-->
 
     <bean id="abstractBusiness" abstract="true"
         class="org.vosao.business.impl.AbstractBusinessImpl">
@@ -115,7 +115,7 @@
         <property name="fileBusiness" ref="fileBusiness"/>  
     </bean>
 
-    <!-- JSON-RPC services -->
+    <!--======================= JSON-RPC services ===========================-->
 
     <bean id="abstractService" abstract="true"
         class="org.vosao.service.impl.AbstractServiceImpl">
@@ -143,7 +143,7 @@
         <property name="commentService" ref="commentService"/>  
     </bean>
 
-    <!-- JSF beans -->
+    <!--========================= JSF beans =================================-->
 
     <bean id="abstractJSFBean" abstract="true"
         class="org.vosao.jsf.AbstractJSFBean">
@@ -176,6 +176,10 @@
         parent="abstractJSFBean" />
 
     <bean id="fileBean" class="org.vosao.jsf.FileBean" 
+        init-method="init" scope="request"
+        parent="abstractJSFBean" />
+
+    <bean id="profileBean" class="org.vosao.jsf.ProfileBean" 
         init-method="init" scope="request"
         parent="abstractJSFBean" />
 

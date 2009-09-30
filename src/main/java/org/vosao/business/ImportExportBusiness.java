@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.zip.ZipInputStream;
 
 import org.dom4j.DocumentException;
+import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
 
 public interface ImportExportBusiness {
@@ -60,5 +61,13 @@ public interface ImportExportBusiness {
 	 */
 	List<String> importZip(ZipInputStream in) throws IOException,
 		DocumentException;
+
+	/**
+	 * Create export file for folder with files and subfolders.
+	 * @param folder - folder to export.
+	 * @return zip file as byte array
+	 * @throws IOException
+	 */
+	byte[] createExportFile(final FolderEntity folder) throws IOException;
 	
 }

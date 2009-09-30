@@ -111,5 +111,18 @@ public class UserEntity implements Serializable {
 	public void setRole(UserRole role) {
 		this.role = role;
 	}
+
+	public boolean equals(Object object) {
+		if (object instanceof UserEntity) {
+			UserEntity entity = (UserEntity)object;
+			if (getId() == null && entity.getId() == null) {
+				return true;
+			}
+			if (getId() != null && getId().equals(entity.getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 }

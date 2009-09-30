@@ -559,5 +559,32 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 	public void setConfigBusiness(ConfigBusiness bean) {
 		configBusiness = bean;
 	}
+
+	@Override
+	public byte[] createExportFile(FolderEntity folder) throws IOException {
+		ByteArrayOutputStream outData = new ByteArrayOutputStream();
+		ZipOutputStream out = new ZipOutputStream(outData);
+		out.putNextEntry(new ZipEntry(THEME_FOLDER));
+		TreeItemDecorator<FolderEntity> root = getFolderBusiness().getTree();
+		TreeItemDecorator<FolderEntity> exportFolder = root.find(folder);
+		if (exportFolder != null) {
+			String zipPath = removeRootSlash(getFolderBusiness()
+					.getFolderPath(folder, root)) + "/";
+			addResourcesFromFolder(out, exportFolder, zipPath);
+			out.close();
+			return outData.toByteArray();
+		}
+		else {
+			logger.error("folder decorator was not found " + folder.getName());
+			return null;
+		}
+	}
+	
+	private String removeRootSlash(final String path) {
+		if (path.charAt(0) == '/') {
+			return path.substring(1);
+		}
+		return path;
+	}
 	
 }

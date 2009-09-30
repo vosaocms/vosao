@@ -59,5 +59,19 @@ public class TreeItemDecorator<T> {
 		this.parent = parent;
 	}
 	
+	public TreeItemDecorator<T> find(final T entity) {
+		if (getEntity().equals(entity)) {
+			return this;
+		}
+		TreeItemDecorator<T> result = null;
+		for (TreeItemDecorator<T> child : getChildren()) {
+			result = child.find(entity);
+			if (result != null) {
+				return result;
+			}
+		}
+		return null;
+	}
+	
 	
 }

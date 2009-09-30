@@ -138,6 +138,9 @@
     <bean id="pageService" class="org.vosao.service.impl.PageServiceImpl"
         parent="abstractService" />
 
+    <bean id="templateService" class="org.vosao.service.impl.TemplateServiceImpl"
+        parent="abstractService" />
+
     <bean id="service" class="org.vosao.service.impl.ServiceImpl"
         init-method="init">  
         <property name="formService" ref="formService"/>  
@@ -145,6 +148,7 @@
         <property name="folderService" ref="folderService"/>  
         <property name="commentService" ref="commentService"/>  
         <property name="pageService" ref="pageService"/>  
+        <property name="templateService" ref="templateService"/>  
     </bean>
 
     <!--========================= JSF beans =================================-->

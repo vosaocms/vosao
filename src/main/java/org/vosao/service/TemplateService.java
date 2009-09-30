@@ -21,24 +21,8 @@
 
 package org.vosao.service;
 
-public interface Service {
+public interface TemplateService extends AbstractService {
 	
-	FormService getFormService();
-	void setFormService(FormService bean);
-
-	FileService getFileService();
-	void setFileService(FileService bean);
-
-	FolderService getFolderService();
-	void setFolderService(FolderService bean);
+	ServiceResponse updateContent(final String templateId, final String content);
 	
-	CommentService getCommentService();
-	void setCommentService(CommentService bean);
-
-	PageService getPageService();
-	void setPageService(PageService bean);
-
-	TemplateService getTemplateService();
-	void setTemplateService(TemplateService bean);
-
 }

@@ -19,26 +19,28 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service;
+package org.vosao.service.impl;
 
-public interface Service {
-	
-	FormService getFormService();
-	void setFormService(FormService bean);
+import org.vosao.entity.TemplateEntity;
+import org.vosao.service.ServiceResponse;
+import org.vosao.service.TemplateService;
 
-	FileService getFileService();
-	void setFileService(FileService bean);
+public class TemplateServiceImpl extends AbstractServiceImpl 
+		implements TemplateService {
 
-	FolderService getFolderService();
-	void setFolderService(FolderService bean);
-	
-	CommentService getCommentService();
-	void setCommentService(CommentService bean);
-
-	PageService getPageService();
-	void setPageService(PageService bean);
-
-	TemplateService getTemplateService();
-	void setTemplateService(TemplateService bean);
+	@Override
+	public ServiceResponse updateContent(String templateId, String content) {
+		TemplateEntity template = getDao().getTemplateDao().getById(templateId);
+		if (template != null) {
+			template.setContent(content);
+			getDao().getTemplateDao().save(template);
+			return ServiceResponse.createSuccessResponse(
+					"Template was successfully updated");
+		}
+		else {
+			return ServiceResponse.createErrorResponse("Template not found " 
+					+ templateId);
+		}
+	}
 
 }

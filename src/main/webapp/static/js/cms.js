@@ -1,3 +1,12 @@
+// ****************************** Constants ************************************
+
+/**
+ * Autosave timeout in seconds.
+ */
+var AUTOSAVE_TIMEOUT = 60;
+
+//************************** Utility functions *********************************
+
 function infoMessage(message) {
 	$("#wrapper .messages").html("<ul><li class=\"info-msg\">" + message + "</li></ul>");
 }
@@ -27,8 +36,18 @@ function getFileExt(filename) {
 	return filename.substring(filename.lastIndexOf('.') + 1, filename.length);
 }
 
+//****************************** JSON-RPC **************************************
+
+/**
+ * Global JSON-RPC entry point.
+ */
 var jsonrpc;
 
+/**
+ * Global JSON-RPC entry point initialization.
+ * @param func - optional callback to run after successful initialization.
+ * @return
+ */
 function initJSONRpc(func) {
     jsonrpc = new JSONRpcClient(function(result, e) {
         if (e) {

@@ -30,6 +30,7 @@ import org.vosao.service.FolderService;
 import org.vosao.service.FormService;
 import org.vosao.service.PageService;
 import org.vosao.service.Service;
+import org.vosao.service.TemplateService;
 
 public class ServiceImpl implements Service {
 
@@ -40,6 +41,7 @@ public class ServiceImpl implements Service {
 	private FolderService folderService;
 	private CommentService commentService;
 	private PageService pageService;
+	private TemplateService templateService;
 	
 	public void init() {
 		JSONRPCBridge.getGlobalBridge().registerObject("formService", 
@@ -52,6 +54,8 @@ public class ServiceImpl implements Service {
 				commentService);
 		JSONRPCBridge.getGlobalBridge().registerObject("pageService", 
 				pageService);
+		JSONRPCBridge.getGlobalBridge().registerObject("templateService", 
+				templateService);
 	}
 	
 	@Override
@@ -102,6 +106,16 @@ public class ServiceImpl implements Service {
 	@Override
 	public void setPageService(PageService bean) {
 		pageService = bean;		
+	}
+
+	@Override
+	public TemplateService getTemplateService() {
+		return templateService;
+	}
+
+	@Override
+	public void setTemplateService(TemplateService templateService) {
+		this.templateService = templateService;
 	}
 
 }

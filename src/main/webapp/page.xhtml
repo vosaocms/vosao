@@ -10,16 +10,25 @@
   <script type="text/javascript" src="/static/ckeditor/ckeditor.js"></script>
   <script type="text/javascript">
 
+    var pageId = '#{pageBean.current.id}';
+
+    //<!--
+    
+    var contentEditor;
+    var autosaveTimer = '';
+    
     $(function(){
-    	CKEDITOR.replace('form:content', {
+    	contentEditor = CKEDITOR.replace('form:content', {
         	height: 480,
     		filebrowserUploadUrl : '/cms/upload',
             filebrowserBrowseUrl : '/cms/fileBrowser'
         });
         $("#tabs").tabs();
+        $("#tabs").bind('tabsselect', tabSelected);       
         $(".datepicker").datepicker({dateFormat:'dd.mm.yy'});
+        initJSONRpc();
     });
-
+    
     function onTitleChange() {
         if ($(".form-url").length == 1) {
             var url = $(".form-url").val();
@@ -29,7 +38,43 @@
             }
         }
     }
-        
+
+    function tabSelected(event, ui) {
+        if (ui.index == 1) {
+            startAutosave();
+        }
+        else {
+            stopAutosave();
+        }            
+    }
+    
+    function startAutosave() {
+     	if (pageId != 'null') {
+            autosaveTimer = setInterval(saveContent, 60000);
+        }
+    }
+    
+    function stopAutosave() {
+        if (autosaveTimer != '') {
+            clearInterval(autosaveTimer);
+            autosaveTimer = '';
+        }
+    }
+
+    function saveContent() {
+        var content = $("#ckeditor-form-row iframe").contents().find("body").html();
+        jsonrpc.pageService.updateContent(function(r) {
+            if (r.result == 'success') {
+                var now = new Date();
+                infoMessage(r.message + " " + now);
+            }
+            else {
+                errorMessage(r.message);
+            }            
+        },pageId, content);        
+    }
+    
+    // -->    
   </script>
     
 </ui:define>
@@ -92,8 +137,9 @@
 
 <div id="tab-2">
 
-<div class="form-row">
-    <h:inputTextarea id="content" rows="20" cols="80" value="#{pageBean.current.content}" />
+<div class="form-row" id="ckeditor-form-row">
+    <h:inputTextarea id="content" rows="20" cols="80" 
+        value="#{pageBean.current.content}" />
 </div>
 
 <div class="buttons">

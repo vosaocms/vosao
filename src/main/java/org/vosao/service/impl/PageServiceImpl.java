@@ -19,23 +19,28 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service;
+package org.vosao.service.impl;
 
-public interface Service {
-	
-	FormService getFormService();
-	void setFormService(FormService bean);
+import org.vosao.entity.PageEntity;
+import org.vosao.service.PageService;
+import org.vosao.service.ServiceResponse;
 
-	FileService getFileService();
-	void setFileService(FileService bean);
+public class PageServiceImpl extends AbstractServiceImpl 
+		implements PageService {
 
-	FolderService getFolderService();
-	void setFolderService(FolderService bean);
-	
-	CommentService getCommentService();
-	void setCommentService(CommentService bean);
-
-	PageService getPageService();
-	void setPageService(PageService bean);
+	@Override
+	public ServiceResponse updateContent(String pageId, String content) {
+		PageEntity page = getDao().getPageDao().getById(pageId);
+		if (page != null) {
+			page.setContent(content);
+			getDao().getPageDao().save(page);
+			return ServiceResponse.createSuccessResponse(
+					"Page was successfully updated");
+		}
+		else {
+			return ServiceResponse.createErrorResponse("Page not found " 
+					+ pageId);
+		}
+	}
 
 }

@@ -3,6 +3,6 @@
   <cron>
     <url>/initCron</url>
     <description>Keep jetty hot</description>
-    <schedule>every 5 minutes</schedule>
+    <schedule>every 1 minutes</schedule>
   </cron>
 </cronentries>

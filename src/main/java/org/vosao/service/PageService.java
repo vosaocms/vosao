@@ -21,21 +21,8 @@
 
 package org.vosao.service;
 
-public interface Service {
+public interface PageService extends AbstractService {
 	
-	FormService getFormService();
-	void setFormService(FormService bean);
-
-	FileService getFileService();
-	void setFileService(FileService bean);
-
-	FolderService getFolderService();
-	void setFolderService(FolderService bean);
+	ServiceResponse updateContent(final String pageId, final String content);
 	
-	CommentService getCommentService();
-	void setCommentService(CommentService bean);
-
-	PageService getPageService();
-	void setPageService(PageService bean);
-
 }

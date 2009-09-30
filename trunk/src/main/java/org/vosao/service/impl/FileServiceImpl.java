@@ -21,10 +21,12 @@
 
 package org.vosao.service.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
+import org.vosao.entity.PageEntity;
 import org.vosao.service.FileService;
 import org.vosao.service.ServiceResponse;
 
@@ -52,6 +54,26 @@ public class FileServiceImpl extends AbstractServiceImpl
 					folder) + "/" + file.getFilename();
 		}
 		return "";
+	}
+
+	@Override
+	public ServiceResponse updateContent(String fileId, String content) {
+		FileEntity file = getDao().getFileDao().getById(fileId);
+		if (file != null) {
+			try {
+				getDao().getFileDao().saveFileContent(file, 
+						content.getBytes("UTF-8"));
+				return ServiceResponse.createSuccessResponse(
+						"File was successfully updated");
+			} catch (UnsupportedEncodingException e) {
+				return ServiceResponse.createErrorResponse(
+						"Error! Unsupported encoding.");
+			}
+		}
+		else {
+			return ServiceResponse.createErrorResponse("File not found " 
+					+ fileId);
+		}
 	}
 
 }

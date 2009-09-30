@@ -50,7 +50,9 @@
     
     function startAutosave() {
      	if (pageId != 'null') {
-            autosaveTimer = setInterval(saveContent, 60000);
+     	    if (autosaveTimer == '') {
+     	        autosaveTimer = setInterval(saveContent, AUTOSAVE_TIMEOUT * 1000);
+     	    }
         }
     }
     
@@ -71,7 +73,16 @@
             else {
                 errorMessage(r.message);
             }            
-        },pageId, content);        
+        }, pageId, content);        
+    }
+
+    function onAutosave() {
+        if ($("#autosave:checked").length > 0) {
+            startAutosave(); 
+        }
+        else {
+            stopAutosave();
+        }
     }
     
     // -->    
@@ -136,6 +147,10 @@
 </div>
 
 <div id="tab-2">
+
+<div>
+  <input id="autosave" type="checkbox" checked="checked" onchange="onAutosave()"> Autosave</input>
+</div>
 
 <div class="form-row" id="ckeditor-form-row">
     <h:inputTextarea id="content" rows="20" cols="80" 

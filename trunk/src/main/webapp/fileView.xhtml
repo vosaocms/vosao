@@ -8,11 +8,66 @@
 <ui:define name="head">
 
 <script type="text/javascript">
-// <!--
-$(function() {
-    $("#tabs").tabs();
-});
-//-->
+
+    var fileId = '#{fileBean.current.id}';
+
+    // <!--
+
+    var autosaveTimer = '';
+
+    $(function() {
+        $("#tabs").tabs();
+        $("#tabs").bind('tabsselect', tabSelected);       
+        initJSONRpc();
+    });
+
+    function tabSelected(event, ui) {
+        if (ui.index == 1) {
+            startAutosave();
+        }
+        else {
+            stopAutosave();
+        }            
+    }
+
+    function startAutosave() {
+        if (fileId != 'null') {
+            if (autosaveTimer == '') {
+                autosaveTimer = setInterval(saveContent, AUTOSAVE_TIMEOUT * 1000);
+            }
+        }
+    }
+    
+    function stopAutosave() {
+        if (autosaveTimer != '') {
+            clearInterval(autosaveTimer);
+            autosaveTimer = '';
+        }
+    }
+
+    function saveContent() {
+        var content = $("textarea").val();
+        jsonrpc.fileService.updateContent(function(r) {
+            if (r.result == 'success') {
+                var now = new Date();
+                infoMessage(r.message + " " + now);
+            }
+            else {
+                errorMessage(r.message);
+            }            
+        }, fileId, content);        
+    }
+
+    function onAutosave() {
+        if ($("#autosave:checked").length > 0) {
+            startAutosave(); 
+        }
+        else {
+            stopAutosave();
+        }
+    }
+
+    //-->
 </script>
 
 </ui:define>
@@ -79,6 +134,10 @@ $(function() {
 
 <h:panelGroup rendered="#{fileBean.editContent}">
 <div id="tab-2">
+
+<div>
+  <input id="autosave" type="checkbox" checked="checked" onchange="onAutosave()"> Autosave</input>
+</div>
 
 <div class="form-row">
     <h:inputTextarea id="content" rows="20" cols="80" value="#{fileBean.content}" />

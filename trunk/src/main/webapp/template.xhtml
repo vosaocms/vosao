@@ -6,6 +6,60 @@
   template="WEB-INF/facelets/layout.xhtml">
 
 <ui:define name="head">
+
+  <script type="text/javascript">
+
+    var templateId = '#{templateBean.current.id}';
+
+    //<!--
+    
+    var autosaveTimer = '';
+    
+    $(function(){
+        initJSONRpc();
+        startAutosave();
+    });
+    
+    function startAutosave() {
+        if (templateId != 'null') {
+            if (autosaveTimer == '') {
+                autosaveTimer = setInterval(saveContent, AUTOSAVE_TIMEOUT * 1000);
+            }
+        }
+    }
+    
+    function stopAutosave() {
+        if (autosaveTimer != '') {
+            clearInterval(autosaveTimer);
+            autosaveTimer = '';
+        }
+    }
+
+    function saveContent() {
+        var content = $("textarea").val();
+        jsonrpc.templateService.updateContent(function(r) {
+            if (r.result == 'success') {
+                var now = new Date();
+                infoMessage(r.message + " " + now);
+            }
+            else {
+                errorMessage(r.message);
+            }            
+        },templateId, content);        
+    }
+
+    function onAutosave() {
+        if ($("#autosave:checked").length > 0) {
+            startAutosave(); 
+        }
+        else {
+            stopAutosave();
+        }
+    }
+    
+    // -->    
+  </script>
+
 </ui:define>
 
 <ui:define name="title">Template</ui:define>
@@ -25,6 +79,9 @@
     <h:inputText value="#{templateBean.current.url}" />
 </div>
 <div class="form-row">
+    <div>
+        <input id="autosave" type="checkbox" checked="checked" onchange="onAutosave()"> Autosave</input>
+    </div>
     <h:inputTextarea rows="20" cols="80" value="#{templateBean.current.content}" />
 </div>
 

@@ -108,4 +108,64 @@ public class CommentDaoImpl extends AbstractDaoImpl implements CommentDao {
 		}
 	}
 	
+	private CommentEntity getById(final String id, PersistenceManager pm) {
+		if (id == null) {
+			return null;
+		}
+		try {
+			return pm.getObjectById(CommentEntity.class, id);
+		}
+		catch (NucleusObjectNotFoundException e) {
+			return null;
+		}
+	}	
+	
+	@Override
+	public void disable(List<String> ids) {
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			for (String id : ids) {
+				CommentEntity comment = getById(id, pm);
+				if (comment != null) {
+					comment.setDisabled(true);
+				}
+			}
+		}
+		finally {
+			pm.close();
+		}
+	}
+
+	@Override
+	public void enable(List<String> ids) {
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			for (String id : ids) {
+				CommentEntity comment = getById(id, pm);
+				if (comment != null) {
+					comment.setDisabled(false);
+				}
+			}
+		}
+		finally {
+			pm.close();
+		}
+	}
+
+	@Override
+	public List<CommentEntity> getByPage(String pageId, boolean disabled) {
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			String query = "select from " + CommentEntity.class.getName()
+			    + " where pageId == pPageId && disabled == pDisabled"
+			    + " parameters String pPageId, boolean pDisabled";
+			List<CommentEntity> result = (List<CommentEntity>)pm.newQuery(query)
+				.execute(pageId, disabled);
+			return copy(result);
+		}
+		finally {
+			pm.close();
+		}
+	}
+	
 }

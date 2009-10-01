@@ -36,10 +36,19 @@ content.xml
     <google-analytics>ETF-342343</google-analytics>
     <email>support@site.com</email>
     <domain>site.com</domain>
+    ... all site configs     
   </config>
   <pages>
     <page url="/" title="root" theme="simple">
       <content>root page content</content>
+      <comments>
+        <comment name="Andrey" publishDate="10.01.2009">
+           This is my comment content
+        <comment>
+        <comment name="Yuri" publishDate="11.01.2009">
+           This is second comment.
+        <comment>
+      </comments>
       <page name="about" title="About page">
         <content>about page content</content>
       </page>

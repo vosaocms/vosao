@@ -60,13 +60,13 @@ public class CommentServiceImpl extends AbstractServiceImpl
 	public ServiceResponse addComment(String name, String comment,
 			String pageId, String challenge, String response,
 			HttpServletRequest request) {
-
+		
 		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
 		ReCaptchaResponse recaptchaResponse = RecaptchaUtil.check(
 				config.getRecaptchaPublicKey(), 
 				config.getRecaptchaPrivateKey(), 
 				challenge, response, request);
-        if (recaptchaResponse.isValid()) {
+		if (recaptchaResponse.isValid()) {
         	try {
         		addComment(name, comment, pageId);
                 return ServiceResponse.createSuccessResponse(
@@ -84,13 +84,11 @@ public class CommentServiceImpl extends AbstractServiceImpl
 	
 	private void addComment(String name, String content, String pageId) 
 			throws ServiceException {
-		logger.debug("addComment " + name + " " + content + " " + pageId);		
 		PageEntity page = getDao().getPageDao().getById(pageId);
 		if (page == null) {
 			throw new ServiceException("Page not found. id = " + pageId);
 		}
 		getBusiness().getCommentBusiness().addComment(name, content, page);
-		logger.debug("comment added to db");		
 	}
 
 }

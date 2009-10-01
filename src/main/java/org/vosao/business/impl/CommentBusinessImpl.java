@@ -37,13 +37,14 @@ import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 public class CommentBusinessImpl extends AbstractBusinessImpl 
 	implements CommentBusiness {
 
-	private static final Log logger = LogFactory.getLog(FileBusinessImpl.class);
+	private static final Log logger = LogFactory.getLog(CommentBusinessImpl.class);
 
 	private static final String COMMENT_LETTER_SUBJECT = "New comment";
 	
 	@Override
 	public CommentEntity addComment(String name, String content, 
 			PageEntity page) {
+
 		ConfigEntity config = getDao().getConfigDao().getConfig();
 		String encodedContent = StringEscapeUtils.escapeHtml(content);
 		CommentEntity comment = new CommentEntity(name, encodedContent, 

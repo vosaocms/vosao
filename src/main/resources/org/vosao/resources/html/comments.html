@@ -1,6 +1,6 @@
 #set ( $comments = $service.getCommentsByPage($page.id))
 <div class="comments">
-  <div class="comments-label">Comments $comments.size()</div>
+  <div class="comments-label">Comments <span class="comments-num">$comments.size()</span></div>
 
   <div class="comments-block" style="display:none">
 
@@ -21,14 +21,13 @@
     <div id="recaptcha">&nbsp;</div>
     <div><input type="button" onclick="onAddComment()" value="Add comment"/></div>
   </form>
-
   </div>
+</div>
+
 <script type="text/javascript">
 
-var jsonrpc;
-
 $(function() {
-  jsonrpc = new JSONRpcClient("/JSON-RPC/");
+  initJSONRpc();
   Recaptcha.create('$config.recaptchaPublicKey',
     'recaptcha', {
         theme:'red', 
@@ -73,6 +72,7 @@ function loadComments(pageId) {
             }    
         }
         $(".comments-list").html(s);
+        $(".comments-num").html(r.list.length);
   }, pageId);
 }
 

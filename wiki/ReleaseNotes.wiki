@@ -1,7 +1,7 @@
 #labels Featured
 = Release Notes =
 
-== version 0.0.2 02.10.2009 ==
+== version 0.0.2 08.10.2009 ==
 
 In this version database schema was changes ans unfortunately complete database clear is required. Please follow these instructions to upgrade running sites.
 

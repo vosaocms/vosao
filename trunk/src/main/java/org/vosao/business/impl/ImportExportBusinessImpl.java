@@ -44,6 +44,7 @@ import org.vosao.business.FolderBusiness;
 import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.entity.CommentEntity;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
@@ -182,7 +183,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 					data.write(buffer, 0, len);
 				}
 				if (isSiteContent(entry)) {
-					createSiteContent(entry, data.toString("UTF-8"));
+					readSiteContent(entry, data.toString("UTF-8"));
 				}
 				else if (isThemeDescription(entry)) {
 					createThemeByDescription(entry, data.toString("UTF-8"));
@@ -382,10 +383,26 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 			pageElement.addAttribute("theme", template.getUrl());
 		}
 		Element contentElement = pageElement.addElement("content");
-		String contentEncoded = page.getEntity().getContent();
-		contentElement.addText(contentEncoded);
+		contentElement.addText(page.getEntity().getContent());
+		createCommentsXML(page, pageElement);
 		for (TreeItemDecorator<PageEntity> child : page.getChildren()) {
 			createPageXML(child, pageElement);
+		}
+	}
+	
+	private void createCommentsXML(TreeItemDecorator<PageEntity> page, 
+			Element pageElement) {
+		Element commentsElement = pageElement.addElement("comments");
+		List<CommentEntity> comments = getDao().getCommentDao().getByPage(
+				page.getEntity().getId());
+		for (CommentEntity comment : comments) {
+			Element commentElement = commentsElement.addElement("comment");
+			commentElement.addAttribute("name", comment.getName());
+			commentElement.addAttribute("disabled", String.valueOf(
+					comment.isDisabled()));
+			commentElement.addAttribute("publishDate", 
+				DateUtil.dateTimeToString(comment.getPublishDate()));
+			commentElement.setText(comment.getContent());
 		}
 	}
 
@@ -425,32 +442,32 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		return true;
 	}
 	
-	private void createSiteContent(final ZipEntry entry, final String xml) 
+	private void readSiteContent(final ZipEntry entry, final String xml) 
 			throws DocumentException {
 		Document doc = DocumentHelper.parseText(xml);
 		Element root = doc.getRootElement();
 		for (Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
             Element element = i.next();
             if (element.getName().equals("pages")) {
-            	createPages(element);
+            	readPages(element);
             }
             if (element.getName().equals("config")) {
-            	createConfigs(element);
+            	readConfigs(element);
             }
             if (element.getName().equals("forms")) {
-            	createForms(element);
+            	readForms(element);
             }
         }
 	}
 	
-	private void createPages(Element pages) {
+	private void readPages(Element pages) {
 		for (Iterator<Element> i = pages.elementIterator(); i.hasNext(); ) {
             Element pageElement = i.next();
-            createPage(pageElement, null);
+            readPage(pageElement, null);
 		}
 	}
 		
-	private void createPage(Element pageElement, PageEntity parentPage) {
+	private void readPage(Element pageElement, PageEntity parentPage) {
 		String parentId = null;
 		if (parentPage != null) {
 			parentId = parentPage.getId();
@@ -495,15 +512,44 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 			page = newPage;
 		}
 		getDao().getPageDao().save(page);
-		for (Iterator<Element> i = pageElement.elementIterator(); i.hasNext(); ) {
+		for (Iterator<Element> i = pageElement.elementIterator(); 
+				i.hasNext(); ) {
             Element element = i.next();
             if (element.getName().equals("page")) {
-            	createPage(element, page);
+            	readPage(element, page);
+            }
+            if (element.getName().equals("comments")) {
+            	readComments(element, page);
             }
 		}
 	}
-
-	private void createConfigs(Element configElement) {
+	
+	private void readComments(Element commentsElement, PageEntity page) {
+		for (Iterator<Element> i = commentsElement.elementIterator();
+				i.hasNext(); ) {
+            Element element = i.next();
+            if (element.getName().equals("comment")) {
+            	String name = element.attributeValue("name");
+            	Date publishDate = new Date();
+            	try {
+            		publishDate = DateUtil.dateTimeToDate(
+            				element.attributeValue("publishDate"));
+            	}
+            	catch (ParseException e) {
+            		logger.error("Error parsing comment publish date " 
+            				+ element.attributeValue("publishDate"));
+            	}
+            	boolean disabled = Boolean.valueOf(element.attributeValue(
+            			"disabled"));
+            	String content = element.getText();
+            	CommentEntity comment = new CommentEntity(name, content, 
+            			publishDate, page.getId(), disabled);
+            	getDao().getCommentDao().save(comment);
+            }
+		}
+	}
+	
+	private void readConfigs(Element configElement) {
 		ConfigEntity config = getConfigBusiness().getConfig();
 		for (Iterator<Element> i = configElement.elementIterator(); i.hasNext(); ) {
             Element element = i.next();
@@ -535,7 +581,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		getDao().getConfigDao().save(config);
 	}
 
-	private void createForms(Element formsElement) {
+	private void readForms(Element formsElement) {
 		for (Iterator<Element> i = formsElement.elementIterator(); i.hasNext(); ) {
             Element element = i.next();
             if (element.getName().equals("form")) {

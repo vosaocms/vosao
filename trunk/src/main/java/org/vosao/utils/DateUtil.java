@@ -40,8 +40,12 @@ public class DateUtil {
 		return dateTimeFormatter.format(date);
 	}
 	
+	public static Date dateTimeToDate(final String str) throws ParseException {
+		return (Date)dateTimeFormatter.parseObject(str);
+	}
+
 	public static Date toDate(final String str) throws ParseException {
-		return (Date) formatter.parseObject(str);
+		return (Date)formatter.parseObject(str);
 	}
 
 	public static String toHeaderString(final Date date) {

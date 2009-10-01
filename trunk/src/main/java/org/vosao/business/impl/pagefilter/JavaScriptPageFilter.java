@@ -46,7 +46,7 @@ public class JavaScriptPageFilter extends AbstractPageFilter
 		return "<head>\n" 
 		    +  "<script src=\"/static/js/jquery.js\" type=\"text/javascript\"></script>\n"
             +  "<script src=\"/static/js/jsonrpc.js\" type=\"text/javascript\"></script>\n"
-            +  "<script src=\"/static/js/cms.js\" type=\"text/javascript\"></script>\n"
+            +  "<script src=\"/static/js/vosao.js\" type=\"text/javascript\"></script>\n"
             +  "<script src=\"http://api.recaptcha.net/js/recaptcha_ajax.js\" type=\"text/javascript\" ></script>\n";
 	}
 

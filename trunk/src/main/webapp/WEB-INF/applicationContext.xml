@@ -92,6 +92,9 @@
     <bean id="fileBusiness" class="org.vosao.business.impl.FileBusinessImpl"
         parent="abstractBusiness" />  
 
+    <bean id="commentBusiness" class="org.vosao.business.impl.CommentBusinessImpl"
+        parent="abstractBusiness" />  
+        
     <bean id="pageBusiness" class="org.vosao.business.impl.PageBusinessImpl"
         init-method="init" parent="abstractBusiness">
         <property name="configBusiness" ref="configBusiness"/>  
@@ -113,6 +116,7 @@
         <property name="configBusiness" ref="configBusiness"/>  
         <property name="formBusiness" ref="formBusiness"/>  
         <property name="fileBusiness" ref="fileBusiness"/>  
+        <property name="commentBusiness" ref="commentBusiness"/>  
     </bean>
 
     <!--======================= JSON-RPC services ===========================-->

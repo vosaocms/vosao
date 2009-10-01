@@ -159,6 +159,7 @@
 </div>
 
 <div class="buttons">
+    <input type="button" value="Save and continue" onclick="saveContent()" />
     <h:commandButton value="Save" action="#{pageBean.update}" />
     <h:commandButton value="Preview" action="#{pageBean.preview}" 
         rendered="#{pageBean.edit}"/>

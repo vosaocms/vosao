@@ -143,6 +143,7 @@
     <h:inputTextarea id="content" rows="20" cols="80" value="#{fileBean.content}" />
 </div>
 <div class="buttons">
+    <input type="button" value="Save and continue" onclick="saveContent()" />
     <h:commandButton value="Save" action="#{fileBean.update}" />
     <h:commandButton value="Cancel" action="#{fileBean.cancelEdit}" />
 </div>    

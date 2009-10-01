@@ -45,7 +45,7 @@
             else {
                 errorMessage(r.message);
             }            
-        },templateId, content);        
+        }, templateId, content);        
     }
 
     function onAutosave() {
@@ -86,6 +86,7 @@
 </div>
 
 <div class="buttons">
+    <input type="button" value="Save and continue" onclick="saveContent()" />
     <h:commandButton value="Save" action="#{templateBean.update}" />
     <h:commandButton value="Cancel" action="#{templateBean.cancelEdit}" />
 </div>

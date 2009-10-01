@@ -22,6 +22,7 @@
 package org.vosao.service.impl;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.List;
 
 import org.vosao.entity.FileEntity;
@@ -61,8 +62,16 @@ public class FileServiceImpl extends AbstractServiceImpl
 		FileEntity file = getDao().getFileDao().getById(fileId);
 		if (file != null) {
 			try {
-				getDao().getFileDao().saveFileContent(file, 
-						content.getBytes("UTF-8"));
+				byte[] data = content.getBytes("UTF-8");
+				file.setLastModifiedTime(new Date());
+				file.setSize(data.length);
+				getDao().getFileDao().save(file);
+				getDao().getFileDao().saveFileContent(file, data);
+				FolderEntity folder = getDao().getFolderDao().getById(
+						file.getFolderId());
+				String cacheUrl = getBusiness().getFolderBusiness()
+						.getFolderPath(folder) + "/" + file.getFilename();
+				getBusiness().getCache().remove(cacheUrl);
 				return ServiceResponse.createSuccessResponse(
 						"File was successfully updated");
 			} catch (UnsupportedEncodingException e) {

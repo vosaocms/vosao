@@ -60,20 +60,20 @@ public class PageRenderDecorator {
 	}
 
 	public String getContent() {
-		if (isCommentsEnabled()) {
-			return page.getContent() + createCommentsHtml();
-		}
 		return page.getContent();
 	}
 	
-	private String createCommentsHtml() {
-		String commentsTemplate = getConfigBusiness().getConfig()
+	public String getComments() {
+		if (isCommentsEnabled()) {
+			String commentsTemplate = getConfigBusiness().getConfig()
 				.getCommentsTemplate();
-		if (StringUtil.isEmpty(commentsTemplate)) {
-			logger.error("comments template is empty");
-			return "comments template is empty";
+			if (StringUtil.isEmpty(commentsTemplate)) {
+				logger.error("comments template is empty");
+				return "comments template is empty";
+			}
+			return getPageBusiness().render(commentsTemplate, page);
 		}
-		return getPageBusiness().render(commentsTemplate, page);
+		return "";
 	}
 
 	public String getTitle() {

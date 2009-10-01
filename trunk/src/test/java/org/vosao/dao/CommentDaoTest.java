@@ -43,7 +43,17 @@ public class CommentDaoTest extends AbstractDaoTest {
 		return comment;
 	}
 	
+	private CommentEntity addComment(final String name, final String content, 
+			final PageEntity page, final boolean disabled) {
+		CommentEntity comment = new CommentEntity(name, content, new Date(), 
+				page.getId());
+		comment.setDisabled(disabled);
+		getDao().getCommentDao().save(comment);
+		return comment;
+	}
+	
 	public void testSave() {
+		
 		PageEntity page = addPage("test");
 		CommentEntity comment = addComment("alex", "content", page);
 		CommentEntity comment2 = getDao().getCommentDao().getById(
@@ -97,5 +107,20 @@ public class CommentDaoTest extends AbstractDaoTest {
 		assertEquals(1, list.size());
 	}	
 	
+	public void testGetByPage2() {
+		PageEntity page = addPage("test");
+		PageEntity page2 = addPage("test2");
+		addComment("alex", "content1", page);
+		addComment("yuri", "content2", page2);
+		addComment("roma", "content3", page);
+		addComment("roma1", "content4", page, true);
+		addComment("roma2", "content5", page2, true);
+		addComment("roma3", "content6", page, true);
+		List<CommentEntity> list = getDao().getCommentDao().getByPage(
+				page.getId(), false);
+		assertEquals(2, list.size());
+		list = getDao().getCommentDao().getByPage(page2.getId(), false);
+		assertEquals(1, list.size());
+	}	
 	
 }

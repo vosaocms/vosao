@@ -92,7 +92,8 @@ public class VelocityServiceImpl implements VelocityService {
 	public List<CommentVO> getCommentsByPage(String pageId) {
 		PageEntity page = getDao().getPageDao().getById(pageId);
 		if (page != null) {
-			return CommentVO.create(getDao().getCommentDao().getByPage(pageId));
+			return CommentVO.create(getDao().getCommentDao().getByPage(pageId,
+					false));
 		}
 		return Collections.emptyList();
 	}

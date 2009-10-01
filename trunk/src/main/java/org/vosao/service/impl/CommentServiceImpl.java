@@ -22,17 +22,14 @@
 package org.vosao.service.impl;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import net.tanesha.recaptcha.ReCaptchaResponse;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vosao.entity.CommentEntity;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.service.CommentService;
@@ -51,7 +48,7 @@ public class CommentServiceImpl extends AbstractServiceImpl
 		PageEntity page = getDao().getPageDao().getById(pageId);
 		if (page != null) {
 			return CommentVO.create( 
-			    getDao().getCommentDao().getByPage(pageId));
+			    getDao().getCommentDao().getByPage(pageId, false));
 		}
 		return Collections.emptyList();
 	}

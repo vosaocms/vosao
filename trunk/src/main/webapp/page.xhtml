@@ -103,6 +103,7 @@
     <h:panelGroup rendered="#{pageBean.showChildren}">
     <li><a href="#tab-3">Children pages</a></li>
     </h:panelGroup>    
+    <li><a href="#tab-4">Comments</a></li>
 </ul>
 
 <div id="tab-1">
@@ -190,6 +191,33 @@
 
 </div>
 </h:panelGroup>
+
+<div id="tab-4">
+<h:dataTable value="#{pageBean.comments}" var="r" styleClass="form-table">
+    <h:column>
+        <f:facet name="header"></f:facet>    
+        <h:selectBooleanCheckbox value="#{pageBean.selectedComments[r.id]}"/>
+    </h:column>
+    <h:column>
+        <f:facet name="header" >Status</f:facet>    
+        <h:panelGroup rendered="#{r.disabled}">Disabled</h:panelGroup>
+        <h:panelGroup rendered="#{!r.disabled}">Enabled</h:panelGroup>
+    </h:column>
+    <h:column>
+        <f:facet name="header" >Name</f:facet>    
+        <h:outputText value="#{r.name}"/>
+    </h:column>
+    <h:column>
+        <f:facet name="header" >Content</f:facet>    
+        <h:outputText value="#{r.content}"/>
+    </h:column>
+</h:dataTable>
+<div class="buttons">
+    <h:commandButton value="Enable comments" action="#{pageBean.enableComments}" />
+    <h:commandButton value="Disable comments" action="#{pageBean.disableComments}" />
+    <h:commandButton value="Delete comments" action="#{pageBean.deleteComments}" />
+</div>    
+</div>
 
 </div>
 

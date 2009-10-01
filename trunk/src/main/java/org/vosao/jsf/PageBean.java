@@ -35,6 +35,7 @@ import javax.faces.model.SelectItem;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.entity.CommentEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.utils.DateUtil;
@@ -55,6 +56,8 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	private List<SelectItem> templates;
 	private String publishDate;
 	private Date dPublishDate;
+	private List<CommentEntity> comments;
+	private Map<String, Boolean> selectedComments;
 
 	public void init() {
 		initList();
@@ -70,6 +73,7 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 		initSelected();
 		initDecorator();
 		initTemplates();
+		initComments();
 	}
 	
 	private void initTemplates() {
@@ -98,6 +102,14 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 	private void initChildren() {
 		if (current != null) {
 			children = getDao().getPageDao().getByParent(current.getId());
+		}
+	}
+	
+	private void initComments() {
+		comments = getDao().getCommentDao().getByPage(current.getId()); 
+		selectedComments = new HashMap<String, Boolean>();
+		for (CommentEntity comment : comments) {
+			selectedComments.put(comment.getId(), false);
 		}
 	}
 	
@@ -153,6 +165,7 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 			current = getDao().getPageDao().getById(id);
 			publishDate = DateUtil.toString(current.getPublishDate());
 			initChildren();
+			initComments();
 			setImageUploadPageId(id);
 		}
 	}
@@ -178,6 +191,31 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 		setParent(current.getId());
 		setParentURL(current.getFriendlyURL());
 		return "pretty:pageCreate";
+	}
+	
+	public void enableComments() {
+		getDao().getCommentDao().enable(getSelectedCommentsIds());
+		initComments();
+	}
+	
+	public void disableComments() {
+		getDao().getCommentDao().disable(getSelectedCommentsIds());
+		initComments();
+	}
+
+	public void deleteComments() {
+		getDao().getCommentDao().remove(getSelectedCommentsIds());
+		initComments();
+	}
+	
+	private List<String> getSelectedCommentsIds() {
+		List<String> ids = new ArrayList<String>();
+		for (String id : selectedComments.keySet()) {
+			if (selectedComments.get(id)) {
+				ids.add(id);
+			}
+		}
+		return ids;
 	}
 	
 	public List<PageEntity> getList() {
@@ -297,5 +335,21 @@ public class PageBean extends AbstractJSFBean implements Serializable {
 
 	public void setPublishDate(String aPublishDate) {
 		publishDate = aPublishDate;
+	}
+
+	public List<CommentEntity> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<CommentEntity> comments) {
+		this.comments = comments;
+	}
+
+	public Map<String, Boolean> getSelectedComments() {
+		return selectedComments;
+	}
+
+	public void setSelectedComments(Map<String, Boolean> selectedComments) {
+		this.selectedComments = selectedComments;
 	}
 }

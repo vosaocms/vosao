@@ -26,6 +26,7 @@ $page.content
  * _String_ page.title  
  * _String_ page.friendlyUrl
  * _String_ page.content
+ * _String_ page.comments - will render comments if comments allowed for this page
 
 *Site global configuration*
 

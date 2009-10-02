@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  template="WEB-INF/facelets/layout.xhtml">
+
+<ui:define name="head">
+    
+    <script src="/static/js/jquery.form.js" language="javascript" />
+    <link rel="stylesheet" href="/static/css/config.css" type="text/css" />
+
+<script type="text/javascript">
+
+$(function(){
+    $("#import-dialog").dialog({ width: 400, autoOpen: false });
+    $("#tabs").tabs();
+});
+
+$(document).ready(function () {
+    $('#upload').ajaxForm(afterUpload);
+});
+
+function afterUpload(data) {
+    var s = data.split('::');
+    var result = s[1];
+    var msg = s[2]; 
+    if (result == 'success') {
+        msg = 'Success. File was successfully imported.';
+    }
+    else {
+        msg = "Error. " + msg;
+    }   
+    $("#import-dialog").dialog("close");
+    $("#afterUpload-dialog .message").text(msg);
+    $("#afterUpload-dialog").dialog();
+}
+
+function onImport() {
+    $("#import-dialog").dialog("open");
+}
+
+function onImportCancel() {
+    $("#import-dialog").dialog("close");
+}
+
+function onAfterUploadOk() {
+    window.location.reload();
+}
+
+</script>
+
+
+</ui:define>
+
+<ui:define name="title">Site configuration</ui:define>
+
+<ui:define name="body">
+
+<h:form>
+<div id="tabs">
+
+<ul>
+    <li><a href="#tab-1">Site configuration</a></li>
+    <li><a href="#tab-2">Comments</a></li>
+</ul>
+
+<div id="tab-1">
+
+<div class="form-row">
+    <label>Google Analytics ID</label>
+    <h:inputText value="#{configBean.config.googleAnalyticsId}" />
+</div>
+
+<div class="form-row">
+    <label>Site owner email</label>
+    <h:inputText value="#{configBean.config.siteEmail}" />
+</div>
+
+<div class="form-row">
+    <label>Site domain</label>
+    <h:inputText value="#{configBean.config.siteDomain}" />
+</div>
+
+<div class="form-row">
+    <label>reCaptcha service public key</label>
+    <h:inputText value="#{configBean.config.recaptchaPublicKey}" size="40"/>
+</div>
+
+<div class="form-row">
+    <label>reCaptcha service private key</label>
+    <h:inputText value="#{configBean.config.recaptchaPrivateKey}" size="40"/>
+</div>
+
+<div class="form-row">
+    <label>Editable resource files extensions</label>
+    <h:inputText value="#{configBean.config.editExt}" />
+</div>
+
+<div class="buttons">
+    <h:commandButton value="Save" action="#{configBean.save}" />
+    <h:commandButton value="Export" action="#{configBean.export}" />
+    <input type="button" onclick="onImport()" value="Import" />
+</div>
+
+</div>
+
+<div id="tab-2">
+
+<div class="form-row">
+    <label>Comments notification email</label>
+    <h:inputText value="#{configBean.config.commentsEmail}" />
+</div>
+
+<div class="form-row">
+    <label>Comments template</label>
+    <h:inputTextarea value="#{configBean.config.commentsTemplate}" cols="80" rows="20"/>
+</div>
+
+<div class="buttons">
+    <h:commandButton value="Save" action="#{configBean.save}" />
+</div>
+
+</div>
+
+</div>
+</h:form>
+
+<div id="import-dialog" title="Import site" style="display:none">
+<form id="upload" action="/cms/upload" method="post" enctype="multipart/form-data">
+    File upload:
+    <input type="hidden" name="fileType" value="import" />
+    <input type="file" name="uploadFile" />
+    <div class="buttons-dlg">
+        <input type="submit" value="Send" />
+        <input type="button" onclick="onImportCancel()" value="Cancel" />
+    </div>    
+</form>
+</div>
+
+<div id="afterUpload-dialog" style="display:none" title="Status window">
+    <p class="message"></p>
+    <div class="buttons-dlg">
+        <input type="button" onclick="onAfterUploadOk()" value="OK" />
+    </div>
+</div>
+
+</ui:define>
+
+</ui:composition>

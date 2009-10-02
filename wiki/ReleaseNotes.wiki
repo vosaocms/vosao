@@ -1,7 +1,7 @@
 #labels Featured
 = Release Notes =
 
-== version 0.0.2 08.10.2009 ==
+== version 0.0.2 02.10.2009 ==
 
 In this version database schema was changes ans unfortunately complete database clear is required. Please follow these instructions to upgrade running sites.
 
@@ -26,6 +26,9 @@ Implemented and fixed issues:
  # [http://code.google.com/p/vosao/issues/detail?id=28&can=1 Add profile dialog ]
  # [http://code.google.com/p/vosao/issues/detail?id=31&can=1 Implement autosave for page and template editor]
  # [http://code.google.com/p/vosao/issues/detail?id=32&can=1 Add export from folder. ]
+ # [http://code.google.com/p/vosao/issues/detail?id=34&can=1 Add comments import/export ]
+ # [http://code.google.com/p/vosao/issues/detail?id=35&can=1 Add comments moderation feature ]
+ # [http://code.google.com/p/vosao/issues/detail?id=36&can=1 Add "save and continue" button to text editors ]
 
 
 == version 0.0.1 25.09.2009 ==

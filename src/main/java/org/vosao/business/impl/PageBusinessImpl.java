@@ -51,14 +51,11 @@ import org.vosao.velocity.impl.VelocityServiceImpl;
 public class PageBusinessImpl extends AbstractBusinessImpl 
 	implements PageBusiness {
 
-	VelocityEngine ve;
 	ConfigBusiness configBusiness;
 	VelocityService velocityService;
 	VelocityPluginService velocityPluginService;
 
 	public void init() throws Exception {
-		ve = new VelocityEngine();
-		ve.init();
 		velocityService = new VelocityServiceImpl(getDao());
 		velocityPluginService = new VelocityPluginServiceImpl(getDao());
 	}
@@ -183,7 +180,8 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		StringWriter wr = new StringWriter();
 		String log = null;
 		try {
-			ve.evaluate(context, wr, log, template);
+			getSystemService().getVelocityEngine().evaluate(
+					context, wr, log, template);
 			return wr.toString();
 		} catch (ParseErrorException e) {
 			return e.toString();

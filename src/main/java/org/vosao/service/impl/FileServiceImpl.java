@@ -67,7 +67,7 @@ public class FileServiceImpl extends AbstractServiceImpl
 						file.getFolderId());
 				String cacheUrl = getBusiness().getFolderBusiness()
 						.getFolderPath(folder) + "/" + file.getFilename();
-				getBusiness().getCache().remove(cacheUrl);
+				getBusiness().getSystemService().getCache().remove(cacheUrl);
 				return ServiceResponse.createSuccessResponse(
 						"File was successfully updated");
 			} catch (UnsupportedEncodingException e) {

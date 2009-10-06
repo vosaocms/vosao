@@ -181,7 +181,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 		String filename = FilenameUtils.getName(path);
 		String cacheUrl = getBusiness().getFolderBusiness()
 				.getFolderPath(folder) + "/" + filename;
-		getBusiness().getCache().remove(cacheUrl);
+		getBusiness().getSystemService().getCache().remove(cacheUrl);
 		log.debug("Clear cache " + cacheUrl);
 		String ext = FilenameUtils.getExtension(path);
 		log.debug("path " + path + " filename " + filename + " ext " + ext);
@@ -253,7 +253,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 
 	private void clearResourcesCache(List<String> files) {
 		for (String file : files) {
-			getBusiness().getCache().remove(file);
+			getBusiness().getSystemService().getCache().remove(file);
 			log.debug("Clear cache " + file);
 		}
 	}

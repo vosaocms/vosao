@@ -23,10 +23,12 @@ package org.vosao.business.impl;
 
 import org.vosao.business.AbstractBusiness;
 import org.vosao.dao.Dao;
+import org.vosao.global.SystemService;
 
 public abstract class AbstractBusinessImpl implements AbstractBusiness {
 
 	private Dao dao;
+	private SystemService systemService;
 	
 	@Override
 	public Dao getDao() {
@@ -36,6 +38,16 @@ public abstract class AbstractBusinessImpl implements AbstractBusiness {
 	@Override
 	public void setDao(Dao aDao) {
 		dao = aDao;		
+	}
+
+	@Override
+	public SystemService getSystemService() {
+		return systemService;
+	}
+	
+	@Override
+	public void setSystemService(SystemService bean) {
+		systemService = bean;
 	}
 
 }

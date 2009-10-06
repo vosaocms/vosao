@@ -19,19 +19,17 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business;
+package org.vosao.global;
 
-import org.vosao.dao.Dao;
-import org.vosao.global.SystemService;
+import javax.cache.Cache;
 
-public interface AbstractBusiness {
+import org.apache.velocity.app.VelocityEngine;
+
+
+public interface SystemService {
 	
-	Dao getDao();
-	
-	void setDao(Dao dao);
-	
-	SystemService getSystemService();
-	
-	void setSystemService(SystemService bean);
+	Cache getCache();
+
+	VelocityEngine getVelocityEngine();
 	
 }

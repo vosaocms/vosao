@@ -21,12 +21,16 @@
 
 package org.vosao.business;
 
-import javax.cache.Cache;
 import javax.servlet.http.HttpServletRequest;
+
+import org.vosao.global.SystemService;
 
 
 public interface Business {
 	
+	SystemService getSystemService();
+	void setSystemService(final SystemService bean);
+
 	UserPreferences getUserPreferences();
 	UserPreferences getUserPreferences(final HttpServletRequest request);
 	void setUserPreferences(final UserPreferences userPreferences);
@@ -43,9 +47,6 @@ public interface Business {
 	ImportExportBusiness getImportExportBusiness();
 	void setImportExportBusiness(final ImportExportBusiness bean);
 	
-	Cache getCache();
-	void setCache(Cache cache);
-
 	ConfigBusiness getConfigBusiness();
 	void setConfigBusiness(final ConfigBusiness bean);
 

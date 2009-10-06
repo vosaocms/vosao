@@ -84,7 +84,7 @@ public class FileBean extends AbstractJSFBean implements Serializable {
 			getDao().getFileDao().save(current, content.getBytes("UTF-8"));
 			String cacheUrl = getBusiness().getFolderBusiness()
 				.getFolderPath(folder) + "/" + current.getFilename();
-			getBusiness().getCache().remove(cacheUrl);
+			getBusiness().getSystemService().getCache().remove(cacheUrl);
 			setCurrentId(current.getId());
 			initCurrent();
 			JSFUtil.addInfoMessage("File was successfully saved.");

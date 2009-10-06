@@ -42,14 +42,14 @@ import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.TemplateBusiness;
 import org.vosao.business.UserPreferences;
+import org.vosao.global.SystemService;
 import org.vosao.jsf.JSFUtil;
 
 public class BusinessImpl implements Business {
 
 	private static final Log log = LogFactory.getLog(BusinessImpl.class);
 
-	private Cache cache;
-	
+	private SystemService systemService;
 	private PageBusiness pageBusiness;
 	private FolderBusiness folderBusiness;
 	private TemplateBusiness templateBusiness;
@@ -61,12 +61,6 @@ public class BusinessImpl implements Business {
 	private FieldBusiness fieldBusiness;
 
 	public void init() {
-		try {
-            cache = CacheManager.getInstance().getCacheFactory().createCache(
-            		Collections.emptyMap());
-        } catch (CacheException e) {
-            log.error("Can't init cache manager.");
-        }
 	}
 	
 	@Override
@@ -136,16 +130,6 @@ public class BusinessImpl implements Business {
 	}
 
 	@Override
-	public Cache getCache() {
-		return cache;
-	}
-
-	@Override
-	public void setCache(Cache cache) {
-		this.cache = cache;
-	}
-	
-	@Override
 	public ConfigBusiness getConfigBusiness() {
 		return configBusiness;
 	}
@@ -192,6 +176,16 @@ public class BusinessImpl implements Business {
 	@Override
 	public void setFieldBusiness(FieldBusiness bean) {
 		fieldBusiness = bean;
+	}
+
+	@Override
+	public SystemService getSystemService() {
+		return systemService;
+	}
+
+	@Override
+	public void setSystemService(SystemService bean) {
+		systemService = bean;
 	}
 	
 	

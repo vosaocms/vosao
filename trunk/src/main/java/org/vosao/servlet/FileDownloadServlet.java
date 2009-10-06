@@ -79,7 +79,8 @@ public class FileDownloadServlet extends BaseSpringServlet {
 				folder.getEntity().getId(), filename); 
 		if (file != null) {
 			if (file.getSize() < CACHE_LIMIT) {
-				getBusiness().getCache().put(request.getPathInfo(), file);
+				getBusiness().getSystemService().getCache()
+					.put(request.getPathInfo(), file);
 			}
 			sendFile(file, request, response);
 		}
@@ -91,14 +92,14 @@ public class FileDownloadServlet extends BaseSpringServlet {
 	}
 	
 	private boolean isInCache(final String path) {
-		return getBusiness().getCache().containsKey(path);
+		return getBusiness().getSystemService().getCache().containsKey(path);
 	}
 	
 	private void sendFromCache(HttpServletRequest request, 
 			HttpServletResponse response) throws IOException {
         log.info("taking from memcache " + request.getPathInfo());
-		FileEntity file = (FileEntity) getBusiness().getCache().get(
-				request.getPathInfo());
+		FileEntity file = (FileEntity) getBusiness().getSystemService()
+				.getCache().get(request.getPathInfo());
 		sendFile(file, request, response);
 	}
 	

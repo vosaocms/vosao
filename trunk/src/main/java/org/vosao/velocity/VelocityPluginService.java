@@ -19,29 +19,10 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.velocity;
 
-import java.util.List;
-
-import org.vosao.entity.FormConfigEntity;
-import org.vosao.entity.FormEntity;
-
-public interface FormDao extends AbstractDao {
-
-	void save(final FormEntity entity);
+public interface VelocityPluginService {
 	
-	FormEntity getById(final String id);
-
-	FormEntity getByName(final String name);
-
-	List<FormEntity> select();
+	FormVelocityService getForm();
 	
-	void remove(final String id);
-	
-	void remove(final List<String> ids);
-	
-	FormConfigEntity getConfig();
-
-	void save(final FormConfigEntity entity);
-
 }

@@ -27,6 +27,8 @@ import javax.jdo.PersistenceManager;
 
 import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.FormDao;
+import org.vosao.entity.ConfigEntity;
+import org.vosao.entity.FormConfigEntity;
 import org.vosao.entity.FormEntity;
 
 public class FormDaoImpl extends AbstractDaoImpl implements FormDao {
@@ -124,5 +126,47 @@ public class FormDaoImpl extends AbstractDaoImpl implements FormDao {
 			pm.close();
 		}
 	}
+
+	private List<FormConfigEntity> selectConfig() {
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			String query = "select from " + FormConfigEntity.class.getName();
+			List<FormConfigEntity> result = (List<FormConfigEntity>)pm.newQuery(
+					query).execute();
+			return copy(result);
+		}
+		finally {
+			pm.close();
+		}
+	}
+
+	@Override
+	public FormConfigEntity getConfig() {
+		List<FormConfigEntity> list = selectConfig();
+		if (list.size() > 0) {
+			return list.get(0);
+		}
+		logger.error("Form config for site was not found!");
+		return new FormConfigEntity();
+	}
+	
+	@Override
+	public void save(final FormConfigEntity entity) {
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			if (entity.getId() != null) {
+				FormConfigEntity p = pm.getObjectById(FormConfigEntity.class, 
+						entity.getId());
+				p.copy(entity);
+			}
+			else {
+				pm.makePersistent(entity);
+			}
+		}
+		finally {
+			pm.close();
+		}
+	}
+	
 
 }

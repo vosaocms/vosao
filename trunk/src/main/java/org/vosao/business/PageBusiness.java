@@ -23,6 +23,7 @@ package org.vosao.business;
 
 import java.util.List;
 
+import org.apache.velocity.VelocityContext;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.PageEntity;
 
@@ -45,11 +46,14 @@ public interface PageBusiness {
 	String render(final PageEntity page);
 	
 	/**
-	 * Render page to template. 
-	 * @param page - page to render
+	 * Render velocity template in specified context. 
+	 * @param template - template to render.
+	 * @param content - context to use.
 	 * @return rendered html.
 	 */
-	String render(final String template, final PageEntity page);
+	String render(final String template, final VelocityContext context);
+
+	VelocityContext createContext();
 	
 	List<String> validateBeforeUpdate(final PageEntity page);
 }

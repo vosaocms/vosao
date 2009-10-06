@@ -27,13 +27,17 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.orm.jdo.PersistenceManagerFactoryUtils;
 import org.vosao.dao.AbstractDao;
 
 public class AbstractDaoImpl implements AbstractDao {
 
+	protected static final Log logger = LogFactory.getLog(AbstractDaoImpl.class);
+
 	PersistenceManagerFactory pmf;
-	
+
 	public PersistenceManagerFactory getPersistenceManagerFactory() {
 		return pmf;
 	}

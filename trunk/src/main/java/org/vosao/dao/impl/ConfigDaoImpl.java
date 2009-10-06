@@ -33,8 +33,6 @@ import org.vosao.entity.ConfigEntity;
 
 public class ConfigDaoImpl extends AbstractDaoImpl implements ConfigDao {
 
-	private static final Log logger = LogFactory.getLog(ConfigDaoImpl.class);
-	
 	@Override
 	public void save(final ConfigEntity entity) {
 		PersistenceManager pm = getPersistenceManager();

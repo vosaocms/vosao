@@ -22,6 +22,8 @@
 package org.vosao.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -36,6 +38,26 @@ import org.vosao.enums.FieldType;
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class FieldEntity implements Serializable {
 
+	public static class Option {
+		private String value;
+		private boolean selected;
+		
+		public Option(String value, boolean selected) {
+			super();
+			this.value = value;
+			this.selected = selected;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		public boolean isSelected() {
+			return selected;
+		}
+	}
+
+	
 	private static final long serialVersionUID = 1L;
 
 	@PrimaryKey
@@ -67,8 +89,12 @@ public class FieldEntity implements Serializable {
 	@Persistent
 	private int height;
 
+	@Persistent
+	private int width;
+
 	public FieldEntity() {
 		height = 1;
+		width = 20;
 	}
 	
 	public void copy(final FieldEntity entity) {
@@ -80,6 +106,7 @@ public class FieldEntity implements Serializable {
 		setValues(entity.getValues());
 		setDefaultValue(entity.getDefaultValue());
 		setHeight(entity.getHeight());
+		setWidth(entity.getWidth());
 	}
 	
 	public FieldEntity(String formId, String name, String title,
@@ -176,6 +203,25 @@ public class FieldEntity implements Serializable {
 
 	public void setHeight(int height) {
 		this.height = height;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+	
+	public List<Option> getOptions() {
+		List<Option> result = new ArrayList<Option>();
+		String[] opts = getValues().split("\n");
+		for (String opt : opts) {
+			String val = opt.replace("*", "");
+			boolean selected = opt.charAt(0) == '*';
+			result.add(new Option(val, selected));
+		}
+		return result;
 	}
 	
 }

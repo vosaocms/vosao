@@ -39,6 +39,7 @@ import org.vosao.business.SetupBean;
 import org.vosao.dao.Dao;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FolderEntity;
+import org.vosao.entity.FormConfigEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.entity.UserEntity;
@@ -71,6 +72,7 @@ public class SetupBeanImpl implements SetupBean {
 		initPages();
 		initFolders();
 		initConfigs();
+		initForms();
 	}
 	
 	private void clearSessions() {
@@ -184,7 +186,22 @@ public class SetupBeanImpl implements SetupBean {
 	        config.setCommentsTemplate(template);
 	        getDao().getConfigDao().save(config);
 		}
-		
+	}
+	
+	private void initForms() {
+		FormConfigEntity config = getDao().getFormDao().getConfig();
+		if (config.getId() == null) {
+			String url = "org/vosao/resources/html/form-template.html";
+			String template = "Error during load resources " + url;
+			try {
+				template = JSFUtil.getTextResource(url);
+			}
+			catch(IOException e) {
+				log.error("Can't read comments template." + e);
+			}
+			config.setFormTemplate(template);
+			getDao().getFormDao().save(config);			
+		}
 	}
 	
 }

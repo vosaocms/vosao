@@ -1,6 +1,8 @@
 #set ( $comments = $service.getCommentsByPage($page.id))
 <div class="comments">
-  <div class="comments-label">Comments <span class="comments-num">$comments.size()</span></div>
+  <div class="comments-label">Comments 
+    <span class="comments-num">$comments.size()</span>
+  </div>
 
   <div class="comments-block" style="display:none">
 
@@ -17,9 +19,14 @@
   <div id="messages">&nbsp;</div>
   <form id="comment-form">
     <div><label>Name</label><input type="text" name="name"/></div>
-    <div><label>Comment</label><textarea name="comment" cols="40" rows="6"></textarea></div>
+    <div><label>Comment</label>
+        <textarea name="comment" cols="40" rows="6">
+        </textarea>
+    </div>
     <div id="recaptcha">&nbsp;</div>
-    <div><input type="button" onclick="onAddComment()" value="Add comment"/></div>
+    <div>
+        <input type="button" onclick="onAddComment()" value="Add comment"/>
+    </div>
   </form>
   </div>
 </div>
@@ -54,7 +61,8 @@ function onAddComment() {
         if (msg == "incorrect-captcha-sol") {
             msg = "incorrect captcha solution";
         }
-        $("#messages").html('<ul><li class="errorMessage">Error. ' + msg + '</li></ul>');
+        $("#messages").html('<ul><li class="errorMessage">Error. ' + msg 
+                + '</li></ul>');
     }
     Recaptcha.reload();  
 }
@@ -65,10 +73,10 @@ function loadComments(pageId) {
         if (r.list.length > 0) {
             for (var i = 0; i < r.list.length; i++) {
                 var comment = r.list[i];
-                s += '<div class="comment"><div class="comment-author">' + comment.name 
-                    + '</div><div class="comment-date">' + comment.publishDateTime 
-                    + '</div><div class="comment-content">' + comment.content
-                    + '</div></div>';
+                s += 
+'<div class="comment"><div class="comment-author">' + comment.name + '</div>\
+<div class="comment-date">' + comment.publishDateTime + '</div>\
+<div class="comment-content">' + comment.content + '</div></div>';
             }    
         }
         $(".comments-list").html(s);

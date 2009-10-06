@@ -1,0 +1,60 @@
+<div id="form-$form.name">
+#foreach($field in $fields)
+<div class="field-$field.name">
+  <label>$field.title</label>
+
+#if ($field.fieldType == 'TEXT')
+    #if ($field.height > 1) 
+<textarea name="$field.name" rows="$field.height" cols="$field.width">$field.defaultValue</textarea>
+    #else
+<input type="text" name="$field.name" value="$field.defaultValue" 
+    size="$field.width" />
+    #end
+
+#elseif ($field.fieldType == 'PASSWORD')
+<input type="password" name="$field.name" size="$field.width" />
+
+#elseif ($field.fieldType == 'CHECKBOX')
+    #set($i = 0)
+    #foreach($option in $field.options)
+        #if($option.selected)
+<input type="checkbox" checked="checked" name="$field.name$i" 
+    value="$option.value"/>$option.value
+<br/>
+        #else
+<input type="checkbox" name="$field.name$i" value="$option.value"/>$option.value
+<br/>
+        #end
+        #set($i = $i + 1)
+    #end
+
+#elseif ($field.fieldType == 'RADIO')
+    #foreach($option in $field.options)
+        #if($option.selected)
+<input type="radio" checked="checked" name="$field.name" 
+    value="$option.value"/>$option.value
+<br/>
+        #else
+<input type="radio" name="$field.name" value="$option.value"/>$option.value
+<br/>
+        #end
+    #end
+
+#elseif ($field.fieldType == 'LISTBOX')
+<select name="$field.name">
+    #foreach($option in $field.options)
+        #if($option.selected)
+<option value="$option.value" selected="selected">$option.value</option>
+        #else
+<option value="$option.value">$option.value</option>
+        #end
+    #end
+</select>
+#end
+
+</div>
+#end
+</div>
+<script type="text/javascript">
+
+</script>

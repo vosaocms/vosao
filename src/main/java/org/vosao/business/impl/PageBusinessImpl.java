@@ -57,7 +57,8 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 
 	public void init() throws Exception {
 		velocityService = new VelocityServiceImpl(getDao());
-		velocityPluginService = new VelocityPluginServiceImpl(getDao());
+		velocityPluginService = new VelocityPluginServiceImpl(getDao(), 
+				getSystemService());
 	}
 	
 	@Override

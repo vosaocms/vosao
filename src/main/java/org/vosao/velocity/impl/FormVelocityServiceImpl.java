@@ -21,15 +21,30 @@
 
 package org.vosao.velocity.impl;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.exception.MethodInvocationException;
+import org.apache.velocity.exception.ParseErrorException;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.vosao.dao.Dao;
+import org.vosao.entity.FieldEntity;
+import org.vosao.entity.FormConfigEntity;
+import org.vosao.entity.FormEntity;
+import org.vosao.global.SystemService;
 import org.vosao.velocity.FormVelocityService;
 
 public class FormVelocityServiceImpl implements FormVelocityService {
 
 	private Dao dao;
+	private SystemService systemService;
 	
-	public FormVelocityServiceImpl(Dao aDao) {
+	public FormVelocityServiceImpl(Dao aDao, SystemService aSystemService) {
 		setDao(aDao);
+		setSystemService(aSystemService);
 	}
 	
 	private Dao getDao() {
@@ -42,7 +57,42 @@ public class FormVelocityServiceImpl implements FormVelocityService {
 
 	@Override
 	public String render(String formName) {
-		return "rendered form " + formName;
+		FormEntity form = getDao().getFormDao().getByName(formName);
+		if (form == null) {
+			return "Error! Form " + formName + " was not found.";
+		}
+		List<FieldEntity> fields = getDao().getFieldDao().getByForm(form);
+		FormConfigEntity formConfig = getDao().getFormDao().getConfig();
+		VelocityContext context = new VelocityContext();
+		context.put("formConfig", formConfig);
+		context.put("form", form);
+		context.put("fields", fields);
+		if (StringUtils.isEmpty(formConfig.getFormTemplate())) {
+			return "Error! Form template is empty.";
+		}
+		StringWriter wr = new StringWriter();
+		String log = null;
+		try {
+			getSystemService().getVelocityEngine().evaluate(
+					context, wr, log, formConfig.getFormTemplate());
+			return wr.toString();
+		} catch (ParseErrorException e) {
+			return e.toString();
+		} catch (MethodInvocationException e) {
+			return e.toString();
+		} catch (ResourceNotFoundException e) {
+			return e.toString();
+		} catch (IOException e) {
+			return e.toString();
+		}
+	}
+
+	public SystemService getSystemService() {
+		return systemService;
+	}
+
+	public void setSystemService(SystemService systemService) {
+		this.systemService = systemService;
 	}
 
 }

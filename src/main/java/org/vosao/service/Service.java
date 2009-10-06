@@ -41,4 +41,7 @@ public interface Service {
 	TemplateService getTemplateService();
 	void setTemplateService(TemplateService bean);
 
+	FieldService getFieldService();
+	void setFieldService(FieldService bean);
+	
 }

@@ -34,6 +34,7 @@ import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.business.CommentBusiness;
 import org.vosao.business.ConfigBusiness;
+import org.vosao.business.FieldBusiness;
 import org.vosao.business.FileBusiness;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.FormBusiness;
@@ -57,6 +58,7 @@ public class BusinessImpl implements Business {
 	private FormBusiness formBusiness;
 	private FileBusiness fileBusiness;
 	private CommentBusiness commentBusiness;
+	private FieldBusiness fieldBusiness;
 
 	public void init() {
 		try {
@@ -180,6 +182,16 @@ public class BusinessImpl implements Business {
 	@Override
 	public void setCommentBusiness(CommentBusiness bean) {
 		commentBusiness = bean;
+	}
+
+	@Override
+	public FieldBusiness getFieldBusiness() {
+		return fieldBusiness;
+	}
+
+	@Override
+	public void setFieldBusiness(FieldBusiness bean) {
+		fieldBusiness = bean;
 	}
 	
 	

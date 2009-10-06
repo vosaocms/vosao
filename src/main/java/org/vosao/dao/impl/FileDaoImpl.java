@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
@@ -138,7 +139,10 @@ public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 	}
 
 	@Override
-	public void saveFileContent(FileEntity file, byte[] content) {
+	public void save(FileEntity file, byte[] content) {
+		file.setLastModifiedTime(new Date());
+		file.setSize(content.length);
+		save(file);
 		removeChunks(getByFile(file.getId()));
 		List<FileChunkEntity> chunks = createChunks(file, content);
 		save(chunks);

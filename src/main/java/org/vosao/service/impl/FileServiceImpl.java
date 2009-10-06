@@ -62,11 +62,7 @@ public class FileServiceImpl extends AbstractServiceImpl
 		FileEntity file = getDao().getFileDao().getById(fileId);
 		if (file != null) {
 			try {
-				byte[] data = content.getBytes("UTF-8");
-				file.setLastModifiedTime(new Date());
-				file.setSize(data.length);
-				getDao().getFileDao().save(file);
-				getDao().getFileDao().saveFileContent(file, data);
+				getDao().getFileDao().save(file, content.getBytes("UTF-8"));
 				FolderEntity folder = getDao().getFolderDao().getById(
 						file.getFolderId());
 				String cacheUrl = getBusiness().getFolderBusiness()

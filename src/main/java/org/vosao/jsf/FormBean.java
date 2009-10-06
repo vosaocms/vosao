@@ -102,6 +102,14 @@ public class FormBean extends AbstractJSFBean implements Serializable {
 		return "pretty:formCreate";
 	}
 	
+	public void addField() {
+		// TODO
+	}
+	
+	public void deleteFields() {
+		// TODO
+	}
+	
 	public List<FormEntity> getList() {
 		return list;
 	}

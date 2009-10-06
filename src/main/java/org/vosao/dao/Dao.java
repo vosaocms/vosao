@@ -44,6 +44,9 @@ public interface Dao {
 	FormDao getFormDao();
 	void setFormDao(final FormDao formDao);
 	
+	FieldDao getFieldDao();
+	void setFieldDao(final FieldDao bean);
+
 	CommentDao getCommentDao();
 	void setCommentDao(final CommentDao bean);
 

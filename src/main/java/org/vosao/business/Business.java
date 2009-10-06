@@ -57,5 +57,8 @@ public interface Business {
 
 	CommentBusiness getCommentBusiness();
 	void setCommentBusiness(final CommentBusiness bean);
+
+	FieldBusiness getFieldBusiness();
+	void setFieldBusiness(final FieldBusiness bean);
 	
 }

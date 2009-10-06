@@ -42,8 +42,7 @@ public class FileDaoTest extends AbstractDaoTest {
 			final FolderEntity folder) {
 		FileEntity file = new FileEntity(title, name, folder.getId(), 
 				contentType, new Date(), data.length);
-		getDao().getFileDao().save(file);
-		getDao().getFileDao().saveFileContent(file, data);
+		getDao().getFileDao().save(file, data);
 		return file;
 	}
 	

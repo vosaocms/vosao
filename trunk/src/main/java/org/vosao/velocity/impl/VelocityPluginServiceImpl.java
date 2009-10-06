@@ -22,27 +22,22 @@
 package org.vosao.velocity.impl;
 
 import org.vosao.dao.Dao;
+import org.vosao.global.SystemService;
 import org.vosao.velocity.FormVelocityService;
 import org.vosao.velocity.VelocityPluginService;
 
 public class VelocityPluginServiceImpl implements VelocityPluginService {
 
 	private Dao dao;
+	private SystemService systemService;
 	private FormVelocityService form;
 	
-	public VelocityPluginServiceImpl(Dao aDao) {
-		setDao(aDao);
-		form = new FormVelocityServiceImpl(getDao());
-	}
-	
-	private Dao getDao() {
-		return dao;
-	}
-	
-	private void setDao(Dao aDao) {
+	public VelocityPluginServiceImpl(Dao aDao, SystemService aSystemService) {
 		dao = aDao;
+		systemService= aSystemService;
+		form = new FormVelocityServiceImpl(dao, systemService);
 	}
-
+	
 	@Override
 	public FormVelocityService getForm() {
 		return form;

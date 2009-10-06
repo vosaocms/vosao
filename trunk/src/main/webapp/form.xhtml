@@ -30,12 +30,12 @@
                     for ( var i = 0; i < r.list.length; i++) {
                         var field = r.list[i];
                         h += 
-        '<tr>\
-        <td><input type="checkbox" name="item' + i + '" value="' + field.id + '"/></td>\
-        <td><a href="#" onclick="onFieldEdit(\'' + field.id + '\')">'   + field.title + '</a></td>\
-        <td>' + field.name + '</td>\
-        <td>'   + fieldTypeString(field.fieldType) + '</td>\
-        </tr>';
+'<tr>\
+<td><input type="checkbox" name="item' + i + '" value="' + field.id + '"/></td>\
+<td><a href="#" onclick="onFieldEdit(\'' + field.id + '\')">'   + field.title + '</a></td>\
+<td>' + field.name + '</td>\
+<td>'   + fieldTypeString(field.fieldType) + '</td>\
+</tr>';
                     }
                     h += '</table>';
                     $('#fieldsTable').html(h);
@@ -46,7 +46,7 @@
         function fieldTypeString(v) {
             if (v == 'TEXT') return 'Text';
             if (v == 'CHECKBOX') return 'Checkbox';
-            if (v == 'COMBOBOX') return 'Combobox';
+            if (v == 'RADIO') return 'Radiobox';
             if (v == 'PASSWORD') return 'Password';
             if (v == 'LISTBOX') return 'Listbox';
             return 'undefined';
@@ -88,26 +88,31 @@
             if (fieldType == 'TEXT') {
                 $('#field-values').hide();
                 $('#field-height').show();
+                $('#field-width').show();
                 $('#field-defaultValue').show();
             }
             if (fieldType == 'LISTBOX') {
                 $('#field-values').show();
                 $('#field-height').hide();
-                $('#field-defaultValue').show();
+                $('#field-width').hide();
+                $('#field-defaultValue').hide();
             }
             if (fieldType == 'CHECKBOX') {
                 $('#field-values').show();
                 $('#field-height').hide();
+                $('#field-width').hide();
                 $('#field-defaultValue').hide();
             }
-            if (fieldType == 'COMBOBOX') {
+            if (fieldType == 'RADIO') {
                 $('#field-values').show();
                 $('#field-height').hide();
+                $('#field-width').hide();
                 $('#field-defaultValue').hide();
             }
             if (fieldType == 'PASSWORD') {
                 $('#field-values').hide();
                 $('#field-height').hide();
+                $('#field-width').show();
                 $('#field-defaultValue').hide();
             }
         }
@@ -120,6 +125,7 @@
                 $('textarea[name=field.values]').val('');
                 $('input[name=field.defaultValue]').val('');
                 $('input[name=field.height]').val('1');
+                $('input[name=field.width]').val('20');
                 $('input[name=field.optional]')[0].checked = false;
             } else {
                 $('input[name=field.name]').val(field.name);
@@ -128,6 +134,7 @@
                 $('textarea[name=field.values]').val(field.values);
                 $('input[name=field.defaultValue]').val(field.defaultValue);
                 $('input[name=field.height]').val(field.height);
+                $('input[name=field.width]').val(field.width);
                 $('input[name=field.optional]')[0].checked = field.optional;
             }
             fieldDialogShowInputs();
@@ -143,6 +150,7 @@
                 values :$('textarea[name=field.values]').val(),
                 defaultValue :$('input[name=field.defaultValue]').val(),
                 height :$('input[name=field.height]').val(),
+                width :$('input[name=field.width]').val(),
                 optional :String($('input[name=field.optional]:checked').size() > 0)
             });
         }
@@ -158,6 +166,10 @@
             var height = Number(fieldVO.map.height);
             if (fieldVO.map.fieldType == 'TEXT' && height <= 0) {
                 errors.push('Height can\'t be less or zero');
+            }
+            var width = Number(fieldVO.map.width);
+            if (fieldVO.map.fieldType == 'TEXT' && width <= 0) {
+                errors.push('Width can\'t be less or zero');
             }
             return errors;
         }
@@ -280,10 +292,14 @@
         <select name="field.fieldType" onchange="onFieldTypeChange()">
             <option value="TEXT">Text</option>
             <option value="CHECKBOX">Checkbox</option>
-            <option value="COMBOBOX">Combobox</option>
+            <option value="RADIO">Radiobox</option>
             <option value="PASSWORD">Password</option>
             <option value="LISTBOX">Listbox</option>
         </select>
+    </div>
+    <div class="form-row" id="field-width">
+        <label>Width in chars</label>
+        <input type="text" name="field.width" />
     </div>
     <div class="form-row" id="field-height">
         <label>Height in chars</label>

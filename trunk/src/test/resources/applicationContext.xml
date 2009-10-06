@@ -28,6 +28,11 @@
         </property>
     </bean>  
     
+    <!--========================== System service ===========================-->
+    
+    <bean id="systemService" class="org.vosao.global.impl.SystemServiceImpl"
+        init-method="init" />  
+    
     <!--============================== DAO ==================================-->
     
     <bean id="abstractDao" abstract="true"
@@ -79,6 +84,7 @@
     <bean id="abstractBusiness" abstract="true"
         class="org.vosao.business.impl.AbstractBusinessImpl">
         <property name="dao" ref="dao"/>  
+        <property name="systemService" ref="systemService"/>  
     </bean>
     
     <bean id="folderBusiness" class="org.vosao.business.impl.FolderBusinessImpl"

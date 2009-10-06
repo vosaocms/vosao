@@ -38,6 +38,9 @@ a:hover {
 #wrapper {
 	margin: 20px;
 }
+#wrapper textarea {
+    font-family: monospace;
+}
 
 .messages .error-msg {
 	color: red;

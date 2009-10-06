@@ -23,10 +23,9 @@ Stable production ready release.
 
 == 01.02.2010 CEO and advertising ==
 
- * create bug fixing support 1.0.X releases
+ * bug fixing support 1.0.X releases
  * create vosaoproject.org site running on vosao cms.
  * create themes library for users
- * create several commercial projects using vosao cms.
 
 
 == 01.05.2010 Refactoring & support ==

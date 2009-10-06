@@ -24,6 +24,7 @@ package org.vosao.dao.impl;
 import org.vosao.dao.CommentDao;
 import org.vosao.dao.ConfigDao;
 import org.vosao.dao.Dao;
+import org.vosao.dao.FieldDao;
 import org.vosao.dao.FileDao;
 import org.vosao.dao.FolderDao;
 import org.vosao.dao.FormDao;
@@ -41,6 +42,7 @@ public class DaoImpl implements Dao {
 	private ConfigDao configDao;
 	private FormDao formDao;
 	private CommentDao commentDao;
+	private FieldDao fieldDao;
 	
 	public PageDao getPageDao() {
 		return pageDao;
@@ -101,6 +103,14 @@ public class DaoImpl implements Dao {
 	
 	public void setCommentDao(CommentDao commentDao) {
 		this.commentDao = commentDao;
+	}
+
+	public FieldDao getFieldDao() {
+		return fieldDao;
+	}
+
+	public void setFieldDao(FieldDao bean) {
+		this.fieldDao = bean;
 	}
 	
 }

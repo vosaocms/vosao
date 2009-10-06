@@ -79,13 +79,9 @@ public class FileBean extends AbstractJSFBean implements Serializable {
 		List<String> errors = getBusiness().getFileBusiness()
 			.validateBeforeUpdate(current);
 		if (errors.isEmpty()) {
-			byte[] data = content.getBytes("UTF-8"); 
-			current.setLastModifiedTime(new Date());
-			current.setSize(data.length);
 			current.setMimeType(MimeType.getContentTypeByExt(
 					FolderUtil.getFileExt(current.getFilename())));
-			getDao().getFileDao().save(current);
-			getDao().getFileDao().saveFileContent(current, data);
+			getDao().getFileDao().save(current, content.getBytes("UTF-8"));
 			String cacheUrl = getBusiness().getFolderBusiness()
 				.getFolderPath(folder) + "/" + current.getFilename();
 			getBusiness().getCache().remove(cacheUrl);

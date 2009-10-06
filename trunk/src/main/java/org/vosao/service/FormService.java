@@ -31,7 +31,7 @@ public interface FormService extends AbstractService {
 	ServiceResponse send(final String name, Map<String, String> params);
 	
 	/**
-	 * Send enered form. Protected by reCaptcha service.
+	 * Send entered form. Protected by reCaptcha service.
 	 * @param name - form name
 	 * @param params-form parameters
 	 * @param challenge - recaptcha challenge

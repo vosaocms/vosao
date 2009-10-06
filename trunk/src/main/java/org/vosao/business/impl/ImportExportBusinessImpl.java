@@ -290,8 +290,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 			fileEntity = new FileEntity(fileName, fileName, folderEntity.getId(),
 					contentType, new Date(), data.length);
 		}
-		getDao().getFileDao().save(fileEntity);
-		getDao().getFileDao().saveFileContent(fileEntity, data);
+		getDao().getFileDao().save(fileEntity, data);
 		return "/" + entry.getName();
 	}
 

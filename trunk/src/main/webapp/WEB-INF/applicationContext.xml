@@ -59,6 +59,9 @@
     <bean id="commentDao" class="org.vosao.dao.impl.CommentDaoImpl"
         parent="abstractDao" />  
 
+    <bean id="fieldDao" class="org.vosao.dao.impl.FieldDaoImpl"
+        parent="abstractDao" />  
+
     <bean id="dao" class="org.vosao.dao.impl.DaoImpl">  
         <property name="pageDao" ref="pageDao"/>  
         <property name="fileDao" ref="fileDao"/>  
@@ -67,6 +70,7 @@
         <property name="templateDao" ref="templateDao"/>  
         <property name="configDao" ref="configDao"/>  
         <property name="formDao" ref="formDao"/>  
+        <property name="fieldDao" ref="fieldDao"/>  
         <property name="commentDao" ref="commentDao"/>  
     </bean>
 
@@ -95,6 +99,9 @@
     <bean id="commentBusiness" class="org.vosao.business.impl.CommentBusinessImpl"
         parent="abstractBusiness" />  
         
+    <bean id="fieldBusiness" class="org.vosao.business.impl.FieldBusinessImpl"
+        parent="abstractBusiness" />  
+
     <bean id="pageBusiness" class="org.vosao.business.impl.PageBusinessImpl"
         init-method="init" parent="abstractBusiness">
         <property name="configBusiness" ref="configBusiness"/>  
@@ -117,6 +124,7 @@
         <property name="formBusiness" ref="formBusiness"/>  
         <property name="fileBusiness" ref="fileBusiness"/>  
         <property name="commentBusiness" ref="commentBusiness"/>  
+        <property name="fieldBusiness" ref="fieldBusiness"/>  
     </bean>
 
     <!--======================= JSON-RPC services ===========================-->
@@ -145,6 +153,9 @@
     <bean id="templateService" class="org.vosao.service.impl.TemplateServiceImpl"
         parent="abstractService" />
 
+    <bean id="fieldService" class="org.vosao.service.impl.FieldServiceImpl"
+        parent="abstractService" />
+
     <bean id="service" class="org.vosao.service.impl.ServiceImpl"
         init-method="init">  
         <property name="formService" ref="formService"/>  
@@ -153,6 +164,7 @@
         <property name="commentService" ref="commentService"/>  
         <property name="pageService" ref="pageService"/>  
         <property name="templateService" ref="templateService"/>  
+        <property name="fieldService" ref="fieldService"/>  
     </bean>
 
     <!--========================= JSF beans =================================-->

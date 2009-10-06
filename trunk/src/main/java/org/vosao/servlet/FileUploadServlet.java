@@ -193,13 +193,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 				MimeType.getContentTypeByExt(ext), new Date(), data.length);
 			log.debug("created file " + file.getFilename());
 		}
-		else {
-			log.debug("updated file " + file.getFilename());
-			file.setLastModifiedTime(new Date());
-			file.setSize(data.length);
-		}
-		getDao().getFileDao().save(file);
-		getDao().getFileDao().saveFileContent(file, data);
+		getDao().getFileDao().save(file, data);
 		return file;
 	}
 

@@ -19,33 +19,21 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.service;
 
 import java.util.List;
+import java.util.Map;
 
-import org.vosao.entity.FileChunkEntity;
-import org.vosao.entity.FileEntity;
+import org.vosao.service.impl.vo.FieldVO;
 
-public interface FileDao extends AbstractDao {
 
-	void save(final FileEntity page);
+public interface FieldService extends AbstractService {
 	
-	FileEntity getById(final String id);
-
-	List<FileEntity> getByFolder(final String folderId);
-
-	FileEntity getByName(final String folderId, final String name);
-
-	void remove(final String id);
+	ServiceResponse updateField(Map<String, String> field);
+	
+	List<FieldVO> getByForm(final String formId);
+	
+	FieldVO getById(final String fieldId);
 	
 	void remove(final List<String> ids);
-	
-	void save(final FileEntity file, byte[] content);
-	
-	byte[] getFileContent(final FileEntity file);
-	
-	List<FileChunkEntity> createChunks(FileEntity file,	byte[] content);
-
-	void removeByFolder(final String folderId);
-
 }

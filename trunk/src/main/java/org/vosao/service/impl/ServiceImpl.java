@@ -25,6 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jabsorb.JSONRPCBridge;
 import org.vosao.service.CommentService;
+import org.vosao.service.FieldService;
 import org.vosao.service.FileService;
 import org.vosao.service.FolderService;
 import org.vosao.service.FormService;
@@ -42,6 +43,7 @@ public class ServiceImpl implements Service {
 	private CommentService commentService;
 	private PageService pageService;
 	private TemplateService templateService;
+	private FieldService fieldService;
 	
 	public void init() {
 		JSONRPCBridge.getGlobalBridge().registerObject("formService", 
@@ -56,6 +58,8 @@ public class ServiceImpl implements Service {
 				pageService);
 		JSONRPCBridge.getGlobalBridge().registerObject("templateService", 
 				templateService);
+		JSONRPCBridge.getGlobalBridge().registerObject("fieldService", 
+				fieldService);
 	}
 	
 	@Override
@@ -116,6 +120,16 @@ public class ServiceImpl implements Service {
 	@Override
 	public void setTemplateService(TemplateService templateService) {
 		this.templateService = templateService;
+	}
+
+	@Override
+	public FieldService getFieldService() {
+		return fieldService;
+	}
+
+	@Override
+	public void setFieldService(FieldService bean) {
+		fieldService = bean;		
 	}
 
 }

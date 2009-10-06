@@ -23,29 +23,21 @@ package org.vosao.dao;
 
 import java.util.List;
 
-import org.vosao.entity.FileChunkEntity;
-import org.vosao.entity.FileEntity;
+import org.vosao.entity.FieldEntity;
+import org.vosao.entity.FormEntity;
 
-public interface FileDao extends AbstractDao {
+public interface FieldDao extends AbstractDao {
 
-	void save(final FileEntity page);
+	void save(final FieldEntity entity);
 	
-	FileEntity getById(final String id);
+	FieldEntity getById(final String id);
 
-	List<FileEntity> getByFolder(final String folderId);
+	List<FieldEntity> getByForm(final FormEntity form);
 
-	FileEntity getByName(final String folderId, final String name);
+	FieldEntity getByName(final FormEntity form, final String name);
 
 	void remove(final String id);
 	
 	void remove(final List<String> ids);
 	
-	void save(final FileEntity file, byte[] content);
-	
-	byte[] getFileContent(final FileEntity file);
-	
-	List<FileChunkEntity> createChunks(FileEntity file,	byte[] content);
-
-	void removeByFolder(final String folderId);
-
 }

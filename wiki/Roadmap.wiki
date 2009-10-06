@@ -15,13 +15,13 @@ Version 0.2
 Develop CMS look&feel. Create all user interface elements.
 
 
-== 01.02.2010 Creating working 1.0 version ==
+== 01.12.2009 Creating working 1.0 version ==
 
 Version 1.0
 Stable production ready release. 
 
 
-== 01.06.2010 CEO and advertising ==
+== 01.02.2010 CEO and advertising ==
 
  * create bug fixing support 1.0.X releases
  * create vosaoproject.org site running on vosao cms.
@@ -29,7 +29,7 @@ Stable production ready release.
  * create several commercial projects using vosao cms.
 
 
-== 01.01.2011 Refactoring & support ==
+== 01.05.2010 Refactoring & support ==
 
 Version 2.0
  * Implementing more features.

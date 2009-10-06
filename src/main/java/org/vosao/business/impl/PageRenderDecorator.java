@@ -25,6 +25,7 @@ import java.util.Date;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.velocity.VelocityContext;
 import org.vosao.business.ConfigBusiness;
 import org.vosao.business.PageBusiness;
 import org.vosao.entity.PageEntity;
@@ -36,6 +37,7 @@ public class PageRenderDecorator {
 	private Log logger = LogFactory.getLog(PageRenderDecorator.class);
 	
 	private PageEntity page;
+	private String content;
 	private ConfigBusiness configBusiness;
 	private PageBusiness pageBusiness;
 	
@@ -45,6 +47,7 @@ public class PageRenderDecorator {
 		this.page = page;
 		this.configBusiness = configBusiness;
 		this.pageBusiness = pageBusiness;
+		pluginContentRender();
 	}
 
 	public PageEntity getPage() {
@@ -60,7 +63,7 @@ public class PageRenderDecorator {
 	}
 
 	public String getContent() {
-		return page.getContent();
+		return content;
 	}
 	
 	public String getComments() {
@@ -71,9 +74,16 @@ public class PageRenderDecorator {
 				logger.error("comments template is empty");
 				return "comments template is empty";
 			}
-			return getPageBusiness().render(commentsTemplate, page);
+			VelocityContext context = getPageBusiness().createContext();
+			context.put("page", page);
+			return getPageBusiness().render(commentsTemplate, context);
 		}
 		return "";
+	}
+	
+	private void pluginContentRender() {
+		content = getPageBusiness().render(page.getContent(), 
+				getPageBusiness().createContext());
 	}
 
 	public String getTitle() {

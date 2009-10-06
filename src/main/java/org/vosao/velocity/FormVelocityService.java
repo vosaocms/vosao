@@ -19,29 +19,15 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.velocity;
 
-import java.util.List;
+public interface FormVelocityService {
 
-import org.vosao.entity.FormConfigEntity;
-import org.vosao.entity.FormEntity;
-
-public interface FormDao extends AbstractDao {
-
-	void save(final FormEntity entity);
+	/**
+	 * Render form to be places on the page o template.
+	 * @param formName - unique form name.
+	 * @return rendered html. 
+	 */
+	String render(final String formName);
 	
-	FormEntity getById(final String id);
-
-	FormEntity getByName(final String name);
-
-	List<FormEntity> select();
-	
-	void remove(final String id);
-	
-	void remove(final List<String> ids);
-	
-	FormConfigEntity getConfig();
-
-	void save(final FormConfigEntity entity);
-
 }

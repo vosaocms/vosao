@@ -6,6 +6,11 @@
   template="WEB-INF/facelets/layout.xhtml">
 
 <ui:define name="head">
+    <script type="text/javascript">
+        $(function() {
+            $("#tabs").tabs();
+        });
+    </script>    
 </ui:define>
 
 <ui:define name="title">Forms</ui:define>
@@ -14,7 +19,13 @@
 
 <h:form>
 
-<h1>Forms</h1>
+<div id="tabs">
+<ul>
+    <li><a href="#tab-1">Forms</a></li>
+    <li><a href="#tab-2">Config</a></li>
+</ul>
+
+<div id="tab-1">
 
 <h:dataTable value="#{formBean.list}" var="r"
     styleClass="form-table">
@@ -38,6 +49,21 @@
 <div class="buttons">
     <h:commandButton value="Add" action="#{formBean.add}" />
     <h:commandButton value="Delete" action="#{formBean.delete}" />
+</div>
+
+</div>
+
+<div id="tab-2">
+<div class="form-row">
+    <label>Form template</label>
+    <h:inputTextarea value="#{formBean.formConfig.formTemplate}" 
+        rows="20" cols="80"/>
+</div>
+<div class="buttons">
+    <h:commandButton value="Save" action="#{formBean.saveConfig}" />
+</div>
+</div>
+
 </div>
 
 </h:form>

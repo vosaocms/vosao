@@ -43,7 +43,9 @@ import org.vosao.business.impl.pagefilter.PageFilter;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
+import org.vosao.velocity.VelocityPluginService;
 import org.vosao.velocity.VelocityService;
+import org.vosao.velocity.impl.VelocityPluginServiceImpl;
 import org.vosao.velocity.impl.VelocityServiceImpl;
 
 public class PageBusinessImpl extends AbstractBusinessImpl 
@@ -52,11 +54,13 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	VelocityEngine ve;
 	ConfigBusiness configBusiness;
 	VelocityService velocityService;
+	VelocityPluginService velocityPluginService;
 
 	public void init() throws Exception {
 		ve = new VelocityEngine();
 		ve.init();
 		velocityService = new VelocityServiceImpl(getDao());
+		velocityPluginService = new VelocityPluginServiceImpl(getDao());
 	}
 	
 	@Override
@@ -89,31 +93,24 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		if (page.getTemplate() != null) {
 			TemplateEntity template = getDao().getTemplateDao().getById(
 					page.getTemplate());
-			VelocityContext context = new VelocityContext();
-			context.put("page", new PageRenderDecorator(page, 
-					getConfigBusiness(), this));
-			ConfigEntity configEntity = getConfigBusiness().getConfig();
-			context.put("config", configEntity.getConfigMap());
-			context.put("service", getVelocityService());
-			StringWriter wr = new StringWriter();
-			String log = null;
-			try {
-				ve.evaluate(context, wr, log, template.getContent());
-				String resultPage = wr.toString();
-				return pagePostProcess(resultPage);
-			} catch (ParseErrorException e) {
-				return e.toString();
-			} catch (MethodInvocationException e) {
-				return e.toString();
-			} catch (ResourceNotFoundException e) {
-				return e.toString();
-			} catch (IOException e) {
-				return e.toString();
-			}
+			VelocityContext context = createContext();
+			PageRenderDecorator pageDecorator = new PageRenderDecorator(page, 
+					getConfigBusiness(), this);
+			context.put("page", pageDecorator);
+			return pagePostProcess(render(template.getContent(), context));
 		}
 		else {
 			return pagePostProcess(page.getContent());
 		}
+	}
+	
+	public VelocityContext createContext() {
+		VelocityContext context = new VelocityContext();
+		ConfigEntity configEntity = getConfigBusiness().getConfig();
+		context.put("config", configEntity.getConfigMap());
+		context.put("service", getVelocityService());
+		context.put("plugin", getVelocityPluginService());
+		return context;
 	}
 	
 	private String pagePostProcess(final String page) {
@@ -177,13 +174,12 @@ public class PageBusinessImpl extends AbstractBusinessImpl
         return velocityService;
 	}
 
+	public VelocityPluginService getVelocityPluginService() {
+		return velocityPluginService;
+	}
+
 	@Override
-	public String render(String template, PageEntity page) {
-		VelocityContext context = new VelocityContext();
-		context.put("page", page);
-		ConfigEntity config = getConfigBusiness().getConfig();
-		context.put("config", config.getConfigMap());
-		context.put("service", getVelocityService());
+	public String render(String template, VelocityContext context) {
 		StringWriter wr = new StringWriter();
 		String log = null;
 		try {

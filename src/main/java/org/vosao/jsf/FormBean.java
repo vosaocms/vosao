@@ -29,6 +29,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.entity.FormConfigEntity;
 import org.vosao.entity.FormEntity;
 
 
@@ -41,11 +42,13 @@ public class FormBean extends AbstractJSFBean implements Serializable {
 	private FormEntity current;
 	private Map<String, Boolean> selected;
 	private String id;
+	private FormConfigEntity formConfig;
 
 	public void init() {
 		initList();
 		current = new FormEntity();
 		initSelected();
+		initFormConfig();
 	}
 	
 	private void initList() {
@@ -57,6 +60,10 @@ public class FormBean extends AbstractJSFBean implements Serializable {
 		for (FormEntity Form : list) {
 			selected.put(Form.getId(), false);
 		}
+	}
+	
+	private void initFormConfig() {
+		formConfig = getDao().getFormDao().getConfig();
 	}
 	
 	public String cancelEdit() {
@@ -102,12 +109,9 @@ public class FormBean extends AbstractJSFBean implements Serializable {
 		return "pretty:formCreate";
 	}
 	
-	public void addField() {
-		// TODO
-	}
-	
-	public void deleteFields() {
-		// TODO
+	public void saveConfig() {
+		getDao().getFormDao().save(formConfig);
+		JSFUtil.addInfoMessage("Form configuration was successfully saved.");
 	}
 	
 	public List<FormEntity> getList() {
@@ -140,6 +144,14 @@ public class FormBean extends AbstractJSFBean implements Serializable {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public FormConfigEntity getFormConfig() {
+		return formConfig;
+	}
+
+	public void setFormConfig(FormConfigEntity formConfig) {
+		this.formConfig = formConfig;
 	}
 	
 }

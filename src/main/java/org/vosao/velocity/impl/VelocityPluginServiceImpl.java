@@ -19,29 +19,32 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.velocity.impl;
 
-import java.util.List;
+import org.vosao.dao.Dao;
+import org.vosao.velocity.FormVelocityService;
+import org.vosao.velocity.VelocityPluginService;
 
-import org.vosao.entity.FormConfigEntity;
-import org.vosao.entity.FormEntity;
+public class VelocityPluginServiceImpl implements VelocityPluginService {
 
-public interface FormDao extends AbstractDao {
-
-	void save(final FormEntity entity);
+	private Dao dao;
+	private FormVelocityService form;
 	
-	FormEntity getById(final String id);
-
-	FormEntity getByName(final String name);
-
-	List<FormEntity> select();
+	public VelocityPluginServiceImpl(Dao aDao) {
+		setDao(aDao);
+		form = new FormVelocityServiceImpl(getDao());
+	}
 	
-	void remove(final String id);
+	private Dao getDao() {
+		return dao;
+	}
 	
-	void remove(final List<String> ids);
-	
-	FormConfigEntity getConfig();
+	private void setDao(Dao aDao) {
+		dao = aDao;
+	}
 
-	void save(final FormConfigEntity entity);
-
+	@Override
+	public FormVelocityService getForm() {
+		return form;
+	}
 }

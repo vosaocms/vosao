@@ -29,6 +29,7 @@ import org.apache.velocity.VelocityContext;
 import org.vosao.business.ConfigBusiness;
 import org.vosao.business.PageBusiness;
 import org.vosao.entity.PageEntity;
+import org.vosao.global.SystemService;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 
@@ -40,13 +41,15 @@ public class PageRenderDecorator {
 	private String content;
 	private ConfigBusiness configBusiness;
 	private PageBusiness pageBusiness;
+	private SystemService systemService;
 	
 	public PageRenderDecorator(PageEntity page,	ConfigBusiness configBusiness,
-			PageBusiness pageBusiness) {
+			PageBusiness pageBusiness, SystemService systemService) {
 		super();
 		this.page = page;
 		this.configBusiness = configBusiness;
 		this.pageBusiness = pageBusiness;
+		this.systemService = systemService;
 		pluginContentRender();
 	}
 
@@ -76,13 +79,13 @@ public class PageRenderDecorator {
 			}
 			VelocityContext context = getPageBusiness().createContext();
 			context.put("page", page);
-			return getPageBusiness().render(commentsTemplate, context);
+			return getSystemService().render(commentsTemplate, context);
 		}
 		return "";
 	}
 	
 	private void pluginContentRender() {
-		content = getPageBusiness().render(page.getContent(), 
+		content = getSystemService().render(page.getContent(), 
 				getPageBusiness().createContext());
 	}
 
@@ -110,12 +113,16 @@ public class PageRenderDecorator {
 		return page.isCommentsEnabled();
 	}
 
-	public ConfigBusiness getConfigBusiness() {
+	private ConfigBusiness getConfigBusiness() {
 		return configBusiness;
 	}
 
-	public PageBusiness getPageBusiness() {
+	private PageBusiness getPageBusiness() {
 		return pageBusiness;
+	}
+
+	private SystemService getSystemService() {
+		return systemService;
 	}
 	
 }

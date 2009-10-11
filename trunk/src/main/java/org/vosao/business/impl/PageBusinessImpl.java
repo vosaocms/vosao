@@ -93,9 +93,10 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 					page.getTemplate());
 			VelocityContext context = createContext();
 			PageRenderDecorator pageDecorator = new PageRenderDecorator(page, 
-					getConfigBusiness(), this);
+					getConfigBusiness(), this, getSystemService());
 			context.put("page", pageDecorator);
-			return pagePostProcess(render(template.getContent(), context));
+			return pagePostProcess(getSystemService()
+					.render(template.getContent(), context));
 		}
 		else {
 			return pagePostProcess(page.getContent());
@@ -176,23 +177,4 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		return velocityPluginService;
 	}
 
-	@Override
-	public String render(String template, VelocityContext context) {
-		StringWriter wr = new StringWriter();
-		String log = null;
-		try {
-			getSystemService().getVelocityEngine().evaluate(
-					context, wr, log, template);
-			return wr.toString();
-		} catch (ParseErrorException e) {
-			return e.toString();
-		} catch (MethodInvocationException e) {
-			return e.toString();
-		} catch (ResourceNotFoundException e) {
-			return e.toString();
-		} catch (IOException e) {
-			return e.toString();
-		}
-	}
-	
 }

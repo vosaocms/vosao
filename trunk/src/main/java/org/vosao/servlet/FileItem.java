@@ -19,26 +19,33 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.global;
+package org.vosao.servlet;
 
-import javax.cache.Cache;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.io.FilenameUtils;
 
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
-
-
-public interface SystemService {
+public class FileItem {
 	
-	Cache getCache();
+	private byte[] data;
+	private String fieldName;
+	private String filename;
 
-	VelocityEngine getVelocityEngine();
+	public FileItem(FileItemStream item, byte[] aData) {
+		super();
+		data = aData;
+		filename = FilenameUtils.getName(item.getName());
+		fieldName = item.getFieldName();
+	}
 
-	/**
-	 * Render velocity template in specified context. 
-	 * @param template - template to render.
-	 * @param content - context to use.
-	 * @return rendered html.
-	 */
-	String render(final String template, final VelocityContext context);
-	
+	public byte[] getData() {
+		return data;
+	}
+
+	public String getFieldName() {
+		return fieldName;
+	}
+
+	public String getFilename() {
+		return filename;
+	}
 }

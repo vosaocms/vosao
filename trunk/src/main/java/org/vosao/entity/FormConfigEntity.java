@@ -40,20 +40,24 @@ public class FormConfigEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static final String FORM_TEMPLATE = "formTemplate";
+	public static final String LETTER_TEMPLATE = "letterTemplate";
 
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Long id;
 	
-	
 	@Persistent(defaultFetchGroup = "true")
 	private Text formTemplate;
+
+	@Persistent(defaultFetchGroup = "true")
+	private Text letterTemplate;
 
 	public FormConfigEntity() {
 	}
 	
 	public void copy(final FormConfigEntity entity) {
 		setFormTemplate(entity.getFormTemplate());
+		setLetterTemplate(entity.getLetterTemplate());
 	}
 	
 	/**
@@ -63,6 +67,7 @@ public class FormConfigEntity implements Serializable {
 	public Map<String, String> getConfigMap() {
 		Map<String, String> result = new HashMap<String, String>();
 		result.put(FORM_TEMPLATE, getNotNull(getFormTemplate()));
+		result.put(LETTER_TEMPLATE, getNotNull(getLetterTemplate()));
 		return result;
 	}
 
@@ -103,6 +108,17 @@ public class FormConfigEntity implements Serializable {
 
 	public void setFormTemplate(String formTemplate) {
 		this.formTemplate = new Text(formTemplate);
+	}
+
+	public String getLetterTemplate() {
+		if (letterTemplate == null) {
+			return null;
+		}
+		return letterTemplate.getValue();
+	}
+
+	public void setLetterTemplate(String letterTemplate) {
+		this.letterTemplate = new Text(letterTemplate);
 	}
 	
 }

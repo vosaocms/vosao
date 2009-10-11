@@ -23,13 +23,20 @@ package org.vosao.business.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.velocity.VelocityContext;
 import org.vosao.business.FormBusiness;
+import org.vosao.entity.ConfigEntity;
+import org.vosao.entity.FieldEntity;
+import org.vosao.entity.FormConfigEntity;
 import org.vosao.entity.FormEntity;
-
-import com.google.appengine.repackaged.com.google.common.base.StringUtil;
+import org.vosao.servlet.FileItem;
+import org.vosao.servlet.UploadException;
+import org.vosao.utils.EmailUtil;
 
 public class FormBusinessImpl extends AbstractBusinessImpl 
 	implements FormBusiness {
@@ -45,16 +52,38 @@ public class FormBusinessImpl extends AbstractBusinessImpl
 				errors.add("Form with such name already exists");
 			}
 		}
-		if (StringUtil.isEmpty(entity.getName())) {
+		if (StringUtils.isEmpty(entity.getName())) {
 			errors.add("Name is empty");
 		}
-		if (StringUtil.isEmpty(entity.getTitle())) {
+		if (StringUtils.isEmpty(entity.getTitle())) {
 			errors.add("Title is empty");
 		}
-		if (StringUtil.isEmpty(entity.getEmail())) {
+		if (StringUtils.isEmpty(entity.getEmail())) {
 			errors.add("Email is empty");
 		}
 		return errors;
+	}
+
+	@Override
+	public void submit(FormEntity form, Map<String, String> parameters,
+			List<FileItem> files) throws UploadException {
+		ConfigEntity config = getDao().getConfigDao().getConfig();
+		FormConfigEntity formConfig = getDao().getFormDao().getConfig();
+		VelocityContext context = new VelocityContext();
+		List<FieldEntity> fields = getDao().getFieldDao().getByForm(form);
+		context.put("form", form);
+		context.put("fields", fields);
+		context.put("values", parameters);
+		context.put("config", config);
+		String letter = getSystemService().render(
+				formConfig.getLetterTemplate(), context);
+		logger.info(letter);
+		String error = EmailUtil.sendEmail(letter, form.getLetterSubject(), 
+				config.getSiteEmail(), "Site admin", form.getEmail(), files);
+		if (error != null) {
+			throw new UploadException(error);
+		}
+		logger.info("Form successfully submited and emailed.");
 	}
 	
 }

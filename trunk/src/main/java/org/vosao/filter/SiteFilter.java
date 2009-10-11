@@ -48,6 +48,7 @@ public class SiteFilter implements Filter {
 	public static final String[] SKIP_URLS = {
 		"/_ah",
 		"/cms",
+		"/plugin",
 		"/static",
 		"/login",
 		"/file",

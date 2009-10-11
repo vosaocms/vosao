@@ -45,14 +45,6 @@ public interface PageBusiness {
 	 */
 	String render(final PageEntity page);
 	
-	/**
-	 * Render velocity template in specified context. 
-	 * @param template - template to render.
-	 * @param content - context to use.
-	 * @return rendered html.
-	 */
-	String render(final String template, final VelocityContext context);
-
 	VelocityContext createContext();
 	
 	List<String> validateBeforeUpdate(final PageEntity page);

@@ -137,6 +137,17 @@
         <url-pattern>/file/*</url-pattern>
     </servlet-mapping>
 
+    <!-- Form plugin send servlet -->
+
+    <servlet>
+        <servlet-name>FormSend</servlet-name>
+        <servlet-class>org.vosao.servlet.FormSendServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FormSend</servlet-name>
+        <url-pattern>/plugin/form/send</url-pattern>
+    </servlet-mapping>
+
     <!-- GAE JSF stuff -->
     
     <!-- context-param>

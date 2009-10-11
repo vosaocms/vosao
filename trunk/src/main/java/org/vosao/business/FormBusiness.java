@@ -22,11 +22,23 @@
 package org.vosao.business;
 
 import java.util.List;
+import java.util.Map;
 
 import org.vosao.entity.FormEntity;
+import org.vosao.servlet.FileItem;
+import org.vosao.servlet.UploadException;
 
 public interface FormBusiness {
 
 	List<String> validateBeforeUpdate(final FormEntity entity);
+	
+	/**
+	 * Submit form.
+	 * @param form - form to submit.
+	 * @param parameters - form parameters.
+	 * @param files - form parameters of FILE type.
+	 */
+	void submit(final FormEntity form, final Map<String, String> parameters, 
+			final List<FileItem> files) throws UploadException;
 	
 }

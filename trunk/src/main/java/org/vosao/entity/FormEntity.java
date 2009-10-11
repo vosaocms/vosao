@@ -53,6 +53,15 @@ public class FormEntity implements Serializable {
 	@Persistent
 	private String letterSubject;
 
+	@Persistent
+	private String sendButtonTitle;
+
+	@Persistent
+	private boolean showResetButton;
+
+	@Persistent
+	private String resetButtonTitle;
+
 	public FormEntity() {
 	}
 	
@@ -70,6 +79,9 @@ public class FormEntity implements Serializable {
 		setName(entity.getName());
 		setEmail(entity.getEmail());
 		setLetterSubject(entity.getLetterSubject());
+		setSendButtonTitle(entity.getSendButtonTitle());
+		setShowResetButton(entity.isShowResetButton());
+		setResetButtonTitle(entity.getResetButtonTitle());
 	}
 	
 	public String getId() {
@@ -123,6 +135,30 @@ public class FormEntity implements Serializable {
 			}
 		}
 		return false;
+	}
+
+	public String getSendButtonTitle() {
+		return sendButtonTitle;
+	}
+
+	public void setSendButtonTitle(String sendButtonTitle) {
+		this.sendButtonTitle = sendButtonTitle;
+	}
+
+	public boolean isShowResetButton() {
+		return showResetButton;
+	}
+
+	public void setShowResetButton(boolean showResetButton) {
+		this.showResetButton = showResetButton;
+	}
+
+	public String getResetButtonTitle() {
+		return resetButtonTitle;
+	}
+
+	public void setResetButtonTitle(String resetButtonTitle) {
+		this.resetButtonTitle = resetButtonTitle;
 	}
 	
 }

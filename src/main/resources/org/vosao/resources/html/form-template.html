@@ -1,4 +1,10 @@
-<div id="form-$form.name">
+<div id="div-$form.name">
+
+<form id="form-$form.name" method="POST" action="/plugin/form/send">
+ <input type="hidden" name="form-name" value="$form.name" />
+
+ <div id="messages-$form.name"> </div>
+
 #foreach($field in $fields)
 <div class="field-$field.name">
   <label>$field.title</label>
@@ -13,6 +19,9 @@
 
 #elseif ($field.fieldType == 'PASSWORD')
 <input type="password" name="$field.name" size="$field.width" />
+
+#elseif ($field.fieldType == 'FILE')
+<input type="file" name="$field.name" />
 
 #elseif ($field.fieldType == 'CHECKBOX')
     #set($i = 0)
@@ -54,7 +63,32 @@
 
 </div>
 #end
+<div class="form-buttons">
+  <input type="submit" value="$form.sendButtonTitle" />
+#if($form.showResetButton)
+  <input type="reset" value="$form.resetButtonTitle" />
+#end
+</div>
+</form>
 </div>
 <script type="text/javascript">
-
+$(function() {
+  $('#form-$form.name').ajaxForm({
+    dataType:'json',
+    success: function(r) {
+      if (r.result == 'success') {
+         $('#messages-$form.name').html('<span class="info">' + r.message
+           + '</span>');
+         $('#form-$form.name')[0].reset();
+      }
+      else {
+         $('#messages-$form.name').html('<span class="error">' + r.message
+           + '</span>');
+      }
+    },
+    error : function() {
+      $('#messages-$form.name').html('<span class="error">Error occured during form submition.</span>');
+    }
+  });
+});
 </script>

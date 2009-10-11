@@ -22,5 +22,5 @@
 package org.vosao.enums;
 
 public enum FieldType {
-	TEXT, CHECKBOX, RADIO, PASSWORD, LISTBOX;
+	TEXT, CHECKBOX, RADIO, PASSWORD, LISTBOX, FILE;
 }

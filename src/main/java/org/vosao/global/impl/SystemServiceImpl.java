@@ -21,6 +21,8 @@
 
 package org.vosao.global.impl;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Collections;
 
 import javax.cache.Cache;
@@ -29,7 +31,11 @@ import javax.cache.CacheManager;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.exception.MethodInvocationException;
+import org.apache.velocity.exception.ParseErrorException;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.vosao.global.SystemService;
 
 public class SystemServiceImpl implements SystemService {
@@ -65,5 +71,23 @@ public class SystemServiceImpl implements SystemService {
 		return velocityEngine;
 	}
 
+	@Override
+	public String render(String template, VelocityContext context) {
+		StringWriter wr = new StringWriter();
+		String log = null;
+		try {
+			getVelocityEngine().evaluate(context, wr, log, template);
+			return wr.toString();
+		} catch (ParseErrorException e) {
+			return e.toString();
+		} catch (MethodInvocationException e) {
+			return e.toString();
+		} catch (ResourceNotFoundException e) {
+			return e.toString();
+		} catch (IOException e) {
+			return e.toString();
+		}
+	}
+	
 	
 }

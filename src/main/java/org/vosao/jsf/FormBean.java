@@ -46,9 +46,15 @@ public class FormBean extends AbstractJSFBean implements Serializable {
 
 	public void init() {
 		initList();
-		current = new FormEntity();
+		initCurrent();
 		initSelected();
 		initFormConfig();
+	}
+	
+	private void initCurrent() {
+		current = new FormEntity();
+		current.setSendButtonTitle("Send");
+		current.setResetButtonTitle("Reset");
 	}
 	
 	private void initList() {

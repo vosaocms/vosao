@@ -50,6 +50,7 @@ import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.jsf.PageBean;
+import org.vosao.utils.StreamUtil;
 
 /**
  * Servlet for uploading images into database.
@@ -61,7 +62,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 	private static final Log log = LogFactory
 			.getLog(FileUploadServlet.class);
 
-	private static final long MAX_SIZE = 5000000;
+	private static final long MAX_SIZE = 10000000;
 
 	private static final String FOLDER_PARAM = "folderId";
 	
@@ -104,7 +105,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 								Streams.asString(stream, "UTF-8"));
 					} else {
 						imageFileItem = item;
-						fileData = readFileStream(stream);
+						fileData = StreamUtil.readFileStream(stream);
 					}
 				}
 				message = processFile(imageFileItem, fileData, parameters);
@@ -197,18 +198,6 @@ public class FileUploadServlet extends BaseSpringServlet {
 		return file;
 	}
 
-	private byte[] readFileStream(final InputStream stream) throws IOException {
-		byte[] buffer = new byte[4096];
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		long contentLength = 0;
-		int n = 0;
-		while (-1 != (n = stream.read(buffer))) {
-			contentLength += n;
-			output.write(buffer, 0, n);
-		}
-		return output.toByteArray();
-	}
-	
 	private FolderEntity getFolder(final String folderId)
 			throws UploadException {
 		

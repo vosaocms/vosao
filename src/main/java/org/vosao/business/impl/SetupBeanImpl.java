@@ -108,13 +108,7 @@ public class SetupBeanImpl implements SetupBean {
 	private void initPages() {
 		List<PageEntity> roots = getDao().getPageDao().getByParent(null);
 		if (roots.size() == 0) {
-			String content = "Hello!";
-			try {
-				content = JSFUtil.getTextResource("org/vosao/resources/html/root.html");
-			}
-			catch(IOException e) {
-		        log.error("Can't read default root page." + e);
-			}
+			String content = loadResource("org/vosao/resources/html/root.html");
 			TemplateEntity template = getDao().getTemplateDao().getByUrl("simple");
 			PageEntity root = new PageEntity("root", content, "/", null, 
 					template.getId());
@@ -126,14 +120,10 @@ public class SetupBeanImpl implements SetupBean {
 	private void initTemplates() {
 		List<TemplateEntity> list = getDao().getTemplateDao().select();
 		if (list.size() == 0) {
-			String content = "$page.content";
-			try {
-				content = JSFUtil.getTextResource("org/vosao/resources/html/simple.html");
-			}
-			catch(IOException e) {
-		        log.error("Can't read default template." + e);
-			}
-			TemplateEntity template = new TemplateEntity("Simple", content, "simple");
+			String content = loadResource(
+					"org/vosao/resources/html/simple.html");
+			TemplateEntity template = new TemplateEntity("Simple", content, 
+					"simple");
 			getDao().getTemplateDao().save(template);
 	        log.info("Adding default template.");
 		}
@@ -175,31 +165,29 @@ public class SetupBeanImpl implements SetupBean {
 	        config.setSiteEmail("");
 	        config.setSiteDomain("");
 	        config.setEditExt("css,js,xml");
-			String url = "org/vosao/resources/html/comments.html";
-			String template = "Error during load resources " + url;
-			try {
-				template = JSFUtil.getTextResource(url);
-			}
-			catch(IOException e) {
-				log.error("Can't read comments template." + e);
-			}
-	        config.setCommentsTemplate(template);
+	        config.setCommentsTemplate(loadResource(
+	        		"org/vosao/resources/html/comments.html"));
 	        getDao().getConfigDao().save(config);
+		}
+	}
+	
+	private String loadResource(final String url) {
+		try {
+			return JSFUtil.getTextResource(url);
+		}
+		catch(IOException e) {
+			log.error("Can't read comments template." + e);
+			return "Error during load resources " + url;
 		}
 	}
 	
 	private void initForms() {
 		FormConfigEntity config = getDao().getFormDao().getConfig();
 		if (config.getId() == null) {
-			String url = "org/vosao/resources/html/form-template.html";
-			String template = "Error during load resources " + url;
-			try {
-				template = JSFUtil.getTextResource(url);
-			}
-			catch(IOException e) {
-				log.error("Can't read comments template." + e);
-			}
-			config.setFormTemplate(template);
+			config.setFormTemplate(loadResource(
+					"org/vosao/resources/html/form-template.html"));
+			config.setLetterTemplate(loadResource(
+					"org/vosao/resources/html/form-letter.html"));
 			getDao().getFormDao().save(config);			
 		}
 	}

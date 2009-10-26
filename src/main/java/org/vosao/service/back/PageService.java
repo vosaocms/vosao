@@ -19,20 +19,29 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.velocity;
+package org.vosao.service.back;
 
 import java.util.List;
+import java.util.Map;
 
-import org.vosao.entity.CommentEntity;
+import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.PageEntity;
-import org.vosao.service.back.impl.vo.CommentVO;
+import org.vosao.service.AbstractService;
+import org.vosao.service.ServiceResponse;
+import org.vosao.service.back.impl.vo.PageVO;
 
-public interface VelocityService {
-
-	PageEntity findPage(final String path);
+public interface PageService extends AbstractService {
 	
-	List<PageEntity> findPageChildren(final String path);
-
-	List<CommentVO> getCommentsByPage(final String pageId);
+	ServiceResponse updateContent(final String pageId, final String content);
+	
+	TreeItemDecorator<PageVO> getTree();
+	
+	PageEntity getPage(final String id);
+	
+	ServiceResponse savePage(final Map<String, String> page);
+	
+	List<PageVO> getChildren(final String id);
+	
+	ServiceResponse deletePages(final List<String> ids);
 	
 }

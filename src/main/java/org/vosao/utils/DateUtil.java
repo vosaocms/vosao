@@ -33,6 +33,7 @@ public class DateUtil {
 	private static final Format headerFormatter = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z");
 	
 	public static String toString(final Date date) {
+		if (date == null) return "";
 		return formatter.format(date);
 	}
 	

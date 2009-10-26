@@ -19,20 +19,20 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.velocity;
+package org.vosao.service;
 
-import java.util.List;
+import org.jabsorb.JSONRPCBridge;
+import org.vosao.service.front.FormService;
+import org.vosao.service.front.LoginService;
 
-import org.vosao.entity.CommentEntity;
-import org.vosao.entity.PageEntity;
-import org.vosao.service.back.impl.vo.CommentVO;
-
-public interface VelocityService {
-
-	PageEntity findPage(final String path);
+public interface FrontService {
 	
-	List<PageEntity> findPageChildren(final String path);
+	void register(JSONRPCBridge bridge);
 
-	List<CommentVO> getCommentsByPage(final String pageId);
+	FormService getFormService();
+	void setFormService(FormService bean);
+
+	LoginService getLoginService();
+	void setLoginService(LoginService bean);
 	
 }

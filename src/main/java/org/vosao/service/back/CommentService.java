@@ -19,20 +19,40 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.velocity;
+package org.vosao.service.back;
 
 import java.util.List;
 
-import org.vosao.entity.CommentEntity;
-import org.vosao.entity.PageEntity;
+import javax.servlet.http.HttpServletRequest;
+
+import org.vosao.service.AbstractService;
+import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.impl.vo.CommentVO;
 
-public interface VelocityService {
 
-	PageEntity findPage(final String path);
+public interface CommentService extends AbstractService {
 	
-	List<PageEntity> findPageChildren(final String path);
+	List<CommentVO> getByPage(final String pageId);
 
-	List<CommentVO> getCommentsByPage(final String pageId);
+	/**
+	 * Add comment to page. Protected by reCaptcha service.
+	 * @param name - user name
+	 * @param params - form parameters
+	 * @param challenge - recaptcha challenge
+	 * @param response - recaptcha response
+	 * @return - service response.
+	 */
+	ServiceResponse addComment(final String name, 
+			final String comment, 
+			final String pageId,
+			final String challenge, 
+			final String response, 
+			HttpServletRequest request);
+	
+	ServiceResponse enableComments(final List<String> ids);
+
+	ServiceResponse disableComments(final List<String> ids);
+	
+	ServiceResponse deleteComments(final List<String> ids);
 	
 }

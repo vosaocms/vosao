@@ -19,20 +19,29 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.velocity;
+package org.vosao.service.front;
 
-import java.util.List;
+import java.util.Map;
 
-import org.vosao.entity.CommentEntity;
-import org.vosao.entity.PageEntity;
-import org.vosao.service.back.impl.vo.CommentVO;
+import javax.servlet.http.HttpServletRequest;
 
-public interface VelocityService {
+import org.vosao.service.AbstractService;
+import org.vosao.service.ServiceResponse;
 
-	PageEntity findPage(final String path);
+
+public interface FormService extends AbstractService {
 	
-	List<PageEntity> findPageChildren(final String path);
-
-	List<CommentVO> getCommentsByPage(final String pageId);
+	ServiceResponse send(final String name, Map<String, String> params);
 	
+	/**
+	 * Send entered form. Protected by reCaptcha service.
+	 * @param name - form name
+	 * @param params-form parameters
+	 * @param challenge - recaptcha challenge
+	 * @param response - recaptcha response
+	 * @return - service response.
+	 */
+	ServiceResponse send(final String name, Map<String, String> params,
+			final String challenge, final String response, 
+			HttpServletRequest request);
 }

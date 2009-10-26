@@ -31,21 +31,20 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.jabsorb.JSONRPCBridge;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.vosao.business.Business;
+import org.vosao.service.BackService;
+import org.vosao.service.FrontService;
 
-public class AuthenticationFilter implements Filter {
-
-	public static final String ORIGINAL_VIEW_KEY = "originalViewKey";
-	public static final String LOGIN_VIEW = "/login.jsp";
+public class ServiceFilter implements Filter {
 
 	FilterConfig config = null;
 	ServletContext servletContext = null;
 
-	public AuthenticationFilter() {
+	public ServiceFilter() {
 	}
 
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -59,14 +58,30 @@ public class AuthenticationFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
-		HttpServletResponse httpResponse = (HttpServletResponse) response;
-		HttpSession session = httpRequest.getSession();
-		if (!isLoggedIn(httpRequest)) {
-			session.setAttribute(ORIGINAL_VIEW_KEY, httpRequest.getRequestURI());
-			httpResponse.sendRedirect(httpRequest.getContextPath() + LOGIN_VIEW);
+		HttpSession session = httpRequest.getSession(true);
+		if (isLoggedIn(httpRequest)) {
+			enableBackService(session);
 		} else {
-			chain.doFilter(request, response);
+			enableFrontService(session);
 		}
+        chain.doFilter(request, response);
+	}
+
+	private void enableBackService(HttpSession session) {
+		JSONRPCBridge bridge = getJSONRPCBridge(session);
+		getBackService().register(bridge);
+	}
+
+	private void enableFrontService(HttpSession session) {
+		JSONRPCBridge bridge = getJSONRPCBridge(session);
+		getFrontService().register(bridge);
+	}
+	
+	private JSONRPCBridge getJSONRPCBridge(HttpSession session) {
+		if (session.getAttribute("JSONRPCBridge") == null) {
+			session.setAttribute("JSONRPCBridge", new JSONRPCBridge());
+		}
+		return (JSONRPCBridge) session.getAttribute("JSONRPCBridge");
 	}
 
 	private boolean isLoggedIn(final HttpServletRequest request) {
@@ -74,6 +89,18 @@ public class AuthenticationFilter implements Filter {
 				.getRequiredWebApplicationContext(servletContext).getBean(
 						"business");
 		return business.getUserPreferences(request).isLoggedIn();
+	}
+
+	private FrontService getFrontService() {
+		return (FrontService) WebApplicationContextUtils
+				.getRequiredWebApplicationContext(servletContext).getBean(
+						"frontService");
+	}
+
+	private BackService getBackService() {
+		return (BackService) WebApplicationContextUtils
+				.getRequiredWebApplicationContext(servletContext).getBean(
+						"backService");
 	}
 	
 }

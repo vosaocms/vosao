@@ -22,7 +22,6 @@
 package org.vosao.servlet;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -49,7 +48,6 @@ import org.dom4j.DocumentException;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PageEntity;
-import org.vosao.jsf.PageBean;
 import org.vosao.utils.StreamUtil;
 
 /**
@@ -76,6 +74,8 @@ public class FileUploadServlet extends BaseSpringServlet {
 	private static final String FOLDER_ID_IS_NULL = "Folder id is null";
 	private static final String PARSE_REQUEST_ERROR = "Parse request error";
 
+	public static final String IMAGE_UPLOAD_PAGE_ID = "imageUploadPageId";
+	
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -94,9 +94,9 @@ public class FileUploadServlet extends BaseSpringServlet {
 				InputStream stream = null;
 				InputStream filestream = null;
 				byte[] fileData = null;
-				parameters.put(PageBean.IMAGE_UPLOAD_PAGE_ID, 
+				parameters.put(IMAGE_UPLOAD_PAGE_ID, 
 						(String)session.getAttribute(
-								PageBean.IMAGE_UPLOAD_PAGE_ID));
+								IMAGE_UPLOAD_PAGE_ID));
 				while (iter.hasNext()) {
 					FileItemStream item = iter.next();
 					stream = item.openStream();
@@ -135,12 +135,12 @@ public class FileUploadServlet extends BaseSpringServlet {
 			Map<String, String> parameters) throws UploadException {
 		
 		if (!parameters.containsKey(FILE_TYPE_PARAM)) {
-			if (!parameters.containsKey(PageBean.IMAGE_UPLOAD_PAGE_ID)) {
+			if (!parameters.containsKey(IMAGE_UPLOAD_PAGE_ID)) {
 				throw new UploadException("File type was not specified");
 			}
 			else {
 				return processResourceFileCKeditor(fileItem, data, 
-						parameters.get(PageBean.IMAGE_UPLOAD_PAGE_ID));
+						parameters.get(IMAGE_UPLOAD_PAGE_ID));
 			}
 		}
 		String fileType = parameters.get(FILE_TYPE_PARAM);
@@ -283,7 +283,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 	
 	private boolean isCKeditorUpload(Map<String, String> parameters) {
 		return !parameters.containsKey(FILE_TYPE_PARAM) && 
-			parameters.containsKey(PageBean.IMAGE_UPLOAD_PAGE_ID);
+			parameters.containsKey(IMAGE_UPLOAD_PAGE_ID);
 	}
 	
 }

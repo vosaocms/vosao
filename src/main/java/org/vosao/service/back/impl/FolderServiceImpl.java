@@ -19,20 +19,29 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.velocity;
+package org.vosao.service.back.impl;
 
-import java.util.List;
+import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.entity.FolderEntity;
+import org.vosao.service.back.FolderService;
+import org.vosao.service.impl.AbstractServiceImpl;
 
-import org.vosao.entity.CommentEntity;
-import org.vosao.entity.PageEntity;
-import org.vosao.service.back.impl.vo.CommentVO;
+public class FolderServiceImpl extends AbstractServiceImpl 
+		implements FolderService {
 
-public interface VelocityService {
+	@Override
+	public TreeItemDecorator<FolderEntity> getTree() {
+		return getBusiness().getFolderBusiness().getTree();
+	}
 
-	PageEntity findPage(final String path);
-	
-	List<PageEntity> findPageChildren(final String path);
+	@Override
+	public String getFolderPath(final String folderId) {
+		FolderEntity folder = getDao().getFolderDao().getById(folderId);
+		if (folder != null) {
+			return getBusiness().getFolderBusiness().getFolderPath(folder);
+		}
+		return null;
+	}
 
-	List<CommentVO> getCommentsByPage(final String pageId);
-	
+
 }

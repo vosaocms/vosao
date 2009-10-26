@@ -31,7 +31,6 @@ import javax.cache.CacheFactory;
 import javax.cache.CacheManager;
 import javax.cache.CacheStatistics;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
@@ -44,7 +43,7 @@ import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.UserRole;
-import org.vosao.jsf.JSFUtil;
+import org.vosao.utils.StreamUtil;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -173,7 +172,7 @@ public class SetupBeanImpl implements SetupBean {
 	
 	private String loadResource(final String url) {
 		try {
-			return JSFUtil.getTextResource(url);
+			return StreamUtil.getTextResource(url);
 		}
 		catch(IOException e) {
 			log.error("Can't read comments template." + e);

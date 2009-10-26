@@ -241,7 +241,8 @@
                 <artifactId>maven-datanucleus-plugin</artifactId>
                 <version>1.1.4</version>
                 <configuration>
-                    <mappingIncludes>**/*.class</mappingIncludes>
+                    <fork>false</fork>
+                    <mappingIncludes>org/vosao/entity/*.class</mappingIncludes>
                     <verbose>true</verbose>
                     <enhancerName>ASM</enhancerName>
                     <api>JDO</api>

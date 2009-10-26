@@ -19,20 +19,23 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.velocity;
+package org.vosao.service.back;
 
 import java.util.List;
+import java.util.Map;
 
-import org.vosao.entity.CommentEntity;
-import org.vosao.entity.PageEntity;
-import org.vosao.service.back.impl.vo.CommentVO;
+import org.vosao.service.AbstractService;
+import org.vosao.service.ServiceResponse;
+import org.vosao.service.back.impl.vo.FieldVO;
 
-public interface VelocityService {
 
-	PageEntity findPage(final String path);
+public interface FieldService extends AbstractService {
 	
-	List<PageEntity> findPageChildren(final String path);
-
-	List<CommentVO> getCommentsByPage(final String pageId);
+	ServiceResponse updateField(Map<String, String> field);
 	
+	List<FieldVO> getByForm(final String formId);
+	
+	FieldVO getById(final String fieldId);
+	
+	void remove(final List<String> ids);
 }

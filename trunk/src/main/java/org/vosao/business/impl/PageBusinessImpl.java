@@ -84,8 +84,8 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			}
 		}
 		return root;
-	}
-
+	}	
+	
 	@Override
 	public String render(PageEntity page) {
 		if (page.getTemplate() != null) {

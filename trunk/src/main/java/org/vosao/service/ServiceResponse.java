@@ -37,6 +37,13 @@ public class ServiceResponse {
 		return new ServiceResponse(ERROR_RESULT, msg);
 	}
 	
+	public static ServiceResponse createErrorResponse(final String msg,
+			final List<String> errors) {
+		ServiceResponse result = new ServiceResponse(ERROR_RESULT, msg);
+		result.messages= errors;
+		return result;
+	}
+
 	public static ServiceResponse createSuccessResponse(final String msg) {
 		return new ServiceResponse(SUCCESS_RESULT, msg);
 	}

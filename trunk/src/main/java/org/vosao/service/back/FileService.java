@@ -19,20 +19,23 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.velocity;
+package org.vosao.service.back;
 
 import java.util.List;
 
-import org.vosao.entity.CommentEntity;
-import org.vosao.entity.PageEntity;
-import org.vosao.service.back.impl.vo.CommentVO;
+import org.vosao.entity.FileEntity;
+import org.vosao.service.AbstractService;
+import org.vosao.service.ServiceResponse;
 
-public interface VelocityService {
 
-	PageEntity findPage(final String path);
+public interface FileService extends AbstractService {
 	
-	List<PageEntity> findPageChildren(final String path);
+	List<FileEntity> getByFolder(final String folderId);
 
-	List<CommentVO> getCommentsByPage(final String pageId);
+	ServiceResponse deleteFiles(final List<String> fileIds);
 	
+	String getFilePath(final String fileId);
+
+	ServiceResponse updateContent(final String fileId, final String content);
+
 }

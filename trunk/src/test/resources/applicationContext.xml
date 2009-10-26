@@ -141,30 +141,28 @@
         <property name="business" ref="business"/>  
     </bean>
 
-    <bean id="formService" class="org.vosao.service.impl.FormServiceImpl"
+    <!--==================== JSON-RPC back services =========================-->
+
+    <bean id="fileService" class="org.vosao.service.back.impl.FileServiceImpl"
         parent="abstractService" />  
 
-    <bean id="fileService" class="org.vosao.service.impl.FileServiceImpl"
-        parent="abstractService" />  
-
-    <bean id="folderService" class="org.vosao.service.impl.FolderServiceImpl"
+    <bean id="folderService" class="org.vosao.service.back.impl.FolderServiceImpl"
         parent="abstractService" />
           
-    <bean id="commentService" class="org.vosao.service.impl.CommentServiceImpl"
+    <bean id="commentService" class="org.vosao.service.back.impl.CommentServiceImpl"
         parent="abstractService" />
 
-    <bean id="pageService" class="org.vosao.service.impl.PageServiceImpl"
+    <bean id="pageService" class="org.vosao.service.back.impl.PageServiceImpl"
         parent="abstractService" />
 
-    <bean id="templateService" class="org.vosao.service.impl.TemplateServiceImpl"
+    <bean id="templateService" class="org.vosao.service.back.impl.TemplateServiceImpl"
         parent="abstractService" />
 
-    <bean id="fieldService" class="org.vosao.service.impl.FieldServiceImpl"
+    <bean id="fieldService" class="org.vosao.service.back.impl.FieldServiceImpl"
         parent="abstractService" />
 
-    <bean id="service" class="org.vosao.service.impl.ServiceImpl"
+    <bean id="backService" class="org.vosao.service.impl.BackServiceImpl"
         init-method="init">  
-        <property name="formService" ref="formService"/>  
         <property name="fileService" ref="fileService"/>  
         <property name="folderService" ref="folderService"/>  
         <property name="commentService" ref="commentService"/>  
@@ -173,44 +171,18 @@
         <property name="fieldService" ref="fieldService"/>  
     </bean>
 
-    <!--========================= JSF beans =================================-->
+    <!--================== JSON-RPC front services ==========================-->
 
-    <bean id="abstractJSFBean" abstract="true"
-        class="org.vosao.jsf.AbstractJSFBean">
-        <property name="dao" ref="dao"/>  
-        <property name="business" ref="business"/>  
+    <bean id="loginService" class="org.vosao.service.front.impl.LoginServiceImpl"
+        parent="abstractService" />
+
+    <bean id="formService" class="org.vosao.service.front.impl.FormServiceImpl"
+        parent="abstractService" />  
+
+    <bean id="frontService" class="org.vosao.service.impl.FrontServiceImpl"
+        init-method="init">  
+        <property name="loginService" ref="loginService"/>  
+        <property name="formService" ref="formService"/>  
     </bean>
-
-    <bean id="pageBean" class="org.vosao.jsf.PageBean" 
-        init-method="init" scope="request"
-        parent="abstractJSFBean" />
-
-    <bean id="folderBean" class="org.vosao.jsf.FolderBean" 
-        init-method="init" scope="request"
-        parent="abstractJSFBean" />
-
-    <bean id="templateBean" class="org.vosao.jsf.TemplateBean" 
-        init-method="init" scope="request"
-        parent="abstractJSFBean" />
-
-    <bean id="configBean" class="org.vosao.jsf.ConfigBean" 
-        init-method="init" scope="request"
-        parent="abstractJSFBean" />
-
-    <bean id="loginBean" class="org.vosao.jsf.LoginBean" 
-        scope="request"
-        parent="abstractJSFBean" />
-
-    <bean id="formBean" class="org.vosao.jsf.FormBean" 
-        init-method="init" scope="request"
-        parent="abstractJSFBean" />
-
-    <bean id="fileBean" class="org.vosao.jsf.FileBean" 
-        init-method="init" scope="request"
-        parent="abstractJSFBean" />
-
-    <bean id="profileBean" class="org.vosao.jsf.ProfileBean" 
-        init-method="init" scope="request"
-        parent="abstractJSFBean" />
 
 </beans>

@@ -21,11 +21,6 @@
 
 package org.vosao.business.impl;
 
-import java.util.Collections;
-
-import javax.cache.Cache;
-import javax.cache.CacheException;
-import javax.cache.CacheManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -43,7 +38,6 @@ import org.vosao.business.PageBusiness;
 import org.vosao.business.TemplateBusiness;
 import org.vosao.business.UserPreferences;
 import org.vosao.global.SystemService;
-import org.vosao.jsf.JSFUtil;
 
 public class BusinessImpl implements Business {
 
@@ -64,21 +58,6 @@ public class BusinessImpl implements Business {
 	}
 	
 	@Override
-	public UserPreferences getUserPreferences() {
-		String name = UserPreferences.class.getName();
-		if (JSFUtil.getSessionObject(name) == null) {
-			JSFUtil.setSessionObject(name, new UserPreferences());
-		}
-		return (UserPreferences)JSFUtil.getSessionObject(name);
-	}
-
-	@Override
-	public void setUserPreferences(UserPreferences aUserPreferences) {
-		JSFUtil.setSessionObject(UserPreferences.class.getName(), 
-				aUserPreferences);
-	}
-
-	@Override
 	public UserPreferences getUserPreferences(final HttpServletRequest request) {
 		String name = UserPreferences.class.getName();
 		HttpSession session = request.getSession(true);
@@ -88,7 +67,14 @@ public class BusinessImpl implements Business {
 		return (UserPreferences)session.getAttribute(name);
 	}
 
-	
+	@Override
+	public void setUserPreferences(UserPreferences bean, 
+			final HttpServletRequest request) {
+		String name = UserPreferences.class.getName();
+		HttpSession session = request.getSession(true);
+		session.setAttribute(name, bean);
+	}
+
 	@Override
 	public PageBusiness getPageBusiness() {
 		return pageBusiness;

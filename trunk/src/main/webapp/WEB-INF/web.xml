@@ -4,12 +4,6 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
 
-    <listener>
-        <listener-class>
-            com.sun.faces.config.ConfigureListener
-        </listener-class>
-    </listener>
-
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
@@ -51,6 +45,17 @@
         <url-pattern>/cms/*</url-pattern>
     </filter-mapping>    
 
+    <!-- ServiceFilter -->
+    
+    <filter>
+        <filter-name>ServiceFilter</filter-name>
+        <filter-class>org.vosao.filter.ServiceFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ServiceFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>    
+
     <!-- SiteFilter -->
     
     <filter>
@@ -60,6 +65,21 @@
     <filter-mapping>
         <filter-name>SiteFilter</filter-name>
         <url-pattern>/*</url-pattern>
+    </filter-mapping>    
+
+    <!-- Sitemesh -->
+    
+    <filter>
+        <filter-name>sitemesh</filter-name>
+        <filter-class>
+            com.opensymphony.module.sitemesh.filter.PageFilter
+        </filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>sitemesh</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>REQUEST</dispatcher>
     </filter-mapping>    
 
     <!-- JSON-RPC -->
@@ -76,44 +96,6 @@
         <servlet-name>org.jabsorb.JSONRPCServlet</servlet-name>
         <url-pattern>/JSON-RPC/*</url-pattern>
     </servlet-mapping>
-
-    <!-- Pretty Faces -->
-    
-    <filter>
-        <filter-name>Pretty Filter</filter-name>
-        <filter-class>com.ocpsoft.pretty.PrettyFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>Pretty Filter</filter-name>
-        <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-        <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
-
-    <!-- JSF -->
-
-    <servlet>
-        <servlet-name>JSF</servlet-name>
-        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>JSF</servlet-name>
-        <url-pattern>*.jsf</url-pattern>
-    </servlet-mapping>
-
-    <context-param>
-        <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
-        <param-value>.xhtml</param-value>
-    </context-param>
-    <context-param>
-        <param-name>facelets.DEVELOPMENT</param-name>
-        <param-value>true</param-value>
-    </context-param>
-    <context-param>
-        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-        <param-value>client</param-value>
-    </context-param>
 
     <!-- File upload servlet -->
 
@@ -147,24 +129,5 @@
         <servlet-name>FormSend</servlet-name>
         <url-pattern>/plugin/form/send</url-pattern>
     </servlet-mapping>
-
-    <!-- GAE JSF stuff -->
-    
-    <!-- context-param>
-        <param-name>com.sun.faces.enableThreading</param-name>
-        <param-value>false</param-value>
-    </context-param-->
-    <context-param>
-        <param-name>com.sun.faces.enableMultiThreadedStartup</param-name>
-        <param-value>false</param-value>
-    </context-param>
-    <context-param>
-        <param-name>com.sun.faces.expressionFactory</param-name>
-        <param-value>com.sun.el.ExpressionFactoryImpl</param-value>
-    </context-param>
-    <!--context-param>
-        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-        <param-value>client</param-value>
-    </context-param-->
     
 </web-app>

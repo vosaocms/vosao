@@ -31,9 +31,8 @@ public interface Business {
 	SystemService getSystemService();
 	void setSystemService(final SystemService bean);
 
-	UserPreferences getUserPreferences();
 	UserPreferences getUserPreferences(final HttpServletRequest request);
-	void setUserPreferences(final UserPreferences userPreferences);
+	void setUserPreferences(UserPreferences bean, final HttpServletRequest request);
 
 	PageBusiness getPageBusiness();
 	void setPageBusiness(final PageBusiness bean);

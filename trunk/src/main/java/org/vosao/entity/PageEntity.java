@@ -31,6 +31,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import org.vosao.utils.DateUtil;
+
 import com.google.appengine.api.datastore.Text;
 
 
@@ -195,6 +197,10 @@ public class PageEntity implements Serializable {
 
 	public Date getPublishDate() {
 		return publishDate;
+	}
+
+	public String getPublishDateString() {
+		return DateUtil.toString(publishDate);
 	}
 
 	public void setPublishDate(Date publishDate) {

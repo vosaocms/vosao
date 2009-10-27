@@ -85,7 +85,7 @@ function serviceFailed(e) {
  */
 var loginService = {
 	login: function(func, email, password) {
-		jsonrpc.loginService.login(function (r,e) {
+		jsonrpc.loginFrontService.login(function (r,e) {
 			if (serviceFailed(e)) return;
 			func(r);
 		}, email, password);

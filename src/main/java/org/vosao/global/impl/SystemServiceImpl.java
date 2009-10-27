@@ -22,6 +22,7 @@
 package org.vosao.global.impl;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.Collections;
 
@@ -38,7 +39,7 @@ import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.vosao.global.SystemService;
 
-public class SystemServiceImpl implements SystemService {
+public class SystemServiceImpl implements SystemService, Serializable {
 
 	private static final Log log = LogFactory.getLog(SystemServiceImpl.class);
 

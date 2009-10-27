@@ -21,6 +21,7 @@
 
 package org.vosao.dao.impl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.orm.jdo.PersistenceManagerFactoryUtils;
 import org.vosao.dao.AbstractDao;
 
-public class AbstractDaoImpl implements AbstractDao {
+public class AbstractDaoImpl implements AbstractDao, Serializable {
 
 	protected static final Log logger = LogFactory.getLog(AbstractDaoImpl.class);
 

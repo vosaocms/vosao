@@ -102,7 +102,7 @@ public class FolderUtil {
 
 	public static String getFileExt(final String path) {
 		int s = path.lastIndexOf(".");
-		return path.substring(s + 1, path.length());
+		return path.substring(s + 1, path.length()).toLowerCase();
 	}
 	
 }

@@ -21,9 +21,13 @@
 
 package org.vosao.service.back;
 
+import java.util.List;
+import java.util.Map;
+
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FolderEntity;
 import org.vosao.service.AbstractService;
+import org.vosao.service.ServiceResponse;
 
 
 public interface FolderService extends AbstractService {
@@ -32,4 +36,11 @@ public interface FolderService extends AbstractService {
 	
 	String getFolderPath(final String folderId);
 	
+	FolderEntity getFolder(final String id);
+	
+	List<FolderEntity> getByParent(final String id);
+	
+	ServiceResponse saveFolder(final Map<String, String> vo);
+	
+	ServiceResponse deleteFolder(final List<String> ids);
 }

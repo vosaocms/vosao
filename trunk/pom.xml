@@ -243,7 +243,7 @@
                 <configuration>
                     <fork>false</fork>
                     <mappingIncludes>org/vosao/entity/*.class</mappingIncludes>
-                    <verbose>true</verbose>
+                    <verbose>false</verbose>
                     <enhancerName>ASM</enhancerName>
                     <api>JDO</api>
                 </configuration>

@@ -23,6 +23,7 @@ package org.vosao.service;
 
 import org.jabsorb.JSONRPCBridge;
 import org.vosao.service.back.CommentService;
+import org.vosao.service.back.ConfigService;
 import org.vosao.service.back.FieldService;
 import org.vosao.service.back.FileService;
 import org.vosao.service.back.FolderService;
@@ -51,4 +52,6 @@ public interface BackService {
 	FieldService getFieldService();
 	void setFieldService(FieldService bean);
 	
+	ConfigService getConfigService();
+	void setConfigService(ConfigService bean);
 }

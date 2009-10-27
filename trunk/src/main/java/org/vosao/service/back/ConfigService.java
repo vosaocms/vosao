@@ -19,30 +19,20 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.jsf;
+package org.vosao.service.back;
 
-import org.vosao.business.Business;
-import org.vosao.dao.Dao;
+import java.util.Map;
 
-public abstract class AbstractJSFBean {
+import org.vosao.entity.ConfigEntity;
+import org.vosao.service.AbstractService;
+import org.vosao.service.ServiceResponse;
 
-	private Dao dao;
-	private Business business;
-
-	public Dao getDao() {
-		return dao;
-	}
-
-	public void setDao(Dao dao) {
-		this.dao = dao;
-	}
+/**
+ * @author Alexander Oleynik
+ */
+public interface ConfigService extends AbstractService {
 	
-	public Business getBusiness() {
-		return business;
-	}
+	ConfigEntity getConfig();
 	
-	public void setBusiness(Business business) {
-		this.business = business;
-	}
-	
+	ServiceResponse saveConfig(final Map<String, String> vo);
 }

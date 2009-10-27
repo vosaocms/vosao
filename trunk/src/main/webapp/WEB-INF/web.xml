@@ -108,6 +108,17 @@
         <url-pattern>/cms/upload</url-pattern>
     </servlet-mapping>
 
+    <!-- File export servlet -->
+
+    <servlet>
+        <servlet-name>ExportUpload</servlet-name>
+        <servlet-class>org.vosao.servlet.ExportServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ExportUpload</servlet-name>
+        <url-pattern>/cms/export</url-pattern>
+    </servlet-mapping>
+
     <!-- File download servlet -->
 
     <servlet>

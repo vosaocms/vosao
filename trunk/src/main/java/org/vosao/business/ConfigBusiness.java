@@ -28,4 +28,7 @@ public interface ConfigBusiness {
 
 	ConfigEntity getConfig();
 	
+	boolean isTextFileExt(final String ext);
+	
+	boolean isImageFileExt(final String ext);
 }

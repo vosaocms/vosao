@@ -21,6 +21,8 @@
 
 package org.vosao.dao.impl;
 
+import java.io.Serializable;
+
 import org.vosao.dao.CommentDao;
 import org.vosao.dao.ConfigDao;
 import org.vosao.dao.Dao;
@@ -32,7 +34,7 @@ import org.vosao.dao.PageDao;
 import org.vosao.dao.TemplateDao;
 import org.vosao.dao.UserDao;
 
-public class DaoImpl implements Dao {
+public class DaoImpl implements Dao, Serializable {
 
 	private PageDao pageDao;
 	private FileDao fileDao;

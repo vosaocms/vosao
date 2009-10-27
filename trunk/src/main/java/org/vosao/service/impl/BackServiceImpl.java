@@ -21,6 +21,8 @@
 
 package org.vosao.service.impl;
 
+import java.io.Serializable;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jabsorb.JSONRPCBridge;
@@ -34,7 +36,7 @@ import org.vosao.service.back.FormService;
 import org.vosao.service.back.PageService;
 import org.vosao.service.back.TemplateService;
 
-public class BackServiceImpl implements BackService {
+public class BackServiceImpl implements BackService, Serializable {
 
 	private static final Log log = LogFactory.getLog(BackServiceImpl.class);
 
@@ -50,6 +52,7 @@ public class BackServiceImpl implements BackService {
 	public void init() {
 	}
 	
+	@Override
 	public void register(JSONRPCBridge bridge) {
 		bridge.registerObject("fileService", fileService);
 		bridge.registerObject("folderService", folderService);
@@ -61,6 +64,18 @@ public class BackServiceImpl implements BackService {
 		bridge.registerObject("configService", configService);
 	}
 	
+	@Override
+	public void unregister(JSONRPCBridge bridge) {
+		bridge.unregisterObject("fileService");
+		bridge.unregisterObject("folderService");
+		bridge.unregisterObject("commentService");
+		bridge.unregisterObject("pageService");
+		bridge.unregisterObject("templateService");
+		bridge.unregisterObject("fieldService");
+		bridge.unregisterObject("formService");
+		bridge.unregisterObject("configService");
+	}
+
 	@Override
 	public FileService getFileService() {
 		return fileService;

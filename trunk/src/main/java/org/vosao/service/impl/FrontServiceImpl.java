@@ -21,6 +21,8 @@
 
 package org.vosao.service.impl;
 
+import java.io.Serializable;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jabsorb.JSONRPCBridge;
@@ -28,7 +30,7 @@ import org.vosao.service.FrontService;
 import org.vosao.service.front.FormService;
 import org.vosao.service.front.LoginService;
 
-public class FrontServiceImpl implements FrontService {
+public class FrontServiceImpl implements FrontService, Serializable {
 
 	private static final Log log = LogFactory.getLog(FrontServiceImpl.class);
 
@@ -38,11 +40,18 @@ public class FrontServiceImpl implements FrontService {
 	public void init() {
 	}
 
+	@Override
 	public void register(JSONRPCBridge bridge) {
-		bridge.registerObject("loginService", loginService);
-		bridge.registerObject("formService", formService);
+		bridge.registerObject("loginFrontService", loginService);
+		bridge.registerObject("formFrontService", formService);
 	}
 	
+	@Override
+	public void unregister(JSONRPCBridge bridge) {
+		bridge.unregisterObject("loginFrontService");
+		bridge.unregisterObject("formFrontService");
+	}
+
 	@Override
 	public FormService getFormService() {
 		return formService;

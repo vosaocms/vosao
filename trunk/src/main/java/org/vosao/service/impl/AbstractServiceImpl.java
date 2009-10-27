@@ -21,11 +21,14 @@
 
 package org.vosao.service.impl;
 
+import java.io.Serializable;
+
 import org.vosao.business.Business;
 import org.vosao.dao.Dao;
 import org.vosao.service.AbstractService;
 
-public abstract class AbstractServiceImpl implements AbstractService {
+public abstract class AbstractServiceImpl implements AbstractService, 
+		Serializable {
 
 	private Dao dao;
 	private Business business;

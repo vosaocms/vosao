@@ -59,12 +59,20 @@ public class ServiceFilter implements Filter {
 			FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpSession session = httpRequest.getSession(true);
-		if (isLoggedIn(httpRequest)) {
-			enableBackService(session);
-		} else {
-			enableFrontService(session);
-		}
+        String url = httpRequest.getServletPath();
+        boolean backService = false;
+        if (url.startsWith("/JSON-RPC") && isLoggedIn(httpRequest)) {
+   			backService = true;
+        }
+		enableFrontService(session);
+        if (backService) {
+        	enableBackService(session);
+        }
         chain.doFilter(request, response);
+		disableFrontService(session);
+        if (backService) {
+			disableBackService(session);
+		}
 	}
 
 	private void enableBackService(HttpSession session) {
@@ -77,6 +85,16 @@ public class ServiceFilter implements Filter {
 		getFrontService().register(bridge);
 	}
 	
+	private void disableBackService(HttpSession session) {
+		JSONRPCBridge bridge = getJSONRPCBridge(session);
+		getBackService().unregister(bridge);
+	}
+
+	private void disableFrontService(HttpSession session) {
+		JSONRPCBridge bridge = getJSONRPCBridge(session);
+		getFrontService().unregister(bridge);
+	}
+
 	private JSONRPCBridge getJSONRPCBridge(HttpSession session) {
 		if (session.getAttribute("JSONRPCBridge") == null) {
 			session.setAttribute("JSONRPCBridge", new JSONRPCBridge());

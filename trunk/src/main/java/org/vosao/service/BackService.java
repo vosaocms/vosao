@@ -34,6 +34,7 @@ import org.vosao.service.back.TemplateService;
 public interface BackService {
 	
 	void register(JSONRPCBridge bridge);
+	void unregister(JSONRPCBridge bridge);
 
 	FileService getFileService();
 	void setFileService(FileService bean);

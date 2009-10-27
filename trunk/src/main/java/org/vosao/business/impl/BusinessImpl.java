@@ -21,6 +21,8 @@
 
 package org.vosao.business.impl;
 
+import java.io.Serializable;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -39,7 +41,7 @@ import org.vosao.business.TemplateBusiness;
 import org.vosao.business.UserPreferences;
 import org.vosao.global.SystemService;
 
-public class BusinessImpl implements Business {
+public class BusinessImpl implements Business, Serializable {
 
 	private static final Log log = LogFactory.getLog(BusinessImpl.class);
 

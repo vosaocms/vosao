@@ -28,6 +28,7 @@ import org.vosao.service.front.LoginService;
 public interface FrontService {
 	
 	void register(JSONRPCBridge bridge);
+	void unregister(JSONRPCBridge bridge);
 
 	FormService getFormService();
 	void setFormService(FormService bean);

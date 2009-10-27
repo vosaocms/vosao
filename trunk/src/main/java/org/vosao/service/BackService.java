@@ -27,6 +27,7 @@ import org.vosao.service.back.ConfigService;
 import org.vosao.service.back.FieldService;
 import org.vosao.service.back.FileService;
 import org.vosao.service.back.FolderService;
+import org.vosao.service.back.FormService;
 import org.vosao.service.back.PageService;
 import org.vosao.service.back.TemplateService;
 
@@ -48,6 +49,9 @@ public interface BackService {
 
 	TemplateService getTemplateService();
 	void setTemplateService(TemplateService bean);
+
+	FormService getFormService();
+	void setFormService(FormService bean);
 
 	FieldService getFieldService();
 	void setFieldService(FieldService bean);

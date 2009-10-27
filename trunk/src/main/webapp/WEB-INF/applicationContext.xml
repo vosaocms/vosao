@@ -160,6 +160,9 @@
     <bean id="templateService" class="org.vosao.service.back.impl.TemplateServiceImpl"
         parent="abstractService" />
 
+    <bean id="formService" class="org.vosao.service.back.impl.FormServiceImpl"
+        parent="abstractService" />
+
     <bean id="fieldService" class="org.vosao.service.back.impl.FieldServiceImpl"
         parent="abstractService" />
 
@@ -173,22 +176,23 @@
         <property name="commentService" ref="commentService"/>  
         <property name="pageService" ref="pageService"/>  
         <property name="templateService" ref="templateService"/>  
+        <property name="formService" ref="formService"/>  
         <property name="fieldService" ref="fieldService"/>  
         <property name="configService" ref="configService"/>  
     </bean>
 
     <!--================== JSON-RPC front services ==========================-->
 
-    <bean id="loginService" class="org.vosao.service.front.impl.LoginServiceImpl"
+    <bean id="loginFrontService" class="org.vosao.service.front.impl.LoginServiceImpl"
         parent="abstractService" />
 
-    <bean id="formService" class="org.vosao.service.front.impl.FormServiceImpl"
+    <bean id="formFrontService" class="org.vosao.service.front.impl.FormServiceImpl"
         parent="abstractService" />  
 
     <bean id="frontService" class="org.vosao.service.impl.FrontServiceImpl"
         init-method="init">  
-        <property name="loginService" ref="loginService"/>  
-        <property name="formService" ref="formService"/>  
+        <property name="loginService" ref="loginFrontService"/>  
+        <property name="formService" ref="formFrontService"/>  
     </bean>
 
 </beans>

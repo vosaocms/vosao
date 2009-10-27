@@ -59,11 +59,7 @@ public class ServiceFilter implements Filter {
 			FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpSession session = httpRequest.getSession(true);
-        String url = httpRequest.getServletPath();
-        boolean backService = false;
-        if (url.startsWith("/JSON-RPC") && isLoggedIn(httpRequest)) {
-   			backService = true;
-        }
+        boolean backService = isLoggedIn(httpRequest);
 		enableFrontService(session);
         if (backService) {
         	enableBackService(session);

@@ -59,11 +59,11 @@ function onAdd() {
 }
 
 function onDelete() {
-    var ids = [];
+    var ids = new Array();
     $('#templates input:checked').each(function () {
         ids.push(this.value);
     });
-    if (ids == []) {
+    if (ids.length == 0) {
         info('Nothing selected.');
         return;
     }
@@ -74,7 +74,28 @@ function onDelete() {
 }
 
 function onExport() {
-    alert('TODO');
+    var ids = new Array();
+    $('#templates input:checked').each(function () {
+        ids.push(this.value);
+    });
+    if (ids.length == 0) {
+        info('Nothing selected.');
+        return;
+    }
+    var link = '/cms/export?type=theme&ids=';
+    $.each(ids, function (n, value) {
+        if (n == 0) {
+            link += value;
+        }
+        else {
+            link += '::' + value;
+        }
+    });
+    location.href = link;
+    $('#templates input:checked').each(function () {
+        this.checked = false;
+    });
+    info('Themes were successfully exported.');
 }
 
 // -->
@@ -89,7 +110,7 @@ function onExport() {
     <input type="button" value="Add" onclick="onAdd()" />
     <input type="button" value="Delete" onclick="onDelete()" />
     <input type="button" value="Export" onclick="onExport()" />
-    <input type="button" onclick="onImport()" value="Import" />
+    <input type="button" value="Import" onclick="onImport()" />
 </div>
 
 <div id="import-dialog" title="Import themes" style="display:none">

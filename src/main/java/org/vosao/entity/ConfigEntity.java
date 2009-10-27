@@ -77,9 +77,6 @@ public class ConfigEntity implements Serializable {
 	@Persistent(defaultFetchGroup = "true")
 	private Text commentsTemplate;
 	
-	@Persistent(defaultFetchGroup = "true")
-	private Text formTemplate;
-
 	public ConfigEntity() {
 	}
 	
@@ -92,7 +89,6 @@ public class ConfigEntity implements Serializable {
 		setRecaptchaPublicKey(entity.getRecaptchaPublicKey());
 		setSiteDomain(entity.getSiteDomain());
 		setSiteEmail(entity.getSiteEmail());
-		setFormTemplate(entity.getFormTemplate());
 	}
 	
 	/**
@@ -109,7 +105,6 @@ public class ConfigEntity implements Serializable {
 		result.put(RECAPTCHA_PUBLIC_KEY, getNotNull(getRecaptchaPublicKey()));
 		result.put(SITE_DOMAIN, getNotNull(getSiteDomain()));
 		result.put(SITE_EMAIL, getNotNull(getSiteEmail()));
-		result.put(FORM_TEMPLATE, getNotNull(getFormTemplate()));
 		return result;
 	}
 
@@ -206,17 +201,6 @@ public class ConfigEntity implements Serializable {
 			}
 		}
 		return false;
-	}
-	
-	public String getFormTemplate() {
-		if (formTemplate == null) {
-			return null;
-		}
-		return formTemplate.getValue();
-	}
-
-	public void setFormTemplate(String formTemplate) {
-		this.formTemplate = new Text(formTemplate);
 	}
 	
 }

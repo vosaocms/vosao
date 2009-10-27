@@ -26,6 +26,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jabsorb.JSONRPCBridge;
 import org.vosao.service.BackService;
 import org.vosao.service.back.CommentService;
+import org.vosao.service.back.ConfigService;
 import org.vosao.service.back.FieldService;
 import org.vosao.service.back.FileService;
 import org.vosao.service.back.FolderService;
@@ -42,6 +43,7 @@ public class BackServiceImpl implements BackService {
 	private PageService pageService;
 	private TemplateService templateService;
 	private FieldService fieldService;
+	private ConfigService configService;
 	
 	public void init() {
 	}
@@ -53,6 +55,7 @@ public class BackServiceImpl implements BackService {
 		bridge.registerObject("pageService", pageService);
 		bridge.registerObject("templateService", templateService);
 		bridge.registerObject("fieldService", fieldService);
+		bridge.registerObject("configService", configService);
 	}
 	
 	@Override
@@ -115,4 +118,14 @@ public class BackServiceImpl implements BackService {
 		fieldService = bean;		
 	}
 
+	@Override
+	public ConfigService getConfigService() {
+		return configService;
+	}
+
+	@Override
+	public void setConfigService(ConfigService bean) {
+		configService = bean;		
+	}
+	
 }

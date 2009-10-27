@@ -1,24 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:ui="http://java.sun.com/jsf/facelets"
-  xmlns:h="http://java.sun.com/jsf/html"
-  xmlns:f="http://java.sun.com/jsf/core"
-  template="WEB-INF/facelets/layout.xhtml">
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
+<html>
+<head>
+    <title>Site configuration</title>
 
-<ui:define name="head">
-    
-    <script src="/static/js/jquery.form.js" language="javascript" />
+    <script src="/static/js/jquery.form.js" language="javascript"></script>
     <link rel="stylesheet" href="/static/css/config.css" type="text/css" />
 
 <script type="text/javascript">
 
+var config = '';
+
 $(function(){
     $("#import-dialog").dialog({ width: 400, autoOpen: false });
     $("#tabs").tabs();
-});
-
-$(document).ready(function () {
     $('#upload').ajaxForm(afterUpload);
+    initJSONRpc(loadConfig);
 });
 
 function afterUpload(data) {
@@ -48,16 +45,49 @@ function onAfterUploadOk() {
     window.location.reload();
 }
 
+function loadConfig() {
+    configService.getConfig(function (r) {
+        config = r;
+        initFormFields();
+    }); 
+}
+
+function initFormFields() {
+	$('#googleAnalyticsId').val(config.googleAnalyticsId);
+    $('#siteEmail').val(config.siteEmail);
+    $('#siteDomain').val(config.siteDomain);
+    $('#recaptchaPublicKey').val(config.recaptchaPublicKey);
+    $('#recaptchaPrivateKey').val(config.recaptchaPrivateKey);
+    $('#editExt').val(config.editExt);
+    $('#commentsEmail').val(config.commentsEmail);
+    $('#commentsTemplate').val(config.commentsTemplate);
+}
+
+function onSave() {
+    var vo = javaMap({
+    	googleAnalyticsId : $('#googleAnalyticsId').val(),
+        siteEmail : $('#siteEmail').val(),
+        siteDomain : $('#siteDomain').val(),
+        recaptchaPublicKey : $('#recaptchaPublicKey').val(),
+        recaptchaPrivateKey : $('#recaptchaPrivateKey').val(),
+        editExt : $('#editExt').val(),
+        commentsEmail : $('#commentsEmail').val(),
+        commentsTemplate : $('#commentsTemplate').val()        
+    });
+    configService.saveConfig(function(r) {
+        showServiceMessages(r);
+    }, vo); 
+}
+
+function onExport() {
+    location.href = '/cms/export?type=site';
+}
+
 </script>
 
+</head>
+<body>
 
-</ui:define>
-
-<ui:define name="title">Site configuration</ui:define>
-
-<ui:define name="body">
-
-<h:form>
 <div id="tabs">
 
 <ul>
@@ -69,38 +99,38 @@ function onAfterUploadOk() {
 
 <div class="form-row">
     <label>Google Analytics ID</label>
-    <h:inputText value="#{configBean.config.googleAnalyticsId}" />
+    <input id="googleAnalyticsId" type="text" />
 </div>
 
 <div class="form-row">
     <label>Site owner email</label>
-    <h:inputText value="#{configBean.config.siteEmail}" />
+    <input id="siteEmail" type="text" />
 </div>
 
 <div class="form-row">
     <label>Site domain</label>
-    <h:inputText value="#{configBean.config.siteDomain}" />
+    <input id="siteDomain" type="text" />
 </div>
 
 <div class="form-row">
     <label>reCaptcha service public key</label>
-    <h:inputText value="#{configBean.config.recaptchaPublicKey}" size="40"/>
+    <input id="recaptchaPublicKey" type="text" size="40"/>
 </div>
 
 <div class="form-row">
     <label>reCaptcha service private key</label>
-    <h:inputText value="#{configBean.config.recaptchaPrivateKey}" size="40"/>
+    <input id="recaptchaPrivateKey" type="text" size="40"/>
 </div>
 
 <div class="form-row">
     <label>Editable resource files extensions</label>
-    <h:inputText value="#{configBean.config.editExt}" />
+    <input id="editExt" type="text"/>
 </div>
 
 <div class="buttons">
-    <h:commandButton value="Save" action="#{configBean.save}" />
-    <h:commandButton value="Export" action="#{configBean.export}" />
-    <input type="button" onclick="onImport()" value="Import" />
+    <input type="button" value="Save" onclick="onSave()" />
+    <input type="button" value="Export" onclick="onExport()" />
+    <input type="button" value="Import" onclick="onImport()" />
 </div>
 
 </div>
@@ -109,22 +139,21 @@ function onAfterUploadOk() {
 
 <div class="form-row">
     <label>Comments notification email</label>
-    <h:inputText value="#{configBean.config.commentsEmail}" />
+    <input id="commentsEmail" type="text"/>
 </div>
 
 <div class="form-row">
     <label>Comments template</label>
-    <h:inputTextarea value="#{configBean.config.commentsTemplate}" cols="80" rows="20"/>
+    <textarea id="commentsTemplate" cols="80" rows="20"></textarea>
 </div>
 
 <div class="buttons">
-    <h:commandButton value="Save" action="#{configBean.save}" />
+    <input type="button" value="Save" onclick="onSave()" />
 </div>
 
 </div>
 
 </div>
-</h:form>
 
 <div id="import-dialog" title="Import site" style="display:none">
 <form id="upload" action="/cms/upload" method="post" enctype="multipart/form-data">
@@ -145,6 +174,5 @@ function onAfterUploadOk() {
     </div>
 </div>
 
-</ui:define>
-
-</ui:composition>
+</body>
+</html>

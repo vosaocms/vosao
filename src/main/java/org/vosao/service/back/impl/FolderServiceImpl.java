@@ -21,8 +21,13 @@
 
 package org.vosao.service.back.impl;
 
+import java.util.List;
+import java.util.Map;
+
+import org.datanucleus.util.StringUtils;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FolderEntity;
+import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.FolderService;
 import org.vosao.service.impl.AbstractServiceImpl;
 
@@ -41,6 +46,51 @@ public class FolderServiceImpl extends AbstractServiceImpl
 			return getBusiness().getFolderBusiness().getFolderPath(folder);
 		}
 		return null;
+	}
+
+	@Override
+	public FolderEntity getFolder(String id) {
+		if (StringUtils.isEmpty(id)) {
+			return null;
+		}
+		return getDao().getFolderDao().getById(id);
+	}
+
+	@Override
+	public List<FolderEntity> getByParent(String id) {
+		return getDao().getFolderDao().getByParent(id);
+	}
+
+	@Override
+	public ServiceResponse saveFolder(Map<String, String> vo) {
+		FolderEntity folder = null;
+		if (!StringUtils.isEmpty(vo.get("id"))) {
+			folder = getDao().getFolderDao().getById(vo.get("id"));
+		}
+		if (folder == null) {
+			folder = new FolderEntity();
+		}
+		folder.setName(vo.get("name"));
+		folder.setTitle(vo.get("title"));
+		folder.setParent(vo.get("parent"));
+		List<String> errors = getBusiness().getFolderBusiness()
+			.validateBeforeUpdate(folder);
+		if (errors.isEmpty()) {
+			getDao().getFolderDao().save(folder);
+			return ServiceResponse.createSuccessResponse(
+					"Folder was successfully saved.");
+		}
+		else {
+			return ServiceResponse.createErrorResponse(
+					"Errors occured during folder save", errors);
+		}
+	}
+
+	@Override
+	public ServiceResponse deleteFolder(List<String> ids) {
+		getDao().getFolderDao().remove(ids);
+		return ServiceResponse.createSuccessResponse(
+				"Folders were successsfully deleted.");
 	}
 
 

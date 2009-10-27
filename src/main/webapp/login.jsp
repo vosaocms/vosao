@@ -57,7 +57,7 @@
 <div class="clear"> </div>
 
 <div class="version">
-  <span>Vosao CMS Version 0.0.2</span>
+  <span>Vosao CMS Version 0.0.3</span>
 </div>
 
 </div>

@@ -35,5 +35,28 @@ public class ConfigBusinessImpl extends AbstractBusinessImpl
 	public ConfigEntity getConfig() {
 		return getDao().getConfigDao().getConfig();
 	}
+
+	@Override
+	public boolean isTextFileExt(String ext) {
+		ConfigEntity config = getConfig();
+		String[] exts = config.getEditExt().split(",");
+		for (String textExt : exts) {
+			if (ext.equals(textExt)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean isImageFileExt(String ext) {
+		String[] exts = {"jpg","jpeg","png","gif","ico"};
+		for (String imageExt : exts) {
+			if (ext.equals(imageExt)) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 }

@@ -24,16 +24,25 @@ package org.vosao.service.back.impl;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.datanucleus.util.StringUtils;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.FileService;
+import org.vosao.service.back.impl.vo.FileVO;
 import org.vosao.service.impl.AbstractServiceImpl;
+import org.vosao.servlet.FolderUtil;
+import org.vosao.servlet.MimeType;
 
 public class FileServiceImpl extends AbstractServiceImpl 
 		implements FileService {
+
+	private static Log logger = LogFactory.getLog(FileServiceImpl.class);
 
 	@Override
 	public List<FileEntity> getByFolder(String folderId) {
@@ -79,6 +88,65 @@ public class FileServiceImpl extends AbstractServiceImpl
 		else {
 			return ServiceResponse.createErrorResponse("File not found " 
 					+ fileId);
+		}
+	}
+
+	@Override
+	public FileVO getFile(String id) {
+		try {
+			if (StringUtils.isEmpty(id)) {
+				return null;
+			}
+			FileEntity file = getDao().getFileDao().getById(id);
+			FileVO vo = new FileVO(file);
+			FolderEntity folder = getDao().getFolderDao().getById(file
+				.getFolderId());
+			vo.setLink("/file" + getBusiness().getFolderBusiness()
+					.getFolderPath(folder) + "/" + file.getFilename());
+			String ext = FolderUtil.getFileExt(file.getFilename());
+			vo.setTextFile(getBusiness().getConfigBusiness().isTextFileExt(ext));
+			vo.setImageFile(getBusiness().getConfigBusiness()
+					.isImageFileExt(ext));
+			vo.setContent(new String(getDao().getFileDao().getFileContent(file), 
+					"UTF-8"));
+			return vo;
+		}
+		catch (Exception e) {
+			logger.error(e.getMessage());
+			return null;
+		}
+	}
+
+	@Override
+	public ServiceResponse saveFile(Map<String, String> vo) {
+		FileEntity file = null;
+		if (!StringUtils.isEmpty(vo.get("id"))) {
+			file = getDao().getFileDao().getById(vo.get("id"));
+		}
+		if (file == null) {
+			file = new FileEntity();
+		}
+		file.setFilename(vo.get("name"));
+		file.setTitle(vo.get("title"));
+		file.setFolderId(vo.get("folderId"));
+		file.setLastModifiedTime(new Date());
+		List<String> errors = getBusiness().getFileBusiness()
+			.validateBeforeUpdate(file);
+		if (errors.isEmpty()) {
+			FolderEntity folder = getDao().getFolderDao().getById(
+					file.getFolderId());
+			file.setMimeType(MimeType.getContentTypeByExt(
+					FolderUtil.getFileExt(file.getFilename())));
+			String cacheUrl = getBusiness().getFolderBusiness()
+					.getFolderPath(folder) + "/" + file.getFilename();
+			getBusiness().getSystemService().getCache().remove(cacheUrl);
+			getDao().getFileDao().save(file);
+			return ServiceResponse.createSuccessResponse(
+					"File was successfully saved.");
+		}
+		else {
+			return ServiceResponse.createErrorResponse(
+					"Errors occured during file save", errors);
 		}
 	}
 

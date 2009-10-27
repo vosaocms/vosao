@@ -35,7 +35,7 @@
         <a href="/cms/templates.jsp">Templates</a>
         <a href="/cms/folders.jsp">Resources</a>
         <a href="/cms/config.jsp">Configuration</a>
-        <a href="/cms/plugins.jsp">Plugins</a>
+        <a href="/cms/plugins">Plugins</a>
     </div>
     <div id="rightmenu">
         <!-- h:outputText value="#{loginBean.currentUser.email}" /--> 

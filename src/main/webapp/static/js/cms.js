@@ -189,6 +189,34 @@ var folderService = {
 			func(r);
 		}, id);
 	},
+
+	getFolder: function(func, id) {
+		jsonrpc.folderService.getFolder(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, id);
+	},
+
+	getByParent: function(func, id) {
+		jsonrpc.folderService.getByParent(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, id);
+	},
+	
+	saveFolder: function(func, vo) {
+		jsonrpc.folderService.saveFolder(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, vo);
+	},
+	
+	deleteFolder: function(func, ids) {
+		jsonrpc.folderService.deleteFolder(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, ids);
+	},
 	
 };
 
@@ -201,4 +229,49 @@ var fileService = {
 		}, id);
 	},
 
+	deleteFiles: function(func, ids) {
+		jsonrpc.fileService.deleteFiles(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, ids);
+	},
+	
+	updateContent: function(func, id, content) {
+		jsonrpc.fileService.updateContent(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, id, content);
+	},
+	
+	getFile: function(func, id) {
+		jsonrpc.fileService.getFile(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, id);
+	},
+	
+	saveFile: function(func, vo) {
+		jsonrpc.fileService.saveFile(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, vo);
+	},
 };
+
+var configService = {
+		
+	getConfig: function(func) {
+		jsonrpc.configService.getConfig(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		});
+	},
+
+	saveConfig: function(func, vo) {
+		jsonrpc.configService.saveConfig(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, vo);
+	},
+	
+}

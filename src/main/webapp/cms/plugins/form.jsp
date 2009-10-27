@@ -1,15 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:ui="http://java.sun.com/jsf/facelets"
-  xmlns:h="http://java.sun.com/jsf/html"
-  xmlns:f="http://java.sun.com/jsf/core"
-  template="WEB-INF/facelets/layout.xhtml">
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
+<html>
+<head>
+    <title>Form</title>
 
-<ui:define name="head">
     <link rel="stylesheet" href="/static/css/form.css" type="text/css" />
+
     <script type="text/javascript">
-        var formId = '#{formBean.current.id}';
+
+        var formId = '<c:out value="${param.id}"/>';
+        
         //<!--
+        
+        var editMode = formId != '';
         var field = null;
         var fields = null;
         var test = null;
@@ -17,14 +20,19 @@
         $( function() {
             $("#tabs").tabs();
             $("#field-dialog").dialog({ width :500, autoOpen :false });
-            initJSONRpc(loadFields);
+            initJSONRpc(loadData);
         });
 
+        function loadData() {
+            loadForm();
+            loadFields();
+        }
+        
         function loadFields() {
             if (formId == '') {
                 return;
             }
-            jsonrpc.fieldService.getByForm(function(r, e) {
+            fieldService.getByForm(function(r, e) {
                 fields = r;
                 if (r.list.length > 0) {
                     var h = '<table class="form-table">';
@@ -68,7 +76,7 @@
             var fieldVO = createFieldVO();
             var errors = validateField(fieldVO);
             if (errors.length == 0) {
-                jsonrpc.fieldService.updateField( function(r, e) {
+                fieldService.updateField( function(r, e) {
                     if (r.result == 'success') {
                         if (closeFlag) {
                             $("#field-dialog").dialog("close");
@@ -209,7 +217,7 @@
 
         function onFieldEdit(fieldId) {
             clearFieldMessage();
-            jsonrpc.fieldService.getById( function(r) {
+            fieldService.getById( function(r) {
                 field = r;
                 fieldDialogInit();
                 $("#field-dialog").dialog("open");
@@ -224,8 +232,8 @@
             if (ids.length == 0) {
                 return;
             }
-            jsonrpc.fieldService.remove(function() {
-                infoMessage(ids.length + ' fields was successfully deleted.');
+            fieldService.remove(function() {
+                info(ids.length + ' fields was successfully deleted.');
                 loadFields();
             }, javaList(ids));
         }
@@ -234,75 +242,119 @@
             onFieldSave(false);
             onAddField();
         }
+
+        function loadForm() {
+            formService.getForm(function (r) {
+                if (r != null) {
+                    $('#title').val(r.title);
+                    $('#name').val(r.name);
+                    $('#email').val(r.email);
+                    $('#letterSubject').val(r.letterSubject);
+                    $('#sendButtonTitle').val(r.sendButtonTitle);
+                    $('#resetButtonTitle').val(r.resetButtonTitle);
+                    $('#showResetButton').each(function() {
+                        this.checked = r.showResetButton;
+                    });
+                    $('.fieldsTab').show();
+                }
+                else {
+                    $('#title').val('');
+                    $('#name').val('');
+                    $('#email').val('');
+                    $('#letterSubject').val('');
+                    $('#sendButtonTitle').val('');
+                    $('#resetButtonTitle').val('');
+                    $('#showResetButton').each(function() {
+                        this.checked = false;
+                    });
+                    $('.fieldsTab').hide();
+                }
+            }, formId);
+        }
         
+        function onUpdate() {
+            var vo = javaMap({
+                id : formId,
+            	title : $('#title').val(),
+            	name : $('#name').val(),
+                email : $('#email').val(),
+                letterSubject : $('#letterSubject').val(),
+                sendButtonTitle : $('#sendButtonTitle').val(),
+                resetButtonTitle : $('#resetButtonTitle').val(),
+                showResetButton : String($('#showResetButton:checked').size() > 0),
+            });
+            formService.saveForm(function (r) {
+                if (r.result = 'success') {
+                    location.href = '/cms/plugins/forms.jsp';
+                }
+                else {
+                    showServiceMessages(r);
+                }
+            }, vo);
+        }
+
+        function onCancel() {
+            location.href = '/cms/plugins/forms.jsp';
+        }
+
         // -->        
-    </script>
-</ui:define>
-
-<ui:define name="title">Form</ui:define>
-
-<ui:define name="body">
-
-<h:form>
+</script>
+</head>
+<body>
 
 <div id="tabs">
 <ul>
     <li><a href="#tab-1">Form</a></li>
-<h:panelGroup rendered="#{formBean.edit}">
-    <li><a href="#tab-2">Fields</a></li>
-</h:panelGroup>
+    <li class="fieldsTab"><a href="#tab-2">Fields</a></li>
 </ul>
 
 <div id="tab-1">
 
 <div class="form-row">
     <label>Title</label>
-    <h:inputText value="#{formBean.current.title}" />
+    <input id="title" type="text" />
 </div>
 <div class="form-row">
     <label>Unique name</label>
-    <h:inputText value="#{formBean.current.name}" />
+    <input id="name" type="text" />
 </div>
 <div class="form-row">
     <label>Email address</label>
-    <h:inputText value="#{formBean.current.email}" />
+    <input id="email" type="text" />
 </div>
 <div class="form-row">
     <label>Letter subject</label>
-    <h:inputText value="#{formBean.current.letterSubject}" />
+    <input id="letterSubject" type="text" />
 </div>
 <div class="form-row">
     <label>"Send" button title</label>
-    <h:inputText value="#{formBean.current.sendButtonTitle}" />
+    <input id="sendButtonTitle" type="text"/>
 </div>
 <div class="form-row">
     <label>"Reset" button title</label>
-    <h:inputText value="#{formBean.current.resetButtonTitle}" />
+    <input id="resetButtonTitle" type="text"/>
 </div>
 <div class="form-row">
     <label>Show "Reset" button</label>
-    <h:selectBooleanCheckbox value="#{formBean.current.showResetButton}" />
+    <input id="showResetButton" type="checkbox"/>
 </div>
 
 <div class="buttons">
-    <h:commandButton value="Save" action="#{formBean.update}" />
-    <h:commandButton value="Cancel" action="#{formBean.cancelEdit}" />
+    <input type="button" value="Save" onclick="onUpdate()" />
+    <input type="button" value="Cancel" onclick="onCancel()" />
 </div>
 
 </div>
 
-<h:panelGroup rendered="#{formBean.edit}">
-<div id="tab-2">
+<div id="tab-2" class="fieldsTab">
     <div id="fieldsTable"> </div>
     <div class="buttons">
         <input type="button" value="Add field" onclick="onAddField()" />
         <input type="button" value="Delete fields" onclick="onDeleteFields()" />
     </div>    
 </div>
-</h:panelGroup>
 
 </div>
-</h:form>
 
 <div id="field-dialog" style="display:none" title="Field details">
     <div id="field-messages" class="messages"> </div>
@@ -346,12 +398,11 @@
         <input type="text" name="field.defaultValue"/>
     </div>
     <div class="buttons-dlg">
-    <h:commandButton value="Save and Add" onclick="onSaveAndAdd()" />
-        <input type="button" onclick="onFieldSave(true)" value="Save" />
-        <input type="button" onclick="onFieldCancel()" value="Cancel" />
+        <input type="button" value="Save and Add" onclick="onSaveAndAdd()" />
+        <input type="button" value="Save" onclick="onFieldSave(true)" />
+        <input type="button" value="Cancel" onclick="onFieldCancel()" />
     </div>
 </div>
 
-</ui:define>
-
-</ui:composition>
+</body>
+</html>

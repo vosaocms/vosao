@@ -1,23 +1,74 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:ui="http://java.sun.com/jsf/facelets"
-  xmlns:h="http://java.sun.com/jsf/html"
-  xmlns:f="http://java.sun.com/jsf/core"
-  template="WEB-INF/facelets/layout.xhtml">
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
+<html>
+<head>
+    <title>Forms</title>
 
-<ui:define name="head">
-    <script type="text/javascript">
-        $(function() {
-            $("#tabs").tabs();
+<script type="text/javascript">
+
+    var formConfig = '';
+
+    $(function() {
+        $("#tabs").tabs();
+        initJSONRpc(loadData);
+    });
+
+    function loadData() {
+        loadForms();
+        loadFormConfig();
+    }
+    
+    function loadForms() {
+        formService.select(function (r) {
+            var html = '<table class="form-table"><tr><td></td><td>Title</td>\
+<td>Name</td><td>Email</td></tr>';
+            $.each(r.list, function(i, form) {
+                html += '<tr><td><input type="checkbox" value="' + form.id
+                    + '"/></td><td><a href="/cms/plugins/form.jsp?id=' + form.id 
+                    + '">' + form.title + '</a></td><td>' + form.name 
+                    + '</td><td>' + form.email + '</td></tr>';
+            });
+            $('#forms').html(html + '</table>');
         });
-    </script>    
-</ui:define>
+    }
 
-<ui:define name="title">Forms</ui:define>
+    function onAdd() {
+        location.href = '/cms/plugins/form.jsp';
+    }
+    
+    function onDelete() {
+        var ids = [];
+        $('#forms input:checked').each(function() {
+            ids.push(this.value);
+        });
+        formService.deleteForm(function (r) {
+            showServiceMessages(r);
+            loadForms();
+        }, javaList(ids));
+    }
 
-<ui:define name="body">
+    function loadFormConfig() {
+        formService.getFormConfig(function (r) {
+            formConfig = r;
+            $('#formTemplate').val(r.formTemplate);
+            $('#letterTemplate').val(r.letterTemplate);
+        });
+    }
+    
+    function onSaveConfig() {
+        var vo = javaMap({
+        	formTemplate : $('#formTemplate').val(),
+        	letterTemplate : $('#letterTemplate').val()
+        });
+        formService.saveFormConfig(function (r) {
+            showServiceMessages(r);
+        }, vo);
+    }
+    
 
-<h:form>
+</script>    
+</head>
+<body>
 
 <div id="tabs">
 <ul>
@@ -26,54 +77,29 @@
 </ul>
 
 <div id="tab-1">
-
-<h:dataTable value="#{formBean.list}" var="r"
-    styleClass="form-table">
-    <h:column>
-        <f:facet name="header"></f:facet>    
-        <h:selectBooleanCheckbox value="#{formBean.selected[r.id]}"/>
-    </h:column>
-    <h:column>
-        <f:facet name="header">Title</f:facet>    
-        <a href="/cms/form/edit/#{r.id}"><h:outputText value="#{r.title}"/></a>
-    </h:column>
-    <h:column>
-        <f:facet name="header">Name</f:facet>    
-        <h:outputText value="#{r.name}"/>
-    </h:column>
-    <h:column>
-        <f:facet name="header">Email</f:facet>    
-        <h:outputText value="#{r.email}"/>
-    </h:column>
-</h:dataTable>
-<div class="buttons">
-    <h:commandButton value="Add" action="#{formBean.add}" />
-    <h:commandButton value="Delete" action="#{formBean.delete}" />
-</div>
-
+    <div id="forms"> </div>
+    <div class="buttons">
+        <input type="button" value="Add" onclick="onAdd()" />
+        <input type="button" value="Delete" onclick="onDelete()" />
+    </div>
 </div>
 
 <div id="tab-2">
 
 <div class="form-row">
     <label>Form template</label>
-    <h:inputTextarea value="#{formBean.formConfig.formTemplate}" 
-        rows="20" cols="80"/>
+    <textarea id="formTemplate" rows="20" cols="80"></textarea>
 </div>
 <div class="form-row">
     <label>Form letter template</label>
-    <h:inputTextarea value="#{formBean.formConfig.letterTemplate}" 
-        rows="20" cols="80"/>
+    <textarea id="letterTemplate" rows="20" cols="80"></textarea>
 </div>
 <div class="buttons">
-    <h:commandButton value="Save" action="#{formBean.saveConfig}" />
+    <input type="button" value="Save" onclick="onSaveConfig()" />
 </div>
 </div>
 
 </div>
 
-</h:form>
-
-</ui:define>
-
-</ui:composition>
+</body>
+</html>

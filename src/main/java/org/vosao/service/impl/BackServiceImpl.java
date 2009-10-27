@@ -30,6 +30,7 @@ import org.vosao.service.back.ConfigService;
 import org.vosao.service.back.FieldService;
 import org.vosao.service.back.FileService;
 import org.vosao.service.back.FolderService;
+import org.vosao.service.back.FormService;
 import org.vosao.service.back.PageService;
 import org.vosao.service.back.TemplateService;
 
@@ -42,6 +43,7 @@ public class BackServiceImpl implements BackService {
 	private CommentService commentService;
 	private PageService pageService;
 	private TemplateService templateService;
+	private FormService formService;
 	private FieldService fieldService;
 	private ConfigService configService;
 	
@@ -55,6 +57,7 @@ public class BackServiceImpl implements BackService {
 		bridge.registerObject("pageService", pageService);
 		bridge.registerObject("templateService", templateService);
 		bridge.registerObject("fieldService", fieldService);
+		bridge.registerObject("formService", formService);
 		bridge.registerObject("configService", configService);
 	}
 	
@@ -126,6 +129,16 @@ public class BackServiceImpl implements BackService {
 	@Override
 	public void setConfigService(ConfigService bean) {
 		configService = bean;		
+	}
+
+	@Override
+	public FormService getFormService() {
+		return formService;
+	}
+
+	@Override
+	public void setFormService(FormService bean) {
+		formService = bean;		
 	}
 	
 }

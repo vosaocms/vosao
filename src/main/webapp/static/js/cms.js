@@ -274,4 +274,81 @@ var configService = {
 		}, vo);
 	},
 	
-}
+};
+
+var formService = {
+		
+	getForm: function(func, id) {
+		jsonrpc.formService.getForm(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, id);
+	},
+
+	saveForm: function(func, vo) {
+		jsonrpc.formService.saveForm(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, vo);
+	},
+
+	select: function(func) {
+		jsonrpc.formService.select(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		});
+	},
+		
+	deleteForm: function(func, ids) {
+		jsonrpc.formService.deleteForm(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, ids);
+	},
+	
+	getFormConfig: function(func) {
+		jsonrpc.formService.getFormConfig(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		});
+	},
+
+	saveFormConfig: function(func, vo) {
+		jsonrpc.formService.saveFormConfig(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, vo);
+	},
+	
+};
+
+var fieldService = {
+		
+	updateField: function(func, vo) {
+		jsonrpc.fieldService.updateField(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, vo);
+	},
+
+	getByForm: function(func, id) {
+		jsonrpc.fieldService.getByForm(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, id);
+	},
+	
+	getById: function(func, id) {
+		jsonrpc.fieldService.getById(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, id);
+	},
+
+	remove: function(func, ids) {
+		jsonrpc.fieldService.remove(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, ids);
+	},
+};

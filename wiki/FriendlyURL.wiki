@@ -11,7 +11,8 @@ Reserved urls:
  * /login.jsp
  * /file
  * /setup
+ * /update
  * /hotCron
  * /JSON-RPC
 
-All urls starting with reserved url are also reserved:
+All urls starting with reserved url are also reserved.

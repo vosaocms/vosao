@@ -19,60 +19,71 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service.back.impl.vo;
+package org.vosao.service.vo;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.vosao.entity.CommentEntity;
-import org.vosao.utils.DateUtil;
+import org.vosao.entity.FieldEntity;
 
 /**
  * Value object to be returned from services.
  * @author Alexander Oleynik
  */
-public class CommentVO {
+public class FieldVO {
 
-    private CommentEntity comment;
-
-	public CommentVO(final CommentEntity entity) {
-		comment = entity;
-	}
-
-	public static List<CommentVO> create(List<CommentEntity> list) {
-		List<CommentVO> result = new ArrayList<CommentVO>();
-		for (CommentEntity comment : list) {
-			result.add(new CommentVO(comment));
+	private FieldEntity field;
+	
+	public static List<FieldVO> create(List<FieldEntity> list) {
+		List<FieldVO> result = new ArrayList<FieldVO>();
+		for (FieldEntity entity : list) {
+			result.add(new FieldVO(entity));
 		}
 		return result;
 	}
 
+	public FieldVO(final FieldEntity aField) {
+		field = aField;
+	}
+	
+	public String getFieldType() {
+		return field.getFieldType().name();
+	}
+
+	public boolean isOptional() {
+		return field.isOptional();
+	}
+
+	public String getValues() {
+		return field.getValues();
+	}
+
+	public String getDefaultValue() {
+		return field.getDefaultValue();
+	}
+
+	public String getTitle() {
+		return field.getTitle();
+	}
+
 	public String getId() {
-		return comment.getId();
+		return field.getId();
 	}
-
-	public String getPageId() {
-		return comment.getPageId();
-	}
-
+	
 	public String getName() {
-		return comment.getName();
+		return field.getName();
 	}
 
-	public String getContent() {
-		return comment.getContent();
+	public String getFormId() {
+		return field.getFormId();
 	}
 
-	public String getPublishDate() {
-		return DateUtil.toString(comment.getPublishDate());
+	public int getHeight() {
+		return field.getHeight();
 	}
 
-	public String getPublishDateTime() {
-		return DateUtil.dateTimeToString(comment.getPublishDate());
-	}
-
-	public boolean isDisabled() {
-		return comment.isDisabled();
+	public int getWidth() {
+		return field.getWidth();
 	}
 	
 }

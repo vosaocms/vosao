@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.vosao.entity.CommentEntity;
 import org.vosao.entity.PageEntity;
-import org.vosao.service.back.impl.vo.CommentVO;
+import org.vosao.service.vo.CommentVO;
 
 public interface VelocityService {
 

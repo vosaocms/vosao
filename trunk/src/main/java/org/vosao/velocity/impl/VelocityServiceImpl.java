@@ -30,7 +30,7 @@ import java.util.List;
 import org.vosao.dao.Dao;
 import org.vosao.entity.CommentEntity;
 import org.vosao.entity.PageEntity;
-import org.vosao.service.back.impl.vo.CommentVO;
+import org.vosao.service.vo.CommentVO;
 import org.vosao.velocity.VelocityService;
 
 public class VelocityServiceImpl implements VelocityService {

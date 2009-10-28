@@ -34,8 +34,8 @@ import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.FileService;
-import org.vosao.service.back.impl.vo.FileVO;
 import org.vosao.service.impl.AbstractServiceImpl;
+import org.vosao.service.vo.FileVO;
 import org.vosao.servlet.FolderUtil;
 import org.vosao.servlet.MimeType;
 

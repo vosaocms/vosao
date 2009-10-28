@@ -74,7 +74,7 @@ function onAddComment() {
 }
 
 function loadComments(pageId) {
-    jsonrpc.commentService.getByPage(function(r) {
+    jsonrpc.commentFrontService.getByPage(function(r) {
         var s = "";
         if (r.list.length > 0) {
             for (var i = 0; i < r.list.length; i++) {

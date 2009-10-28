@@ -19,7 +19,7 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service.back.impl;
+package org.vosao.service.front.impl;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,7 +34,7 @@ import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.service.ServiceException;
 import org.vosao.service.ServiceResponse;
-import org.vosao.service.back.CommentService;
+import org.vosao.service.front.CommentService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.CommentVO;
 import org.vosao.utils.RecaptchaUtil;
@@ -55,24 +55,43 @@ public class CommentServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public ServiceResponse deleteComments(List<String> ids) {
-		getDao().getCommentDao().remove(ids);
-		return ServiceResponse.createSuccessResponse(
-				"Comments were successfuly deleted");
+	public ServiceResponse addComment(String name, String comment,
+			String pageId, String challenge, String response,
+			HttpServletRequest request) {
+		
+		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
+		boolean valid = true;
+		ReCaptchaResponse recaptchaResponse = null;
+		if (config.isEnableRecaptcha()) {
+			recaptchaResponse = RecaptchaUtil.check(
+					config.getRecaptchaPublicKey(), 
+					config.getRecaptchaPrivateKey(), 
+					challenge, response, request);
+			valid = recaptchaResponse.isValid();
+		}
+		if (valid) {
+        	try {
+        		addComment(name, comment, pageId);
+                return ServiceResponse.createSuccessResponse(
+                		"Comment was successfully created.");
+        	}
+        	catch (ServiceException e) {
+                return ServiceResponse.createErrorResponse(e.getMessage());
+        	}
+        }
+        else {
+            return ServiceResponse.createErrorResponse(
+            		recaptchaResponse.getErrorMessage());
+        }
 	}
-
-	@Override
-	public ServiceResponse disableComments(List<String> ids) {
-		getDao().getCommentDao().disable(ids);
-		return ServiceResponse.createSuccessResponse(
-				"Comments were successfuly disabled");
-	}
-
-	@Override
-	public ServiceResponse enableComments(List<String> ids) {
-		getDao().getCommentDao().enable(ids);
-		return ServiceResponse.createSuccessResponse(
-				"Comments were successfuly enabled");
+	
+	private void addComment(String name, String content, String pageId) 
+			throws ServiceException {
+		PageEntity page = getDao().getPageDao().getById(pageId);
+		if (page == null) {
+			throw new ServiceException("Page not found. id = " + pageId);
+		}
+		getBusiness().getCommentBusiness().addComment(name, content, page);
 	}
 
 }

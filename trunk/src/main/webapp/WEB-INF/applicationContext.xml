@@ -189,10 +189,14 @@
     <bean id="formFrontService" class="org.vosao.service.front.impl.FormServiceImpl"
         parent="abstractService" />  
 
+    <bean id="commentFrontService" class="org.vosao.service.front.impl.CommentServiceImpl"
+        parent="abstractService" />  
+
     <bean id="frontService" class="org.vosao.service.impl.FrontServiceImpl"
         init-method="init">  
         <property name="loginService" ref="loginFrontService"/>  
         <property name="formService" ref="formFrontService"/>  
+        <property name="commentService" ref="commentFrontService"/>  
     </bean>
 
 </beans>

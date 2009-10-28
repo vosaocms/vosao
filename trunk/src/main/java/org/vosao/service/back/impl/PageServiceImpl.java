@@ -35,8 +35,8 @@ import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.entity.PageEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.PageService;
-import org.vosao.service.back.impl.vo.PageVO;
 import org.vosao.service.impl.AbstractServiceImpl;
+import org.vosao.service.vo.PageVO;
 import org.vosao.utils.DateUtil;
 
 public class PageServiceImpl extends AbstractServiceImpl 

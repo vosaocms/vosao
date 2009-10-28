@@ -22,6 +22,7 @@
 package org.vosao.service;
 
 import org.jabsorb.JSONRPCBridge;
+import org.vosao.service.front.CommentService;
 import org.vosao.service.front.FormService;
 import org.vosao.service.front.LoginService;
 
@@ -35,5 +36,8 @@ public interface FrontService {
 
 	LoginService getLoginService();
 	void setLoginService(LoginService bean);
+
+	CommentService getCommentService();
+	void setCommentService(CommentService bean);
 	
 }

@@ -21,17 +21,21 @@
 
 package org.vosao.service.back.impl;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
+import org.vosao.business.SetupBean;
+import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.entity.FormConfigEntity;
 import org.vosao.entity.FormEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.FormService;
 import org.vosao.service.impl.AbstractServiceImpl;
+import org.vosao.utils.StreamUtil;
 
 public class FormServiceImpl extends AbstractServiceImpl 
 		implements FormService {
@@ -101,6 +105,26 @@ public class FormServiceImpl extends AbstractServiceImpl
 		getDao().getFormDao().save(config);
 		return ServiceResponse.createSuccessResponse(
 				"Form configuration was successfully saved.");
+	}
+
+	@Override
+	public ServiceResponse restoreFormLetter() throws IOException {
+		FormConfigEntity config = getDao().getFormDao().getConfig();
+		config.setLetterTemplate(StreamUtil.getTextResource(
+			SetupBeanImpl.FORM_LETTER_FILE));
+		getDao().getFormDao().save(config);			
+		return ServiceResponse.createSuccessResponse(
+				"Form letter was successfully restored.");
+	}
+
+	@Override
+	public ServiceResponse restoreFormTemplate() throws IOException {
+		FormConfigEntity config = getDao().getFormDao().getConfig();
+		config.setFormTemplate(StreamUtil.getTextResource(
+			SetupBeanImpl.FORM_TEMPLATE_FILE));
+		getDao().getFormDao().save(config);			
+		return ServiceResponse.createSuccessResponse(
+				"Form template was successfully restored.");
 	}
 
 }

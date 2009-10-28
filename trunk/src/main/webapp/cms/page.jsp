@@ -130,7 +130,12 @@
             template : $('#templates option:selected').val()
         });
         pageService.savePage(function (r) {
-            showServiceMessages(r);
+            if (r.result == 'success') {
+                location.href = '/cms/pages.jsp';
+            }
+            else {
+                showServiceMessages(r);
+            }
         }, pageVO);        
     }
     

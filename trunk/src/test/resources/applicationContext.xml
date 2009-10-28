@@ -113,24 +113,26 @@
         <property name="configBusiness" ref="configBusiness"/>  
     </bean>      
 
-    <bean id="importExportBusiness" class="org.vosao.business.impl.ImportExportBusinessImpl"
-        parent="abstractBusiness">  
-        <property name="folderBusiness" ref="folderBusiness"/>  
-        <property name="pageBusiness" ref="pageBusiness"/>  
-        <property name="configBusiness" ref="configBusiness"/>  
-    </bean>    
-
     <bean id="business" class="org.vosao.business.impl.BusinessImpl"
         init-method="init">  
+        <property name="systemService" ref="systemService"/>  
+
         <property name="pageBusiness" ref="pageBusiness"/>  
         <property name="folderBusiness" ref="folderBusiness"/>  
         <property name="templateBusiness" ref="templateBusiness"/>  
-        <property name="importExportBusiness" ref="importExportBusiness"/>  
         <property name="configBusiness" ref="configBusiness"/>  
         <property name="formBusiness" ref="formBusiness"/>  
         <property name="fileBusiness" ref="fileBusiness"/>  
         <property name="commentBusiness" ref="commentBusiness"/>  
         <property name="fieldBusiness" ref="fieldBusiness"/>  
+    </bean>
+
+    <!--========================== ImportExport =============================-->
+
+    <bean id="importExportBusiness" 
+        class="org.vosao.business.impl.ImportExportBusinessImpl">
+        <property name="dao" ref="dao"/>  
+        <property name="business" ref="business"/>  
     </bean>
 
     <!--======================= JSON-RPC services ===========================-->
@@ -158,7 +160,13 @@
     <bean id="templateService" class="org.vosao.service.back.impl.TemplateServiceImpl"
         parent="abstractService" />
 
+    <bean id="formService" class="org.vosao.service.back.impl.FormServiceImpl"
+        parent="abstractService" />
+
     <bean id="fieldService" class="org.vosao.service.back.impl.FieldServiceImpl"
+        parent="abstractService" />
+
+    <bean id="configService" class="org.vosao.service.back.impl.ConfigServiceImpl"
         parent="abstractService" />
 
     <bean id="backService" class="org.vosao.service.impl.BackServiceImpl"
@@ -168,21 +176,23 @@
         <property name="commentService" ref="commentService"/>  
         <property name="pageService" ref="pageService"/>  
         <property name="templateService" ref="templateService"/>  
+        <property name="formService" ref="formService"/>  
         <property name="fieldService" ref="fieldService"/>  
+        <property name="configService" ref="configService"/>  
     </bean>
 
     <!--================== JSON-RPC front services ==========================-->
 
-    <bean id="loginService" class="org.vosao.service.front.impl.LoginServiceImpl"
+    <bean id="loginFrontService" class="org.vosao.service.front.impl.LoginServiceImpl"
         parent="abstractService" />
 
-    <bean id="formService" class="org.vosao.service.front.impl.FormServiceImpl"
+    <bean id="formFrontService" class="org.vosao.service.front.impl.FormServiceImpl"
         parent="abstractService" />  
 
     <bean id="frontService" class="org.vosao.service.impl.FrontServiceImpl"
         init-method="init">  
-        <property name="loginService" ref="loginService"/>  
-        <property name="formService" ref="formService"/>  
+        <property name="loginService" ref="loginFrontService"/>  
+        <property name="formService" ref="formFrontService"/>  
     </bean>
 
 </beans>

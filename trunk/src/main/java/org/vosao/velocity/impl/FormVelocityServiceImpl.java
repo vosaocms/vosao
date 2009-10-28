@@ -64,6 +64,7 @@ public class FormVelocityServiceImpl implements FormVelocityService {
 		List<FieldEntity> fields = getDao().getFieldDao().getByForm(form);
 		FormConfigEntity formConfig = getDao().getFormDao().getConfig();
 		VelocityContext context = new VelocityContext();
+		context.put("config", getDao().getConfigDao().getConfig());
 		context.put("formConfig", formConfig);
 		context.put("form", form);
 		context.put("fields", fields);

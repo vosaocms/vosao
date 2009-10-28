@@ -113,13 +113,6 @@
         <property name="configBusiness" ref="configBusiness"/>  
     </bean>      
 
-    <bean id="importExportBusiness" class="org.vosao.business.impl.ImportExportBusinessImpl"
-        parent="abstractBusiness">  
-        <property name="folderBusiness" ref="folderBusiness"/>  
-        <property name="pageBusiness" ref="pageBusiness"/>  
-        <property name="configBusiness" ref="configBusiness"/>  
-    </bean>    
-
     <bean id="business" class="org.vosao.business.impl.BusinessImpl"
         init-method="init">  
         <property name="systemService" ref="systemService"/>  
@@ -127,12 +120,19 @@
         <property name="pageBusiness" ref="pageBusiness"/>  
         <property name="folderBusiness" ref="folderBusiness"/>  
         <property name="templateBusiness" ref="templateBusiness"/>  
-        <property name="importExportBusiness" ref="importExportBusiness"/>  
         <property name="configBusiness" ref="configBusiness"/>  
         <property name="formBusiness" ref="formBusiness"/>  
         <property name="fileBusiness" ref="fileBusiness"/>  
         <property name="commentBusiness" ref="commentBusiness"/>  
         <property name="fieldBusiness" ref="fieldBusiness"/>  
+    </bean>
+
+    <!--========================== ImportExport =============================-->
+
+    <bean id="importExportBusiness" 
+        class="org.vosao.business.impl.ImportExportBusinessImpl">
+        <property name="dao" ref="dao"/>  
+        <property name="business" ref="business"/>  
     </bean>
 
     <!--======================= JSON-RPC services ===========================-->

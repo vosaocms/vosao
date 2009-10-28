@@ -62,6 +62,7 @@ public class FormServiceImpl extends AbstractServiceImpl
 		form.setResetButtonTitle(vo.get("resetButtonTitle"));
 		form.setSendButtonTitle(vo.get("sendButtonTitle"));
 		form.setShowResetButton(Boolean.valueOf(vo.get("showResetButton")));
+		form.setEnableCaptcha(Boolean.valueOf(vo.get("enableCaptcha")));
 		List<String> errors = getBusiness().getFormBusiness()
 			.validateBeforeUpdate(form);
 		if (errors.isEmpty()) {

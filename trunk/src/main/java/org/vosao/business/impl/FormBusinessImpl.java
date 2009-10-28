@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.tanesha.recaptcha.ReCaptchaResponse;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,6 +39,7 @@ import org.vosao.entity.FormEntity;
 import org.vosao.servlet.FileItem;
 import org.vosao.servlet.UploadException;
 import org.vosao.utils.EmailUtil;
+import org.vosao.utils.RecaptchaUtil;
 
 public class FormBusinessImpl extends AbstractBusinessImpl 
 	implements FormBusiness {
@@ -77,7 +80,6 @@ public class FormBusinessImpl extends AbstractBusinessImpl
 		context.put("config", config);
 		String letter = getSystemService().render(
 				formConfig.getLetterTemplate(), context);
-		logger.info(letter);
 		String error = EmailUtil.sendEmail(letter, form.getLetterSubject(), 
 				config.getSiteEmail(), "Site admin", form.getEmail(), files);
 		if (error != null) {

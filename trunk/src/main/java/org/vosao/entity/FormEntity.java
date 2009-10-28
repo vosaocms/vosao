@@ -62,6 +62,9 @@ public class FormEntity implements Serializable {
 	@Persistent
 	private String resetButtonTitle;
 
+	@Persistent
+	private boolean enableCaptcha;
+
 	public FormEntity() {
 	}
 	
@@ -82,6 +85,7 @@ public class FormEntity implements Serializable {
 		setSendButtonTitle(entity.getSendButtonTitle());
 		setShowResetButton(entity.isShowResetButton());
 		setResetButtonTitle(entity.getResetButtonTitle());
+		setEnableCaptcha(entity.isEnableCaptcha());
 	}
 	
 	public String getId() {
@@ -159,6 +163,14 @@ public class FormEntity implements Serializable {
 
 	public void setResetButtonTitle(String resetButtonTitle) {
 		this.resetButtonTitle = resetButtonTitle;
+	}
+
+	public boolean isEnableCaptcha() {
+		return enableCaptcha;
+	}
+
+	public void setEnableCaptcha(boolean enableCaptcha) {
+		this.enableCaptcha = enableCaptcha;
 	}
 	
 }

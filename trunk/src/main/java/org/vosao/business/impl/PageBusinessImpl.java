@@ -106,7 +106,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	public VelocityContext createContext() {
 		VelocityContext context = new VelocityContext();
 		ConfigEntity configEntity = getConfigBusiness().getConfig();
-		context.put("config", configEntity.getConfigMap());
+		context.put("config", configEntity);
 		context.put("service", getVelocityService());
 		context.put("plugin", getVelocityPluginService());
 		return context;

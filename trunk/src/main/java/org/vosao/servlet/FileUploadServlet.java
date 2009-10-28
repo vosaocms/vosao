@@ -45,6 +45,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.DocumentException;
+import org.vosao.business.ImportExportBusiness;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PageEntity;
@@ -225,8 +226,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 		ByteArrayInputStream inputData = new ByteArrayInputStream(data);
 		try {
 			ZipInputStream in = new ZipInputStream(inputData);
-			List<String> files = getBusiness().getImportExportBusiness()
-					.importZip(in);
+			List<String> files = getImportExportBusiness().importZip(in);
 			clearResourcesCache(files);
 			message = createMessage("success", "Imported.");
 			in.close();
@@ -284,6 +284,10 @@ public class FileUploadServlet extends BaseSpringServlet {
 	private boolean isCKeditorUpload(Map<String, String> parameters) {
 		return !parameters.containsKey(FILE_TYPE_PARAM) && 
 			parameters.containsKey(IMAGE_UPLOAD_PAGE_ID);
+	}
+	
+	private ImportExportBusiness getImportExportBusiness() {
+		return (ImportExportBusiness) getSpringBean("importExportBusiness");
 	}
 	
 }

@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.business.ImportExportBusiness;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
 
@@ -86,7 +87,7 @@ public class ExportServlet extends BaseSpringServlet {
 		response.addHeader("Content-Disposition", "attachment; filename=\"" 
 				+ downloadFile + "\"");
 		ServletOutputStream out = response.getOutputStream();
-		byte[] file = getBusiness().getImportExportBusiness().createExportFile(
+		byte[] file = getImportExportBusiness().createExportFile(
 				selectedTemplates);
 		response.setContentLength(file.length);
 		out.write(file);
@@ -113,8 +114,7 @@ public class ExportServlet extends BaseSpringServlet {
 		response.addHeader("Content-Disposition", "attachment; filename=\"" 
 				+ downloadFile + "\"");
 		ServletOutputStream out = response.getOutputStream();
-		byte[] file = getBusiness().getImportExportBusiness().createExportFile(
-				folder);
+		byte[] file = getImportExportBusiness().createExportFile(folder);
 		response.setContentLength(file.length);
 		out.write(file);
 		out.flush();
@@ -129,11 +129,15 @@ public class ExportServlet extends BaseSpringServlet {
 		response.addHeader("Content-Disposition", "attachment; filename=\"" 
 				+ downloadFile + "\"");
 		ServletOutputStream out = response.getOutputStream();
-		byte[] file = getBusiness().getImportExportBusiness().createExportFile();
+		byte[] file = getImportExportBusiness().createExportFile();
 		response.setContentLength(file.length);
 		out.write(file);
 		out.flush();
 		out.close();
+	}
+	
+	private ImportExportBusiness getImportExportBusiness() {
+		return (ImportExportBusiness) getSpringBean("importExportBusiness");
 	}
 	
 }

@@ -95,6 +95,10 @@ public class SiteFilter implements Filter {
         	renderPage(httpRequest, httpResponse, url);
         	return;
         }
+        if (url.equals("/")) {
+            httpResponse.sendRedirect("/setup");
+            return;
+        }
         httpResponse.sendRedirect("/");
     }
     

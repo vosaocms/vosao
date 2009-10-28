@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -15,13 +17,19 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.vosao.business.impl.FormBusinessImpl;
 import org.vosao.servlet.FileItem;
 import org.vosao.servlet.FolderUtil;
 import org.vosao.servlet.MimeType;
 
 public class EmailUtil {
 
+	private static final Log logger = LogFactory.getLog(EmailUtil.class);
+	
 	/**
 	 * Send email with html content.
 	 * @param htmlBody
@@ -64,7 +72,8 @@ public class EmailUtil {
                 attachment.setFileName(item.getFilename());
                 String mimeType = MimeType.getContentTypeByExt(
                 		FolderUtil.getFileExt(item.getFilename()));
-                attachment.setContent(item.getData(), mimeType);
+                DataSource ds = new ByteArrayDataSource(item.getData(), mimeType);
+                attachment.setDataHandler(new DataHandler(ds));
                 mp.addBodyPart(attachment);
             }
             MimeMessage msg = new MimeMessage(session);

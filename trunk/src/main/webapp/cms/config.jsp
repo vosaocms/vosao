@@ -16,7 +16,18 @@ $(function(){
     $("#tabs").tabs();
     $('#upload').ajaxForm(afterUpload);
     initJSONRpc(loadConfig);
+    $('#enableRecaptcha').click(toggleRecaptcha);
 });
+
+function toggleRecaptcha() {
+    var recaptcha = $('#enableRecaptcha:checked').size() > 0;
+    if (recaptcha) {
+        $('#recaptcha').show();
+    }
+    else {
+        $('#recaptcha').hide();
+    }
+}
 
 function afterUpload(data) {
     var s = data.split('::');
@@ -56,8 +67,10 @@ function initFormFields() {
 	$('#googleAnalyticsId').val(config.googleAnalyticsId);
     $('#siteEmail').val(config.siteEmail);
     $('#siteDomain').val(config.siteDomain);
+    $('#enableRecaptcha').each(function () {this.checked = config.enableRecaptcha});
     $('#recaptchaPublicKey').val(config.recaptchaPublicKey);
     $('#recaptchaPrivateKey').val(config.recaptchaPrivateKey);
+    toggleRecaptcha();
     $('#editExt').val(config.editExt);
     $('#commentsEmail').val(config.commentsEmail);
     $('#commentsTemplate').val(config.commentsTemplate);
@@ -68,6 +81,7 @@ function onSave() {
     	googleAnalyticsId : $('#googleAnalyticsId').val(),
         siteEmail : $('#siteEmail').val(),
         siteDomain : $('#siteDomain').val(),
+        enableRecaptcha : String($('#enableRecaptcha:checked').size() > 0),
         recaptchaPublicKey : $('#recaptchaPublicKey').val(),
         recaptchaPrivateKey : $('#recaptchaPrivateKey').val(),
         editExt : $('#editExt').val(),
@@ -113,13 +127,19 @@ function onExport() {
 </div>
 
 <div class="form-row">
+    <label>Enable reCaptcha use on the site</label>
+    <input id="enableRecaptcha" type="checkbox" />
+</div>
+
+<div id="recaptcha">
+<div class="form-row">
     <label>reCaptcha service public key</label>
     <input id="recaptchaPublicKey" type="text" size="40"/>
 </div>
-
 <div class="form-row">
     <label>reCaptcha service private key</label>
     <input id="recaptchaPrivateKey" type="text" size="40"/>
+</div>
 </div>
 
 <div class="form-row">

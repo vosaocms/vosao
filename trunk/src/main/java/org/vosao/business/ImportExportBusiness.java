@@ -26,19 +26,11 @@ import java.util.List;
 import java.util.zip.ZipInputStream;
 
 import org.dom4j.DocumentException;
+import org.vosao.dao.Dao;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
 
 public interface ImportExportBusiness {
-
-	void setFolderBusiness(FolderBusiness bean);
-	FolderBusiness getFolderBusiness();
-	
-	void setPageBusiness(PageBusiness bean);
-	PageBusiness getPageBusiness();
-
-	void setConfigBusiness(ConfigBusiness bean);
-	ConfigBusiness getConfigBusiness();
 
 	/**
 	 * Create export file with selected themes.

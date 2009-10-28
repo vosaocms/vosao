@@ -48,9 +48,7 @@ public class BaseSpringServlet extends HttpServlet {
 	 * @return Business bean.
 	 */
 	public Business getBusiness() {
-		WebApplicationContext wac = WebApplicationContextUtils
-				.getRequiredWebApplicationContext(getServletContext());
-		return (Business) wac.getBean("business");
+		return (Business) getSpringBean("business");
 	}
 
 	/**
@@ -59,9 +57,12 @@ public class BaseSpringServlet extends HttpServlet {
 	 * @return Dao bean.
 	 */
 	public Dao getDao() {
-		WebApplicationContext wac = WebApplicationContextUtils
-				.getRequiredWebApplicationContext(getServletContext());
-		return (Dao) wac.getBean("dao");
+		return (Dao) getSpringBean("dao");
+	}
+	
+	public Object getSpringBean(final String name) {
+		return WebApplicationContextUtils.getRequiredWebApplicationContext(
+				getServletContext()).getBean(name);
 	}
 
 }

@@ -1,0 +1,17 @@
+= Friendly URL for pages =
+
+Each page in Vosao CMS has it's unique url. You enter this URL when creating a new page.
+
+Reserved urls:
+
+ * /_ah
+ * /cms
+ * /plugin
+ * /static
+ * /login.jsp
+ * /file
+ * /setup
+ * /hotCron
+ * /JSON-RPC
+
+All urls starting with reserved url are also reserved:

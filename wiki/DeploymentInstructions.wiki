@@ -1,0 +1,15 @@
+= Deployment instructions =
+
+Unfortunately Google doesn't offer any kind of automatic deployment so you will need to do some hand work to get Vosao CMS up and running.
+
+ # Download and install GAE JAVA SDK http://code.google.com/appengine/downloads.html Of course you will need working java on your machine.
+ # Download Vosao CMS war file.
+ # Unpack it somewhere.
+ # In unpacked directory find file WEB-INF/appengine-web.xml and change application name to your application name.
+ # Upload vosaocms by issuing GAE SDK command line:
+
+  {{{
+      # appcfg.py update <vosaocms war directory>
+  }}}
+ # Set browser to your application url. Starting from version 0.0.3 database will be automatically filled by default values and you will be redirected to site root page. In version prior 0.0.3 you need to specify setup url /setup to start installation process and then set site root url.
+ # That's it.

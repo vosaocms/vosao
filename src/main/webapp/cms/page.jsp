@@ -78,6 +78,9 @@
                     + value.title + '</option>';
             });
             $('#templates').html(html);
+            if (page != null) {
+                $('#templates').val(page.template);
+            }
         });
     }
 
@@ -97,6 +100,7 @@
             $('#publishDate').val(page.publishDateString);
             $('#commentsEnabled').each(function() {this.checked = page.commentsEnabled});
             $('#content').val(page.content);
+            $('#templates').val(page.template);
         }
         else {
             $('#title').val('');

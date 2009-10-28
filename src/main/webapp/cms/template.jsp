@@ -17,7 +17,6 @@ var autosaveTimer = '';
     
 $(function(){
     initJSONRpc(loadTemplate);
-    startAutosave();
 });
     
 function startAutosave() {
@@ -36,8 +35,8 @@ function stopAutosave() {
 }
 
 function saveContent() {
-    var content = $("textarea").val();
-    jsonrpc.templateService.updateContent(function(r) {
+    var content = $("#content").val();
+    templateService.updateContent(function(r) {
         if (r.result == 'success') {
             var now = new Date();
             info(r.message + " " + now);
@@ -94,7 +93,7 @@ function onUpdate(cont) {
 	});
 	templateService.saveTemplate(function (r) {
 		showServiceMessages(r);
-		if (!cont) {
+		if (r.result == 'success' && !cont) {
 			location.href = '/cms/templates.jsp';
 		}
 	}, templateVO);
@@ -119,7 +118,7 @@ function onUpdate(cont) {
 </div>
 <div class="form-row">
     <div>
-        <input id="autosave" type="checkbox" checked="checked" onchange="onAutosave()"> Autosave</input>
+        <input id="autosave" type="checkbox" onchange="onAutosave()"> Autosave</input>
     </div>
     <textarea id="content" rows="20" cols="80"></textarea>
 </div>

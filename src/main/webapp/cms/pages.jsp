@@ -40,7 +40,7 @@
 <body>
 
 <h1>Pages</h1>
-<ul id="pages-tree"> </ul>
+<ul id="pages-tree"><img src="/static/images/ajax-loader.gif" /></ul>
 
 </body>
 </html>

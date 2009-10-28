@@ -57,6 +57,16 @@ content.xml
       </page>
     </page>
   </pages>
+  <forms>
+    <form-config>
+      <formTemplate> lalalal </formTemplate>
+      <letterTemplate> lalalala </letterTemplate>
+    </form-config>
+    <form name="test" title="Test form" email="alex@kin.com" letterSubject="test form letter" enableCaptcha="false">
+      <field name="name" title="Name" fieldType="TEXT" optional="false" height="1" width="20" />
+      <field name="resume" title="Resume" fieldType="FILE" optional="false" height="1" width="20" />
+    </form> 
+  </forms>
 </site>
 }}}
 

@@ -22,8 +22,6 @@
 package org.vosao.entity;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -38,16 +36,6 @@ import com.google.appengine.api.datastore.Text;
 public class ConfigEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
-	public static final String GOOGLE_ANALYTICS_ID_PARAM = "googleAnalyticsId";
-	public static final String SITE_EMAIL = "siteEmail";
-	public static final String SITE_DOMAIN = "siteDomain";
-	public static final String EDIT_EXT = "editExt";
-	public static final String RECAPTCHA_PRIVATE_KEY = "recaptchaPrivateKey";
-	public static final String RECAPTCHA_PUBLIC_KEY = "recaptchaPublicKey";
-	public static final String COMMENTS_EMAIL = "commentsEmail";
-	public static final String COMMENTS_TEMPLATE = "commentsTemplate";
-	public static final String FORM_TEMPLATE = "formTemplate";
 
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -80,6 +68,9 @@ public class ConfigEntity implements Serializable {
 	@Persistent(defaultFetchGroup = "true")
 	private Text commentsTemplate;
 	
+	@Persistent
+	private String version;
+
 	public ConfigEntity() {
 	}
 	
@@ -93,6 +84,7 @@ public class ConfigEntity implements Serializable {
 		setSiteDomain(entity.getSiteDomain());
 		setSiteEmail(entity.getSiteEmail());
 		setEnableRecaptcha(entity.isEnableRecaptcha());
+		setVersion(entity.getVersion());
 	}
 	
 	private String getNotNull(String value) {
@@ -196,6 +188,14 @@ public class ConfigEntity implements Serializable {
 
 	public void setEnableRecaptcha(boolean enableRecaptcha) {
 		this.enableRecaptcha = enableRecaptcha;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
 	}
 	
 }

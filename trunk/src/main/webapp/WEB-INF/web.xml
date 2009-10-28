@@ -34,6 +34,17 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>    
 
+    <!-- Update filter -->
+    
+    <filter>
+        <filter-name>UpdateFilter</filter-name>
+        <filter-class>org.vosao.filter.UpdateFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>UpdateFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>    
+
     <!-- AuthenticationFilter -->
     
     <filter>

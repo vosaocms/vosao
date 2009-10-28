@@ -28,6 +28,7 @@ import org.dom4j.Element;
 import org.vosao.business.Business;
 import org.vosao.dao.Dao;
 import org.vosao.entity.FieldEntity;
+import org.vosao.entity.FormConfigEntity;
 import org.vosao.entity.FormEntity;
 import org.vosao.enums.FieldType;
 import org.vosao.utils.XmlUtil;
@@ -39,10 +40,20 @@ public class FormExporter extends AbstractExporter {
 	}
 	
 	public void createFormsXML(Element formsElement) {
+		createFormConfigXML(formsElement);
 		List<FormEntity> list = getDao().getFormDao().select();
 		for (FormEntity form : list) {
 			createFormXML(formsElement, form);
 		}
+	}
+
+	private void createFormConfigXML(Element formsElement) {
+		FormConfigEntity config = getDao().getFormDao().getConfig();
+		Element configElement = formsElement.addElement("form-config");
+		Element formTemplateElement = configElement.addElement("formTemplate");
+		formTemplateElement.setText(config.getFormTemplate());
+		Element formLetterElement = configElement.addElement("letterTemplate");
+		formLetterElement.setText(config.getLetterTemplate());
 	}
 
 	private void createFormXML(Element formsElement, final FormEntity form) {
@@ -64,7 +75,8 @@ public class FormExporter extends AbstractExporter {
 	}
 	
 	public void readForms(Element formsElement) {
-		for (Iterator<Element> i = formsElement.elementIterator(); i.hasNext(); ) {
+		for (Iterator<Element> i = formsElement.elementIterator(); 
+				i.hasNext(); ) {
             Element element = i.next();
             if (element.getName().equals("form")) {
             	String name = element.attributeValue("name");
@@ -81,6 +93,9 @@ public class FormExporter extends AbstractExporter {
             	form.setResetButtonTitle(element.attributeValue("resetButtonTitle"));
             	getDao().getFormDao().save(form);
             	readFields(element, form);
+            }
+            if (element.getName().equals("form-config")) {
+            	readFormConfig(element);
             }
 		}		
 	}
@@ -122,5 +137,21 @@ public class FormExporter extends AbstractExporter {
             }
 		}		
 	}
+
+	public void readFormConfig(Element configElement) {
+		FormConfigEntity config = getDao().getFormDao().getConfig();
+		for (Iterator<Element> i = configElement.elementIterator(); 
+				i.hasNext(); ) {
+            Element element = i.next();
+            if (element.getName().equals("formTemplate")) {
+            	config.setFormTemplate(element.getText());
+            }
+            if (element.getName().equals("letterTemplate")) {
+            	config.setLetterTemplate(element.getText());
+            }
+		}
+		getDao().getFormDao().save(config);
+	}
+	
 	
 }

@@ -42,6 +42,7 @@ public class UpdateManager {
 	private void addConfigVersion() {
 		Entity config = getConfig();
 		config.setProperty("version", "0.0.2");
+		config.setProperty("enableRecaptcha", false);
 		datastore.put(config);
 	}
 	

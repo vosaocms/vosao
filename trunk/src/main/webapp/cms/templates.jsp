@@ -105,7 +105,7 @@ function onExport() {
 <body>
 
 <h1>Templates</h1>
-<div id="templates"> </div>
+<div id="templates"><img src="/static/images/ajax-loader.gif" /></div>
 <div class="buttons">
     <input type="button" value="Add" onclick="onAdd()" />
     <input type="button" value="Delete" onclick="onDelete()" />

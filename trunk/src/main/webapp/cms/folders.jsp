@@ -41,7 +41,7 @@ function renderFolder(vo) {
 
 <h1>Folders</h1>
 
-<ul id="folders-tree"> </ul>
+<ul id="folders-tree"><img src="/static/images/ajax-loader.gif" /></ul>
 
 </body>
 </html>

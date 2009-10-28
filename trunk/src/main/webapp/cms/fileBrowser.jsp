@@ -85,10 +85,12 @@ function onFileSelected(fileId) {
 
 <div class="browser-folders">
     <ul id="folders-tree">
+    <img src="/static/images/ajax-loader.gif" />
     </ul>
 </div>
 <div class="browser-files">
     <ul id="files">
+    <img src="/static/images/ajax-loader.gif" />
     </ul>
     <div class="clear"> </div>
 </div>

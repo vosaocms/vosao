@@ -22,17 +22,12 @@ public class UpdateTask003 implements UpdateTask {
 	public void update() throws UpdateException {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService(); 
-		Query query = new Query("ConfigEntity");
-		for (Entity e : datastore.prepare(query).asIterable()) {
-			e.setProperty("enableRecaptcha", "false");
-			datastore.put(e);
-		}
-		query = new Query("FormEntity");
+		Query query = new Query("FormEntity");
 		for (Entity e : datastore.prepare(query).asIterable()) {
 			e.setProperty("sendButtonTitle", "");
-			e.setProperty("showResetButton", "false");
+			e.setProperty("showResetButton", false);
 			e.setProperty("resetButtonTitle", "");
-			e.setProperty("enableCaptcha", "false");
+			e.setProperty("enableCaptcha", false);
 			datastore.put(e);
 		}
 		

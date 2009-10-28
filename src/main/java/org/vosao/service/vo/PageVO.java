@@ -19,7 +19,7 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service.back.impl.vo;
+package org.vosao.service.vo;
 
 import java.util.ArrayList;
 import java.util.List;

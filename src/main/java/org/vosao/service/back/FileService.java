@@ -27,7 +27,7 @@ import java.util.Map;
 import org.vosao.entity.FileEntity;
 import org.vosao.service.AbstractService;
 import org.vosao.service.ServiceResponse;
-import org.vosao.service.back.impl.vo.FileVO;
+import org.vosao.service.vo.FileVO;
 
 
 public interface FileService extends AbstractService {

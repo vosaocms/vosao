@@ -28,7 +28,7 @@ import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.PageEntity;
 import org.vosao.service.AbstractService;
 import org.vosao.service.ServiceResponse;
-import org.vosao.service.back.impl.vo.PageVO;
+import org.vosao.service.vo.PageVO;
 
 public interface PageService extends AbstractService {
 	

@@ -64,7 +64,20 @@
             showServiceMessages(r);
         }, vo);
     }
-    
+
+    function onFormTemplateRestore() {
+        formService.restoreFormTemplate(function (r) {
+            showServiceMessages(r);
+            loadFormConfig();
+        });
+    }
+
+    function onFormLetterRestore() {
+        formService.restoreFormLetter(function (r) {
+            showServiceMessages(r);
+            loadFormConfig();
+        });
+    }
 
 </script>    
 </head>
@@ -88,11 +101,23 @@
 
 <div class="form-row">
     <label>Form template</label>
-    <textarea id="formTemplate" rows="20" cols="80"></textarea>
+    <div>
+    <a href="#" onclick="$('#formTemplate').toggle()">edit</a> 
+    <a href="#" onclick="onFormTemplateRestore()">restore default</a>
+    </div>
+    <div>
+    <textarea id="formTemplate" rows="20" cols="80" style="display:none"></textarea>
+    </div>
 </div>
 <div class="form-row">
     <label>Form letter template</label>
-    <textarea id="letterTemplate" rows="20" cols="80"></textarea>
+    <div>
+    <a href="#" onclick="$('#letterTemplate').toggle()">edit</a> 
+    <a href="#" onclick="onFormLetterRestore()">restore default</a>
+    </div>
+    <div>
+    <textarea id="letterTemplate" rows="20" cols="80" style="display:none"></textarea>
+    </div>
 </div>
 <div class="buttons">
     <input type="button" value="Save" onclick="onSaveConfig()" />

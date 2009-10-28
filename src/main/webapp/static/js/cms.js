@@ -320,6 +320,20 @@ var formService = {
 		}, vo);
 	},
 	
+	restoreFormTemplate: function(func) {
+		jsonrpc.formService.restoreFormTemplate(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		});
+	},
+	
+	restoreFormLetter: function(func) {
+		jsonrpc.formService.restoreFormLetter(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		});
+	},
+	
 };
 
 var fieldService = {

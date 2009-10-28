@@ -19,71 +19,60 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service.back.impl.vo;
+package org.vosao.service.vo;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.vosao.entity.FieldEntity;
+import org.vosao.entity.CommentEntity;
+import org.vosao.utils.DateUtil;
 
 /**
  * Value object to be returned from services.
  * @author Alexander Oleynik
  */
-public class FieldVO {
+public class CommentVO {
 
-	private FieldEntity field;
-	
-	public static List<FieldVO> create(List<FieldEntity> list) {
-		List<FieldVO> result = new ArrayList<FieldVO>();
-		for (FieldEntity entity : list) {
-			result.add(new FieldVO(entity));
+    private CommentEntity comment;
+
+	public CommentVO(final CommentEntity entity) {
+		comment = entity;
+	}
+
+	public static List<CommentVO> create(List<CommentEntity> list) {
+		List<CommentVO> result = new ArrayList<CommentVO>();
+		for (CommentEntity comment : list) {
+			result.add(new CommentVO(comment));
 		}
 		return result;
 	}
 
-	public FieldVO(final FieldEntity aField) {
-		field = aField;
-	}
-	
-	public String getFieldType() {
-		return field.getFieldType().name();
-	}
-
-	public boolean isOptional() {
-		return field.isOptional();
-	}
-
-	public String getValues() {
-		return field.getValues();
-	}
-
-	public String getDefaultValue() {
-		return field.getDefaultValue();
-	}
-
-	public String getTitle() {
-		return field.getTitle();
-	}
-
 	public String getId() {
-		return field.getId();
+		return comment.getId();
 	}
-	
+
+	public String getPageId() {
+		return comment.getPageId();
+	}
+
 	public String getName() {
-		return field.getName();
+		return comment.getName();
 	}
 
-	public String getFormId() {
-		return field.getFormId();
+	public String getContent() {
+		return comment.getContent();
 	}
 
-	public int getHeight() {
-		return field.getHeight();
+	public String getPublishDate() {
+		return DateUtil.toString(comment.getPublishDate());
 	}
 
-	public int getWidth() {
-		return field.getWidth();
+	public String getPublishDateTime() {
+		return DateUtil.dateTimeToString(comment.getPublishDate());
+	}
+
+	public boolean isDisabled() {
+		return comment.isDisabled();
 	}
 	
 }

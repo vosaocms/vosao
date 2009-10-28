@@ -180,13 +180,18 @@ public class SetupBeanImpl implements SetupBean {
 		}
 	}
 	
+	public static final String FORM_TEMPLATE_FILE =
+		"org/vosao/resources/html/form-template.html";
+	public static final String FORM_LETTER_FILE =
+		"org/vosao/resources/html/form-letter.html";
+	
 	private void initForms() {
 		FormConfigEntity config = getDao().getFormDao().getConfig();
 		if (config.getId() == null) {
 			config.setFormTemplate(loadResource(
-					"org/vosao/resources/html/form-template.html"));
+					FORM_TEMPLATE_FILE));
 			config.setLetterTemplate(loadResource(
-					"org/vosao/resources/html/form-letter.html"));
+					FORM_LETTER_FILE));
 			getDao().getFormDao().save(config);			
 		}
 	}

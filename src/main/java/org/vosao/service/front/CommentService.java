@@ -19,33 +19,34 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service.back;
+package org.vosao.service.front;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
-import org.vosao.entity.FormConfigEntity;
-import org.vosao.entity.FormEntity;
+import javax.servlet.http.HttpServletRequest;
+
 import org.vosao.service.AbstractService;
 import org.vosao.service.ServiceResponse;
+import org.vosao.service.vo.CommentVO;
 
 
-public interface FormService extends AbstractService {
+public interface CommentService extends AbstractService {
 	
-	ServiceResponse saveForm(Map<String, String> vo);
-	
-	FormEntity getForm(final String formId);
-	
-	List<FormEntity> select();
-	
-	ServiceResponse deleteForm(final List<String> ids);
-	
-	FormConfigEntity getFormConfig();
-	
-	ServiceResponse saveFormConfig(final Map<String, String> vo);
+	List<CommentVO> getByPage(final String pageId);
 
-	ServiceResponse restoreFormTemplate() throws IOException;
+	/**
+	 * Add comment to page. Protected by reCaptcha service.
+	 * @param name - user name
+	 * @param params - form parameters
+	 * @param challenge - recaptcha challenge
+	 * @param response - recaptcha response
+	 * @return - service response.
+	 */
+	ServiceResponse addComment(final String name, 
+			final String comment, 
+			final String pageId,
+			final String challenge, 
+			final String response, 
+			HttpServletRequest request);
 	
-	ServiceResponse restoreFormLetter() throws IOException;
 }

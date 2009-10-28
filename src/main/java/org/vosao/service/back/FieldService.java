@@ -26,7 +26,7 @@ import java.util.Map;
 
 import org.vosao.service.AbstractService;
 import org.vosao.service.ServiceResponse;
-import org.vosao.service.back.impl.vo.FieldVO;
+import org.vosao.service.vo.FieldVO;
 
 
 public interface FieldService extends AbstractService {

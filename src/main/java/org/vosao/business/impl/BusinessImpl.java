@@ -49,7 +49,6 @@ public class BusinessImpl implements Business, Serializable {
 	private PageBusiness pageBusiness;
 	private FolderBusiness folderBusiness;
 	private TemplateBusiness templateBusiness;
-	private ImportExportBusiness importExportBusiness;
 	private ConfigBusiness configBusiness;
 	private FormBusiness formBusiness;
 	private FileBusiness fileBusiness;
@@ -105,16 +104,6 @@ public class BusinessImpl implements Business, Serializable {
 	@Override
 	public void setTemplateBusiness(TemplateBusiness bean) {
 		templateBusiness = bean;
-	}
-
-	@Override
-	public ImportExportBusiness getImportExportBusiness() {
-		return importExportBusiness;
-	}
-
-	@Override
-	public void setImportExportBusiness(ImportExportBusiness bean) {
-		importExportBusiness = bean;
 	}
 
 	@Override

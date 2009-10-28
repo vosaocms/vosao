@@ -63,10 +63,23 @@
 
 </div>
 #end
+#if($form.enableCaptcha && $config.enableRecaptcha)
+<div id="recaptcha">&nbsp;</div>
+<input id="recaptchaChallenge" type="hidden" />
+<input id="recaptchaResponse" type="hidden" />
+#end
+#set($formSend = "Send")
+#if(!$form.sendButtonTitle)
+    #set($formSend = $form.sendButtonTitle)
+#end
 <div class="form-buttons">
-  <input type="submit" value="$form.sendButtonTitle" />
+  <input type="submit" value="$formSend" />
 #if($form.showResetButton)
-  <input type="reset" value="$form.resetButtonTitle" />
+#set($formReset = "Reset")
+#if(!$form.resetButtonTitle)
+    #set($formReset = $form.resetButtonTitle)
+#end
+  <input type="reset" value="$formReset" />
 #end
 </div>
 </form>
@@ -90,5 +103,12 @@ $(function() {
       $('#messages-$form.name').html('<span class="error">Error occured during form submition.</span>');
     }
   });
+
+#if($form.enableCaptcha && $config.enableRecaptcha)
+  Recaptcha.create('$config.recaptchaPublicKey',
+    'recaptcha', {
+        theme:'red', callback: Recaptcha.focus_response_field});
+#end 
 });
+
 </script>

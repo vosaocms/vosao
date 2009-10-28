@@ -43,9 +43,6 @@ public interface Business {
 	TemplateBusiness getTemplateBusiness();
 	void setTemplateBusiness(final TemplateBusiness bean);
 
-	ImportExportBusiness getImportExportBusiness();
-	void setImportExportBusiness(final ImportExportBusiness bean);
-	
 	ConfigBusiness getConfigBusiness();
 	void setConfigBusiness(final ConfigBusiness bean);
 

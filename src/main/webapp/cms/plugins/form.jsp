@@ -255,6 +255,9 @@
                     $('#showResetButton').each(function() {
                         this.checked = r.showResetButton;
                     });
+                    $('#enableCaptcha').each(function() {
+                        this.checked = r.enableCaptcha;
+                    });
                     $('.fieldsTab').show();
                 }
                 else {
@@ -265,6 +268,9 @@
                     $('#sendButtonTitle').val('');
                     $('#resetButtonTitle').val('');
                     $('#showResetButton').each(function() {
+                        this.checked = false;
+                    });
+                    $('#enableCaptcha').each(function() {
                         this.checked = false;
                     });
                     $('.fieldsTab').hide();
@@ -282,6 +288,7 @@
                 sendButtonTitle : $('#sendButtonTitle').val(),
                 resetButtonTitle : $('#resetButtonTitle').val(),
                 showResetButton : String($('#showResetButton:checked').size() > 0),
+                enableCaptcha : String($('#enableCaptcha:checked').size() > 0),
             });
             formService.saveForm(function (r) {
                 if (r.result = 'success') {
@@ -337,6 +344,10 @@
 <div class="form-row">
     <label>Show "Reset" button</label>
     <input id="showResetButton" type="checkbox"/>
+</div>
+<div class="form-row">
+    <label>Enable captcha</label>
+    <input id="enableCaptcha" type="checkbox"/>
 </div>
 
 <div class="buttons">

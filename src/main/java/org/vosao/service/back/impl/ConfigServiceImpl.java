@@ -47,6 +47,7 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 		config.setCommentsTemplate(vo.get("commentsTemplate"));
 		config.setEditExt(vo.get("editExt"));
 		config.setGoogleAnalyticsId(vo.get("googleAnalyticsId"));
+		config.setEnableRecaptcha(Boolean.valueOf(vo.get("enableRecaptcha")));
 		config.setRecaptchaPrivateKey(vo.get("recaptchaPrivateKey"));
 		config.setRecaptchaPublicKey(vo.get("recaptchaPublicKey"));
 		config.setSiteDomain(vo.get("siteDomain"));

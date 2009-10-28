@@ -32,6 +32,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.tanesha.recaptcha.ReCaptchaResponse;
+
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
@@ -39,7 +41,9 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FormEntity;
+import org.vosao.utils.RecaptchaUtil;
 import org.vosao.utils.StreamUtil;
 
 /**
@@ -94,7 +98,7 @@ public class FormSendServlet extends BaseSpringServlet {
 					parameters.put(paramName, request.getParameter(paramName));
 				}
 			}
-			message = processForm(parameters, files);
+			message = processForm(parameters, files, request);
 		} catch (UploadException e) {
 			message = createMessage("error", e.getMessage()); 
 			logger.error(message);
@@ -110,8 +114,9 @@ public class FormSendServlet extends BaseSpringServlet {
 	}
 	
 	private String processForm(Map<String, String> parameters,
-			List<FileItem> files) throws UploadException {
-		logger.info("parameters " + parameters.keySet().toString());
+			List<FileItem> files, HttpServletRequest request) 
+			throws UploadException {
+		logger.info("parameters " + parameters.toString());
 		String formName = parameters.get(FORM_NAME_PARAM);
 		if (formName == null) {
 			throw new UploadException("Form name parameter was not found.");
@@ -120,6 +125,19 @@ public class FormSendServlet extends BaseSpringServlet {
 		if (form == null) {
 			throw new UploadException("Form with name " + formName 
 					+ " was not found.");
+		}
+		ConfigEntity config = getDao().getConfigDao().getConfig();
+		String challenge = parameters.get("recaptcha_challenge_field");
+		String response = parameters.get("recaptcha_response_field");
+		if (form.isEnableCaptcha() && config.isEnableRecaptcha()) {
+			ReCaptchaResponse recaptchaResponse = RecaptchaUtil.check(
+					config.getRecaptchaPublicKey(), 
+					config.getRecaptchaPrivateKey(), 
+					challenge, response, request);
+			if (!recaptchaResponse.isValid()) {
+				return createMessage("error", 
+						"Incorrect captcha solution.");
+			}
 		}
 		getBusiness().getFormBusiness().submit(form, parameters, files);
 		return createMessage("success", "Form was successfully submited.");

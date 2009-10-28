@@ -66,6 +66,9 @@ public class ConfigEntity implements Serializable {
 	private String editExt;
 
 	@Persistent
+	private boolean enableRecaptcha;
+
+	@Persistent
 	private String recaptchaPrivateKey;
 
 	@Persistent
@@ -89,25 +92,9 @@ public class ConfigEntity implements Serializable {
 		setRecaptchaPublicKey(entity.getRecaptchaPublicKey());
 		setSiteDomain(entity.getSiteDomain());
 		setSiteEmail(entity.getSiteEmail());
+		setEnableRecaptcha(entity.isEnableRecaptcha());
 	}
 	
-	/**
-	 * Get all configs with values.
-	 * @return configs with not null values.
-	 */
-	public Map<String, String> getConfigMap() {
-		Map<String, String> result = new HashMap<String, String>();
-		result.put(COMMENTS_EMAIL, getNotNull(getCommentsEmail()));
-		result.put(COMMENTS_TEMPLATE, getNotNull(getCommentsTemplate()));
-		result.put(EDIT_EXT, getNotNull(getEditExt()));
-		result.put(GOOGLE_ANALYTICS_ID_PARAM, getNotNull(getGoogleAnalyticsId()));
-		result.put(RECAPTCHA_PRIVATE_KEY, getNotNull(getRecaptchaPrivateKey()));
-		result.put(RECAPTCHA_PUBLIC_KEY, getNotNull(getRecaptchaPublicKey()));
-		result.put(SITE_DOMAIN, getNotNull(getSiteDomain()));
-		result.put(SITE_EMAIL, getNotNull(getSiteEmail()));
-		return result;
-	}
-
 	private String getNotNull(String value) {
 		if (value != null) {
 			return value;
@@ -201,6 +188,14 @@ public class ConfigEntity implements Serializable {
 			}
 		}
 		return false;
+	}
+
+	public boolean isEnableRecaptcha() {
+		return enableRecaptcha;
+	}
+
+	public void setEnableRecaptcha(boolean enableRecaptcha) {
+		this.enableRecaptcha = enableRecaptcha;
 	}
 	
 }

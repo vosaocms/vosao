@@ -41,7 +41,7 @@ import org.vosao.business.SetupBean;
 
 public class InitFilter implements Filter {
     
-    private static final Log log = LogFactory.getLog(SiteFilter.class);
+    private static final Log logger = LogFactory.getLog(SiteFilter.class);
 
     private static final String SETUP_URL = "/setup";
     private static final String HOT_CRON_URL = "/hotCron";
@@ -67,7 +67,8 @@ public class InitFilter implements Filter {
             	.getRequiredWebApplicationContext(servletContext)
             	.getBean("setupBean");
         	setupBean.setup();
-        	writeContent(httpResponse, "Setup was successfully completed.");
+        	logger.info("Setup was successfully completed.");
+        	httpResponse.sendRedirect("/");
         	return;
         }
         if (url.equals(HOT_CRON_URL)) {

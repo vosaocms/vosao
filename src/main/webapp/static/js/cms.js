@@ -366,3 +366,34 @@ var fieldService = {
 		}, ids);
 	},
 };
+
+var seoUrlService = {
+		
+	save: function(func, vo) {
+		jsonrpc.seoUrlService.save(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, vo);
+	},
+
+	select: function(func) {
+		jsonrpc.seoUrlService.select(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		});
+	},
+		
+	getById: function(func, id) {
+		jsonrpc.seoUrlService.getById(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, id);
+	},
+
+	remove: function(func, ids) {
+		jsonrpc.seoUrlService.remove(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, ids);
+	},
+};

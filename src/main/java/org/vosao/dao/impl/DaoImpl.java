@@ -31,6 +31,7 @@ import org.vosao.dao.FileDao;
 import org.vosao.dao.FolderDao;
 import org.vosao.dao.FormDao;
 import org.vosao.dao.PageDao;
+import org.vosao.dao.SeoUrlDao;
 import org.vosao.dao.TemplateDao;
 import org.vosao.dao.UserDao;
 
@@ -45,6 +46,7 @@ public class DaoImpl implements Dao, Serializable {
 	private FormDao formDao;
 	private CommentDao commentDao;
 	private FieldDao fieldDao;
+	private SeoUrlDao seoUrlDao;
 	
 	public PageDao getPageDao() {
 		return pageDao;
@@ -113,6 +115,14 @@ public class DaoImpl implements Dao, Serializable {
 
 	public void setFieldDao(FieldDao bean) {
 		this.fieldDao = bean;
+	}
+	
+	public SeoUrlDao getSeoUrlDao() {
+		return seoUrlDao;
+	}
+	
+	public void setSeoUrlDao(SeoUrlDao seoUrlDao) {
+		this.seoUrlDao = seoUrlDao;
 	}
 	
 }

@@ -29,6 +29,7 @@ import org.vosao.service.back.FileService;
 import org.vosao.service.back.FolderService;
 import org.vosao.service.back.FormService;
 import org.vosao.service.back.PageService;
+import org.vosao.service.back.SeoUrlService;
 import org.vosao.service.back.TemplateService;
 
 public interface BackService {
@@ -59,4 +60,8 @@ public interface BackService {
 	
 	ConfigService getConfigService();
 	void setConfigService(ConfigService bean);
+	
+	SeoUrlService getSeoUrlService();
+	void setSeoUrlService(SeoUrlService bean);
+	
 }

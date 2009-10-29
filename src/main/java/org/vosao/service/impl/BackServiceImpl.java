@@ -34,6 +34,7 @@ import org.vosao.service.back.FileService;
 import org.vosao.service.back.FolderService;
 import org.vosao.service.back.FormService;
 import org.vosao.service.back.PageService;
+import org.vosao.service.back.SeoUrlService;
 import org.vosao.service.back.TemplateService;
 
 public class BackServiceImpl implements BackService, Serializable {
@@ -48,6 +49,7 @@ public class BackServiceImpl implements BackService, Serializable {
 	private FormService formService;
 	private FieldService fieldService;
 	private ConfigService configService;
+	private SeoUrlService seoUrlService;
 	
 	public void init() {
 	}
@@ -62,6 +64,7 @@ public class BackServiceImpl implements BackService, Serializable {
 		bridge.registerObject("fieldService", fieldService);
 		bridge.registerObject("formService", formService);
 		bridge.registerObject("configService", configService);
+		bridge.registerObject("seoUrlService", seoUrlService);
 	}
 	
 	@Override
@@ -74,6 +77,7 @@ public class BackServiceImpl implements BackService, Serializable {
 		bridge.unregisterObject("fieldService");
 		bridge.unregisterObject("formService");
 		bridge.unregisterObject("configService");
+		bridge.unregisterObject("seoUrlService");
 	}
 
 	@Override
@@ -154,6 +158,16 @@ public class BackServiceImpl implements BackService, Serializable {
 	@Override
 	public void setFormService(FormService bean) {
 		formService = bean;		
+	}
+
+	@Override
+	public SeoUrlService getSeoUrlService() {
+		return seoUrlService;
+	}
+
+	@Override
+	public void setSeoUrlService(SeoUrlService bean) {
+		seoUrlService = bean;		
 	}
 	
 }

@@ -40,6 +40,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.vosao.business.Business;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.SeoUrlEntity;
 
 
 public class SiteFilter implements Filter {
@@ -63,6 +64,7 @@ public class SiteFilter implements Filter {
     private Dao dao;
     private Business business;
     private PageEntity page;
+    private SeoUrlEntity seoUrl;
     
     public SiteFilter() {
     }
@@ -90,6 +92,10 @@ public class SiteFilter implements Filter {
         String url = httpRequest.getServletPath();
         if (isSkipUrl(url)) {
             chain.doFilter(request, response);
+            return;
+        }
+        if (isSeoUrl(url)) {
+            httpResponse.sendRedirect(seoUrl.getToLink());
             return;
         }
         if (isSiteUrl(url)) {
@@ -123,6 +129,14 @@ public class SiteFilter implements Filter {
     	return false;
     }
     
+    private boolean isSeoUrl(final String url) {
+    	seoUrl = dao.getSeoUrlDao().getByFrom(url);
+    	if (seoUrl != null) {
+        	return true;
+    	}
+    	return false;
+    }
+
     private void renderPage(HttpServletRequest request, 
     		HttpServletResponse response, final String url) throws IOException {
     	response.setContentType("text/html");

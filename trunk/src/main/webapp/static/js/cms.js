@@ -397,3 +397,41 @@ var seoUrlService = {
 		}, ids);
 	},
 };
+
+var userService = {
+		
+	save: function(func, vo) {
+		jsonrpc.userService.save(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, vo);
+	},
+
+	select: function(func) {
+		jsonrpc.userService.select(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		});
+	},
+			
+	getById: function(func, id) {
+		jsonrpc.userService.getById(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, id);
+	},
+
+	getLoggedIn: function(func) {
+		jsonrpc.userService.getLoggedIn(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		});
+	},
+
+	remove: function(func, ids) {
+		jsonrpc.userService.remove(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, ids);
+	},
+};

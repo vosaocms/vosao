@@ -176,6 +176,9 @@
     <bean id="seoUrlService" class="org.vosao.service.back.impl.SeoUrlServiceImpl"
         parent="abstractService" />
 
+    <bean id="userService" class="org.vosao.service.back.impl.UserServiceImpl"
+        parent="abstractService" />
+
     <bean id="backService" class="org.vosao.service.impl.BackServiceImpl"
         init-method="init">  
         <property name="fileService" ref="fileService"/>  
@@ -187,6 +190,7 @@
         <property name="fieldService" ref="fieldService"/>  
         <property name="configService" ref="configService"/>  
         <property name="seoUrlService" ref="seoUrlService"/>  
+        <property name="userService" ref="userService"/>  
     </bean>
 
     <!--================== JSON-RPC front services ==========================-->

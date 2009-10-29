@@ -8,7 +8,6 @@ Unfortunately Google doesn't offer any kind of automatic deployment so you will 
  # Unpack it somewhere.
  # In unpacked directory find file WEB-INF/appengine-web.xml and change application name to your application name.
  # Upload vosaocms by issuing GAE SDK command line:
-
   {{{
       # appcfg.py update <vosaocms war directory>
   }}}

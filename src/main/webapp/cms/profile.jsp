@@ -1,46 +1,88 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:ui="http://java.sun.com/jsf/facelets"
-  xmlns:h="http://java.sun.com/jsf/html"
-  xmlns:f="http://java.sun.com/jsf/core"
-  template="WEB-INF/facelets/layout.xhtml">
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
+<html>
+<head>
+    <title>User profile</title>
+    
+<script type="text/javascript">
 
-<ui:define name="head">
-</ui:define>
+    var user = null;
 
-<ui:define name="title">User profile</ui:define>
+    $(function(){
+        initJSONRpc(loadUser);
+    });
 
-<ui:define name="body">
+    function loadUser() {
+        userService.getLoggedIn(function (r) {
+            user = r;
+            $('#name').val(user.name);
+            $('#email').val(user.email);
+            $('#password1').val('');
+            $('#password2').val('');
+        });
+    }
 
-<h:form>
+    function validPasswords() {
+        var pass1 = $('#password1').val();
+        var pass2 = $('#password2').val();
+        if (pass1 || pass2) {
+            if (pass1 == pass2) {
+                return true;
+            }
+            return false;
+        }
+        return true;
+    }
+    
+    function onSave() {
+        var pass = '';
+        if (validPasswords()) {
+            pass = $('#password1').val();
+        }
+        else {
+            error('Passwords don\'t match.');
+            return;
+        }
+        var vo = {
+        	id : String(user.id),
+            name : $('#name').val(),   
+            email : $('#email').val(),   
+            password : pass,   
+        };
+        userService.save(function (r) {
+            showServiceMessages(r);
+        }, javaMap(vo));
+    }
+
+</script>
+    
+</head>
+<body>
 
 <h1>User profile</h1>
 
 <div class="form-row">
     <label>User name</label>
-    <h:inputText value="#{profileBean.user.name}" />
+    <input id="name" type="text" />
 </div>
 
 <div class="form-row">
     <label>User email</label>
-    <h:inputText value="#{profileBean.user.email}" />
+    <input id="email" type="text" />
 </div>
 
 <div class="form-row">
     <label>Password</label>
-    <h:inputSecret value="#{profileBean.password1}" />
+    <input id="password1" type="password" />
 </div>
 <div class="form-row">
     <label>Retype the password</label>
-    <h:inputSecret value="#{profileBean.password2}" />
+    <input id="password2" type="password" />
 </div>
 
 <div class="buttons">
-    <h:commandButton value="Save" action="#{profileBean.save}" />
+    <input type="button" value="Save" onclick="onSave()" />
 </div>
 
-</h:form>
-
-</ui:define>
-
-</ui:composition>
+</body>
+</html>

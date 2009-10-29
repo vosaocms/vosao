@@ -1,6 +1,10 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
+<%@ page import="org.vosao.business.UserPreferences" %>
+<% UserPreferences userPreferences = (UserPreferences) session.getAttribute(
+		"org.vosao.business.UserPreferences"); 
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -21,7 +25,23 @@
 
     <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
 
+    <script language="javascript">
+
+    function onLogout() {
+        loginService.logout(function (r) {
+            if (r.result == 'success') {
+                location.href = '/';
+            }
+            else {
+                showServiceMessages(r);
+            }
+        });
+    }
+    
+    </script>
+
     <decorator:head />
+
     
 </head>
 
@@ -38,17 +58,15 @@
         <a href="/cms/plugins">Plugins</a>
     </div>
     <div id="rightmenu">
-        <!-- h:outputText value="#{loginBean.currentUser.email}" /--> 
+        <%= userPreferences.getUser().getEmail() %> 
         | <a href="/cms/profile.jsp">Profile</a> 
-        | <a href="/cms/logout.jsp">Logout</a>
+        | <a href="#" onclick="onLogout()">Logout</a>
     </div>
     <span class="clear">&#160;</span>
 </div>
 
 <div id="wrapper">
-    <div class="messages">
-        <!-- h:messages errorClass="error-msg" infoClass="info-msg" /-->
-    </div>
+    <div class="messages"> </div>
 
     <decorator:body />
 </div>

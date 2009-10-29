@@ -10,4 +10,5 @@ public interface LoginService extends AbstractService {
 	ServiceResponse login(final String email, final String password,
 			HttpServletRequest request);
 	
+	ServiceResponse logout(HttpServletRequest request);
 }

@@ -31,6 +31,7 @@ import org.vosao.service.back.FormService;
 import org.vosao.service.back.PageService;
 import org.vosao.service.back.SeoUrlService;
 import org.vosao.service.back.TemplateService;
+import org.vosao.service.back.UserService;
 
 public interface BackService {
 	
@@ -63,5 +64,8 @@ public interface BackService {
 	
 	SeoUrlService getSeoUrlService();
 	void setSeoUrlService(SeoUrlService bean);
+
+	UserService getUserService();
+	void setUserService(UserService bean);
 	
 }

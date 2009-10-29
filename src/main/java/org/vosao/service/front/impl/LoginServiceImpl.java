@@ -35,6 +35,12 @@ public class LoginServiceImpl extends AbstractServiceImpl
 		}
 		return ServiceResponse.createSuccessResponse(originalView);
 	}
+
+	@Override
+	public ServiceResponse logout(HttpServletRequest request) {
+		getBusiness().getUserPreferences(request).setUser(null);
+		return ServiceResponse.createSuccessResponse("Successfully logged out");
+	}
 	
 
 }

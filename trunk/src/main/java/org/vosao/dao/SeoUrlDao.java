@@ -21,36 +21,26 @@
 
 package org.vosao.dao;
 
-public interface Dao {
+import java.util.List;
 
-	PageDao getPageDao();
-	void setPageDao(final PageDao pageDao);
+import org.vosao.entity.SeoUrlEntity;
+
+/**
+ * @author Alexander Oleynik
+ */
+public interface SeoUrlDao extends AbstractDao {
+
+	void save(final SeoUrlEntity entity);
 	
-	FileDao getFileDao();
-	void setFileDao(final FileDao fileDao);
+	SeoUrlEntity getById(final String id);
 
-	FolderDao getFolderDao();
-	void setFolderDao(final FolderDao folderDao);
+	SeoUrlEntity getByFrom(final String from);
 
-	UserDao getUserDao();
-	void setUserDao(final UserDao userDao);
-
-	TemplateDao getTemplateDao();
-	void setTemplateDao(final TemplateDao templateDao);
-
-	ConfigDao getConfigDao();
-	void setConfigDao(final ConfigDao configDao);
-
-	FormDao getFormDao();
-	void setFormDao(final FormDao formDao);
+	List<SeoUrlEntity> select();
 	
-	FieldDao getFieldDao();
-	void setFieldDao(final FieldDao bean);
-
-	CommentDao getCommentDao();
-	void setCommentDao(final CommentDao bean);
-
-	SeoUrlDao getSeoUrlDao();
-	void setSeoUrlDao(final SeoUrlDao bean);
-
+	void remove(final String id);
+	
+	void remove(final List<String> ids);
+	
+	
 }

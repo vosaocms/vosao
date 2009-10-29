@@ -14,6 +14,14 @@
            User entered data will be emailed to specified address.
         </p>
     </div>
+    <div>
+        <img src="/static/images/seo_urls.png" />
+        <a href="/cms/plugins/seo-urls.jsp">SEO Urls</a>
+        <p>This plugin will help you to save many spent for SEO advertising
+           and indexing of your previous site. Here you can enter a list of
+           indexed urls and list of corresponding Vosao site urls.
+        </p>
+    </div>
 </div>
 
 </body>

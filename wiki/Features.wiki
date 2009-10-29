@@ -14,3 +14,4 @@
   * Adding comments to pages 
   * Email notificaion on new comments added.
   * Comments moderation
+  * SEO urls. Redirect table for indexed links.

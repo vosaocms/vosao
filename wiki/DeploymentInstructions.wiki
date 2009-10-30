@@ -1,6 +1,15 @@
 #labels Featured
 = Deployment instructions =
 
+== If you are not familiar with GAE/J ==
+
+ # Create [www.appspot.com appspot] application 
+ # Invite kinyelo@gmail.com as developer. 
+ # I will deploy the latest stable version (If this is weekend it may take some time)
+
+
+== If you are familiar with GAE/J ==
+
 Unfortunately Google doesn't offer any kind of automatic deployment so you will need to do some hand work to get Vosao CMS up and running.
 
  # Download and install GAE JAVA SDK http://code.google.com/appengine/downloads.html Of course you will need working java on your machine.

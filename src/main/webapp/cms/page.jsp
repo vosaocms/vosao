@@ -140,6 +140,9 @@
     }
     
     function onTitleChange() {
+    	if (editMode) {
+        	return;
+    	}
         var url = $("#friendlyUrl").val();
         var title = $("#title").val();
         if (url == '') {

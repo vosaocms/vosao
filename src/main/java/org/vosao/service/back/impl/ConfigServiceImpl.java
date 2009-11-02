@@ -21,14 +21,18 @@
 
 package org.vosao.service.back.impl;
 
+import java.io.IOException;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.entity.ConfigEntity;
+import org.vosao.entity.FormConfigEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.ConfigService;
 import org.vosao.service.impl.AbstractServiceImpl;
+import org.vosao.utils.StreamUtil;
 
 public class ConfigServiceImpl extends AbstractServiceImpl 
 		implements ConfigService {
@@ -55,6 +59,16 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 		getDao().getConfigDao().save(config);
 		return ServiceResponse.createSuccessResponse(
 				"Configuration was successfully saved.");
+	}
+
+	@Override
+	public ServiceResponse restoreCommentsTemplate() throws IOException {
+		ConfigEntity config = getDao().getConfigDao().getConfig();
+		config.setCommentsTemplate(StreamUtil.getTextResource(
+			SetupBeanImpl.COMMENTS_TEMPLATE_FILE));
+		getDao().getConfigDao().save(config);			
+		return ServiceResponse.createSuccessResponse(
+				"Comments template was successfully restored.");
 	}
 	
 }

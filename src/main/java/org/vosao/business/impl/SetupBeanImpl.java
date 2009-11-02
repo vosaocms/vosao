@@ -157,6 +157,9 @@ public class SetupBeanImpl implements SetupBean {
 		this.business = business;
 	}
 
+	public static final String COMMENTS_TEMPLATE_FILE = 
+			"org/vosao/resources/html/comments.html";
+	
 	private void initConfigs() {
 		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
 		if (config.getId() == null || config.getId() == 0) {
@@ -165,7 +168,7 @@ public class SetupBeanImpl implements SetupBean {
 	        config.setSiteDomain("");
 	        config.setEditExt("css,js,xml");
 	        config.setCommentsTemplate(loadResource(
-	        		"org/vosao/resources/html/comments.html"));
+	        		COMMENTS_TEMPLATE_FILE));
 	        getDao().getConfigDao().save(config);
 		}
 	}

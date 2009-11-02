@@ -97,6 +97,13 @@ function onExport() {
     location.href = '/cms/export?type=site';
 }
 
+function onRestore() {
+    configService.restoreCommentsTemplate(function (r) {
+        showServiceMessages(r);
+        loadConfig();
+    });
+}
+
 </script>
 
 </head>
@@ -169,6 +176,7 @@ function onExport() {
 
 <div class="buttons">
     <input type="button" value="Save" onclick="onSave()" />
+    <input type="button" value="Restore default" onclick="onRestore()" />
 </div>
 
 </div>

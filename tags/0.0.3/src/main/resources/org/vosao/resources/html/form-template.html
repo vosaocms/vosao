@@ -1,0 +1,114 @@
+<div id="div-$form.name">
+
+<form id="form-$form.name" method="POST" action="/plugin/form/send">
+ <input type="hidden" name="form-name" value="$form.name" />
+
+ <div id="messages-$form.name"> </div>
+
+#foreach($field in $fields)
+<div class="field-$field.name">
+  <label>$field.title</label>
+
+#if ($field.fieldType == 'TEXT')
+    #if ($field.height > 1) 
+<textarea name="$field.name" rows="$field.height" cols="$field.width">$field.defaultValue</textarea>
+    #else
+<input type="text" name="$field.name" value="$field.defaultValue" 
+    size="$field.width" />
+    #end
+
+#elseif ($field.fieldType == 'PASSWORD')
+<input type="password" name="$field.name" size="$field.width" />
+
+#elseif ($field.fieldType == 'FILE')
+<input type="file" name="$field.name" />
+
+#elseif ($field.fieldType == 'CHECKBOX')
+    #set($i = 0)
+    #foreach($option in $field.options)
+        #if($option.selected)
+<input type="checkbox" checked="checked" name="$field.name$i" 
+    value="$option.value"/>$option.value
+<br/>
+        #else
+<input type="checkbox" name="$field.name$i" value="$option.value"/>$option.value
+<br/>
+        #end
+        #set($i = $i + 1)
+    #end
+
+#elseif ($field.fieldType == 'RADIO')
+    #foreach($option in $field.options)
+        #if($option.selected)
+<input type="radio" checked="checked" name="$field.name" 
+    value="$option.value"/>$option.value
+<br/>
+        #else
+<input type="radio" name="$field.name" value="$option.value"/>$option.value
+<br/>
+        #end
+    #end
+
+#elseif ($field.fieldType == 'LISTBOX')
+<select name="$field.name">
+    #foreach($option in $field.options)
+        #if($option.selected)
+<option value="$option.value" selected="selected">$option.value</option>
+        #else
+<option value="$option.value">$option.value</option>
+        #end
+    #end
+</select>
+#end
+
+</div>
+#end
+#if($form.enableCaptcha && $config.enableRecaptcha)
+<div id="recaptcha">&nbsp;</div>
+<input id="recaptchaChallenge" type="hidden" />
+<input id="recaptchaResponse" type="hidden" />
+#end
+#set($formSend = "Send")
+#if(!$form.sendButtonTitle)
+    #set($formSend = $form.sendButtonTitle)
+#end
+<div class="form-buttons">
+  <input type="submit" value="$formSend" />
+#if($form.showResetButton)
+#set($formReset = "Reset")
+#if(!$form.resetButtonTitle)
+    #set($formReset = $form.resetButtonTitle)
+#end
+  <input type="reset" value="$formReset" />
+#end
+</div>
+</form>
+</div>
+<script type="text/javascript">
+$(function() {
+  $('#form-$form.name').ajaxForm({
+    dataType:'json',
+    success: function(r) {
+      if (r.result == 'success') {
+         $('#messages-$form.name').html('<span class="info">' + r.message
+           + '</span>');
+         $('#form-$form.name')[0].reset();
+      }
+      else {
+         $('#messages-$form.name').html('<span class="error">' + r.message
+           + '</span>');
+      }
+    },
+    error : function() {
+      $('#messages-$form.name').html('<span class="error">Error occured during form submition.</span>');
+    }
+  });
+
+#if($form.enableCaptcha && $config.enableRecaptcha)
+  Recaptcha.create('$config.recaptchaPublicKey',
+    'recaptcha', {
+        theme:'red', callback: Recaptcha.focus_response_field});
+#end 
+});
+
+</script>

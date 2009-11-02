@@ -1,9 +1,9 @@
 #labels Featured
 = Release Notes =
 
-== version 0.0.3 05.11.2009 ==
+== Version 0.0.3 05.11.2009 ==
 
-I am proud to present version 0.0.3 of Vosao CMS.
+I am proud to annonce availability of version 0.0.3 of Vosao CMS.
 
 Clean installation:
 
@@ -25,22 +25,12 @@ Implemented and fixed issues:
  # [http://code.google.com/p/vosao/issues/detail?id=40 Added ability to enable/disable reCaptcha]
  # [http://code.google.com/p/vosao/issues/detail?id=41 Created friendly update procedure]
  # [http://code.google.com/p/vosao/issues/detail?id=42 Added "Restore defaults" to comments template.]
- # [http://code.google.com/p/vosao/issues/detail?id=43&can=1 Added SEO Urls plugin]
- # []
- # []
- # []
- # []
- # []
- # []
- # []
- # []
- # []
- # []
- # []
+ # [http://code.google.com/p/vosao/issues/detail?id=43 Added SEO Urls plugin]
+ # [http://code.google.com/p/vosao/issues/detail?id=45 Updated GAE/J 1.2.6 ]
+ # [http://code.google.com/p/vosao/issues/detail?id=46 Lightened application frameworks stack]
+ # [http://code.google.com/p/vosao/issues/detail?id=47 Datanucleus error: Command line too long.]
 
-
-
-== version 0.0.2 02.10.2009 ==
+== Version 0.0.2 02.10.2009 ==
 
 In this version database schema was changed and unfortunately complete database cleaning is required. Please follow these instructions to upgrade running sites.
 
@@ -70,5 +60,5 @@ Implemented and fixed issues:
  # [http://code.google.com/p/vosao/issues/detail?id=36&can=1 Add "save and continue" button to text editors ]
 
 
-== version 0.0.1 25.09.2009 ==
+== Version 0.0.1 25.09.2009 ==
  * first prototype release 

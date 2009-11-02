@@ -151,7 +151,7 @@
     }
 
     function tabSelected(event, ui) {
-        if (ui.index == 1) {
+        if (ui.index == 1 && $('#autosave:checked').size() > 0) {
             startAutosave();
         }
         else {
@@ -175,7 +175,8 @@
     }
 
     function getContent() {
-        return $("#ckeditor-form-row iframe").contents().find("body").html();
+        CKEDITOR.instances.content.updateElement();
+        return $('#content').val();
     }
 
     function saveContent() {
@@ -350,8 +351,7 @@
 <div id="tab-2">
 
 <div>
-  <input id="autosave" type="checkbox" checked="checked" 
-      onchange="onAutosave()"> Autosave</input>
+  <input id="autosave" type="checkbox" onchange="onAutosave()"> Autosave</input>
 </div>
 
 <div class="form-row" id="ckeditor-form-row">

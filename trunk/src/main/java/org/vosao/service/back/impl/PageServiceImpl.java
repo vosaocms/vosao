@@ -95,8 +95,6 @@ public class PageServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse savePage(Map<String, String> pageMap) {
-		logger.info(pageMap.toString());
-		
 		PageEntity page = getPage(pageMap.get("id"));
 		if (page == null) {
 			page = new PageEntity();

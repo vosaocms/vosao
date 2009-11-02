@@ -21,6 +21,7 @@
 
 package org.vosao.service.back;
 
+import java.io.IOException;
 import java.util.Map;
 
 import org.vosao.entity.ConfigEntity;
@@ -35,4 +36,6 @@ public interface ConfigService extends AbstractService {
 	ConfigEntity getConfig();
 	
 	ServiceResponse saveConfig(final Map<String, String> vo);
+	
+	ServiceResponse restoreCommentsTemplate() throws IOException;
 }

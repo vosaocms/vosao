@@ -38,7 +38,7 @@ public class LoginServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse logout(HttpServletRequest request) {
-		getBusiness().getUserPreferences(request).setUser(null);
+		getBusiness().setUserPreferences(null, request);
 		return ServiceResponse.createSuccessResponse("Successfully logged out");
 	}
 	

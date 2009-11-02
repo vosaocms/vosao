@@ -273,6 +273,13 @@ var configService = {
 			func(r);
 		}, vo);
 	},
+
+	restoreCommentsTemplate: function(func) {
+		jsonrpc.configService.restoreCommentsTemplate(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		});
+	},
 	
 };
 

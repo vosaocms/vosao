@@ -1,6 +1,45 @@
 #labels Featured
 = Release Notes =
 
+== version 0.0.3 05.11.2009 ==
+
+I am proud to present version 0.0.3 of Vosao CMS.
+
+Clean installation:
+
+ # Upload version 0.0.3 and select it as the default version
+ # Run site root url /. Default site will be installed.
+
+Version upgrade steps:
+
+ # Upload version 0.0.3 and select it as the default version
+ # Run update url /update. Database schema will be automatically updated.
+
+Implemented and fixed issues:
+
+ # [http://code.google.com/p/vosao/issues/detail?id=14 Added form plugin]
+ # [http://code.google.com/p/vosao/issues/detail?id=33 Added security to JSON-RPC services]
+ # []
+ # []
+ # []
+ # []
+ # []
+ # []
+ # []
+ # []
+ # []
+ # []
+ # []
+ # []
+ # []
+ # []
+ # []
+ # []
+ # []
+ # []
+
+
+
 == version 0.0.2 02.10.2009 ==
 
 In this version database schema was changed and unfortunately complete database cleaning is required. Please follow these instructions to upgrade running sites.

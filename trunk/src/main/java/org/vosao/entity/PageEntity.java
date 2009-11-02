@@ -215,6 +215,10 @@ public class PageEntity implements Serializable {
 		this.commentsEnabled = commentsEnabled;
 	}
 	
+	public boolean isRoot() {
+		return parent == null;
+	}
+	
 	public boolean equals(Object object) {
 		if (object instanceof PageEntity) {
 			PageEntity entity = (PageEntity)object;

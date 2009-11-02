@@ -43,6 +43,7 @@ import org.vosao.business.impl.pagefilter.PageFilter;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
+import org.vosao.filter.SiteFilter;
 import org.vosao.velocity.VelocityPluginService;
 import org.vosao.velocity.VelocityService;
 import org.vosao.velocity.impl.VelocityPluginServiceImpl;
@@ -141,7 +142,12 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		if (StringUtils.isEmpty(page.getFriendlyURL())) {
 			errors.add("Friendly URL is empty");
 		}
-		if (!page.getFriendlyURL().equals("/") 
+		else {
+			if (SiteFilter.isSkipUrl(page.getFriendlyURL())) {
+				errors.add("Entered url is reserved for internal use.");
+			}
+		}
+		if (!page.isRoot() 
 			&& StringUtils.isEmpty(page.getPageFriendlyURL())) {
 			errors.add("Friendly URL is empty");
 		}

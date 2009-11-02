@@ -112,7 +112,7 @@ public class SiteFilter implements Filter {
     public void destroy() {
     }
 
-    private static boolean isSkipUrl(final String url) {
+    public static boolean isSkipUrl(final String url) {
     	for (String u : SKIP_URLS) {
     		if (url.startsWith(u)) {
     			return true;

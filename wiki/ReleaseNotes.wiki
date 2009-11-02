@@ -3,7 +3,7 @@
 
 == Version 0.0.3 05.11.2009 ==
 
-I am proud to annonce availability of version 0.0.3 of Vosao CMS.
+I am proud to announce availability of version 0.0.3 of Vosao CMS.
 
 Clean installation:
 

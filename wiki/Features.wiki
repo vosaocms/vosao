@@ -12,6 +12,6 @@
   * Text resource files editor with ability to create resource files
   * [CaptchaService Captcha service]
   * Adding comments to pages 
-  * Email notificaion on new comments added.
+  * Email notification on new comments added.
   * Comments moderation
   * SEO urls. Redirect table for indexed links.

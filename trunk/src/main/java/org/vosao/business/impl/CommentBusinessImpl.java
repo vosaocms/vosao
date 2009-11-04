@@ -68,7 +68,7 @@ public class CommentBusinessImpl extends AbstractBusinessImpl
 		StringBuffer b = new StringBuffer();
 		b.append("<p>New comment was added to page ")
 		    .append(config.getSiteDomain()).append(page.getFriendlyURL())
-		    .append("by ").append(comment.getName()).append("</p>")
+		    .append(" by ").append(comment.getName()).append("</p>")
 		    .append(comment.getContent());
 		return b.toString();
 	}

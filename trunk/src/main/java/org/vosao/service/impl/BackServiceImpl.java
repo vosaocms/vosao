@@ -33,6 +33,7 @@ import org.vosao.service.back.FieldService;
 import org.vosao.service.back.FileService;
 import org.vosao.service.back.FolderService;
 import org.vosao.service.back.FormService;
+import org.vosao.service.back.LanguageService;
 import org.vosao.service.back.PageService;
 import org.vosao.service.back.SeoUrlService;
 import org.vosao.service.back.TemplateService;
@@ -52,6 +53,7 @@ public class BackServiceImpl implements BackService, Serializable {
 	private ConfigService configService;
 	private SeoUrlService seoUrlService;
 	private UserService userService;
+	private LanguageService languageService;
 	
 	public void init() {
 	}
@@ -68,6 +70,7 @@ public class BackServiceImpl implements BackService, Serializable {
 		bridge.registerObject("configService", configService);
 		bridge.registerObject("seoUrlService", seoUrlService);
 		bridge.registerObject("userService", userService);
+		bridge.registerObject("languageService", languageService);
 	}
 	
 	@Override
@@ -82,6 +85,7 @@ public class BackServiceImpl implements BackService, Serializable {
 		bridge.unregisterObject("configService");
 		bridge.unregisterObject("seoUrlService");
 		bridge.unregisterObject("userService");
+		bridge.unregisterObject("languageService");
 	}
 
 	@Override
@@ -182,6 +186,16 @@ public class BackServiceImpl implements BackService, Serializable {
 	@Override
 	public void setUserService(UserService bean) {
 		userService = bean;		
+	}
+
+	@Override
+	public LanguageService getLanguageService() {
+		return languageService;
+	}
+
+	@Override
+	public void setLanguageService(LanguageService bean) {
+		languageService = bean;		
 	}
 	
 }

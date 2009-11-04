@@ -21,39 +21,23 @@
 
 package org.vosao.dao;
 
-public interface Dao {
+import java.util.List;
 
-	PageDao getPageDao();
-	void setPageDao(final PageDao pageDao);
+import org.vosao.entity.LanguageEntity;
+
+public interface LanguageDao extends AbstractDao {
+
+	void save(final LanguageEntity entity);
 	
-	FileDao getFileDao();
-	void setFileDao(final FileDao fileDao);
+	LanguageEntity getById(final String id);
 
-	FolderDao getFolderDao();
-	void setFolderDao(final FolderDao folderDao);
+	LanguageEntity getByCode(final String code);
 
-	UserDao getUserDao();
-	void setUserDao(final UserDao userDao);
-
-	TemplateDao getTemplateDao();
-	void setTemplateDao(final TemplateDao templateDao);
-
-	ConfigDao getConfigDao();
-	void setConfigDao(final ConfigDao configDao);
-
-	FormDao getFormDao();
-	void setFormDao(final FormDao formDao);
+	List<LanguageEntity> select();
 	
-	FieldDao getFieldDao();
-	void setFieldDao(final FieldDao bean);
-
-	CommentDao getCommentDao();
-	void setCommentDao(final CommentDao bean);
-
-	SeoUrlDao getSeoUrlDao();
-	void setSeoUrlDao(final SeoUrlDao bean);
-
-	LanguageDao getLanguageDao();
-	void setLanguageDao(final LanguageDao bean);
-
+	void remove(final String id);
+	
+	void remove(final List<String> ids);
+	
+	
 }

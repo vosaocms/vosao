@@ -10,14 +10,21 @@
 <script type="text/javascript">
 
 var config = '';
+var language = null;
 
 $(function(){
     $("#import-dialog").dialog({ width: 400, autoOpen: false });
+    $("#language-dialog").dialog({ width: 400, autoOpen: false });
     $("#tabs").tabs();
     $('#upload').ajaxForm(afterUpload);
-    initJSONRpc(loadConfig);
+    initJSONRpc(loadData);
     $('#enableRecaptcha').click(toggleRecaptcha);
 });
+
+function loadData() {
+    loadConfig();
+	loadLanguages();
+}
 
 function toggleRecaptcha() {
     var recaptcha = $('#enableRecaptcha:checked').size() > 0;
@@ -104,6 +111,108 @@ function onRestore() {
     });
 }
 
+function onAddLanguage() {
+    language = null;
+    $('#languageCode').val('');
+    $('#languageTitle').val('');
+    $('#language-dialog .message').html('');
+	$('#language-dialog').dialog('open');
+}
+
+function onRemoveLanguage() {
+    var ids = [];
+    $('#languages input:checked').each(function () {
+        ids.push(this.value);
+    });
+    if (ids.length == 0) {
+        info('Nothing selected');
+        return;
+    }
+    languageService.remove(function (r) {
+        info(r.message);
+        loadLanguages();
+    }, javaList(ids));
+}
+
+function languageInfo(msg) {
+    $('#language-dialog .messages').html('<ul><li class="info-msg">' 
+            + msg + '</li></ul>');
+}
+
+function languageError(msg) {
+    $('#language-dialog .messages').html('<ul><li class="error-msg">' 
+    	    + msg + '</li></ul>');
+}
+
+function languageErrors(errors) {
+    var h = '<ul>';
+    $.each(errors, function (i, msg) {
+        h += '<li class="error-msg">' + msg + '</li>';
+    });
+    $('#language-dialog .messages').html(h + '</ul>');
+}
+
+function languageValidate(vo) {
+    var errors = [];
+	if (vo.code == '') {
+	    errors.push('Code is empty');
+	}
+    if (vo.title == '') {
+        errors.push('Title is empty');
+    }
+    return errors;
+}
+
+function onLanguageSave() {
+    var vo = {
+    	id : language != null ? language.id : '',
+       	code : $('#languageCode').val(),
+        title : $('#languageTitle').val(),
+    };
+    var errors = languageValidate(vo);
+    if (errors.length == 0) {
+        languageService.save(function (r) {
+            if (r.result == 'success') {
+                $('#language-dialog').dialog('close');
+                loadLanguages();
+            }
+            else {
+                languageErrors(r.messages.list);
+            }
+        }, javaMap(vo));
+    }	
+    else {
+        languageErrors(errors);
+    }       
+}
+
+function onLanguageCancel() {
+    $('#language-dialog').dialog('close');
+}
+
+function loadLanguages() {
+    languageService.select(function (r) {
+        var h = '<table class="form-table"><tr><td></td><td>Code</td><td>Title</td></tr>';
+        $.each(r.list, function (i, lang) {
+            h += '<tr><td><input type="checkbox" value="' + lang.id 
+                + '"/></td><td>' + lang.code + '</td><td>\
+                <a href="#" onclick="onLanguageEdit(\'' + lang.id 
+                + '\')">' + lang.title + '</a></td></tr>';
+        });
+        $('#languages').html(h + '</table>');
+    });
+}
+
+function onLanguageEdit(id) {
+    languageService.getById(function (r) {
+        language = r;
+        $('#languageCode').val(r.code);
+        $('#languageTitle').val(r.title);
+        $('#language-dialog .message').html('');
+        $('#language-dialog').dialog('open');
+    }, id);
+}
+
 </script>
 
 </head>
@@ -114,6 +223,7 @@ function onRestore() {
 <ul>
     <li><a href="#tab-1">Site configuration</a></li>
     <li><a href="#tab-2">Comments</a></li>
+    <li><a href="#tab-3">Languages</a></li>
 </ul>
 
 <div id="tab-1">
@@ -181,6 +291,18 @@ function onRestore() {
 
 </div>
 
+<div id="tab-3">
+
+<div id="languages"> </div>
+
+<div class="buttons">
+    <input type="button" value="Add" onclick="onAddLanguage()" />
+    <input type="button" value="Remove" onclick="onRemoveLanguage()" />
+</div>
+
+</div>
+
+
 </div>
 
 <div id="import-dialog" title="Import site" style="display:none">
@@ -201,6 +323,24 @@ function onRestore() {
         <input type="button" onclick="onAfterUploadOk()" value="OK" />
     </div>
 </div>
+
+<div id="language-dialog" style="display:none" title="Site language">
+    <div class="messages"> </div>
+    <div class="form-row">
+        <label>Language <a href="http://www.loc.gov/standards/iso639-2/php/English_list.php">iso639-2</a> code</label>
+        <input id="languageCode" type="text"/>
+    </div>
+    <div class="form-row">
+        <label>Language title</label>
+        <input id="languageTitle" type="text"/>
+    </div>
+    <div class="buttons-dlg">
+        <input type="button" onclick="onLanguageSave()" value="Save" />
+        <input type="button" onclick="onLanguageCancel()" value="Cancel" />
+    </div>
+</div>
+
+
 
 </body>
 </html>

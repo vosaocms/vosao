@@ -19,41 +19,26 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.service.back;
 
-public interface Dao {
+import java.util.List;
+import java.util.Map;
 
-	PageDao getPageDao();
-	void setPageDao(final PageDao pageDao);
+import org.vosao.entity.LanguageEntity;
+import org.vosao.service.AbstractService;
+import org.vosao.service.ServiceResponse;
+
+/**
+ * @author Alexander Oleynik
+ */
+public interface LanguageService extends AbstractService {
 	
-	FileDao getFileDao();
-	void setFileDao(final FileDao fileDao);
+	List<LanguageEntity> select();
 
-	FolderDao getFolderDao();
-	void setFolderDao(final FolderDao folderDao);
+	ServiceResponse remove(final List<String> ids);
 
-	UserDao getUserDao();
-	void setUserDao(final UserDao userDao);
-
-	TemplateDao getTemplateDao();
-	void setTemplateDao(final TemplateDao templateDao);
-
-	ConfigDao getConfigDao();
-	void setConfigDao(final ConfigDao configDao);
-
-	FormDao getFormDao();
-	void setFormDao(final FormDao formDao);
+	LanguageEntity getById(final String id);
 	
-	FieldDao getFieldDao();
-	void setFieldDao(final FieldDao bean);
-
-	CommentDao getCommentDao();
-	void setCommentDao(final CommentDao bean);
-
-	SeoUrlDao getSeoUrlDao();
-	void setSeoUrlDao(final SeoUrlDao bean);
-
-	LanguageDao getLanguageDao();
-	void setLanguageDao(final LanguageDao bean);
-
+	ServiceResponse save(final Map<String, String> vo); 
+	
 }

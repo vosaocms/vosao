@@ -70,6 +70,9 @@
     <bean id="seoUrlDao" class="org.vosao.dao.impl.SeoUrlDaoImpl"
         parent="abstractDao" />  
 
+    <bean id="languageDao" class="org.vosao.dao.impl.LanguageDaoImpl"
+        parent="abstractDao" />  
+
     <bean id="dao" class="org.vosao.dao.impl.DaoImpl">  
         <property name="pageDao" ref="pageDao"/>  
         <property name="fileDao" ref="fileDao"/>  
@@ -81,6 +84,7 @@
         <property name="fieldDao" ref="fieldDao"/>  
         <property name="commentDao" ref="commentDao"/>  
         <property name="seoUrlDao" ref="seoUrlDao"/>  
+        <property name="languageDao" ref="languageDao"/>  
     </bean>
 
     <!--=========================== Business ================================-->
@@ -179,6 +183,9 @@
     <bean id="userService" class="org.vosao.service.back.impl.UserServiceImpl"
         parent="abstractService" />
 
+    <bean id="languageService" class="org.vosao.service.back.impl.LanguageServiceImpl"
+        parent="abstractService" />
+
     <bean id="backService" class="org.vosao.service.impl.BackServiceImpl"
         init-method="init">  
         <property name="fileService" ref="fileService"/>  
@@ -191,6 +198,7 @@
         <property name="configService" ref="configService"/>  
         <property name="seoUrlService" ref="seoUrlService"/>  
         <property name="userService" ref="userService"/>  
+        <property name="languageService" ref="languageService"/>  
     </bean>
 
     <!--================== JSON-RPC front services ==========================-->

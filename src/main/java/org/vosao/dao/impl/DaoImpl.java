@@ -30,6 +30,7 @@ import org.vosao.dao.FieldDao;
 import org.vosao.dao.FileDao;
 import org.vosao.dao.FolderDao;
 import org.vosao.dao.FormDao;
+import org.vosao.dao.LanguageDao;
 import org.vosao.dao.PageDao;
 import org.vosao.dao.SeoUrlDao;
 import org.vosao.dao.TemplateDao;
@@ -47,6 +48,7 @@ public class DaoImpl implements Dao, Serializable {
 	private CommentDao commentDao;
 	private FieldDao fieldDao;
 	private SeoUrlDao seoUrlDao;
+	private LanguageDao languageDao;
 	
 	public PageDao getPageDao() {
 		return pageDao;
@@ -123,6 +125,14 @@ public class DaoImpl implements Dao, Serializable {
 	
 	public void setSeoUrlDao(SeoUrlDao seoUrlDao) {
 		this.seoUrlDao = seoUrlDao;
+	}
+
+	public LanguageDao getLanguageDao() {
+		return languageDao;
+	}
+	
+	public void setLanguageDao(LanguageDao bean) {
+		this.languageDao = bean;
 	}
 	
 }

@@ -442,3 +442,34 @@ var userService = {
 		}, ids);
 	},
 };
+
+var languageService = {
+		
+	save: function(func, vo) {
+		jsonrpc.languageService.save(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, vo);
+	},
+
+	select: function(func) {
+		jsonrpc.languageService.select(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		});
+	},
+				
+	getById: function(func, id) {
+		jsonrpc.languageService.getById(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, id);
+	},
+
+	remove: function(func, ids) {
+		jsonrpc.languageService.remove(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, ids);
+	},
+};

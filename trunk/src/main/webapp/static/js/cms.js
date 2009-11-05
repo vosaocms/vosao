@@ -82,11 +82,11 @@ var pageService = {
 		}, page);
     },
 
-    updateContent: function(func, pageId, content) {
+    updateContent: function(func, pageId, content, languageCode) {
 		jsonrpc.pageService.updateContent(function (r,e) {
 			if (backServiceFailed(e)) return;
 			func(r);
-		}, pageId, content);
+		}, pageId, content, languageCode);
     },
 
     getChildren: function(func, id) {
@@ -102,6 +102,14 @@ var pageService = {
 			func(r);
 		}, ids);
     },
+    
+    getContents: function(func, pageId) {
+		jsonrpc.pageService.getContents(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, pageId);
+    },
+    
 };
 
 var templateService = {

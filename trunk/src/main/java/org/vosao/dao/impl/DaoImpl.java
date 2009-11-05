@@ -25,6 +25,7 @@ import java.io.Serializable;
 
 import org.vosao.dao.CommentDao;
 import org.vosao.dao.ConfigDao;
+import org.vosao.dao.ContentDao;
 import org.vosao.dao.Dao;
 import org.vosao.dao.FieldDao;
 import org.vosao.dao.FileDao;
@@ -49,6 +50,7 @@ public class DaoImpl implements Dao, Serializable {
 	private FieldDao fieldDao;
 	private SeoUrlDao seoUrlDao;
 	private LanguageDao languageDao;
+	private ContentDao contentDao;
 	
 	public PageDao getPageDao() {
 		return pageDao;
@@ -133,6 +135,14 @@ public class DaoImpl implements Dao, Serializable {
 	
 	public void setLanguageDao(LanguageDao bean) {
 		this.languageDao = bean;
+	}
+
+	public ContentDao getContentDao() {
+		return contentDao;
+	}
+	
+	public void setContentDao(ContentDao contentDao) {
+		this.contentDao = contentDao;
 	}
 	
 }

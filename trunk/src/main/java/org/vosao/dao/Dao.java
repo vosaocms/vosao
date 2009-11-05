@@ -56,4 +56,7 @@ public interface Dao {
 	LanguageDao getLanguageDao();
 	void setLanguageDao(final LanguageDao bean);
 
+	ContentDao getContentDao();
+	void setContentDao(final ContentDao bean);
+
 }

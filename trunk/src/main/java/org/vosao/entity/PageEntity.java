@@ -33,8 +33,6 @@ import javax.jdo.annotations.PrimaryKey;
 
 import org.vosao.utils.DateUtil;
 
-import com.google.appengine.api.datastore.Text;
-
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class PageEntity implements Serializable {
@@ -48,9 +46,6 @@ public class PageEntity implements Serializable {
 	
 	@Persistent
 	private String title;
-	
-	@Persistent(defaultFetchGroup = "true")
-	private Text content;
 	
 	@Persistent
 	private String friendlyURL;
@@ -72,31 +67,27 @@ public class PageEntity implements Serializable {
 		publishDate = new Date();
 	}
 	
-	public PageEntity(String title, String content,
-			String friendlyURL, String aParent, String aTemplate,
-			Date publish) {
-		this(title, content, friendlyURL, aParent, aTemplate);
+	public PageEntity(String title, String friendlyURL, String aParent, 
+			String aTemplate, Date publish) {
+		this(title, friendlyURL, aParent, aTemplate);
 		publishDate = publish;
 	}
 
-	public PageEntity(String title, String content,
-			String friendlyURL, String aParent, String aTemplate) {
-		this(title, content, friendlyURL, aParent);
+	public PageEntity(String title, String friendlyURL, String aParent, 
+			String aTemplate) {
+		this(title, friendlyURL, aParent);
 		template = aTemplate;
 	}
 
-	public PageEntity(String title, String content,
-			String friendlyURL, String aParent) {
+	public PageEntity(String title, String friendlyURL, String aParent) {
 		this();
 		this.title = title;
-		this.content = new Text(content);
 		this.friendlyURL = friendlyURL;
 		this.parent = aParent;
 	}
 	
 	public void copy(final PageEntity entity) {
 		setTitle(entity.getTitle());
-		setContent(entity.getContent());
 		setFriendlyURL(entity.getFriendlyURL());
 		setParent(entity.getParent());
 		setTemplate(entity.getTemplate());
@@ -118,17 +109,6 @@ public class PageEntity implements Serializable {
 	
 	public void setTitle(String title) {
 		this.title = title;
-	}
-	
-	public String getContent() {
-		if (content == null) {
-			return null;
-		}
-		return content.getValue();
-	}
-	
-	public void setContent(String content) {
-		this.content = new Text(content);
 	}
 	
 	public String getFriendlyURL() {

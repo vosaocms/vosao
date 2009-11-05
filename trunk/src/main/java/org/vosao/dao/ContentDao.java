@@ -19,33 +19,26 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service.back;
+package org.vosao.dao;
 
 import java.util.List;
-import java.util.Map;
 
-import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.ContentEntity;
-import org.vosao.entity.PageEntity;
-import org.vosao.service.AbstractService;
-import org.vosao.service.ServiceResponse;
-import org.vosao.service.vo.PageVO;
 
-public interface PageService extends AbstractService {
+public interface ContentDao extends AbstractDao {
+
+	void save(final ContentEntity entity);
 	
-	ServiceResponse updateContent(final String pageId, final String content,
-			String languageCode);
+	ContentEntity getById(final String id);
 	
-	List<ContentEntity> getContents(final String pageId);
+	void remove(final String id);
 	
-	TreeItemDecorator<PageVO> getTree();
+	void remove(final List<String> ids);
 	
-	PageEntity getPage(final String id);
-	
-	ServiceResponse savePage(final Map<String, String> page);
-	
-	List<PageVO> getChildren(final String id);
-	
-	ServiceResponse deletePages(final List<String> ids);
+	List<ContentEntity> select(final String parentClass, 
+			final String parentKey);
+
+	ContentEntity getByLanguage(final String parentClass, 
+			final String parentKey, final String language);
 	
 }

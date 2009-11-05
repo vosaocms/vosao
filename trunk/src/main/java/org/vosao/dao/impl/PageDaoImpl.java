@@ -26,13 +26,17 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 
 import org.datanucleus.exceptions.NucleusObjectNotFoundException;
+import org.vosao.dao.ContentDao;
 import org.vosao.dao.PageDao;
+import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
-
-import com.google.appengine.api.datastore.Key;
 
 public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 
+	private static final String PAGE_CLASS_NAME = PageEntity.class.getName();
+
+	private ContentDao contentDao;
+	
 	public void save(final PageEntity page) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
@@ -83,7 +87,7 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		}
 		PersistenceManager pm = getPersistenceManager();
 		try {
-			pm.deletePersistent(pm.getObjectById(PageEntity.class, id));
+			removePage(id, pm);
 		}
 		finally {
 			pm.close();
@@ -94,7 +98,7 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			for (String id : ids) {
-				pm.deletePersistent(pm.getObjectById(PageEntity.class, id));
+				removePage(id, pm);
 			}
 		}
 		finally {
@@ -102,6 +106,16 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		}
 	}
 
+	private void removePage(String pageId, PersistenceManager pm) {
+		List<ContentEntity> contents = getContentDao().select(
+				PAGE_CLASS_NAME, pageId);
+		for (ContentEntity content : contents) {
+			pm.deletePersistent(pm.getObjectById(ContentEntity.class, 
+					content.getId()));
+		}
+		pm.deletePersistent(pm.getObjectById(PageEntity.class, pageId));
+	}
+	
 	public List<PageEntity> getByParent(final String id) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
@@ -132,6 +146,43 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		finally {
 			pm.close();
 		}
+	}
+
+	@Override
+	public String getContent(String pageId, String languageCode) {
+		ContentEntity content = getContentDao().getByLanguage(
+				PAGE_CLASS_NAME, pageId, languageCode);
+		if (content != null) {
+			return content.getContent();
+		}
+		return null;
+	}
+
+	@Override
+	public void setContent(String pageId, String languageCode, String content) {
+		ContentEntity contentEntity = getContentDao().getByLanguage(
+				PAGE_CLASS_NAME, pageId, languageCode);
+		if (contentEntity == null) {
+			contentEntity = new ContentEntity(PAGE_CLASS_NAME, pageId, 
+					languageCode, content);
+		}
+		else {
+			contentEntity.setContent(content);
+		}
+		getContentDao().save(contentEntity);
+	}
+
+	public ContentDao getContentDao() {
+		return contentDao;
+	}
+
+	public void setContentDao(ContentDao contentDao) {
+		this.contentDao = contentDao;
+	}
+
+	@Override
+	public List<ContentEntity> getContents(String pageId) {
+		return getContentDao().select(PAGE_CLASS_NAME, pageId);
 	}
 	
 }

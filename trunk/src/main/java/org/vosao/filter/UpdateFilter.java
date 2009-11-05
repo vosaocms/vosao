@@ -25,8 +25,6 @@ import java.io.IOException;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -38,24 +36,19 @@ import org.apache.commons.logging.LogFactory;
 import org.vosao.update.UpdateException;
 import org.vosao.update.UpdateManager;
 
-
-public class UpdateFilter implements Filter {
+/**
+ * @author Alexander Oleynik
+ */
+public class UpdateFilter extends AbstractFilter implements Filter {
     
     private static final Log logger = LogFactory.getLog(UpdateFilter.class);
 
     private static final String UPDATE_URL = "/update";
     
-    private FilterConfig config = null;
-    private ServletContext servletContext = null;
-  
     public UpdateFilter() {
+    	super();
     }
   
-    public void init(FilterConfig filterConfig) throws ServletException {
-        config = filterConfig;
-        servletContext = config.getServletContext();
-    }
-    
     public void doFilter(ServletRequest request, ServletResponse response, 
     		FilterChain chain) throws IOException, ServletException {
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
@@ -63,10 +56,11 @@ public class UpdateFilter implements Filter {
         String url = httpRequest.getServletPath();
         if (url.equals(UPDATE_URL)) {
         	try {
-        		UpdateManager updateManager = new UpdateManager();
+        		UpdateManager updateManager = new UpdateManager(getDao());
         		updateManager.update();
-            	logger.info("Update was successfully completed.");
-        		writeContent(httpResponse, "Update was successfully complete!");
+            	String msg = "Update was successfully completed.";
+        		logger.info(msg);
+        		writeContent(httpResponse, msg);
             	return;
         	}
         	catch (UpdateException e) {
@@ -76,9 +70,6 @@ public class UpdateFilter implements Filter {
         	}
         }
         chain.doFilter(request, response);
-    }
-    
-    public void destroy() {
     }
     
     private void writeContent(HttpServletResponse response, String content)

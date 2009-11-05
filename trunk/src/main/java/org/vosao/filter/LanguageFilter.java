@@ -29,48 +29,38 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vosao.business.SetupBean;
+import org.vosao.entity.LanguageEntity;
 
 
-public class InitFilter extends AbstractFilter implements Filter {
+public class LanguageFilter extends AbstractFilter implements Filter {
     
-    private static final Log logger = LogFactory.getLog(SiteFilter.class);
+    private static final Log logger = LogFactory.getLog(LanguageFilter.class);
 
-    private static final String SETUP_URL = "/setup";
-    private static final String HOT_CRON_URL = "/hotCron";
-    
-    public InitFilter() {
+    public LanguageFilter() {
     	super();
     }
   
     public void doFilter(ServletRequest request, ServletResponse response, 
     		FilterChain chain) throws IOException, ServletException {
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
-        HttpServletResponse httpResponse = (HttpServletResponse)response;
-        String url = httpRequest.getServletPath();
-        if (url.equals(SETUP_URL)) {
-            SetupBean setupBean = (SetupBean)getSpringBean("setupBean");
-        	setupBean.setup();
-        	logger.info("Setup was successfully completed.");
-        	httpResponse.sendRedirect("/");
-        	return;
-        }
-        if (url.equals(HOT_CRON_URL)) {
-        	writeContent(httpResponse, "OK");
-        	return;
-        }
+    	if (getBusiness().getLanguage(httpRequest) == null) {
+    		String language = request.getLocale().getISO3Language();
+    		logger.info("Initial language set " + language);
+    		getBusiness().setLanguage(language, httpRequest);
+    	}
+    	if (httpRequest.getParameter("language") != null) {
+    		String languageCode = httpRequest.getParameter("language");
+    		LanguageEntity language = getDao().getLanguageDao().getByCode(
+    				languageCode);
+    		if (language != null) {
+    			logger.info("Set language " + language + " by parameter");
+    			getBusiness().setLanguage(languageCode, httpRequest);
+    		}
+    	}
         chain.doFilter(request, response);
-    }
-    
-    private void writeContent(HttpServletResponse response, String content)
-    		throws IOException {
-    	response.setContentType("text/html");
-    	response.setCharacterEncoding("UTF-8");
-    	response.getWriter().append("<html><body>" + content + "</body></html>");
     }
     
 }

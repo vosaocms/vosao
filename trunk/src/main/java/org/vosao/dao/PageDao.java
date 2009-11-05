@@ -23,6 +23,7 @@ package org.vosao.dao;
 
 import java.util.List;
 
+import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 
 public interface PageDao extends AbstractDao {
@@ -40,6 +41,17 @@ public interface PageDao extends AbstractDao {
 	void remove(final String id);
 	
 	void remove(final List<String> ids);
+	
+	String getContent(final String pageId, final String languageCode);
+
+	void setContent(final String pageId, final String languageCode, 
+			final String content);
+	
+	ContentDao getContentDao();
+
+	void setContentDao(ContentDao bean);
+	
+	List<ContentEntity> getContents(final String pageId);
 	
 	
 }

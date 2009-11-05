@@ -28,6 +28,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.ConfigBusiness;
 import org.vosao.business.PageBusiness;
+import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.global.SystemService;
 
@@ -38,15 +39,18 @@ public class PageRenderDecorator {
 	private Log logger = LogFactory.getLog(PageRenderDecorator.class);
 	
 	private PageEntity page;
+	private String languageCode;
 	private String content;
 	private ConfigBusiness configBusiness;
 	private PageBusiness pageBusiness;
 	private SystemService systemService;
 	
-	public PageRenderDecorator(PageEntity page,	ConfigBusiness configBusiness,
+	public PageRenderDecorator(PageEntity page,	String languageCode, 
+			ConfigBusiness configBusiness,
 			PageBusiness pageBusiness, SystemService systemService) {
 		super();
 		this.page = page;
+		this.languageCode = languageCode;
 		this.configBusiness = configBusiness;
 		this.pageBusiness = pageBusiness;
 		this.systemService = systemService;
@@ -85,7 +89,9 @@ public class PageRenderDecorator {
 	}
 	
 	private void pluginContentRender() {
-		content = getSystemService().render(page.getContent(), 
+		ContentEntity contentEntity = pageBusiness.getPageContent(
+				page, languageCode);
+		content = getSystemService().render(contentEntity.getContent(), 
 				getPageBusiness().createContext());
 	}
 

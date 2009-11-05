@@ -20,21 +20,26 @@
 
     //<!--
     
-    var page = '';
+    var page = null;
+    var contents = null;
+    var currentLanguage = '';
     var children = {list:[]};
     var parentPage = '';
     var editMode = pageId != '';
     var contentEditor;
+    var etalonContent = '';
     var autosaveTimer = '';
     
     $(function(){
+        contentEditor = CKEDITOR.replace('content', {
+            height: 480,
+            filebrowserUploadUrl : '/cms/upload',
+            filebrowserBrowseUrl : '/cms/fileBrowser.jsp'
+        });
         $("#tabs").tabs();
         $("#tabs").bind('tabsselect', tabSelected);       
         $(".datepicker").datepicker({dateFormat:'dd.mm.yy'});
         initJSONRpc(loadData);
-        if (!editMode) {
-            $('.childrenTab').hide();
-        }
     });
 
     function loadData() {
@@ -46,7 +51,9 @@
         else {
             loadChildren();
             loadComments();
+            loadContents();
         }
+        loadLanguages();
     }
 
     function loadPage() {
@@ -84,6 +91,21 @@
         });
     }
 
+    function loadLanguages() {
+        languageService.select(function (r) {
+            var h = '';
+            $.each(r.list, function (i, value) {
+                var sel = '';
+                if (value.code == 'eng') {
+                    sel = 'selected="selected"';
+                }
+                h += '<option value="' + value.code + '" ' + sel + '>' 
+                    + value.title + '</option>';
+            });
+            $('#language').html(h);
+        });
+    }
+    
     function initPageForm() {
         if (page != null) {
             $('#title').val(page.title);
@@ -99,8 +121,10 @@
             }
             $('#publishDate').val(page.publishDateString);
             $('#commentsEnabled').each(function() {this.checked = page.commentsEnabled});
-            $('#content').val(page.content);
             $('#templates').val(page.template);
+            $('.contentTab').show();
+            $('.childrenTab').show();
+            $('.commentsTab').show();
         }
         else {
             $('#title').val('');
@@ -109,13 +133,10 @@
             $('#parentFriendlyUrl').html('');
             $('#publishDate').val(formatDate(new Date()));
             $('#commentsEnabled').each(function() {this.checked = false});
-            $('#content').val('');
+            $('.contentTab').hide();
+            $('.childrenTab').hide();
+            $('.commentsTab').hide();
         }
-        contentEditor = CKEDITOR.replace('content', {
-            height: 480,
-            filebrowserUploadUrl : '/cms/upload',
-            filebrowserBrowseUrl : '/cms/fileBrowser.jsp'
-        });
     }
 
     function onPageUpdate() {
@@ -126,7 +147,7 @@
             friendlyUrl : $('#parentFriendlyUrl').text() + $('#friendlyUrl').val(),
             publishDate : $('#publishDate').val(),
             commentsEnabled : String($('#commentsEnabled:checked').size() > 0),
-            content : getContent(),
+            content : getEditorContent(),
             template : $('#templates option:selected').val()
         });
         pageService.savePage(function (r) {
@@ -160,7 +181,7 @@
     }
     
     function startAutosave() {
-     	if (pageId != 'null') {
+     	if (editMode) {
      	    if (autosaveTimer == '') {
      	        autosaveTimer = setInterval(saveContent, AUTOSAVE_TIMEOUT * 1000);
      	    }
@@ -174,13 +195,21 @@
         }
     }
 
-    function getContent() {
-        CKEDITOR.instances.content.updateElement();
-        return $('#content').val();
+    function getEditorContent() {
+        return contentEditor.getData();
     }
 
+    function setEditorContent(data) {
+    	contentEditor.setData(data);
+    }
+
+    function isContentChanged() {
+        return contents[currentLanguage] != getEditorContent();
+    }
+    
     function saveContent() {
-        var content = getContent();
+        var content = getEditorContent();
+        contents[currentLanguage] = content;
         pageService.updateContent(function(r) {
             if (r.result == 'success') {
                 var now = new Date();
@@ -189,7 +218,7 @@
             else {
                 error(r.message);
             }            
-        }, pageId, content);        
+        }, pageId, content, currentLanguage);        
     }
 
     function onAutosave() {
@@ -300,7 +329,37 @@
             loadComments();
         }, javaList(ids));
     }
-            
+
+    function onLanguageChange() {
+    	if (!isContentChanged() 
+    	    || confirm('Are you sure? All changes will be lost.')) {
+    	    currentLanguage = $('#language').val();
+    	    if (contents[currentLanguage] == undefined) {
+    	   	    contents[currentLanguage] = '';
+    	    }
+    	    setEditorContent(contents[currentLanguage]);
+    	}
+    	else {
+        	$('#language').val(currentLanguage);
+    	}
+    }
+
+    function loadContents() {
+        if (editMode) {
+            pageService.getContents(function (r) {
+                contents = [];
+                $.each(r.list, function (i, value) {
+                    contents[value.languageCode] = value.content;                    
+                });
+                currentLanguage = 'eng';
+                setEditorContent(contents['eng']);
+            }, pageId);
+        }
+        else {
+            setEditorContent('');
+        }
+    }
+    
     // -->    
   </script>
     
@@ -310,9 +369,9 @@
 <div id="tabs">
 <ul>
     <li><a href="#tab-1">Page</a></li>
-    <li><a href="#tab-2">Content</a></li>
+    <li class="contentTab"><a href="#tab-2">Content</a></li>
     <li class="childrenTab"><a href="#tab-3">Children pages</a></li>
-    <li><a href="#tab-4">Comments</a></li>
+    <li class="commentsTab"><a href="#tab-4">Comments</a></li>
 </ul>
 
 <div id="tab-1">
@@ -348,10 +407,13 @@
 
 </div>
 
-<div id="tab-2">
+<div id="tab-2" class="contentTab">
 
-<div>
+<div style="float:right">
   <input id="autosave" type="checkbox" onchange="onAutosave()"> Autosave</input>
+</div>
+<div>
+  Select content language: <select id="language" onchange="onLanguageChange()"></select>
 </div>
 
 <div class="form-row" id="ckeditor-form-row">
@@ -375,7 +437,7 @@
     </div>    
 </div>
 
-<div id="tab-4">
+<div id="tab-4" class="commentsTab">
     <div id="comments"> </div>
     <div class="buttons">
         <input type="button" value="Enable comments" onclick="onEnableComments()" />

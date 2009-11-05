@@ -38,6 +38,7 @@ import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.dao.Dao;
 import org.vosao.entity.CommentEntity;
+import org.vosao.entity.ContentEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
@@ -74,8 +75,13 @@ public class PageExporter extends AbstractExporter {
 		if (template != null) {
 			pageElement.addAttribute("theme", template.getUrl());
 		}
-		Element contentElement = pageElement.addElement("content");
-		contentElement.addText(page.getEntity().getContent());
+		List<ContentEntity> contents = getDao().getPageDao().getContents(
+				page.getEntity().getId()); 
+		for (ContentEntity content : contents) {
+			Element contentElement = pageElement.addElement("content");
+			contentElement.addAttribute("language", content.getLanguageCode());
+			contentElement.addText(content.getContent());
+		}
 		createCommentsXML(page, pageElement);
 		for (TreeItemDecorator<PageEntity> child : page.getChildren()) {
 			createPageXML(child, pageElement);
@@ -164,15 +170,7 @@ public class PageExporter extends AbstractExporter {
 		if (template != null) {
 			templateId = template.getId();
 		}
-		String content = "";
-		for (Iterator<Element> i = pageElement.elementIterator(); i.hasNext();) {
-			Element element = i.next();
-			if (element.getName().equals("content")) {
-				content = element.getText();
-				break;
-			}
-		}
-		PageEntity newPage = new PageEntity(title, content, url, parentId,
+		PageEntity newPage = new PageEntity(title, url, parentId,
 				templateId, publishDate);
 		if (commentsEnabled != null) {
 			newPage.setCommentsEnabled(Boolean.valueOf(commentsEnabled));
@@ -184,6 +182,7 @@ public class PageExporter extends AbstractExporter {
 			page = newPage;
 		}
 		getDao().getPageDao().save(page);
+		readContents(pageElement, page);
 		for (Iterator<Element> i = pageElement.elementIterator(); i.hasNext();) {
 			Element element = i.next();
 			if (element.getName().equals("page")) {
@@ -195,6 +194,21 @@ public class PageExporter extends AbstractExporter {
 		}
 	}
 
+	private void readContents(Element pageElement, PageEntity page) {
+		for (Iterator<Element> i = pageElement.elementIterator(); i.hasNext();) {
+			Element element = i.next();
+			if (element.getName().equals("content")) {
+				String content = element.getText();
+				String language = element.attributeValue("language");
+				if (language == null) {
+					language = "eng";
+				}
+				getDao().getPageDao().setContent(page.getId(), language, 
+						content);
+			}
+		}
+	}
+	
 	private void readComments(Element commentsElement, PageEntity page) {
 		for (Iterator<Element> i = commentsElement.elementIterator(); i
 				.hasNext();) {

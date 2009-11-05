@@ -34,6 +34,9 @@ public interface Business {
 	UserPreferences getUserPreferences(final HttpServletRequest request);
 	void setUserPreferences(UserPreferences bean, final HttpServletRequest request);
 
+	String getLanguage(final HttpServletRequest request);
+	void setLanguage(String language, final HttpServletRequest request);
+
 	PageBusiness getPageBusiness();
 	void setPageBusiness(final PageBusiness bean);
 

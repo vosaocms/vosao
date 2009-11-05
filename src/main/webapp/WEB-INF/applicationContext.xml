@@ -39,10 +39,7 @@
         class="org.vosao.dao.impl.AbstractDaoImpl">
         <property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>  
     </bean>
-    
-    <bean id="pageDao" class="org.vosao.dao.impl.PageDaoImpl"
-        parent="abstractDao" />  
-    
+      
     <bean id="fileDao" class="org.vosao.dao.impl.FileDaoImpl"
         parent="abstractDao" />  
     
@@ -73,6 +70,14 @@
     <bean id="languageDao" class="org.vosao.dao.impl.LanguageDaoImpl"
         parent="abstractDao" />  
 
+    <bean id="contentDao" class="org.vosao.dao.impl.ContentDaoImpl"
+        parent="abstractDao" />  
+
+    <bean id="pageDao" class="org.vosao.dao.impl.PageDaoImpl"
+        parent="abstractDao">
+        <property name="contentDao" ref="contentDao"/>  
+    </bean>      
+
     <bean id="dao" class="org.vosao.dao.impl.DaoImpl">  
         <property name="pageDao" ref="pageDao"/>  
         <property name="fileDao" ref="fileDao"/>  
@@ -85,6 +90,7 @@
         <property name="commentDao" ref="commentDao"/>  
         <property name="seoUrlDao" ref="seoUrlDao"/>  
         <property name="languageDao" ref="languageDao"/>  
+        <property name="contentDao" ref="contentDao"/>  
     </bean>
 
     <!--=========================== Business ================================-->

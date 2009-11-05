@@ -21,19 +21,15 @@
 
 package org.vosao.business.impl;
 
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.exception.MethodInvocationException;
-import org.apache.velocity.exception.ParseErrorException;
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.vosao.business.ConfigBusiness;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
@@ -41,6 +37,7 @@ import org.vosao.business.impl.pagefilter.GoogleAnalyticsPageFilter;
 import org.vosao.business.impl.pagefilter.JavaScriptPageFilter;
 import org.vosao.business.impl.pagefilter.PageFilter;
 import org.vosao.entity.ConfigEntity;
+import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.filter.SiteFilter;
@@ -49,10 +46,15 @@ import org.vosao.velocity.VelocityService;
 import org.vosao.velocity.impl.VelocityPluginServiceImpl;
 import org.vosao.velocity.impl.VelocityServiceImpl;
 
+/**
+ * @author Alexander Oleynik
+ */
 public class PageBusinessImpl extends AbstractBusinessImpl 
 	implements PageBusiness {
 
-	ConfigBusiness configBusiness;
+    private static final Log logger = LogFactory.getLog(PageBusinessImpl.class);
+
+    ConfigBusiness configBusiness;
 	VelocityService velocityService;
 	VelocityPluginService velocityPluginService;
 
@@ -88,19 +90,21 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	}	
 	
 	@Override
-	public String render(PageEntity page) {
+	public String render(PageEntity page, String languageCode) {
 		if (page.getTemplate() != null) {
 			TemplateEntity template = getDao().getTemplateDao().getById(
 					page.getTemplate());
 			VelocityContext context = createContext();
 			PageRenderDecorator pageDecorator = new PageRenderDecorator(page, 
-					getConfigBusiness(), this, getSystemService());
+					languageCode, getConfigBusiness(), this, 
+					getSystemService());
 			context.put("page", pageDecorator);
 			return pagePostProcess(getSystemService()
 					.render(template.getContent(), context));
 		}
 		else {
-			return pagePostProcess(page.getContent());
+			ContentEntity content = getPageContent(page, languageCode);
+			return pagePostProcess(content.getContent());
 		}
 	}
 	
@@ -154,9 +158,6 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		if (StringUtils.isEmpty(page.getTitle())) {
 			errors.add("Title is empty");
 		}
-		if (page.getContent() == null) {
-			errors.add("Content is empty");
-		}
 		return errors;
 	}
 
@@ -181,6 +182,24 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 
 	public VelocityPluginService getVelocityPluginService() {
 		return velocityPluginService;
+	}
+
+	@Override
+	public ContentEntity getPageContent(PageEntity page, String languageCode) {
+		ContentEntity content = getDao().getContentDao().getByLanguage(
+				PageEntity.class.getName(), page.getId(), languageCode);
+		if (content == null) {
+			content = getDao().getContentDao().getByLanguage(
+					PageEntity.class.getName(), page.getId(), "eng");
+		}
+		if (content == null) {
+			logger.error("No content found for page " + page.getTitle());
+			content = new ContentEntity();
+			content.setParentClass(PageEntity.class.getName());
+			content.setParentKey(page.getId());
+			content.setLanguageCode(languageCode);
+		}
+		return content;
 	}
 
 }

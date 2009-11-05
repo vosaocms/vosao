@@ -22,11 +22,13 @@
 package org.vosao.business.impl.imex;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.dom4j.Element;
 import org.vosao.business.Business;
 import org.vosao.dao.Dao;
 import org.vosao.entity.ConfigEntity;
+import org.vosao.entity.LanguageEntity;
 import org.vosao.utils.XmlUtil;
 
 public class ConfigExporter extends AbstractExporter {
@@ -71,8 +73,19 @@ public class ConfigExporter extends AbstractExporter {
 		}
 		Element elem = configElement.addElement("enableRecaptcha");
 		elem.setText(String.valueOf(config.isEnableRecaptcha()));
+		createLanguagesXML(configElement);
 	}
 
+	private void createLanguagesXML(Element configElement) {
+		Element languagesElement = configElement.addElement("languages");
+		List<LanguageEntity> langs = getDao().getLanguageDao().select();
+		for (LanguageEntity lang : langs) {
+			Element langElem = languagesElement.addElement("language");
+			langElem.addAttribute("code", lang.getCode());
+			langElem.addAttribute("title", lang.getTitle());
+		}
+	}
+	
 	public void readConfigs(Element configElement) {
 		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
 		for (Iterator<Element> i = configElement.elementIterator(); i.hasNext(); ) {
@@ -101,6 +114,9 @@ public class ConfigExporter extends AbstractExporter {
             if (element.getName().equals("commentsTemplate")) {
             	config.setCommentsTemplate(element.getText());
             }
+            if (element.getName().equals("languages")) {
+            	readLanguages(element);
+            }
             if (element.getName().equals("enableRecaptcha")) {
             	config.setEnableRecaptcha(XmlUtil.readBooleanText(
             			element, false));
@@ -109,5 +125,16 @@ public class ConfigExporter extends AbstractExporter {
 		getDao().getConfigDao().save(config);
 	}
 	
+	public void readLanguages(Element languagesElement) {
+		for (Iterator<Element> i = languagesElement.elementIterator(); i.hasNext(); ) {
+            Element element = i.next();
+            if (element.getName().equals("language")) {
+            	String code = element.attributeValue("code");
+            	String title = element.attributeValue("title");
+            	LanguageEntity language = new LanguageEntity(code, title);
+            	getDao().getLanguageDao().save(language);
+            }
+		}
+	}
 	
 }

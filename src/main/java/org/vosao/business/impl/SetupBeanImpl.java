@@ -37,8 +37,10 @@ import org.vosao.business.Business;
 import org.vosao.business.SetupBean;
 import org.vosao.dao.Dao;
 import org.vosao.entity.ConfigEntity;
+import org.vosao.entity.ContentEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FormConfigEntity;
+import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.entity.UserEntity;
@@ -72,8 +74,14 @@ public class SetupBeanImpl implements SetupBean {
 		initFolders();
 		initConfigs();
 		initForms();
+		initLanguages();
 	}
 	
+	private void initLanguages() {
+		LanguageEntity lang = new LanguageEntity("eng", "English");
+		getDao().getLanguageDao().save(lang);		
+	}
+
 	private void clearSessions() {
         DatastoreService datastore = DatastoreServiceFactory
         		.getDatastoreService();
@@ -109,9 +117,10 @@ public class SetupBeanImpl implements SetupBean {
 		if (roots.size() == 0) {
 			String content = loadResource("org/vosao/resources/html/root.html");
 			TemplateEntity template = getDao().getTemplateDao().getByUrl("simple");
-			PageEntity root = new PageEntity("root", content, "/", null, 
+			PageEntity root = new PageEntity("root", "/", null,	
 					template.getId());
 			getDao().getPageDao().save(root);
+			getDao().getPageDao().setContent(root.getId(), "eng", content);
 	        log.info("Adding root page.");
 		}
 	}

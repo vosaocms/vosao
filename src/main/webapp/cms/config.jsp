@@ -327,7 +327,7 @@ function onLanguageEdit(id) {
 <div id="language-dialog" style="display:none" title="Site language">
     <div class="messages"> </div>
     <div class="form-row">
-        <label>Language <a href="http://www.loc.gov/standards/iso639-2/php/English_list.php">iso639-2</a> code</label>
+        <label>Language <a href="http://www.loc.gov/standards/iso639-2/php/English_list.php">iso639-2</a> 3 letter code</label>
         <input id="languageCode" type="text"/>
     </div>
     <div class="form-row">

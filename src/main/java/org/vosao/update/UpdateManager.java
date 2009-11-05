@@ -3,6 +3,8 @@ package org.vosao.update;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.vosao.dao.Dao;
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -12,11 +14,14 @@ public class UpdateManager {
 
 	private List<UpdateTask> tasks;
 	private DatastoreService datastore;
+	private Dao dao;
 	
-	public UpdateManager() {
+	public UpdateManager(Dao aDao) {
+		dao = aDao;
 		datastore = DatastoreServiceFactory.getDatastoreService(); 
 		tasks = new ArrayList<UpdateTask>();
 		tasks.add(new UpdateTask003());
+		tasks.add(new UpdateTask004(dao));
 	}
 	
 	public void update() throws UpdateException {

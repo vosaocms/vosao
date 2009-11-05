@@ -30,11 +30,13 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.google.appengine.api.datastore.Text;
+
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class LanguageEntity implements Serializable {
+public class ContentEntity implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7L;
 
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -42,22 +44,34 @@ public class LanguageEntity implements Serializable {
     private String id;
 	
 	@Persistent
-	private String code;
+	private String parentClass;
+	
+	@Persistent
+	private String parentKey;
 
 	@Persistent
-	private String title;
+	private String languageCode;
 
-	public LanguageEntity() {
+	@Persistent(defaultFetchGroup = "true")
+	private Text content;
+	
+	public ContentEntity() {
 	}
 	
-	public LanguageEntity(final String code, final String title) {
-		this.code = code;
-		this.title = title;
+	public ContentEntity(String parentClass, String parentKey, 
+			String languageCode, String content) {
+		this();
+		this.parentClass = parentClass;
+		this.parentKey = parentKey;
+		this.languageCode = languageCode;
+		this.content = new Text(content);
 	}
-
-	public void copy(final LanguageEntity entity) {
-		setCode(entity.getCode());
-		setTitle(entity.getTitle());
+	
+	public void copy(final ContentEntity entity) {
+		setParentClass(entity.getParentClass());
+		setParentKey(entity.getParentKey());
+		setLanguageCode(entity.getLanguageCode());
+		setContent(entity.getContent());
 	}
 	
 	public String getId() {
@@ -67,10 +81,21 @@ public class LanguageEntity implements Serializable {
 	public void setId(String id) {
 		this.id = id;
 	}
-
+	
+	public String getContent() {
+		if (content == null) {
+			return null;
+		}
+		return content.getValue();
+	}
+	
+	public void setContent(String content) {
+		this.content = new Text(content);
+	}
+	
 	public boolean equals(Object object) {
-		if (object instanceof LanguageEntity) {
-			LanguageEntity entity = (LanguageEntity)object;
+		if (object instanceof ContentEntity) {
+			ContentEntity entity = (ContentEntity)object;
 			if (getId() == null && entity.getId() == null) {
 				return true;
 			}
@@ -81,20 +106,28 @@ public class LanguageEntity implements Serializable {
 		return false;
 	}
 
-	public String getCode() {
-		return code;
+	public String getParentClass() {
+		return parentClass;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setParentClass(String parentClass) {
+		this.parentClass = parentClass;
 	}
 
-	public String getTitle() {
-		return title;
+	public String getParentKey() {
+		return parentKey;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setParentKey(String parentKey) {
+		this.parentKey = parentKey;
+	}
+
+	public String getLanguageCode() {
+		return languageCode;
+	}
+
+	public void setLanguageCode(String languageCode) {
+		this.languageCode = languageCode;
 	}
 	
 }

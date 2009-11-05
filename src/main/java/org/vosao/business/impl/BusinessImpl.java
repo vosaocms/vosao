@@ -164,6 +164,18 @@ public class BusinessImpl implements Business, Serializable {
 	public void setSystemService(SystemService bean) {
 		systemService = bean;
 	}
+
+	private static final String LANGUAGE_PARAM = "language";
+	
+	@Override
+	public String getLanguage(HttpServletRequest request) {
+		return (String)request.getSession(true).getAttribute(LANGUAGE_PARAM);
+	}
+
+	@Override
+	public void setLanguage(String language, HttpServletRequest request) {
+		request.getSession(true).setAttribute(LANGUAGE_PARAM, language);
+	}
 	
 	
 }

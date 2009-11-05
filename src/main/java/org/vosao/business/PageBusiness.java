@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 
 
@@ -43,9 +44,13 @@ public interface PageBusiness {
 	 * @param page - page to render
 	 * @return rendered html.
 	 */
-	String render(final PageEntity page);
+	String render(final PageEntity page, final String languageCode);
 	
 	VelocityContext createContext();
 	
 	List<String> validateBeforeUpdate(final PageEntity page);
+	
+	ContentEntity getPageContent(final PageEntity page, 
+			final String languageCode);
+	
 }

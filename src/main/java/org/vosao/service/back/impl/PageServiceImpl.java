@@ -27,11 +27,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.business.impl.SetupBeanImpl;
+import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.PageService;
@@ -45,13 +48,13 @@ public class PageServiceImpl extends AbstractServiceImpl
 	private static Log logger = LogFactory.getLog(PageServiceImpl.class);
 
 	@Override
-	public ServiceResponse updateContent(String pageId, String content) {
+	public ServiceResponse updateContent(String pageId, String content,
+			String languageCode) {
 		PageEntity page = getDao().getPageDao().getById(pageId);
 		if (page != null) {
-			page.setContent(content);
-			getDao().getPageDao().save(page);
+			getDao().getPageDao().setContent(pageId, languageCode, content);
 			return ServiceResponse.createSuccessResponse(
-					"Page was successfully updated");
+					"Page content was successfully updated");
 		}
 		else {
 			return ServiceResponse.createErrorResponse("Page not found " 
@@ -100,7 +103,6 @@ public class PageServiceImpl extends AbstractServiceImpl
 			page = new PageEntity();
 		}
 		page.setCommentsEnabled(Boolean.valueOf(pageMap.get("commentsEnabled")));
-		page.setContent(pageMap.get("content"));
 		page.setFriendlyURL(pageMap.get("friendlyUrl"));
 		page.setParent(pageMap.get("parent"));
 		try {
@@ -111,7 +113,6 @@ public class PageServiceImpl extends AbstractServiceImpl
 		}
 		page.setTemplate(pageMap.get("template"));
 		page.setTitle(pageMap.get("title"));
-		
 		List<String> errors = getBusiness().getPageBusiness()
 			.validateBeforeUpdate(page);
 		if (errors.isEmpty()) {
@@ -136,6 +137,11 @@ public class PageServiceImpl extends AbstractServiceImpl
 		getDao().getPageDao().remove(ids);
 		return ServiceResponse.createSuccessResponse(
 				"Pages were successfully deleted");
+	}
+
+	@Override
+	public List<ContentEntity> getContents(String pageId) {
+		return getDao().getPageDao().getContents(pageId);
 	}
 
 }

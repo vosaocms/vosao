@@ -26,8 +26,6 @@ import java.io.Writer;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -36,17 +34,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.vosao.business.Business;
-import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.SeoUrlEntity;
 
-
-public class SiteFilter implements Filter {
+/**
+ * @author Alexander Oleynik
+ */
+public class SiteFilter extends AbstractFilter implements Filter {
     
     private static final Log log = LogFactory.getLog(SiteFilter.class);
-	public static final String[] SKIP_URLS = {
+
+    public static final String[] SKIP_URLS = {
 		"/_ah",
 		"/cms",
 		"/plugin",
@@ -58,35 +56,12 @@ public class SiteFilter implements Filter {
 		"/hotCron",
 		"/JSON-RPC"};
     
-    private FilterConfig config = null;
-    private ServletContext servletContext = null;
-  
-    private Dao dao;
-    private Business business;
-    private PageEntity page;
-    private SeoUrlEntity seoUrl;
-    
     public SiteFilter() {
+    	super();
     }
   
-    public void init(FilterConfig filterConfig) throws ServletException {
-        config = filterConfig;
-        servletContext = config.getServletContext();
-    }
-    
-    private void prepare() {
-        dao = (Dao)WebApplicationContextUtils
-        	.getRequiredWebApplicationContext(servletContext)
-    		.getBean("dao");
-        business = (Business)WebApplicationContextUtils
-    		.getRequiredWebApplicationContext(servletContext)
-    		.getBean("business");
-    }
-    
     public void doFilter(ServletRequest request, ServletResponse response, 
-        FilterChain chain) throws IOException, ServletException {
-        
-    	prepare();
+    		FilterChain chain) throws IOException, ServletException {
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
         HttpServletResponse httpResponse = (HttpServletResponse)response;
         String url = httpRequest.getServletPath();
@@ -94,12 +69,14 @@ public class SiteFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        if (isSeoUrl(url)) {
+        SeoUrlEntity seoUrl = getDao().getSeoUrlDao().getByFrom(url);
+        if (seoUrl != null) {
             httpResponse.sendRedirect(seoUrl.getToLink());
             return;
         }
-        if (isSiteUrl(url)) {
-        	renderPage(httpRequest, httpResponse, url);
+    	PageEntity page = getDao().getPageDao().getByUrl(url);
+        if (page != null) {
+        	renderPage(httpRequest, httpResponse, page);
         	return;
         }
         if (url.equals("/")) {
@@ -107,9 +84,6 @@ public class SiteFilter implements Filter {
             return;
         }
         httpResponse.sendRedirect("/");
-    }
-    
-    public void destroy() {
     }
 
     public static boolean isSkipUrl(final String url) {
@@ -120,31 +94,16 @@ public class SiteFilter implements Filter {
     	}
     	return false;
     }
-    
-    private boolean isSiteUrl(final String url) {
-    	page = dao.getPageDao().getByUrl(url);
-    	if (page != null) {
-        	return true;
-    	}
-    	return false;
-    }
-    
-    private boolean isSeoUrl(final String url) {
-    	seoUrl = dao.getSeoUrlDao().getByFrom(url);
-    	if (seoUrl != null) {
-        	return true;
-    	}
-    	return false;
-    }
 
     private void renderPage(HttpServletRequest request, 
-    		HttpServletResponse response, final String url) throws IOException {
+    		HttpServletResponse response, final PageEntity page) 
+    		throws IOException {
     	response.setContentType("text/html");
     	response.setCharacterEncoding("UTF-8");
     	Writer out = response.getWriter();
-    	String content = business.getPageBusiness().render(page);
+    	String language = getBusiness().getLanguage(request);
+    	String content = getBusiness().getPageBusiness().render(page, language);
     	out.write(content);
     }
-
     
 }

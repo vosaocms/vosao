@@ -4,7 +4,7 @@
 == If you are not familiar with GAE/J ==
 
  # Create [http://www.appspot.com appspot] application 
- # Invite kinyelo@gmail.com as developer. 
+ # Invite support@vosao.org as developer. 
  # I will deploy the latest stable version (If this is weekend it may take some time)
 
 

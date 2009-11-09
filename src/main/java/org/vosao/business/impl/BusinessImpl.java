@@ -38,6 +38,7 @@ import org.vosao.business.FormBusiness;
 import org.vosao.business.MessageBusiness;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.TemplateBusiness;
+import org.vosao.business.UserBusiness;
 import org.vosao.business.UserPreferences;
 import org.vosao.global.SystemService;
 
@@ -55,6 +56,7 @@ public class BusinessImpl implements Business, Serializable {
 	private CommentBusiness commentBusiness;
 	private FieldBusiness fieldBusiness;
 	private MessageBusiness messageBusiness;
+	private UserBusiness userBusiness;
 
 	public void init() {
 	}
@@ -188,5 +190,14 @@ public class BusinessImpl implements Business, Serializable {
 		this.messageBusiness = messageBusiness;
 	}
 	
+	@Override
+	public UserBusiness getUserBusiness() {
+		return userBusiness;
+	}
+
+	@Override
+	public void setUserBusiness(UserBusiness bean) {
+		this.userBusiness = bean;
+	}
 	
 }

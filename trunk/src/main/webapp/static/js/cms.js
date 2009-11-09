@@ -10,8 +10,9 @@
  */
 var AUTOSAVE_TIMEOUT = 60;
 
-//************************** Utility functions *********************************
+var ENGLISH_CODE = 'en';
 
+//************************** Utility functions *********************************
 function info(message) {
 	$("#wrapper .messages").html("<ul><li class=\"info-msg\">" + message 
 			+ "</li></ul>");
@@ -480,4 +481,43 @@ var languageService = {
 			func(r);
 		}, ids);
 	},
+};
+
+var messageService = {
+		
+	save: function(func, vo) {
+		jsonrpc.messageService.save(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, vo);
+	},
+
+	select: function(func) {
+		jsonrpc.messageService.select(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		});
+	},
+					
+	getById: function(func, id) {
+		jsonrpc.messageService.getById(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, id);
+	},
+
+	remove: function(func, codes) {
+		jsonrpc.messageService.remove(function (r,e) {
+		if (backServiceFailed(e)) return;
+			func(r);
+		}, codes);
+	},
+	
+	selectByCode: function(func, code) {
+		jsonrpc.messageService.selectByCode(function (r,e) {
+			if (backServiceFailed(e)) return;
+			func(r);
+		}, code);
+	},
+	
 };

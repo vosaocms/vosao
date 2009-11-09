@@ -40,6 +40,7 @@ import org.vosao.dao.Dao;
 import org.vosao.entity.CommentEntity;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.FolderEntity;
+import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.utils.DateUtil;
@@ -201,7 +202,7 @@ public class PageExporter extends AbstractExporter {
 				String content = element.getText();
 				String language = element.attributeValue("language");
 				if (language == null) {
-					language = "eng";
+					language = LanguageEntity.ENGLISH_CODE;
 				}
 				getDao().getPageDao().setContent(page.getId(), language, 
 						content);

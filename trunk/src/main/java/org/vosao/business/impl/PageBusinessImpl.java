@@ -31,6 +31,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.ConfigBusiness;
+import org.vosao.business.MessageBusiness;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.business.impl.pagefilter.GoogleAnalyticsPageFilter;
@@ -38,6 +39,7 @@ import org.vosao.business.impl.pagefilter.JavaScriptPageFilter;
 import org.vosao.business.impl.pagefilter.PageFilter;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.ContentEntity;
+import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.filter.SiteFilter;
@@ -55,6 +57,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
     private static final Log logger = LogFactory.getLog(PageBusinessImpl.class);
 
     ConfigBusiness configBusiness;
+    MessageBusiness messageBusiness;
 	VelocityService velocityService;
 	VelocityPluginService velocityPluginService;
 
@@ -94,7 +97,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		if (page.getTemplate() != null) {
 			TemplateEntity template = getDao().getTemplateDao().getById(
 					page.getTemplate());
-			VelocityContext context = createContext();
+			VelocityContext context = createContext(languageCode);
 			PageRenderDecorator pageDecorator = new PageRenderDecorator(page, 
 					languageCode, getConfigBusiness(), this, 
 					getSystemService());
@@ -108,12 +111,13 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		}
 	}
 	
-	public VelocityContext createContext() {
+	public VelocityContext createContext(final String languageCode) {
 		VelocityContext context = new VelocityContext();
 		ConfigEntity configEntity = getConfigBusiness().getConfig();
 		context.put("config", configEntity);
 		context.put("service", getVelocityService());
 		context.put("plugin", getVelocityPluginService());
+		context.put("messages", getMessageBusiness().getBundle(languageCode));
 		return context;
 	}
 	
@@ -176,6 +180,16 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		configBusiness = bean;		
 	}
 
+	@Override
+	public MessageBusiness getMessageBusiness() {
+		return messageBusiness;
+	}
+
+	@Override
+	public void setMessageBusiness(MessageBusiness bean) {
+		messageBusiness = bean;		
+	}
+
 	private VelocityService getVelocityService() {
         return velocityService;
 	}
@@ -190,7 +204,8 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 				PageEntity.class.getName(), page.getId(), languageCode);
 		if (content == null) {
 			content = getDao().getContentDao().getByLanguage(
-					PageEntity.class.getName(), page.getId(), "eng");
+					PageEntity.class.getName(), page.getId(), 
+					LanguageEntity.ENGLISH_CODE);
 		}
 		if (content == null) {
 			logger.error("No content found for page " + page.getTitle());

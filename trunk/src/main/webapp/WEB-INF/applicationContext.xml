@@ -73,6 +73,9 @@
     <bean id="contentDao" class="org.vosao.dao.impl.ContentDaoImpl"
         parent="abstractDao" />  
 
+    <bean id="messageDao" class="org.vosao.dao.impl.MessageDaoImpl"
+        parent="abstractDao" />  
+    
     <bean id="pageDao" class="org.vosao.dao.impl.PageDaoImpl"
         parent="abstractDao">
         <property name="contentDao" ref="contentDao"/>  
@@ -91,6 +94,7 @@
         <property name="seoUrlDao" ref="seoUrlDao"/>  
         <property name="languageDao" ref="languageDao"/>  
         <property name="contentDao" ref="contentDao"/>  
+        <property name="messageDao" ref="messageDao"/>  
     </bean>
 
     <!--=========================== Business ================================-->
@@ -122,9 +126,13 @@
     <bean id="fieldBusiness" class="org.vosao.business.impl.FieldBusinessImpl"
         parent="abstractBusiness" />  
 
+    <bean id="messageBusiness" class="org.vosao.business.impl.MessageBusinessImpl"
+        parent="abstractBusiness" />  
+    
     <bean id="pageBusiness" class="org.vosao.business.impl.PageBusinessImpl"
         init-method="init" parent="abstractBusiness">
         <property name="configBusiness" ref="configBusiness"/>  
+        <property name="messageBusiness" ref="messageBusiness"/>  
     </bean>      
 
     <bean id="business" class="org.vosao.business.impl.BusinessImpl"
@@ -139,6 +147,7 @@
         <property name="fileBusiness" ref="fileBusiness"/>  
         <property name="commentBusiness" ref="commentBusiness"/>  
         <property name="fieldBusiness" ref="fieldBusiness"/>  
+        <property name="messageBusiness" ref="messageBusiness"/>  
     </bean>
 
     <!--========================== ImportExport =============================-->
@@ -192,6 +201,9 @@
     <bean id="languageService" class="org.vosao.service.back.impl.LanguageServiceImpl"
         parent="abstractService" />
 
+    <bean id="messageService" class="org.vosao.service.back.impl.MessageServiceImpl"
+        parent="abstractService" />
+
     <bean id="backService" class="org.vosao.service.impl.BackServiceImpl"
         init-method="init">  
         <property name="fileService" ref="fileService"/>  
@@ -205,6 +217,7 @@
         <property name="seoUrlService" ref="seoUrlService"/>  
         <property name="userService" ref="userService"/>  
         <property name="languageService" ref="languageService"/>  
+        <property name="messageService" ref="messageService"/>  
     </bean>
 
     <!--================== JSON-RPC front services ==========================-->

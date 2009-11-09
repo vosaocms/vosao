@@ -47,7 +47,7 @@ public class LanguageFilter extends AbstractFilter implements Filter {
     		FilterChain chain) throws IOException, ServletException {
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
     	if (getBusiness().getLanguage(httpRequest) == null) {
-    		String language = request.getLocale().getISO3Language();
+    		String language = request.getLocale().getLanguage();
     		logger.info("Initial language set " + language);
     		getBusiness().setLanguage(language, httpRequest);
     	}

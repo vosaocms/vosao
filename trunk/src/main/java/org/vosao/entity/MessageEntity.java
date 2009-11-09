@@ -30,15 +30,14 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-
+/**
+ * @author Alexander Oleynik
+ */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class LanguageEntity implements Serializable {
+public class MessageEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final String ENGLISH_CODE = "en";
-	public static final String ENGLISH_TITLE = "English";
-	
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
@@ -48,19 +47,25 @@ public class LanguageEntity implements Serializable {
 	private String code;
 
 	@Persistent
-	private String title;
+	private String languageCode;
+	
+	@Persistent
+	private String value;
 
-	public LanguageEntity() {
+	public MessageEntity() {
 	}
 	
-	public LanguageEntity(final String code, final String title) {
+	public MessageEntity(final String code, final String languageCode, 
+			final String value) {
 		this.code = code;
-		this.title = title;
+		this.languageCode = languageCode;
+		this.value = value;
 	}
 
-	public void copy(final LanguageEntity entity) {
+	public void copy(final MessageEntity entity) {
 		setCode(entity.getCode());
-		setTitle(entity.getTitle());
+		setLanguageCode(entity.getLanguageCode());
+		setValue(entity.getValue());
 	}
 	
 	public String getId() {
@@ -72,8 +77,8 @@ public class LanguageEntity implements Serializable {
 	}
 
 	public boolean equals(Object object) {
-		if (object instanceof LanguageEntity) {
-			LanguageEntity entity = (LanguageEntity)object;
+		if (object instanceof MessageEntity) {
+			MessageEntity entity = (MessageEntity)object;
 			if (getId() == null && entity.getId() == null) {
 				return true;
 			}
@@ -92,12 +97,20 @@ public class LanguageEntity implements Serializable {
 		this.code = code;
 	}
 
-	public String getTitle() {
-		return title;
+	public String getLanguageCode() {
+		return languageCode;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setLanguageCode(String languageCode) {
+		this.languageCode = languageCode;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 	
 }

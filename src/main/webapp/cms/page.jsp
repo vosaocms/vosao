@@ -240,15 +240,16 @@
 
     function loadChildren() {
         pageService.getChildren(function (r) {
-            var html = '<table class="form-table"><tr><td></td><td>Title</td>\
-                <td>Friendly URL</td></tr>';
+            var html = '<table class="form-table"><tr><th></th><th>Title</th>\
+                <th>Friendly URL</th></tr>';
             $.each(r.list, function (n, value) {
                 html += '<tr><td><input type="checkbox" value="' + value.id 
                 + '"/></td><td><a href="/cms/page.jsp?id=' + value.id 
                 +'">' + value.title + '</a></td><td>' + value.friendlyURL
                 + '</td></tr>';
             });
-            $('#children').html(html + '</table>'); 
+            $('#children').html(html + '</table>');
+            $('#children tr:even').addClass('even');
         }, pageId);
     }
 
@@ -261,27 +262,30 @@
         $('#children input:checked').each(function () {
             ids.push(this.value);
         });
-        if (ids == []) {
+        if (ids.length == 0) {
             info('Nothing selected.');
             return;
         }
-        pageService.deletePages(function(r) {
-            showServiceMessages(r);
-            loadChildren();
-        }, javaList(ids));
+        if (confirm('Are you sure?')) {
+            pageService.deletePages(function(r) {
+                showServiceMessages(r);
+                loadChildren();
+            }, javaList(ids));
+        }
     }
 
     function loadComments() {
         commentService.getByPage(function (r) {
-            var html = '<table class="form-table"><tr><td></td><td>Status</td>\
-                <td>Name</td><td>Content</td></tr>';
+            var html = '<table class="form-table"><tr><th></th><th>Status</th>\
+                <th>Name</th><th>Content</th></tr>';
             $.each(r.list, function (n, value) {
                 var status = value.disabled ? 'Disabled' : 'Enabled';
                 html += '<tr><td><input type="checkbox" value="' + value.id 
                 + '"/></td><td>' + status + '</a></td><td>' + value.name
                 + '</td><td>' + value.content + '</td></tr>';
             });
-            $('#comments').html(html + '</table>'); 
+            $('#comments').html(html + '</table>');
+            $('#comments tr:even').addClass('even'); 
         }, pageId);
     }
 
@@ -320,14 +324,16 @@
         $('#comments input:checked').each(function () {
             ids.push(this.value);
         });
-        if (ids == []) {
+        if (ids.length == 0) {
             info('Nothing selected.');
             return;
         }
-        commentService.deleteComments(function(r) {
-            showServiceMessages(r);
-            loadComments();
-        }, javaList(ids));
+        if (confirm('Are you sure?')) {
+            commentService.deleteComments(function(r) {
+                showServiceMessages(r);
+                loadComments();
+            }, javaList(ids));
+        }
     }
 
     function onLanguageChange() {

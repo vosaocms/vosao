@@ -17,7 +17,7 @@
 
     function loadUrls() {
         seoUrlService.select(function (r) {
-            var html = '<table class="form-table"><tr><td></td><td>From</td><td>To</td></tr>';
+            var html = '<table class="form-table"><tr><th></th><th>From</th><th>To</th></tr>';
             $.each(r.list, function (i, url) {
                 html += '<tr><td><input type="checkbox" value="' 
                     + url.id + '"/></td><td><a href="#" onclick="onEdit(\''
@@ -25,6 +25,7 @@
                     + url.toLink + '</td></tr>';
             });
             $('#urls').html(html + '</table>');
+            $('#urls tr:even').addClass('even');
         });
     }
 
@@ -63,10 +64,12 @@
             info('Nothing selected.');
             return;
         }
-        seoUrlService.remove(function(r) {
-            showServiceMessages(r);
-            loadUrls();
-        }, javaList(ids));
+        if (confirm('Are you sure?')) {
+            seoUrlService.remove(function(r) {
+                showServiceMessages(r);
+                loadUrls();
+            }, javaList(ids));
+        }
     }
 
     function onSaveAndAdd() {
@@ -100,11 +103,11 @@
                     }
                     loadUrls();
                 } else {
-                    errorMessages(r.messages.list);
+                    errorUrlMessages(r.messages.list);
                 }
             }, javaMap(vo));
         } else {
-            errorMessages(errors);
+            errorUrlMessages(errors);
         }
     }
 
@@ -116,12 +119,8 @@
         $('#url-messages').html('');
     }
 
-    function errorMessages(messages) {
-        var h = '<ul>';
-        $.each(messages, function(i, msg) {
-            h += '<li class="error-msg">' + msg + '</li>';
-        });
-        $("#url-messages").html(h + '</ul>');
+    function errorUrlMessages(messages) {
+        errorMessages("#url-messages", messages);
     }
     
 </script>    

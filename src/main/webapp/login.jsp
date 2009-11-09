@@ -37,11 +37,11 @@
 <h4>Sign in with your</h4>
 <h3>Vosao CMS account</h3>
 
-<div>
+<div class="form-row">
     <label>Email</label>
     <input type="text" id="loginEmail" />
 </div>
-<div>
+<div class="form-row">
     <label>Password</label>
     <input type="password" id="loginPassword" />
 </div>

@@ -4,8 +4,8 @@
     font-family: arial, sans-serif;
 }
 
-body {
-	font-size: 12px;
+body, input {
+	font-size: 14px;
 }
 
 h1 {
@@ -95,11 +95,24 @@ label {
 	clear: both;
 }
 .form-table {
-	min-width: 200px; 
+	min-width: 200px;
+	border-collapse: collapse; 
 }
+.form-table th {
+    padding: 2px 4px;
+    background-color: #C5D7EF;
+    font-weight: bold;
+    text-align: left;
+    vertical-align: middle;
+}   
 .form-table td {
 	padding: 2px 4px;
 }	
+.form-table tr.even td {
+    background-color: #E9E9E9;
+    border-bottom: 1px solid #C5D7EF;
+    border-top: 1px solid #C5D7EF; 
+}
 
 .buttons {
 	margin: 20px 0;

@@ -78,7 +78,8 @@ public class SetupBeanImpl implements SetupBean {
 	}
 	
 	private void initLanguages() {
-		LanguageEntity lang = new LanguageEntity("eng", "English");
+		LanguageEntity lang = new LanguageEntity(
+				LanguageEntity.ENGLISH_CODE, LanguageEntity.ENGLISH_TITLE);
 		getDao().getLanguageDao().save(lang);		
 	}
 
@@ -120,7 +121,8 @@ public class SetupBeanImpl implements SetupBean {
 			PageEntity root = new PageEntity("root", "/", null,	
 					template.getId());
 			getDao().getPageDao().save(root);
-			getDao().getPageDao().setContent(root.getId(), "eng", content);
+			getDao().getPageDao().setContent(root.getId(), 
+					LanguageEntity.ENGLISH_CODE, content);
 	        log.info("Adding root page.");
 		}
 	}

@@ -4,6 +4,10 @@
     font-family: arial, sans-serif;
 }
 
+body {
+	font-size: 12px;
+}
+
 h1 {
     background-color:#C8DFF4;
     color:#222299;
@@ -88,6 +92,7 @@ label {
 }
 .form-row {
 	padding: 2px 0;
+	clear: both;
 }
 .form-table {
 	min-width: 200px; 
@@ -141,4 +146,8 @@ label {
     background-color: silver;
     width: 160px;
     height: 120px;
+}
+
+.ui-widget {
+	font-size: 1em;
 }

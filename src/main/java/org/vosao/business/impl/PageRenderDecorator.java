@@ -81,7 +81,8 @@ public class PageRenderDecorator {
 				logger.error("comments template is empty");
 				return "comments template is empty";
 			}
-			VelocityContext context = getPageBusiness().createContext();
+			VelocityContext context = getPageBusiness().createContext(
+					languageCode);
 			context.put("page", page);
 			return getSystemService().render(commentsTemplate, context);
 		}
@@ -92,7 +93,7 @@ public class PageRenderDecorator {
 		ContentEntity contentEntity = pageBusiness.getPageContent(
 				page, languageCode);
 		content = getSystemService().render(contentEntity.getContent(), 
-				getPageBusiness().createContext());
+				getPageBusiness().createContext(languageCode));
 	}
 
 	public String getTitle() {

@@ -59,4 +59,7 @@ public interface Dao {
 	ContentDao getContentDao();
 	void setContentDao(final ContentDao bean);
 
+	MessageDao getMessageDao();
+	void setMessageDao(final MessageDao bean);
+
 }

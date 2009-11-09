@@ -29,6 +29,7 @@ import org.vosao.service.back.FileService;
 import org.vosao.service.back.FolderService;
 import org.vosao.service.back.FormService;
 import org.vosao.service.back.LanguageService;
+import org.vosao.service.back.MessageService;
 import org.vosao.service.back.PageService;
 import org.vosao.service.back.SeoUrlService;
 import org.vosao.service.back.TemplateService;
@@ -71,5 +72,8 @@ public interface BackService {
 
 	LanguageService getLanguageService();
 	void setLanguageService(LanguageService bean);
+
+	MessageService getMessageService();
+	void setMessageService(MessageService bean);
 	
 }

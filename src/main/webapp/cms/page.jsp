@@ -96,7 +96,7 @@
             var h = '';
             $.each(r.list, function (i, value) {
                 var sel = '';
-                if (value.code == 'eng') {
+                if (value.code == ENGLISH_CODE) {
                     sel = 'selected="selected"';
                 }
                 h += '<option value="' + value.code + '" ' + sel + '>' 
@@ -351,8 +351,8 @@
                 $.each(r.list, function (i, value) {
                     contents[value.languageCode] = value.content;                    
                 });
-                currentLanguage = 'eng';
-                setEditorContent(contents['eng']);
+                currentLanguage = ENGLISH_CODE;
+                setEditorContent(contents[ENGLISH_CODE]);
             }, pageId);
         }
         else {

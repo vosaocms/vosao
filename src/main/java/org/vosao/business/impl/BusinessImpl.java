@@ -35,7 +35,7 @@ import org.vosao.business.FieldBusiness;
 import org.vosao.business.FileBusiness;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.FormBusiness;
-import org.vosao.business.ImportExportBusiness;
+import org.vosao.business.MessageBusiness;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.TemplateBusiness;
 import org.vosao.business.UserPreferences;
@@ -54,6 +54,7 @@ public class BusinessImpl implements Business, Serializable {
 	private FileBusiness fileBusiness;
 	private CommentBusiness commentBusiness;
 	private FieldBusiness fieldBusiness;
+	private MessageBusiness messageBusiness;
 
 	public void init() {
 	}
@@ -175,6 +176,16 @@ public class BusinessImpl implements Business, Serializable {
 	@Override
 	public void setLanguage(String language, HttpServletRequest request) {
 		request.getSession(true).setAttribute(LANGUAGE_PARAM, language);
+	}
+
+	@Override
+	public MessageBusiness getMessageBusiness() {
+		return messageBusiness;
+	}
+
+	@Override
+	public void setMessageBusiness(MessageBusiness messageBusiness) {
+		this.messageBusiness = messageBusiness;
 	}
 	
 	

@@ -43,7 +43,7 @@ public class UpdateTask004 implements UpdateTask {
 			ContentEntity contentEntity = new ContentEntity(
 					PageEntity.class.getName(),
 					(String) e.getProperty("id"), 
-					"eng", 
+					LanguageEntity.ENGLISH_CODE, 
 					((Text) e.getProperty("content")).getValue());
 			getDao().getContentDao().save(contentEntity);
 			e.removeProperty("content");
@@ -54,8 +54,8 @@ public class UpdateTask004 implements UpdateTask {
 
 	private void addEngLanguage() {
 		LanguageEntity lang = new LanguageEntity();
-		lang.setCode("eng");
-		lang.setTitle("English");
+		lang.setCode(LanguageEntity.ENGLISH_CODE);
+		lang.setTitle(LanguageEntity.ENGLISH_TITLE);
 		getDao().getLanguageDao().save(lang);
 	}
 	

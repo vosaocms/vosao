@@ -11,14 +11,17 @@
 
 var config = '';
 var language = null;
+var languages = null;
 
 $(function(){
     $("#import-dialog").dialog({ width: 400, autoOpen: false });
     $("#language-dialog").dialog({ width: 400, autoOpen: false });
+    $("#message-dialog").dialog({ width: 400, autoOpen: false });
     $("#tabs").tabs();
     $('#upload').ajaxForm(afterUpload);
     initJSONRpc(loadData);
     $('#enableRecaptcha').click(toggleRecaptcha);
+    initLanguagesList();
 });
 
 function loadData() {
@@ -117,6 +120,9 @@ function onAddLanguage() {
     $('#languageTitle').val('');
     $('#language-dialog .message').html('');
 	$('#language-dialog').dialog('open');
+    $('#languageSelection').show();
+    $('#listed-language').show();
+    $('#not-listed-language').hide();
 }
 
 function onRemoveLanguage() {
@@ -192,6 +198,7 @@ function onLanguageCancel() {
 
 function loadLanguages() {
     languageService.select(function (r) {
+        languages = r.list;
         var h = '<table class="form-table"><tr><td></td><td>Code</td><td>Title</td></tr>';
         $.each(r.list, function (i, lang) {
             h += '<tr><td><input type="checkbox" value="' + lang.id 
@@ -200,6 +207,7 @@ function loadLanguages() {
                 + '\')">' + lang.title + '</a></td></tr>';
         });
         $('#languages').html(h + '</table>');
+        loadMessages();
     });
 }
 
@@ -210,7 +218,289 @@ function onLanguageEdit(id) {
         $('#languageTitle').val(r.title);
         $('#language-dialog .message').html('');
         $('#language-dialog').dialog('open');
+        $('#languageSelection').hide();
+        $('#listed-language').hide();
+        $('#not-listed-language').show();
     }, id);
+}
+
+var isoLanguages = {
+	aa: 'Afar',
+	ab: 'Abkhazian',
+	af: 'Afrikaans',
+	am: 'Amharic',
+	ar: 'Arabic',
+	as: 'Assamese',
+	ay: 'Aymara',
+	az: 'Azerbaijani',
+
+	ba: 'Bashkir',
+	be: 'Byelorussian',
+	bg: 'Bulgarian',
+	bh: 'Bihari',
+	bi: 'Bislama',
+	bn: 'Bengali; Bangla',
+	bo: 'Tibetan',
+	br: 'Breton',
+
+	ca: 'Catalan',
+	co: 'Corsican',
+	cs: 'Czech',
+	cy: 'Welsh',
+
+	da: 'Danish',
+	de: 'German',
+	dz: 'Bhutani',
+
+	el: 'Greek',
+	en: 'English',
+	eo: 'Esperanto',
+	es: 'Spanish',
+	et: 'Estonian',
+	eu: 'Basque',
+
+	fa: 'Persian',
+	fi: 'Finnish',
+	fj: 'Fiji',
+	fo: 'Faroese',
+	fr: 'French',
+	fy: 'Frisian',
+
+	ga: 'Irish',
+	gd: 'Scots Gaelic',
+	gl: 'Galician',
+	gn: 'Guarani',
+	gu: 'Gujarati',
+
+	ha: 'Hausa',
+	he: 'Hebrew (formerly iw)',
+	hi: 'Hindi',
+	hr: 'Croatian',
+	hu: 'Hungarian',
+	hy: 'Armenian',
+
+	ia: 'Interlingua',
+	id: 'Indonesian (formerly in)',
+	ie: 'Interlingue',
+	ik: 'Inupiak',
+	is: 'Icelandic',
+	it: 'Italian',
+	iu: 'Inuktitut',
+
+	ja: 'Japanese',
+	jw: 'Javanese',
+
+	ka: 'Georgian',
+	kk: 'Kazakh',
+	kl: 'Greenlandic',
+	km: 'Cambodian',
+	kn: 'Kannada',
+	ko: 'Korean',
+	ks: 'Kashmiri',
+	ku: 'Kurdish',
+	ky: 'Kirghiz',
+
+	la: 'Latin',
+	ln: 'Lingala',
+	lo: 'Laothian',
+	lt: 'Lithuanian',
+	lv: 'Latvian, Lettish',
+
+	mg: 'Malagasy',
+	mi: 'Maori',
+	mk: 'Macedonian',
+	ml: 'Malayalam',
+	mn: 'Mongolian',
+	mo: 'Moldavian',
+	mr: 'Marathi',
+	ms: 'Malay',
+	mt: 'Maltese',
+	my: 'Burmese',
+
+	na: 'Nauru',
+	ne: 'Nepali',
+	nl: 'Dutch',
+	no: 'Norwegian',
+
+	oc: 'Occitan',
+	om: '(Afan) Oromo',
+	or: 'Oriya',
+
+	pa: 'Punjabi',
+	pl: 'Polish',
+	ps: 'Pashto, Pushto',
+	pt: 'Portuguese',
+
+	qu: 'Quechua',
+
+	rm: 'Rhaeto-Romance',
+	rn: 'Kirundi',
+	ro: 'Romanian',
+	ru: 'Russian',
+	rw: 'Kinyarwanda',
+
+	sa: 'Sanskrit',
+	sd: 'Sindhi',
+	sg: 'Sangho',
+	sh: 'Serbo-Croatian',
+	si: 'Sinhalese',
+	sk: 'Slovak',
+	sl: 'Slovenian',
+	sm: 'Samoan',
+	sn: 'Shona',
+	so: 'Somali',
+	sq: 'Albanian',
+	sr: 'Serbian',
+	ss: 'Siswati',
+	st: 'Sesotho',
+	su: 'Sundanese',
+	sv: 'Swedish',
+	sw: 'Swahili',
+
+	ta: 'Tamil',
+	te: 'Telugu',
+	tg: 'Tajik',
+	th: 'Thai',
+	ti: 'Tigrinya',
+	tk: 'Turkmen',
+	tl: 'Tagalog',
+	tn: 'Setswana',
+	to: 'Tonga',
+	tr: 'Turkish',
+	ts: 'Tsonga',
+	tt: 'Tatar',
+	tw: 'Twi',
+
+	ug: 'Uighur',
+	uk: 'Ukrainian',
+	ur: 'Urdu',
+	uz: 'Uzbek',
+
+	vi: 'Vietnamese',
+	vo: 'Volapuk',
+
+	wo: 'Wolof',
+
+	xh: 'Xhosa',
+
+	yi: 'Yiddish (formerly ji)',
+	yo: 'Yoruba',
+
+	za: 'Zhuang',
+	zh: 'Chinese',
+	zu: 'Zulu',
+};
+
+function initLanguagesList() {
+    var h = '';
+	for (var code in isoLanguages) {
+		h += '<option value="' + code + '">' + isoLanguages[code] 
+		    + '</option>\n';
+	}
+	$('#selectLanguage').html(h);
+}
+
+function onShowLanguageSelect(show) {
+	if (show) {
+		$('#listed-language').show();
+        $('#not-listed-language').hide();
+	}
+	else {
+        $('#listed-language').hide();
+        $('#not-listed-language').show();
+	}
+}
+
+function onSelectLanguageChange() {
+	var code = $('#selectLanguage').val();
+	$('#languageCode').val(code);
+    $('#languageTitle').val(isoLanguages[code]);
+}
+
+function onAddMessage() {
+    var h = '';
+	$.each(languages, function (i, lang) {
+        h += '<div class="form-row"><label>' + lang.title 
+            + '</label><input type="text" id="message_' + lang.code + '" /></div>';
+    });
+    $('#messageCode').val('');
+	$('#messagesInput').html(h);
+	$('#message-dialog').dialog('open');
+}
+
+function onRemoveMessage() {
+    var codes = [];
+    $('#messageBundle input:checked').each(function () {
+        codes.push(this.value);
+    });
+    messageService.remove(function (r) {
+        info(r.message);
+        loadMessages();
+    }, javaList(codes));
+}
+
+function loadMessages() {
+	messageService.select(function (r) {
+        var h = '<table class="form-table"><tr><td><td>Code</td>';
+        $.each(languages, function (i, lang) {
+            h += '<td>' + lang.title + '</td>';
+        });
+        h += '</tr>';
+        $.each(r.list, function (i, msg) {
+            h += '<tr><td><input type="checkbox" value="' + msg.code + '"/></td>\
+                <td><a href="#" onclick="onMessageEdit(\'' + msg.code + '\')">'
+                + msg.code + '</a></td>';
+            $.each(languages, function (i, lang) {
+                h += '<td>' + msg.values.map[lang.code] + '</td>';
+            });
+            h += '</tr>';
+        });
+        $('#messageBundle').html(h + '</table>');
+	});
+}
+
+function onMessageEdit(code) {
+    messageService.selectByCode(function (r) {
+        onAddMessage();
+        $('#messageCode').val(code);
+        $.each(r.list, function (i, msg) {
+            $('#message_' + msg.languageCode).val(msg.value);
+        });
+    }, code);
+}
+
+function onMessageSave() {
+    var vo = {code : $('#messageCode').val() };
+    $.each(languages, function (i, lang) {
+        vo[lang.code] = $('#message_' + lang.code).val();
+    });
+    messageService.save(function (r) {
+        if (r.result == 'success') {
+            loadMessages();
+            $('#message-dialog').dialog('close');
+        }
+        else {
+            messageErrors(r.messages.list);
+        }
+    }, javaMap(vo));
+    
+}
+
+function onMessageCancel() {
+    $('#message-dialog').dialog('close');
+}
+
+function messageError(msg) {
+    $('#message-dialog .messages').html('<ul><li class="error-msg">' 
+            + msg + '</li></ul>');
+}
+
+function messageErrors(errors) {
+    var h = '<ul>';
+    $.each(errors, function (i, msg) {
+        h += '<li class="error-msg">' + msg + '</li>';
+    });
+    $('#message-dialog .messages').html(h + '</ul>');
 }
 
 </script>
@@ -224,84 +514,77 @@ function onLanguageEdit(id) {
     <li><a href="#tab-1">Site configuration</a></li>
     <li><a href="#tab-2">Comments</a></li>
     <li><a href="#tab-3">Languages</a></li>
+    <li><a href="#tab-4">Message bundles</a></li>
 </ul>
 
 <div id="tab-1">
-
-<div class="form-row">
-    <label>Google Analytics ID</label>
-    <input id="googleAnalyticsId" type="text" />
-</div>
-
-<div class="form-row">
-    <label>Site owner email</label>
-    <input id="siteEmail" type="text" />
-</div>
-
-<div class="form-row">
-    <label>Site domain</label>
-    <input id="siteDomain" type="text" />
-</div>
-
-<div class="form-row">
-    <label>Enable reCaptcha use on the site</label>
-    <input id="enableRecaptcha" type="checkbox" />
-</div>
-
-<div id="recaptcha">
-<div class="form-row">
-    <label>reCaptcha service public key</label>
-    <input id="recaptchaPublicKey" type="text" size="40"/>
-</div>
-<div class="form-row">
-    <label>reCaptcha service private key</label>
-    <input id="recaptchaPrivateKey" type="text" size="40"/>
-</div>
-</div>
-
-<div class="form-row">
-    <label>Editable resource files extensions</label>
-    <input id="editExt" type="text"/>
-</div>
-
-<div class="buttons">
-    <input type="button" value="Save" onclick="onSave()" />
-    <input type="button" value="Export" onclick="onExport()" />
-    <input type="button" value="Import" onclick="onImport()" />
-</div>
-
+    <div class="form-row">
+        <label>Google Analytics ID</label>
+        <input id="googleAnalyticsId" type="text" />
+    </div>
+    <div class="form-row">
+        <label>Site owner email</label>
+        <input id="siteEmail" type="text" />
+    </div>
+    <div class="form-row">
+        <label>Site domain</label>
+        <input id="siteDomain" type="text" />
+    </div>
+    <div class="form-row">
+        <label>Enable reCaptcha use on the site</label>
+        <input id="enableRecaptcha" type="checkbox" />
+    </div>
+    <div id="recaptcha">
+        <div class="form-row">
+            <label>reCaptcha service public key</label>
+            <input id="recaptchaPublicKey" type="text" size="40"/>
+        </div>
+        <div class="form-row">
+            <label>reCaptcha service private key</label>
+            <input id="recaptchaPrivateKey" type="text" size="40"/>
+        </div>
+    </div>
+    <div class="form-row">
+        <label>Editable resource files extensions</label>
+        <input id="editExt" type="text"/>
+    </div>
+    <div class="buttons">
+        <input type="button" value="Save" onclick="onSave()" />
+        <input type="button" value="Export" onclick="onExport()" />
+        <input type="button" value="Import" onclick="onImport()" />
+    </div>
 </div>
 
 <div id="tab-2">
-
-<div class="form-row">
-    <label>Comments notification email</label>
-    <input id="commentsEmail" type="text"/>
-</div>
-
-<div class="form-row">
-    <label>Comments template</label>
-    <textarea id="commentsTemplate" cols="80" rows="20"></textarea>
-</div>
-
-<div class="buttons">
-    <input type="button" value="Save" onclick="onSave()" />
-    <input type="button" value="Restore default" onclick="onRestore()" />
-</div>
-
+    <div class="form-row">
+        <label>Comments notification email</label>
+        <input id="commentsEmail" type="text"/>
+    </div>
+    <div class="form-row">
+        <label>Comments template</label>
+        <textarea id="commentsTemplate" cols="80" rows="20"></textarea>
+    </div>
+    <div class="buttons">
+        <input type="button" value="Save" onclick="onSave()" />
+        <input type="button" value="Restore default" onclick="onRestore()" />
+    </div>
 </div>
 
 <div id="tab-3">
-
-<div id="languages"> </div>
-
-<div class="buttons">
-    <input type="button" value="Add" onclick="onAddLanguage()" />
-    <input type="button" value="Remove" onclick="onRemoveLanguage()" />
+    <div id="languages"> </div>
+    <div class="buttons">
+        <input type="button" value="Add" onclick="onAddLanguage()" />
+        <input type="button" value="Remove" onclick="onRemoveLanguage()" />
+    </div>
 </div>
 
+<div id="tab-4">
+    <div id="messageBundle"> </div>
+    <div class="buttons">
+        <input type="button" value="Add" onclick="onAddMessage()" />
+        <input type="button" value="Remove" onclick="onRemoveMessage()" />
+    </div>
 </div>
-
 
 </div>
 
@@ -326,13 +609,24 @@ function onLanguageEdit(id) {
 
 <div id="language-dialog" style="display:none" title="Site language">
     <div class="messages"> </div>
+    <div id="languageSelection" style="padding-bottom: 10px;">
+        <input type="radio" name="select" checked="checked" 
+            onclick="onShowLanguageSelect(true)"/> Select from list
+        <input type="radio" name="select" onclick="onShowLanguageSelect(false)"/>
+            Not in the list
+    </div>        
+    <div id="listed-language">
+        <select id="selectLanguage" onchange="onSelectLanguageChange()"></select>
+    </div>
+    <div id="not-listed-language" style="display:none">
     <div class="form-row">
-        <label>Language <a href="http://www.loc.gov/standards/iso639-2/php/English_list.php">iso639-2</a> 3 letter code</label>
+        <label>Language <a href="http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt">iso639</a> 2 letter code</label>
         <input id="languageCode" type="text"/>
     </div>
     <div class="form-row">
         <label>Language title</label>
         <input id="languageTitle" type="text"/>
+    </div>
     </div>
     <div class="buttons-dlg">
         <input type="button" onclick="onLanguageSave()" value="Save" />
@@ -340,7 +634,18 @@ function onLanguageEdit(id) {
     </div>
 </div>
 
-
+<div id="message-dialog" style="display:none" title="Localized message">
+    <div class="messages"> </div>
+    <div class="form-row">
+        <label>Message code</label>
+        <input id="messageCode" type="text"/>
+    </div>
+    <div id="messagesInput"> </div>
+    <div class="buttons-dlg">
+        <input type="button" onclick="onMessageSave()" value="Save" />
+        <input type="button" onclick="onMessageCancel()" value="Cancel" />
+    </div>
+</div>
 
 </body>
 </html>

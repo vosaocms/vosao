@@ -34,8 +34,11 @@ public interface PageBusiness {
 	ConfigBusiness getConfigBusiness();
 	void setConfigBusiness(ConfigBusiness bean);
 	
-	TreeItemDecorator<PageEntity> getTree(final List<PageEntity> pages);
+	MessageBusiness getMessageBusiness();
+	void setMessageBusiness(MessageBusiness bean);
 	
+	TreeItemDecorator<PageEntity> getTree(final List<PageEntity> pages);
+		
 	TreeItemDecorator<PageEntity> getTree();
 
 	/**
@@ -46,7 +49,7 @@ public interface PageBusiness {
 	 */
 	String render(final PageEntity page, final String languageCode);
 	
-	VelocityContext createContext();
+	VelocityContext createContext(final String languageCode);
 	
 	List<String> validateBeforeUpdate(final PageEntity page);
 	

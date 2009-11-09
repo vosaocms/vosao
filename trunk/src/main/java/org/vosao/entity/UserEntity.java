@@ -125,4 +125,8 @@ public class UserEntity implements Serializable {
 		return false;
 	}
 	
+	public String getRoleString() {
+		return role.name();
+	}
+	
 }

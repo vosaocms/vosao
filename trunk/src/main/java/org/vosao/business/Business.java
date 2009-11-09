@@ -63,5 +63,8 @@ public interface Business {
 
 	MessageBusiness getMessageBusiness();
 	void setMessageBusiness(final MessageBusiness bean);
+
+	UserBusiness getUserBusiness();
+	void setUserBusiness(final UserBusiness bean);
 	
 }

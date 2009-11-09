@@ -21,7 +21,6 @@
 
 package org.vosao.service.back.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -58,16 +57,6 @@ public class UserServiceImpl extends AbstractServiceImpl
 		return getDao().getUserDao().getById(id);
 	}
 
-	private List<String> validate(UserEntity entity) {
-		List<String> errors = new ArrayList<String>();
-		UserEntity found = getDao().getUserDao().getByEmail(
-				entity.getEmail());
-		if (found != null && !found.getId().equals(entity.getId())) {
-				errors.add("This user email already registered.");
-		}
-		return errors;
-	}
-	
 	@Override
 	public ServiceResponse save(Map<String, String> vo) {
 		UserEntity user = null;
@@ -82,8 +71,9 @@ public class UserServiceImpl extends AbstractServiceImpl
 		if (!StringUtils.isEmpty(vo.get("password"))) {
 			user.setPassword(vo.get("password"));
 		}
-		user.setRole(UserRole.ADMIN);
-		List<String> errors = validate(user);
+		user.setRole(UserRole.valueOf(vo.get("role")));
+		List<String> errors = getBusiness().getUserBusiness()
+				.validateBeforeUpdate(user);
 		if (errors.isEmpty()) {
 			getDao().getUserDao().save(user);
 			return ServiceResponse.createSuccessResponse(

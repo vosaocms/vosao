@@ -129,6 +129,9 @@
     <bean id="messageBusiness" class="org.vosao.business.impl.MessageBusinessImpl"
         parent="abstractBusiness" />  
     
+    <bean id="userBusiness" class="org.vosao.business.impl.UserBusinessImpl"
+        parent="abstractBusiness" />  
+    
     <bean id="pageBusiness" class="org.vosao.business.impl.PageBusinessImpl"
         init-method="init" parent="abstractBusiness">
         <property name="configBusiness" ref="configBusiness"/>  
@@ -148,6 +151,7 @@
         <property name="commentBusiness" ref="commentBusiness"/>  
         <property name="fieldBusiness" ref="fieldBusiness"/>  
         <property name="messageBusiness" ref="messageBusiness"/>  
+        <property name="userBusiness" ref="userBusiness"/>  
     </bean>
 
     <!--========================== ImportExport =============================-->

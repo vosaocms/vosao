@@ -39,10 +39,7 @@
         class="org.vosao.dao.impl.AbstractDaoImpl">
         <property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>  
     </bean>
-    
-    <bean id="pageDao" class="org.vosao.dao.impl.PageDaoImpl"
-        parent="abstractDao" />  
-    
+      
     <bean id="fileDao" class="org.vosao.dao.impl.FileDaoImpl"
         parent="abstractDao" />  
     
@@ -67,6 +64,23 @@
     <bean id="fieldDao" class="org.vosao.dao.impl.FieldDaoImpl"
         parent="abstractDao" />  
 
+    <bean id="seoUrlDao" class="org.vosao.dao.impl.SeoUrlDaoImpl"
+        parent="abstractDao" />  
+
+    <bean id="languageDao" class="org.vosao.dao.impl.LanguageDaoImpl"
+        parent="abstractDao" />  
+
+    <bean id="contentDao" class="org.vosao.dao.impl.ContentDaoImpl"
+        parent="abstractDao" />  
+
+    <bean id="messageDao" class="org.vosao.dao.impl.MessageDaoImpl"
+        parent="abstractDao" />  
+    
+    <bean id="pageDao" class="org.vosao.dao.impl.PageDaoImpl"
+        parent="abstractDao">
+        <property name="contentDao" ref="contentDao"/>  
+    </bean>      
+
     <bean id="dao" class="org.vosao.dao.impl.DaoImpl">  
         <property name="pageDao" ref="pageDao"/>  
         <property name="fileDao" ref="fileDao"/>  
@@ -77,6 +91,10 @@
         <property name="formDao" ref="formDao"/>  
         <property name="fieldDao" ref="fieldDao"/>  
         <property name="commentDao" ref="commentDao"/>  
+        <property name="seoUrlDao" ref="seoUrlDao"/>  
+        <property name="languageDao" ref="languageDao"/>  
+        <property name="contentDao" ref="contentDao"/>  
+        <property name="messageDao" ref="messageDao"/>  
     </bean>
 
     <!--=========================== Business ================================-->
@@ -108,9 +126,16 @@
     <bean id="fieldBusiness" class="org.vosao.business.impl.FieldBusinessImpl"
         parent="abstractBusiness" />  
 
+    <bean id="messageBusiness" class="org.vosao.business.impl.MessageBusinessImpl"
+        parent="abstractBusiness" />  
+    
+    <bean id="userBusiness" class="org.vosao.business.impl.UserBusinessImpl"
+        parent="abstractBusiness" />  
+    
     <bean id="pageBusiness" class="org.vosao.business.impl.PageBusinessImpl"
         init-method="init" parent="abstractBusiness">
         <property name="configBusiness" ref="configBusiness"/>  
+        <property name="messageBusiness" ref="messageBusiness"/>  
     </bean>      
 
     <bean id="business" class="org.vosao.business.impl.BusinessImpl"
@@ -125,6 +150,8 @@
         <property name="fileBusiness" ref="fileBusiness"/>  
         <property name="commentBusiness" ref="commentBusiness"/>  
         <property name="fieldBusiness" ref="fieldBusiness"/>  
+        <property name="messageBusiness" ref="messageBusiness"/>  
+        <property name="userBusiness" ref="userBusiness"/>  
     </bean>
 
     <!--========================== ImportExport =============================-->
@@ -169,6 +196,18 @@
     <bean id="configService" class="org.vosao.service.back.impl.ConfigServiceImpl"
         parent="abstractService" />
 
+    <bean id="seoUrlService" class="org.vosao.service.back.impl.SeoUrlServiceImpl"
+        parent="abstractService" />
+
+    <bean id="userService" class="org.vosao.service.back.impl.UserServiceImpl"
+        parent="abstractService" />
+
+    <bean id="languageService" class="org.vosao.service.back.impl.LanguageServiceImpl"
+        parent="abstractService" />
+
+    <bean id="messageService" class="org.vosao.service.back.impl.MessageServiceImpl"
+        parent="abstractService" />
+
     <bean id="backService" class="org.vosao.service.impl.BackServiceImpl"
         init-method="init">  
         <property name="fileService" ref="fileService"/>  
@@ -179,6 +218,10 @@
         <property name="formService" ref="formService"/>  
         <property name="fieldService" ref="fieldService"/>  
         <property name="configService" ref="configService"/>  
+        <property name="seoUrlService" ref="seoUrlService"/>  
+        <property name="userService" ref="userService"/>  
+        <property name="languageService" ref="languageService"/>  
+        <property name="messageService" ref="messageService"/>  
     </bean>
 
     <!--================== JSON-RPC front services ==========================-->
@@ -189,10 +232,14 @@
     <bean id="formFrontService" class="org.vosao.service.front.impl.FormServiceImpl"
         parent="abstractService" />  
 
+    <bean id="commentFrontService" class="org.vosao.service.front.impl.CommentServiceImpl"
+        parent="abstractService" />  
+
     <bean id="frontService" class="org.vosao.service.impl.FrontServiceImpl"
         init-method="init">  
         <property name="loginService" ref="loginFrontService"/>  
         <property name="formService" ref="formFrontService"/>  
+        <property name="commentService" ref="commentFrontService"/>  
     </bean>
 
 </beans>

@@ -12,11 +12,13 @@
 var config = '';
 var language = null;
 var languages = null;
+var user = null;
 
 $(function(){
     $("#import-dialog").dialog({ width: 400, autoOpen: false });
     $("#language-dialog").dialog({ width: 400, autoOpen: false });
     $("#message-dialog").dialog({ width: 400, autoOpen: false });
+    $("#user-dialog").dialog({ width: 400, autoOpen: false });
     $("#tabs").tabs();
     $('#upload').ajaxForm(afterUpload);
     initJSONRpc(loadData);
@@ -27,6 +29,7 @@ $(function(){
 function loadData() {
     loadConfig();
 	loadLanguages();
+	loadUsers();
 }
 
 function toggleRecaptcha() {
@@ -113,6 +116,8 @@ function onRestore() {
         loadConfig();
     });
 }
+
+// Language
 
 function onAddLanguage() {
     language = null;
@@ -417,6 +422,8 @@ function onSelectLanguageChange() {
     $('#languageTitle').val(isoLanguages[code]);
 }
 
+// Message 
+
 function onAddMessage() {
     var h = '';
 	$.each(languages, function (i, lang) {
@@ -503,6 +510,123 @@ function messageErrors(errors) {
     $('#message-dialog .messages').html(h + '</ul>');
 }
 
+// User 
+
+function onAddUser() {
+    user = null;
+    initUserForm();
+    $('#user-dialog').dialog('open');
+}
+
+function onRemoveUser() {
+    var ids = [];
+    $('#users input:checked').each(function () {
+        ids.push(String(this.value));
+    });
+    userService.remove(function (r) {
+        info(r.message);
+        loadUsers();
+    }, javaList(ids));
+}
+
+function loadUsers() {
+    userService.select(function (r) {
+        var h = '<table class="form-table"><tr><td></td><td>Name</td><td>Email</td><td>Role</td></tr>';
+        $.each(r.list, function (i, user) {
+            h += '<tr><td><input type="checkbox" value="' + user.id 
+                + '"/></td><td>' + user.name + '</td><td>\
+                <a href="#" onclick="onUserEdit(' + user.id + ')">' 
+                + user.email + '</a></td><td>'
+                + getRole(user.roleString) + '</td></tr>';
+        });
+        $('#users').html(h + '</table>');
+    });
+}
+
+function getRole(role) {
+    return role == 'ADMIN' ? 'Administrator' : 'User';
+}
+
+function onUserEdit(id) {
+    userService.getById(function (r) {
+        user = r;
+        initUserForm();
+        $('#user-dialog').dialog('open');
+    }, id);
+}
+
+function initUserForm() {
+	if (user == null) {
+        $('#userName').val('');
+        $('#userEmail').val('');
+        $('#userRole').val('');
+	}
+	else {
+        $('#userName').val(user.name);
+        $('#userEmail').val(user.email);
+        $('#userRole').val(user.roleString);
+	}
+    $('#userPassword1').val('');
+    $('#userPassword2').val('');
+    $('#user-dialog .messages').html('');
+}
+
+function validateUser(vo) {
+    var errors = [];
+    if (vo.email == '') {
+        errors.push('Email is empty');
+    }
+    if (vo.password1 != vo.password2) {
+        errors.push('Passwords don\'t match');
+    }
+    return errors;
+}
+
+function onUserSave() {
+    var vo = {
+    	id : user != null ? String(user.id) : '',
+        name : $('#userName').val(),
+        email : $('#userEmail').val(),
+        role : $('#userRole').val(),
+        password : $('#userPassword1').val(),
+        password1 : $('#userPassword1').val(),
+        password2 : $('#userPassword2').val(),
+    };
+    var errors = validateUser(vo);
+    if (errors.length == 0) {
+        userService.save(function (r) {
+            if (r.result == 'success') {
+                $('#user-dialog').dialog('close');
+                info(r.message);
+                loadUsers();
+            }
+            else {
+                userErrors(r.messages.list);
+            }
+        }, javaMap(vo));
+    }
+    else {
+        userErrors(errors);
+    }
+}
+
+function onUserCancel() {
+    $('#user-dialog').dialog('close');
+}
+
+function userError(msg) {
+    $('#user-dialog .messages').html('<ul><li class="error-msg">' 
+            + msg + '</li></ul>');
+}
+
+function userErrors(errors) {
+    var h = '<ul>';
+    $.each(errors, function (i, msg) {
+        h += '<li class="error-msg">' + msg + '</li>';
+    });
+    $('#user-dialog .messages').html(h + '</ul>');
+}
+
 </script>
 
 </head>
@@ -514,7 +638,8 @@ function messageErrors(errors) {
     <li><a href="#tab-1">Site configuration</a></li>
     <li><a href="#tab-2">Comments</a></li>
     <li><a href="#tab-3">Languages</a></li>
-    <li><a href="#tab-4">Message bundles</a></li>
+    <li><a href="#tab-4">Message bundle</a></li>
+    <li><a href="#tab-5">Users</a></li>
 </ul>
 
 <div id="tab-1">
@@ -586,6 +711,14 @@ function messageErrors(errors) {
     </div>
 </div>
 
+<div id="tab-5">
+    <div id="users"> </div>
+    <div class="buttons">
+        <input type="button" value="Add" onclick="onAddUser()" />
+        <input type="button" value="Remove" onclick="onRemoveUser()" />
+    </div>
+</div>
+
 </div>
 
 <div id="import-dialog" title="Import site" style="display:none">
@@ -646,6 +779,38 @@ function messageErrors(errors) {
         <input type="button" onclick="onMessageCancel()" value="Cancel" />
     </div>
 </div>
+
+<div id="user-dialog" style="display:none" title="User details">
+    <div class="messages"> </div>
+    <div class="form-row">
+        <label>User name</label>
+        <input id="userName" type="text"/>
+    </div>
+    <div class="form-row">
+        <label>User email</label>
+        <input id="userEmail" type="text"/>
+    </div>
+    <div>
+        <label>User role</label>
+        <select id="userRole">
+            <option value="USER">User</option>
+            <option value="ADMIN">Administrator</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label>Password</label>
+        <input id="userPassword1" type="password"/>
+    </div>
+    <div class="form-row">
+        <label>Retype password</label>
+        <input id="userPassword2" type="password"/>
+    </div>
+    <div class="buttons-dlg">
+        <input type="button" onclick="onUserSave()" value="Save" />
+        <input type="button" onclick="onUserCancel()" value="Cancel" />
+    </div>
+</div>
+
 
 </body>
 </html>

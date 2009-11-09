@@ -13,24 +13,43 @@ var AUTOSAVE_TIMEOUT = 60;
 var ENGLISH_CODE = 'en';
 
 //************************** Utility functions *********************************
-function info(message) {
-	$("#wrapper .messages").html("<ul><li class=\"info-msg\">" + message 
-			+ "</li></ul>");
+
+function info(msg) {
+	infoMessage('#wrapper .messages', msg);
+    $('#wrapper .messages').fadeIn();
+    setTimeout(function() {
+    	$('#wrapper .messages').fadeOut();
+    }, 5000);
 }
 
-function addInfo(message) {
-	$("#wrapper .messages ul").append("<li class=\"info-msg\">" + message 
-			+ "</li>");
+function error(msg) {
+    errorMessage('#wrapper .messages', msg);	
+    $('#wrapper .messages').fadeIn();
+    setTimeout(function() {
+    	$('#wrapper .messages').fadeOut();
+    }, 5000);
 }
 
-function error(message) {
-	$("#wrapper .messages").html("<ul><li class=\"error-msg\">" + message 
-			+ "</li></ul>");
+function infoMessage(widget, msg) {
+	$(widget).html('<div class="ui-widget">\
+		<div class="ui-state-highlight ui-corner-all" style="padding: 0.5em 0.7em;margin: 4px;"><p>\
+		<span class="ui-icon ui-icon-info" style="float:left;margin-right:0.3em" />\
+		<strong>Hey!</strong> ' + msg + '</p></div></div>');
 }
 
-function addError(message) {
-	$("#wrapper .messages ul").append("<li class=\"error-msg\">" + message 
-			+ "</li>");
+function errorMessage(widget, msg) {
+	$(widget).html('<div class="ui-widget">\
+		<div class="ui-state-error ui-corner-all" style="padding: 0.5em 0.7em;margin: 4px;"><p>\
+		<span class="ui-icon ui-icon-alert" style="float:left;margin-right:0.3em" />\
+		<strong>Alert:</strong> ' + msg + '</p></div></div>');
+}
+
+function errorMessages(widget, errors) {
+    var msg = '';
+    $.each(errors, function (i, m) {
+        msg += (i == 0 ? '' : '<br />') + m;
+    });
+    errorMessage(widget, msg);
 }
 
 function backServiceFailed(e) {
@@ -45,13 +64,13 @@ function showServiceMessages(r) {
 	if (r.result == 'success') {
 		info(r.message);
 		if (r.messages.list.length > 0) {
-			$.each(r.messages.list, function(n,value) { addInfo(value) });
+			$.each(r.messages.list, function(n,value) { info(value) });
 		}
 	}
 	else {
 		error(r.message);
 		if (r.messages.list.length > 0) {
-			$.each(r.messages.list, function(n,value) { addError(value) });
+			$.each(r.messages.list, function(n,value) { error(value) });
 		}
 	}
 }

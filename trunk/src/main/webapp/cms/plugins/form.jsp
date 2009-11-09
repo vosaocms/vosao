@@ -35,7 +35,7 @@
             fieldService.getByForm(function(r, e) {
                 fields = r;
                 if (r.list.length > 0) {
-                    var h = '<table class="form-table">';
+                    var h = '<table class="form-table"><tr><th></th><th>Title</th><th>Name</th><th>Type</th></tr>';
                     for ( var i = 0; i < r.list.length; i++) {
                         var field = r.list[i];
                         h += 
@@ -48,6 +48,7 @@
                     }
                     h += '</table>';
                     $('#fieldsTable').html(h);
+                    $('#fieldsTable tr:even').addClass('even');
                 }
             }, formId);
         }
@@ -193,22 +194,15 @@
         }
 
         function fieldInfoMessage(message) {
-            $("#field-messages").html(
-                    "<ul><li class=\"info-msg\">" + message + "</li></ul>");
+            infoMessage('#field-messages', message);
         }
 
         function fieldErrorMessages(messages) {
-            var h = '<ul>';
-            for ( var i = 0; i < messages.length; i++) {
-                h += '<li class="error-msg">' + messages[i] + '</li>';
-            }
-            h += '</li>';
-            $("#field-messages").html(h);
+            errorMessages('#field-messages', messages);
         }
 
         function fieldErrorMessage(message) {
-            $("#field-messages").html(
-                    "<ul><li class=\"error-msg\">" + message + "</li></ul>");
+            errorMessage('#field-messages', message);
         }
 
         function clearFieldMessage() {
@@ -230,12 +224,15 @@
                 ids.push(this.value);
             });
             if (ids.length == 0) {
+                info('Nothing selected');
                 return;
             }
-            fieldService.remove(function() {
-                info(ids.length + ' fields was successfully deleted.');
-                loadFields();
-            }, javaList(ids));
+            if (confirm('Are you sure?')) {
+                fieldService.remove(function() {
+                    info(ids.length + ' fields was successfully deleted.');
+                    loadFields();
+                }, javaList(ids));
+            }
         }
 
         function onSaveAndAdd() {

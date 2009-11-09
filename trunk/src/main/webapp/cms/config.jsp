@@ -139,28 +139,24 @@ function onRemoveLanguage() {
         info('Nothing selected');
         return;
     }
-    languageService.remove(function (r) {
-        info(r.message);
-        loadLanguages();
-    }, javaList(ids));
+    if (confirm('Are you sure?')) {
+        languageService.remove(function (r) {
+            info(r.message);
+            loadLanguages();
+        }, javaList(ids));
+    }
 }
 
 function languageInfo(msg) {
-    $('#language-dialog .messages').html('<ul><li class="info-msg">' 
-            + msg + '</li></ul>');
+    infoMessage('#language-dialog .messages', msg);
 }
 
 function languageError(msg) {
-    $('#language-dialog .messages').html('<ul><li class="error-msg">' 
-    	    + msg + '</li></ul>');
+    errorMessage('#language-dialog .messages', msg);
 }
 
 function languageErrors(errors) {
-    var h = '<ul>';
-    $.each(errors, function (i, msg) {
-        h += '<li class="error-msg">' + msg + '</li>';
-    });
-    $('#language-dialog .messages').html(h + '</ul>');
+    errorMessages('#language-dialog .messages', errors);
 }
 
 function languageValidate(vo) {
@@ -204,7 +200,7 @@ function onLanguageCancel() {
 function loadLanguages() {
     languageService.select(function (r) {
         languages = r.list;
-        var h = '<table class="form-table"><tr><td></td><td>Code</td><td>Title</td></tr>';
+        var h = '<table class="form-table"><tr><th></th><th>Code</th><th>Title</th></tr>';
         $.each(r.list, function (i, lang) {
             h += '<tr><td><input type="checkbox" value="' + lang.id 
                 + '"/></td><td>' + lang.code + '</td><td>\
@@ -212,6 +208,7 @@ function loadLanguages() {
                 + '\')">' + lang.title + '</a></td></tr>';
         });
         $('#languages').html(h + '</table>');
+        $('#languages tr:even').addClass('even');
         loadMessages();
     });
 }
@@ -440,17 +437,23 @@ function onRemoveMessage() {
     $('#messageBundle input:checked').each(function () {
         codes.push(this.value);
     });
-    messageService.remove(function (r) {
-        info(r.message);
-        loadMessages();
-    }, javaList(codes));
+    if (codes.length == 0) {
+        info('Nothing selected');
+        return;
+    }
+    if (confirm('Are you sure?')) {
+        messageService.remove(function (r) {
+            info(r.message);
+            loadMessages();
+        }, javaList(codes));
+    }
 }
 
 function loadMessages() {
 	messageService.select(function (r) {
-        var h = '<table class="form-table"><tr><td><td>Code</td>';
+        var h = '<table class="form-table"><tr><th></th><th>Code</th>';
         $.each(languages, function (i, lang) {
-            h += '<td>' + lang.title + '</td>';
+            h += '<th>' + lang.title + '</th>';
         });
         h += '</tr>';
         $.each(r.list, function (i, msg) {
@@ -463,6 +466,7 @@ function loadMessages() {
             h += '</tr>';
         });
         $('#messageBundle').html(h + '</table>');
+        $('#messageBundle tr:even').addClass('even');
 	});
 }
 
@@ -498,16 +502,11 @@ function onMessageCancel() {
 }
 
 function messageError(msg) {
-    $('#message-dialog .messages').html('<ul><li class="error-msg">' 
-            + msg + '</li></ul>');
+    errorMessage('#message-dialog .messages', msg);
 }
 
 function messageErrors(errors) {
-    var h = '<ul>';
-    $.each(errors, function (i, msg) {
-        h += '<li class="error-msg">' + msg + '</li>';
-    });
-    $('#message-dialog .messages').html(h + '</ul>');
+	errorsMessages('#message-dialog .messages', errors);
 }
 
 // User 
@@ -523,15 +522,21 @@ function onRemoveUser() {
     $('#users input:checked').each(function () {
         ids.push(String(this.value));
     });
-    userService.remove(function (r) {
-        info(r.message);
-        loadUsers();
-    }, javaList(ids));
+    if (ids.length == 0) {
+        info('Nothing selected');
+        return;
+    }
+    if (confirm('Are you sure?')) {
+        userService.remove(function (r) {
+            info(r.message);
+            loadUsers();
+        }, javaList(ids));
+    }
 }
 
 function loadUsers() {
     userService.select(function (r) {
-        var h = '<table class="form-table"><tr><td></td><td>Name</td><td>Email</td><td>Role</td></tr>';
+        var h = '<table class="form-table"><tr><th></th><th>Name</th><th>Email</th><th>Role</th></tr>';
         $.each(r.list, function (i, user) {
             h += '<tr><td><input type="checkbox" value="' + user.id 
                 + '"/></td><td>' + user.name + '</td><td>\
@@ -540,6 +545,7 @@ function loadUsers() {
                 + getRole(user.roleString) + '</td></tr>';
         });
         $('#users').html(h + '</table>');
+        $('#users tr:even').addClass('even');
     });
 }
 
@@ -615,16 +621,11 @@ function onUserCancel() {
 }
 
 function userError(msg) {
-    $('#user-dialog .messages').html('<ul><li class="error-msg">' 
-            + msg + '</li></ul>');
+    errorMessage('#user-dialog .messages', msg);
 }
 
 function userErrors(errors) {
-    var h = '<ul>';
-    $.each(errors, function (i, msg) {
-        h += '<li class="error-msg">' + msg + '</li>';
-    });
-    $('#user-dialog .messages').html(h + '</ul>');
+    errorMessages('#user-dialog .messages', errors);
 }
 
 </script>

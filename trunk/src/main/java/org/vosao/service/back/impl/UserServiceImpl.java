@@ -21,6 +21,7 @@
 
 package org.vosao.service.back.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -46,8 +47,12 @@ public class UserServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public ServiceResponse remove(List<Long> ids) {
-		getDao().getUserDao().remove(ids);
+	public ServiceResponse remove(List<String> ids) {
+		List<Long> idList = new ArrayList<Long>();
+		for (String id : ids) {
+			idList.add(Long.valueOf(id));
+		}
+		getDao().getUserDao().remove(idList);
 		return ServiceResponse.createSuccessResponse(
 				"Users were successfully deleted");
 	}

@@ -20,8 +20,8 @@
     
     function loadForms() {
         formService.select(function (r) {
-            var html = '<table class="form-table"><tr><td></td><td>Title</td>\
-<td>Name</td><td>Email</td></tr>';
+            var html = '<table class="form-table"><tr><th></th><th>Title</th>\
+<th>Name</th><th>Email</th></tr>';
             $.each(r.list, function(i, form) {
                 html += '<tr><td><input type="checkbox" value="' + form.id
                     + '"/></td><td><a href="/cms/plugins/form.jsp?id=' + form.id 
@@ -29,6 +29,7 @@
                     + '</td><td>' + form.email + '</td></tr>';
             });
             $('#forms').html(html + '</table>');
+            $('#forms tr:even').addClass('even');
         });
     }
 
@@ -41,10 +42,16 @@
         $('#forms input:checked').each(function() {
             ids.push(this.value);
         });
-        formService.deleteForm(function (r) {
-            showServiceMessages(r);
-            loadForms();
-        }, javaList(ids));
+        if (ids.length == 0) {
+            info('Nothing selected');
+            return;
+        }
+        if (confirm('Are you sure?')) {
+            formService.deleteForm(function (r) {
+                showServiceMessages(r);
+                loadForms();
+            }, javaList(ids));
+        }
     }
 
     function loadFormConfig() {

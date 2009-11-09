@@ -17,6 +17,7 @@ var autosaveTimer = '';
     
 $(function(){
     initJSONRpc(loadTemplate);
+    $("#tabs").tabs();
 });
     
 function startAutosave() {
@@ -106,27 +107,34 @@ function onUpdate(cont) {
 </head>
 <body>
 
-<h1>Template</h1>
+<div id="tabs">
 
-<div class="form-row">
-    <label>Title</label>
-    <input id="title" type="text" />
-</div>
-<div class="form-row">
-    <label>URL name</label>
-    <input id="url" type="text" />
-</div>
-<div class="form-row">
-    <div>
-        <input id="autosave" type="checkbox" onchange="onAutosave()"> Autosave</input>
+<ul>
+    <li><a href="#tab-1">Template</a></li>
+</ul>
+
+<div id="tab-1">
+    <div class="form-row">
+        <label>Title</label>
+        <input id="title" type="text" />
     </div>
-    <textarea id="content" rows="20" cols="80"></textarea>
+    <div class="form-row">
+        <label>URL name</label>
+        <input id="url" type="text" />
+    </div>
+    <div class="form-row">
+        <div>
+            <input id="autosave" type="checkbox" onchange="onAutosave()"> Autosave</input>
+        </div>
+        <textarea id="content" rows="30" cols="120"></textarea>
+    </div>
+    <div class="buttons">
+        <input type="button" value="Save and continue" onclick="onUpdate(true)" />
+        <input type="button" value="Save" onclick="onUpdate(false)" />
+        <input type="button" value="Cancel" onclick="onCancel()" />
+    </div>
 </div>
 
-<div class="buttons">
-    <input type="button" value="Save and continue" onclick="onUpdate(true)" />
-    <input type="button" value="Save" onclick="onUpdate(false)" />
-    <input type="button" value="Cancel" onclick="onCancel()" />
 </div>
 
 </body>

@@ -13,6 +13,7 @@ $(function(){
     $("#import-dialog").dialog({ width: 400, autoOpen: false });
     $('#upload').ajaxForm(afterUpload);
     initJSONRpc(loadTemplates);
+    $("#tabs").tabs();
 });
 
 function afterUpload(data) {
@@ -44,13 +45,14 @@ function onAfterUploadOk() {
 
 function loadTemplates() {
     templateService.getTemplates(function (r) {
-        var html = '<table><tr><td></td><td>Title</td></tr>';
+        var html = '<table class="form-table"><tr><th></th><th>Title</th></tr>';
         $.each(r.list, function (n, value) {
             html += '<tr><td><input type="checkbox" value="' + value.id 
                 + '" /></td><td><a href="/cms/template.jsp?id=' + value.id
                 +'">' + value.title + '</a></td></tr>';
         });
         $('#templates').html(html + '</table>');
+        $('#templates tr:even').addClass('even');
     });
 }
 
@@ -67,10 +69,12 @@ function onDelete() {
         info('Nothing selected.');
         return;
     }
-    templateService.deleteTemplates(function(r) {
-        showServiceMessages(r);
-        loadTemapltes();
-    }, javaList(ids));
+    if (confirm('Are you sure?')) {
+        templateService.deleteTemplates(function(r) {
+            showServiceMessages(r);
+            loadTemapltes();
+        }, javaList(ids));
+    }
 }
 
 function onExport() {
@@ -104,13 +108,22 @@ function onExport() {
 </head>
 <body>
 
-<h1>Templates</h1>
-<div id="templates"><img src="/static/images/ajax-loader.gif" /></div>
-<div class="buttons">
-    <input type="button" value="Add" onclick="onAdd()" />
-    <input type="button" value="Delete" onclick="onDelete()" />
-    <input type="button" value="Export" onclick="onExport()" />
-    <input type="button" value="Import" onclick="onImport()" />
+<div id="tabs">
+
+<ul>
+    <li><a href="#tab-1">Templates</a></li>
+</ul>
+
+<div id="tab-1">
+    <div id="templates"><img src="/static/images/ajax-loader.gif" /></div>
+    <div class="buttons">
+        <input type="button" value="Add" onclick="onAdd()" />
+        <input type="button" value="Delete" onclick="onDelete()" />
+        <input type="button" value="Export" onclick="onExport()" />
+        <input type="button" value="Import" onclick="onImport()" />
+    </div>
+</div>
+
 </div>
 
 <div id="import-dialog" title="Import themes" style="display:none">

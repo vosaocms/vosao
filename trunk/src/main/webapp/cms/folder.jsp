@@ -105,15 +105,17 @@ function onDeleteFiles() {
         info('Nothing selected.');
         return;
     }
-    fileService.deleteFiles(function (r) {
-        if (r.result == "success") {
-            loadFiles();
-            info("Files was successfully deleted.");
-        }
-        else {
-            error("Error during deleting files. " + r.messsage);
-        }
-    }, ids);
+    if (confirm('Are you sure?')) {
+        fileService.deleteFiles(function (r) {
+            if (r.result == "success") {
+                loadFiles();
+                info("Files was successfully deleted.");
+                }
+            else {
+                error("Error during deleting files. " + r.messsage);
+                        }
+        }, ids);
+    }
 }
 
 function onCreateFile() {
@@ -134,13 +136,14 @@ function loadChildren() {
 	}
 	folderService.getByParent(function (r) {
 		var html = '<table class="form-table">\
-<tr><td></td>Title<td></td><td>Name</td></tr>';
+<tr><th></th><th>Title</th><th>Name</th></tr>';
         $.each(r.list, function (i, child) {
             html += '<tr><td><input type="checkbox" value="' + child.id
                 + '"/></td><td><a href="/cms/folder.jsp?id=' + child.id 
                 + '">' + child.title + '</td><td>' + child.name + '</td></tr>';
         });
         $('#children').html(html + '</table>');
+        $('#children tr:even').addClass('even');
 	}, folderId);
 }
 
@@ -182,15 +185,17 @@ function onDelete() {
         info('Nothing selected.');
         return;
     }
-    folderService.deleteFolder(function (r) {
-        if (r.result == "success") {
-            loadChildren();
-            info("Folders was successfully deleted.");
-        }
-        else {
-            error("Error during deleting folders. " + r.messsage);
-        }
-    }, ids);
+    if (confirm('Are you sure?')) {
+        folderService.deleteFolder(function (r) {
+            if (r.result == "success") {
+                loadChildren();
+                info("Folders was successfully deleted.");
+            }
+            else {
+                error("Error during deleting folders. " + r.messsage);
+            }
+        }, ids);
+    }
 }
 
 // -->

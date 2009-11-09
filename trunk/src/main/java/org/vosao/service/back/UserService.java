@@ -37,7 +37,7 @@ public interface UserService extends AbstractService {
 	
 	List<UserEntity> select();
 
-	ServiceResponse remove(final List<Long> ids);
+	ServiceResponse remove(final List<String> ids);
 
 	UserEntity getById(final Long id);
 	

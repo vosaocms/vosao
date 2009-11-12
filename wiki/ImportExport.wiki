@@ -29,7 +29,7 @@ Zip archive with following structure:
  |- page /- any_other_page_files_and_folders
 }}}
 
-content.xml
+content.xml [http://code.google.com/p/vosao/source/browse/trunk/src/main/webapp/WEB-INF/dtd/content.dtd dtd]
 {{{
 <site>
   <config>
@@ -70,7 +70,7 @@ content.xml
 </site>
 }}}
 
-description.xml
+description.xml [http://code.google.com/p/vosao/source/browse/trunk/src/main/webapp/WEB-INF/dtd/template.dtd dtd]
 {{{
 <theme>
   <title>My first theme</title>

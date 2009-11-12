@@ -31,7 +31,7 @@ public class PageEntityTest extends TestCase {
 		assertEquals("", page.getParentFriendlyURL());
 		assertEquals("", page.getPageFriendlyURL());
 		page.setFriendlyURL("/rent");
-		assertEquals("", page.getParentFriendlyURL());
+		assertEquals("/", page.getParentFriendlyURL());
 		assertEquals("rent", page.getPageFriendlyURL());
 		page.setFriendlyURL("/parent/page");
 		assertEquals("/parent", page.getParentFriendlyURL());

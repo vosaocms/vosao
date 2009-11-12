@@ -30,7 +30,7 @@ import org.vosao.entity.PageEntity;
 public class CommentDaoTest extends AbstractDaoTest {
 
 	private PageEntity addPage(final String name) {
-		PageEntity page = new PageEntity(name, name, "/" + name, null);
+		PageEntity page = new PageEntity(name, "/" + name);
 		getDao().getPageDao().save(page);
 		return page;
 	}
@@ -38,7 +38,7 @@ public class CommentDaoTest extends AbstractDaoTest {
 	private CommentEntity addComment(final String name, final String content, 
 			final PageEntity page) {
 		CommentEntity comment = new CommentEntity(name, content, new Date(), 
-				page.getId());
+				page.getFriendlyURL());
 		getDao().getCommentDao().save(comment);
 		return comment;
 	}
@@ -46,14 +46,13 @@ public class CommentDaoTest extends AbstractDaoTest {
 	private CommentEntity addComment(final String name, final String content, 
 			final PageEntity page, final boolean disabled) {
 		CommentEntity comment = new CommentEntity(name, content, new Date(), 
-				page.getId());
+				page.getFriendlyURL());
 		comment.setDisabled(disabled);
 		getDao().getCommentDao().save(comment);
 		return comment;
 	}
 	
 	public void testSave() {
-		
 		PageEntity page = addPage("test");
 		CommentEntity comment = addComment("alex", "content", page);
 		CommentEntity comment2 = getDao().getCommentDao().getById(
@@ -87,10 +86,10 @@ public class CommentDaoTest extends AbstractDaoTest {
 		CommentEntity comment = addComment("roma", "content3", page);
 		getDao().getCommentDao().remove(comment.getId());
 		List<CommentEntity> list = getDao().getCommentDao().getByPage(
-				page.getId());
+				page.getFriendlyURL());
 		assertEquals(1, list.size());
 		assertEquals("alex", list.get(0).getName());
-		list = getDao().getCommentDao().getByPage(page2.getId());
+		list = getDao().getCommentDao().getByPage(page2.getFriendlyURL());
 		assertEquals(1, list.size());
 	}
 	
@@ -101,9 +100,9 @@ public class CommentDaoTest extends AbstractDaoTest {
 		addComment("yuri", "content2", page2);
 		addComment("roma", "content3", page);
 		List<CommentEntity> list = getDao().getCommentDao().getByPage(
-				page.getId());
+				page.getFriendlyURL());
 		assertEquals(2, list.size());
-		list = getDao().getCommentDao().getByPage(page2.getId());
+		list = getDao().getCommentDao().getByPage(page2.getFriendlyURL());
 		assertEquals(1, list.size());
 	}	
 	
@@ -117,9 +116,9 @@ public class CommentDaoTest extends AbstractDaoTest {
 		addComment("roma2", "content5", page2, true);
 		addComment("roma3", "content6", page, true);
 		List<CommentEntity> list = getDao().getCommentDao().getByPage(
-				page.getId(), false);
+				page.getFriendlyURL(), false);
 		assertEquals(2, list.size());
-		list = getDao().getCommentDao().getByPage(page2.getId(), false);
+		list = getDao().getCommentDao().getByPage(page2.getFriendlyURL(), false);
 		assertEquals(1, list.size());
 	}	
 	

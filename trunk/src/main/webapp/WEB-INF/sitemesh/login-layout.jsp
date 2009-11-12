@@ -42,6 +42,7 @@
     <script src="/static/js/jsonrpc.js" language="javascript"></script>
     <script src="/static/js/vosao.js" language="javascript"></script>
     <script src="/static/js/cms.js" language="javascript"></script>
+    <script src="/static/js/back-services.js" language="javascript"></script>
 
     <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
 

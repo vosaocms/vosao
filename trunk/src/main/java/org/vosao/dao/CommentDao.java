@@ -31,9 +31,9 @@ public interface CommentDao extends AbstractDao {
 	
 	CommentEntity getById(final String id);
 
-	List<CommentEntity> getByPage(final String pageId);
+	List<CommentEntity> getByPage(final String pageUrl);
 
-	List<CommentEntity> getByPage(final String pageId, boolean disabled);
+	List<CommentEntity> getByPage(final String pageUrl, boolean disabled);
 
 	void remove(final String id);
 	

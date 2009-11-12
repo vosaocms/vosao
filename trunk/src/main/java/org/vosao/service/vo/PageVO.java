@@ -63,8 +63,8 @@ public class PageVO {
 		return page.getParentFriendlyURL();
 	}
 
-	public String getParent() {
-		return page.getParent();
+	public String getParentUrl() {
+		return page.getParentUrl();
 	}
 
 	public String getTemplate() {
@@ -77,6 +77,35 @@ public class PageVO {
 	
 	public boolean isCommentEnabled() {
 		return page.isCommentsEnabled();
+	}
+	
+	public Integer getVersion() {
+		return page.getVersion();
+	}
+
+	public String getVersionTitle() {
+		return page.getVersionTitle();
+	}
+
+	public String getState() {
+		return page.getState().name();
+	}
+	
+	public String getCreateUserId() {
+		return page.getCreateUserId() != null ? 
+				page.getCreateUserId().toString() : "";
+	}
+	
+	public String getCreateDate() {
+		return DateUtil.dateTimeToString(page.getCreateDate());
+	}
+
+	public String getModUserId() {
+		return page.getModUserId()!= null ? page.getModUserId().toString() : "";
+	}
+	
+	public String getModDate() {
+		return DateUtil.dateTimeToString(page.getModDate());
 	}
 	
 }

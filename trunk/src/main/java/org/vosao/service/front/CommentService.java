@@ -32,7 +32,7 @@ import org.vosao.service.vo.CommentVO;
 
 public interface CommentService extends AbstractService {
 	
-	List<CommentVO> getByPage(final String pageId);
+	List<CommentVO> getByPage(final String pageUrl);
 
 	/**
 	 * Add comment to page. Protected by reCaptcha service.
@@ -44,7 +44,7 @@ public interface CommentService extends AbstractService {
 	 */
 	ServiceResponse addComment(final String name, 
 			final String comment, 
-			final String pageId,
+			final String pageUrl,
 			final String challenge, 
 			final String response, 
 			HttpServletRequest request);

@@ -21,37 +21,27 @@
 
 package org.vosao.service.back.impl;
 
-import java.util.Collections;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import net.tanesha.recaptcha.ReCaptchaResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vosao.entity.ConfigEntity;
-import org.vosao.entity.PageEntity;
-import org.vosao.service.ServiceException;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.CommentService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.CommentVO;
-import org.vosao.utils.RecaptchaUtil;
 
+/**
+ * @author Alexander Oleynik
+ */
 public class CommentServiceImpl extends AbstractServiceImpl 
 		implements CommentService {
 
 	private static Log logger = LogFactory.getLog(CommentServiceImpl.class);
 	
 	@Override
-	public List<CommentVO> getByPage(String pageId) {
-		PageEntity page = getDao().getPageDao().getById(pageId);
-		if (page != null) {
-			return CommentVO.create( 
-			    getDao().getCommentDao().getByPage(pageId, false));
-		}
-		return Collections.emptyList();
+	public List<CommentVO> getByPage(String pageUrl) {
+		return CommentVO.create(getDao().getCommentDao()
+				.getByPage(pageUrl, false));
 	}
 
 	@Override

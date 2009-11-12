@@ -51,8 +51,8 @@ public class CommentVO {
 		return comment.getId();
 	}
 
-	public String getPageId() {
-		return comment.getPageId();
+	public String getPageUrl() {
+		return comment.getPageUrl();
 	}
 
 	public String getName() {

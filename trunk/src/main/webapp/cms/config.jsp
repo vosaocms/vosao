@@ -40,7 +40,7 @@ $(function(){
     $("#import-dialog").dialog({ width: 400, autoOpen: false });
     $("#language-dialog").dialog({ width: 400, autoOpen: false });
     $("#message-dialog").dialog({ width: 400, autoOpen: false });
-    $("#user-dialog").dialog({ width: 400, autoOpen: false });
+    $("#user-dialog").dialog({ width: 460, autoOpen: false });
     $("#tabs").tabs();
     $('#upload').ajaxForm(afterUpload);
     initJSONRpc(loadData);

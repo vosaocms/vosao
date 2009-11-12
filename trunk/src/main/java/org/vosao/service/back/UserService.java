@@ -29,13 +29,14 @@ import javax.servlet.http.HttpServletRequest;
 import org.vosao.entity.UserEntity;
 import org.vosao.service.AbstractService;
 import org.vosao.service.ServiceResponse;
+import org.vosao.service.vo.UserVO;
 
 /**
  * @author Alexander Oleynik
  */
 public interface UserService extends AbstractService {
 	
-	List<UserEntity> select();
+	List<UserVO> select();
 
 	ServiceResponse remove(final List<String> ids);
 

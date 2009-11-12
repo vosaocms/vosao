@@ -94,13 +94,13 @@ public class CommentDaoImpl extends AbstractDaoImpl implements CommentDao {
 	}
 
 	@Override
-	public List<CommentEntity> getByPage(final String pageId) {
+	public List<CommentEntity> getByPage(final String pageUrl) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			String query = "select from " + CommentEntity.class.getName()
-			    + " where pageId == pPageId parameters String pPageId";
+			    + " where pageUrl == pPageUrl parameters String pPageUrl";
 			List<CommentEntity> result = (List<CommentEntity>)pm.newQuery(query)
-				.execute(pageId);
+				.execute(pageUrl);
 			return copy(result);
 		}
 		finally {
@@ -153,14 +153,14 @@ public class CommentDaoImpl extends AbstractDaoImpl implements CommentDao {
 	}
 
 	@Override
-	public List<CommentEntity> getByPage(String pageId, boolean disabled) {
+	public List<CommentEntity> getByPage(String pageUrl, boolean disabled) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			String query = "select from " + CommentEntity.class.getName()
-			    + " where pageId == pPageId && disabled == pDisabled"
-			    + " parameters String pPageId, boolean pDisabled";
+			    + " where pageUrl == pPageUrl && disabled == pDisabled"
+			    + " parameters String pPageUrl, boolean pDisabled";
 			List<CommentEntity> result = (List<CommentEntity>)pm.newQuery(query)
-				.execute(pageId, disabled);
+				.execute(pageUrl, disabled);
 			return copy(result);
 		}
 		finally {

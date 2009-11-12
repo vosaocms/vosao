@@ -44,6 +44,7 @@ import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.entity.UserEntity;
+import org.vosao.enums.PageState;
 import org.vosao.enums.UserRole;
 import org.vosao.utils.StreamUtil;
 
@@ -114,12 +115,14 @@ public class SetupBeanImpl implements SetupBean {
 	}
 
 	private void initPages() {
-		List<PageEntity> roots = getDao().getPageDao().getByParent(null);
+		List<PageEntity> roots = getDao().getPageDao().getByParent("");
 		if (roots.size() == 0) {
 			String content = loadResource("org/vosao/resources/html/root.html");
 			TemplateEntity template = getDao().getTemplateDao().getByUrl("simple");
-			PageEntity root = new PageEntity("root", "/", null,	
-					template.getId());
+			PageEntity root = new PageEntity("root", "/", template.getId());
+			root.setCreateUserId(1L);
+			root.setModUserId(1L);
+			root.setState(PageState.APPROVED);
 			getDao().getPageDao().save(root);
 			getDao().getPageDao().setContent(root.getId(), 
 					LanguageEntity.ENGLISH_CODE, content);

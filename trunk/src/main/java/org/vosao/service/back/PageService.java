@@ -24,6 +24,8 @@ package org.vosao.service.back;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
@@ -34,7 +36,7 @@ import org.vosao.service.vo.PageVO;
 public interface PageService extends AbstractService {
 	
 	ServiceResponse updateContent(final String pageId, final String content,
-			String languageCode);
+			String languageCode, HttpServletRequest request);
 	
 	List<ContentEntity> getContents(final String pageId);
 	
@@ -42,10 +44,25 @@ public interface PageService extends AbstractService {
 	
 	PageEntity getPage(final String id);
 	
-	ServiceResponse savePage(final Map<String, String> page);
+	PageEntity getPageByUrl(final String url);
+
+	ServiceResponse savePage(final Map<String, String> page, 
+			HttpServletRequest request);
 	
 	List<PageVO> getChildren(final String id);
 	
 	ServiceResponse deletePages(final List<String> ids);
+
+	List<PageVO> getPageVersions(final String url);
+	
+	/**
+	 * Add page next version by copying last version content.
+	 * @param url - friendly url.
+	 * @return - service response
+	 */
+	String addVersion(final String url, final String versionTitle, 
+			HttpServletRequest request);
+	
+	ServiceResponse approve(final String pageId);
 	
 }

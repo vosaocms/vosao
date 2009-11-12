@@ -21,7 +21,6 @@
 
 package org.vosao.service.front.impl;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,24 +38,23 @@ import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.CommentVO;
 import org.vosao.utils.RecaptchaUtil;
 
+/**
+ * @author Alexander Oleynik
+ */
 public class CommentServiceImpl extends AbstractServiceImpl 
 		implements CommentService {
 
 	private static Log logger = LogFactory.getLog(CommentServiceImpl.class);
 	
 	@Override
-	public List<CommentVO> getByPage(String pageId) {
-		PageEntity page = getDao().getPageDao().getById(pageId);
-		if (page != null) {
-			return CommentVO.create( 
-			    getDao().getCommentDao().getByPage(pageId, false));
-		}
-		return Collections.emptyList();
+	public List<CommentVO> getByPage(String pageUrl) {
+		return CommentVO.create(getDao().getCommentDao()
+				.getByPage(pageUrl, false));
 	}
 
 	@Override
 	public ServiceResponse addComment(String name, String comment,
-			String pageId, String challenge, String response,
+			String pageUrl, String challenge, String response,
 			HttpServletRequest request) {
 		
 		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
@@ -71,7 +69,7 @@ public class CommentServiceImpl extends AbstractServiceImpl
 		}
 		if (valid) {
         	try {
-        		addComment(name, comment, pageId);
+        		addComment(name, comment, pageUrl);
                 return ServiceResponse.createSuccessResponse(
                 		"Comment was successfully created.");
         	}
@@ -85,11 +83,11 @@ public class CommentServiceImpl extends AbstractServiceImpl
         }
 	}
 	
-	private void addComment(String name, String content, String pageId) 
+	private void addComment(String name, String content, String pageUrl) 
 			throws ServiceException {
-		PageEntity page = getDao().getPageDao().getById(pageId);
+		PageEntity page = getDao().getPageDao().getByUrl(pageUrl);
 		if (page == null) {
-			throw new ServiceException("Page not found. id = " + pageId);
+			throw new ServiceException("Page not found. id = " + pageUrl);
 		}
 		getBusiness().getCommentBusiness().addComment(name, content, page);
 	}

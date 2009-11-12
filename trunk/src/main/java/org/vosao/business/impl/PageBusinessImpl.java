@@ -22,6 +22,7 @@
 package org.vosao.business.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,8 @@ import org.vosao.entity.ContentEntity;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
+import org.vosao.entity.UserEntity;
+import org.vosao.enums.PageState;
 import org.vosao.filter.SiteFilter;
 import org.vosao.velocity.VelocityPluginService;
 import org.vosao.velocity.VelocityService;
@@ -72,17 +75,18 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		Map<String, TreeItemDecorator<PageEntity>> buf = 
 				new HashMap<String, TreeItemDecorator<PageEntity>>();
 		for (PageEntity page : pages) {
-			buf.put(page.getId(), new TreeItemDecorator<PageEntity>(page, null));
+			buf.put(page.getFriendlyURL(), 
+					new TreeItemDecorator<PageEntity>(page, null));
 		}
 		TreeItemDecorator<PageEntity> root = null;
 		for (String id : buf.keySet()) {
 			TreeItemDecorator<PageEntity> page = buf.get(id);
-			if (page.getEntity().getParent() == null) {
+			if (StringUtils.isEmpty(page.getEntity().getParentUrl())) {
 				root = page;
 			}
 			else {
 				TreeItemDecorator<PageEntity> parent = buf.get(page.getEntity()
-						.getParent());
+						.getParentUrl());
 				if (parent != null) {
 					parent.getChildren().add(page);
 					page.setParent(parent);
@@ -217,4 +221,28 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		return content;
 	}
 
+	@Override
+	public PageEntity addVersion(PageEntity oldPage, final Integer version, 
+			final String versionTitle, final UserEntity user) {
+		PageEntity page = new PageEntity();
+		page.copy(oldPage);
+		page.setState(PageState.EDIT);
+		page.setVersion(version);
+		page.setVersionTitle(versionTitle);
+		Date dt = new Date();
+		page.setCreateDate(dt);
+		page.setCreateUserId(user.getId());
+		page.setModDate(dt);
+		page.setModUserId(user.getId());
+		getDao().getPageDao().save(page);
+		List<ContentEntity> contents = getDao().getPageDao().getContents(
+				oldPage.getId());
+		for (ContentEntity content : contents) {
+			getDao().getPageDao().setContent(page.getId(), 
+					content.getLanguageCode(), content.getContent());
+		}
+		return page;
+	}
+
 }
+

@@ -43,9 +43,10 @@
     }
 
     function renderPage(vo) {
-        var html = '<li><a href="page.jsp?id=' + vo.entity.id + '">' 
+        var pageUrl = encodeURIComponent(vo.entity.friendlyURL);
+    	var html = '<li><a href="page.jsp?id=' + vo.entity.id + '">' 
             + vo.entity.title + '</a> <a title="Add child" href="page.jsp?parent=' 
-            + vo.entity.id + '">+</a>';
+            + pageUrl + '">+</a>';
         if (vo.children.list.length > 0) {
             html += '<ul>';
             $.each(vo.children.list, function(n, value) {

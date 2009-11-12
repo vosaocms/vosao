@@ -63,8 +63,8 @@ content.xml [http://code.google.com/p/vosao/source/browse/trunk/src/main/webapp/
       <letterTemplate> lalalala </letterTemplate>
     </form-config>
     <form name="test" title="Test form" email="alex@kin.com" letterSubject="test form letter" enableCaptcha="false">
-      <field name="name" title="Name" fieldType="TEXT" optional="false" height="1" width="20" />
-      <field name="resume" title="Resume" fieldType="FILE" optional="false" height="1" width="20" />
+      <field name="name" title="Name" fieldType="TEXT" mandatory="false" height="1" width="20" />
+      <field name="resume" title="Resume" fieldType="FILE" mandatory="false" height="1" width="20" />
     </form> 
   </forms>
 </site>

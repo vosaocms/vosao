@@ -18,24 +18,8 @@
  *
  * email: vosao.dev@gmail.com
  */
+package org.vosao.enums;
 
-package org.vosao.service.back;
-
-import java.util.List;
-
-import org.vosao.service.AbstractService;
-import org.vosao.service.ServiceResponse;
-import org.vosao.service.vo.CommentVO;
-
-
-public interface CommentService extends AbstractService {
-	
-	List<CommentVO> getByPage(final String pageUrl);
-
-	ServiceResponse enableComments(final List<String> ids);
-
-	ServiceResponse disableComments(final List<String> ids);
-	
-	ServiceResponse deleteComments(final List<String> ids);
-	
+public enum PageState {
+	EDIT, APPROVED;
 }

@@ -33,6 +33,6 @@ public interface VelocityService {
 	
 	List<PageEntity> findPageChildren(final String path);
 
-	List<CommentVO> getCommentsByPage(final String pageId);
+	List<CommentVO> getCommentsByPage(final String pageUrl);
 	
 }

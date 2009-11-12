@@ -27,6 +27,7 @@ import org.apache.velocity.VelocityContext;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.UserEntity;
 
 
 public interface PageBusiness {
@@ -55,5 +56,12 @@ public interface PageBusiness {
 	
 	ContentEntity getPageContent(final PageEntity page, 
 			final String languageCode);
+	
+	/**
+	 * Add new version of specified page.
+	 * @param oldPage - page to create version from.
+	 */
+	PageEntity addVersion(final PageEntity oldPage, final Integer version, 
+			final String versionTitle, final UserEntity user);
 	
 }

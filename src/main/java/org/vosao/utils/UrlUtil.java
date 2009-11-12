@@ -19,23 +19,34 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service.back;
+package org.vosao.utils;
 
-import java.util.List;
+/**
+ * @author Alexander Oleynik
+ */
+public class UrlUtil {
 
-import org.vosao.service.AbstractService;
-import org.vosao.service.ServiceResponse;
-import org.vosao.service.vo.CommentVO;
+	static public String getParentFriendlyURL(final String friendlyUrl) {
+		if (friendlyUrl == null || friendlyUrl.equals("/")) {
+			return "";
+		}
+		int lastSlash = friendlyUrl.lastIndexOf('/');
+		if (lastSlash == 0 || lastSlash == -1) {
+			return "/";
+		}
+		return friendlyUrl.substring(0, lastSlash);
+	}
 
-
-public interface CommentService extends AbstractService {
+	static public String getPageFriendlyURL(final String friendlyUrl) {
+		if (friendlyUrl == null || friendlyUrl.equals("/")) {
+			return "";
+		}
+		int lastSlash = friendlyUrl.lastIndexOf('/');
+		if (lastSlash == -1) {
+			return "";
+		}
+		return friendlyUrl.substring(lastSlash + 1, friendlyUrl.length());
+	}
 	
-	List<CommentVO> getByPage(final String pageUrl);
-
-	ServiceResponse enableComments(final List<String> ids);
-
-	ServiceResponse disableComments(final List<String> ids);
-	
-	ServiceResponse deleteComments(final List<String> ids);
 	
 }

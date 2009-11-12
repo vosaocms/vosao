@@ -19,23 +19,46 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service.back;
+package org.vosao.service.vo;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.vosao.service.AbstractService;
-import org.vosao.service.ServiceResponse;
-import org.vosao.service.vo.CommentVO;
+import org.vosao.entity.UserEntity;
 
+/**
+ * Value object to be returned from services.
+ * @author Alexander Oleynik
+ */
+public class UserVO {
 
-public interface CommentService extends AbstractService {
+    private UserEntity user;
+
+	public UserVO(final UserEntity entity) {
+		user = entity;
+	}
+
+	public static List<UserVO> create(List<UserEntity> list) {
+		List<UserVO> result = new ArrayList<UserVO>();
+		for (UserEntity User : list) {
+			result.add(new UserVO(User));
+		}
+		return result;
+	}
+
+	public String getId() {
+		return user.getId().toString();
+	}
+
+	public String getName() {
+		return user.getName();
+	}
+
+	public String getEmail() {
+		return user.getEmail();
+	}
 	
-	List<CommentVO> getByPage(final String pageUrl);
-
-	ServiceResponse enableComments(final List<String> ids);
-
-	ServiceResponse disableComments(final List<String> ids);
-	
-	ServiceResponse deleteComments(final List<String> ids);
-	
+	public String getRole() {
+		return user.getRole().name();
+	}
 }

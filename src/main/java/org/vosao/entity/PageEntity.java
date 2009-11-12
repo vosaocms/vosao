@@ -31,7 +31,9 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import org.vosao.enums.PageState;
 import org.vosao.utils.DateUtil;
+import org.vosao.utils.UrlUtil;
 
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
@@ -51,8 +53,8 @@ public class PageEntity implements Serializable {
 	private String friendlyURL;
 	
 	@Persistent
-	private String parent;
-	
+	private String parentUrl;
+
 	@Persistent
 	private String template;
 	
@@ -61,38 +63,68 @@ public class PageEntity implements Serializable {
 	
 	@Persistent
 	private boolean commentsEnabled;
+
+	@Persistent
+	private Integer version;
 	
+	@Persistent
+	private String versionTitle;
+
+	@Persistent
+	private PageState state;
+	
+	@Persistent
+	private Long createUserId;
+	
+	@Persistent
+	private Date createDate;
+	
+	@Persistent
+	private Long modUserId;
+	
+	@Persistent
+	private Date modDate;
 	
 	public PageEntity() {
 		publishDate = new Date();
+		state = PageState.EDIT;
+		version = 1;
+		versionTitle = "New page";
+		createDate = new Date();
+		modDate = createDate;
 	}
 	
-	public PageEntity(String title, String friendlyURL, String aParent, 
+	public PageEntity(String title, String friendlyURL, 
 			String aTemplate, Date publish) {
-		this(title, friendlyURL, aParent, aTemplate);
+		this(title, friendlyURL, aTemplate);
 		publishDate = publish;
 	}
 
-	public PageEntity(String title, String friendlyURL, String aParent, 
+	public PageEntity(String title, String friendlyURL,  
 			String aTemplate) {
-		this(title, friendlyURL, aParent);
+		this(title, friendlyURL);
 		template = aTemplate;
 	}
 
-	public PageEntity(String title, String friendlyURL, String aParent) {
+	public PageEntity(String aTitle, String aFriendlyURL) {
 		this();
-		this.title = title;
-		this.friendlyURL = friendlyURL;
-		this.parent = aParent;
+		title = aTitle;
+		setFriendlyURL(aFriendlyURL);
 	}
 	
 	public void copy(final PageEntity entity) {
 		setTitle(entity.getTitle());
 		setFriendlyURL(entity.getFriendlyURL());
-		setParent(entity.getParent());
 		setTemplate(entity.getTemplate());
 		setPublishDate(entity.getPublishDate());
 		setCommentsEnabled(entity.isCommentsEnabled());
+		setVersion(entity.getVersion());
+		setVersionTitle(entity.getVersionTitle());
+		setState(entity.getState());
+		setCreateDate(entity.getCreateDate());
+		setCreateUserId(entity.getCreateUserId());
+		setModDate(entity.getModDate());
+		setModUserId(entity.getModUserId());
 	}
 	
 	public String getId() {
@@ -115,16 +147,9 @@ public class PageEntity implements Serializable {
 		return friendlyURL;
 	}
 	
-	public void setFriendlyURL(String friendlyURL) {
-		this.friendlyURL = friendlyURL;
-	}
-
-	public String getParent() {
-		return parent;
-	}
-
-	public void setParent(String parent) {
-		this.parent = parent;
+	public void setFriendlyURL(String aFriendlyURL) {
+		friendlyURL = aFriendlyURL;
+		parentUrl = getParentFriendlyURL();
 	}
 
 	public String getTemplate() {
@@ -136,14 +161,7 @@ public class PageEntity implements Serializable {
 	}
 	
 	public String getParentFriendlyURL() {
-		if (getFriendlyURL() == null) {
-			return "";
-		}
-		int lastSlash = getFriendlyURL().lastIndexOf('/');
-		if (lastSlash == 0 || lastSlash == -1) {
-			return "";
-		}
-		return getFriendlyURL().substring(0, lastSlash);
+		return UrlUtil.getParentFriendlyURL(getFriendlyURL());
 	}
 
 	public void setParentFriendlyURL(final String url) {
@@ -156,14 +174,7 @@ public class PageEntity implements Serializable {
 	}
 
 	public String getPageFriendlyURL() {
-		if (getFriendlyURL() == null) {
-			return "";
-		}
-		int lastSlash = getFriendlyURL().lastIndexOf('/');
-		if (getFriendlyURL().equals("/") || lastSlash == -1) {
-			return "";
-		}
-		return getFriendlyURL().substring(lastSlash + 1, getFriendlyURL().length());
+		return UrlUtil.getPageFriendlyURL(getFriendlyURL());
 	}
 
 	public void setPageFriendlyURL(final String url) {
@@ -171,7 +182,12 @@ public class PageEntity implements Serializable {
 			setFriendlyURL(url);
 		}
 		else {
-			setFriendlyURL(getParentFriendlyURL() + "/" + url);
+			if (parentUrl.equals("/")) {
+				friendlyURL = parentUrl + url;
+			}
+			else {
+				friendlyURL = parentUrl + "/" + url;
+			}
 		}
 	}
 
@@ -196,7 +212,7 @@ public class PageEntity implements Serializable {
 	}
 	
 	public boolean isRoot() {
-		return parent == null;
+		return friendlyURL.equals("/");
 	}
 	
 	public boolean equals(Object object) {
@@ -210,6 +226,86 @@ public class PageEntity implements Serializable {
 			}
 		}
 		return false;
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
+	public String getVersionTitle() {
+		return versionTitle;
+	}
+
+	public void setVersionTitle(String versionTitle) {
+		this.versionTitle = versionTitle;
+	}
+
+	public PageState getState() {
+		return state;
+	}
+
+	public String getStateString() {
+		return state.name();
+	}
+
+	public void setState(PageState state) {
+		this.state = state;
+	}
+
+	public Long getCreateUserId() {
+		return createUserId;
+	}
+
+	public void setCreateUserId(Long createUserId) {
+		this.createUserId = createUserId;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Long getModUserId() {
+		return modUserId;
+	}
+
+	public void setModUserId(Long modUserId) {
+		this.modUserId = modUserId;
+	}
+
+	public Date getModDate() {
+		return modDate;
+	}
+
+	public String getModDateString() {
+		return DateUtil.dateTimeToString(modDate);
+	}
+
+	public String getCreateDateString() {
+		return DateUtil.dateTimeToString(createDate);
+	}
+
+	public void setModDate(Date modDate) {
+		this.modDate = modDate;
+	}
+	
+	public boolean isApproved() {
+		return state.equals(PageState.APPROVED);
+	}
+
+	public String getParentUrl() {
+		return parentUrl;
+	}
+
+	public void setParentUrl(String parentUrl) {
+		this.parentUrl = parentUrl;
 	}
 	
 }

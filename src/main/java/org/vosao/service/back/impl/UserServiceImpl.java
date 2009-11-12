@@ -35,6 +35,7 @@ import org.vosao.enums.UserRole;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.UserService;
 import org.vosao.service.impl.AbstractServiceImpl;
+import org.vosao.service.vo.UserVO;
 
 public class UserServiceImpl extends AbstractServiceImpl 
 		implements UserService {
@@ -42,8 +43,8 @@ public class UserServiceImpl extends AbstractServiceImpl
 	private static final Log logger = LogFactory.getLog(UserServiceImpl.class);
 
 	@Override
-	public List<UserEntity> select() {
-		return getDao().getUserDao().select();
+	public List<UserVO> select() {
+		return UserVO.create(getDao().getUserDao().select());
 	}
 
 	@Override

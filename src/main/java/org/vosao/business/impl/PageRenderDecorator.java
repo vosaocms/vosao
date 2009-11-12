@@ -104,8 +104,8 @@ public class PageRenderDecorator {
 		return page.getFriendlyURL();
 	}
 
-	public String getParent() {
-		return page.getParent();
+	public String getParentUrl() {
+		return page.getParentUrl();
 	}
 	
 	public String getTemplate() {

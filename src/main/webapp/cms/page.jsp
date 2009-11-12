@@ -26,6 +26,7 @@
 <html>
 <head>
   <title>Page</title>
+  <link rel="stylesheet" href="/static/css/page.css" type="text/css" />
   <script type="text/javascript" src="/static/ckeditor/ckeditor.js"></script>
   
 <%
@@ -38,23 +39,25 @@
   <script type="text/javascript">
 
     var pageId = '<c:out value="${param.id}"/>';
-    var pageParentId = '<c:out value="${param.parent}"/>';
+    var pageParentUrl = decodeURIComponent('<c:out value="${param.parent}"/>');
 
     //<!--
     
     var page = null;
+    var pages = {};
+    var versions = [];
     var contents = null;
     var currentLanguage = '';
     var children = {list:[]};
-    var parentPage = '';
     var editMode = pageId != '';
     var contentEditor;
     var etalonContent = '';
     var autosaveTimer = '';
+    var users = {};
     
     $(function(){
         contentEditor = CKEDITOR.replace('content', {
-            height: 480,
+            height: 350, width: 'auto;padding-right:140px;',
             filebrowserUploadUrl : '/cms/upload',
             filebrowserBrowseUrl : '/cms/fileBrowser.jsp'
         });
@@ -62,16 +65,20 @@
         $("#tabs").bind('tabsselect', tabSelected);       
         $(".datepicker").datepicker({dateFormat:'dd.mm.yy'});
         initJSONRpc(loadData);
+
+        // hover states on the link buttons
+        $('a.button').hover(
+        	function() { $(this).addClass('ui-state-hover'); },
+        	function() { $(this).removeClass('ui-state-hover'); }
+        ); 
+
+        $("#version-dialog").dialog({ width: 400, autoOpen: false });
     });
 
     function loadData() {
         loadPage();
         loadTemplates();
-        if (!editMode) {
-            loadParent();
-        }
-        else {
-            loadChildren();
+        if (editMode) {
             loadComments();
             loadContents();
         }
@@ -83,20 +90,66 @@
             page = r;
             if (editMode) {
                 pageId = page.id;
-                pageParentId = page.parent;
+                pageParentUrl = page.parentUrl;
+                loadChildren();
+                loadVersions(page.friendlyURL);
+                loadUsers();
+            }
+            else {
+                pages['1'] = page;
             }
             initPageForm();
         }, pageId);            
     }
 
-    function loadParent() {
-        pageService.getPage(function (r) {
-            if (r != null) {
-                var urlEnd = r.parent == null ? '' : '/'; 
-                $('#parentFriendlyUrl').html(r.friendlyURL + urlEnd);
-                parentPage = r;
+    function loadVersions(url) {
+        pageService.getPageVersions(function (r) {
+            versions = [];
+            pages = {};
+            $.each(r.list, function (i, value) {
+                pages[String(value.version)] = value;
+                versions.push(String(value.version));
+            });
+            versions.sort();
+            var h = '';
+            $.each(versions, function (i, version) {
+                var vPage = pages[version];
+                h += '<div>';
+                if (pageId != vPage.id) {
+                    h += '<a class="button ui-state-default ui-corner-all"\
+                       href="#" title="' + vPage.versionTitle + '"\
+                       onclick="onVersionSelect(\'' + version + '\')">Version ' 
+                       + version +'</a>';
+                }
+                else {
+                    h += '<a class="button ui-state-default ui-state-active \
+                       ui-corner-all" href="#" title="' + vPage.versionTitle 
+                       + '" onclick="onVersionSelect(\'' + version + '\')" \
+                       ><span class="ui-icon ui-icon-triangle-1-e"></span> \
+                       Version ' + version + '</a>';
+                }
+                h += '<img class="button" src="/static/images/delete-16.png" \
+                    onclick="onVersionDelete(\'' + version + '\')"/></div>';
+            });
+            $('#versions .vertical-buttons-panel').html(h);
+        }, url);
+    }
+
+    function loadUsers() {
+        userService.select(function (r) {
+            users = {};
+            $.each(r.list, function (i, value) {
+                users[value.id] = value;
+            });
+            if (page.createUserId != '' 
+                && users[page.createUserId] != undefined) {
+                $('#pageCreateUser').html(users[page.createUserId].name);
             }
-        }, pageParentId);
+            if (page.modUserId != ''
+                && users[page.modUserId] != undefined) {
+                $('#pageModUser').html(users[page.modUserId].name);
+            }
+        });
     }
     
     function loadTemplates() {
@@ -129,9 +182,10 @@
     }
     
     function initPageForm() {
+        var urlEnd = pageParentUrl == '/' ? '' : '/'; 
         if (page != null) {
             $('#title').val(page.title);
-            if (page.parent == null) {
+            if (page.parentUrl == '') {
                 $('#friendlyUrl').hide();
                 $('#friendlyUrl').val('');
                 $('#parentFriendlyUrl').html('/');
@@ -139,32 +193,41 @@
             else {
                 $('#friendlyUrl').show();
                 $('#friendlyUrl').val(page.pageFriendlyURL);
-                $('#parentFriendlyUrl').html(page.parentFriendlyURL + '/');
+                $('#parentFriendlyUrl').html(page.parentFriendlyURL + urlEnd);
             }
             $('#publishDate').val(page.publishDateString);
             $('#commentsEnabled').each(function() {this.checked = page.commentsEnabled});
             $('#templates').val(page.template);
+            $('#pageState').html(page.stateString == 'EDIT' ? 'Edit' : 'Approved');
+            $('#pageCreateDate').html(page.createDateString);
+            $('#pageModDate').html(page.modDateString);
             $('.contentTab').show();
             $('.childrenTab').show();
             $('.commentsTab').show();
+            $('#pagePreview').show();
         }
         else {
             $('#title').val('');
             $('#friendlyUrl').show();
             $('#friendlyUrl').val('');
-            $('#parentFriendlyUrl').html('');
+            $('#parentFriendlyUrl').html(pageParentUrl + urlEnd);
             $('#publishDate').val(formatDate(new Date()));
             $('#commentsEnabled').each(function() {this.checked = false});
+            $('#pageState').html('Edit');
+            $('#pageCreateUser').html('');
+            $('#pageCreateDate').html('');
+            $('#pageModUser').html('');
+            $('#pageModDate').html('');
             $('.contentTab').hide();
             $('.childrenTab').hide();
             $('.commentsTab').hide();
+            $('#pagePreview').hide();
         }
     }
 
     function onPageUpdate() {
         var pageVO = javaMap({
             id : pageId,
-            parent: pageParentId,
             title : $('#title').val(),
             friendlyUrl : $('#parentFriendlyUrl').text() + $('#friendlyUrl').val(),
             publishDate : $('#publishDate').val(),
@@ -236,6 +299,7 @@
             if (r.result == 'success') {
                 var now = new Date();
                 info(r.message + " " + now);
+                loadPage();
             }
             else {
                 error(r.message);
@@ -272,11 +336,12 @@
             });
             $('#children').html(html + '</table>');
             $('#children tr:even').addClass('even');
-        }, pageId);
+        }, page.friendlyURL);
     }
 
     function onAddChild() {
-        location.href = '/cms/page.jsp?parent=' + pageId;
+        location.href = '/cms/page.jsp?parent=' + encodeURIComponent(
+                page.friendlyURL);
     }
 
     function onDelete() {
@@ -387,6 +452,63 @@
             setEditorContent('');
         }
     }
+
+    function onVersionDelete(version) {
+        if (confirm('Are you sure?')) {
+            var delPage = pages[version];
+            pageService.deletePages(function (r) {
+                if (version == String(page.version)) {
+                    if (versions.length == 1) {
+                        location.href = '/cms/pages.jsp';
+                    }
+                    else {
+                        var previousVersion = versions[0];
+                        if (versions.indexOf(version) == 0) {
+                      	    previousVersion = versions[1];
+                        }
+                        else {
+                            previousVersion = versions[versions.indexOf(version) - 1];
+                        }
+                        pageId = pages[previousVersion].id;
+                        loadData();
+                    }                        
+                }
+                else {
+                    loadVersions(page.friendlyURL);
+                }
+            }, javaList([delPage.id]));
+        }
+    }
+
+    function onAddVersion() {
+        $('#version-dialog').dialog('open');
+        $('#version-title').val('');
+    }
+
+    function onVersionTitleSave() {
+        pageService.addVersion(function (r) {
+            pageId = r;
+            loadData();
+            $('#version-dialog').dialog('close');
+        }, page.friendlyURL, $('#version-title').val());
+    }
+    
+    function onVersionTitleCancel() {
+        $('#version-dialog').dialog('close');
+    }
+
+    function onVersionSelect(version) {
+        var selPage = pages[version];
+        pageId = selPage.id;
+        loadData();
+    }
+
+    function onPageApprove() {
+        pageService.approve(function (r) {
+            showServiceMessages(r);
+            loadPage();
+        }, pageId);
+    }
     
     // -->    
   </script>
@@ -437,21 +559,40 @@
 
 <div id="tab-2" class="contentTab">
 
-<div style="float:right">
-  <input id="autosave" type="checkbox" onchange="onAutosave()"> Autosave</input>
-</div>
-<div>
-  Select content language: <select id="language" onchange="onLanguageChange()"></select>
+<div id="versions">
+    <div class="vertical-buttons-panel"> </div>      
+    <a class="button ui-state-default ui-corner-all" href="#" 
+        onclick="onAddVersion()">
+        <span class="ui-icon ui-icon-plus"></span> Add version
+    </a>
+    <div id="auditData">
+        <div>Page state: <span id="pageState"> </span></div>
+        <div>User created: <span id="pageCreateUser"> </span></div>
+        <div>Creation date: <span id="pageCreateDate"> </span></div>
+        <div>User modified: <span id="pageModUser"> </span></div>
+        <div>Modify date: <span id="pageModDate"> </span></div>
+    </div>
 </div>
 
-<div class="form-row" id="ckeditor-form-row">
-    <textarea id="content" rows="20" cols="80"></textarea>
+<div style="padding-right:10px;">
+    <div style="float:right">
+        <input id="autosave" type="checkbox" 
+            onchange="onAutosave()"> Autosave</input>
+    </div>
+    <div>
+        Select content language: 
+        <select id="language" onchange="onLanguageChange()"></select>
+    </div>
+    <div id="ckeditor-form-row">
+        <textarea id="content" rows="20" cols="80"></textarea>
+    </div>
 </div>
 
 <div class="buttons">
     <input type="button" value="Save and continue" onclick="saveContent()" />
     <input type="button" value="Save" onclick="onPageUpdate()" />
     <input type="button" value="Preview" onclick="onPagePreview()" />
+    <input type="button" value="Approve" onclick="onPageApprove()" />
     <input type="button" value="Cancel" onclick="onPageCancel()" />
 </div>    
 
@@ -474,6 +615,17 @@
     </div>    
 </div>
 
+</div>
+
+<div id="version-dialog" style="display:none" title="Version title">
+    <div class="form-row">
+        <label>Version title</label>
+        <input id="version-title" type="text" />        
+    </div>
+    <div class="buttons-dlg">
+        <input type="button" value="Add" onclick="onVersionTitleSave()"/>
+        <input type="button" value="Cancel" onclick="onVersionTitleCancel()"/>
+    </div>
 </div>
 
 </body>

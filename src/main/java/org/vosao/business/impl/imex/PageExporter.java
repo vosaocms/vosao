@@ -93,7 +93,7 @@ public class PageExporter extends AbstractExporter {
 			Element pageElement) {
 		Element commentsElement = pageElement.addElement("comments");
 		List<CommentEntity> comments = getDao().getCommentDao().getByPage(
-				page.getEntity().getId());
+				page.getEntity().getFriendlyURL());
 		for (CommentEntity comment : comments) {
 			Element commentElement = commentsElement.addElement("comment");
 			commentElement.addAttribute("name", comment.getName());
@@ -147,10 +147,6 @@ public class PageExporter extends AbstractExporter {
 	}
 
 	private void readPage(Element pageElement, PageEntity parentPage) {
-		String parentId = null;
-		if (parentPage != null) {
-			parentId = parentPage.getId();
-		}
 		String title = pageElement.attributeValue("title");
 		String url = pageElement.attributeValue("url");
 		String themeUrl = pageElement.attributeValue("theme");
@@ -171,8 +167,7 @@ public class PageExporter extends AbstractExporter {
 		if (template != null) {
 			templateId = template.getId();
 		}
-		PageEntity newPage = new PageEntity(title, url, parentId,
-				templateId, publishDate);
+		PageEntity newPage = new PageEntity(title, url,	templateId, publishDate);
 		if (commentsEnabled != null) {
 			newPage.setCommentsEnabled(Boolean.valueOf(commentsEnabled));
 		}

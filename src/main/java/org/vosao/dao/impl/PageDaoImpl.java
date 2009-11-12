@@ -21,7 +21,10 @@
 
 package org.vosao.dao.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jdo.PersistenceManager;
 
@@ -31,12 +34,16 @@ import org.vosao.dao.PageDao;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 
+/**
+ * @author Alexander Oleynik
+ */
 public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 
 	private static final String PAGE_CLASS_NAME = PageEntity.class.getName();
 
 	private ContentDao contentDao;
 	
+	@Override
 	public void save(final PageEntity page) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
@@ -53,6 +60,7 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		}
 	}
 	
+	@Override
 	public PageEntity getById(final String id) {
 		if (id == null) {
 			return null;
@@ -69,11 +77,13 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		}
 	}
 	
+	@Override
 	public List<PageEntity> select() {
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			String query = "select from " + PageEntity.class.getName();
-			List<PageEntity> result = (List<PageEntity>)pm.newQuery(query).execute();
+			List<PageEntity> result = filterLatestVersion((List<PageEntity>)
+					pm.newQuery(query).execute());
 			return copy(result);
 		}
 		finally {
@@ -81,6 +91,7 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		}
 	}
 	
+	@Override
 	public void remove(final String id) {
 		if (id == null) {
 			return;
@@ -94,6 +105,7 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		}
 	}
 	
+	@Override
 	public void remove(final List<String> ids) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
@@ -116,14 +128,16 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		pm.deletePersistent(pm.getObjectById(PageEntity.class, pageId));
 	}
 	
-	public List<PageEntity> getByParent(final String id) {
+	@Override
+	public List<PageEntity> getByParent(final String url) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			String query = "select from " + PageEntity.class.getName()
-			    + " where parent == pParent" 
-			    + " parameters String pParent";
-			List<PageEntity> result = (List<PageEntity>)pm.newQuery(query)
-				.execute(id);
+			    + " where parentUrl == pParentUrl" 
+			    + " parameters String pParentUrl"
+			    + " order by publishDate desc";
+			List<PageEntity> result = filterLatestVersion((List<PageEntity>)
+					pm.newQuery(query).execute(url));
 			return copy(result);
 		}
 		finally {
@@ -131,21 +145,13 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		}
 	}
 
+	@Override
 	public PageEntity getByUrl(final String url) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + PageEntity.class.getName()
-			    + " where friendlyURL == pUrl parameters String pUrl";
-			List<PageEntity> result = (List<PageEntity>)pm.newQuery(query)
-				.execute(url);
-			if (result.size() > 0) {
-				return result.get(0);
-			}
-			return null;
+		List<PageEntity> result = filterApproved(selectByUrl(url));
+		if (result.size() > 0) {
+			return result.get(0);
 		}
-		finally {
-			pm.close();
-		}
+		return null;
 	}
 
 	@Override
@@ -172,10 +178,12 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		getContentDao().save(contentEntity);
 	}
 
+	@Override
 	public ContentDao getContentDao() {
 		return contentDao;
 	}
 
+	@Override
 	public void setContentDao(ContentDao contentDao) {
 		this.contentDao = contentDao;
 	}
@@ -185,4 +193,51 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		return getContentDao().select(PAGE_CLASS_NAME, pageId);
 	}
 	
+	private List<PageEntity> filterLatestVersion(List<PageEntity> list) {
+		Map<String, PageEntity> pages = new HashMap<String, PageEntity>();
+		for (PageEntity page : list) {
+			String key = page.getFriendlyURL();
+			if (!pages.containsKey(key)
+				|| pages.get(key).getVersion() < page.getVersion()) {
+				pages.put(key, page);
+			}
+		}
+		List<PageEntity> result = new ArrayList<PageEntity>();
+		result.addAll(pages.values());
+		return result;
+	}
+	
+	private List<PageEntity> filterApproved(
+			List<PageEntity> list) {
+		Map<String, PageEntity> pages = new HashMap<String, PageEntity>();
+		for (PageEntity page : list) {
+			if (page.isApproved()) {
+				String key = page.getFriendlyURL();
+				if (!pages.containsKey(key)
+					|| pages.get(key).getVersion() < page.getVersion()) {
+					pages.put(key, page);
+				}
+			}
+		}
+		List<PageEntity> result = new ArrayList<PageEntity>();
+		result.addAll(pages.values());
+		return result;
+	}
+	
+	@Override
+	public List<PageEntity> selectByUrl(final String url) {
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			String query = "select from " + PageEntity.class.getName()
+			    + " where friendlyURL == pUrl"
+			    + " parameters String pUrl"
+			    + " order by version";
+			List<PageEntity> result = (List<PageEntity>)
+					pm.newQuery(query).execute(url);
+			return copy(result);
+		}
+		finally {
+			pm.close();
+		}
+	}
 }

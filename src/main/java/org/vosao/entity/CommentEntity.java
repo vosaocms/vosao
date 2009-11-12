@@ -45,7 +45,7 @@ public class CommentEntity implements Serializable {
     private String id;
 
 	@Persistent
-	private String pageId;
+	private String pageUrl;
 	
 	@Persistent
 	private String name;
@@ -64,11 +64,11 @@ public class CommentEntity implements Serializable {
 	}
 	
 	public CommentEntity(final String aName, final String aContent, 
-			final Date aPublishDate, final String aPageId) {
+			final Date aPublishDate, final String aPageUrl) {
 		setName(aName);
 		setContent(aContent);
 		setPublishDate(aPublishDate);
-		setPageId(aPageId);
+		setPageUrl(aPageUrl);
 		setDisabled(false);
 	}
 
@@ -83,7 +83,7 @@ public class CommentEntity implements Serializable {
 		setName(entity.getName());
 		setContent(entity.getContent());
 		setPublishDate(entity.getPublishDate());
-		setPageId(entity.getPageId());
+		setPageUrl(entity.getPageUrl());
 		setDisabled(entity.isDisabled());
 	}
 	
@@ -122,12 +122,12 @@ public class CommentEntity implements Serializable {
 		this.publishDate = publishDate;
 	}
 
-	public String getPageId() {
-		return pageId;
+	public String getPageUrl() {
+		return pageUrl;
 	}
 
-	public void setPageId(String pageId) {
-		this.pageId = pageId;
+	public void setPageUrl(String pageUrl) {
+		this.pageUrl = pageUrl;
 	}
 
 	public boolean isDisabled() {

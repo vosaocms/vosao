@@ -32,8 +32,18 @@ public interface PageDao extends AbstractDao {
 	
 	PageEntity getById(final String id);
 
-	List<PageEntity> getByParent(final String id);
+	/**
+	 * Select pages latest versions by parent page.
+	 * @param url
+	 * @return
+	 */
+	List<PageEntity> getByParent(final String url);
 
+	/**
+	 * Get latest version approved page by url.
+	 * @param url
+	 * @return page
+	 */
 	PageEntity getByUrl(final String url);
 
 	List<PageEntity> select();
@@ -53,5 +63,11 @@ public interface PageDao extends AbstractDao {
 	
 	List<ContentEntity> getContents(final String pageId);
 	
+	/**
+	 * Selects all page's versions ordered by version.
+	 * @param url - friendly url.
+	 * @return - list of pages.
+	 */
+	List<PageEntity> selectByUrl(final String url);
 	
 }

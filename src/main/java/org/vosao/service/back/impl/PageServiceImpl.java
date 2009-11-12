@@ -23,6 +23,7 @@ package org.vosao.service.back.impl;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,8 @@ import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.UserEntity;
+import org.vosao.enums.PageState;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.PageService;
 import org.vosao.service.impl.AbstractServiceImpl;
@@ -49,9 +52,15 @@ public class PageServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse updateContent(String pageId, String content,
-			String languageCode) {
+			String languageCode, HttpServletRequest request) {
 		PageEntity page = getDao().getPageDao().getById(pageId);
 		if (page != null) {
+			UserEntity user = getBusiness().getUserPreferences(request)
+				.getUser();
+			page.setState(PageState.EDIT);
+			page.setModDate(new Date());
+			page.setModUserId(user.getId());
+			getDao().getPageDao().save(page);
 			getDao().getPageDao().setContent(pageId, languageCode, content);
 			return ServiceResponse.createSuccessResponse(
 					"Page content was successfully updated");
@@ -68,17 +77,18 @@ public class PageServiceImpl extends AbstractServiceImpl
 		Map<String, TreeItemDecorator<PageVO>> buf = 
 				new HashMap<String, TreeItemDecorator<PageVO>>();
 		for (PageVO page : pages) {
-			buf.put(page.getId(), new TreeItemDecorator<PageVO>(page, null));
+			buf.put(page.getFriendlyURL(), 
+					new TreeItemDecorator<PageVO>(page, null));
 		}
 		TreeItemDecorator<PageVO> root = null;
 		for (String id : buf.keySet()) {
 			TreeItemDecorator<PageVO> page = buf.get(id);
-			if (page.getEntity().getParent() == null) {
+			if (StringUtils.isEmpty(page.getEntity().getParentUrl())) {
 				root = page;
 			}
 			else {
 				TreeItemDecorator<PageVO> parent = buf.get(page.getEntity()
-						.getParent());
+						.getParentUrl());
 				if (parent != null) {
 					parent.getChildren().add(page);
 					page.setParent(parent);
@@ -97,14 +107,24 @@ public class PageServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public ServiceResponse savePage(Map<String, String> pageMap) {
+	public PageEntity getPageByUrl(String url) {
+		return getDao().getPageDao().getByUrl(url);
+	}
+
+	@Override
+	public ServiceResponse savePage(Map<String, String> pageMap,
+			HttpServletRequest request) {
+		UserEntity user = getBusiness().getUserPreferences(request).getUser();
 		PageEntity page = getPage(pageMap.get("id"));
 		if (page == null) {
 			page = new PageEntity();
+			page.setCreateUserId(user.getId());
 		}
+		page.setState(PageState.EDIT);
+		page.setModDate(new Date());
+		page.setModUserId(user.getId());
 		page.setCommentsEnabled(Boolean.valueOf(pageMap.get("commentsEnabled")));
 		page.setFriendlyURL(pageMap.get("friendlyUrl"));
-		page.setParent(pageMap.get("parent"));
 		try {
 			page.setPublishDate(DateUtil.toDate(pageMap.get("publishDate")));
 		}
@@ -128,8 +148,8 @@ public class PageServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public List<PageVO> getChildren(String id) {
-		return PageVO.create(getDao().getPageDao().getByParent(id));
+	public List<PageVO> getChildren(String url) {
+		return PageVO.create(getDao().getPageDao().getByParent(url));
 	}
 
 	@Override
@@ -142,6 +162,39 @@ public class PageServiceImpl extends AbstractServiceImpl
 	@Override
 	public List<ContentEntity> getContents(String pageId) {
 		return getDao().getPageDao().getContents(pageId);
+	}
+
+	@Override
+	public List<PageVO> getPageVersions(String url) {
+		return PageVO.create(getDao().getPageDao().selectByUrl(url));
+	}
+
+	@Override
+	public String addVersion(String url, String versionTitle, 
+			HttpServletRequest request) {
+		List<PageEntity> list = getDao().getPageDao().selectByUrl(url);
+		UserEntity user = getBusiness().getUserPreferences(request).getUser();
+		if (list.size() > 0) {
+			PageEntity lastPage = list.get(list.size() - 1);
+			return getBusiness().getPageBusiness().addVersion(lastPage, 
+					lastPage.getVersion() + 1, versionTitle, user).getId();
+		}
+		return null;
+	}
+
+	@Override
+	public ServiceResponse approve(String pageId) {
+		if (pageId == null) {
+			return ServiceResponse.createErrorResponse("Page not found");
+		}
+		PageEntity page = getDao().getPageDao().getById(pageId);
+		if (page == null) {
+			return ServiceResponse.createErrorResponse("Page not found");
+		}
+		page.setState(PageState.APPROVED);
+		getDao().getPageDao().save(page);
+		return ServiceResponse.createSuccessResponse(
+				"Page was successfully approved.");
 	}
 
 }

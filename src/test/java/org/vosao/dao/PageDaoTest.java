@@ -24,19 +24,20 @@ package org.vosao.dao;
 import java.util.List;
 
 import org.vosao.entity.PageEntity;
+import org.vosao.enums.PageState;
 
 public class PageDaoTest extends AbstractDaoTest {
 
 	private PageEntity addPage(final String title, 
-			final String url,final PageEntity parent) {
-		PageEntity page = new PageEntity(title, url, 
-				parent == null ? null : parent.getId());
+			final String url) {
+		PageEntity page = new PageEntity(title, url);
+		page.setState(PageState.APPROVED);
 		getDao().getPageDao().save(page);
 		return page;
 	}
 	
 	public void testSave() {
-		addPage("title", "/url", null);
+		addPage("title", "/url");
 		List<PageEntity> pages = getDao().getPageDao().select();
 		assertEquals(1, pages.size());
 		PageEntity page1 = pages.get(0);
@@ -44,24 +45,24 @@ public class PageDaoTest extends AbstractDaoTest {
 	}	
 	
 	public void testGetById() {
-		PageEntity page = addPage("title","/url",null);
+		PageEntity page = addPage("title","/url");
 		assertNotNull(page.getId());
 		PageEntity page2 = getDao().getPageDao().getById(page.getId());
 		assertEquals(page.getTitle(), page2.getTitle());
 		assertEquals(page.getFriendlyURL(), page2.getFriendlyURL());
-		assertEquals(page.getParent(), page2.getParent());
+		assertEquals(page.getParentUrl(), page2.getParentUrl());
 	}	
 
 	public void testSelect() {
-		addPage("title1", "/url1", null);
-		addPage("title2", "/url2", null);
-		addPage("title3", "/url3", null);
+		addPage("title1", "/url1");
+		addPage("title2", "/url2");
+		addPage("title3", "/url3");
 		List<PageEntity> pages = getDao().getPageDao().select();
 		assertEquals(3, pages.size());
 	}	
 	
 	public void testUpdate() {
-		PageEntity page = addPage("title1", "/url1", null);
+		PageEntity page = addPage("title1", "/url1");
 		assertNotNull(page.getId());
 		PageEntity page2 = getDao().getPageDao().getById(page.getId());
 		page2.setTitle("update");
@@ -71,9 +72,9 @@ public class PageDaoTest extends AbstractDaoTest {
 	}
 	
 	public void testResultList() {
-		addPage("title1", "/url1", null);
-		addPage("title2", "/url2", null);
-		addPage("title3", "/url3", null);
+		addPage("title1", "/url1");
+		addPage("title2", "/url2");
+		addPage("title3", "/url3");
 		List<PageEntity> pages = getDao().getPageDao().select();
 		PageEntity page = new PageEntity("title", "/url", null);
 		pages.add(page);
@@ -81,19 +82,24 @@ public class PageDaoTest extends AbstractDaoTest {
 	}
 
 	public void testGetByParent() {
-		PageEntity root = addPage("root", "/", null);
-		addPage("title1", "/url1", root);
-		addPage("title2", "/url2", null);
-		addPage("title3", "/url3", root);
-		List<PageEntity> pages = getDao().getPageDao().getByParent(root.getId());
+		addPage("root", "/");
+		PageEntity page = addPage("title1", "/url1");
+		assertEquals("/", page.getParentUrl());
+		page = addPage("title2", "/url1/2");
+		assertEquals("/url1", page.getParentUrl());
+		page = addPage("title3", "/url1/3");
+		assertEquals("/url1", page.getParentUrl());
+		List<PageEntity> pages = getDao().getPageDao().getByParent("/");
+		assertEquals(1, pages.size());
+		pages = getDao().getPageDao().getByParent("/url1");
 		assertEquals(2, pages.size());
 	}	
 	
 	public void testGetByUrl() {
-		PageEntity root = addPage("root", "/", null);
-		addPage("title1", "/url1", root);
-		addPage("title2", "/url2", null);
-		addPage("title3", "/url3", root);
+		PageEntity root = addPage("root", "/");
+		addPage("title1", "/url1");
+		addPage("title2", "/url2");
+		addPage("title3", "/url3");
 		PageEntity page = getDao().getPageDao().getByUrl("/url3");
 		assertNotNull(page);
 		assertEquals("title3", page.getTitle());

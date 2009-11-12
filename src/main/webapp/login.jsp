@@ -35,6 +35,7 @@
             else {
                 loginService.login(function (r) {
                     if (r.result == 'success') {
+                        info('Success. Logging in...');
                         document.location.href = r.message;
                     }
                     else {

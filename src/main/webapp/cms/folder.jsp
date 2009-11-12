@@ -98,7 +98,8 @@ function afterUpload(data) {
 function loadFiles() {
 	fileService.getByFolder(function (r) {
 	    files = r.list;
-	    var h = '<table class="form-table">';
+	    var h = '<table class="form-table"><tr><th></th><th>Title</th>\
+		    <th>Filename</th><th>Mime type</th><th>Size</th></tr>';
 	    $.each(files, function(i, file) { 
 	        h += '<tr>\
 <td><input type="checkbox" name="item' + i + '" value="' + file.id + '"/></td>\
@@ -109,7 +110,8 @@ function loadFiles() {
 </tr>';
         });
 	    h += '</table>';   
-	    $("#filesTable").html(h);
+	    $('#filesTable').html(h);
+	    $('#filesTable tr:even').addClass('even');
 	}, folderId);
 }
 

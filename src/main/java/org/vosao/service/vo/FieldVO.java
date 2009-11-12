@@ -51,7 +51,7 @@ public class FieldVO {
 	}
 
 	public boolean isOptional() {
-		return field.isOptional();
+		return field.isMandatory();
 	}
 
 	public String getValues() {

@@ -33,6 +33,7 @@
 <script type="text/javascript">
 $(function(){
     initJSONRpc(loadTree);
+    $("#tabs").tabs();
 });
 
 function loadTree() {
@@ -61,9 +62,17 @@ function renderFolder(vo) {
 </head>
 <body>
 
-<h1>Folders</h1>
+<div id="tabs">
 
-<ul id="folders-tree"><img src="/static/images/ajax-loader.gif" /></ul>
+<ul>
+    <li><a href="#tab-1">Folders</a></li>
+</ul>
+
+<div id="tab-1">
+    <ul id="folders-tree"><img src="/static/images/ajax-loader.gif" /></ul>
+</div>
+
+</div>
 
 </body>
 </html>

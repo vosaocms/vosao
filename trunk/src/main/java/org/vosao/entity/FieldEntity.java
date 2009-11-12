@@ -78,7 +78,7 @@ public class FieldEntity implements Serializable {
 	private FieldType fieldType;
 
 	@Persistent
-	private boolean optional;
+	private boolean mandatory;
 
 	@Persistent
 	private String values;
@@ -102,7 +102,7 @@ public class FieldEntity implements Serializable {
 		setName(entity.getName());
 		setTitle(entity.getTitle());
 		setFieldType(entity.getFieldType());
-		setOptional(entity.isOptional());
+		setMandatory(entity.isMandatory());
 		setValues(entity.getValues());
 		setDefaultValue(entity.getDefaultValue());
 		setHeight(entity.getHeight());
@@ -116,7 +116,7 @@ public class FieldEntity implements Serializable {
 		this.name = name;
 		this.title = title;
 		this.fieldType = fieldType;
-		this.optional = optional;
+		this.mandatory = optional;
 		this.defaultValue = defaultValue;
 	}
 
@@ -128,12 +128,12 @@ public class FieldEntity implements Serializable {
 		this.fieldType = fieldType;
 	}
 
-	public boolean isOptional() {
-		return optional;
+	public boolean isMandatory() {
+		return mandatory;
 	}
 
-	public void setOptional(boolean optional) {
-		this.optional = optional;
+	public void setMandatory(boolean optional) {
+		this.mandatory = optional;
 	}
 
 	public String getValues() {

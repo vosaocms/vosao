@@ -33,6 +33,7 @@
 
     $(function(){
         initJSONRpc(loadTree);
+        $("#tabs").tabs();
     });
 
     function loadTree() {
@@ -62,8 +63,17 @@
 </head>
 <body>
 
-<h1>Pages</h1>
-<ul id="pages-tree"><img src="/static/images/ajax-loader.gif" /></ul>
+<div id="tabs">
+
+<ul>
+    <li><a href="#tab-1">Pages</a></li>
+</ul>
+
+<div id="tab-1">
+    <ul id="pages-tree"><img src="/static/images/ajax-loader.gif" /></ul>
+</div>
+
+</div>
 
 </body>
 </html>

@@ -105,7 +105,7 @@ public class FormExporter extends AbstractExporter {
 		fieldElement.addAttribute("name", field.getName());
 		fieldElement.addAttribute("title", field.getTitle());
 		fieldElement.addAttribute("fieldType", field.getFieldType().name());
-		fieldElement.addAttribute("optional", String.valueOf(field.isOptional()));
+		fieldElement.addAttribute("mandatory", String.valueOf(field.isMandatory()));
 		fieldElement.addAttribute("values", field.getValues());
 		fieldElement.addAttribute("defaultValue", field.getDefaultValue());
 		fieldElement.addAttribute("height", String.valueOf(field.getHeight()));
@@ -127,8 +127,8 @@ public class FormExporter extends AbstractExporter {
             	catch (Exception e) {
             		field.setFieldType(FieldType.TEXT);
             	}
-            	field.setOptional(XmlUtil.readBooleanAttr(element, 
-            			"optional", false));
+            	field.setMandatory(XmlUtil.readBooleanAttr(element, 
+            			"mandatory", false));
             	field.setValues(element.attributeValue("values"));
             	field.setDefaultValue(element.attributeValue("defaultValue"));
             	field.setHeight(XmlUtil.readIntAttr(element, "height", 0));

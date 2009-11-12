@@ -22,10 +22,10 @@ h1, h2 {
 	margin: 20px 0;
 }
 
-a, a:visited {
+a, a:visited, .ui-widget-content a {
 	color: blue;
 }
-a:hover {
+a:hover, .ui-widget-content a:hover {
     color: #148fd5;
 }
 
@@ -99,14 +99,14 @@ label {
 	border-collapse: collapse; 
 }
 .form-table th {
-    padding: 2px 4px;
+    padding: 6px;
     background-color: #C5D7EF;
     font-weight: bold;
     text-align: left;
     vertical-align: middle;
 }   
 .form-table td {
-	padding: 2px 4px;
+	padding: 6px;
 }	
 .form-table tr.even td {
     background-color: #E9E9E9;

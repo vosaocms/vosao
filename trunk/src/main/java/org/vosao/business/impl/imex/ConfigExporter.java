@@ -37,7 +37,8 @@ public class ConfigExporter extends AbstractExporter {
 		super(aDao, aBusiness);
 	}
 	
-	public void createConfigXML(Element configElement) {
+	public void createConfigXML(Element siteElement) {
+		Element configElement = siteElement.addElement("config");
 		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
 		if (config.getGoogleAnalyticsId() != null) {
 			Element googleAnalytics = configElement.addElement("google-analytics");
@@ -131,8 +132,12 @@ public class ConfigExporter extends AbstractExporter {
             if (element.getName().equals("language")) {
             	String code = element.attributeValue("code");
             	String title = element.attributeValue("title");
-            	LanguageEntity language = new LanguageEntity(code, title);
-            	getDao().getLanguageDao().save(language);
+            	LanguageEntity language = getDao().getLanguageDao().getByCode(
+            			code);
+            	if (language == null) {
+                	language = new LanguageEntity(code, title);
+                	getDao().getLanguageDao().save(language);
+            	}
             }
 		}
 	}

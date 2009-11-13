@@ -122,6 +122,15 @@ function onUpdate(cont) {
 	}, templateVO);
 }
 
+function onBig() {
+	$('#content').attr('cols','120');
+    $('#content').attr('rows','30');
+}
+
+function onSmall() {
+    $('#content').attr('cols','80');
+    $('#content').attr('rows','20');
+}
 
 // -->    
 </script>
@@ -147,8 +156,11 @@ function onUpdate(cont) {
     <div class="form-row">
         <div>
             <input id="autosave" type="checkbox" onchange="onAutosave()"> Autosave</input>
+            Editor size:
+            <a href="#" onclick="onBig()"> Big</a>
+            <a href="#" onclick="onSmall()"> Small</a>
         </div>
-        <textarea id="content" rows="30" cols="120"></textarea>
+        <textarea id="content" rows="20" cols="80" wrap="off"></textarea>
     </div>
     <div class="buttons">
         <input type="button" value="Save and continue" onclick="onUpdate(true)" />

@@ -234,9 +234,9 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		page.setVersionTitle(versionTitle);
 		Date dt = new Date();
 		page.setCreateDate(dt);
-		page.setCreateUserId(user.getId());
+		page.setCreateUserEmail(user.getEmail());
 		page.setModDate(dt);
-		page.setModUserId(user.getId());
+		page.setModUserEmail(user.getEmail());
 		getDao().getPageDao().save(page);
 		List<ContentEntity> contents = getDao().getPageDao().getContents(
 				oldPage.getId());

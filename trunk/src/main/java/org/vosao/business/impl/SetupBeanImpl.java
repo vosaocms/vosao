@@ -120,8 +120,8 @@ public class SetupBeanImpl implements SetupBean {
 			String content = loadResource("org/vosao/resources/html/root.html");
 			TemplateEntity template = getDao().getTemplateDao().getByUrl("simple");
 			PageEntity root = new PageEntity("root", "/", template.getId());
-			root.setCreateUserId(1L);
-			root.setModUserId(1L);
+			root.setCreateUserEmail("admin@test.com");
+			root.setModUserEmail("admin@test.com");
 			root.setState(PageState.APPROVED);
 			getDao().getPageDao().save(root);
 			getDao().getPageDao().setContent(root.getId(), 

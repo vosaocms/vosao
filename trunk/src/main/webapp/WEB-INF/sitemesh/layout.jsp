@@ -89,9 +89,8 @@
 </div>
 
 <div id="wrapper">
-    <div class="messages"> </div>
-
     <decorator:body />
+    <div class="messages"> </div>
 </div>
 
 </body>

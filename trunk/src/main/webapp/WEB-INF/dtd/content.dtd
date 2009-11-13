@@ -22,7 +22,7 @@
 -->
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE site [
-<!ELEMENT site (config,pages,forms)>
+<!ELEMENT site (config,pages,forms,users)>
 
 <!ELEMENT config (google-analytics,email,domain,edit-ext,recaptchaPrivateKey,
 recaptchaPublicKey,commentsEmail,commentsTemplate,enableRecaptcha,languages)>
@@ -40,14 +40,14 @@ recaptchaPublicKey,commentsEmail,commentsTemplate,enableRecaptcha,languages)>
 <!ELEMENT language EMPTY>
 
 <!ELEMENT pages (page*)>
-<!ELEMENT page (version,versionTitle,state,createUserId,modUserId,createDate,
-modDate,content*,page-version*,comments,page*)>
+<!ELEMENT page (version,versionTitle,state,createUserEmail,modUserEmail,
+createDate,modDate,content*,page-version*,comments,page*)>
 
 <!ELEMENT version (#PCDATA)>
 <!ELEMENT versionTitle (#PCDATA)>
 <!ELEMENT state (#PCDATA)>
-<!ELEMENT createUserId (#PCDATA)>
-<!ELEMENT modUserId (#PCDATA)>
+<!ELEMENT createUserEmail (#PCDATA)>
+<!ELEMENT modUserEmail (#PCDATA)>
 <!ELEMENT createDate (#PCDATA)>
 <!ELEMENT modDate (#PCDATA)>
 <!ELEMENT content (#PCDATA)>
@@ -64,6 +64,12 @@ createDate,modDate,content*)>
 
 <!ELEMENT form (field*)>
 <!ELEMENT field EMPTY>
+
+<!ELEMENT users (user*)>
+<!ELEMENT user (name,email,password,role)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT password (#PCDATA)>
+<!ELEMENT role (#PCDATA)>
 
 <!ATTLIST language code CDATA #REQUIERED>
 <!ATTLIST language title CDATA #REQUIERED>

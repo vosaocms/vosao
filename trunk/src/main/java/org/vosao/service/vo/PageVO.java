@@ -91,17 +91,16 @@ public class PageVO {
 		return page.getState().name();
 	}
 	
-	public String getCreateUserId() {
-		return page.getCreateUserId() != null ? 
-				page.getCreateUserId().toString() : "";
+	public String getCreateUserEmail() {
+		return page.getCreateUserEmail();
 	}
 	
 	public String getCreateDate() {
 		return DateUtil.dateTimeToString(page.getCreateDate());
 	}
 
-	public String getModUserId() {
-		return page.getModUserId()!= null ? page.getModUserId().toString() : "";
+	public String getModUserEmail() {
+		return page.getModUserEmail();
 	}
 	
 	public String getModDate() {

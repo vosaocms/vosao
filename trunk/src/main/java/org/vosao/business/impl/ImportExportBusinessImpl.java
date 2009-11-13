@@ -132,8 +132,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 	@Override
 	public byte[] createExportFile() throws IOException {
 		ThemeExporter themeExporter = createThemeExporter();
-		PageExporter pageExporter = createPageExporter();
-		
+		SiteExporter siteExporter = createSiteExporter();
 		ByteArrayOutputStream outData = new ByteArrayOutputStream();
 		ZipOutputStream out = new ZipOutputStream(outData);
 		out.putNextEntry(new ZipEntry(ThemeExporter.THEME_FOLDER));
@@ -141,7 +140,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		for (TemplateEntity theme : list) {
 			themeExporter.exportTheme(out, theme);
 		}
-		pageExporter.exportContent(out);
+		siteExporter.exportSite(out);
 		out.close();
 		return outData.toByteArray();
 	}

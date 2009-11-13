@@ -74,13 +74,13 @@ public class PageEntity implements Serializable {
 	private PageState state;
 	
 	@Persistent
-	private Long createUserId;
+	private String createUserEmail;
 	
 	@Persistent
 	private Date createDate;
 	
 	@Persistent
-	private Long modUserId;
+	private String modUserEmail;
 	
 	@Persistent
 	private Date modDate;
@@ -92,6 +92,8 @@ public class PageEntity implements Serializable {
 		versionTitle = "New page";
 		createDate = new Date();
 		modDate = createDate;
+		createUserEmail = "";
+		modUserEmail = "";
 	}
 	
 	public PageEntity(String title, String friendlyURL, 
@@ -122,9 +124,9 @@ public class PageEntity implements Serializable {
 		setVersionTitle(entity.getVersionTitle());
 		setState(entity.getState());
 		setCreateDate(entity.getCreateDate());
-		setCreateUserId(entity.getCreateUserId());
+		setCreateUserEmail(entity.getCreateUserEmail());
 		setModDate(entity.getModDate());
-		setModUserId(entity.getModUserId());
+		setModUserEmail(entity.getModUserEmail());
 	}
 	
 	public String getId() {
@@ -256,12 +258,12 @@ public class PageEntity implements Serializable {
 		this.state = state;
 	}
 
-	public Long getCreateUserId() {
-		return createUserId;
+	public String getCreateUserEmail() {
+		return createUserEmail;
 	}
 
-	public void setCreateUserId(Long createUserId) {
-		this.createUserId = createUserId;
+	public void setCreateUserEmail(String createUser) {
+		this.createUserEmail = createUser;
 	}
 
 	public Date getCreateDate() {
@@ -272,12 +274,12 @@ public class PageEntity implements Serializable {
 		this.createDate = createDate;
 	}
 
-	public Long getModUserId() {
-		return modUserId;
+	public String getModUserEmail() {
+		return modUserEmail;
 	}
 
-	public void setModUserId(Long modUserId) {
-		this.modUserId = modUserId;
+	public void setModUserEmail(String modUser) {
+		this.modUserEmail = modUser;
 	}
 
 	public Date getModDate() {

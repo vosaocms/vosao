@@ -53,7 +53,6 @@
     var contentEditor;
     var etalonContent = '';
     var autosaveTimer = '';
-    var users = {};
     
     $(function(){
         contentEditor = CKEDITOR.replace('content', {
@@ -93,7 +92,6 @@
                 pageParentUrl = page.parentUrl;
                 loadChildren();
                 loadVersions(page.friendlyURL);
-                loadUsers();
             }
             else {
                 pages['1'] = page;
@@ -135,23 +133,6 @@
         }, url);
     }
 
-    function loadUsers() {
-        userService.select(function (r) {
-            users = {};
-            $.each(r.list, function (i, value) {
-                users[value.id] = value;
-            });
-            if (page.createUserId != '' 
-                && users[page.createUserId] != undefined) {
-                $('#pageCreateUser').html(users[page.createUserId].name);
-            }
-            if (page.modUserId != ''
-                && users[page.modUserId] != undefined) {
-                $('#pageModUser').html(users[page.modUserId].name);
-            }
-        });
-    }
-    
     function loadTemplates() {
         templateService.getTemplates(function (r) {
             var html = '';
@@ -201,6 +182,8 @@
             $('#pageState').html(page.stateString == 'EDIT' ? 'Edit' : 'Approved');
             $('#pageCreateDate').html(page.createDateString);
             $('#pageModDate').html(page.modDateString);
+            $('#pageCreateUser').html(page.createUserEmail);
+            $('#pageModUser').html(page.modUserEmail);
             $('.contentTab').show();
             $('.childrenTab').show();
             $('.commentsTab').show();

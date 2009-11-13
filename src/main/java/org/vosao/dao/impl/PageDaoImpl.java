@@ -240,4 +240,40 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 			pm.close();
 		}
 	}
+	
+	@Override
+	public PageEntity getByUrlVersion(final String url, final Integer version) {
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			String query = "select from " + PageEntity.class.getName()
+			    + " where friendlyURL == pUrl && version == pVersion"
+			    + " parameters String pUrl, Integer pVersion";
+			List<PageEntity> result = (List<PageEntity>)
+					pm.newQuery(query).execute(url, version);
+			if (result.size() > 0) {
+				return result.get(0);
+			}
+			return null;
+		}
+		finally {
+			pm.close();
+		}
+	}
+	
+	@Override
+	public List<PageEntity> getByParentApproved(final String url) {
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			String query = "select from " + PageEntity.class.getName()
+			    + " where parentUrl == pParentUrl" 
+			    + " parameters String pParentUrl"
+			    + " order by publishDate desc";
+			List<PageEntity> result = filterApproved((List<PageEntity>)
+					pm.newQuery(query).execute(url));
+			return copy(result);
+		}
+		finally {
+			pm.close();
+		}
+	}
 }

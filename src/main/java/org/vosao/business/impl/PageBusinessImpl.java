@@ -116,8 +116,11 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	}
 	
 	public VelocityContext createContext(final String languageCode) {
+		LanguageEntity language = getDao().getLanguageDao().getByCode(
+				languageCode);
 		VelocityContext context = new VelocityContext();
 		ConfigEntity configEntity = getConfigBusiness().getConfig();
+		context.put("language", language);
 		context.put("config", configEntity);
 		context.put("service", getVelocityService());
 		context.put("plugin", getVelocityPluginService());

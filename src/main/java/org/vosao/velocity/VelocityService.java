@@ -23,7 +23,6 @@ package org.vosao.velocity;
 
 import java.util.List;
 
-import org.vosao.entity.CommentEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.service.vo.CommentVO;
 
@@ -34,5 +33,10 @@ public interface VelocityService {
 	List<PageEntity> findPageChildren(final String path);
 
 	List<CommentVO> getCommentsByPage(final String pageUrl);
+	
+	String getContent(final String path, final String languageCode);
+
+	List<String> getChildrenContent(final String path, 
+			final String languageCode);
 	
 }

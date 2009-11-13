@@ -21,6 +21,7 @@
 
 package org.vosao.velocity.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.vosao.dao.Dao;
@@ -59,7 +60,7 @@ public class VelocityServiceImpl implements VelocityService {
 
 	@Override
 	public List<PageEntity> findPageChildren(String path) {
-		return getDao().getPageDao().getByParent(path);
+		return getDao().getPageDao().getByParentApproved(path);
 	}
 
 	@Override
@@ -68,4 +69,24 @@ public class VelocityServiceImpl implements VelocityService {
 				pageUrl, false));
 	}
 
+	@Override
+	public String getContent(String path, String languageCode) {
+		PageEntity page = getDao().getPageDao().getByUrl(path);
+		if (page != null) {
+			return getDao().getPageDao().getContent(page.getId(), languageCode);
+		}
+		return "Approved content not found";
+	}
+
+	@Override
+	public List<String> getChildrenContent(String path, String languageCode) {
+		List<PageEntity> pages = getDao().getPageDao().getByParentApproved(
+				path);
+		List<String> result = new ArrayList<String>();
+		for (PageEntity page : pages) {
+			result.add(getDao().getPageDao().getContent(page.getId(), 
+					languageCode));
+		}
+		return result;
+	}
 }

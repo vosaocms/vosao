@@ -54,6 +54,7 @@ function formatDate(date) {
 
 var jsonrpc = '';
 var jsonrpcListeners = [];
+var jsonrpcSystemListeners = [];
 var jsonrpcInitialized = false;
 
 /**
@@ -65,6 +66,10 @@ function createJSONRpc() {
 			alert("Error during initializing JSON-RPC." + e);
 		}
 		else {
+			while (jsonrpcSystemListeners.length > 0) {
+				var func = jsonrpcSystemListeners.pop();
+				func();
+			}
 			while (jsonrpcListeners.length > 0) {
 				var func = jsonrpcListeners.pop();
 				func();
@@ -77,9 +82,8 @@ function createJSONRpc() {
 createJSONRpc();
 
 /**
- * Global JSON-RPC entry point initialization.
+ * Add application JSON-RPC initialization callback.
  * @param func - optional callback to run after successful initialization.
- * @return
  */
 function initJSONRpc(func) {
 	if (func == undefined) {
@@ -92,6 +96,20 @@ function initJSONRpc(func) {
     }
 }
 
+/**
+ * Add system JSON-RPC initialization callback.
+ * @param func - optional callback to run after successful initialization.
+ */
+function initJSONRpcSystem(func) {
+	if (func == undefined) {
+		return;
+	}
+	if (jsonrpcInitialized) {
+        func();
+    } else {
+    	jsonrpcSystemListeners.push(func);
+    }
+}
 
 function serviceFailed(e) {
 	if (e != null) {

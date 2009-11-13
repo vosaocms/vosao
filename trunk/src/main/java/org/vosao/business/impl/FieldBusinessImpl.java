@@ -74,7 +74,7 @@ public class FieldBusinessImpl extends AbstractBusinessImpl
 			field.setName(vo.get("name"));
 			field.setTitle(vo.get("title"));
 			field.setFieldType(FieldType.valueOf(vo.get("fieldType")));
-			field.setMandatory(Boolean.valueOf(vo.get("optional")));
+			field.setMandatory(Boolean.valueOf(vo.get("mandatory")));
 			field.setDefaultValue(vo.get("defaultValue"));
 			field.setValues(vo.get("values"));
 			field.setHeight(Integer.valueOf(vo.get("height")));

@@ -43,7 +43,9 @@ import org.vosao.entity.FolderEntity;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
+import org.vosao.enums.PageState;
 import org.vosao.utils.DateUtil;
+import org.vosao.utils.XmlUtil;
 
 public class PageExporter extends AbstractExporter {
 
@@ -63,29 +65,60 @@ public class PageExporter extends AbstractExporter {
 	private void createPageXML(TreeItemDecorator<PageEntity> page,
 			Element root) {
 		Element pageElement = root.addElement("page"); 
-		pageElement.addAttribute("url", page.getEntity().getFriendlyURL());
-		pageElement.addAttribute("title", page.getEntity().getTitle());
+		createPageDetailsXML(page.getEntity(), pageElement);
+		createPageVersionXML(page.getEntity(), pageElement);
+		createCommentsXML(page, pageElement);
+		for (TreeItemDecorator<PageEntity> child : page.getChildren()) {
+			createPageXML(child, pageElement);
+		}
+	}
+	
+	private void createPageVersionXML(PageEntity page, Element pageElement) {
+		List<PageEntity> versions = getDao().getPageDao().selectByUrl(
+				page.getFriendlyURL());
+		for (PageEntity pageVersion : versions) {
+			if (!pageVersion.getId().equals(page.getId())) {
+				createPageDetailsXML(pageVersion, pageElement.addElement(
+						"page-version"));
+			}
+		}
+	}
+
+	private void createPageDetailsXML(PageEntity page, Element pageElement) {
+		pageElement.addAttribute("url", page.getFriendlyURL());
+		pageElement.addAttribute("title", page.getTitle());
 		pageElement.addAttribute("commentsEnabled", String.valueOf(
-				page.getEntity().isCommentsEnabled()));
-		if (page.getEntity().getPublishDate() != null) {
+				page.isCommentsEnabled()));
+		if (page.getPublishDate() != null) {
 			pageElement.addAttribute("publishDate", 
-				DateUtil.toString(page.getEntity().getPublishDate()));
+				DateUtil.toString(page.getPublishDate()));
 		}
 		TemplateEntity template = getDao().getTemplateDao().getById(
-				page.getEntity().getTemplate());
+				page.getTemplate());
 		if (template != null) {
 			pageElement.addAttribute("theme", template.getUrl());
 		}
+		pageElement.addElement("version").setText(page.getVersion().toString());
+		pageElement.addElement("versionTitle").setText(page.getVersionTitle());
+		pageElement.addElement("state").setText(page.getState().name());
+		pageElement.addElement("createUserId").setText(page.getCreateUserId()
+				.toString());
+		pageElement.addElement("modUserId").setText(page.getModUserId()
+				.toString());
+		if (page.getCreateDate() != null) {
+			pageElement.addElement("createDate").setText(
+					DateUtil.dateTimeToString(page.getCreateDate()));
+		}
+		if (page.getModDate() != null) {
+			pageElement.addElement("modDate").setText(
+					DateUtil.dateTimeToString(page.getModDate()));
+		}
 		List<ContentEntity> contents = getDao().getPageDao().getContents(
-				page.getEntity().getId()); 
+				page.getId()); 
 		for (ContentEntity content : contents) {
 			Element contentElement = pageElement.addElement("content");
 			contentElement.addAttribute("language", content.getLanguageCode());
 			contentElement.addText(content.getContent());
-		}
-		createCommentsXML(page, pageElement);
-		for (TreeItemDecorator<PageEntity> child : page.getChildren()) {
-			createPageXML(child, pageElement);
 		}
 	}
 	
@@ -147,6 +180,22 @@ public class PageExporter extends AbstractExporter {
 	}
 
 	private void readPage(Element pageElement, PageEntity parentPage) {
+		PageEntity page = readPageVersion(pageElement);
+		for (Iterator<Element> i = pageElement.elementIterator(); i.hasNext();) {
+			Element element = i.next();
+			if (element.getName().equals("page")) {
+				readPage(element, page);
+			}
+			if (element.getName().equals("comments")) {
+				readComments(element, page);
+			}
+			if (element.getName().equals("page-version")) {
+				readPageVersion(element);
+			}
+		}
+	}
+
+	private PageEntity readPageVersion(Element pageElement) {
 		String title = pageElement.attributeValue("title");
 		String url = pageElement.attributeValue("url");
 		String themeUrl = pageElement.attributeValue("theme");
@@ -171,7 +220,45 @@ public class PageExporter extends AbstractExporter {
 		if (commentsEnabled != null) {
 			newPage.setCommentsEnabled(Boolean.valueOf(commentsEnabled));
 		}
-		PageEntity page = getDao().getPageDao().getByUrl(url);
+		newPage.setState(PageState.APPROVED);
+		for (Iterator<Element> i = pageElement.elementIterator(); i.hasNext();) {
+			Element element = i.next();
+			if (element.getName().equals("version")) {
+				newPage.setVersion(XmlUtil.readIntegerText(element, 1));
+			}
+			if (element.getName().equals("versionTitle")) {
+				newPage.setVersionTitle(element.getText());
+			}
+			if (element.getName().equals("state")) {
+				newPage.setState(PageState.valueOf(element.getText()));
+			}
+			if (element.getName().equals("createUserId")) {
+				newPage.setCreateUserId(XmlUtil.readLongText(element, 1L));
+			}
+			if (element.getName().equals("modUserId")) {
+				newPage.setModUserId(XmlUtil.readLongText(element, 1L));
+			}
+			if (element.getName().equals("createDate")) {
+				try {
+					newPage.setCreateDate(DateUtil.dateTimeToDate(
+							element.getText()));
+				} catch (ParseException e) {
+					logger.error("Wrong date format for createDate " 
+							+ element.getText());
+				}
+			}
+			if (element.getName().equals("modDate")) {
+				try {
+					newPage.setModDate(DateUtil.dateTimeToDate(
+							element.getText()));
+				} catch (ParseException e) {
+					logger.error("Wrong date format for createDate " 
+							+ element.getText());
+				}
+			}
+		}
+		PageEntity page = getDao().getPageDao().getByUrlVersion(url, 
+				newPage.getVersion());
 		if (page != null) {
 			page.copy(newPage);
 		} else {
@@ -179,17 +266,9 @@ public class PageExporter extends AbstractExporter {
 		}
 		getDao().getPageDao().save(page);
 		readContents(pageElement, page);
-		for (Iterator<Element> i = pageElement.elementIterator(); i.hasNext();) {
-			Element element = i.next();
-			if (element.getName().equals("page")) {
-				readPage(element, page);
-			}
-			if (element.getName().equals("comments")) {
-				readComments(element, page);
-			}
-		}
+		return page;
 	}
-
+	
 	private void readContents(Element pageElement, PageEntity page) {
 		for (Iterator<Element> i = pageElement.elementIterator(); i.hasNext();) {
 			Element element = i.next();

@@ -167,7 +167,7 @@
                 $('input[name=field.defaultValue]').val('');
                 $('input[name=field.height]').val('1');
                 $('input[name=field.width]').val('20');
-                $('input[name=field.optional]')[0].checked = false;
+                $('input[name=field.mandatory]')[0].checked = false;
             } else {
                 $('input[name=field.name]').val(field.name);
                 $('input[name=field.title]').val(field.title);
@@ -176,7 +176,7 @@
                 $('input[name=field.defaultValue]').val(field.defaultValue);
                 $('input[name=field.height]').val(field.height);
                 $('input[name=field.width]').val(field.width);
-                $('input[name=field.optional]')[0].checked = field.optional;
+                $('input[name=field.mandatory]')[0].checked = field.optional;
             }
             fieldDialogShowInputs();
         }
@@ -192,7 +192,7 @@
                 defaultValue :$('input[name=field.defaultValue]').val(),
                 height :$('input[name=field.height]').val(),
                 width :$('input[name=field.width]').val(),
-                optional :String($('input[name=field.optional]:checked').size() > 0)
+                mandatory :String($('input[name=field.mandatory]:checked').size() > 0)
             });
         }
 
@@ -416,8 +416,8 @@
         <input type="text" name="field.height" />
     </div>
     <div class="form-row">
-        <label>Optional</label>
-        <input type="checkbox" name="field.optional" />
+        <label>Mandatory</label>
+        <input type="checkbox" name="field.mandatory" />
     </div>
     <div class="form-row" id="field-values">
         <label>Values</label>

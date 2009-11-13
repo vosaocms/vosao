@@ -45,5 +45,32 @@ public class XmlUtil {
 		}
 	}
 	
+	public static int readIntegerText(Element e, int defaultValue) {
+		String value = e.getText();
+		if (value == null) {
+			return defaultValue;
+		}
+		try {
+			return Integer.valueOf(value);
+		}
+		catch (Exception ex) {
+			return defaultValue;
+		}
+	}
+
+	public static Long readLongText(Element e, Long defaultValue) {
+		String value = e.getText();
+		if (value == null) {
+			return defaultValue;
+		}
+		try {
+			return Long.valueOf(value);
+		}
+		catch (Exception ex) {
+			return defaultValue;
+		}
+	}
+
+	
 	
 }

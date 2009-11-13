@@ -40,9 +40,19 @@ recaptchaPublicKey,commentsEmail,commentsTemplate,enableRecaptcha,languages)>
 <!ELEMENT language EMPTY>
 
 <!ELEMENT pages (page*)>
-<!ELEMENT page (content*, comments, page*)>
+<!ELEMENT page (version,versionTitle,state,createUserId,modUserId,createDate,
+modDate,content*,page-version*,comments,page*)>
 
+<!ELEMENT version (#PCDATA)>
+<!ELEMENT versionTitle (#PCDATA)>
+<!ELEMENT state (#PCDATA)>
+<!ELEMENT createUserId (#PCDATA)>
+<!ELEMENT modUserId (#PCDATA)>
+<!ELEMENT createDate (#PCDATA)>
+<!ELEMENT modDate (#PCDATA)>
 <!ELEMENT content (#PCDATA)>
+<!ELEMENT page-version (version,versionTitle,state,createUserId,modUserId,
+createDate,modDate,content*)>
 <!ELEMENT comments (comment*)>
 <!ELEMENT comment (#PCDATA)>
 

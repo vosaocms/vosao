@@ -39,7 +39,8 @@ public class FormExporter extends AbstractExporter {
 		super(aDao, aBusiness);
 	}
 	
-	public void createFormsXML(Element formsElement) {
+	public void createFormsXML(Element siteElement) {
+		Element formsElement = siteElement.addElement("forms");
 		createFormConfigXML(formsElement);
 		List<FormEntity> list = getDao().getFormDao().select();
 		for (FormEntity form : list) {

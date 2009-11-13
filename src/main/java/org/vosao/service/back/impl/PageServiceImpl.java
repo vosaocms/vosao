@@ -59,7 +59,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 				.getUser();
 			page.setState(PageState.EDIT);
 			page.setModDate(new Date());
-			page.setModUserId(user.getId());
+			page.setModUserEmail(user.getEmail());
 			getDao().getPageDao().save(page);
 			getDao().getPageDao().setContent(pageId, languageCode, content);
 			return ServiceResponse.createSuccessResponse(
@@ -118,11 +118,11 @@ public class PageServiceImpl extends AbstractServiceImpl
 		PageEntity page = getPage(pageMap.get("id"));
 		if (page == null) {
 			page = new PageEntity();
-			page.setCreateUserId(user.getId());
+			page.setCreateUserEmail(user.getEmail());
 		}
 		page.setState(PageState.EDIT);
 		page.setModDate(new Date());
-		page.setModUserId(user.getId());
+		page.setModUserEmail(user.getEmail());
 		page.setCommentsEnabled(Boolean.valueOf(pageMap.get("commentsEnabled")));
 		page.setFriendlyURL(pageMap.get("friendlyUrl"));
 		try {

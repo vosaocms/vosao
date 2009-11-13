@@ -564,7 +564,7 @@ function loadUsers() {
                 + '"/></td><td>' + user.name + '</td><td>\
                 <a href="#" onclick="onUserEdit(' + user.id + ')">' 
                 + user.email + '</a></td><td>'
-                + getRole(user.roleString) + '</td></tr>';
+                + getRole(user.role) + '</td></tr>';
         });
         $('#users').html(h + '</table>');
         $('#users tr:even').addClass('even');

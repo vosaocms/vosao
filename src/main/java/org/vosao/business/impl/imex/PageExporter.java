@@ -54,12 +54,14 @@ public class PageExporter extends AbstractExporter {
 	private ResourceExporter resourceExporter;
 	private ConfigExporter configExporter;
 	private FormExporter formExporter;
+	private UserExporter userExporter;
 	
 	public PageExporter(Dao aDao, Business aBusiness) {
 		super(aDao, aBusiness);
 		resourceExporter = new ResourceExporter(aDao, aBusiness);
 		configExporter = new ConfigExporter(aDao, aBusiness);
 		formExporter = new FormExporter(aDao, aBusiness);
+		userExporter = new UserExporter(aDao, aBusiness);
 	}
 	
 	private void createPageXML(TreeItemDecorator<PageEntity> page,
@@ -101,10 +103,11 @@ public class PageExporter extends AbstractExporter {
 		pageElement.addElement("version").setText(page.getVersion().toString());
 		pageElement.addElement("versionTitle").setText(page.getVersionTitle());
 		pageElement.addElement("state").setText(page.getState().name());
-		pageElement.addElement("createUserId").setText(page.getCreateUserId()
-				.toString());
-		pageElement.addElement("modUserId").setText(page.getModUserId()
-				.toString());
+		String createUserId = "1";
+		pageElement.addElement("createUserEmail").setText(
+				page.getCreateUserEmail());
+		pageElement.addElement("modUserId").setText(
+				page.getModUserEmail());
 		if (page.getCreateDate() != null) {
 			pageElement.addElement("createDate").setText(
 					DateUtil.dateTimeToString(page.getCreateDate()));
@@ -138,29 +141,14 @@ public class PageExporter extends AbstractExporter {
 		}
 	}
 
-	public void exportContent(final ZipOutputStream out) throws IOException {
-		String contentName = "content.xml";
-		out.putNextEntry(new ZipEntry(contentName));
-		out.write(createContentExportXML().getBytes("UTF-8"));
-		out.closeEntry();
-		addContentResources(out);
-	}
-
-	private String createContentExportXML() {
-		Document doc = DocumentHelper.createDocument();
-		Element root = doc.addElement("site");
-		Element config = root.addElement("config");
-		configExporter.createConfigXML(config);
-		Element pages = root.addElement("pages");
+	public void createPagesXML(Element siteElement) {
+		Element pages = siteElement.addElement("pages");
 		TreeItemDecorator<PageEntity> pageRoot = getBusiness()
 				.getPageBusiness().getTree();
 		createPageXML(pageRoot, pages);
-		Element forms = root.addElement("forms");
-		formExporter.createFormsXML(forms);
-		return doc.asXML();
 	}
 	
-	private void addContentResources(final ZipOutputStream out)
+	public void addContentResources(final ZipOutputStream out)
 			throws IOException {
 		TreeItemDecorator<FolderEntity> root = getBusiness()
 				.getFolderBusiness().getTree();
@@ -232,11 +220,11 @@ public class PageExporter extends AbstractExporter {
 			if (element.getName().equals("state")) {
 				newPage.setState(PageState.valueOf(element.getText()));
 			}
-			if (element.getName().equals("createUserId")) {
-				newPage.setCreateUserId(XmlUtil.readLongText(element, 1L));
+			if (element.getName().equals("createUserEmail")) {
+				newPage.setCreateUserEmail(element.getText());
 			}
-			if (element.getName().equals("modUserId")) {
-				newPage.setModUserId(XmlUtil.readLongText(element, 1L));
+			if (element.getName().equals("modUserEmail")) {
+				newPage.setModUserEmail(element.getText());
 			}
 			if (element.getName().equals("createDate")) {
 				try {

@@ -21,16 +21,20 @@
 
 package org.vosao.business.impl.imex;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.Business;
+import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.dao.Dao;
+import org.vosao.entity.PageEntity;
 import org.vosao.servlet.FolderUtil;
 
 public class SiteExporter extends AbstractExporter {
@@ -38,12 +42,14 @@ public class SiteExporter extends AbstractExporter {
 	private ConfigExporter configExporter;
 	private PageExporter pageExporter;
 	private FormExporter formExporter;
+	private UserExporter userExporter;
 
 	public SiteExporter(Dao aDao, Business aBusiness) {
 		super(aDao, aBusiness);
 		configExporter = new ConfigExporter(aDao, aBusiness);
 		pageExporter = new PageExporter(aDao, aBusiness);
 		formExporter = new FormExporter(aDao, aBusiness);
+		userExporter = new UserExporter(aDao, aBusiness);
 	}
 
 	public boolean isSiteContent(final ZipEntry entry)
@@ -55,20 +61,42 @@ public class SiteExporter extends AbstractExporter {
 		return true;
 	}
 
+	public void exportSite(final ZipOutputStream out) throws IOException {
+		String contentName = "content.xml";
+		out.putNextEntry(new ZipEntry(contentName));
+		out.write(createSiteExportXML().getBytes("UTF-8"));
+		out.closeEntry();
+		pageExporter.addContentResources(out);
+	}
+
+	private String createSiteExportXML() {
+		Document doc = DocumentHelper.createDocument();
+		Element siteElement = doc.addElement("site");
+		configExporter.createConfigXML(siteElement);
+		pageExporter.createPagesXML(siteElement);
+		formExporter.createFormsXML(siteElement);
+		userExporter.createUsersXML(siteElement);
+		return doc.asXML();
+	}
+	
+	
 	public void readSiteContent(final ZipEntry entry, final String xml)
 			throws DocumentException {
 		Document doc = DocumentHelper.parseText(xml);
 		Element root = doc.getRootElement();
 		for (Iterator<Element> i = root.elementIterator(); i.hasNext();) {
 			Element element = i.next();
-			if (element.getName().equals("pages")) {
-				pageExporter.readPages(element);
-			}
 			if (element.getName().equals("config")) {
 				configExporter.readConfigs(element);
 			}
+			if (element.getName().equals("pages")) {
+				pageExporter.readPages(element);
+			}
 			if (element.getName().equals("forms")) {
 				formExporter.readForms(element);
+			}
+			if (element.getName().equals("users")) {
+				userExporter.readUsers(element);
 			}
 		}
 	}

@@ -24,109 +24,9 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-
     <title>Templates</title>
-    
     <script src="/static/js/jquery.form.js" language="javascript"></script>
-
-<script type="text/javascript">
-// <!--
-$(function(){
-    $("#import-dialog").dialog({ width: 400, autoOpen: false });
-    $('#upload').ajaxForm(afterUpload);
-    initJSONRpc(loadTemplates);
-    $("#tabs").tabs();
-});
-
-function afterUpload(data) {
-    var s = data.split('::');
-    var result = s[1];
-    var msg = s[2]; 
-    if (result == 'success') {
-        msg = 'Success. File was successfully imported.';
-    }
-    else {
-        msg = "Error. " + msg;
-    }   
-    $("#import-dialog").dialog("close");
-    $("#afterUpload-dialog .message").text(msg);
-    $("#afterUpload-dialog").dialog();
-}
-
-function onImport() {
-    $("#import-dialog").dialog("open");
-}
-
-function onImportCancel() {
-    $("#import-dialog").dialog("close");
-}
-
-function onAfterUploadOk() {
-    window.location.reload();
-}
-
-function loadTemplates() {
-    templateService.getTemplates(function (r) {
-        var html = '<table class="form-table"><tr><th></th><th>Title</th></tr>';
-        $.each(r.list, function (n, value) {
-            html += '<tr><td><input type="checkbox" value="' + value.id 
-                + '" /></td><td><a href="/cms/template.jsp?id=' + value.id
-                +'">' + value.title + '</a></td></tr>';
-        });
-        $('#templates').html(html + '</table>');
-        $('#templates tr:even').addClass('even');
-    });
-}
-
-function onAdd() {
-	location.href = '/cms/template.jsp';
-}
-
-function onDelete() {
-    var ids = new Array();
-    $('#templates input:checked').each(function () {
-        ids.push(this.value);
-    });
-    if (ids.length == 0) {
-        info('Nothing selected.');
-        return;
-    }
-    if (confirm('Are you sure?')) {
-        templateService.deleteTemplates(function(r) {
-            showServiceMessages(r);
-            loadTemapltes();
-        }, javaList(ids));
-    }
-}
-
-function onExport() {
-    var ids = new Array();
-    $('#templates input:checked').each(function () {
-        ids.push(this.value);
-    });
-    if (ids.length == 0) {
-        info('Nothing selected.');
-        return;
-    }
-    var link = '/cms/export?type=theme&ids=';
-    $.each(ids, function (n, value) {
-        if (n == 0) {
-            link += value;
-        }
-        else {
-            link += '::' + value;
-        }
-    });
-    location.href = link;
-    $('#templates input:checked').each(function () {
-        this.checked = false;
-    });
-    info('Themes were successfully exported.');
-}
-
-// -->
-</script>
-
+    <script src="/static/js/cms/templates.js" language="javascript"></script>
 </head>
 <body>
 
@@ -139,10 +39,10 @@ function onExport() {
 <div id="tab-1">
     <div id="templates"><img src="/static/images/ajax-loader.gif" /></div>
     <div class="buttons">
-        <input type="button" value="Add" onclick="onAdd()" />
-        <input type="button" value="Delete" onclick="onDelete()" />
-        <input type="button" value="Export" onclick="onExport()" />
-        <input type="button" value="Import" onclick="onImport()" />
+        <input id="addButton" type="button" value="Add" />
+        <input id="deleteButton" type="button" value="Delete" />
+        <input id="exportButton" type="button" value="Export" />
+        <input id="importButton" type="button" value="Import" />
     </div>
 </div>
 
@@ -155,7 +55,7 @@ function onExport() {
     <input type="file" name="uploadFile" />
     <div class="buttons-dlg">
         <input type="submit" value="Send" />
-        <input type="button" onclick="onImportCancel()" value="Cancel" />
+        <input id="importCancelButton" type="button" value="Cancel" />
     </div>    
 </form>
 </div>
@@ -163,7 +63,7 @@ function onExport() {
 <div id="afterUpload-dialog" style="display:none" title="Status window">
     <p class="message"></p>
     <div class="buttons-dlg">
-        <input type="button" onclick="onAfterUploadOk()" value="OK" />
+        <input id="okButton" type="button" value="OK" />
     </div>
 </div>
 

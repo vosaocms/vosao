@@ -25,90 +25,7 @@
 <html>
 <head>
     <title>Forms</title>
-
-<script type="text/javascript">
-
-    var formConfig = '';
-
-    $(function() {
-        $("#tabs").tabs();
-        initJSONRpc(loadData);
-    });
-
-    function loadData() {
-        loadForms();
-        loadFormConfig();
-    }
-    
-    function loadForms() {
-        formService.select(function (r) {
-            var html = '<table class="form-table"><tr><th></th><th>Title</th>\
-<th>Name</th><th>Email</th></tr>';
-            $.each(r.list, function(i, form) {
-                html += '<tr><td><input type="checkbox" value="' + form.id
-                    + '"/></td><td><a href="/cms/plugins/form.jsp?id=' + form.id 
-                    + '">' + form.title + '</a></td><td>' + form.name 
-                    + '</td><td>' + form.email + '</td></tr>';
-            });
-            $('#forms').html(html + '</table>');
-            $('#forms tr:even').addClass('even');
-        });
-    }
-
-    function onAdd() {
-        location.href = '/cms/plugins/form.jsp';
-    }
-    
-    function onDelete() {
-        var ids = [];
-        $('#forms input:checked').each(function() {
-            ids.push(this.value);
-        });
-        if (ids.length == 0) {
-            info('Nothing selected');
-            return;
-        }
-        if (confirm('Are you sure?')) {
-            formService.deleteForm(function (r) {
-                showServiceMessages(r);
-                loadForms();
-            }, javaList(ids));
-        }
-    }
-
-    function loadFormConfig() {
-        formService.getFormConfig(function (r) {
-            formConfig = r;
-            $('#formTemplate').val(r.formTemplate);
-            $('#letterTemplate').val(r.letterTemplate);
-        });
-    }
-    
-    function onSaveConfig() {
-        var vo = javaMap({
-        	formTemplate : $('#formTemplate').val(),
-        	letterTemplate : $('#letterTemplate').val()
-        });
-        formService.saveFormConfig(function (r) {
-            showServiceMessages(r);
-        }, vo);
-    }
-
-    function onFormTemplateRestore() {
-        formService.restoreFormTemplate(function (r) {
-            showServiceMessages(r);
-            loadFormConfig();
-        });
-    }
-
-    function onFormLetterRestore() {
-        formService.restoreFormLetter(function (r) {
-            showServiceMessages(r);
-            loadFormConfig();
-        });
-    }
-
-</script>    
+    <script src="/static/js/cms/plugins/forms.js" type="text/javascript"></script>    
 </head>
 <body>
 
@@ -121,8 +38,8 @@
 <div id="tab-1">
     <div id="forms"> </div>
     <div class="buttons">
-        <input type="button" value="Add" onclick="onAdd()" />
-        <input type="button" value="Delete" onclick="onDelete()" />
+        <input id="addButton" type="button" value="Add" />
+        <input id="deleteButton" type="button" value="Delete" />
     </div>
 </div>
 
@@ -131,25 +48,27 @@
 <div class="form-row">
     <label>Form template</label>
     <div>
-    <a href="#" onclick="$('#formTemplate').toggle()">edit</a> 
-    <a href="#" onclick="onFormTemplateRestore()">restore default</a>
+        <a id="editFormTemplateLink" href="#">edit</a> 
+        <a id="restoreFormTemplateLink" href="#">restore default</a>
     </div>
     <div>
-    <textarea id="formTemplate" rows="20" cols="80" style="display:none"></textarea>
+        <textarea id="formTemplate" rows="20" cols="80" 
+            style="display:none"></textarea>
     </div>
 </div>
 <div class="form-row">
     <label>Form letter template</label>
     <div>
-    <a href="#" onclick="$('#letterTemplate').toggle()">edit</a> 
-    <a href="#" onclick="onFormLetterRestore()">restore default</a>
+        <a id="editFormLetterLink" href="#" onclick="">edit</a> 
+        <a id="restoreFormLetterLink" href="#">restore default</a>
     </div>
     <div>
-    <textarea id="letterTemplate" rows="20" cols="80" style="display:none"></textarea>
+        <textarea id="letterTemplate" rows="20" cols="80" 
+            style="display:none"></textarea>
     </div>
 </div>
 <div class="buttons">
-    <input type="button" value="Save" onclick="onSaveConfig()" />
+    <input id="saveButton" type="button" value="Save" />
 </div>
 </div>
 

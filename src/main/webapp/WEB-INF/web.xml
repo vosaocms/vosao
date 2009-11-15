@@ -111,7 +111,7 @@
         <servlet-class>org.jabsorb.JSONRPCServlet</servlet-class>
         <init-param>
             <param-name>gzip_threshold</param-name>
-            <param-value>-1</param-value>
+            <param-value>200</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>

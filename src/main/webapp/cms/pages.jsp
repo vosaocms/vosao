@@ -24,55 +24,20 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-
     <title>Pages</title>
     <script src="/static/js/jquery.treeview.pack.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/static/css/jquery.treeview.css" type="text/css" />
-
-    <script type="text/javascript">
-
-    $(function(){
-        initJSONRpc(loadTree);
-        $("#tabs").tabs();
-    });
-
-    function loadTree() {
-        pageService.getTree(function(r) {
-            $('#pages-tree').html(renderPage(r));
-            $("#pages-tree").treeview();
-        });
-    }
-
-    function renderPage(vo) {
-        var pageUrl = encodeURIComponent(vo.entity.friendlyURL);
-    	var html = '<li><a href="page.jsp?id=' + vo.entity.id + '">' 
-            + vo.entity.title + '</a> <a title="Add child" href="page.jsp?parent=' 
-            + pageUrl + '">+</a>';
-        if (vo.children.list.length > 0) {
-            html += '<ul>';
-            $.each(vo.children.list, function(n, value) {
-                html += renderPage(value);
-            });
-            html += '</ul>';
-        }
-        return html + '</li>';
-    }
-    
-    </script>
-    
+    <script src="/static/js/cms/pages.js" type="text/javascript"></script>
 </head>
 <body>
 
 <div id="tabs">
-
-<ul>
-    <li><a href="#tab-1">Pages</a></li>
-</ul>
-
-<div id="tab-1">
-    <ul id="pages-tree"><img src="/static/images/ajax-loader.gif" /></ul>
-</div>
-
+    <ul>
+        <li><a href="#tab-1">Pages</a></li>
+    </ul>
+    <div id="tab-1">
+        <ul id="pages-tree"><img src="/static/images/ajax-loader.gif" /></ul>
+    </div>
 </div>
 
 </body>

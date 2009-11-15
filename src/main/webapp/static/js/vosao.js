@@ -83,7 +83,7 @@ createJSONRpc();
 
 /**
  * Add application JSON-RPC initialization callback.
- * @param func - optional callback to run after successful initialization.
+ * @param func - callback to run after successful initialization.
  */
 function initJSONRpc(func) {
 	if (func == undefined) {
@@ -97,8 +97,8 @@ function initJSONRpc(func) {
 }
 
 /**
- * Add system JSON-RPC initialization callback.
- * @param func - optional callback to run after successful initialization.
+ * Add system (high priority) JSON-RPC initialization callback.
+ * @param func - callback to run after successful initialization.
  */
 function initJSONRpcSystem(func) {
 	if (func == undefined) {
@@ -139,13 +139,3 @@ var loginService = {
     },
     
 };
-
-
-
-
-
-
-
-
-
-

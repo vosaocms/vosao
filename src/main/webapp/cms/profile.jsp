@@ -25,59 +25,7 @@
 <html>
 <head>
     <title>User profile</title>
-    
-<script type="text/javascript">
-
-    var user = null;
-
-    $(function(){
-        initJSONRpc(loadUser);
-    });
-
-    function loadUser() {
-        userService.getLoggedIn(function (r) {
-            user = r;
-            $('#name').val(user.name);
-            $('#email').val(user.email);
-            $('#password1').val('');
-            $('#password2').val('');
-        });
-    }
-
-    function validPasswords() {
-        var pass1 = $('#password1').val();
-        var pass2 = $('#password2').val();
-        if (pass1 || pass2) {
-            if (pass1 == pass2) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    }
-    
-    function onSave() {
-        var pass = '';
-        if (validPasswords()) {
-            pass = $('#password1').val();
-        }
-        else {
-            error('Passwords don\'t match.');
-            return;
-        }
-        var vo = {
-        	id : String(user.id),
-            name : $('#name').val(),   
-            email : $('#email').val(),   
-            password : pass,   
-        };
-        userService.save(function (r) {
-            showServiceMessages(r);
-        }, javaMap(vo));
-    }
-
-</script>
-    
+    <script src="/static/js/cms/profile.js" type="text/javascript"></script>   
 </head>
 <body>
 
@@ -103,7 +51,7 @@
 </div>
 
 <div class="buttons">
-    <input type="button" value="Save" onclick="onSave()" />
+    <input id="saveButton" type="button" value="Save" />
 </div>
 
 </body>

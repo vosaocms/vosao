@@ -126,7 +126,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		context.put("language", language);
 		context.put("config", configEntity);
 		VelocityService velocityService = new VelocityServiceImpl(getDao(),
-				languageCode);
+				this, languageCode);
 		context.put("service", velocityService);
 		context.put("plugin", getVelocityPluginService());
 		context.put("messages", getMessageBusiness().getBundle(languageCode));

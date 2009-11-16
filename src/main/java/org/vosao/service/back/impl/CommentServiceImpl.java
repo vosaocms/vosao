@@ -40,8 +40,7 @@ public class CommentServiceImpl extends AbstractServiceImpl
 	
 	@Override
 	public List<CommentVO> getByPage(String pageUrl) {
-		return CommentVO.create(getDao().getCommentDao()
-				.getByPage(pageUrl, false));
+		return CommentVO.create(getDao().getCommentDao().getByPage(pageUrl));
 	}
 
 	@Override

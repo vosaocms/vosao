@@ -24,6 +24,8 @@ package org.vosao.velocity.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.vosao.business.PageBusiness;
+import org.vosao.business.impl.PageRenderDecorator;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
 import org.vosao.service.vo.CommentVO;
@@ -35,17 +37,24 @@ import org.vosao.velocity.VelocityService;
 public class VelocityServiceImpl implements VelocityService {
 
 	private Dao dao;
+	private PageBusiness pageBusiness;
 	private String languageCode;
 	
-	public VelocityServiceImpl(Dao aDao, String aLanguageCode) {
+	public VelocityServiceImpl(Dao aDao, PageBusiness aPageBusiness, 
+			String aLanguageCode) {
 		dao = aDao;
 		languageCode = aLanguageCode;
+		pageBusiness = aPageBusiness;
 	}
 	
 	private Dao getDao() {
 		return dao;
 	}
 	
+	private PageBusiness getPageBusiness() {
+		return pageBusiness;
+	}
+
 	@Override
 	public PageEntity findPage(String path) {
 		PageEntity page = getDao().getPageDao().getByUrl(path);
@@ -71,7 +80,8 @@ public class VelocityServiceImpl implements VelocityService {
 	public String findContent(String path, String aLanguageCode) {
 		PageEntity page = getDao().getPageDao().getByUrl(path);
 		if (page != null) {
-			return getDao().getPageDao().getContent(page.getId(), aLanguageCode);
+			return getPageBusiness().createPageRenderDecorator(
+					page, aLanguageCode).getContent();
 		}
 		return "Approved content not found";
 	}
@@ -87,8 +97,8 @@ public class VelocityServiceImpl implements VelocityService {
 				path);
 		List<String> result = new ArrayList<String>();
 		for (PageEntity page : pages) {
-			result.add(getDao().getPageDao().getContent(page.getId(), 
-					aLanguageCode));
+			result.add(getPageBusiness().createPageRenderDecorator(
+					page, aLanguageCode).getContent());
 		}
 		return result;
 	}

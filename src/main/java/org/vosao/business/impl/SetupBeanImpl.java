@@ -79,9 +79,13 @@ public class SetupBeanImpl implements SetupBean {
 	}
 	
 	private void initLanguages() {
-		LanguageEntity lang = new LanguageEntity(
+		LanguageEntity lang = getDao().getLanguageDao().getByCode(
+				LanguageEntity.ENGLISH_CODE); 
+		if (lang == null) {
+			lang = new LanguageEntity(
 				LanguageEntity.ENGLISH_CODE, LanguageEntity.ENGLISH_TITLE);
-		getDao().getLanguageDao().save(lang);		
+			getDao().getLanguageDao().save(lang);
+		}
 	}
 
 	private void clearSessions() {

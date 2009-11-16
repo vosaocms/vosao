@@ -77,10 +77,14 @@ public class UpdateTask004 implements UpdateTask {
 	}
 
 	private void addEngLanguage() {
-		LanguageEntity lang = new LanguageEntity();
-		lang.setCode(LanguageEntity.ENGLISH_CODE);
-		lang.setTitle(LanguageEntity.ENGLISH_TITLE);
-		getDao().getLanguageDao().save(lang);
+		LanguageEntity lang = getDao().getLanguageDao().getByCode(
+				LanguageEntity.ENGLISH_CODE);
+		if (lang == null) {
+			lang = new LanguageEntity();
+			lang.setCode(LanguageEntity.ENGLISH_CODE);
+			lang.setTitle(LanguageEntity.ENGLISH_TITLE);
+			getDao().getLanguageDao().save(lang);
+		}
 	}
 	
 	private void updatePages() {

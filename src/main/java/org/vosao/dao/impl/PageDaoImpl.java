@@ -22,6 +22,7 @@
 package org.vosao.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -134,10 +135,10 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		try {
 			String query = "select from " + PageEntity.class.getName()
 			    + " where parentUrl == pParentUrl" 
-			    + " parameters String pParentUrl"
-			    + " order by publishDate desc";
+			    + " parameters String pParentUrl";
 			List<PageEntity> result = filterLatestVersion((List<PageEntity>)
 					pm.newQuery(query).execute(url));
+			Collections.sort(result, new PageEntity.PublishDateDesc());
 			return copy(result);
 		}
 		finally {
@@ -230,11 +231,11 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		try {
 			String query = "select from " + PageEntity.class.getName()
 			    + " where friendlyURL == pUrl"
-			    + " parameters String pUrl"
-			    + " order by version";
+			    + " parameters String pUrl";
 			List<PageEntity> result = (List<PageEntity>)
 					pm.newQuery(query).execute(url);
-			return copy(result);
+			Collections.sort(result, new PageEntity.VersionAsc());
+			return result;
 		}
 		finally {
 			pm.close();
@@ -266,11 +267,11 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 		try {
 			String query = "select from " + PageEntity.class.getName()
 			    + " where parentUrl == pParentUrl" 
-			    + " parameters String pParentUrl"
-			    + " order by publishDate desc";
+			    + " parameters String pParentUrl";
 			List<PageEntity> result = filterApproved((List<PageEntity>)
 					pm.newQuery(query).execute(url));
-			return copy(result);
+			Collections.sort(result, new PageEntity.PublishDateDesc());
+			return result;
 		}
 		finally {
 			pm.close();

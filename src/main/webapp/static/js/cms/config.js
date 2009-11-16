@@ -597,11 +597,13 @@ function initUserForm() {
 	if (user == null) {
         $('#userName').val('');
         $('#userEmail').val('');
+        $('#userEmail').removeAttr('disabled');
         $('#userRole').val('');
 	}
 	else {
         $('#userName').val(user.name);
         $('#userEmail').val(user.email);
+        $('#userEmail').attr('disabled', true);
         $('#userRole').val(user.roleString);
 	}
     $('#userPassword1').val('');

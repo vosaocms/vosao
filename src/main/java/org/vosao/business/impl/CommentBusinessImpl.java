@@ -48,7 +48,7 @@ public class CommentBusinessImpl extends AbstractBusinessImpl
 		ConfigEntity config = getDao().getConfigDao().getConfig();
 		String encodedContent = StringEscapeUtils.escapeHtml(content);
 		CommentEntity comment = new CommentEntity(name, encodedContent, 
-				new Date(), page.getId());
+				new Date(), page.getFriendlyURL());
 		getDao().getCommentDao().save(comment);
 		String toAddress = config.getCommentsEmail();
 		if (StringUtil.isEmpty(toAddress)) {

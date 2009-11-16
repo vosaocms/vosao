@@ -35,24 +35,22 @@ import org.vosao.velocity.VelocityService;
 public class VelocityServiceImpl implements VelocityService {
 
 	private Dao dao;
+	private String languageCode;
 	
-	public VelocityServiceImpl(Dao aDao) {
-		setDao(aDao);
+	public VelocityServiceImpl(Dao aDao, String aLanguageCode) {
+		dao = aDao;
+		languageCode = aLanguageCode;
 	}
 	
 	private Dao getDao() {
 		return dao;
 	}
 	
-	private void setDao(Dao aDao) {
-		dao = aDao;
-	}
-	
 	@Override
 	public PageEntity findPage(String path) {
 		PageEntity page = getDao().getPageDao().getByUrl(path);
 		if (page == null) {
-			page = new PageEntity("Page not found", "Page not found", 
+			return new PageEntity("Page not found", "Page not found", 
 					"Page not found", null);
 		}
 		return page;
@@ -70,23 +68,34 @@ public class VelocityServiceImpl implements VelocityService {
 	}
 
 	@Override
-	public String getContent(String path, String languageCode) {
+	public String findContent(String path, String aLanguageCode) {
 		PageEntity page = getDao().getPageDao().getByUrl(path);
 		if (page != null) {
-			return getDao().getPageDao().getContent(page.getId(), languageCode);
+			return getDao().getPageDao().getContent(page.getId(), aLanguageCode);
 		}
 		return "Approved content not found";
 	}
 
 	@Override
-	public List<String> getChildrenContent(String path, String languageCode) {
+	public String findContent(String path) {
+		return findContent(path, languageCode);
+	}
+
+	@Override
+	public List<String> findChildrenContent(String path, String aLanguageCode) {
 		List<PageEntity> pages = getDao().getPageDao().getByParentApproved(
 				path);
 		List<String> result = new ArrayList<String>();
 		for (PageEntity page : pages) {
 			result.add(getDao().getPageDao().getContent(page.getId(), 
-					languageCode));
+					aLanguageCode));
 		}
 		return result;
 	}
+
+	@Override
+	public List<String> findChildrenContent(String path) {
+		return findChildrenContent(path, languageCode);
+	}
+	
 }

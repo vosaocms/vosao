@@ -23,7 +23,7 @@
         <textarea name="comment" cols="40" rows="6"></textarea>
     </div>
     <div id="recaptcha">&nbsp;</div>
-    <div>
+    <div class="buttons">
         <input type="button" onclick="onAddComment()" value="Add comment"/>
     </div>
   </form>
@@ -34,46 +34,65 @@
 
 $(function() {
 #if($config.enableRecaptcha)
-  Recaptcha.create('$config.recaptchaPublicKey',
-    'recaptcha', {
-        theme:'red', 
-        callback: Recaptcha.focus_response_field});
+    Recaptcha.create('$config.recaptchaPublicKey',
+        'recaptcha', {
+            theme:'red', 
+            callback: Recaptcha.focus_response_field});
 #end
-  $(".comments-label").click(function() {
-    $(".comments-block").slideToggle('slow');
-  });
-
+    $(".comments-label").click(function() {
+        $(".comments-block").slideToggle('slow');
+    });
 });
+
+function validate(name, comment) {
+	if (name == '') {
+		return 'Name is empty';
+	}
+    if (comment == '') {
+        return 'Comment is empty';
+    }
+}
 
 function onAddComment() {
     var name = $("#comment-form input[name=name]").val();
     var comment = $("#comment-form textarea[name=comment]").val();
     var pageUrl = '$page.friendlyURL';
-#if($config.enableRecaptcha)
-    var data = jsonrpc.commentFrontService.addComment(name, comment, pageUrl,
-        Recaptcha.get_challenge(), Recaptcha.get_response());
-#else
-    var data = jsonrpc.commentFrontService.addComment(name, comment, pageUrl,
-            '', '');
-#end
-    if (data.result == 'success') {
-        $("#messages").html('<ul><li class="infoMessage">Comment was successfully added.</li></ul>');
-        $("#comment-form textarea[name=comment]").val('');
-        loadComments(pageUrl);
+    var error = validate(name, comment);
+    if (error) {
+        commentError(error);
+        return;        
     }
-    else {
-        var msg = data.message;
-        if (msg == "incorrect-captcha-sol") {
-            msg = "incorrect captcha solution";
+    jsonrpc.commentFrontService.addComment(function (data, e) {
+        if (serviceFailed(e)) return;
+        if (data.result == 'success') {
+            $("#messages").html('');
+            $("#comment-form textarea[name=comment]").val('');
+            loadComments(pageUrl);
         }
-        $("#messages").html('<ul><li class="errorMessage">Error. ' + msg 
-                + '</li></ul>');
-    }
-    Recaptcha.reload();  
+        else {
+            var msg = data.message;
+            if (msg == "incorrect-captcha-sol") {
+                msg = "incorrect captcha solution";
+            }
+            commentError(msg);
+        }
+    }, name, comment, pageUrl,
+#if($config.enableRecaptcha)
+    Recaptcha.get_challenge(), Recaptcha.get_response());
+    Recaptcha.reload();
+#else
+    '', '');
+#end
+}
+
+function commentError(msg) {
+    $("#messages").html('<ul><li class="errorMessage">Error. ' + msg 
+            + '</li></ul>');
 }
 
 function loadComments(pageUrl) {
-    jsonrpc.commentFrontService.getByPage(function(r) {
+    jsonrpc.commentFrontService.getByPage(function(r, e) {
+        if (serviceFailed(e)) return;
         var s = "";
         if (r.list.length > 0) {
             for (var i = 0; i < r.list.length; i++) {

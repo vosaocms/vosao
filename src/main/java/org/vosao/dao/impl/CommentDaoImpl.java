@@ -21,6 +21,7 @@
 
 package org.vosao.dao.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
@@ -29,6 +30,9 @@ import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.CommentDao;
 import org.vosao.entity.CommentEntity;
 
+/**
+ * @author Alexander Oleynik
+ */
 public class CommentDaoImpl extends AbstractDaoImpl implements CommentDao {
 
 	@Override
@@ -101,7 +105,8 @@ public class CommentDaoImpl extends AbstractDaoImpl implements CommentDao {
 			    + " where pageUrl == pPageUrl parameters String pPageUrl";
 			List<CommentEntity> result = (List<CommentEntity>)pm.newQuery(query)
 				.execute(pageUrl);
-			return copy(result);
+			Collections.sort(result, new CommentEntity.PublishDateDesc());
+			return result;
 		}
 		finally {
 			pm.close();
@@ -161,7 +166,8 @@ public class CommentDaoImpl extends AbstractDaoImpl implements CommentDao {
 			    + " parameters String pPageUrl, boolean pDisabled";
 			List<CommentEntity> result = (List<CommentEntity>)pm.newQuery(query)
 				.execute(pageUrl, disabled);
-			return copy(result);
+			Collections.sort(result, new CommentEntity.PublishDateDesc());
+			return result;
 		}
 		finally {
 			pm.close();

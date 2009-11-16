@@ -22,6 +22,7 @@
 package org.vosao.entity;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Date;
 
 import javax.jdo.annotations.Extension;
@@ -33,11 +34,26 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Text;
 
-
+/**
+ * @author Alexander Oleynik
+ */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class CommentEntity implements Serializable {
 
 	private static final long serialVersionUID = 7L;
+
+	public static class PublishDateDesc implements Comparator<CommentEntity> {
+		@Override
+		public int compare(CommentEntity o1, CommentEntity o2) {
+			if (o1.getPublishDate().after(o2.getPublishDate())) {
+				return -1;
+			}
+			if (o1.getPublishDate().equals(o2.getPublishDate())) {
+				return 0;
+			}
+			return 1;
+		}
+	}
 
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)

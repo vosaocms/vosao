@@ -61,11 +61,9 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 
     ConfigBusiness configBusiness;
     MessageBusiness messageBusiness;
-	VelocityService velocityService;
 	VelocityPluginService velocityPluginService;
 
 	public void init() throws Exception {
-		velocityService = new VelocityServiceImpl(getDao());
 		velocityPluginService = new VelocityPluginServiceImpl(getDao(), 
 				getSystemService());
 	}
@@ -102,10 +100,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			TemplateEntity template = getDao().getTemplateDao().getById(
 					page.getTemplate());
 			VelocityContext context = createContext(languageCode);
-			PageRenderDecorator pageDecorator = new PageRenderDecorator(page, 
-					languageCode, getConfigBusiness(), this, 
-					getSystemService());
-			context.put("page", pageDecorator);
+			context.put("page", createPageRenderDecorator(page, languageCode));
 			return pagePostProcess(getSystemService()
 					.render(template.getContent(), context));
 		}
@@ -115,6 +110,14 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		}
 	}
 	
+	@Override	
+	public PageRenderDecorator createPageRenderDecorator(final PageEntity page,
+			final String languageCode) {
+		return new PageRenderDecorator(page, languageCode, getDao(), this, 
+				getSystemService());
+	}
+	
+	@Override
 	public VelocityContext createContext(final String languageCode) {
 		LanguageEntity language = getDao().getLanguageDao().getByCode(
 				languageCode);
@@ -122,7 +125,9 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		ConfigEntity configEntity = getConfigBusiness().getConfig();
 		context.put("language", language);
 		context.put("config", configEntity);
-		context.put("service", getVelocityService());
+		VelocityService velocityService = new VelocityServiceImpl(getDao(),
+				languageCode);
+		context.put("service", velocityService);
 		context.put("plugin", getVelocityPluginService());
 		context.put("messages", getMessageBusiness().getBundle(languageCode));
 		return context;
@@ -195,10 +200,6 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	@Override
 	public void setMessageBusiness(MessageBusiness bean) {
 		messageBusiness = bean;		
-	}
-
-	private VelocityService getVelocityService() {
-        return velocityService;
 	}
 
 	public VelocityPluginService getVelocityPluginService() {

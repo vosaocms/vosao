@@ -62,8 +62,9 @@
 </div>
 <div class="form-row">
     <label>Friendly URL </label>
-    <span id="parentFriendlyUrl"> </span>
+    <span id="parentFriendlyUrl"></span>
     <input id="friendlyUrl" type="text" />
+    <span id="friendlyUrlSpan"></span>
 </div>
 <div class="form-row">
     <label>Template</label>

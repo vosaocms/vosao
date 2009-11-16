@@ -22,6 +22,7 @@
 package org.vosao.entity;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Date;
 
 import javax.jdo.annotations.Extension;
@@ -35,12 +36,40 @@ import org.vosao.enums.PageState;
 import org.vosao.utils.DateUtil;
 import org.vosao.utils.UrlUtil;
 
-
+/**
+ * @author Alexander Oleynik
+ */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class PageEntity implements Serializable {
 
 	private static final long serialVersionUID = 7L;
 
+	public static class PublishDateDesc implements Comparator<PageEntity> {
+		@Override
+		public int compare(PageEntity o1, PageEntity o2) {
+			if (o1.getPublishDate().after(o2.getPublishDate())) {
+				return -1;
+			}
+			if (o1.getPublishDate().equals(o2.getPublishDate())) {
+				return 0;
+			}
+			return 1;
+		}
+	}
+	
+	public static class VersionAsc implements Comparator<PageEntity> {
+		@Override
+		public int compare(PageEntity o1, PageEntity o2) {
+			if (o1.getVersion() > o2.getVersion()) {
+				return 1;
+			}
+			if (o1.getVersion().equals(o2.getVersion())) {
+				return 0;
+			}
+			return -1;
+		}
+	}
+	
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
@@ -71,7 +100,7 @@ public class PageEntity implements Serializable {
 	private String versionTitle;
 
 	@Persistent
-	private PageState state;
+	private String state;
 	
 	@Persistent
 	private String createUserEmail;
@@ -87,7 +116,7 @@ public class PageEntity implements Serializable {
 	
 	public PageEntity() {
 		publishDate = new Date();
-		state = PageState.EDIT;
+		state = PageState.EDIT.name();
 		version = 1;
 		versionTitle = "New page";
 		createDate = new Date();
@@ -247,15 +276,15 @@ public class PageEntity implements Serializable {
 	}
 
 	public PageState getState() {
-		return state;
+		return PageState.valueOf(state);
 	}
 
 	public String getStateString() {
-		return state.name();
+		return state;
 	}
 
-	public void setState(PageState state) {
-		this.state = state;
+	public void setState(PageState aState) {
+		this.state = aState.name();
 	}
 
 	public String getCreateUserEmail() {
@@ -299,7 +328,7 @@ public class PageEntity implements Serializable {
 	}
 	
 	public boolean isApproved() {
-		return state.equals(PageState.APPROVED);
+		return state.equals(PageState.APPROVED.name());
 	}
 
 	public String getParentUrl() {

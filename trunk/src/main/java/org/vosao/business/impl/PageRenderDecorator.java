@@ -28,6 +28,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.ConfigBusiness;
 import org.vosao.business.PageBusiness;
+import org.vosao.dao.Dao;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.global.SystemService;
@@ -41,17 +42,18 @@ public class PageRenderDecorator {
 	private PageEntity page;
 	private String languageCode;
 	private String content;
-	private ConfigBusiness configBusiness;
+	private Dao dao;
 	private PageBusiness pageBusiness;
 	private SystemService systemService;
 	
 	public PageRenderDecorator(PageEntity page,	String languageCode, 
-			ConfigBusiness configBusiness,
-			PageBusiness pageBusiness, SystemService systemService) {
+			Dao dao,
+			PageBusiness pageBusiness, 
+			SystemService systemService) {
 		super();
 		this.page = page;
 		this.languageCode = languageCode;
-		this.configBusiness = configBusiness;
+		this.dao = dao;
 		this.pageBusiness = pageBusiness;
 		this.systemService = systemService;
 		pluginContentRender();
@@ -75,7 +77,7 @@ public class PageRenderDecorator {
 	
 	public String getComments() {
 		if (isCommentsEnabled()) {
-			String commentsTemplate = getConfigBusiness().getConfig()
+			String commentsTemplate = getDao().getConfigDao().getConfig()
 				.getCommentsTemplate();
 			if (StringUtil.isEmpty(commentsTemplate)) {
 				logger.error("comments template is empty");
@@ -120,8 +122,8 @@ public class PageRenderDecorator {
 		return page.isCommentsEnabled();
 	}
 
-	private ConfigBusiness getConfigBusiness() {
-		return configBusiness;
+	private Dao getDao() {
+		return dao;
 	}
 
 	private PageBusiness getPageBusiness() {

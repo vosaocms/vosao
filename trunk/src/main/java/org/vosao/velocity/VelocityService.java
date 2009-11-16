@@ -26,17 +26,60 @@ import java.util.List;
 import org.vosao.entity.PageEntity;
 import org.vosao.service.vo.CommentVO;
 
+/**
+ * @author Alexander Oleynik
+ */
 public interface VelocityService {
 
+	/**
+	 * Find approved last version of page entity by friendlyURL.
+	 * @param path - firnedly url.
+	 * @return found page.
+	 */
 	PageEntity findPage(final String path);
 	
+	/**
+	 * Find approved last versions of children pages entity by parent page
+	 * friendlyURL.
+	 * @param path - firnedly url.
+	 * @return list of found pages.
+	 */
 	List<PageEntity> findPageChildren(final String path);
 
 	List<CommentVO> getCommentsByPage(final String pageUrl);
 	
-	String getContent(final String path, final String languageCode);
+	/**
+	 * Find approved last version page content by friendlyURL and language.
+	 * @param path - page friendlyURL.
+	 * @param languageCode - content language code.
+	 * @return found content.
+	 */
+	String findContent(final String path, final String languageCode);
 
-	List<String> getChildrenContent(final String path, 
+	/**
+	 * Find approved last version page content by friendlyURL and current 
+	 * language.
+	 * @param path - page friendlyURL.
+	 * @return found content.
+	 */
+	String findContent(final String path);
+
+	/**
+	 * Find approved last versions of children pages content by parent page 
+	 * friendlyURL and language code.
+	 * @param path - firnedly url.
+	 * @param languageCode - language code.
+	 * @return list of found contents.
+	 */
+	List<String> findChildrenContent(final String path, 
 			final String languageCode);
+
+	/**
+	 * Find approved last versions of children pages content by parent page 
+	 * friendlyURL and current language code.
+	 * @param path - firnedly url.
+	 * @return list of found contents.
+	 */
+	List<String> findChildrenContent(final String path);
 	
 }

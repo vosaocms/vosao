@@ -25,14 +25,28 @@ import java.util.List;
 
 import org.vosao.entity.CommentEntity;
 
+/**
+ * @author Alexander Oleynik
+ */
 public interface CommentDao extends AbstractDao {
 
 	void save(final CommentEntity page);
 	
 	CommentEntity getById(final String id);
 
+	/**
+	 * Get comments by page's friendlyURL.
+	 * @param pageUrl - page friendlyURL.
+	 * @return found comments ordered by publishDate desc.
+	 */
 	List<CommentEntity> getByPage(final String pageUrl);
 
+	/**
+	 * Get comments by page's friendlyURL and disabled flag value.
+	 * @param pageUrl - page friendlyURL.
+	 * @param disabled - disabled flag.
+	 * @return found comments ordered by publishDate desc.
+	 */
 	List<CommentEntity> getByPage(final String pageUrl, boolean disabled);
 
 	void remove(final String id);

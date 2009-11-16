@@ -72,8 +72,9 @@ public class ConfigExporter extends AbstractExporter {
 			Element elem = configElement.addElement("commentsTemplate");
 			elem.setText(config.getCommentsTemplate());
 		}
-		Element elem = configElement.addElement("enableRecaptcha");
-		elem.setText(String.valueOf(config.isEnableRecaptcha()));
+		configElement.addElement("enableRecaptcha").setText(
+				String.valueOf(config.isEnableRecaptcha()));
+		configElement.addElement("version").setText(config.getVersion());
 		createLanguagesXML(configElement);
 	}
 
@@ -114,6 +115,9 @@ public class ConfigExporter extends AbstractExporter {
             }
             if (element.getName().equals("commentsTemplate")) {
             	config.setCommentsTemplate(element.getText());
+            }
+            if (element.getName().equals("version")) {
+            	config.setVersion(element.getText());
             }
             if (element.getName().equals("languages")) {
             	readLanguages(element);

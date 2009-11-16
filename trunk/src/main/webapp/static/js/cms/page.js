@@ -161,7 +161,7 @@ function initPageForm() {
 	var urlEnd = pageParentUrl == '/' ? '' : '/';
 	if (page != null) {
 		$('#title').val(page.title);
-		if (page.parentUrl == '') {
+		if (page.parentUrl == '' || page.parentUrl == null) {
 			$('#friendlyUrl').hide();
 			$('#friendlyUrl').val('');
 			$('#parentFriendlyUrl').html('/');
@@ -312,6 +312,11 @@ function loadChildren() {
         });
         $('#children').html(html + '</table>');
         $('#children tr:even').addClass('even');
+        if (r.list.length > 0) {
+        	$('#parentFriendlyUrl').hide();
+        	$('#friendlyUrl').hide();
+        	$('#friendlyUrlSpan').html(page.friendlyURL);
+        }
     }, page.friendlyURL);
 }
 

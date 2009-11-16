@@ -32,7 +32,9 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Text;
 
-
+/**
+ * @author Alexander Oleynik
+ */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class ContentEntity implements Serializable {
 
@@ -64,7 +66,7 @@ public class ContentEntity implements Serializable {
 		this.parentClass = parentClass;
 		this.parentKey = parentKey;
 		this.languageCode = languageCode;
-		this.content = new Text(content);
+		setContent(content);
 	}
 	
 	public void copy(final ContentEntity entity) {

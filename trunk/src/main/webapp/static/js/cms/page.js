@@ -73,7 +73,6 @@ function loadData() {
 	loadPage();
 	loadTemplates();
 	if (editMode) {
-		loadComments();
 		loadContents();
 	}
 	loadLanguages();
@@ -87,6 +86,7 @@ function loadPage() {
 			pageParentUrl = page.parentUrl;
 			loadChildren();
 			loadVersions(page.friendlyURL);
+			loadComments();
 		} else {
 			pages['1'] = page;
 		}
@@ -353,7 +353,7 @@ function loadComments() {
         });
         $('#comments').html(html + '</table>');
         $('#comments tr:even').addClass('even'); 
-    }, pageId);
+    }, page.friendlyURL);
 }
 
 function onEnableComments() {
@@ -361,7 +361,7 @@ function onEnableComments() {
 	$('#comments input:checked').each(function() {
 		ids.push(this.value);
 	});
-	if (ids == []) {
+	if (ids.length == 0) {
 		info('Nothing selected.');
 		return;
 	}
@@ -376,7 +376,7 @@ function onDisableComments() {
 	$('#comments input:checked').each(function() {
 		ids.push(this.value);
 	});
-	if (ids == []) {
+	if (ids.length == 0) {
 		info('Nothing selected.');
 		return;
 	}

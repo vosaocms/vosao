@@ -71,6 +71,7 @@ public class ConfigExporter extends AbstractExporter {
 		}
 		Element elem = configElement.addElement("enableRecaptcha");
 		elem.setText(String.valueOf(config.isEnableRecaptcha()));
+		configElement.addElement("version").setText(config.getVersion());
 	}
 
 	public void readConfigs(Element configElement) {
@@ -100,6 +101,9 @@ public class ConfigExporter extends AbstractExporter {
             }
             if (element.getName().equals("commentsTemplate")) {
             	config.setCommentsTemplate(element.getText());
+            }
+            if (element.getName().equals("version")) {
+            	config.setVersion(element.getText());
             }
             if (element.getName().equals("enableRecaptcha")) {
             	config.setEnableRecaptcha(XmlUtil.readBooleanText(

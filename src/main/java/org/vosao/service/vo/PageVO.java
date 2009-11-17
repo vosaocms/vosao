@@ -75,6 +75,10 @@ public class PageVO {
 		return DateUtil.toString(page.getPublishDate());
 	}
 	
+	public String getPublishDateString() {
+		return DateUtil.toString(page.getPublishDate());
+	}
+
 	public boolean isCommentEnabled() {
 		return page.isCommentsEnabled();
 	}

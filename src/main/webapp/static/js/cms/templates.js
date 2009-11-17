@@ -88,7 +88,7 @@ function onDelete() {
     if (confirm('Are you sure?')) {
         templateService.deleteTemplates(function(r) {
             showServiceMessages(r);
-            loadTemapltes();
+            loadTemplates();
         }, javaList(ids));
     }
 }

@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.vosao.entity.PageEntity;
 import org.vosao.service.vo.CommentVO;
+import org.vosao.service.vo.UserVO;
 
 /**
  * @author Alexander Oleynik
@@ -81,5 +82,7 @@ public interface VelocityService {
 	 * @return list of found contents.
 	 */
 	List<String> findChildrenContent(final String path);
+	
+	UserVO findUser(final String email);
 	
 }

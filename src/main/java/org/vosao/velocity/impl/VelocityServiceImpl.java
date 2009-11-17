@@ -28,7 +28,10 @@ import org.vosao.business.PageBusiness;
 import org.vosao.business.impl.PageRenderDecorator;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.UserEntity;
+import org.vosao.enums.UserRole;
 import org.vosao.service.vo.CommentVO;
+import org.vosao.service.vo.UserVO;
 import org.vosao.velocity.VelocityService;
 
 /**
@@ -106,6 +109,16 @@ public class VelocityServiceImpl implements VelocityService {
 	@Override
 	public List<String> findChildrenContent(String path) {
 		return findChildrenContent(path, languageCode);
+	}
+
+	@Override
+	public UserVO findUser(String email) {
+		UserEntity user = getDao().getUserDao().getByEmail(email);
+		if (user == null) {
+			user = new UserEntity("Not found","Not found","Not found",
+					UserRole.USER);
+		}
+		return new UserVO(user);
 	}
 	
 }

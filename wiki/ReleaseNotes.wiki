@@ -1,7 +1,7 @@
 #labels Featured
 = Release Notes =
 
-== Version 0.0.4 01.12.2009 ==
+== Version 0.0.4 17.11.2009 ==
 
 Vosao CMS version 0.0.4 is out. This is the last version in working prototype cycle releases. Next releases cycle will be alpha. This means that project has stabilized architecture and framework set.
 

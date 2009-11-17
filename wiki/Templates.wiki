@@ -24,7 +24,7 @@ $page.content
 *Current page*
 
  * _String_ page.title  
- * _String_ page.friendlyUrl
+ * _String_ page.friendlyURL
  * _String_ page.content
  * _String_ page.comments - will render comments if comments allowed for this page
 
@@ -38,10 +38,12 @@ $page.content
 
  * _Page_ service.findPage(url) - find page by friendly url
  * _List of Page_ service.findPageChildren(url) - find all child pages of specified page by url ordered by publish date.
+ * _String_ service.findContent(url) - find page content by friendly url
+ * _List of String_ service.findChildrenContent(url) - find all child pages content of specified page url ordered by publish date.
    _usage example_
    {{{
      #foreach($p in $service.findPageChildren("/blogs")
        <h1 class="blog-title">$p.title</h1>
-       <div class="blog-entry">$p.content</div>
+       <div class="blog-entry">$service.findContent($p.friendlyURL)</div>
      #end
    }}}

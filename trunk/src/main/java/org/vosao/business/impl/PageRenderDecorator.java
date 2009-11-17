@@ -32,6 +32,7 @@ import org.vosao.dao.Dao;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.global.SystemService;
+import org.vosao.utils.DateUtil;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 
@@ -118,6 +119,10 @@ public class PageRenderDecorator {
 		return page.getPublishDate();
 	}
 	
+	public String getPublishDateString() {
+		return DateUtil.toString(page.getPublishDate());
+	}
+
 	public boolean isCommentsEnabled() {
 		return page.isCommentsEnabled();
 	}
@@ -132,6 +137,34 @@ public class PageRenderDecorator {
 
 	private SystemService getSystemService() {
 		return systemService;
+	}
+	
+	public Integer getVersion() {
+		return page.getVersion();
+	}
+
+	public String getVersionTitle() {
+		return page.getVersionTitle();
+	}
+
+	public String getState() {
+		return page.getState().name();
+	}
+
+	public String getCreateUserEmail() {
+		return page.getCreateUserEmail();
+	}
+	
+	public String getCreateDate() {
+		return DateUtil.dateTimeToString(page.getCreateDate());
+	}
+
+	public String getModUserEmail() {
+		return page.getModUserEmail();
+	}
+	
+	public String getModDate() {
+		return DateUtil.dateTimeToString(page.getModDate());
 	}
 	
 }

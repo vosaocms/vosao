@@ -22,3 +22,7 @@ Unfortunately Google doesn't offer any kind of automatic deployment so you will 
   }}}
  # Set browser to your application url. Database will be automatically filled by default values and you will be redirected to site root page.
  # That's it.
+
+=== Updating old version ===
+ # Upload latest version and select it as a default version.
+ # Set browser to update procedure url /update. Database will be automatically updated and you will see success message.

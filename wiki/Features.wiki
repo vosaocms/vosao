@@ -15,4 +15,5 @@
   * Email notification on new comments added.
   * Comments moderation
   * SEO urls. Redirect table for indexed links.
-  * Multilanguage content support. Localized message bundles. User browser language auto selection.
+  * Multilanguage content support. Localized messages bundle. User browser language auto selection.
+  * Content versioning support.

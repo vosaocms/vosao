@@ -1,6 +1,31 @@
 #labels Featured
 = Release Notes =
 
+== Version 0.0.4 01.12.2009 ==
+
+Vosao CMS version 0.0.4 is out. This is the last version in working prototype cycle releases. Next releases cycle will be alpha. This means that project has stabilized architecture and framework set.
+
+Clean installation:
+
+ # Upload version 0.0.4 and select it as the default version
+ # Run site root url /. Default site will be installed.
+
+Version upgrade steps:
+
+ # Upload version 0.0.4 and select it as the default version
+ # Run update url /update. Database schema will be automatically updated.
+
+Incompatibility with previous version:
+
+ # Due to adding multilanguage support some velocity variables and services changed it's names and structure. Please read template documentation section.
+
+Implemented and fixed issues:
+
+ # [http://code.google.com/p/vosao/issues/detail?id=30 Added users administration dialog.]
+ # [http://code.google.com/p/vosao/issues/detail?id=48 Added i18n for pages and templates]
+ # [http://code.google.com/p/vosao/issues/detail?id=50 Refactor js messages]
+ # [http://code.google.com/p/vosao/issues/detail?id=51 Add content versioning support]
+
 == Version 0.0.3 02.11.2009 ==
 
 I am proud to announce availability of version 0.0.3 of Vosao CMS.

@@ -2,6 +2,6 @@
 
 To protect site against spam Vosao CMS uses [http://en.wikipedia.org/wiki/CAPTCHA captcha] technology. We decided not to invent the wheel and integrated [http://recaptcha.net reCaptcha] service. It's free and stable.
 
-Different components of Vosao CMS uses reCaptcha internally (forms, comments) so to function properly they require you to provide reCaptcha private and public keys. To obtain them you need to register your website on [http://recaptcha.net reCaptcha] site. 
+To start using reCaptcha service you need to provide reCaptcha private and public keys. To obtain them register your website on [http://recaptcha.net reCaptcha] site. 
 
 In Vosao CMS you can enter reCaptcha keys on Site Configuration panel.

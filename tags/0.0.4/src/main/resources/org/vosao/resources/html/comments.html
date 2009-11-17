@@ -1,0 +1,111 @@
+#set ( $comments = $service.getCommentsByPage($page.friendlyURL))
+<div class="comments">
+  <div class="comments-label">Show comments 
+    <span class="comments-num">$comments.size()</span>
+  </div>
+
+  <div class="comments-block" style="display:none">
+
+  <div class="comments-list">
+  #foreach( $comment in $comments )
+  <div class="comment">
+    <div class="comment-author">$comment.name</div>
+    <div class="comment-date">$comment.publishDateTime</div>
+    <div class="comment-content">$comment.content</div>
+  </div> 
+  #end
+  </div>
+
+  <div id="messages">&nbsp;</div>
+  <form id="comment-form">
+    <div><label>Name</label><input type="text" name="name"/></div>
+    <div><label>Comment</label>
+        <textarea name="comment" cols="40" rows="6"></textarea>
+    </div>
+    <div id="recaptcha">&nbsp;</div>
+    <div class="buttons">
+        <input type="button" onclick="onAddComment()" value="Add comment"/>
+    </div>
+  </form>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+$(function() {
+#if($config.enableRecaptcha)
+    Recaptcha.create('$config.recaptchaPublicKey',
+        'recaptcha', {
+            theme:'red', 
+            callback: Recaptcha.focus_response_field});
+#end
+    $(".comments-label").click(function() {
+        $(".comments-block").slideToggle('slow');
+    });
+});
+
+function validate(name, comment) {
+	if (name == '') {
+		return 'Name is empty';
+	}
+    if (comment == '') {
+        return 'Comment is empty';
+    }
+}
+
+function onAddComment() {
+    var name = $("#comment-form input[name=name]").val();
+    var comment = $("#comment-form textarea[name=comment]").val();
+    var pageUrl = '$page.friendlyURL';
+    var error = validate(name, comment);
+    if (error) {
+        commentError(error);
+        return;        
+    }
+    jsonrpc.commentFrontService.addComment(function (data, e) {
+        if (serviceFailed(e)) return;
+        if (data.result == 'success') {
+            $("#messages").html('');
+            $("#comment-form textarea[name=comment]").val('');
+            loadComments(pageUrl);
+        }
+        else {
+            var msg = data.message;
+            if (msg == "incorrect-captcha-sol") {
+                msg = "incorrect captcha solution";
+            }
+            commentError(msg);
+        }
+    }, name, comment, pageUrl,
+#if($config.enableRecaptcha)
+    Recaptcha.get_challenge(), Recaptcha.get_response());
+    Recaptcha.reload();
+#else
+    '', '');
+#end
+}
+
+function commentError(msg) {
+    $("#messages").html('<ul><li class="errorMessage">Error. ' + msg 
+            + '</li></ul>');
+}
+
+function loadComments(pageUrl) {
+    jsonrpc.commentFrontService.getByPage(function(r, e) {
+        if (serviceFailed(e)) return;
+        var s = "";
+        if (r.list.length > 0) {
+            for (var i = 0; i < r.list.length; i++) {
+                var comment = r.list[i];
+                s += 
+'<div class="comment"><div class="comment-author">' + comment.name + '</div>\
+<div class="comment-date">' + comment.publishDateTime + '</div>\
+<div class="comment-content">' + comment.content + '</div></div>';
+            }    
+        }
+        $(".comments-list").html(s);
+        $(".comments-num").html(r.list.length);
+  }, pageUrl);
+}
+
+</script>

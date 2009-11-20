@@ -22,6 +22,9 @@
 package org.vosao.entity;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -29,16 +32,23 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import org.vosao.enums.UserRole;
-
 /**
  * @author Alexander Oleynik
  */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class UserEntity implements Serializable {
+public class GroupEntity implements Serializable {
 
 	private static final long serialVersionUID = 2L;
 
+	public static Map<Long, GroupEntity> createIdMap(
+			final List<GroupEntity> list) {
+		Map<Long, GroupEntity> result = new HashMap<Long, GroupEntity>();
+		for (GroupEntity group : list) {
+			result.put(group.getId(), group);
+		}
+		return result;
+	}
+	
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Long id;
@@ -46,32 +56,16 @@ public class UserEntity implements Serializable {
 	@Persistent
 	private String name;
 	
-	@Persistent
-	private String password;
-
-	@Persistent
-	private String email;
-
-	@Persistent
-	private UserRole role;
-	
-	public UserEntity() {
+	public GroupEntity() {
 	}
 	
-	public UserEntity(String aName, String aPassword,
-			String anEmail, UserRole aRole) {
+	public GroupEntity(String aName) {
 		this();
 		name = aName;
-		password = aPassword;
-		email = anEmail;
-		role = aRole;
 	}
 	
-	public void copy(final UserEntity entity) {
+	public void copy(final GroupEntity entity) {
 		setName(entity.getName());
-		setPassword(entity.getPassword());
-		setEmail(entity.getEmail());
-		setRole(entity.getRole());		
 	}
 	
 	public Long getId() {
@@ -82,14 +76,6 @@ public class UserEntity implements Serializable {
 		this.id = id;
 	}
 	
-	public String getPassword() {
-		return password;
-	}
-	
-	public void setPassword(String aPassword) {
-		password = aPassword;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -98,25 +84,9 @@ public class UserEntity implements Serializable {
 		this.name = name;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public UserRole getRole() {
-		return role;
-	}
-
-	public void setRole(UserRole role) {
-		this.role = role;
-	}
-
 	public boolean equals(Object object) {
-		if (object instanceof UserEntity) {
-			UserEntity entity = (UserEntity)object;
+		if (object instanceof GroupEntity) {
+			GroupEntity entity = (GroupEntity)object;
 			if (getId() == null && entity.getId() == null) {
 				return true;
 			}
@@ -125,10 +95,6 @@ public class UserEntity implements Serializable {
 			}
 		}
 		return false;
-	}
-	
-	public String getRoleString() {
-		return role.name();
 	}
 	
 }

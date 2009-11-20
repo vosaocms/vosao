@@ -19,32 +19,29 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.service.back;
 
 import java.util.List;
+import java.util.Map;
 
-import org.vosao.entity.UserEntity;
-import org.vosao.enums.UserRole;
+import org.vosao.entity.GroupEntity;
+import org.vosao.service.AbstractService;
+import org.vosao.service.ServiceResponse;
+import org.vosao.service.vo.GroupVO;
 
 /**
  * @author Alexander Oleynik
  */
-public interface UserDao extends AbstractDao {
-
-	void save(final UserEntity entity);
+public interface GroupService extends AbstractService {
 	
-	UserEntity getById(final Long id);
+	List<GroupVO> select();
 
-	UserEntity getByEmail(final String email);
+	ServiceResponse remove(final List<String> ids);
 
-	List<UserEntity> getByRole(final UserRole role);
+	GroupVO getById(final Long id);
+	
+	ServiceResponse save(final Map<String, String> vo); 
 
-	List<UserEntity> select();
-	
-	void remove(final Long id);
-	
-	void remove(final List<Long> ids);
-	
-	List<UserEntity> selectByGroup(final Long groupId);
+	ServiceResponse setGroupUsers(final String groupId, final List<String> ids);
 	
 }

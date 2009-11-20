@@ -52,6 +52,7 @@
     <li class="contentTab"><a href="#tab-2">Content</a></li>
     <li class="childrenTab"><a href="#tab-3">Children pages</a></li>
     <li class="commentsTab"><a href="#tab-4">Comments</a></li>
+    <li class="securityTab"><a href="#tab-5">Security</a></li>
 </ul>
 
 <div id="tab-1">
@@ -145,6 +146,14 @@
     </div>    
 </div>
 
+<div id="tab-5" class="securityTab">
+    <div id="permissions"> </div>
+    <div class="buttons">
+        <input id="addPermissionButton" type="button" value="Add permission" />
+        <input id="deletePermissionButton" type="button" value="Delete permission" />
+    </div>    
+</div>
+
 </div>
 
 <div id="version-dialog" style="display:none" title="Version title">
@@ -155,6 +164,32 @@
     <div class="buttons-dlg">
         <input id="versionSaveButton" type="button" value="Add" />
         <input id="versionCancelButton" type="button" value="Cancel" />
+    </div>
+</div>
+
+<div id="permission-dialog" style="display:none" title="Permission details">
+    <div class="form-row">
+        <label>Group</label>
+        <select id="groupSelect"></select>
+        <span id="groupName"></span>        
+    </div>
+    <div id="permissionList" class="form-row">
+        <fieldset>
+            <legend>Permission</legend>
+            <input type="radio" name="permission" value="DENIED"/> Denied <br />
+            <input type="radio" name="permission" value="READ" /> Read <br />
+            <input type="radio" name="permission" value="WRITE" /> Read/Write <br />
+            <input type="radio" name="permission" value="PUBLISH" /> Read/Write/Publish <br />
+        </fieldset>        
+    </div>
+    <div class="form-row">
+        <label>All languages</label>
+        <input id="allLanguages" type="checkbox" checked="checked" />
+    </div>    
+    <div id ="permLanguages" class="form-row" style="display:none"> </div>
+    <div class="buttons-dlg">
+        <input id="permissionSaveButton" type="button" value="Save" />
+        <input id="permissionCancelButton" type="button" value="Cancel" />
     </div>
 </div>
 

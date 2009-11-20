@@ -27,7 +27,7 @@ $(function(){
 });
 
 function loadUser() {
-    userService.getLoggedIn(function (r) {
+	jsonrpc.userService.getLoggedIn(function (r) {
         user = r;
         $('#name').val(user.name);
         $('#email').val(user.email);
@@ -63,7 +63,7 @@ function onSave() {
         email : $('#email').val(),   
         password : pass,   
     };
-    userService.save(function (r) {
+    jsonrpc.userService.save(function (r) {
         showServiceMessages(r);
     }, javaMap(vo));
 }

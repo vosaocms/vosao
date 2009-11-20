@@ -19,32 +19,50 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.service.vo;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import org.vosao.entity.UserEntity;
-import org.vosao.enums.UserRole;
+import org.vosao.entity.GroupEntity;
 
 /**
+ * Value object to be returned from services.
  * @author Alexander Oleynik
  */
-public interface UserDao extends AbstractDao {
+public class GroupVO {
 
-	void save(final UserEntity entity);
-	
-	UserEntity getById(final Long id);
+    private GroupEntity group;
+    private List<UserVO> users;
 
-	UserEntity getByEmail(final String email);
+	public GroupVO(final GroupEntity entity) {
+		group = entity;
+		users = new ArrayList<UserVO>();
+	}
 
-	List<UserEntity> getByRole(final UserRole role);
+	public static List<GroupVO> create(List<GroupEntity> list) {
+		List<GroupVO> result = new ArrayList<GroupVO>();
+		for (GroupEntity Group : list) {
+			result.add(new GroupVO(Group));
+		}
+		return result;
+	}
 
-	List<UserEntity> select();
-	
-	void remove(final Long id);
-	
-	void remove(final List<Long> ids);
-	
-	List<UserEntity> selectByGroup(final Long groupId);
-	
+	public String getId() {
+		return group.getId().toString();
+	}
+
+	public String getName() {
+		return group.getName();
+	}
+
+	public List<UserVO> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<UserVO> users) {
+		this.users = users;
+	}
+
 }

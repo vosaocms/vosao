@@ -26,7 +26,7 @@ $(document).ready(function(){
 });
 
 function loadFolderTree() {
-    folderService.getTree(function(rootItem) {
+	jsonrpc.folderService.getTree(function(rootItem) {
         rootFolder = rootItem;
         $("#folders-tree").html(renderFolderList(rootItem));        
        	$("#folders-tree").treeview();
@@ -55,8 +55,8 @@ function renderFolderList(item) {
 }
 
 function onFolderSelected(folderId) {
-    folderService.getFolderPath(function(folderPath) {
-        fileService.getByFolder(function(files) {
+	jsonrpc.folderService.getFolderPath(function(folderPath) {
+		jsonrpc.fileService.getByFolder(function(files) {
             var result = "";
             for (i = 0; i < files.list.length; i++) {
                 var file = files.list[i];

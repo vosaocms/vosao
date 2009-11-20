@@ -24,11 +24,15 @@ var pages = {};
 var versions = [];
 var contents = null;
 var currentLanguage = '';
+var languages = null;
 var children = {list:[]};
 var editMode = pageId != '';
 var contentEditor;
 var etalonContent = '';
 var autosaveTimer = '';
+var permission = null;
+var permissions = null;
+var groups = null;
     
 $(function(){
     contentEditor = CKEDITOR.replace('content', {
@@ -48,6 +52,8 @@ $(function(){
     ); 
 
     $("#version-dialog").dialog({ width: 400, autoOpen: false });
+    $("#permission-dialog").dialog({ width: 400, autoOpen: false });
+
     $('#title').change(onTitleChange);
     $('#pageSaveButton').click(onPageUpdate);
     $('#pagePreview').click(onPagePreview);
@@ -67,6 +73,11 @@ $(function(){
     $('#deleteCommentsButton').click(onDeleteComments);
     $('#versionSaveButton').click(onVersionTitleSave);
     $('#versionCancelButton').click(onVersionTitleCancel);
+    $('#addPermissionButton').click(onAddPermission);
+    $('#deletePermissionButton').click(onDeletePermission);
+    $('#permissionSaveButton').click(onPermissionSave);
+    $('#permissionCancelButton').click(onPermissionCancel);
+    $('#allLanguages').change(onAllLanguagesChange);
 });
 
 function loadData() {
@@ -79,7 +90,7 @@ function loadData() {
 }
 
 function loadPage() {
-	pageService.getPage(function(r) {
+	jsonrpc.pageService.getPage(function(r) {
 		page = r;
 		if (editMode) {
 			pageId = page.id;
@@ -87,6 +98,8 @@ function loadPage() {
 			loadChildren();
 			loadVersions(page.friendlyURL);
 			loadComments();
+			loadPermissions();
+			loadGroups();
 		} else {
 			pages['1'] = page;
 		}
@@ -95,7 +108,7 @@ function loadPage() {
 }
 
 function loadVersions(url) {
-    pageService.getPageVersions(function (r) {
+	jsonrpc.pageService.getPageVersions(function (r) {
         versions = [];
         pages = {};
         $.each(r.list, function (i, value) {
@@ -128,7 +141,7 @@ function loadVersions(url) {
 }
 
 function loadTemplates() {
-    templateService.getTemplates(function (r) {
+	jsonrpc.templateService.getTemplates(function (r) {
         var html = '';
         $.each(r.list, function (n,value) {
             html += '<option value="' + value.id + '">' 
@@ -142,9 +155,11 @@ function loadTemplates() {
 }
 
 function loadLanguages() {
-	languageService.select(function(r) {
+	jsonrpc.languageService.select(function(r) {
+		languages = {};
 		var h = '';
 		$.each(r.list, function(i, value) {
+			languages[value.code] = value;
 			var sel = '';
 			if (value.code == ENGLISH_CODE) {
 				sel = 'selected="selected"';
@@ -153,6 +168,7 @@ function loadLanguages() {
 					+ value.title + '</option>';
 		});
 		$('#language').html(h);
+		setPermissionLanguages();
 	});
 }
     
@@ -183,6 +199,7 @@ function initPageForm() {
 		$('.contentTab').show();
 		$('.childrenTab').show();
 		$('.commentsTab').show();
+		$('.securityTab').show();
 		$('#pagePreview').show();
 	} else {
 		$('#title').val('');
@@ -201,6 +218,7 @@ function initPageForm() {
 		$('.contentTab').hide();
 		$('.childrenTab').hide();
 		$('.commentsTab').hide();
+		$('.securityTab').hide();
 		$('#pagePreview').hide();
 	}
 }
@@ -215,7 +233,7 @@ function onPageUpdate() {
 		content : getEditorContent(),
 		template : $('#templates option:selected').val()
 	});
-	pageService.savePage(function(r) {
+	jsonrpc.pageService.savePage(function(r) {
 		if (r.result == 'success') {
 			location.href = '/cms/pages.jsp';
 		} else {
@@ -243,7 +261,7 @@ function tabSelected(event, ui) {
 	}
 }
     
-    function startAutosave() {
+function startAutosave() {
 	if (editMode) {
 		if (autosaveTimer == '') {
 			autosaveTimer = setInterval(saveContent, AUTOSAVE_TIMEOUT * 1000);
@@ -273,7 +291,7 @@ function isContentChanged() {
 function saveContent() {
 	var content = getEditorContent();
 	contents[currentLanguage] = content;
-	pageService.updateContent(function(r) {
+	jsonrpc.pageService.updateContent(function(r) {
 		if (r.result == 'success') {
 			var now = new Date();
 			info(r.message + " " + now);
@@ -301,7 +319,7 @@ function onPageCancel() {
 }
 
 function loadChildren() {
-    pageService.getChildren(function (r) {
+	jsonrpc.pageService.getChildren(function (r) {
         var html = '<table class="form-table"><tr><th></th><th>Title</th>\
             <th>Friendly URL</th></tr>';
         $.each(r.list, function (n, value) {
@@ -334,7 +352,7 @@ function onDelete() {
 		return;
 	}
 	if (confirm('Are you sure?')) {
-		pageService.deletePages(function(r) {
+		jsonrpc.pageService.deletePages(function(r) {
 			showServiceMessages(r);
 			loadChildren();
 		}, javaList(ids));
@@ -342,7 +360,7 @@ function onDelete() {
 }
 
 function loadComments() {
-    commentService.getByPage(function (r) {
+	jsonrpc.commentService.getByPage(function (r) {
         var html = '<table class="form-table"><tr><th></th><th>Status</th>\
             <th>Name</th><th>Content</th></tr>';
         $.each(r.list, function (n, value) {
@@ -365,7 +383,7 @@ function onEnableComments() {
 		info('Nothing selected.');
 		return;
 	}
-	commentService.enableComments(function(r) {
+	jsonrpc.commentService.enableComments(function(r) {
 		showServiceMessages(r);
 		loadComments();
 	}, javaList(ids));
@@ -380,7 +398,7 @@ function onDisableComments() {
 		info('Nothing selected.');
 		return;
 	}
-	commentService.disableComments(function(r) {
+	jsonrpc.commentService.disableComments(function(r) {
 		showServiceMessages(r);
 		loadComments();
 	}, javaList(ids));
@@ -396,7 +414,7 @@ function onDeleteComments() {
 		return;
 	}
 	if (confirm('Are you sure?')) {
-		commentService.deleteComments(function(r) {
+		jsonrpc.commentService.deleteComments(function(r) {
 			showServiceMessages(r);
 			loadComments();
 		}, javaList(ids));
@@ -418,7 +436,7 @@ function onLanguageChange() {
 
 function loadContents() {
 	if (editMode) {
-		pageService.getContents(function(r) {
+		jsonrpc.pageService.getContents(function(r) {
 			contents = [];
 			$.each(r.list, function(i, value) {
 				contents[value.languageCode] = value.content;
@@ -434,26 +452,25 @@ function loadContents() {
 function onVersionDelete(version) {
 	if (confirm('Are you sure?')) {
 		var delPage = pages[version];
-		pageService.deletePages(
-				function(r) {
-					if (version == String(page.version)) {
-						if (versions.length == 1) {
-							location.href = '/cms/pages.jsp';
-						} else {
-							var previousVersion = versions[0];
-							if (versions.indexOf(version) == 0) {
-								previousVersion = versions[1];
-							} else {
-								previousVersion = versions[versions
-										.indexOf(version) - 1];
-							}
-							pageId = pages[previousVersion].id;
-							loadData();
-						}
+		jsonrpc.pageService.deletePages(function(r) {
+			if (version == String(page.version)) {
+				if (versions.length == 1) {
+					location.href = '/cms/pages.jsp';
+				} else {
+					var previousVersion = versions[0];
+					if (versions.indexOf(version) == 0) {
+						previousVersion = versions[1];
 					} else {
-						loadVersions(page.friendlyURL);
+						previousVersion = versions[versions
+								.indexOf(version) - 1];
 					}
-				}, javaList( [ delPage.id ]));
+					pageId = pages[previousVersion].id;
+					loadData();
+				}
+			} else {
+				loadVersions(page.friendlyURL);
+			}
+		}, javaList( [ delPage.id ]));
 	}
 }
 
@@ -463,7 +480,7 @@ function onAddVersion() {
 }
 
 function onVersionTitleSave() {
-	pageService.addVersion(function(r) {
+	jsonrpc.pageService.addVersion(function(r) {
 		pageId = r;
 		loadData();
 		$('#version-dialog').dialog('close');
@@ -481,8 +498,155 @@ function onVersionSelect(version) {
 }
 
 function onPageApprove() {
-	pageService.approve(function(r) {
+	jsonrpc.pageService.approve(function(r) {
 		showServiceMessages(r);
 		loadPage();
 	}, pageId);
+}
+
+function getPermissionName(perm) {
+	if (perm == 'DENIED') {
+		return 'Denied';
+	}
+	if (perm == 'READ') {
+		return 'Read';
+	}
+	if (perm == 'WRITE') {
+		return 'Read/Write';
+	}
+	if (perm == 'PUBLISH') {
+		return 'Read/Write/Publish';
+	}
+}
+
+function loadPermissions() {
+	jsonrpc.contentPermissionService.selectByUrl(function (r) {
+		permissions = idMap(r.list);
+		var h = '<table class="form-table"><tr><th></th><th>Group</th><th>Permission</th><th>Languages</th></tr>';
+		$.each(permissions, function(i,value) {
+			var checkbox = '';
+			var editLink = value.group.name;
+			if (!value.inherited) {
+				checkbox = '<input type="checkbox" value="' + value.id + '">';
+				editLink = '<a href="#" onclick="onPermissionEdit(\'' + value.id 
+					+ '\')"> ' + value.group.name + '</a>';
+			}
+			var l = value.allLanguages ? 'all languages' : value.languages;
+			h += '<tr><td>' + checkbox + '</td><td>' + editLink + '</td><td>'
+				+ getPermissionName(value.permission) + '</td><td>' + l 
+				+ '</td></tr>';
+		});
+		$('#permissions').html(h + '</table>');
+        $('#permissions tr:even').addClass('even'); 
+	}, page.friendlyURL);
+}
+
+function loadGroups() {
+	jsonrpc.groupService.select(function(r) {
+		groups = idMap(r.list);
+		var h = '';
+		$.each(groups, function(i,value) {
+			h += '<option value="' + value.id + '">' + value.name + '</option>';
+		});
+		$('#groupSelect').html(h);
+	});
+}
+
+function setPermissionLanguages() {
+	var h = '<fieldset><legend>Languages</legend>';
+	$.each(languages, function(i,value) {
+		h += '<input type="checkbox" value="' + value.code + '" /> ' + value.title 
+			+ '<br />';
+	});
+	$('#permLanguages').html(h + '</fieldset>');
+}
+
+function onPermissionEdit(id) {
+	permission = permissions[id];
+	initPermissionForm();
+	$('#permission-dialog').dialog('open');
+}
+
+function initPermissionForm() {
+	$('#permission-dialog input[type=radio]').removeAttr('checked');
+	$('#allLanguages').attr('checked','checked');
+	$('#permLanguages').hide();
+	if (permission == null) {
+		$('#permission-dialog input[value=READ]').attr('checked', 'checked');
+		$('#groupSelect').show();
+		$('#groupName').hide();
+	}
+	else {
+		$('#permissionList input[value=' + permission.permission 
+				+ ']').attr('checked', 'checked');
+		$('#groupSelect').hide();
+		$('#groupName').show();
+		$('#groupName').text(permission.group.name);
+		if (!permission.allLanguages) {
+			$('#allLanguages').removeAttr('checked');
+			$('#permLanguages').show();
+			var codes = permission.languages.split(',');
+			$('#permLanguages input').removeAttr('checked');
+			$.each(codes, function(i,value) {
+				$('#permLanguages input[value=' + value + ']').attr('checked',
+						'checked');
+			});
+		}
+	}
+}
+
+function onPermissionSave() {
+	var langs = '';
+	$('#permLanguages input:checked').each(function() {
+		langs += (langs == '' ? '' : ',') + this.value;
+	});
+	var vo = {
+		url: page.friendlyURL,
+		groupId: $('#groupSelect').val(),
+		permission: $('#permissionList input:checked')[0].value,
+		languages: $('#allLanguages')[0].checked ? '' : langs,
+	};
+	jsonrpc.contentPermissionService.save(function(r) {
+		showServiceMessages(r);
+		$('#permission-dialog').dialog('close');
+		if (r.result == 'success') {
+			loadPermissions();
+		}
+	}, javaMap(vo));
+}
+
+function onAddPermission() {
+	permission = null;
+	initPermissionForm();
+	$('#permission-dialog').dialog('open');
+}
+
+function onDeletePermission() {
+	var ids = [];
+	$('#permissions input:checked').each(function() {
+		ids.push(this.value);
+	});
+	if (ids.length == 0) {
+		info('Nothing selected.');
+		return;
+	}
+	if (confirm('Are you sure?')) {
+		jsonrpc.contentPermissionService.remove(function(r) {
+			showServiceMessages(r);
+			loadPermissions();
+		}, javaList(ids));
+	}
+}
+
+function onPermissionCancel() {
+	$('#permission-dialog').dialog('close');
+}
+
+function onAllLanguagesChange() {
+	if (this.checked) {
+		$('#permLanguages').hide();
+	}	
+	else {
+		$('#permLanguages').show();
+	}
 }

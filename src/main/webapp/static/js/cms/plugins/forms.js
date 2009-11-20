@@ -39,7 +39,7 @@ function loadData() {
 }
     
 function loadForms() {
-    formService.select(function (r) {
+	jsonrpc.formService.select(function (r) {
         var html = '<table class="form-table"><tr><th></th><th>Title</th>\
 <th>Name</th><th>Email</th></tr>';
         $.each(r.list, function(i, form) {
@@ -67,7 +67,7 @@ function onDelete() {
         return;
     }
     if (confirm('Are you sure?')) {
-        formService.deleteForm(function (r) {
+    	jsonrpc.formService.deleteForm(function (r) {
             showServiceMessages(r);
             loadForms();
         }, javaList(ids));
@@ -75,7 +75,7 @@ function onDelete() {
 }
 
 function loadFormConfig() {
-    formService.getFormConfig(function (r) {
+	jsonrpc.formService.getFormConfig(function (r) {
         formConfig = r;
         $('#formTemplate').val(r.formTemplate);
         $('#letterTemplate').val(r.letterTemplate);
@@ -87,20 +87,20 @@ function onSaveConfig() {
    	    formTemplate : $('#formTemplate').val(),
    	    letterTemplate : $('#letterTemplate').val()
     });
-    formService.saveFormConfig(function (r) {
+    jsonrpc.formService.saveFormConfig(function (r) {
         showServiceMessages(r);
     }, vo);
 }
 
 function onFormTemplateRestore() {
-    formService.restoreFormTemplate(function (r) {
+	jsonrpc.formService.restoreFormTemplate(function (r) {
         showServiceMessages(r);
         loadFormConfig();
     });
 }
 
 function onFormLetterRestore() {
-    formService.restoreFormLetter(function (r) {
+	jsonrpc.formService.restoreFormLetter(function (r) {
         showServiceMessages(r);
         loadFormConfig();
     });

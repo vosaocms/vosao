@@ -66,5 +66,11 @@ public interface Business {
 
 	UserBusiness getUserBusiness();
 	void setUserBusiness(final UserBusiness bean);
+
+	ContentPermissionBusiness getContentPermissionBusiness();
+	void setContentPermissionBusiness(final ContentPermissionBusiness bean);
+
+	GroupBusiness getGroupBusiness();
+	void setGroupBusiness(final GroupBusiness bean);
 	
 }

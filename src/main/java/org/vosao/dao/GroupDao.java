@@ -23,28 +23,24 @@ package org.vosao.dao;
 
 import java.util.List;
 
-import org.vosao.entity.UserEntity;
-import org.vosao.enums.UserRole;
+import org.vosao.entity.GroupEntity;
 
 /**
  * @author Alexander Oleynik
  */
-public interface UserDao extends AbstractDao {
+public interface GroupDao extends AbstractDao {
 
-	void save(final UserEntity entity);
+	void save(final GroupEntity entity);
 	
-	UserEntity getById(final Long id);
+	GroupEntity getById(final Long id);
 
-	UserEntity getByEmail(final String email);
+	GroupEntity getByName(final String name);
 
-	List<UserEntity> getByRole(final UserRole role);
-
-	List<UserEntity> select();
+	List<GroupEntity> select();
 	
 	void remove(final Long id);
 	
 	void remove(final List<Long> ids);
 	
-	List<UserEntity> selectByGroup(final Long groupId);
 	
 }

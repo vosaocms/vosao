@@ -118,24 +118,3 @@ function serviceFailed(e) {
 	}
 	return false;
 }
-
-/**
- * Frontend services.
- */
-var loginService = {
-	
-	login: function(func, email, password) {
-		jsonrpc.loginFrontService.login(function (r,e) {
-			if (serviceFailed(e)) return;
-			func(r);
-		}, email, password);
-    },
-    
-	logout: function(func) {
-		jsonrpc.loginFrontService.logout(function (r,e) {
-			if (serviceFailed(e)) return;
-			func(r);
-		});
-    },
-    
-};

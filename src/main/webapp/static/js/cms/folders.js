@@ -25,7 +25,7 @@ $(function(){
 });
 
 function loadTree() {
-    folderService.getTree(function(r) {
+	jsonrpc.folderService.getTree(function(r) {
         $('#folders-tree').html(renderFolder(r));
         $("#folders-tree").treeview();
     });

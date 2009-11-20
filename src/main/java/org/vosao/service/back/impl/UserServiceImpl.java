@@ -31,6 +31,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
 import org.vosao.entity.UserEntity;
+import org.vosao.entity.UserGroupEntity;
 import org.vosao.enums.UserRole;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.UserService;
@@ -94,6 +95,12 @@ public class UserServiceImpl extends AbstractServiceImpl
 	@Override
 	public UserEntity getLoggedIn(HttpServletRequest request) {
 		return getBusiness().getUserPreferences(request).getUser();
+	}
+
+	@Override
+	public List<UserVO> selectByGroup(String groupId) {
+		return UserVO.create(getDao().getUserDao().selectByGroup(
+				Long.valueOf(groupId)));
 	}
 
 }

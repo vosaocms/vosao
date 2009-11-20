@@ -26,17 +26,20 @@ import java.io.Serializable;
 import org.vosao.dao.CommentDao;
 import org.vosao.dao.ConfigDao;
 import org.vosao.dao.ContentDao;
+import org.vosao.dao.ContentPermissionDao;
 import org.vosao.dao.Dao;
 import org.vosao.dao.FieldDao;
 import org.vosao.dao.FileDao;
 import org.vosao.dao.FolderDao;
 import org.vosao.dao.FormDao;
+import org.vosao.dao.GroupDao;
 import org.vosao.dao.LanguageDao;
 import org.vosao.dao.MessageDao;
 import org.vosao.dao.PageDao;
 import org.vosao.dao.SeoUrlDao;
 import org.vosao.dao.TemplateDao;
 import org.vosao.dao.UserDao;
+import org.vosao.dao.UserGroupDao;
 
 public class DaoImpl implements Dao, Serializable {
 
@@ -53,6 +56,9 @@ public class DaoImpl implements Dao, Serializable {
 	private LanguageDao languageDao;
 	private ContentDao contentDao;
 	private MessageDao messageDao;
+	private GroupDao groupDao;
+	private UserGroupDao userGroupDao;
+	private ContentPermissionDao contentPermissionDao;
 	
 	public PageDao getPageDao() {
 		return pageDao;
@@ -153,6 +159,30 @@ public class DaoImpl implements Dao, Serializable {
 	
 	public void setMessageDao(MessageDao messageDao) {
 		this.messageDao = messageDao;
+	}
+
+	public GroupDao getGroupDao() {
+		return groupDao;
+	}
+	
+	public void setGroupDao(GroupDao bean) {
+		this.groupDao = bean;
+	}
+
+	public UserGroupDao getUserGroupDao() {
+		return userGroupDao;
+	}
+	
+	public void setUserGroupDao(UserGroupDao bean) {
+		this.userGroupDao = bean;
+	}
+
+	public ContentPermissionDao getContentPermissionDao() {
+		return contentPermissionDao;
+	}
+	
+	public void setContentPermissionDao(ContentPermissionDao bean) {
+		this.contentPermissionDao = bean;
 	}
 	
 }

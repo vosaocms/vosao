@@ -19,32 +19,31 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.business;
 
 import java.util.List;
 
+import org.vosao.entity.ContentPermissionEntity;
+import org.vosao.entity.GroupEntity;
 import org.vosao.entity.UserEntity;
-import org.vosao.enums.UserRole;
+import org.vosao.enums.ContentPermissionType;
 
 /**
  * @author Alexander Oleynik
  */
-public interface UserDao extends AbstractDao {
-
-	void save(final UserEntity entity);
+public interface ContentPermissionBusiness {
 	
-	UserEntity getById(final Long id);
+	ContentPermissionEntity getPermission(final String url, 
+			final UserEntity user);
 
-	UserEntity getByEmail(final String email);
+	void setPermission(final String url, final GroupEntity group, 
+			final ContentPermissionType permission);
 
-	List<UserEntity> getByRole(final UserRole role);
+	void setPermission(final String url, final GroupEntity group, 
+			final ContentPermissionType permission, final String languages);
+	
+	List<String> validateBeforeUpdate(final ContentPermissionEntity perm);
 
-	List<UserEntity> select();
-	
-	void remove(final Long id);
-	
-	void remove(final List<Long> ids);
-	
-	List<UserEntity> selectByGroup(final Long groupId);
+	List<ContentPermissionEntity> getInheritedPermissions(final String url);
 	
 }

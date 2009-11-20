@@ -29,10 +29,12 @@ import org.jabsorb.JSONRPCBridge;
 import org.vosao.service.BackService;
 import org.vosao.service.back.CommentService;
 import org.vosao.service.back.ConfigService;
+import org.vosao.service.back.ContentPermissionService;
 import org.vosao.service.back.FieldService;
 import org.vosao.service.back.FileService;
 import org.vosao.service.back.FolderService;
 import org.vosao.service.back.FormService;
+import org.vosao.service.back.GroupService;
 import org.vosao.service.back.LanguageService;
 import org.vosao.service.back.MessageService;
 import org.vosao.service.back.PageService;
@@ -56,6 +58,8 @@ public class BackServiceImpl implements BackService, Serializable {
 	private UserService userService;
 	private LanguageService languageService;
 	private MessageService messageService;
+	private GroupService groupService;
+	private ContentPermissionService contentPermissionService;
 	
 	public void init() {
 	}
@@ -74,6 +78,8 @@ public class BackServiceImpl implements BackService, Serializable {
 		bridge.registerObject("userService", userService);
 		bridge.registerObject("languageService", languageService);
 		bridge.registerObject("messageService", messageService);
+		bridge.registerObject("groupService", groupService);
+		bridge.registerObject("contentPermissionService", contentPermissionService);
 	}
 	
 	@Override
@@ -90,6 +96,8 @@ public class BackServiceImpl implements BackService, Serializable {
 		bridge.unregisterObject("userService");
 		bridge.unregisterObject("languageService");
 		bridge.unregisterObject("messageService");
+		bridge.unregisterObject("groupService");
+		bridge.unregisterObject("contentPermissionService");
 	}
 
 	@Override
@@ -210,6 +218,26 @@ public class BackServiceImpl implements BackService, Serializable {
 	@Override
 	public void setMessageService(MessageService bean) {
 		messageService = bean;		
+	}
+
+	@Override
+	public GroupService getGroupService() {
+		return groupService;
+	}
+
+	@Override
+	public void setGroupService(GroupService bean) {
+		groupService = bean;		
+	}
+
+	@Override
+	public ContentPermissionService getContentPermissionService() {
+		return contentPermissionService;
+	}
+
+	@Override
+	public void setContentPermissionService(ContentPermissionService bean) {
+		contentPermissionService = bean;		
 	}
 	
 }

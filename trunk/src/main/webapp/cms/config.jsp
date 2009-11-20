@@ -39,6 +39,7 @@
     <li><a href="#tab-3">Languages</a></li>
     <li><a href="#tab-4">Message bundle</a></li>
     <li><a href="#tab-5">Users</a></li>
+    <li><a href="#tab-6">Groups</a></li>
 </ul>
 
 <div id="tab-1">
@@ -115,6 +116,14 @@
     <div class="buttons">
         <input id="addUserButton" type="button" value="Add" />
         <input id="removeUserButton" type="button" value="Remove" />
+    </div>
+</div>
+
+<div id="tab-6">
+    <div id="groups"> </div>
+    <div class="buttons">
+        <input id="addGroupButton" type="button" value="Add" />
+        <input id="removeGroupButton" type="button" value="Remove" />
     </div>
 </div>
 
@@ -209,6 +218,27 @@
         <input id="userCancelDlgButton" type="button" value="Cancel" />
     </div>
 </div>
+
+<div id="group-dialog" style="display:none" title="Group details">
+    <div class="messages"> </div>
+    <div class="form-row">
+        <label>Group name</label>
+        <input id="groupName" type="text"/>
+    </div>
+    <div class="buttons-dlg">
+        <input id="groupSaveDlgButton" type="button" value="Save" />
+        <input id="groupCancelDlgButton" type="button" value="Cancel" />
+    </div>
+</div>
+
+<div id="user-group-dialog" style="display:none" title="Group users">
+    <div id="groupUsers"> </div>
+    <div class="buttons-dlg">
+        <input id="userGroupSaveDlgButton" type="button" value="Save" />
+        <input id="userGroupCancelDlgButton" type="button" value="Cancel" />
+    </div>
+</div>
+
 
 </body>
 </html>

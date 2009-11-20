@@ -24,10 +24,12 @@ package org.vosao.service;
 import org.jabsorb.JSONRPCBridge;
 import org.vosao.service.back.CommentService;
 import org.vosao.service.back.ConfigService;
+import org.vosao.service.back.ContentPermissionService;
 import org.vosao.service.back.FieldService;
 import org.vosao.service.back.FileService;
 import org.vosao.service.back.FolderService;
 import org.vosao.service.back.FormService;
+import org.vosao.service.back.GroupService;
 import org.vosao.service.back.LanguageService;
 import org.vosao.service.back.MessageService;
 import org.vosao.service.back.PageService;
@@ -75,5 +77,11 @@ public interface BackService {
 
 	MessageService getMessageService();
 	void setMessageService(MessageService bean);
+
+	GroupService getGroupService();
+	void setGroupService(GroupService bean);
+
+	ContentPermissionService getContentPermissionService();
+	void setContentPermissionService(ContentPermissionService bean);
 	
 }

@@ -29,6 +29,18 @@ a:hover, .ui-widget-content a:hover {
     color: #148fd5;
 }
 
+fieldset {
+	padding: 10px;
+	border: 1px solid #ccc;
+}
+
+legend {
+    padding: 4px 8px;
+    background-color: #C5D7EF;
+    font-weight: bold;
+    text-align: left;
+    vertical-align: middle;
+}
 
 #topbar {
 	border-bottom: 1px solid #a5c4d5;

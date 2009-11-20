@@ -69,7 +69,7 @@ function stopAutosave() {
 
 function saveContent() {
 	var content = $("textarea").val();
-	fileService.updateContent(function(r) {
+	jsonrpc.fileService.updateContent(function(r) {
 		if (r.result == 'success') {
 			var now = new Date();
 			info(r.message + " " + now);
@@ -88,7 +88,7 @@ function onAutosave() {
 }
 
 function loadFile() {
-	fileService.getFile(function(r) {
+	jsonrpc.fileService.getFile(function(r) {
 		file = r;
 		if (editMode) {
 			folderId = file.folderId;
@@ -133,7 +133,7 @@ function onUpdate() {
 		title : $('#title').val(),
 		name : $('#name').val()
 	});
-	fileService.saveFile(function(r) {
+	jsonrpc.fileService.saveFile(function(r) {
 		if (r.result == 'success') {
 			location.href = '/cms/folder.jsp?id=' + folderId;
 		} else {

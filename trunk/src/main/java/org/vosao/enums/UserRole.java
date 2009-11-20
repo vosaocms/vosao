@@ -21,6 +21,9 @@
 
 package org.vosao.enums;
 
+/**
+ * @author Alexander Oleynik
+ */
 public enum UserRole {
-	USER, ADMIN;
+	USER, ADMIN, SITE_USER;
 }

@@ -59,7 +59,7 @@ function stopAutosave() {
 
 function saveContent() {
     var content = $("#content").val();
-    templateService.updateContent(function(r) {
+    jsonrpc.templateService.updateContent(function(r) {
         if (r.result == 'success') {
             var now = new Date();
             info(r.message + " " + now);
@@ -84,7 +84,7 @@ function loadTemplate() {
 		template = null;
         initTemplateForm();
 	}
-	templateService.getTemplate(function (r) {
+	jsonrpc.templateService.getTemplate(function (r) {
 		template = r;
 		initTemplateForm();
 	}, templateId);
@@ -114,7 +114,7 @@ function onUpdate(cont) {
         url : $('#url').val(),
         content : $('#content').val(),
 	});
-	templateService.saveTemplate(function (r) {
+	jsonrpc.templateService.saveTemplate(function (r) {
 		showServiceMessages(r);
 		if (r.result == 'success' && !cont) {
 			location.href = '/cms/templates.jsp';

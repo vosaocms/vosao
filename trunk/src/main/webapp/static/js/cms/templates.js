@@ -60,7 +60,7 @@ function onAfterUploadOk() {
 }
 
 function loadTemplates() {
-    templateService.getTemplates(function (r) {
+    jsonrpc.templateService.getTemplates(function (r) {
         var html = '<table class="form-table"><tr><th></th><th>Title</th></tr>';
         $.each(r.list, function (n, value) {
             html += '<tr><td><input type="checkbox" value="' + value.id 
@@ -86,7 +86,7 @@ function onDelete() {
         return;
     }
     if (confirm('Are you sure?')) {
-        templateService.deleteTemplates(function(r) {
+    	jsonrpc.templateService.deleteTemplates(function(r) {
             showServiceMessages(r);
             loadTemplates();
         }, javaList(ids));

@@ -76,6 +76,15 @@
     <bean id="messageDao" class="org.vosao.dao.impl.MessageDaoImpl"
         parent="abstractDao" />  
     
+    <bean id="groupDao" class="org.vosao.dao.impl.GroupDaoImpl"
+        parent="abstractDao" />  
+
+    <bean id="userGroupDao" class="org.vosao.dao.impl.UserGroupDaoImpl"
+        parent="abstractDao" />  
+
+    <bean id="contentPermissionDao" class="org.vosao.dao.impl.ContentPermissionDaoImpl"
+        parent="abstractDao" />  
+
     <bean id="pageDao" class="org.vosao.dao.impl.PageDaoImpl"
         parent="abstractDao">
         <property name="contentDao" ref="contentDao"/>  
@@ -95,6 +104,9 @@
         <property name="languageDao" ref="languageDao"/>  
         <property name="contentDao" ref="contentDao"/>  
         <property name="messageDao" ref="messageDao"/>  
+        <property name="groupDao" ref="groupDao"/>  
+        <property name="userGroupDao" ref="userGroupDao"/>  
+        <property name="contentPermissionDao" ref="contentPermissionDao"/>  
     </bean>
 
     <!--=========================== Business ================================-->
@@ -132,6 +144,12 @@
     <bean id="userBusiness" class="org.vosao.business.impl.UserBusinessImpl"
         parent="abstractBusiness" />  
     
+    <bean id="contentPermissionBusiness" class="org.vosao.business.impl.ContentPermissionBusinessImpl"
+        parent="abstractBusiness" />  
+
+    <bean id="groupBusiness" class="org.vosao.business.impl.GroupBusinessImpl"
+        parent="abstractBusiness" />  
+
     <bean id="pageBusiness" class="org.vosao.business.impl.PageBusinessImpl"
         init-method="init" parent="abstractBusiness">
         <property name="configBusiness" ref="configBusiness"/>  
@@ -141,7 +159,6 @@
     <bean id="business" class="org.vosao.business.impl.BusinessImpl"
         init-method="init">  
         <property name="systemService" ref="systemService"/>  
-
         <property name="pageBusiness" ref="pageBusiness"/>  
         <property name="folderBusiness" ref="folderBusiness"/>  
         <property name="templateBusiness" ref="templateBusiness"/>  
@@ -152,6 +169,8 @@
         <property name="fieldBusiness" ref="fieldBusiness"/>  
         <property name="messageBusiness" ref="messageBusiness"/>  
         <property name="userBusiness" ref="userBusiness"/>  
+        <property name="contentPermissionBusiness" ref="contentPermissionBusiness"/>  
+        <property name="groupBusiness" ref="groupBusiness"/>  
     </bean>
 
     <!--========================== ImportExport =============================-->
@@ -208,6 +227,12 @@
     <bean id="messageService" class="org.vosao.service.back.impl.MessageServiceImpl"
         parent="abstractService" />
 
+    <bean id="groupService" class="org.vosao.service.back.impl.GroupServiceImpl"
+        parent="abstractService" />
+
+    <bean id="contentPermissionService" class="org.vosao.service.back.impl.ContentPermissionServiceImpl"
+        parent="abstractService" />
+
     <bean id="backService" class="org.vosao.service.impl.BackServiceImpl"
         init-method="init">  
         <property name="fileService" ref="fileService"/>  
@@ -222,6 +247,8 @@
         <property name="userService" ref="userService"/>  
         <property name="languageService" ref="languageService"/>  
         <property name="messageService" ref="messageService"/>  
+        <property name="groupService" ref="groupService"/>  
+        <property name="contentPermissionService" ref="contentPermissionService"/>  
     </bean>
 
     <!--================== JSON-RPC front services ==========================-->

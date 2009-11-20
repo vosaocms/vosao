@@ -33,7 +33,7 @@ $(function() {
 });
 
 function loadUrls() {
-    seoUrlService.select(function (r) {
+	jsonrpc.seoUrlService.select(function (r) {
         var html = '<table class="form-table"><tr><th></th><th>From</th><th>To</th></tr>';
         $.each(r.list, function (i, url) {
             html += '<tr><td><input type="checkbox" value="' 
@@ -48,7 +48,7 @@ function loadUrls() {
 
 function onEdit(id) {
     clearMessages();
-    seoUrlService.getById(function(r) {
+    jsonrpc.seoUrlService.getById(function(r) {
         seoUrl = r;
         urlDialogInit();
         $("#url-dialog").dialog("open");
@@ -83,7 +83,7 @@ function onRemove() {
         return;
     }
     if (confirm('Are you sure?')) {
-        seoUrlService.remove(function(r) {
+    	jsonrpc.seoUrlService.remove(function(r) {
             showServiceMessages(r);
             loadUrls();
         }, javaList(ids));
@@ -113,7 +113,7 @@ function onSave(closeFlag, addFlag) {
     };
     var errors = validateSeoUrl(vo);
     if (errors.length == 0) {
-        seoUrlService.save(function(r) {
+    	jsonrpc.seoUrlService.save(function(r) {
             if (r.result == 'success') {
                 if (closeFlag) {
                     $("#url-dialog").dialog("close");

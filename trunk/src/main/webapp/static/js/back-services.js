@@ -58,18 +58,6 @@ function setupJSONRpcHooks() {
 /**
  * Backend services.
  */
-var pageService = null;
-var templateService = null;
-var commentService = null;
-var folderService = null;
-var fileService = null;
-var configService = null;
-var formService = null;
-var fieldService = null;
-var seoUrlService = null;
-var messageService = null;
-var languageService = null;
-var userService = null;
 
 $(function() {
     initJSONRpcSystem(initBackServices);
@@ -77,16 +65,4 @@ $(function() {
 
 function initBackServices() {
 	setupJSONRpcHooks();
-	pageService = jsonrpc.pageService;
-	templateService = jsonrpc.templateService;
-	commentService = jsonrpc.commentService;
-	folderService = jsonrpc.folderService;
-	fileService = jsonrpc.fileService;
-	configService = jsonrpc.configService;
-	formService = jsonrpc.formService;
-	fieldService = jsonrpc.fieldService;
-	seoUrlService = jsonrpc.seoUrlService;
-	messageService = jsonrpc.messageService;
-	languageService = jsonrpc.languageService;
-	userService = jsonrpc.userService;
 }

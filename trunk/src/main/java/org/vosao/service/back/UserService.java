@@ -45,4 +45,7 @@ public interface UserService extends AbstractService {
 	ServiceResponse save(final Map<String, String> vo); 
 	
 	UserEntity getLoggedIn(HttpServletRequest request);
+	
+	List<UserVO> selectByGroup(final String groupId);
+	
 }

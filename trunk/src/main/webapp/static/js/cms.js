@@ -88,3 +88,15 @@ function showServiceMessages(r) {
 	}
 }
 
+/**
+ * Create map from list of object with id field as key.
+ * @param list - list of objects.
+ * @return - map of objects.
+ */
+function idMap(list) {
+	var map = {};
+	$.each(list, function (i, value) {
+		map[value.id] = value;
+	});
+	return map;
+}

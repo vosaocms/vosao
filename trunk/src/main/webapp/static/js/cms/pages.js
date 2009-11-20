@@ -25,7 +25,7 @@ $(function() {
 });
 
 function loadTree() {
-	pageService.getTree(function(r) {
+	jsonrpc.pageService.getTree(function(r) {
 		$('#pages-tree').html(renderPage(r));
 		$("#pages-tree").treeview();
 	});

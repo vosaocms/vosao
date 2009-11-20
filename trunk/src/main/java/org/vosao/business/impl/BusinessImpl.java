@@ -31,10 +31,12 @@ import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.business.CommentBusiness;
 import org.vosao.business.ConfigBusiness;
+import org.vosao.business.ContentPermissionBusiness;
 import org.vosao.business.FieldBusiness;
 import org.vosao.business.FileBusiness;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.FormBusiness;
+import org.vosao.business.GroupBusiness;
 import org.vosao.business.MessageBusiness;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.TemplateBusiness;
@@ -57,6 +59,8 @@ public class BusinessImpl implements Business, Serializable {
 	private FieldBusiness fieldBusiness;
 	private MessageBusiness messageBusiness;
 	private UserBusiness userBusiness;
+	private ContentPermissionBusiness contentPermissionBusiness;
+	private GroupBusiness groupBusiness;
 
 	public void init() {
 	}
@@ -198,6 +202,26 @@ public class BusinessImpl implements Business, Serializable {
 	@Override
 	public void setUserBusiness(UserBusiness bean) {
 		this.userBusiness = bean;
+	}
+
+	@Override
+	public ContentPermissionBusiness getContentPermissionBusiness() {
+		return contentPermissionBusiness;
+	}
+
+	@Override
+	public void setContentPermissionBusiness(ContentPermissionBusiness bean) {
+		this.contentPermissionBusiness = bean;
+	}
+
+	@Override
+	public GroupBusiness getGroupBusiness() {
+		return groupBusiness;
+	}
+
+	@Override
+	public void setGroupBusiness(GroupBusiness bean) {
+		this.groupBusiness = bean;
 	}
 	
 }

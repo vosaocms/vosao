@@ -23,12 +23,17 @@ var config = '';
 var language = null;
 var languages = null;
 var user = null;
+var group = null;
+var groups = null;
+var users = null;
 
 $(function(){
     $("#import-dialog").dialog({ width: 400, autoOpen: false });
     $("#language-dialog").dialog({ width: 400, autoOpen: false });
     $("#message-dialog").dialog({ width: 400, autoOpen: false });
     $("#user-dialog").dialog({ width: 460, autoOpen: false });
+    $("#group-dialog").dialog({ width: 460, autoOpen: false });
+    $("#user-group-dialog").dialog({ width: 300, autoOpen: false });
     $("#tabs").tabs();
     $('#upload').ajaxForm(afterUpload);
     initJSONRpc(loadData);
@@ -39,29 +44,40 @@ $(function(){
     $('#importButton').click(onImport);
     $('#commentsSaveButton').click(onSave);
     $('#restoreButton').click(onRestore);
-    $('#addLanguageButton').click(onAddLanguage);
-    $('#removeLanguageButton').click(onRemoveLanguage);
-    $('#addMessageButton').click(onAddMessage);
-    $('#removeMessageButton').click(onRemoveMessage);
-    $('#addUserButton').click(onAddUser);
-    $('#removeUserButton').click(onRemoveUser);
     $('#importCancelButton').click(onImportCancel);
     $('#okButton').click(onAfterUploadOk);
+    
     $('#selectFromListRadio').click(function() { onShowLanguageSelect(true); });
     $('#notInListRadio').click(function() { onShowLanguageSelect(false); });
     $('#selectLanguage').change(onSelectLanguageChange);
     $('#languageSaveButton').click(onLanguageSave);
     $('#languageCancelButton').click(onLanguageCancel);
+    $('#addLanguageButton').click(onAddLanguage);
+    $('#removeLanguageButton').click(onRemoveLanguage);
+
+    $('#addMessageButton').click(onAddMessage);
+    $('#removeMessageButton').click(onRemoveMessage);
     $('#saveMessageDlgButton').click(onMessageSave);
     $('#cancelMessageDlgButton').click(onMessageCancel);
+
+    $('#addUserButton').click(onAddUser);
+    $('#removeUserButton').click(onRemoveUser);
     $('#userSaveDlgButton').click(onUserSave);
     $('#userCancelDlgButton').click(onUserCancel);
+
+    $('#addGroupButton').click(onAddGroup);
+    $('#removeGroupButton').click(onRemoveGroup);
+    $('#groupSaveDlgButton').click(onGroupSave);
+    $('#groupCancelDlgButton').click(onGroupCancel);
+    $('#userGroupSaveDlgButton').click(onUserGroupSave);
+    $('#userGroupCancelDlgButton').click(onUserGroupCancel);
 });
 
 function loadData() {
     loadConfig();
 	loadLanguages();
 	loadUsers();
+	loadGroups();
 }
 
 function toggleRecaptcha() {
@@ -102,7 +118,7 @@ function onAfterUploadOk() {
 }
 
 function loadConfig() {
-    configService.getConfig(function (r) {
+	jsonrpc.configService.getConfig(function (r) {
         config = r;
         initFormFields();
     }); 
@@ -133,7 +149,7 @@ function onSave() {
         commentsEmail : $('#commentsEmail').val(),
         commentsTemplate : $('#commentsTemplate').val()        
     });
-    configService.saveConfig(function(r) {
+    jsonrpc.configService.saveConfig(function(r) {
         showServiceMessages(r);
     }, vo); 
 }
@@ -143,7 +159,7 @@ function onExport() {
 }
 
 function onRestore() {
-    configService.restoreCommentsTemplate(function (r) {
+	jsonrpc.configService.restoreCommentsTemplate(function (r) {
         showServiceMessages(r);
         loadConfig();
     });
@@ -172,7 +188,7 @@ function onRemoveLanguage() {
         return;
     }
     if (confirm('Are you sure?')) {
-        languageService.remove(function (r) {
+    	jsonrpc.languageService.remove(function (r) {
             info(r.message);
             loadLanguages();
         }, javaList(ids));
@@ -210,7 +226,7 @@ function onLanguageSave() {
     };
     var errors = languageValidate(vo);
     if (errors.length == 0) {
-        languageService.save(function (r) {
+    	jsonrpc.languageService.save(function (r) {
             if (r.result == 'success') {
                 $('#language-dialog').dialog('close');
                 loadLanguages();
@@ -230,7 +246,7 @@ function onLanguageCancel() {
 }
 
 function loadLanguages() {
-    languageService.select(function (r) {
+	jsonrpc.languageService.select(function (r) {
         languages = r.list;
         var h = '<table class="form-table"><tr><th></th><th>Code</th><th>Title</th></tr>';
         $.each(r.list, function (i, lang) {
@@ -246,7 +262,7 @@ function loadLanguages() {
 }
 
 function onLanguageEdit(id) {
-    languageService.getById(function (r) {
+	jsonrpc.languageService.getById(function (r) {
         language = r;
         $('#languageCode').val(r.code);
         $('#languageTitle').val(r.title);
@@ -474,7 +490,7 @@ function onRemoveMessage() {
         return;
     }
     if (confirm('Are you sure?')) {
-        messageService.remove(function (r) {
+    	jsonrpc.messageService.remove(function (r) {
             info(r.message);
             loadMessages();
         }, javaList(codes));
@@ -482,7 +498,7 @@ function onRemoveMessage() {
 }
 
 function loadMessages() {
-	messageService.select(function (r) {
+	jsonrpc.messageService.select(function (r) {
         var h = '<table class="form-table"><tr><th></th><th>Code</th>';
         $.each(languages, function (i, lang) {
             h += '<th>' + lang.title + '</th>';
@@ -503,7 +519,7 @@ function loadMessages() {
 }
 
 function onMessageEdit(code) {
-    messageService.selectByCode(function (r) {
+	jsonrpc.messageService.selectByCode(function (r) {
         onAddMessage();
         $('#messageCode').val(code);
         $.each(r.list, function (i, msg) {
@@ -517,7 +533,7 @@ function onMessageSave() {
     $.each(languages, function (i, lang) {
         vo[lang.code] = $('#message_' + lang.code).val();
     });
-    messageService.save(function (r) {
+    jsonrpc.messageService.save(function (r) {
         if (r.result == 'success') {
             loadMessages();
             $('#message-dialog').dialog('close');
@@ -559,7 +575,7 @@ function onRemoveUser() {
         return;
     }
     if (confirm('Are you sure?')) {
-        userService.remove(function (r) {
+    	jsonrpc.userService.remove(function (r) {
             info(r.message);
             loadUsers();
         }, javaList(ids));
@@ -567,7 +583,7 @@ function onRemoveUser() {
 }
 
 function loadUsers() {
-    userService.select(function (r) {
+	jsonrpc.userService.select(function (r) {
         var h = '<table class="form-table"><tr><th></th><th>Name</th><th>Email</th><th>Role</th></tr>';
         $.each(r.list, function (i, user) {
             h += '<tr><td><input type="checkbox" value="' + user.id 
@@ -586,7 +602,7 @@ function getRole(role) {
 }
 
 function onUserEdit(id) {
-    userService.getById(function (r) {
+	jsonrpc.userService.getById(function (r) {
         user = r;
         initUserForm();
         $('#user-dialog').dialog('open');
@@ -634,7 +650,7 @@ function onUserSave() {
     };
     var errors = validateUser(vo);
     if (errors.length == 0) {
-        userService.save(function (r) {
+    	jsonrpc.userService.save(function (r) {
             if (r.result == 'success') {
                 $('#user-dialog').dialog('close');
                 info(r.message);
@@ -660,4 +676,153 @@ function userError(msg) {
 
 function userErrors(errors) {
     errorMessages('#user-dialog .messages', errors);
+}
+
+// Group
+
+function loadGroups() {
+	jsonrpc.groupService.select(function (r) {
+    	groups = idMap(r.list);
+        var h = '<table class="form-table"><tr><th></th><th>Name</th><th>Users</th></tr>';
+        $.each(r.list, function (i, group) {
+        	if (group.name == 'guests') {
+        		return;
+        	}
+        	var users = 'add users';
+        	if (group.users.list.length > 0) {
+        		users = '';
+        		$.each(group.users.list, function (i, user) {
+        			users += (i==0 ? '' : ', ') + user.name;
+        		});
+        	}
+        	var editLink = '<a href="#" onclick="onGroupEdit(' + group.id + ')">' 
+                + group.name + '</a>';
+        	var userGroupLink = '<a href="#" onclick="onEditUserGroup(\'' 
+                + group.id + '\')">' + users + '</a>';
+            h += '<tr><td><input type="checkbox" value="' + group.id 
+                + '"/></td><td>' + editLink + '</td><td>' + userGroupLink 
+                + '</td></tr>';
+        });
+        $('#groups').html(h + '</table>');
+        $('#groups tr:even').addClass('even');
+    });
+}
+
+function onAddGroup() {
+    group = null;
+    initGroupForm();
+    $('#group-dialog').dialog('open');
+}
+
+function onRemoveGroup() {
+    var ids = [];
+    $('#groups input:checked').each(function () {
+        ids.push(String(this.value));
+    });
+    if (ids.length == 0) {
+        info('Nothing selected');
+        return;
+    }
+    if (confirm('Are you sure?')) {
+    	jsonrpc.groupService.remove(function (r) {
+            info(r.message);
+            loadGroups();
+        }, javaList(ids));
+    }
+}
+
+function onGroupEdit(id) {
+	jsonrpc.groupService.getById(function (r) {
+        group = r;
+        initGroupForm();
+        $('#group-dialog').dialog('open');
+    }, id);
+}
+
+function initGroupForm() {
+	if (group == null) {
+        $('#groupName').val('');
+	}
+	else {
+        $('#groupName').val(group.name);
+	}
+    $('#group-dialog .messages').html('');
+}
+
+function validateGroup(vo) {
+    var errors = [];
+    if (vo.name == '') {
+        errors.push('Name is empty');
+    }
+    return errors;
+}
+
+function onGroupSave() {
+    var vo = {
+    	id : group != null ? String(group.id) : '',
+        name : $('#groupName').val(),
+    };
+    var errors = validateGroup(vo);
+    if (errors.length == 0) {
+    	jsonrpc.groupService.save(function (r) {
+            if (r.result == 'success') {
+                $('#group-dialog').dialog('close');
+                info(r.message);
+                loadGroups();
+            }
+            else {
+                groupErrors(r.messages.list);
+            }
+        }, javaMap(vo));
+    }
+    else {
+        groupErrors(errors);
+    }
+}
+
+function onGroupCancel() {
+    $('#group-dialog').dialog('close');
+}
+
+function groupError(msg) {
+    errorMessage('#group-dialog .messages', msg);
+}
+
+function groupErrors(errors) {
+    errorMessages('#group-dialog .messages', errors);
+}
+
+function onEditUserGroup(id) {
+	group = groups[id];
+	jsonrpc.userService.select(function (r) {
+		users = idMap(r.list);
+		var groupUsers = idMap(group.users.list);
+		var h = '';
+		$.each(users, function (i, value) {
+			var checked = '';
+			if (groupUsers[value.id] != undefined) {
+				checked = 'checked = "checked"';
+			}
+			h += '<div class="form-row"><input type="checkbox" ' + checked 
+				+ ' value="' + value.id + '"> ' + value.name + '</div>';
+		});
+		$('#groupUsers').html(h);
+		$('#user-group-dialog').dialog('open');
+	});
+}
+
+function onUserGroupCancel() {
+    $('#user-group-dialog').dialog('close');
+}
+
+function onUserGroupSave() {
+	var usersId = [];
+	$('#user-group-dialog input:checked').each(function () {
+		usersId.push(this.value);
+	});
+	jsonrpc.groupService.setGroupUsers(function (r) {
+		showServiceMessages(r);
+	    $('#user-group-dialog').dialog('close');
+	    loadGroups();
+	}, group.id, javaList(usersId));
 }

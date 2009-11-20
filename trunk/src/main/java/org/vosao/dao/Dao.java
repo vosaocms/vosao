@@ -62,4 +62,13 @@ public interface Dao {
 	MessageDao getMessageDao();
 	void setMessageDao(final MessageDao bean);
 
+	GroupDao getGroupDao();
+	void setGroupDao(final GroupDao bean);
+
+	UserGroupDao getUserGroupDao();
+	void setUserGroupDao(final UserGroupDao bean);
+
+	ContentPermissionDao getContentPermissionDao();
+	void setContentPermissionDao(final ContentPermissionDao bean);
+
 }

@@ -53,7 +53,7 @@ function loadData() {
 }
 
 function loadFolder() {
-	folderService.getFolder(function (r) {
+	jsonrpc.folderService.getFolder(function (r) {
 		folder = r;
 		initFormFields();
 	}, folderId);
@@ -92,7 +92,7 @@ function afterUpload(data) {
 }
 
 function loadFiles() {
-	fileService.getByFolder(function (r) {
+	jsonrpc.fileService.getByFolder(function (r) {
 	    files = r.list;
 	    var h = '<table class="form-table"><tr><th></th><th>Title</th>\
 		    <th>Filename</th><th>Mime type</th><th>Size</th></tr>';
@@ -126,7 +126,7 @@ function onDeleteFiles() {
         return;
     }
     if (confirm('Are you sure?')) {
-        fileService.deleteFiles(function (r) {
+    	jsonrpc.fileService.deleteFiles(function (r) {
             if (r.result == "success") {
                 loadFiles();
                 info("Files was successfully deleted.");
@@ -154,7 +154,7 @@ function loadChildren() {
 	if (!editMode) {
 		return;
 	}
-	folderService.getByParent(function (r) {
+	jsonrpc.folderService.getByParent(function (r) {
 		var html = '<table class="form-table">\
 <tr><th></th><th>Title</th><th>Name</th></tr>';
         $.each(r.list, function (i, child) {
@@ -174,7 +174,7 @@ function onUpdate() {
         name : $('#name').val(),
         title : $('#title').val(),
     });
-    folderService.saveFolder(function (r) {
+    jsonrpc.folderService.saveFolder(function (r) {
         showServiceMessage(r);
     }, vo);
 }
@@ -206,7 +206,7 @@ function onDelete() {
         return;
     }
     if (confirm('Are you sure?')) {
-        folderService.deleteFolder(function (r) {
+    	jsonrpc.folderService.deleteFolder(function (r) {
             if (r.result == "success") {
                 loadChildren();
                 info("Folders was successfully deleted.");

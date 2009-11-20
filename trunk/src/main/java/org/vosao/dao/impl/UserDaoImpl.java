@@ -21,6 +21,7 @@
 
 package org.vosao.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
@@ -28,6 +29,7 @@ import javax.jdo.PersistenceManager;
 import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.UserDao;
 import org.vosao.entity.UserEntity;
+import org.vosao.entity.UserGroupEntity;
 import org.vosao.enums.UserRole;
 
 public class UserDaoImpl extends AbstractDaoImpl implements UserDao {
@@ -123,6 +125,27 @@ public class UserDaoImpl extends AbstractDaoImpl implements UserDao {
 			for (Long id : ids) {
 				pm.deletePersistent(pm.getObjectById(UserEntity.class, id));
 			}
+		}
+		finally {
+			pm.close();
+		}
+	}
+
+	@Override
+	public List<UserEntity> selectByGroup(Long groupId) {
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			String query = "select from " + UserGroupEntity.class.getName() 
+				+ " where groupId == pGroupId" 
+				+ " parameters Long pGroupId";
+			List<UserGroupEntity> userGroups = (List<UserGroupEntity>)
+					pm.newQuery(query).execute(groupId);
+			List<UserEntity> result = new ArrayList<UserEntity>();
+			for (UserGroupEntity userGroup : userGroups) {
+				result.add(pm.getObjectById(UserEntity.class, 
+						userGroup.getUserId()));
+			}
+			return result;
 		}
 		finally {
 			pm.close();

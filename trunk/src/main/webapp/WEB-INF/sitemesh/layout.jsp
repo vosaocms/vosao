@@ -51,7 +51,8 @@
     <script language="javascript">
 
     function onLogout() {
-        loginService.logout(function (r) {
+        jsonrpc.loginService.logout(function (r, e) {
+            if (serviceFailed(e)) return;
             if (r.result == 'success') {
                 location.href = '/';
             }

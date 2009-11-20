@@ -23,28 +23,26 @@ package org.vosao.dao;
 
 import java.util.List;
 
-import org.vosao.entity.UserEntity;
-import org.vosao.enums.UserRole;
+import org.vosao.entity.ContentPermissionEntity;
 
 /**
  * @author Alexander Oleynik
  */
-public interface UserDao extends AbstractDao {
+public interface ContentPermissionDao extends AbstractDao {
 
-	void save(final UserEntity entity);
+	void save(final ContentPermissionEntity entity);
 	
-	UserEntity getById(final Long id);
+	ContentPermissionEntity getById(final Long id);
 
-	UserEntity getByEmail(final String email);
+	ContentPermissionEntity getByUrlGroup(final String url, final Long groupId);
 
-	List<UserEntity> getByRole(final UserRole role);
-
-	List<UserEntity> select();
+	List<ContentPermissionEntity> select();
 	
+	List<ContentPermissionEntity> selectByUrl(final String url);
+
 	void remove(final Long id);
 	
 	void remove(final List<Long> ids);
 	
-	List<UserEntity> selectByGroup(final Long groupId);
 	
 }

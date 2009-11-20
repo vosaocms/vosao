@@ -19,32 +19,17 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.business;
 
 import java.util.List;
 
-import org.vosao.entity.UserEntity;
-import org.vosao.enums.UserRole;
+import org.vosao.entity.GroupEntity;
 
 /**
  * @author Alexander Oleynik
  */
-public interface UserDao extends AbstractDao {
+public interface GroupBusiness {
 
-	void save(final UserEntity entity);
-	
-	UserEntity getById(final Long id);
-
-	UserEntity getByEmail(final String email);
-
-	List<UserEntity> getByRole(final UserRole role);
-
-	List<UserEntity> select();
-	
-	void remove(final Long id);
-	
-	void remove(final List<Long> ids);
-	
-	List<UserEntity> selectByGroup(final Long groupId);
+	List<String> validateBeforeUpdate(final GroupEntity Group);
 	
 }

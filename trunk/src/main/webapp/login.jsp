@@ -33,7 +33,8 @@
                 error('Email is empty!');
             }
             else {
-                loginService.login(function (r) {
+                jsonrpc.loginService.login(function (r, e) {
+                    if (serviceFailed(e)) return;
                     if (r.result == 'success') {
                         info('Success. Logging in...');
                         document.location.href = r.message;

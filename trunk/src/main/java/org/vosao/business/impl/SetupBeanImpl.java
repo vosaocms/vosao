@@ -40,10 +40,12 @@ import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FormConfigEntity;
+import org.vosao.entity.GroupEntity;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.entity.UserEntity;
+import org.vosao.enums.ContentPermissionType;
 import org.vosao.enums.PageState;
 import org.vosao.enums.UserRole;
 import org.vosao.utils.StreamUtil;
@@ -69,6 +71,7 @@ public class SetupBeanImpl implements SetupBean {
 		} catch (CacheException e) {
 			log.error(e);
 		}
+		initGroups();
 		initUsers();
 		initTemplates();
 		initPages();
@@ -115,6 +118,16 @@ public class SetupBeanImpl implements SetupBean {
 					UserRole.ADMIN);
 			getDao().getUserDao().save(admin);
 	        log.info("Adding admin user admin@test.com.");
+		}
+	}
+
+	private void initGroups() {
+		GroupEntity guests = getDao().getGroupDao().getByName("guests");
+		if (guests == null) {
+			guests = new GroupEntity("guests");
+			getDao().getGroupDao().save(guests);
+			getBusiness().getContentPermissionBusiness().setPermission(
+					"/", guests, ContentPermissionType.READ);
 		}
 	}
 

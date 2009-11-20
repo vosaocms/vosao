@@ -19,32 +19,27 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.service.back;
 
 import java.util.List;
+import java.util.Map;
 
-import org.vosao.entity.UserEntity;
-import org.vosao.enums.UserRole;
+import org.vosao.entity.ContentPermissionEntity;
+import org.vosao.service.AbstractService;
+import org.vosao.service.ServiceResponse;
+import org.vosao.service.vo.ContentPermissionVO;
 
 /**
  * @author Alexander Oleynik
  */
-public interface UserDao extends AbstractDao {
-
-	void save(final UserEntity entity);
+public interface ContentPermissionService extends AbstractService {
 	
-	UserEntity getById(final Long id);
+	ServiceResponse remove(final List<String> ids);
 
-	UserEntity getByEmail(final String email);
-
-	List<UserEntity> getByRole(final UserRole role);
-
-	List<UserEntity> select();
+	ContentPermissionEntity getById(final Long id);
 	
-	void remove(final Long id);
+	ServiceResponse save(final Map<String, String> vo); 
 	
-	void remove(final List<Long> ids);
-	
-	List<UserEntity> selectByGroup(final Long groupId);
+	List<ContentPermissionVO> selectByUrl(final String pageUrl);
 	
 }

@@ -47,7 +47,7 @@ function loadFields() {
 	if (formId == '') {
 		return;
 	}
-	fieldService.getByForm(function(r, e) {
+	jsonrpc.fieldService.getByForm(function(r, e) {
 		fields = r;
 		if (r.list.length > 0) {
 			var h = '<table class="form-table"><tr><th></th><th>Title</th><th>Name</th><th>Type</th></tr>';
@@ -92,7 +92,7 @@ function onFieldSave(closeFlag) {
 	var fieldVO = createFieldVO();
 	var errors = validateField(fieldVO);
 	if (errors.length == 0) {
-		fieldService.updateField( function(r, e) {
+		jsonrpc.fieldService.updateField( function(r, e) {
 			if (r.result == 'success') {
 				if (closeFlag) {
 					$("#field-dialog").dialog("close");
@@ -226,7 +226,7 @@ function clearFieldMessage() {
 
 function onFieldEdit(fieldId) {
 	clearFieldMessage();
-	fieldService.getById( function(r) {
+	jsonrpc.fieldService.getById( function(r) {
 		field = r;
 		fieldDialogInit();
 		$("#field-dialog").dialog("open");
@@ -243,7 +243,7 @@ function onDeleteFields() {
 		return;
 	}
 	if (confirm('Are you sure?')) {
-		fieldService.remove(function() {
+		jsonrpc.fieldService.remove(function() {
 			info(ids.length + ' fields was successfully deleted.');
 			loadFields();
 		}, javaList(ids));
@@ -256,7 +256,7 @@ function onSaveAndAdd() {
 }
 
 function loadForm() {
-	formService.getForm(function (r) {
+	jsonrpc.formService.getForm(function (r) {
 		if (r != null) {
 			$('#title').val(r.title);
 			$('#name').val(r.name);
@@ -302,7 +302,7 @@ function onUpdate() {
 		showResetButton : String($('#showResetButton:checked').size() > 0),
 		enableCaptcha : String($('#enableCaptcha:checked').size() > 0),
 	});
-	formService.saveForm(function (r) {
+	jsonrpc.formService.saveForm(function (r) {
 		if (r.result = 'success') {
 			location.href = '/cms/plugins/forms.jsp';
 		}

@@ -1,0 +1,24 @@
+#labels Featured
+= Building Vosao =
+
+Vosao uses Maven2 as a project build tool. So you need maven configured on your system. Unfortunately I was unable to make Eclipse build the project with Maven plugin so I recommend to use maven command line for build process.
+
+Build project steps:
+
+ # Download GAE/J SDK and unzip it for example to directory /opt/gae
+ # Configure {vosao source}/ant.properties - set appengine.sdk.home var to "/opt/gae"
+ # Download and configure maven2
+ # If your application name is "testapp" then this command will build war file.
+{{{
+  > mvn -Dappname=testapp clean package
+}}}
+ # Run development server:
+{{{
+  > run.sh
+}}}
+ # Deploy to GAE
+{{{
+  > update.sh
+}}}
+
+If your OS is Windows please look inside these .sh scripts, you will find ordinal commands which you can put inside .bat files.

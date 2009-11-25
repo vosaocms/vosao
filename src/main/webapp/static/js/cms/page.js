@@ -170,18 +170,20 @@ function loadLanguages() {
 		var h = '';
 		$.each(r.list, function(i, value) {
 			languages[value.code] = value;
-			var sel = '';
-			if (value.code == ENGLISH_CODE) {
-				sel = 'selected="selected"';
-			}
-			h += '<option value="' + value.code + '" ' + sel + '>'
-					+ value.title + '</option>';
 		});
-		$('#language').html(h);
+		fillLanguagesList(languages);
 		setPermissionLanguages();
 	});
 }
-    
+ 
+function fillLanguagesList(langsMap) {
+	var h = '';
+	$.each(langsMap, function(code, lang) {
+		h += '<option value="' + code + '" ' + '>'
+				+ lang.title + '</option>';
+	});
+	$('#language').html(h);
+}
 
 function initPageForm() {
 	var urlEnd = pageParentUrl == '/' ? '' : '/';

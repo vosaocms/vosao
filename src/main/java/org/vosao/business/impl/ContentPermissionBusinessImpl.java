@@ -84,12 +84,12 @@ public class ContentPermissionBusinessImpl extends AbstractBusinessImpl
 		result.setAllLanguages(false);
 		Set<String> languages = new HashSet<String>();
 		for (ContentPermissionEntity perm : permissions) {
-			if (perm.isAllLanguages()) {
-				result.setAllLanguages(true);
-			}
-			languages.addAll(perm.getLanguagesList());
 			if (perm.isMyPermissionHigher(result)) {
 				result.setPermission(perm.getPermission());
+				if (perm.isAllLanguages()) {
+					result.setAllLanguages(true);
+				}
+				languages.addAll(perm.getLanguagesList());
 			}
 		}
 		String langs = "";

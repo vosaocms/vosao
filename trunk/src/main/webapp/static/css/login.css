@@ -11,8 +11,8 @@
 #login-form {
 	float: right;
 	border: 1px solid #a5c4d5;
-	padding: 10px;
-	background-color: #d3e8f4;
+	padding: 10px 20px;
+	background: url('../images/login-bg.png') repeat-x 0 0;
 }
 
 #login-form h3, #login-form h4 {

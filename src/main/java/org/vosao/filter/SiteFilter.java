@@ -32,6 +32,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.entity.PageEntity;
@@ -74,7 +75,7 @@ public class SiteFilter extends AbstractFilter implements Filter {
             httpResponse.sendRedirect(seoUrl.getToLink());
             return;
         }
-    	PageEntity page = getDao().getPageDao().getByUrl(url);
+    	PageEntity page = getPage(url, httpRequest);
         if (page != null) {
         	renderPage(httpRequest, httpResponse, page);
         	return;
@@ -106,4 +107,24 @@ public class SiteFilter extends AbstractFilter implements Filter {
     	out.write(content);
     }
     
+    private Integer getVersion(HttpServletRequest request) {
+    	try {
+    		return Integer.valueOf(request.getParameter("version"));
+    	}
+    	catch (NumberFormatException e) {
+    		return null;
+    	}
+    }
+    
+    private PageEntity getPage(String url, HttpServletRequest request) {
+    	Integer version = getVersion(request);
+    	PageEntity page;
+    	if (version == null) {
+            page = getDao().getPageDao().getByUrl(url);
+    	}
+    	else {
+            page = getDao().getPageDao().getByUrlVersion(url, version);
+    	}
+    	return page;
+    }    
 }

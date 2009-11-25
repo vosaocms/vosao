@@ -41,17 +41,17 @@
             var email = $('#loginEmail').val();
             var password = $('#loginPassword').val();
             if (email == '') {
-                error('Email is empty!');
+                errorMessage('#login-messages', 'Email is empty!');
             }
             else {
                 jsonrpc.loginFrontService.login(function (r, e) {
                     if (serviceFailed(e)) return;
                     if (r.result == 'success') {
-                        info('Success. Logging in...');
+                        infoMessage('#login-messages', 'Success. Logging in...');
                         document.location.href = r.message;
                     }
                     else {
-                        error(r.message);
+                        errorMessage('#login-messages', r.message);
                     }
                 }, email, password);
             }                
@@ -80,9 +80,8 @@
     <label>Password</label>
     <input type="password" id="loginPassword" />
 </div>
-<div class="messages"> </div>
-<div>
-    <label></label>
+<div id="login-messages"> </div>
+<div class="buttons-dlg">
     <input type="button" value="Login" onclick="onLogin()" />
 </div>    
 
@@ -92,7 +91,7 @@
 <div class="clear"> </div>
 
 <div class="version">
-  <span>Vosao CMS Version 0.0.4</span>
+  <span>Vosao CMS Version 0.1</span>
 </div>
 
 </div>

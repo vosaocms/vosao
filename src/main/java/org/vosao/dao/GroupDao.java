@@ -42,5 +42,6 @@ public interface GroupDao extends AbstractDao {
 	
 	void remove(final List<Long> ids);
 	
+	GroupEntity getGuestsGroup();
 	
 }

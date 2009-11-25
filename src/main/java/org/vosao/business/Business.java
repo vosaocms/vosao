@@ -23,6 +23,7 @@ package org.vosao.business;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.vosao.entity.UserEntity;
 import org.vosao.global.SystemService;
 
 
@@ -34,6 +35,8 @@ public interface Business {
 	UserPreferences getUserPreferences(final HttpServletRequest request);
 	void setUserPreferences(UserPreferences bean, final HttpServletRequest request);
 
+	UserEntity getUser();
+	
 	String getLanguage(final HttpServletRequest request);
 	void setLanguage(String language, final HttpServletRequest request);
 

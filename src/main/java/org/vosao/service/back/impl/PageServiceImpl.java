@@ -22,19 +22,16 @@
 package org.vosao.service.back.impl;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
+import org.vosao.business.CurrentUser;
 import org.vosao.business.decorators.TreeItemDecorator;
-import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.UserEntity;
@@ -52,11 +49,10 @@ public class PageServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse updateContent(String pageId, String content,
-			String languageCode, HttpServletRequest request) {
-		PageEntity page = getDao().getPageDao().getById(pageId);
+			String languageCode) {
+		PageEntity page = getBusiness().getPageBusiness().getById(pageId);
 		if (page != null) {
-			UserEntity user = getBusiness().getUserPreferences(request)
-				.getUser();
+			UserEntity user = getBusiness().getUser();
 			page.setState(PageState.EDIT);
 			page.setModDate(new Date());
 			page.setModUserEmail(user.getEmail());
@@ -73,7 +69,8 @@ public class PageServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public TreeItemDecorator<PageVO> getTree() {
-		List<PageVO> pages = PageVO.create(getDao().getPageDao().select());
+		List<PageVO> pages = PageVO.create(getBusiness().getPageBusiness()
+				.select());
 		Map<String, TreeItemDecorator<PageVO>> buf = 
 				new HashMap<String, TreeItemDecorator<PageVO>>();
 		for (PageVO page : pages) {
@@ -103,18 +100,17 @@ public class PageServiceImpl extends AbstractServiceImpl
 		if (StringUtils.isEmpty(id)) {
 			return null;
 		}
-		return getDao().getPageDao().getById(id);
+		return getBusiness().getPageBusiness().getById(id);
 	}
 
 	@Override
 	public PageEntity getPageByUrl(String url) {
-		return getDao().getPageDao().getByUrl(url);
+		return getBusiness().getPageBusiness().getByUrl(url);
 	}
 
 	@Override
-	public ServiceResponse savePage(Map<String, String> pageMap,
-			HttpServletRequest request) {
-		UserEntity user = getBusiness().getUserPreferences(request).getUser();
+	public ServiceResponse savePage(Map<String, String> pageMap) {
+		UserEntity user = CurrentUser.getInstance();
 		PageEntity page = getPage(pageMap.get("id"));
 		if (page == null) {
 			page = new PageEntity();
@@ -125,6 +121,11 @@ public class PageServiceImpl extends AbstractServiceImpl
 		page.setModUserEmail(user.getEmail());
 		page.setCommentsEnabled(Boolean.valueOf(pageMap.get("commentsEnabled")));
 		page.setFriendlyURL(pageMap.get("friendlyUrl"));
+		if (!getBusiness().getContentPermissionBusiness().getPermission(
+				page.getFriendlyURL(), CurrentUser.getInstance())
+					.isChangeGranted()) {
+			return ServiceResponse.createErrorResponse("Access denied");
+		}
 		try {
 			page.setPublishDate(DateUtil.toDate(pageMap.get("publishDate")));
 		}
@@ -149,37 +150,43 @@ public class PageServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public List<PageVO> getChildren(String url) {
-		return PageVO.create(getDao().getPageDao().getByParent(url));
+		return PageVO.create(getBusiness().getPageBusiness().getByParent(url));
 	}
 
 	@Override
 	public ServiceResponse deletePages(List<String> ids) {
-		getDao().getPageDao().remove(ids);
+		getBusiness().getPageBusiness().remove(ids);
 		return ServiceResponse.createSuccessResponse(
 				"Pages were successfully deleted");
 	}
 
 	@Override
 	public List<ContentEntity> getContents(String pageId) {
-		return getDao().getPageDao().getContents(pageId);
+		return getBusiness().getPageBusiness().getContents(pageId);
 	}
 
 	@Override
 	public List<PageVO> getPageVersions(String url) {
-		return PageVO.create(getDao().getPageDao().selectByUrl(url));
+		return PageVO.create(getBusiness().getPageBusiness().selectByUrl(url));
 	}
 
 	@Override
-	public String addVersion(String url, String versionTitle, 
-			HttpServletRequest request) {
-		List<PageEntity> list = getDao().getPageDao().selectByUrl(url);
-		UserEntity user = getBusiness().getUserPreferences(request).getUser();
+	public ServiceResponse addVersion(String url, String versionTitle) {
+		if (!getBusiness().getContentPermissionBusiness().getPermission(
+				url, CurrentUser.getInstance()).isChangeGranted()) {
+			return ServiceResponse.createErrorResponse("Access denied");
+		}
+		List<PageEntity> list = getBusiness().getPageBusiness().selectByUrl(url);
 		if (list.size() > 0) {
 			PageEntity lastPage = list.get(list.size() - 1);
-			return getBusiness().getPageBusiness().addVersion(lastPage, 
-					lastPage.getVersion() + 1, versionTitle, user).getId();
+			ServiceResponse resp = ServiceResponse.createSuccessResponse(
+					"Version successfully added");
+			resp.setMessage(getBusiness().getPageBusiness().addVersion(lastPage, 
+					lastPage.getVersion() + 1, versionTitle, 
+						CurrentUser.getInstance()).getId());
+			return resp;
 		}
-		return null;
+		return ServiceResponse.createErrorResponse("Page not found");
 	}
 
 	@Override
@@ -190,6 +197,11 @@ public class PageServiceImpl extends AbstractServiceImpl
 		PageEntity page = getDao().getPageDao().getById(pageId);
 		if (page == null) {
 			return ServiceResponse.createErrorResponse("Page not found");
+		}
+		if (!getBusiness().getContentPermissionBusiness().getPermission(
+				page.getFriendlyURL(), CurrentUser.getInstance())
+					.isPublishGranted()) {
+			return ServiceResponse.createErrorResponse("Access denied");
 		}
 		page.setState(PageState.APPROVED);
 		getDao().getPageDao().save(page);

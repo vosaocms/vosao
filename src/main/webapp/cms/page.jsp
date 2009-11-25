@@ -178,8 +178,9 @@
             <legend>Permission</legend>
             <input type="radio" name="permission" value="DENIED"/> Denied <br />
             <input type="radio" name="permission" value="READ" /> Read <br />
-            <input type="radio" name="permission" value="WRITE" /> Read/Write <br />
-            <input type="radio" name="permission" value="PUBLISH" /> Read/Write/Publish <br />
+            <input type="radio" name="permission" value="WRITE" /> Read, Write <br />
+            <input type="radio" name="permission" value="PUBLISH" /> Read, Write, Publish <br />
+            <input type="radio" name="permission" value="ADMIN" /> Read, Write, Publish, Grant permissions <br />
         </fieldset>        
     </div>
     <div class="form-row">

@@ -64,11 +64,22 @@ public class ContentPermissionEntity implements Serializable {
 		allLanguages = true;
 	}
 	
-	public ContentPermissionEntity(String aName) {
+	public ContentPermissionEntity(String anUrl) {
 		this();
-		url = aName;
+		url = anUrl;
 	}
 	
+	public ContentPermissionEntity(String anUrl, ContentPermissionType perm) {
+		this(anUrl);
+		permission = perm;
+	}
+
+	public ContentPermissionEntity(String anUrl, ContentPermissionType perm,
+			Long aGroupId) {
+		this(anUrl, perm);
+		groupId = aGroupId;
+	}
+
 	public void copy(final ContentPermissionEntity entity) {
 		setUrl(entity.getUrl());
 		setPermission(entity.getPermission());
@@ -162,6 +173,22 @@ public class ContentPermissionEntity implements Serializable {
 	
 	public boolean isDenied() {
 		return permission.equals(ContentPermissionType.DENIED);
+	}
+
+	public boolean isAdmin() {
+		return permission.equals(ContentPermissionType.ADMIN);
+	}
+
+	public boolean isChangeGranted() {
+		return isWrite() || isPublish() || isAdmin();
+	}
+	
+	public boolean isPublishGranted() {
+		return isPublish() || isAdmin();
+	}
+	
+	public boolean isMyPermissionHigher(ContentPermissionEntity perm) {
+		return getPermission().ordinal() > perm.getPermission().ordinal();
 	}
 	
 }

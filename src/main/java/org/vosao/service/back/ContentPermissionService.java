@@ -41,5 +41,7 @@ public interface ContentPermissionService extends AbstractService {
 	ServiceResponse save(final Map<String, String> vo); 
 	
 	List<ContentPermissionVO> selectByUrl(final String pageUrl);
+
+	ContentPermissionEntity getPermission(final String url);
 	
 }

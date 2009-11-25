@@ -22,11 +22,14 @@
 package org.vosao.business.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.CommentBusiness;
+import org.vosao.business.ContentPermissionBusiness;
+import org.vosao.business.CurrentUser;
 import org.vosao.entity.CommentEntity;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.PageEntity;
@@ -40,6 +43,8 @@ public class CommentBusinessImpl extends AbstractBusinessImpl
 	private static final Log logger = LogFactory.getLog(CommentBusinessImpl.class);
 
 	private static final String COMMENT_LETTER_SUBJECT = "New comment";
+	
+	private ContentPermissionBusiness contentPermissionBusiness;
 	
 	@Override
 	public CommentEntity addComment(String name, String content, 
@@ -73,5 +78,47 @@ public class CommentBusinessImpl extends AbstractBusinessImpl
 		return b.toString();
 	}
 
+	private boolean isChangeGranted(List<String> ids) {
+		if (ids.size() > 0) {
+			CommentEntity comment = getDao().getCommentDao().getById(ids.get(0));
+			return getContentPermissionBusiness().getPermission(
+					comment.getPageUrl(), CurrentUser.getInstance())
+						.isChangeGranted();
+		}		
+		return false;
+	}
+	
+	@Override
+	public void disable(List<String> ids) {
+		if (isChangeGranted(ids)) {
+			getDao().getCommentDao().disable(ids);
+		}		
+	}
+
+	@Override
+	public void enable(List<String> ids) {
+		if (isChangeGranted(ids)) {
+			getDao().getCommentDao().enable(ids);
+		}		
+	}
+
+	@Override
+	public void remove(List<String> ids) {
+		if (isChangeGranted(ids)) {
+			getDao().getCommentDao().remove(ids);
+		}		
+	}
+
+	@Override
+	public ContentPermissionBusiness getContentPermissionBusiness() {
+		return contentPermissionBusiness;
+	}
+
+	@Override
+	public void setContentPermissionBusiness(ContentPermissionBusiness bean) {
+		contentPermissionBusiness = bean;		
+	}
+
+	
 	
 }

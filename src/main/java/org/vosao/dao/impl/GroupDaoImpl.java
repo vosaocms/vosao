@@ -121,4 +121,9 @@ public class GroupDaoImpl extends AbstractDaoImpl implements GroupDao {
 		}
 	}
 
+	@Override
+	public GroupEntity getGuestsGroup() {
+		return getByName("guests");
+	}
+
 }

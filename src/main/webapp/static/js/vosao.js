@@ -113,7 +113,7 @@ function initJSONRpcSystem(func) {
 
 function serviceFailed(e) {
 	if (e != null) {
-		alert('Can\'t connect to server. ' + e.message);
+		alert('Can\'t connect to server. ' + e + ' '+ e.message);
 		return true;
 	}
 	return false;

@@ -19,11 +19,27 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.enums;
+package org.vosao.business;
+
+import org.vosao.entity.UserEntity;
 
 /**
+ * Current user session value cache class. Due to GAE single-threaded nature
+ * we can cache currently logged in user in static property. Which we set in 
+ * authentication filter.
+ *
  * @author Alexander Oleynik
+ *
  */
-public enum UserRole {
-	USER, ADMIN, SITE_USER, GUEST;
+public class CurrentUser {
+
+	private static UserEntity user;
+	
+	public static UserEntity getInstance() {
+		return user;
+	}
+	
+	public static void setInstance(UserEntity aUser) {
+		user = aUser;
+	}
 }

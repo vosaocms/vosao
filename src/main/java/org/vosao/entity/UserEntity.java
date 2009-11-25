@@ -39,6 +39,9 @@ public class UserEntity implements Serializable {
 
 	private static final long serialVersionUID = 2L;
 
+	public static UserEntity GUEST = new UserEntity("guest","","",
+			UserRole.GUEST);
+	
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Long id;
@@ -128,7 +131,17 @@ public class UserEntity implements Serializable {
 	}
 	
 	public String getRoleString() {
+		if (role == null) {
+			return "";
+		}
 		return role.name();
+	}
+	
+	public boolean isAdmin() {
+		if (role == null) {
+			return false;
+		}
+		return role.equals(UserRole.ADMIN);
 	}
 	
 }

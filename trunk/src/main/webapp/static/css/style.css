@@ -32,6 +32,11 @@ a:hover, .ui-widget-content a:hover {
 fieldset {
 	padding: 10px;
 	border: 1px solid #ccc;
+    -moz-border-radius-bottomleft:5px;
+    -moz-border-radius-bottomright:5px;
+    -moz-border-radius-topleft:5px;
+    -moz-border-radius-topright:5px;
+    border-radius: 5px;
 }
 
 legend {

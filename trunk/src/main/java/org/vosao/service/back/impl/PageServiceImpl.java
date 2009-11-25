@@ -53,10 +53,14 @@ public class PageServiceImpl extends AbstractServiceImpl
 			String languageCode, boolean approve) {
 		PageEntity page = getBusiness().getPageBusiness().getById(pageId);
 		if (page != null) {
+			if (!getBusiness().getPageBusiness().canChangeContent(
+					page.getFriendlyURL(), languageCode)) {
+				return ServiceResponse.createErrorResponse("Access denied");
+			}
 			UserEntity user = CurrentUser.getInstance();
 			ContentPermissionEntity perm = getBusiness()
-				.getContentPermissionBusiness().getPermission(
-					page.getFriendlyURL(), CurrentUser.getInstance());
+					.getContentPermissionBusiness().getPermission(
+							page.getFriendlyURL(), user);
 			if (approve && perm.isPublishGranted()) {
 				page.setState(PageState.APPROVED);
 			}

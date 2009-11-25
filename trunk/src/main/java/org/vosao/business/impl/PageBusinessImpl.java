@@ -43,6 +43,7 @@ import org.vosao.business.impl.pagefilter.JavaScriptPageFilter;
 import org.vosao.business.impl.pagefilter.PageFilter;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.ContentEntity;
+import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
@@ -270,7 +271,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	private List<PageEntity> securityFilter(List<PageEntity> list) {
 		List<PageEntity> result = new ArrayList<PageEntity>();
 		for (PageEntity page : list) {
-			if (canReadPage(page.getFriendlyURL())) {
+			if (canReadPage(page)) {
 				result.add(page);
 			}
 		}
@@ -284,13 +285,17 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 
 	private PageEntity securityFilter(PageEntity page) {
 		if (page != null) {
-			if (!canReadPage(page.getFriendlyURL())) {
+			if (!canReadPage(page)) {
 				return null;
 			}
 		}
 		return page;
 	}
 	
+	private boolean canReadPage(PageEntity page) {
+		return canReadPage(page.getFriendlyURL());
+	}
+
 	private boolean canReadPage(String url) {
 		return !getContentPermissionBusiness().getPermission(
 				url, CurrentUser.getInstance()).isDenied();
@@ -329,17 +334,46 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	public List<ContentEntity> getContents(String pageId) {
 		PageEntity page = getById(pageId);
 		if (page != null) {
-			return getDao().getPageDao().getContents(pageId);
+			return securityFilter(page.getFriendlyURL(), 
+					getDao().getPageDao().getContents(pageId));
 		}
 		return Collections.EMPTY_LIST;
 	}
 
+	private List<ContentEntity> securityFilter(String url, 
+			List<ContentEntity> list) {
+		ContentPermissionEntity perm = getContentPermissionBusiness()
+				.getPermission(url, CurrentUser.getInstance());
+		if (perm.isAllLanguages()) {
+			return list;
+		}
+		List<ContentEntity> result = new ArrayList<ContentEntity>();
+		List<String> languages = perm.getLanguagesList();
+		for (ContentEntity content : list) {
+			if (languages.contains(content.getLanguageCode())) {
+				result.add(content);
+			}
+		}
+		return result;
+	}
+	
 	@Override
 	public List<PageEntity> selectByUrl(String url) {
 		if (canReadPage(url)) {
 			return getDao().getPageDao().selectByUrl(url);
 		}
 		return Collections.EMPTY_LIST;
+	}
+
+	@Override
+	public boolean canChangeContent(String url, String languageCode) {
+		ContentPermissionEntity perm = getContentPermissionBusiness()
+				.getPermission(url, CurrentUser.getInstance());
+		if (perm.isAllLanguages()) {
+			return perm.isChangeGranted();
+		}
+		return perm.isChangeGranted() && perm.getLanguagesList().contains(
+				languageCode);
 	}
 }
 

@@ -111,5 +111,7 @@ public interface PageBusiness {
 	 */
 	PageEntity addVersion(final PageEntity oldPage, final Integer version, 
 			final String versionTitle, final UserEntity user);
+
+	boolean canChangeContent(String url, String languageCode);
 	
 }

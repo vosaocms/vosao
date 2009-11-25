@@ -33,7 +33,7 @@
                 error('Email is empty!');
             }
             else {
-                jsonrpc.loginService.login(function (r, e) {
+                jsonrpc.loginFrontService.login(function (r, e) {
                     if (serviceFailed(e)) return;
                     if (r.result == 'success') {
                         info('Success. Logging in...');

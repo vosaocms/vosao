@@ -19,6 +19,13 @@
  * email: vosao.dev@gmail.com
  */
  
+/**
+ * Declared in page.jsp
+ * 
+ *   var pageId;
+ *   var pageParentUrl;
+ */
+
 var page = null;
 var pages = {};
 var versions = [];
@@ -92,6 +99,7 @@ function loadData() {
 function loadPage() {
 	jsonrpc.pageService.getPage(function(r) {
 		page = r;
+		var permUrl = pageParentUrl;
 		if (editMode) {
 			pageId = page.id;
 			pageParentUrl = page.parentUrl;
@@ -100,9 +108,11 @@ function loadPage() {
 			loadComments();
 			loadPermissions();
 			loadGroups();
+			permUrl = page.friendlyURL;
 		} else {
 			pages['1'] = page;
 		}
+		loadPagePermission(permUrl);
 		initPageForm();
 	}, pageId);
 }
@@ -481,8 +491,11 @@ function onAddVersion() {
 
 function onVersionTitleSave() {
 	jsonrpc.pageService.addVersion(function(r) {
-		pageId = r;
-		loadData();
+		showServiceMessages(r);
+		if (r.result == 'success') {
+			pageId = r.message;
+			loadData();
+		}
 		$('#version-dialog').dialog('close');
 	}, page.friendlyURL, $('#version-title').val());
 }
@@ -512,10 +525,13 @@ function getPermissionName(perm) {
 		return 'Read';
 	}
 	if (perm == 'WRITE') {
-		return 'Read/Write';
+		return 'Read, Write';
 	}
 	if (perm == 'PUBLISH') {
-		return 'Read/Write/Publish';
+		return 'Read, Write, Publish';
+	}
+	if (perm == 'ADMIN') {
+		return 'Read, Write, Publish, Grant permissions';
 	}
 }
 
@@ -602,7 +618,8 @@ function onPermissionSave() {
 	});
 	var vo = {
 		url: page.friendlyURL,
-		groupId: $('#groupSelect').val(),
+		groupId: permission == null ? $('#groupSelect').val() : 
+			String(permission.group.id),
 		permission: $('#permissionList input:checked')[0].value,
 		languages: $('#allLanguages')[0].checked ? '' : langs,
 	};
@@ -649,4 +666,41 @@ function onAllLanguagesChange() {
 	else {
 		$('#permLanguages').show();
 	}
+}
+
+function loadPagePermission(url) {
+    jsonrpc.contentPermissionService.getPermission(function (r) {
+    	if (r.publishGranted) {
+    		$('#approveButton').show();
+    	}
+    	else {
+    		$('#approveButton').hide();
+    	}
+    	if (r.changeGranted) {
+    		$('#pageSaveButton').show();
+    		$('#saveContinueContentButton').show();
+    		$('#saveContentButton').show();
+    		$('#addChildButton').show();
+    		$('#deleteChildButton').show();
+    		$('#enableCommentsButton').show();
+    		$('#disableCommentsButton').show();
+    		$('#deleteCommentsButton').show();
+    	}
+    	else {
+    		$('#pageSaveButton').hide();
+    		$('#saveContinueContentButton').hide();
+    		$('#saveContentButton').hide();
+    		$('#addChildButton').hide();
+    		$('#deleteChildButton').hide();
+    		$('#enableCommentsButton').hide();
+    		$('#disableCommentsButton').hide();
+    		$('#deleteCommentsButton').hide();
+    	}
+    	if (r.admin && editMode) {
+    		$('.securityTab').show();
+    	}
+    	else {
+    		$('.securityTab').hide();
+    	}
+    }, url);
 }

@@ -46,14 +46,31 @@ public class ContentPermissionBusinessImpl extends AbstractBusinessImpl
 			ContentPermissionBusinessImpl.class);
 	
 	@Override
+	public ContentPermissionEntity getGuestPermission(final String url) {
+		GroupEntity guests = getDao().getGroupDao().getGuestsGroup();
+		ContentPermissionEntity result = getGroupPermission(url, guests.getId());
+		result.setUrl(url);
+		return result;
+	}
+
+	@Override
 	public ContentPermissionEntity getPermission(final String url, 
 			final UserEntity user) {
-		List<UserGroupEntity> userGroups = getDao().getUserGroupDao().selectByUser(
-				user.getId());
+		if (user.isAdmin()) {
+			return new ContentPermissionEntity(url, 
+					ContentPermissionType.ADMIN);
+		}
+		List<UserGroupEntity> userGroups = getDao().getUserGroupDao().selectByUser(user.getId());
+		userGroups.add(new UserGroupEntity(getDao().getGroupDao()
+				.getGuestsGroup().getId(), user.getId()));
 		List<ContentPermissionEntity> permissions = 
 				new ArrayList<ContentPermissionEntity>();
 		for (UserGroupEntity userGroup : userGroups) {
-			permissions.add(getPermission(url, userGroup.getGroupId()));
+			ContentPermissionEntity contentPermission = getGroupPermission(url, 
+					userGroup.getGroupId());
+			if (contentPermission != null) {
+				permissions.add(contentPermission);
+			}
 		}
 		ContentPermissionEntity result = consolidatePermissions(permissions);
 		result.setUrl(url);
@@ -71,14 +88,8 @@ public class ContentPermissionBusinessImpl extends AbstractBusinessImpl
 				result.setAllLanguages(true);
 			}
 			languages.addAll(perm.getLanguagesList());
-			if (perm.isPublish()) {
-				result.setPermission(ContentPermissionType.PUBLISH);
-			}
-			if (perm.isWrite() && !result.isPublish()) {
-				result.setPermission(ContentPermissionType.WRITE);
-			}
-			if (perm.isRead() && !result.isPublish() && !result.isWrite()) {
-				result.setPermission(ContentPermissionType.READ);
+			if (perm.isMyPermissionHigher(result)) {
+				result.setPermission(perm.getPermission());
 			}
 		}
 		String langs = "";
@@ -89,11 +100,12 @@ public class ContentPermissionBusinessImpl extends AbstractBusinessImpl
 		return result;
 	}
 
-	private ContentPermissionEntity getPermission(String url, Long groupId) {
+	private ContentPermissionEntity getGroupPermission(String url,
+			Long groupId) {
 		String myUrl = url;
 		while (myUrl != null) {
 			ContentPermissionEntity perm = getDao().getContentPermissionDao()
-				.getByUrlGroup(url, groupId);
+				.getByUrlGroup(myUrl, groupId);
 			if (perm != null) {
 				return perm;
 			}

@@ -39,6 +39,50 @@ public interface PageBusiness {
 	MessageBusiness getMessageBusiness();
 	void setMessageBusiness(MessageBusiness bean);
 	
+	ContentPermissionBusiness getContentPermissionBusiness();
+	void setContentPermissionBusiness(ContentPermissionBusiness bean);
+
+	/**
+	 * Security filtered dao version.
+	 * @return found page.
+	 */
+	PageEntity getById(final String id);
+	
+	/**
+	 * Security filtered dao version.
+	 * @return list of pages.
+	 */
+	List<PageEntity> select();
+
+	/**
+	 * Security filtered dao version.
+	 * @return found page.
+	 */
+	PageEntity getByUrl(final String url);
+
+	/**
+	 * Security filtered dao version.
+	 * @return list of pages.
+	 */
+	List<PageEntity> getByParent(final String url);
+
+	/**
+	 * Security filtered dao version.
+	 */
+	void remove(final List<String> ids);
+
+	/**
+	 * Security filtered dao version.
+	 */
+	List<ContentEntity> getContents(final String pageId);
+
+	/**
+	 * Security filtered dao version.
+	 */
+	List<PageEntity> selectByUrl(final String url);
+	
+	
+	
 	TreeItemDecorator<PageEntity> getTree(final List<PageEntity> pages);
 		
 	TreeItemDecorator<PageEntity> getTree();

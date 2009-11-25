@@ -93,8 +93,8 @@ public class UserServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public UserEntity getLoggedIn(HttpServletRequest request) {
-		return getBusiness().getUserPreferences(request).getUser();
+	public UserEntity getLoggedIn() {
+		return getBusiness().getUser();
 	}
 
 	@Override

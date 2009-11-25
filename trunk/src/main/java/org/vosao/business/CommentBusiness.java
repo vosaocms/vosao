@@ -21,10 +21,30 @@
 
 package org.vosao.business;
 
+import java.util.List;
+
 import org.vosao.entity.CommentEntity;
 import org.vosao.entity.PageEntity;
 
 public interface CommentBusiness {
+
+	ContentPermissionBusiness getContentPermissionBusiness();
+	void setContentPermissionBusiness(ContentPermissionBusiness bean);
+
+	/**
+	 * Security filtered dao version.
+	 */
+	void remove(List<String> ids);
+	
+	/**
+	 * Security filtered dao version.
+	 */
+	void enable(List<String> ids);
+	
+	/**
+	 * Security filtered dao version.
+	 */
+	void disable(List<String> ids);
 
 	CommentEntity addComment(final String name, final String content, 
 			final PageEntity page);

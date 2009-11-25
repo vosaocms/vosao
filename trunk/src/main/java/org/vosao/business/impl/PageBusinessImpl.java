@@ -22,6 +22,7 @@
 package org.vosao.business.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.ConfigBusiness;
+import org.vosao.business.ContentPermissionBusiness;
+import org.vosao.business.CurrentUser;
 import org.vosao.business.MessageBusiness;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
@@ -59,9 +62,10 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 
     private static final Log logger = LogFactory.getLog(PageBusinessImpl.class);
 
-    ConfigBusiness configBusiness;
-    MessageBusiness messageBusiness;
-	VelocityPluginService velocityPluginService;
+    private ConfigBusiness configBusiness;
+    private MessageBusiness messageBusiness;
+    private ContentPermissionBusiness contentPermissionBusiness;
+	private VelocityPluginService velocityPluginService;
 
 	public void init() throws Exception {
 		velocityPluginService = new VelocityPluginServiceImpl(getDao(), 
@@ -202,6 +206,16 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		messageBusiness = bean;		
 	}
 
+	@Override
+	public ContentPermissionBusiness getContentPermissionBusiness() {
+		return contentPermissionBusiness;
+	}
+
+	@Override
+	public void setContentPermissionBusiness(ContentPermissionBusiness bean) {
+		contentPermissionBusiness = bean;		
+	}
+
 	public VelocityPluginService getVelocityPluginService() {
 		return velocityPluginService;
 	}
@@ -248,5 +262,84 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		return page;
 	}
 
+	@Override
+	public List<PageEntity> select() {
+		return securityFilter(getDao().getPageDao().select());
+	}
+	
+	private List<PageEntity> securityFilter(List<PageEntity> list) {
+		List<PageEntity> result = new ArrayList<PageEntity>();
+		for (PageEntity page : list) {
+			if (canReadPage(page.getFriendlyURL())) {
+				result.add(page);
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public PageEntity getById(String id) {
+		return securityFilter(getDao().getPageDao().getById(id));
+	}
+
+	private PageEntity securityFilter(PageEntity page) {
+		if (page != null) {
+			if (!canReadPage(page.getFriendlyURL())) {
+				return null;
+			}
+		}
+		return page;
+	}
+	
+	private boolean canReadPage(String url) {
+		return !getContentPermissionBusiness().getPermission(
+				url, CurrentUser.getInstance()).isDenied();
+	}
+
+	private boolean canWritePage(String url) {
+		return getContentPermissionBusiness().getPermission(
+				url, CurrentUser.getInstance()).isChangeGranted();
+	}
+
+	@Override
+	public PageEntity getByUrl(String url) {
+		return securityFilter(getDao().getPageDao().getByUrl(url));
+	}
+
+	@Override
+	public List<PageEntity> getByParent(String url) {
+		return securityFilter(getDao().getPageDao().getByParent(url));
+	}
+
+	@Override
+	public void remove(List<String> ids) {
+		List<String> removeIds = new ArrayList<String>();
+		for (String id : ids) {
+			PageEntity page = getDao().getPageDao().getById(id);
+			if (page != null) {
+				if (canWritePage(page.getFriendlyURL())) {
+					removeIds.add(id);
+				}
+			}
+		}
+		getDao().getPageDao().remove(removeIds);
+	}
+
+	@Override
+	public List<ContentEntity> getContents(String pageId) {
+		PageEntity page = getById(pageId);
+		if (page != null) {
+			return getDao().getPageDao().getContents(pageId);
+		}
+		return Collections.EMPTY_LIST;
+	}
+
+	@Override
+	public List<PageEntity> selectByUrl(String url) {
+		if (canReadPage(url)) {
+			return getDao().getPageDao().selectByUrl(url);
+		}
+		return Collections.EMPTY_LIST;
+	}
 }
 

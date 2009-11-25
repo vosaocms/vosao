@@ -23,9 +23,10 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
-<%@ page import="org.vosao.business.UserPreferences" %>
-<% UserPreferences userPreferences = (UserPreferences) session.getAttribute(
-		"org.vosao.business.UserPreferences"); 
+<%@ page import="org.vosao.business.CurrentUser" %>
+<%@ page import="org.vosao.entity.UserEntity" %>
+<% 
+    UserEntity user = CurrentUser.getInstance();
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -51,7 +52,7 @@
     <script language="javascript">
 
     function onLogout() {
-        jsonrpc.loginService.logout(function (r, e) {
+        jsonrpc.loginFrontService.logout(function (r, e) {
             if (serviceFailed(e)) return;
             if (r.result == 'success') {
                 location.href = '/';
@@ -76,13 +77,17 @@
     <div id="leftmenu">
         <a href="/cms">Vosao</a> CMS
         <a href="/cms/pages.jsp">Content</a>
+<% if (user.isAdmin()) { %>
         <a href="/cms/templates.jsp">Templates</a>
+<% } %>        
         <a href="/cms/folders.jsp">Resources</a>
+<% if (user.isAdmin()) { %>
         <a href="/cms/config.jsp">Configuration</a>
         <a href="/cms/plugins">Plugins</a>
+<% } %>        
     </div>
     <div id="rightmenu">
-        <%= userPreferences.getUser().getEmail() %> 
+        <%= user.getEmail() %> 
         | <a href="/cms/profile.jsp">Profile</a> 
         | <a href="#" onclick="onLogout()">Logout</a>
     </div>

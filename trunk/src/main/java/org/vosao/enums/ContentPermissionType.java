@@ -25,5 +25,5 @@ package org.vosao.enums;
  * @author Alexander Oleynik
  */
 public enum ContentPermissionType {
-	DENIED, READ, WRITE, PUBLISH;
+	DENIED, READ, WRITE, PUBLISH, ADMIN;
 }

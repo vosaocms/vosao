@@ -22,6 +22,11 @@
 %>
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
+<%@ page import="org.vosao.business.CurrentUser" %>
+<%@ page import="org.vosao.entity.UserEntity" %>
+<% 
+    UserEntity user = CurrentUser.getInstance();
+%>
 <html>
 <head>
     <title>VOSAO CMS</title>
@@ -37,18 +42,21 @@
            binding. 
         </p>
     </div>
+<% if (user.isAdmin()) { %>
     <div>
         <img src="/static/images/file_edit.png" />
         <a href="/cms/templates.jsp">Design templates</a>
         <p>Here you can edit design templates. Site can have several design 
            templates. For every page you can select separate template.</p>
     </div>
+<% } %>    
     <div>
         <img src="/static/images/diskette.png" />
         <a href="/cms/folders.jsp">File resources storage</a>
         <p>Here you can edit site resources. Resource could be any file
            including those used in design templates or referenced from pages</p>
     </div>
+<% if (user.isAdmin()) { %>
     <div>
         <img src="/static/images/computer.png" />
         <a href="/cms/config.jsp">Site configuration</a>
@@ -60,6 +68,7 @@
         <a href="/cms/plugins.jsp">Plugins</a>
         <p>Various plugins configuration. Forms.</p>
     </div>
+<% } %>    
 </div>
 
 </body>

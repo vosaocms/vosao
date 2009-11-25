@@ -45,21 +45,21 @@ public class CommentServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse deleteComments(List<String> ids) {
-		getDao().getCommentDao().remove(ids);
+		getBusiness().getCommentBusiness().remove(ids);
 		return ServiceResponse.createSuccessResponse(
 				"Comments were successfuly deleted");
 	}
 
 	@Override
 	public ServiceResponse disableComments(List<String> ids) {
-		getDao().getCommentDao().disable(ids);
+		getBusiness().getCommentBusiness().disable(ids);
 		return ServiceResponse.createSuccessResponse(
 				"Comments were successfuly disabled");
 	}
 
 	@Override
 	public ServiceResponse enableComments(List<String> ids) {
-		getDao().getCommentDao().enable(ids);
+		getBusiness().getCommentBusiness().enable(ids);
 		return ServiceResponse.createSuccessResponse(
 				"Comments were successfuly enabled");
 	}

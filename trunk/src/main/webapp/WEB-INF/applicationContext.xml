@@ -131,10 +131,7 @@
 
     <bean id="fileBusiness" class="org.vosao.business.impl.FileBusinessImpl"
         parent="abstractBusiness" />  
-
-    <bean id="commentBusiness" class="org.vosao.business.impl.CommentBusinessImpl"
-        parent="abstractBusiness" />  
-        
+       
     <bean id="fieldBusiness" class="org.vosao.business.impl.FieldBusinessImpl"
         parent="abstractBusiness" />  
 
@@ -150,10 +147,16 @@
     <bean id="groupBusiness" class="org.vosao.business.impl.GroupBusinessImpl"
         parent="abstractBusiness" />  
 
+    <bean id="commentBusiness" class="org.vosao.business.impl.CommentBusinessImpl"
+        parent="abstractBusiness">  
+        <property name="contentPermissionBusiness" ref="contentPermissionBusiness"/>  
+    </bean>      
+
     <bean id="pageBusiness" class="org.vosao.business.impl.PageBusinessImpl"
         init-method="init" parent="abstractBusiness">
         <property name="configBusiness" ref="configBusiness"/>  
         <property name="messageBusiness" ref="messageBusiness"/>  
+        <property name="contentPermissionBusiness" ref="contentPermissionBusiness"/>  
     </bean>      
 
     <bean id="business" class="org.vosao.business.impl.BusinessImpl"

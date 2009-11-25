@@ -32,6 +32,7 @@ import org.vosao.business.Business;
 import org.vosao.business.CommentBusiness;
 import org.vosao.business.ConfigBusiness;
 import org.vosao.business.ContentPermissionBusiness;
+import org.vosao.business.CurrentUser;
 import org.vosao.business.FieldBusiness;
 import org.vosao.business.FileBusiness;
 import org.vosao.business.FolderBusiness;
@@ -42,6 +43,7 @@ import org.vosao.business.PageBusiness;
 import org.vosao.business.TemplateBusiness;
 import org.vosao.business.UserBusiness;
 import org.vosao.business.UserPreferences;
+import org.vosao.entity.UserEntity;
 import org.vosao.global.SystemService;
 
 public class BusinessImpl implements Business, Serializable {
@@ -83,6 +85,11 @@ public class BusinessImpl implements Business, Serializable {
 		session.setAttribute(name, bean);
 	}
 
+	@Override
+	public UserEntity getUser() {
+		return CurrentUser.getInstance();
+	}
+	
 	@Override
 	public PageBusiness getPageBusiness() {
 		return pageBusiness;

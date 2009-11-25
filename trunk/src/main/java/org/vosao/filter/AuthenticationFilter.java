@@ -32,6 +32,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.vosao.business.CurrentUser;
+import org.vosao.business.UserPreferences;
+
 public class AuthenticationFilter extends AbstractFilter implements Filter {
 
 	public static final String ORIGINAL_VIEW_KEY = "originalViewKey";
@@ -47,9 +50,12 @@ public class AuthenticationFilter extends AbstractFilter implements Filter {
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		HttpSession session = httpRequest.getSession();
 		if (!isLoggedIn(httpRequest)) {
+			CurrentUser.setInstance(null);
 			session.setAttribute(ORIGINAL_VIEW_KEY, httpRequest.getRequestURI());
 			httpResponse.sendRedirect(httpRequest.getContextPath() + LOGIN_VIEW);
 		} else {
+			CurrentUser.setInstance(getBusiness().getUserPreferences(
+					httpRequest).getUser());
 			chain.doFilter(request, response);
 		}
 	}

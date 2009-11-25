@@ -28,7 +28,7 @@
     <script src="/static/js/jquery.form.js" language="javascript"></script>
     <script type="text/javascript">
         var folderId = '<c:out value="${param.id}"/>';
-        var parentFolderId = '<c:out value="${param.parent}"/>';
+        var folderParentId = '<c:out value="${param.parent}"/>';
     </script>
     <script src="/static/js/cms/folder.js" language="javascript"></script>
 </head>

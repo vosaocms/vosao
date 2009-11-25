@@ -50,6 +50,10 @@ function loadData() {
         $('.filesTab').hide();
         $('.childrenTab').hide();
     }
+    else {
+        $('.filesTab').show();
+        $('.childrenTab').show();
+    }
 }
 
 function loadFolder() {
@@ -143,10 +147,13 @@ function onCreateFile() {
 }
 
 function onTitleChange() {
-    var url = $("#url").val();
+	if (editMode) {
+		return;
+	}
+    var url = $("#name").val();
     var title = $("#title").val();
     if (url == "") {
-        $("#url").val(urlFromTitle(title));
+        $("#name").val(urlFromTitle(title));
     }
 }
 
@@ -175,7 +182,17 @@ function onUpdate() {
         title : $('#title').val(),
     });
     jsonrpc.folderService.saveFolder(function (r) {
-        showServiceMessage(r);
+        if (r.result == 'success') {
+            info("Folder was successfully saved.");
+            if (folderId == '') {
+            	folderId = r.message;
+            	editMode = true;
+            	loadData();
+            }
+        }
+        else {
+        	showServiceMessages(r);
+        }
     }, vo);
 }
 

@@ -77,8 +77,7 @@ public class FolderServiceImpl extends AbstractServiceImpl
 			.validateBeforeUpdate(folder);
 		if (errors.isEmpty()) {
 			getDao().getFolderDao().save(folder);
-			return ServiceResponse.createSuccessResponse(
-					"Folder was successfully saved.");
+			return ServiceResponse.createSuccessResponse(folder.getId());
 		}
 		else {
 			return ServiceResponse.createErrorResponse(

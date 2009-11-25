@@ -195,12 +195,10 @@ public class PageServiceImpl extends AbstractServiceImpl
 		List<PageEntity> list = getBusiness().getPageBusiness().selectByUrl(url);
 		if (list.size() > 0) {
 			PageEntity lastPage = list.get(list.size() - 1);
-			ServiceResponse resp = ServiceResponse.createSuccessResponse(
-					"Version successfully added");
-			resp.setMessage(getBusiness().getPageBusiness().addVersion(lastPage, 
-					lastPage.getVersion() + 1, versionTitle, 
+			return ServiceResponse.createSuccessResponse(
+				getBusiness().getPageBusiness().addVersion(
+					lastPage, lastPage.getVersion() + 1, versionTitle, 
 						CurrentUser.getInstance()).getId());
-			return resp;
 		}
 		return ServiceResponse.createErrorResponse("Page not found");
 	}

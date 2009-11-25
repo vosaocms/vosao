@@ -33,6 +33,7 @@ import org.datanucleus.util.StringUtils;
 import org.vosao.business.CurrentUser;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.ContentEntity;
+import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.PageState;
@@ -49,11 +50,19 @@ public class PageServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse updateContent(String pageId, String content,
-			String languageCode) {
+			String languageCode, boolean approve) {
 		PageEntity page = getBusiness().getPageBusiness().getById(pageId);
 		if (page != null) {
-			UserEntity user = getBusiness().getUser();
-			page.setState(PageState.EDIT);
+			UserEntity user = CurrentUser.getInstance();
+			ContentPermissionEntity perm = getBusiness()
+				.getContentPermissionBusiness().getPermission(
+					page.getFriendlyURL(), CurrentUser.getInstance());
+			if (approve && perm.isPublishGranted()) {
+				page.setState(PageState.APPROVED);
+			}
+			else {
+				page.setState(PageState.EDIT);
+			}
 			page.setModDate(new Date());
 			page.setModUserEmail(user.getEmail());
 			getDao().getPageDao().save(page);
@@ -116,14 +125,21 @@ public class PageServiceImpl extends AbstractServiceImpl
 			page = new PageEntity();
 			page.setCreateUserEmail(user.getEmail());
 		}
-		page.setState(PageState.EDIT);
 		page.setModDate(new Date());
 		page.setModUserEmail(user.getEmail());
 		page.setCommentsEnabled(Boolean.valueOf(pageMap.get("commentsEnabled")));
 		page.setFriendlyURL(pageMap.get("friendlyUrl"));
-		if (!getBusiness().getContentPermissionBusiness().getPermission(
-				page.getFriendlyURL(), CurrentUser.getInstance())
-					.isChangeGranted()) {
+		ContentPermissionEntity perm = getBusiness()
+			.getContentPermissionBusiness().getPermission(
+				page.getFriendlyURL(), CurrentUser.getInstance());
+		if (Boolean.valueOf(pageMap.get("approve")) 
+			&& perm.isPublishGranted()) {
+			page.setState(PageState.APPROVED);
+		}
+		else {
+			page.setState(PageState.EDIT);
+		}
+		if (!perm.isChangeGranted()) {
 			return ServiceResponse.createErrorResponse("Access denied");
 		}
 		try {

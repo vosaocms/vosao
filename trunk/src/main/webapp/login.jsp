@@ -21,12 +21,23 @@
  */
 %>
 <%@ page contentType="text/html; charset=UTF-8"%>
+<%@ page import="org.vosao.business.CurrentUser" %>
+<%@ page import="org.vosao.entity.UserEntity" %>
+<% 
+    UserEntity user = CurrentUser.getInstance();
+%>
 <html>
 <head>
     <title>Login page</title>
     <link rel="stylesheet" href="/static/css/login.css" type="text/css" />
     <script type="text/javascript">
+        var loggedIn = <%= user != null %>;
+    
         function onLogin() {
+            if (loggedIn) {
+                location.href = '/cms';
+                return;
+            }
             var email = $('#loginEmail').val();
             var password = $('#loginPassword').val();
             if (email == '') {

@@ -323,7 +323,9 @@ function onAutosave() {
 }
 
 function onPagePreview() {
-	window.open(page.friendlyURL, "preview");
+	var url = page.friendlyURL + '?language=' + currentLanguage 
+		+ '&version=' + page.version;
+	window.open(url, "preview");
 }
 
 function onPageCancel() {

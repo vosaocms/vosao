@@ -35,7 +35,7 @@ import org.vosao.service.vo.PageVO;
 public interface PageService extends AbstractService {
 	
 	ServiceResponse updateContent(final String pageId, final String content,
-			String languageCode);
+			String languageCode, boolean approve);
 	
 	List<ContentEntity> getContents(final String pageId);
 	

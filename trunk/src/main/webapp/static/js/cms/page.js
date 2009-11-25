@@ -241,7 +241,8 @@ function onPageUpdate() {
 		publishDate : $('#publishDate').val(),
 		commentsEnabled : String($('#commentsEnabled:checked').size() > 0),
 		content : getEditorContent(),
-		template : $('#templates option:selected').val()
+		template : $('#templates option:selected').val(),
+		approve : String($('#approveOnPageSave:checked').size() > 0)
 	});
 	jsonrpc.pageService.savePage(function(r) {
 		if (r.result == 'success') {
@@ -300,6 +301,7 @@ function isContentChanged() {
 
 function saveContent() {
 	var content = getEditorContent();
+	var approve = $('#approveOnContentSave:checked').size() > 0;
 	contents[currentLanguage] = content;
 	jsonrpc.pageService.updateContent(function(r) {
 		if (r.result == 'success') {
@@ -309,7 +311,7 @@ function saveContent() {
 		} else {
 			error(r.message);
 		}
-	}, pageId, content, currentLanguage);
+	}, pageId, content, currentLanguage, approve);
 }
 
 function onAutosave() {

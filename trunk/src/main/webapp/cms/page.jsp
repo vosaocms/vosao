@@ -81,6 +81,9 @@
 </div>
 
 <div class="buttons">
+    <div class="checkboxes">
+        <input id="approveOnPageSave" type="checkbox"> Approve on Save
+    </div> 
     <input id="pageSaveButton" type="button" value="Save" />
     <input id="pagePreview" type="button" value="Preview" />
     <input id="pageCancelButton" type="button" value="Cancel" />
@@ -119,6 +122,9 @@
 </div>
 
 <div class="buttons">
+    <div class="checkboxes">
+        <input id="approveOnContentSave" type="checkbox"> Approve on Save
+    </div> 
     <input id="saveContinueContentButton" type="button" 
         value="Save and continue" />
     <input id="saveContentButton" type="button" value="Save" />

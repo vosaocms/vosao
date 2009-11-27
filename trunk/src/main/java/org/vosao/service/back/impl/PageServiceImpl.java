@@ -38,16 +38,31 @@ import org.vosao.entity.PageEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.PageState;
 import org.vosao.service.ServiceResponse;
+import org.vosao.service.back.CommentService;
+import org.vosao.service.back.ContentPermissionService;
+import org.vosao.service.back.GroupService;
+import org.vosao.service.back.LanguageService;
 import org.vosao.service.back.PageService;
+import org.vosao.service.back.TemplateService;
 import org.vosao.service.impl.AbstractServiceImpl;
+import org.vosao.service.vo.PageRequestVO;
 import org.vosao.service.vo.PageVO;
 import org.vosao.utils.DateUtil;
 
+/**
+ * @author Alexander Oleynik
+ */
 public class PageServiceImpl extends AbstractServiceImpl 
 		implements PageService {
 
 	private static Log logger = LogFactory.getLog(PageServiceImpl.class);
 
+	private CommentService commentService;
+	private TemplateService templateService;
+	private LanguageService languageService;
+	private ContentPermissionService contentPermissionService;
+	private GroupService groupService;
+	
 	@Override
 	public ServiceResponse updateContent(String pageId, String content,
 			String languageCode, boolean approve) {
@@ -225,6 +240,86 @@ public class PageServiceImpl extends AbstractServiceImpl
 		getDao().getPageDao().save(page);
 		return ServiceResponse.createSuccessResponse(
 				"Page was successfully approved.");
+	}
+
+	@Override
+	public PageRequestVO getPageRequest(final String id, 
+			final String parentUrl) {
+		try {
+		PageRequestVO result = new PageRequestVO();
+		result.setPage(getPage(id));
+		String permUrl = parentUrl;
+		if (result.getPage() != null) {
+			String url = result.getPage().getFriendlyURL();
+			result.setVersions(getPageVersions(url));
+			result.setChildren(getChildren(url));
+			result.setComments(getCommentService().getByPage(url));
+			result.setContents(getContents(id));
+			result.setPermissions(getContentPermissionService().selectByUrl(
+					url));
+			permUrl = result.getPage().getFriendlyURL();
+		}
+		result.setTemplates(getTemplateService().getTemplates());
+		result.setLanguages(getLanguageService().select());
+		result.setGroups(getGroupService().select());
+		result.setPagePermission(getContentPermissionService().getPermission(
+				permUrl));
+		return result;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public CommentService getCommentService() {
+		return commentService;
+	}
+
+	@Override
+	public void setCommentService(CommentService bean) {
+		commentService = bean;		
+	}
+
+	@Override
+	public LanguageService getLanguageService() {
+		return languageService;
+	}
+
+	@Override
+	public TemplateService getTemplateService() {
+		return templateService;
+	}
+
+	@Override
+	public void setLanguageService(LanguageService bean) {
+		languageService = bean;	
+	}
+
+	@Override
+	public void setTemplateService(TemplateService bean) {
+		templateService = bean;
+	}
+
+	@Override
+	public ContentPermissionService getContentPermissionService() {
+		return contentPermissionService;
+	}
+
+	@Override
+	public void setContentPermissionService(ContentPermissionService bean) {
+		contentPermissionService = bean;		
+	}
+
+	@Override
+	public GroupService getGroupService() {
+		return groupService;
+	}
+
+	@Override
+	public void setGroupService(GroupService bean) {
+		groupService = bean;
 	}
 
 }

@@ -203,9 +203,6 @@
     <bean id="commentService" class="org.vosao.service.back.impl.CommentServiceImpl"
         parent="abstractService" />
 
-    <bean id="pageService" class="org.vosao.service.back.impl.PageServiceImpl"
-        parent="abstractService" />
-
     <bean id="templateService" class="org.vosao.service.back.impl.TemplateServiceImpl"
         parent="abstractService" />
 
@@ -235,6 +232,15 @@
 
     <bean id="contentPermissionService" class="org.vosao.service.back.impl.ContentPermissionServiceImpl"
         parent="abstractService" />
+
+    <bean id="pageService" class="org.vosao.service.back.impl.PageServiceImpl"
+        parent="abstractService">
+        <property name="commentService" ref="commentService"/>  
+        <property name="templateService" ref="templateService"/>  
+        <property name="languageService" ref="languageService"/>         
+        <property name="contentPermissionService" ref="contentPermissionService"/>  
+        <property name="groupService" ref="groupService"/>  
+    </bean>    
 
     <bean id="backService" class="org.vosao.service.impl.BackServiceImpl"
         init-method="init">  

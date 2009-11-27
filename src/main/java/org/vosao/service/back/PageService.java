@@ -26,14 +26,29 @@ import java.util.Map;
 
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.ContentEntity;
-import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.service.AbstractService;
 import org.vosao.service.ServiceResponse;
+import org.vosao.service.vo.PageRequestVO;
 import org.vosao.service.vo.PageVO;
 
 public interface PageService extends AbstractService {
 	
+	CommentService getCommentService();
+	void setCommentService(CommentService bean);
+
+	TemplateService getTemplateService();
+	void setTemplateService(TemplateService bean);
+	
+	LanguageService getLanguageService();
+	void setLanguageService(LanguageService bean);
+	
+	ContentPermissionService getContentPermissionService();
+	void setContentPermissionService(ContentPermissionService bean);
+
+	GroupService getGroupService();
+	void setGroupService(GroupService bean);
+
 	ServiceResponse updateContent(final String pageId, final String content,
 			String languageCode, boolean approve);
 	
@@ -43,6 +58,8 @@ public interface PageService extends AbstractService {
 	
 	PageEntity getPage(final String id);
 	
+	PageRequestVO getPageRequest(final String id, final String parentUrl);
+
 	PageEntity getPageByUrl(final String url);
 
 	ServiceResponse savePage(final Map<String, String> page);

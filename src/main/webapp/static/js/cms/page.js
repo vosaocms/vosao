@@ -40,6 +40,7 @@ var autosaveTimer = '';
 var permission = null;
 var permissions = null;
 var groups = null;
+var pageRequest = null;
     
 $(function(){
     contentEditor = CKEDITOR.replace('content', {
@@ -88,92 +89,88 @@ $(function(){
 });
 
 function loadData() {
-	loadPage();
-	loadTemplates();
-	if (editMode) {
-		loadContents();
-	}
-	loadLanguages();
+	jsonrpc.pageService.getPageRequest(function(r) {
+		pageRequest = r;
+		page = pageRequest.page;
+		loadLanguages();
+		loadTemplates();
+		loadPage();
+		if (editMode) {
+			loadContents();
+		}
+	}, pageId, pageParentUrl);
 }
 
 function loadPage() {
-	jsonrpc.pageService.getPage(function(r) {
-		page = r;
-		var permUrl = pageParentUrl;
-		if (editMode) {
-			pageId = page.id;
-			pageParentUrl = page.parentUrl;
-			loadChildren();
-			loadVersions(page.friendlyURL);
-			loadComments();
-			loadPermissions();
-			loadGroups();
-			permUrl = page.friendlyURL;
-		} else {
-			pages['1'] = page;
-		}
-		loadPagePermission(permUrl);
-		initPageForm();
-	}, pageId);
+	if (editMode) {
+		pageId = page.id;
+		pageParentUrl = page.parentUrl;
+		loadChildren();
+		loadVersions();
+		loadComments();
+		loadPermissions();
+		loadGroups();
+	} else {
+		pages['1'] = page;
+	}
+	initPageForm();
+	loadPagePermission();
 }
 
-function loadVersions(url) {
-	jsonrpc.pageService.getPageVersions(function (r) {
-        versions = [];
-        pages = {};
-        $.each(r.list, function (i, value) {
-            pages[String(value.version)] = value;
-            versions.push(String(value.version));
-        });
-        versions.sort();
-        var h = '';
-        $.each(versions, function (i, version) {
-            var vPage = pages[version];
-            h += '<div>';
-            if (pageId != vPage.id) {
-                h += '<a class="button ui-state-default ui-corner-all"\
-                   href="#" title="' + vPage.versionTitle + '"\
-                   onclick="onVersionSelect(\'' + version + '\')">Version ' 
-                   + version +'</a>';
-            }
-            else {
-                h += '<a class="button ui-state-default ui-state-active \
-                   ui-corner-all" href="#" title="' + vPage.versionTitle 
-                   + '" onclick="onVersionSelect(\'' + version + '\')" \
-                   ><span class="ui-icon ui-icon-triangle-1-e"></span> \
-                   Version ' + version + '</a>';
-            }
-            h += '<img class="button" src="/static/images/delete-16.png" \
-                onclick="onVersionDelete(\'' + version + '\')"/></div>';
-        });
-        $('#versions .vertical-buttons-panel').html(h);
-    }, url);
+function loadVersions() {
+	var r = pageRequest.versions; 
+    versions = [];
+    pages = {};
+    $.each(r.list, function (i, value) {
+        pages[String(value.version)] = value;
+        versions.push(String(value.version));
+    });
+    versions.sort();
+    var h = '';
+    $.each(versions, function (i, version) {
+        var vPage = pages[version];
+        h += '<div>';
+        if (pageId != vPage.id) {
+            h += '<a class="button ui-state-default ui-corner-all"\
+               href="#" title="' + vPage.versionTitle + '"\
+               onclick="onVersionSelect(\'' + version + '\')">Version ' 
+               + version +'</a>';
+        }
+        else {
+            h += '<a class="button ui-state-default ui-state-active \
+               ui-corner-all" href="#" title="' + vPage.versionTitle 
+               + '" onclick="onVersionSelect(\'' + version + '\')" \
+               ><span class="ui-icon ui-icon-triangle-1-e"></span> \
+               Version ' + version + '</a>';
+        }
+        h += '<img class="button" src="/static/images/delete-16.png" \
+            onclick="onVersionDelete(\'' + version + '\')"/></div>';
+    });
+    $('#versions .vertical-buttons-panel').html(h);
 }
 
 function loadTemplates() {
-	jsonrpc.templateService.getTemplates(function (r) {
-        var html = '';
-        $.each(r.list, function (n,value) {
-            html += '<option value="' + value.id + '">' 
-                + value.title + '</option>';
-        });
-        $('#templates').html(html);
-        if (page != null) {
-            $('#templates').val(page.template);
-        }
+	var r = pageRequest.templates;
+	var html = '';
+    $.each(r.list, function (n,value) {
+        html += '<option value="' + value.id + '">' 
+            + value.title + '</option>';
     });
+    $('#templates').html(html);
+    if (page != null) {
+        $('#templates').val(page.template);
+    }
 }
 
 function loadLanguages() {
-	jsonrpc.languageService.select(function(r) {
-		languages = {};
-		var h = '';
-		$.each(r.list, function(i, value) {
-			languages[value.code] = value;
-		});
-		fillLanguagesList(languages);
-		setPermissionLanguages();
+	var r = pageRequest.languages;
+	languages = {};
+	var h = '';
+	$.each(r.list, function(i, value) {
+		languages[value.code] = value;
 	});
+	fillLanguagesList(languages);
+	setPermissionLanguages();
 }
  
 function fillLanguagesList(langsMap) {
@@ -335,23 +332,22 @@ function onPageCancel() {
 }
 
 function loadChildren() {
-	jsonrpc.pageService.getChildren(function (r) {
-        var html = '<table class="form-table"><tr><th></th><th>Title</th>\
-            <th>Friendly URL</th></tr>';
-        $.each(r.list, function (n, value) {
-            html += '<tr><td><input type="checkbox" value="' + value.id 
-            + '"/></td><td><a href="/cms/page.jsp?id=' + value.id 
-            +'">' + value.title + '</a></td><td>' + value.friendlyURL
-            + '</td></tr>';
-        });
-        $('#children').html(html + '</table>');
-        $('#children tr:even').addClass('even');
-        if (r.list.length > 0) {
-        	$('#parentFriendlyUrl').hide();
-        	$('#friendlyUrl').hide();
-        	$('#friendlyUrlSpan').html(page.friendlyURL);
-        }
-    }, page.friendlyURL);
+	var r = pageRequest.children;
+    var html = '<table class="form-table"><tr><th></th><th>Title</th>\
+        <th>Friendly URL</th></tr>';
+    $.each(r.list, function (n, value) {
+        html += '<tr><td><input type="checkbox" value="' + value.id 
+        + '"/></td><td><a href="/cms/page.jsp?id=' + value.id 
+        +'">' + value.title + '</a></td><td>' + value.friendlyURL
+        + '</td></tr>';
+    });
+    $('#children').html(html + '</table>');
+    $('#children tr:even').addClass('even');
+    if (r.list.length > 0) {
+     	$('#parentFriendlyUrl').hide();
+       	$('#friendlyUrl').hide();
+       	$('#friendlyUrlSpan').html(page.friendlyURL);
+    }
 }
 
 function onAddChild() {
@@ -376,18 +372,17 @@ function onDelete() {
 }
 
 function loadComments() {
-	jsonrpc.commentService.getByPage(function (r) {
-        var html = '<table class="form-table"><tr><th></th><th>Status</th>\
-            <th>Name</th><th>Content</th></tr>';
-        $.each(r.list, function (n, value) {
-            var status = value.disabled ? 'Disabled' : 'Enabled';
-            html += '<tr><td><input type="checkbox" value="' + value.id 
-            + '"/></td><td>' + status + '</a></td><td>' + value.name
-            + '</td><td>' + value.content + '</td></tr>';
-        });
-        $('#comments').html(html + '</table>');
-        $('#comments tr:even').addClass('even'); 
-    }, page.friendlyURL);
+	var r = pageRequest.comments;
+    var html = '<table class="form-table"><tr><th></th><th>Status</th>\
+        <th>Name</th><th>Content</th></tr>';
+    $.each(r.list, function (n, value) {
+        var status = value.disabled ? 'Disabled' : 'Enabled';
+        html += '<tr><td><input type="checkbox" value="' + value.id 
+        + '"/></td><td>' + status + '</a></td><td>' + value.name
+        + '</td><td>' + value.content + '</td></tr>';
+    });
+    $('#comments').html(html + '</table>');
+    $('#comments tr:even').addClass('even'); 
 }
 
 function onEnableComments() {
@@ -452,14 +447,29 @@ function onLanguageChange() {
 
 function loadContents() {
 	if (editMode) {
-		jsonrpc.pageService.getContents(function(r) {
-			contents = [];
-			$.each(r.list, function(i, value) {
-				contents[value.languageCode] = value.content;
+		var r = pageRequest.contents;
+		contents = [];
+		$.each(r.list, function(i, value) {
+			contents[value.languageCode] = value.content;
+		});
+		var allowedLangs = {};
+		if (pageRequest.pagePermission.allLanguages) {
+			allowedLangs = languages;
+		}
+		else {
+			$.each(pageRequest.pagePermission.languagesList.list, 
+					function(i, value) {
+				allowedLangs[value] = languages[value];
 			});
+		}
+		fillLanguagesList(allowedLangs);
+		if (allowedLangs[ENGLISH_CODE] != undefined) {
 			currentLanguage = ENGLISH_CODE;
-			setEditorContent(contents[ENGLISH_CODE]);
-		}, pageId);
+		}
+		else {
+			currentLanguage = r.list[0].languageCode;
+		}
+		setEditorContent(contents[currentLanguage]);
 	} else {
 		setEditorContent('');
 	}
@@ -542,36 +552,34 @@ function getPermissionName(perm) {
 }
 
 function loadPermissions() {
-	jsonrpc.contentPermissionService.selectByUrl(function (r) {
-		permissions = idMap(r.list);
-		var h = '<table class="form-table"><tr><th></th><th>Group</th><th>Permission</th><th>Languages</th></tr>';
-		$.each(permissions, function(i,value) {
-			var checkbox = '';
-			var editLink = value.group.name;
-			if (!value.inherited) {
-				checkbox = '<input type="checkbox" value="' + value.id + '">';
-				editLink = '<a href="#" onclick="onPermissionEdit(\'' + value.id 
-					+ '\')"> ' + value.group.name + '</a>';
-			}
-			var l = value.allLanguages ? 'all languages' : value.languages;
-			h += '<tr><td>' + checkbox + '</td><td>' + editLink + '</td><td>'
-				+ getPermissionName(value.permission) + '</td><td>' + l 
-				+ '</td></tr>';
-		});
-		$('#permissions').html(h + '</table>');
-        $('#permissions tr:even').addClass('even'); 
-	}, page.friendlyURL);
+	var r = pageRequest.permissions;
+	permissions = idMap(r.list);
+	var h = '<table class="form-table"><tr><th></th><th>Group</th><th>Permission</th><th>Languages</th></tr>';
+	$.each(permissions, function(i,value) {
+		var checkbox = '';
+		var editLink = value.group.name;
+		if (!value.inherited) {
+			checkbox = '<input type="checkbox" value="' + value.id + '">';
+			editLink = '<a href="#" onclick="onPermissionEdit(\'' + value.id 
+				+ '\')"> ' + value.group.name + '</a>';
+		}
+		var l = value.allLanguages ? 'all languages' : value.languages;
+		h += '<tr><td>' + checkbox + '</td><td>' + editLink + '</td><td>'
+			+ getPermissionName(value.permission) + '</td><td>' + l 
+			+ '</td></tr>';
+	});
+	$('#permissions').html(h + '</table>');
+    $('#permissions tr:even').addClass('even'); 
 }
 
 function loadGroups() {
-	jsonrpc.groupService.select(function(r) {
-		groups = idMap(r.list);
-		var h = '';
-		$.each(groups, function(i,value) {
-			h += '<option value="' + value.id + '">' + value.name + '</option>';
-		});
-		$('#groupSelect').html(h);
+	var r = pageRequest.groups;
+	groups = idMap(r.list);
+	var h = '';
+	$.each(groups, function(i,value) {
+		h += '<option value="' + value.id + '">' + value.name + '</option>';
 	});
+	$('#groupSelect').html(h);
 }
 
 function setPermissionLanguages() {
@@ -674,39 +682,38 @@ function onAllLanguagesChange() {
 	}
 }
 
-function loadPagePermission(url) {
-    jsonrpc.contentPermissionService.getPermission(function (r) {
-    	if (r.publishGranted) {
-    		$('#approveButton').show();
-    	}
-    	else {
-    		$('#approveButton').hide();
-    	}
-    	if (r.changeGranted) {
-    		$('#pageSaveButton').show();
-    		$('#saveContinueContentButton').show();
-    		$('#saveContentButton').show();
-    		$('#addChildButton').show();
-    		$('#deleteChildButton').show();
-    		$('#enableCommentsButton').show();
-    		$('#disableCommentsButton').show();
-    		$('#deleteCommentsButton').show();
-    	}
-    	else {
-    		$('#pageSaveButton').hide();
-    		$('#saveContinueContentButton').hide();
-    		$('#saveContentButton').hide();
-    		$('#addChildButton').hide();
-    		$('#deleteChildButton').hide();
-    		$('#enableCommentsButton').hide();
-    		$('#disableCommentsButton').hide();
-    		$('#deleteCommentsButton').hide();
-    	}
-    	if (r.admin && editMode) {
-    		$('.securityTab').show();
-    	}
-    	else {
-    		$('.securityTab').hide();
-    	}
-    }, url);
+function loadPagePermission() {
+    var r = pageRequest.pagePermission;
+   	if (r.publishGranted) {
+   		$('#approveButton').show();
+   	}
+   	else {
+   		$('#approveButton').hide();
+   	}
+   	if (r.changeGranted) {
+   		$('#pageSaveButton').show();
+   		$('#saveContinueContentButton').show();
+   		$('#saveContentButton').show();
+   		$('#addChildButton').show();
+   		$('#deleteChildButton').show();
+   		$('#enableCommentsButton').show();
+   		$('#disableCommentsButton').show();
+   		$('#deleteCommentsButton').show();
+   	}
+   	else {
+   		$('#pageSaveButton').hide();
+   		$('#saveContinueContentButton').hide();
+   		$('#saveContentButton').hide();
+   		$('#addChildButton').hide();
+   		$('#deleteChildButton').hide();
+   		$('#enableCommentsButton').hide();
+   		$('#disableCommentsButton').hide();
+   		$('#deleteCommentsButton').hide();
+   	}
+   	if (r.admin && editMode) {
+   		$('.securityTab').show();
+   	}
+   	else {
+   		$('.securityTab').hide();
+   	}
 }

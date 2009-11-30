@@ -46,6 +46,7 @@ import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.ContentPermissionType;
+import org.vosao.enums.FolderPermissionType;
 import org.vosao.enums.PageState;
 import org.vosao.enums.UserRole;
 import org.vosao.utils.StreamUtil;
@@ -62,6 +63,8 @@ public class SetupBeanImpl implements SetupBean {
 
 	private Dao dao;
 	private Business business;
+	
+	private GroupEntity guests;
 	
 	public void setup() {
 		log.info("setup...");
@@ -122,7 +125,7 @@ public class SetupBeanImpl implements SetupBean {
 	}
 
 	private void initGroups() {
-		GroupEntity guests = getDao().getGroupDao().getByName("guests");
+		guests = getDao().getGroupDao().getByName("guests");
 		if (guests == null) {
 			guests = new GroupEntity("guests");
 			getDao().getGroupDao().save(guests);
@@ -169,6 +172,8 @@ public class SetupBeanImpl implements SetupBean {
 			getDao().getFolderDao().save(theme);
 			FolderEntity simple = new FolderEntity("Simple", "simple", theme.getId());
 			getDao().getFolderDao().save(simple);
+			getBusiness().getFolderPermissionBusiness().setPermission(
+					root, guests, FolderPermissionType.READ);
 		}
 	}
 	

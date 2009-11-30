@@ -39,6 +39,7 @@
     <li><a href="#tab-1">Folder</a></li>
     <li class="filesTab"><a href="#tab-2">Files</a></li>
     <li class="childrenTab"><a href="#tab-3">Subfolders</a></li>
+    <li class="securityTab"><a href="#tab-4">Security</a></li>
 </ul>
 
 <div id="tab-1">
@@ -78,6 +79,14 @@
     </div>    
 </div>
 
+<div id="tab-4" class="securityTab">
+    <div id="permissions"> </div>
+    <div class="buttons">
+        <input id="addPermissionButton" type="button" value="Add permission" />
+        <input id="deletePermissionButton" type="button" value="Delete permission" />
+    </div>    
+</div>
+
 </div>
 
 <div id="file-upload" title="Upload file to folder" style="display:none">
@@ -92,6 +101,27 @@
     </div>
 </form>
 </div>
+
+<div id="permission-dialog" style="display:none" title="Permission details">
+    <div class="form-row">
+        <label>Group</label>
+        <select id="groupSelect"></select>
+        <span id="groupName"></span>        
+    </div>
+    <div id="permissionList" class="form-row">
+        <fieldset>
+            <legend>Permission</legend>
+            <input type="radio" name="permission" value="DENIED"/> Denied <br />
+            <input type="radio" name="permission" value="READ" /> Read <br />
+            <input type="radio" name="permission" value="WRITE" /> Read, Write <br />
+        </fieldset>        
+    </div>
+    <div class="buttons-dlg">
+        <input id="permissionSaveButton" type="button" value="Save" />
+        <input id="permissionCancelButton" type="button" value="Cancel" />
+    </div>
+</div>
+
 
 </body>
 </html>

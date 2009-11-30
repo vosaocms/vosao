@@ -22,7 +22,8 @@
 
 function backServiceFailed(e) {
 	if (e != null) {
-		error('Can\'t connect to server. ' + e + ' ' + e.message);
+		error('Can\'t connect to server. ' + e + ' ' + e.message + ' ' 
+				+ e.code + ' ' + e.msg);
 		return true;
 	}
 	return false;

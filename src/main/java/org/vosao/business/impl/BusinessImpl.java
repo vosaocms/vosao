@@ -36,6 +36,7 @@ import org.vosao.business.CurrentUser;
 import org.vosao.business.FieldBusiness;
 import org.vosao.business.FileBusiness;
 import org.vosao.business.FolderBusiness;
+import org.vosao.business.FolderPermissionBusiness;
 import org.vosao.business.FormBusiness;
 import org.vosao.business.GroupBusiness;
 import org.vosao.business.MessageBusiness;
@@ -63,6 +64,7 @@ public class BusinessImpl implements Business, Serializable {
 	private UserBusiness userBusiness;
 	private ContentPermissionBusiness contentPermissionBusiness;
 	private GroupBusiness groupBusiness;
+	private FolderPermissionBusiness folderPermissionBusiness;
 
 	public void init() {
 	}
@@ -218,7 +220,7 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public void setContentPermissionBusiness(ContentPermissionBusiness bean) {
-		this.contentPermissionBusiness = bean;
+		contentPermissionBusiness = bean;
 	}
 
 	@Override
@@ -228,7 +230,18 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public void setGroupBusiness(GroupBusiness bean) {
-		this.groupBusiness = bean;
+		groupBusiness = bean;
 	}
+
+	@Override
+	public FolderPermissionBusiness getFolderPermissionBusiness() {
+		return folderPermissionBusiness;
+	}
+
+	@Override
+	public void setFolderPermissionBusiness(FolderPermissionBusiness bean) {
+		folderPermissionBusiness = bean;
+	}
+	
 	
 }

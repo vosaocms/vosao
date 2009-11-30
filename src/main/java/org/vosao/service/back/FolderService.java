@@ -28,16 +28,29 @@ import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FolderEntity;
 import org.vosao.service.AbstractService;
 import org.vosao.service.ServiceResponse;
+import org.vosao.service.vo.FolderRequestVO;
 
 
 public interface FolderService extends AbstractService {
 	
+	FileService getFileService();
+	void setFileService(FileService bean);
+	
+	FolderPermissionService getFolderPermissionService();
+	void setFolderPermissionService(FolderPermissionService bean);
+	
+	GroupService getGroupService();
+	void setGroupService(GroupService bean);
+
 	TreeItemDecorator<FolderEntity> getTree();
 	
 	String getFolderPath(final String folderId);
 	
 	FolderEntity getFolder(final String id);
 	
+	FolderRequestVO getFolderRequest(final String folderId,
+			final String folderParentId);
+
 	List<FolderEntity> getByParent(final String id);
 	
 	ServiceResponse saveFolder(final Map<String, String> vo);

@@ -75,5 +75,8 @@ public interface Business {
 
 	GroupBusiness getGroupBusiness();
 	void setGroupBusiness(final GroupBusiness bean);
+
+	FolderPermissionBusiness getFolderPermissionBusiness();
+	void setFolderPermissionBusiness(final FolderPermissionBusiness bean);
 	
 }

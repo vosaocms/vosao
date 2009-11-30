@@ -31,6 +31,7 @@ import org.vosao.dao.Dao;
 import org.vosao.dao.FieldDao;
 import org.vosao.dao.FileDao;
 import org.vosao.dao.FolderDao;
+import org.vosao.dao.FolderPermissionDao;
 import org.vosao.dao.FormDao;
 import org.vosao.dao.GroupDao;
 import org.vosao.dao.LanguageDao;
@@ -59,6 +60,7 @@ public class DaoImpl implements Dao, Serializable {
 	private GroupDao groupDao;
 	private UserGroupDao userGroupDao;
 	private ContentPermissionDao contentPermissionDao;
+	private FolderPermissionDao folderPermissionDao;
 	
 	public PageDao getPageDao() {
 		return pageDao;
@@ -183,6 +185,14 @@ public class DaoImpl implements Dao, Serializable {
 	
 	public void setContentPermissionDao(ContentPermissionDao bean) {
 		this.contentPermissionDao = bean;
+	}
+
+	public FolderPermissionDao getFolderPermissionDao() {
+		return folderPermissionDao;
+	}
+	
+	public void setFolderPermissionDao(FolderPermissionDao bean) {
+		this.folderPermissionDao = bean;
 	}
 	
 }

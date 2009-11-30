@@ -47,7 +47,7 @@ legend {
     vertical-align: middle;
 }
 
-input[type=button] {
+input[type=button], input[type=submit] {
 	padding: 4px 8px;
 	font-weight: bold;
 	background: url('../images/button.png') repeat-x 0 0;
@@ -59,7 +59,7 @@ input[type=button] {
     border-radius: 4px;
 }
 
-input[type=button]:hover {
+input[type=button]:focus, input[type=button]:focus {
     background: url('../images/button1.png') repeat-x 0 0;
 }
 

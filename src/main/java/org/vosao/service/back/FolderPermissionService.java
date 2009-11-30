@@ -19,31 +19,29 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.service.back;
 
 import java.util.List;
+import java.util.Map;
 
-import org.vosao.entity.FolderEntity;
+import org.vosao.entity.FolderPermissionEntity;
+import org.vosao.service.AbstractService;
+import org.vosao.service.ServiceResponse;
+import org.vosao.service.vo.FolderPermissionVO;
 
-public interface FolderDao extends AbstractDao {
-
-	void save(final FolderEntity page);
+/**
+ * @author Alexander Oleynik
+ */
+public interface FolderPermissionService extends AbstractService {
 	
-	FolderEntity getById(final String id);
+	ServiceResponse remove(final List<String> ids);
 
-	FolderEntity getByPath(final String path);
+	FolderPermissionEntity getById(final Long id);
+	
+	ServiceResponse save(final Map<String, String> vo); 
+	
+	List<FolderPermissionVO> selectByFolder(final String folderId);
 
-	String getFolderPath(final String folderId);
-
-	List<FolderEntity> getByParent(final String id);
-
-	FolderEntity getByParentName(final String parentid, final String name);
-	
-	List<FolderEntity> select();
-	
-	void remove(final String id);
-	
-	void remove(final List<String> ids);
-	
+	FolderPermissionEntity getPermission(final String folderId);
 	
 }

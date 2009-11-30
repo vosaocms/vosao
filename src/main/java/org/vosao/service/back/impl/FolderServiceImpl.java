@@ -21,6 +21,7 @@
 
 package org.vosao.service.back.impl;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -28,12 +29,20 @@ import org.datanucleus.util.StringUtils;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FolderEntity;
 import org.vosao.service.ServiceResponse;
+import org.vosao.service.back.FileService;
+import org.vosao.service.back.FolderPermissionService;
 import org.vosao.service.back.FolderService;
+import org.vosao.service.back.GroupService;
 import org.vosao.service.impl.AbstractServiceImpl;
+import org.vosao.service.vo.FolderRequestVO;
 
 public class FolderServiceImpl extends AbstractServiceImpl 
 		implements FolderService {
 
+	private FileService fileService;
+	private FolderPermissionService folderPermissionService;
+	private GroupService groupService;
+	
 	@Override
 	public TreeItemDecorator<FolderEntity> getTree() {
 		return getBusiness().getFolderBusiness().getTree();
@@ -90,6 +99,55 @@ public class FolderServiceImpl extends AbstractServiceImpl
 		getDao().getFolderDao().remove(ids);
 		return ServiceResponse.createSuccessResponse(
 				"Folders were successsfully deleted.");
+	}
+
+	@Override
+	public FolderRequestVO getFolderRequest(String folderId, 
+			String folderParentId) {
+		FolderRequestVO result = new FolderRequestVO();
+		result.setFolder(getFolder(folderId));
+		String permFolderId = folderParentId;
+		if (result.getFolder() != null) {
+			result.setChildren(getByParent(folderId));
+			result.setFiles(getFileService().getByFolder(folderId));
+			result.setPermissions(getFolderPermissionService().selectByFolder(
+					folderId));
+			permFolderId = folderId;
+		}
+		result.setGroups(getGroupService().select());
+		result.setFolderPermission(getFolderPermissionService().getPermission(
+				permFolderId));
+		return result;
+	}
+
+	@Override
+	public FileService getFileService() {
+		return fileService;
+	}
+
+	@Override
+	public void setFolderPermissionService(FolderPermissionService bean) {
+		folderPermissionService = bean;
+	}
+
+	@Override
+	public FolderPermissionService getFolderPermissionService() {
+		return folderPermissionService;
+	}
+
+	@Override
+	public void setGroupService(GroupService bean) {
+		groupService = bean;
+	}
+	
+	@Override
+	public GroupService getGroupService() {
+		return groupService;
+	}
+
+	@Override
+	public void setFileService(FileService bean) {
+		fileService = bean;
 	}
 
 

@@ -19,13 +19,23 @@
  * email: vosao.dev@gmail.com
  */
 
+/**
+ * Declared in folder.jsp
+ *  
+ *   var folderId = '<c:out value="${param.id}"/>';
+ *   var folderParentId = '<c:out value="${param.parent}"/>';
+ *
+ */   
+
 var files = '';
 var folder = null;
 var editMode = folderId != '';
+var folderRequest = null;
 
 $(function() {
     $("#tabs").tabs();
     $("#file-upload").dialog({ width: 400, autoOpen: false });
+    $("#permission-dialog").dialog({ width: 400, autoOpen: false });
     $('#upload').ajaxForm(afterUpload);
     initJSONRpc(loadData);
     $('#title').change(onTitleChange);
@@ -40,27 +50,34 @@ $(function() {
     $('#deleteFoldersButton').click(onDelete);
     $('#folderCancelButton').click(onCancel);
     $('#fileUploadCancelButton').click(onFileUploadCancel);
+    $('#addPermissionButton').click(onAddPermission);
+    $('#deletePermissionButton').click(onDeletePermission);
+    $('#permissionSaveButton').click(onPermissionSave);
+    $('#permissionCancelButton').click(onPermissionCancel);
 });
 
 function loadData() {
-    loadFolder();
-    loadChildren();
-    loadFiles();
-    if (!editMode) {
-        $('.filesTab').hide();
-        $('.childrenTab').hide();
-    }
-    else {
-        $('.filesTab').show();
-        $('.childrenTab').show();
-    }
+	jsonrpc.folderService.getFolderRequest(function (r) {
+		folderRequest = r;
+	    loadFolder();
+	    loadGroups();
+	    if (!editMode) {
+	        $('.filesTab').hide();
+	        $('.childrenTab').hide();
+	    }
+	    else {
+		    loadPermissions(folderRequest.permissions);
+		    loadChildren();
+		    loadFiles();
+	        $('.filesTab').show();
+	        $('.childrenTab').show();
+	    }
+	}, folderId, folderParentId);
 }
 
 function loadFolder() {
-	jsonrpc.folderService.getFolder(function (r) {
-		folder = r;
-		initFormFields();
-	}, folderId);
+	folder = folderRequest.folder;
+	initFormFields();
 }
 
 function initFormFields() {
@@ -96,23 +113,21 @@ function afterUpload(data) {
 }
 
 function loadFiles() {
-	jsonrpc.fileService.getByFolder(function (r) {
-	    files = r.list;
-	    var h = '<table class="form-table"><tr><th></th><th>Title</th>\
-		    <th>Filename</th><th>Mime type</th><th>Size</th></tr>';
-	    $.each(files, function(i, file) { 
-	        h += '<tr>\
+    files = folderRequest.files;
+    var h = '<table class="form-table"><tr><th></th><th>Title</th>\
+	    <th>Filename</th><th>Mime type</th><th>Size</th></tr>';
+    $.each(files.list, function(i, file) { 
+        h += '<tr>\
 <td><input type="checkbox" name="item' + i + '" value="' + file.id + '"/></td>\
 <td><a href="/cms/file.jsp?id=' + file.id + '">' + file.title + '</a></td>\
 <td>' + file.filename + '</td>\
 <td>' + file.mimeType + '</td>\
 <td>' + file.size + ' bytes</td>\
 </tr>';
-        });
-	    h += '</table>';   
-	    $('#filesTable').html(h);
-	    $('#filesTable tr:even').addClass('even');
-	}, folderId);
+    });
+    h += '</table>';   
+    $('#filesTable').html(h);
+    $('#filesTable tr:even').addClass('even');
 }
 
 function getCheckedFilesIds() {
@@ -161,17 +176,15 @@ function loadChildren() {
 	if (!editMode) {
 		return;
 	}
-	jsonrpc.folderService.getByParent(function (r) {
-		var html = '<table class="form-table">\
+	var html = '<table class="form-table">\
 <tr><th></th><th>Title</th><th>Name</th></tr>';
-        $.each(r.list, function (i, child) {
-            html += '<tr><td><input type="checkbox" value="' + child.id
-                + '"/></td><td><a href="/cms/folder.jsp?id=' + child.id 
-                + '">' + child.title + '</td><td>' + child.name + '</td></tr>';
-        });
-        $('#children').html(html + '</table>');
-        $('#children tr:even').addClass('even');
-	}, folderId);
+    $.each(folderRequest.children.list, function (i, child) {
+        html += '<tr><td><input type="checkbox" value="' + child.id
+            + '"/></td><td><a href="/cms/folder.jsp?id=' + child.id 
+            + '">' + child.title + '</td><td>' + child.name + '</td></tr>';
+    });
+    $('#children').html(html + '</table>');
+    $('#children tr:even').addClass('even');
 }
 
 function onUpdate() {
@@ -235,3 +248,144 @@ function onDelete() {
     }
 }
 
+// Permissions security
+
+function getPermissionName(perm) {
+	if (perm == 'DENIED') {
+		return 'Denied';
+	}
+	if (perm == 'READ') {
+		return 'Read';
+	}
+	if (perm == 'WRITE') {
+		return 'Read, Write';
+	}
+	if (perm == 'ADMIN') {
+		return 'Read, Write, Grant permissions';
+	}
+}
+
+function loadPermissions(r) {
+	permissions = idMap(r.list);
+	var h = '<table class="form-table"><tr><th></th><th>Group</th><th>Permission</th></tr>';
+	$.each(permissions, function(i,value) {
+		var checkbox = '';
+		var editLink = value.group.name;
+		if (!value.inherited) {
+			checkbox = '<input type="checkbox" value="' + value.id + '">';
+			editLink = '<a href="#" onclick="onPermissionEdit(\'' + value.id 
+				+ '\')"> ' + value.group.name + '</a>';
+		}
+		h += '<tr><td>' + checkbox + '</td><td>' + editLink + '</td><td>'
+			+ getPermissionName(value.permission) + '</td></tr>';
+	});
+	$('#permissions').html(h + '</table>');
+    $('#permissions tr:even').addClass('even'); 
+}
+
+function callLoadPermissions() {
+	jsonrpc.folderPermissionService.selectByFolder(function (r) {
+		loadPermissions(r);
+	}, folderId);
+}
+
+function loadGroups() {
+	var r = folderRequest.groups;
+	groups = idMap(r.list);
+	var h = '';
+	$.each(groups, function(i,value) {
+		h += '<option value="' + value.id + '">' + value.name + '</option>';
+	});
+	$('#groupSelect').html(h);
+}
+
+function onPermissionEdit(id) {
+	permission = permissions[id];
+	initPermissionForm();
+	$('#permission-dialog').dialog('open');
+}
+
+function initPermissionForm() {
+	$('#permission-dialog input[type=radio]').removeAttr('checked');
+	if (permission == null) {
+		$('#permission-dialog input[value=READ]').attr('checked', 'checked');
+		$('#groupSelect').show();
+		$('#groupName').hide();
+	}
+	else {
+		$('#permissionList input[value=' + permission.permission 
+				+ ']').attr('checked', 'checked');
+		$('#groupSelect').hide();
+		$('#groupName').show();
+		$('#groupName').text(permission.group.name);
+	}
+}
+
+function onPermissionSave() {
+	var vo = {
+		folderId: folderId,
+		groupId: permission == null ? $('#groupSelect').val() : 
+			String(permission.group.id),
+		permission: $('#permissionList input:checked')[0].value,
+	};
+	jsonrpc.folderPermissionService.save(function(r) {
+		showServiceMessages(r);
+		$('#permission-dialog').dialog('close');
+		if (r.result == 'success') {
+			callLoadPermissions();
+		}
+	}, javaMap(vo));
+}
+
+function onAddPermission() {
+	permission = null;
+	initPermissionForm();
+	$('#permission-dialog').dialog('open');
+}
+
+function onDeletePermission() {
+	var ids = [];
+	$('#permissions input:checked').each(function() {
+		ids.push(this.value);
+	});
+	if (ids.length == 0) {
+		info('Nothing selected.');
+		return;
+	}
+	if (confirm('Are you sure?')) {
+		jsonrpc.folderPermissionService.remove(function(r) {
+			showServiceMessages(r);
+			callLoadPermissions();
+		}, javaList(ids));
+	}
+}
+
+function onPermissionCancel() {
+	$('#permission-dialog').dialog('close');
+}
+
+function loadFolderPermission() {
+    var r = pageRequest.folderPermission;
+   	if (r.changeGranted) {
+   		$('#saveButton').show();
+   		$('#createFileButton').show();
+   		$('#uploadButton').show();
+   		$('#deleteFilesButton').show();
+   		$('#addChildButton').show();
+   		$('#deleteFoldersButton').show();
+   	}
+   	else {
+   		$('#saveButton').hide();
+   		$('#createFileButton').hide();
+   		$('#uploadButton').hide();
+   		$('#deleteFilesButton').hide();
+   		$('#addChildButton').hide();
+   		$('#deleteFoldersButton').hide();
+   	}
+   	if (r.admin && editMode) {
+   		$('.securityTab').show();
+   	}
+   	else {
+   		$('.securityTab').hide();
+   	}
+}

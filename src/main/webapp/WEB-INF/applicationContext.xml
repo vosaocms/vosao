@@ -85,6 +85,9 @@
     <bean id="contentPermissionDao" class="org.vosao.dao.impl.ContentPermissionDaoImpl"
         parent="abstractDao" />  
 
+    <bean id="folderPermissionDao" class="org.vosao.dao.impl.FolderPermissionDaoImpl"
+        parent="abstractDao" />  
+
     <bean id="pageDao" class="org.vosao.dao.impl.PageDaoImpl"
         parent="abstractDao">
         <property name="contentDao" ref="contentDao"/>  
@@ -107,6 +110,7 @@
         <property name="groupDao" ref="groupDao"/>  
         <property name="userGroupDao" ref="userGroupDao"/>  
         <property name="contentPermissionDao" ref="contentPermissionDao"/>  
+        <property name="folderPermissionDao" ref="folderPermissionDao"/>  
     </bean>
 
     <!--=========================== Business ================================-->
@@ -144,6 +148,11 @@
     <bean id="contentPermissionBusiness" class="org.vosao.business.impl.ContentPermissionBusinessImpl"
         parent="abstractBusiness" />  
 
+    <bean id="folderPermissionBusiness" class="org.vosao.business.impl.FolderPermissionBusinessImpl"
+        parent="abstractBusiness">
+        <property name="contentPermissionBusiness" ref="contentPermissionBusiness"/>  
+    </bean>      
+
     <bean id="groupBusiness" class="org.vosao.business.impl.GroupBusinessImpl"
         parent="abstractBusiness" />  
 
@@ -174,6 +183,7 @@
         <property name="userBusiness" ref="userBusiness"/>  
         <property name="contentPermissionBusiness" ref="contentPermissionBusiness"/>  
         <property name="groupBusiness" ref="groupBusiness"/>  
+        <property name="folderPermissionBusiness" ref="folderPermissionBusiness"/>  
     </bean>
 
     <!--========================== ImportExport =============================-->
@@ -196,10 +206,7 @@
 
     <bean id="fileService" class="org.vosao.service.back.impl.FileServiceImpl"
         parent="abstractService" />  
-
-    <bean id="folderService" class="org.vosao.service.back.impl.FolderServiceImpl"
-        parent="abstractService" />
-          
+        
     <bean id="commentService" class="org.vosao.service.back.impl.CommentServiceImpl"
         parent="abstractService" />
 
@@ -233,6 +240,16 @@
     <bean id="contentPermissionService" class="org.vosao.service.back.impl.ContentPermissionServiceImpl"
         parent="abstractService" />
 
+    <bean id="folderPermissionService" class="org.vosao.service.back.impl.FolderPermissionServiceImpl"
+        parent="abstractService" />
+
+    <bean id="folderService" class="org.vosao.service.back.impl.FolderServiceImpl"
+        parent="abstractService">
+        <property name="fileService" ref="fileService"/>  
+        <property name="folderPermissionService" ref="folderPermissionService"/>  
+        <property name="groupService" ref="groupService"/>  
+    </bean>
+
     <bean id="pageService" class="org.vosao.service.back.impl.PageServiceImpl"
         parent="abstractService">
         <property name="commentService" ref="commentService"/>  
@@ -258,6 +275,7 @@
         <property name="messageService" ref="messageService"/>  
         <property name="groupService" ref="groupService"/>  
         <property name="contentPermissionService" ref="contentPermissionService"/>  
+        <property name="folderPermissionService" ref="folderPermissionService"/>  
     </bean>
 
     <!--================== JSON-RPC front services ==========================-->

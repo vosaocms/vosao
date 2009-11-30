@@ -120,4 +120,8 @@ public class FolderEntity implements Serializable {
 		return false;
 	}
 	
+	public boolean isRoot() {
+		return parent == null;
+	}
+	
 }

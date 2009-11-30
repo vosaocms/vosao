@@ -19,23 +19,50 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business;
+package org.vosao.service.vo;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.vosao.dao.Dao;
-import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FolderPermissionEntity;
-import org.vosao.global.SystemService;
+import org.vosao.entity.GroupEntity;
 
-public interface AbstractBusiness {
-	
-	Dao getDao();
-	
-	void setDao(Dao dao);
-	
-	SystemService getSystemService();
-	
-	void setSystemService(SystemService bean);
+/**
+ * Value object to be returned from services.
+ * @author Alexander Oleynik
+ */
+public class FolderPermissionVO {
 
+    private FolderPermissionEntity folderPermission;
+    private boolean inherited;
+    private GroupEntity group;
+
+	public FolderPermissionVO(final FolderPermissionEntity entity) {
+		folderPermission = entity;
+	}
+
+	public String getId() {
+		return folderPermission.getId().toString();
+	}
+
+	public boolean isInherited() {
+		return inherited;
+	}
+
+	public void setInherited(boolean inherited) {
+		this.inherited = inherited;
+	}
+
+	public GroupEntity getGroup() {
+		return group;
+	}
+
+	public void setGroup(GroupEntity group) {
+		this.group = group;
+	}
+	
+	public String getPermission() {
+		return folderPermission.getPermission().name();
+	}
+	
 }

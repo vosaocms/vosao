@@ -24,6 +24,7 @@ package org.vosao.business.impl;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -34,17 +35,18 @@ import org.vosao.entity.GroupEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.entity.UserGroupEntity;
 import org.vosao.enums.ContentPermissionType;
+import org.vosao.service.vo.ContentPermissionVO;
 import org.vosao.utils.UrlUtil;
 
 /**
  * @author Alexander Oleynik
  */
-public class ContentPermissionBusinessImpl extends AbstractBusinessImpl 
-	implements ContentPermissionBusiness {
+public class ContentPermissionBusinessImpl extends AbstractBusinessImpl
+		implements ContentPermissionBusiness {
 
-	private static final Log logger = LogFactory.getLog(
-			ContentPermissionBusinessImpl.class);
-	
+	private static final Log logger = LogFactory
+			.getLog(ContentPermissionBusinessImpl.class);
+
 	@Override
 	public ContentPermissionEntity getGuestPermission(final String url) {
 		GroupEntity guests = getDao().getGroupDao().getGuestsGroup();
@@ -54,19 +56,18 @@ public class ContentPermissionBusinessImpl extends AbstractBusinessImpl
 	}
 
 	@Override
-	public ContentPermissionEntity getPermission(final String url, 
+	public ContentPermissionEntity getPermission(final String url,
 			final UserEntity user) {
 		if (user.isAdmin()) {
-			return new ContentPermissionEntity(url, 
-					ContentPermissionType.ADMIN);
+			return new ContentPermissionEntity(url, ContentPermissionType.ADMIN);
 		}
-		List<UserGroupEntity> userGroups = getDao().getUserGroupDao().selectByUser(user.getId());
+		List<UserGroupEntity> userGroups = getDao().getUserGroupDao()
+				.selectByUser(user.getId());
 		userGroups.add(new UserGroupEntity(getDao().getGroupDao()
 				.getGuestsGroup().getId(), user.getId()));
-		List<ContentPermissionEntity> permissions = 
-				new ArrayList<ContentPermissionEntity>();
+		List<ContentPermissionEntity> permissions = new ArrayList<ContentPermissionEntity>();
 		for (UserGroupEntity userGroup : userGroups) {
-			ContentPermissionEntity contentPermission = getGroupPermission(url, 
+			ContentPermissionEntity contentPermission = getGroupPermission(url,
 					userGroup.getGroupId());
 			if (contentPermission != null) {
 				permissions.add(contentPermission);
@@ -94,28 +95,27 @@ public class ContentPermissionBusinessImpl extends AbstractBusinessImpl
 		}
 		String langs = "";
 		for (String lang : languages) {
-			langs +=  (langs.equals("") ? "" : ",") + lang;
+			langs += (langs.equals("") ? "" : ",") + lang;
 		}
 		result.setLanguages(langs);
 		return result;
 	}
 
-	private ContentPermissionEntity getGroupPermission(String url,
-			Long groupId) {
+	private ContentPermissionEntity getGroupPermission(String url, Long groupId) {
 		String myUrl = url;
 		while (myUrl != null) {
 			ContentPermissionEntity perm = getDao().getContentPermissionDao()
-				.getByUrlGroup(myUrl, groupId);
+					.getByUrlGroup(myUrl, groupId);
 			if (perm != null) {
 				return perm;
 			}
 			if (myUrl.equals("/")) {
 				myUrl = null;
-			}
-			else {
+			} else {
 				myUrl = UrlUtil.getParentFriendlyURL(myUrl);
 			}
-		};		
+		}
+		;
 		return null;
 	}
 
@@ -124,7 +124,7 @@ public class ContentPermissionBusinessImpl extends AbstractBusinessImpl
 			ContentPermissionType permission) {
 		setPermission(url, group, permission, null);
 	}
-	
+
 	@Override
 	public void setPermission(String url, GroupEntity group,
 			ContentPermissionType permission, String languages) {
@@ -137,8 +137,7 @@ public class ContentPermissionBusinessImpl extends AbstractBusinessImpl
 		}
 		if (languages == null) {
 			perm.setAllLanguages(true);
-		}
-		else {
+		} else {
 			perm.setAllLanguages(false);
 			perm.setLanguages(languages);
 		}
@@ -164,20 +163,38 @@ public class ContentPermissionBusinessImpl extends AbstractBusinessImpl
 	@Override
 	public List<ContentPermissionEntity> getInheritedPermissions(
 			final String url) {
-		List<ContentPermissionEntity> result = 
-				new ArrayList<ContentPermissionEntity>();
+		List<ContentPermissionEntity> result = new ArrayList<ContentPermissionEntity>();
 		String myUrl = url;
 		while (myUrl != null) {
-			result.addAll(getDao().getContentPermissionDao().selectByUrl(
-					myUrl));			
+			result
+					.addAll(getDao().getContentPermissionDao().selectByUrl(
+							myUrl));
 			if (myUrl.equals("/")) {
 				myUrl = null;
-			}
-			else {
+			} else {
 				myUrl = UrlUtil.getParentFriendlyURL(myUrl);
 			}
 		}
 		return result;
 	}
-	
+
+	@Override
+	public List<ContentPermissionEntity> selectByUrl(String pageUrl) {
+		List<ContentPermissionEntity> direct = getDao()
+				.getContentPermissionDao().selectByUrl(pageUrl);
+		List<ContentPermissionEntity> inherited = 
+				getInheritedPermissions(UrlUtil.getParentFriendlyURL(pageUrl));
+		List<ContentPermissionEntity> result = 
+				new ArrayList<ContentPermissionEntity>();
+		for (ContentPermissionEntity perm : inherited) {
+			if (!direct.contains(perm) && !result.contains(perm)) {
+				result.add(perm);
+			}
+		}
+		for (ContentPermissionEntity perm : direct) {
+			result.add(perm);
+		}
+		return result;
+	}
+
 }

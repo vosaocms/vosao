@@ -27,6 +27,7 @@ import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.GroupEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.ContentPermissionType;
+import org.vosao.service.vo.ContentPermissionVO;
 
 /**
  * @author Alexander Oleynik
@@ -47,5 +48,7 @@ public interface ContentPermissionBusiness {
 	List<String> validateBeforeUpdate(final ContentPermissionEntity perm);
 
 	List<ContentPermissionEntity> getInheritedPermissions(final String url);
+	
+	List<ContentPermissionEntity> selectByUrl(String pageUrl);
 	
 }

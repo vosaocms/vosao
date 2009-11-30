@@ -48,7 +48,7 @@ function error(msg) {
     $('#wrapper .messages').fadeIn();
     setTimeout(function() {
     	$('#wrapper .messages').fadeOut();
-    }, 5000);
+    }, 15000);
 }
 
 function infoMessage(widget, msg) {

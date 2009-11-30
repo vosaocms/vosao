@@ -71,4 +71,7 @@ public interface Dao {
 	ContentPermissionDao getContentPermissionDao();
 	void setContentPermissionDao(final ContentPermissionDao bean);
 
+	FolderPermissionDao getFolderPermissionDao();
+	void setFolderPermissionDao(final FolderPermissionDao bean);
+
 }

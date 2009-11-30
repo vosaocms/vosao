@@ -27,6 +27,7 @@ import org.vosao.service.back.ConfigService;
 import org.vosao.service.back.ContentPermissionService;
 import org.vosao.service.back.FieldService;
 import org.vosao.service.back.FileService;
+import org.vosao.service.back.FolderPermissionService;
 import org.vosao.service.back.FolderService;
 import org.vosao.service.back.FormService;
 import org.vosao.service.back.GroupService;
@@ -83,5 +84,8 @@ public interface BackService {
 
 	ContentPermissionService getContentPermissionService();
 	void setContentPermissionService(ContentPermissionService bean);
+
+	FolderPermissionService getFolderPermissionService();
+	void setFolderPermissionService(FolderPermissionService bean);
 	
 }

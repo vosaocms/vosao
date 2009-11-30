@@ -23,27 +23,27 @@ package org.vosao.dao;
 
 import java.util.List;
 
-import org.vosao.entity.FolderEntity;
+import org.vosao.entity.FolderPermissionEntity;
 
-public interface FolderDao extends AbstractDao {
+/**
+ * @author Alexander Oleynik
+ */
+public interface FolderPermissionDao extends AbstractDao {
 
-	void save(final FolderEntity page);
+	void save(final FolderPermissionEntity entity);
 	
-	FolderEntity getById(final String id);
+	FolderPermissionEntity getById(final Long id);
 
-	FolderEntity getByPath(final String path);
+	FolderPermissionEntity getByFolderGroup(final String folderId, 
+			final Long groupId);
 
-	String getFolderPath(final String folderId);
-
-	List<FolderEntity> getByParent(final String id);
-
-	FolderEntity getByParentName(final String parentid, final String name);
+	List<FolderPermissionEntity> select();
 	
-	List<FolderEntity> select();
+	List<FolderPermissionEntity> selectByFolder(final String folderId);
+
+	void remove(final Long id);
 	
-	void remove(final String id);
-	
-	void remove(final List<String> ids);
+	void remove(final List<Long> ids);
 	
 	
 }

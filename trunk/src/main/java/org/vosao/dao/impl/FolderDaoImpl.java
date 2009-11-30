@@ -21,6 +21,8 @@
 
 package org.vosao.dao.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
@@ -136,5 +138,34 @@ public class FolderDaoImpl extends AbstractDaoImpl implements FolderDao {
 		
 	}
 
+	@Override
+	public FolderEntity getByPath(String path) {
+		FolderEntity result = getByParentName(null, "/");
+		for (String name : path.split("/")) {
+			result = getByParentName(result.getId(), name);
+			if (result == null) {
+				return null;
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public String getFolderPath(String folderId) {
+		FolderEntity folder = getById(folderId);
+		List<String> names = new ArrayList<String>();
+		while(folder != null) {
+			names.add(folder.getName());
+			folder = getById(folder.getParent());
+		}
+		Collections.reverse(names);
+		StringBuffer result = new StringBuffer();
+		for (String name : names) {
+			if (!name.equals("/")) {
+				result.append("/").append(name);
+			}
+		}
+		return result.toString();
+	}
 	
 }

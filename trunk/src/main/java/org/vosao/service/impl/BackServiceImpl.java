@@ -32,6 +32,7 @@ import org.vosao.service.back.ConfigService;
 import org.vosao.service.back.ContentPermissionService;
 import org.vosao.service.back.FieldService;
 import org.vosao.service.back.FileService;
+import org.vosao.service.back.FolderPermissionService;
 import org.vosao.service.back.FolderService;
 import org.vosao.service.back.FormService;
 import org.vosao.service.back.GroupService;
@@ -60,6 +61,7 @@ public class BackServiceImpl implements BackService, Serializable {
 	private MessageService messageService;
 	private GroupService groupService;
 	private ContentPermissionService contentPermissionService;
+	private FolderPermissionService folderPermissionService;
 	
 	public void init() {
 	}
@@ -80,6 +82,7 @@ public class BackServiceImpl implements BackService, Serializable {
 		bridge.registerObject("messageService", messageService);
 		bridge.registerObject("groupService", groupService);
 		bridge.registerObject("contentPermissionService", contentPermissionService);
+		bridge.registerObject("folderPermissionService", folderPermissionService);
 	}
 	
 	@Override
@@ -98,6 +101,7 @@ public class BackServiceImpl implements BackService, Serializable {
 		bridge.unregisterObject("messageService");
 		bridge.unregisterObject("groupService");
 		bridge.unregisterObject("contentPermissionService");
+		bridge.unregisterObject("folderPermissionService");
 	}
 
 	@Override
@@ -238,6 +242,16 @@ public class BackServiceImpl implements BackService, Serializable {
 	@Override
 	public void setContentPermissionService(ContentPermissionService bean) {
 		contentPermissionService = bean;		
+	}
+
+	@Override
+	public FolderPermissionService getFolderPermissionService() {
+		return folderPermissionService;
+	}
+
+	@Override
+	public void setFolderPermissionService(FolderPermissionService bean) {
+		folderPermissionService = bean;		
 	}
 	
 }

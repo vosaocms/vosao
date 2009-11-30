@@ -23,19 +23,35 @@ package org.vosao.business;
 
 import java.util.List;
 
-import org.vosao.dao.Dao;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FolderPermissionEntity;
-import org.vosao.global.SystemService;
+import org.vosao.entity.GroupEntity;
+import org.vosao.entity.UserEntity;
+import org.vosao.enums.FolderPermissionType;
 
-public interface AbstractBusiness {
+/**
+ * @author Alexander Oleynik
+ */
+public interface FolderPermissionBusiness {
 	
-	Dao getDao();
+	ContentPermissionBusiness getContentPermissionBusiness();
+	void setContentPermissionBusiness(ContentPermissionBusiness bean);
 	
-	void setDao(Dao dao);
+	FolderPermissionEntity getPermission(final FolderEntity folder, 
+			final UserEntity user);
+
+	FolderPermissionEntity getGuestPermission(final FolderEntity folder);
+
+	void setPermission(final FolderEntity folder, final GroupEntity group, 
+			final FolderPermissionType permission);
 	
-	SystemService getSystemService();
-	
-	void setSystemService(SystemService bean);
+	List<String> validateBeforeUpdate(final FolderPermissionEntity perm);
+
+	/**
+	 * Get inherited permissions for folder, including page permissions.
+	 * @param folder.
+	 * @return permission list.
+	 */
+	List<FolderPermissionEntity> getInheritedPermissions(final FolderEntity folder);
 
 }

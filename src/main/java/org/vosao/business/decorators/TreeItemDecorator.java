@@ -51,6 +51,10 @@ public class TreeItemDecorator<T> {
 		return children;
 	}
 
+	public void setChildren(List<TreeItemDecorator<T>> list) {
+		children = list;
+	}
+
 	public TreeItemDecorator<T> getParent() {
 		return parent;
 	}

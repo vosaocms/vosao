@@ -25,6 +25,12 @@ import java.io.UnsupportedEncodingException;
 
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FolderEntity;
+import org.vosao.entity.FolderPermissionEntity;
+import org.vosao.entity.GroupEntity;
+import org.vosao.entity.UserEntity;
+import org.vosao.entity.UserGroupEntity;
+import org.vosao.enums.FolderPermissionType;
+import org.vosao.enums.UserRole;
 
 public class FolderBusinessTest extends AbstractBusinessTest {
 
@@ -32,6 +38,40 @@ public class FolderBusinessTest extends AbstractBusinessTest {
 		FolderEntity Folder = new FolderEntity(name, parent);
 		getDao().getFolderDao().save(Folder);
 		return Folder;
+	}
+	
+	private UserEntity addUser(String name, String email, UserRole role) {
+		UserEntity user = new UserEntity(name, name, email, role);
+		getDao().getUserDao().save(user);
+		return user;
+	}
+	
+	private GroupEntity addGroup(String name) {
+		GroupEntity group = new GroupEntity(name);
+		getDao().getGroupDao().save(group);
+		return group;
+	}
+	
+	private void addUserGroup(UserEntity user, GroupEntity group) {
+		UserGroupEntity userGroup = new UserGroupEntity(group.getId(), 
+				user.getId());
+		getDao().getUserGroupDao().save(userGroup);
+	}
+	
+	private void addPermission(FolderEntity folder, GroupEntity group, 
+			FolderPermissionType perm) {
+		FolderPermissionEntity p = new FolderPermissionEntity(folder.getId(),
+				perm, group.getId());
+		getDao().getFolderPermissionDao().save(p);
+	}
+
+	private void addGuestPerission(FolderEntity root) {
+		UserEntity tester = addUser("tester","kinyelo@gmail.com", UserRole.ADMIN);
+		CurrentUser.setInstance(tester);
+		GroupEntity guests = addGroup("guests");
+		GroupEntity developers = addGroup("developers");
+		addUserGroup(tester, developers);
+		addPermission(root, guests, FolderPermissionType.READ);
 	}
 	
 	/**
@@ -44,6 +84,7 @@ public class FolderBusinessTest extends AbstractBusinessTest {
 	 */
 	public void testFindFolderByPath() {
 		FolderEntity root = addFolder("/", null);
+		addGuestPerission(root);
 		FolderEntity images = addFolder("images", root.getId());
 		FolderEntity logos = addFolder("logos", images.getId());
 		FolderEntity photos = addFolder("photos", images.getId());
@@ -83,7 +124,8 @@ public class FolderBusinessTest extends AbstractBusinessTest {
 	}	
 
 	public void testCreateFolder() throws UnsupportedEncodingException {
-		addFolder("/", null);
+		FolderEntity root = addFolder("/", null);
+		addGuestPerission(root);
 		getBusiness().getFolderBusiness().createFolder("/one/two/free/four");
 		TreeItemDecorator<FolderEntity> treeRoot = getBusiness()
 			.getFolderBusiness().getTree();
@@ -118,6 +160,7 @@ public class FolderBusinessTest extends AbstractBusinessTest {
 	 */
 	public void testGetFolderPath() {
 		FolderEntity root = addFolder("/", null);
+		addGuestPerission(root);
 		FolderEntity images = addFolder("images", root.getId());
 		FolderEntity logos = addFolder("logos", images.getId());
 		FolderEntity photos = addFolder("photos", images.getId());

@@ -33,12 +33,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.vosao.business.CurrentUser;
-import org.vosao.business.UserPreferences;
 
+/**
+ * @author Aleksandr Oleynik
+ */
 public class AuthenticationFilter extends AbstractFilter implements Filter {
 
 	public static final String ORIGINAL_VIEW_KEY = "originalViewKey";
 	public static final String LOGIN_VIEW = "/login.jsp";
+	public static final String CMS = "/cms";
 
 	public AuthenticationFilter() {
 		super();
@@ -49,15 +52,22 @@ public class AuthenticationFilter extends AbstractFilter implements Filter {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		HttpSession session = httpRequest.getSession();
+        String url = httpRequest.getServletPath();
 		if (!isLoggedIn(httpRequest)) {
 			CurrentUser.setInstance(null);
-			session.setAttribute(ORIGINAL_VIEW_KEY, httpRequest.getRequestURI());
-			httpResponse.sendRedirect(httpRequest.getContextPath() + LOGIN_VIEW);
-		} else {
+			if (url.startsWith(CMS)) {
+				session.setAttribute(ORIGINAL_VIEW_KEY, httpRequest
+						.getRequestURI());
+				httpResponse.sendRedirect(httpRequest.getContextPath()
+						+ LOGIN_VIEW);
+				return;
+			}
+		}
+		else {
 			CurrentUser.setInstance(getBusiness().getUserPreferences(
 					httpRequest).getUser());
-			chain.doFilter(request, response);
 		}
+		chain.doFilter(request, response);
 	}
 
 	private boolean isLoggedIn(final HttpServletRequest request) {

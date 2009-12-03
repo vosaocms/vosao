@@ -28,7 +28,6 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.datanucleus.util.StringUtils;
 import org.vosao.business.CurrentUser;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FolderPermissionEntity;
@@ -41,6 +40,9 @@ import org.vosao.service.vo.FolderPermissionVO;
 
 import com.google.appengine.repackaged.com.google.protobuf.ServiceException;
 
+/**
+ * @author Alexander Oleynik
+ */
 public class FolderPermissionServiceImpl extends AbstractServiceImpl 
 		implements FolderPermissionService {
 

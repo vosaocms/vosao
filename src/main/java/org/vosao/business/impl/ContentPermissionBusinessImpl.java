@@ -58,6 +58,9 @@ public class ContentPermissionBusinessImpl extends AbstractBusinessImpl
 	@Override
 	public ContentPermissionEntity getPermission(final String url,
 			final UserEntity user) {
+		if (user == null) {
+			return getGuestPermission(url);
+		}
 		if (user.isAdmin()) {
 			return new ContentPermissionEntity(url, ContentPermissionType.ADMIN);
 		}

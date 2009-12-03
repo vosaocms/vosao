@@ -135,6 +135,7 @@ function initFormFields() {
     $('#editExt').val(config.editExt);
     $('#commentsEmail').val(config.commentsEmail);
     $('#commentsTemplate').val(config.commentsTemplate);
+    $('#siteUserLoginUrl').val(config.siteUserLoginUrl);
 }
 
 function onSave() {
@@ -147,7 +148,8 @@ function onSave() {
         recaptchaPrivateKey : $('#recaptchaPrivateKey').val(),
         editExt : $('#editExt').val(),
         commentsEmail : $('#commentsEmail').val(),
-        commentsTemplate : $('#commentsTemplate').val()        
+        commentsTemplate : $('#commentsTemplate').val(),        
+        siteUserLoginUrl : $('#siteUserLoginUrl').val(),        
     });
     jsonrpc.configService.saveConfig(function(r) {
         showServiceMessages(r);

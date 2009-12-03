@@ -25,6 +25,9 @@ import java.util.List;
 
 import org.vosao.entity.FolderEntity;
 
+/**
+ * @author Alexander Oleynik
+ */
 public interface FolderDao extends AbstractDao {
 
 	void save(final FolderEntity page);

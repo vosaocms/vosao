@@ -21,6 +21,8 @@
 
 package org.vosao.business;
 
+import java.util.List;
+
 import org.vosao.entity.ConfigEntity;
 
 
@@ -31,4 +33,6 @@ public interface ConfigBusiness {
 	boolean isTextFileExt(final String ext);
 	
 	boolean isImageFileExt(final String ext);
+	
+	List<String> validateBeforeUpdate(ConfigEntity entity);
 }

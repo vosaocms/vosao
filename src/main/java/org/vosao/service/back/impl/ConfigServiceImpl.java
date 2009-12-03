@@ -22,6 +22,7 @@
 package org.vosao.service.back.impl;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -56,9 +57,18 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 		config.setRecaptchaPublicKey(vo.get("recaptchaPublicKey"));
 		config.setSiteDomain(vo.get("siteDomain"));
 		config.setSiteEmail(vo.get("siteEmail"));
-		getDao().getConfigDao().save(config);
-		return ServiceResponse.createSuccessResponse(
-				"Configuration was successfully saved.");
+		config.setSiteUserLoginUrl(vo.get("siteUserLoginUrl"));
+		List<String> errors = getBusiness().getConfigBusiness()
+				.validateBeforeUpdate(config);
+		if (errors.isEmpty()) {
+			getDao().getConfigDao().save(config);
+			return ServiceResponse.createSuccessResponse(
+					"Configuration was successfully saved.");
+		}
+		else {
+			return ServiceResponse.createErrorResponse(
+					"Error during save config.", errors);
+		}
 	}
 
 	@Override

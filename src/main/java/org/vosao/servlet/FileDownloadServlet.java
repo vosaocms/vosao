@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.business.CurrentUser;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
@@ -50,20 +51,13 @@ public class FileDownloadServlet extends BaseSpringServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-        log.info("get file " + request.getPathInfo());
+        log.debug("get file " + request.getPathInfo());
 		String[] chain = FolderUtil.getPathChain(request.getPathInfo());
 		if (chain.length == 0) {
 			response.getWriter().append("file was not specified");
 			return;
 		}
-		
-		if (isInCache(request.getPathInfo())) {
-			sendFromCache(request, response);
-			return;
-		}
-		
-		String filename = chain[chain.length-1];
-		
+		String filename = chain[chain.length-1];		
 		TreeItemDecorator<FolderEntity> tree = getBusiness().getFolderBusiness()
 				.getTree();
 		TreeItemDecorator<FolderEntity> folder = getBusiness().getFolderBusiness()
@@ -75,6 +69,14 @@ public class FileDownloadServlet extends BaseSpringServlet {
 					+ " was not found");
 			return;
 		}
+		if (isAccessDenied(folder.getEntity())) {
+			response.getWriter().append("Access denied");
+			return;
+		}
+		if (isInCache(request.getPathInfo())) {
+			sendFromCache(request, response);
+			return;
+		}	
 		FileEntity file = getDao().getFileDao().getByName(
 				folder.getEntity().getId(), filename); 
 		if (file != null) {
@@ -124,5 +126,15 @@ public class FileDownloadServlet extends BaseSpringServlet {
 			output.close();
 		}
 	}
+
+	private boolean isAccessDenied(FolderEntity folder) {
+		if (CurrentUser.getInstance() == null) {
+			return getBusiness().getFolderPermissionBusiness()
+					.getGuestPermission(folder).isDenied();
+		}
+		return getBusiness().getFolderPermissionBusiness()
+				.getPermission(folder, CurrentUser.getInstance()).isDenied();
+	}
+	
 	
 }

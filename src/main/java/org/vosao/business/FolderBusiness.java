@@ -27,9 +27,27 @@ import java.util.List;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FolderEntity;
 
-
+/**
+ * @author Alexander Oleynik
+ */
 public interface FolderBusiness {
 
+	FolderPermissionBusiness getFolderPermissionBusiness();
+	void setFolderPermissionBusiness(FolderPermissionBusiness bean);
+
+	/**
+	 * Security filtered dao version.
+	 * @return found folder.
+	 */
+	FolderEntity getById(final String id);
+	
+	/**
+	 * Security filtered dao version.
+	 * @return found folders.
+	 */
+	List<FolderEntity> getByParent(final String id);
+
+	
 	TreeItemDecorator<FolderEntity> getTree(final List<FolderEntity> list);
 
 	TreeItemDecorator<FolderEntity> getTree();

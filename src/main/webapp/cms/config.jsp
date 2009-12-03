@@ -73,6 +73,10 @@
         <label>Editable resource files extensions</label>
         <input id="editExt" type="text"/>
     </div>
+    <div class="form-row">
+        <label>Site users login page url</label>
+        <input id="siteUserLoginUrl" type="text"/>
+    </div>
     <div class="buttons">
         <input id="saveButton" type="button" value="Save" />
         <input id="exportButton" type="button" value="Export" />

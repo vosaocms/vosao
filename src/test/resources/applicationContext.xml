@@ -121,9 +121,6 @@
         <property name="systemService" ref="systemService"/>  
     </bean>
     
-    <bean id="folderBusiness" class="org.vosao.business.impl.FolderBusinessImpl"
-        parent="abstractBusiness" />  
-
     <bean id="templateBusiness" class="org.vosao.business.impl.TemplateBusinessImpl"
         parent="abstractBusiness" />  
 
@@ -149,7 +146,9 @@
         parent="abstractBusiness" />  
 
     <bean id="folderPermissionBusiness" class="org.vosao.business.impl.FolderPermissionBusinessImpl"
-        parent="abstractBusiness" />  
+        parent="abstractBusiness">
+        <property name="contentPermissionBusiness" ref="contentPermissionBusiness"/>  
+    </bean>      
 
     <bean id="groupBusiness" class="org.vosao.business.impl.GroupBusinessImpl"
         parent="abstractBusiness" />  
@@ -159,6 +158,11 @@
         <property name="contentPermissionBusiness" ref="contentPermissionBusiness"/>  
     </bean>      
 
+    <bean id="folderBusiness" class="org.vosao.business.impl.FolderBusinessImpl"
+        parent="abstractBusiness">  
+        <property name="folderPermissionBusiness" ref="folderPermissionBusiness"/>  
+    </bean>
+    
     <bean id="pageBusiness" class="org.vosao.business.impl.PageBusinessImpl"
         init-method="init" parent="abstractBusiness">
         <property name="configBusiness" ref="configBusiness"/>  

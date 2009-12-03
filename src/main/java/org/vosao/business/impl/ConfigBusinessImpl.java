@@ -21,10 +21,15 @@
 
 package org.vosao.business.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.ConfigBusiness;
 import org.vosao.entity.ConfigEntity;
+import org.vosao.filter.SiteFilter;
 
 public class ConfigBusinessImpl extends AbstractBusinessImpl 
 	implements ConfigBusiness {
@@ -57,6 +62,22 @@ public class ConfigBusinessImpl extends AbstractBusinessImpl
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public List<String> validateBeforeUpdate(ConfigEntity entity) {
+		List<String> errors = new ArrayList<String>();
+		if (StringUtils.isEmpty(entity.getSiteDomain())) {
+			errors.add("Site domain is empty");
+		}
+		if (StringUtils.isEmpty(entity.getSiteEmail())) {
+			errors.add("Site email is empty");
+		}
+		if (SiteFilter.isSkipUrl(entity.getSiteUserLoginUrl())) {
+			errors.add(entity.getSiteUserLoginUrl() 
+					+ " url is reserved for internal use");
+		}
+		return errors;
 	}
 	
 }

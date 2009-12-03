@@ -22,8 +22,6 @@
 package org.vosao.business.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -31,7 +29,6 @@ import org.apache.commons.logging.LogFactory;
 import org.vosao.business.ContentPermissionBusiness;
 import org.vosao.business.CurrentUser;
 import org.vosao.business.FolderPermissionBusiness;
-import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FolderPermissionEntity;
@@ -39,8 +36,6 @@ import org.vosao.entity.GroupEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.entity.UserGroupEntity;
 import org.vosao.enums.FolderPermissionType;
-
-import com.google.appengine.repackaged.com.google.io.protocol.ProtocolMessage.PrintFlag;
 
 /**
  * @author Alexander Oleynik
@@ -65,6 +60,9 @@ public class FolderPermissionBusinessImpl extends AbstractBusinessImpl
 	@Override
 	public FolderPermissionEntity getPermission(final FolderEntity folder, 
 			final UserEntity user) {
+		if (user == null) {
+			return getGuestPermission(folder);
+		}
 		if (user.isAdmin()) {
 			return new FolderPermissionEntity(folder.getId(), 
 					FolderPermissionType.ADMIN);

@@ -19,35 +19,18 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business;
-
-import java.util.List;
-
-import org.vosao.entity.ContentPermissionEntity;
-import org.vosao.entity.GroupEntity;
-import org.vosao.entity.UserEntity;
-import org.vosao.enums.ContentPermissionType;
+package org.vosao.common;
 
 /**
  * @author Alexander Oleynik
  */
-public interface ContentPermissionBusiness {
+public class AccessDeniedException extends Exception {
 	
-	ContentPermissionEntity getPermission(final String url, 
-			final UserEntity user);
+	public AccessDeniedException() {
+		super("Access denied");
+	}
 
-	ContentPermissionEntity getGuestPermission(final String url);
-
-	void setPermission(final String url, final GroupEntity group, 
-			final ContentPermissionType permission);
-
-	void setPermission(final String url, final GroupEntity group, 
-			final ContentPermissionType permission, final String languages);
-	
-	List<String> validateBeforeUpdate(final ContentPermissionEntity perm);
-
-	List<ContentPermissionEntity> getInheritedPermissions(final String url);
-	
-	List<ContentPermissionEntity> selectByUrl(String pageUrl);
-	
+	public AccessDeniedException(String msg) {
+		super(msg);
+	}
 }

@@ -21,7 +21,6 @@
 
 package org.vosao.service.back.impl;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +35,9 @@ import org.vosao.service.back.GroupService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.FolderRequestVO;
 
+/**
+ * @author Alexander Oleynik
+ */
 public class FolderServiceImpl extends AbstractServiceImpl 
 		implements FolderService {
 
@@ -62,12 +64,12 @@ public class FolderServiceImpl extends AbstractServiceImpl
 		if (StringUtils.isEmpty(id)) {
 			return null;
 		}
-		return getDao().getFolderDao().getById(id);
+		return getBusiness().getFolderBusiness().getById(id);
 	}
 
 	@Override
 	public List<FolderEntity> getByParent(String id) {
-		return getDao().getFolderDao().getByParent(id);
+		return getBusiness().getFolderBusiness().getByParent(id);
 	}
 
 	@Override
@@ -96,7 +98,7 @@ public class FolderServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse deleteFolder(List<String> ids) {
-		getDao().getFolderDao().remove(ids);
+		getBusiness().getFolderBusiness().recursiveRemove(ids);
 		return ServiceResponse.createSuccessResponse(
 				"Folders were successsfully deleted.");
 	}

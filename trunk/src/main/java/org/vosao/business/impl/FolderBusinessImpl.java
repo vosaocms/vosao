@@ -30,17 +30,24 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.business.CurrentUser;
 import org.vosao.business.FolderBusiness;
+import org.vosao.business.FolderPermissionBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FolderEntity;
 import org.vosao.servlet.FolderUtil;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 
+/**
+ * @author Alexander Oleynik
+ */
 public class FolderBusinessImpl extends AbstractBusinessImpl 
 	implements FolderBusiness {
 
 	private static final Log logger = LogFactory.getLog(FolderBusinessImpl.class);
+
+	private FolderPermissionBusiness folderPermissionBusiness;
 	
 	@Override
 	public TreeItemDecorator<FolderEntity> getTree(
@@ -66,7 +73,7 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 				}
 			}
 		}
-		return root;
+		return securityFilter(root);
 	}
 
 	@Override
@@ -89,14 +96,19 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 				current = child;
 			}
 		}
-		return current;
+		if (haveReadAccess(current.getEntity())) {
+			return current;
+		}
+		return null;
 	}
 	
 	private TreeItemDecorator<FolderEntity> findByChildName(
 			final TreeItemDecorator<FolderEntity> folder, final String name) {
 		for (TreeItemDecorator<FolderEntity> child : folder.getChildren()) {
 			if (child.getEntity().getName().equals(name)) {
-				return child;
+				if (haveReadAccess(child.getEntity())) {
+					return child;
+				}
 			}
 		}
 		return null;
@@ -104,12 +116,17 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 
 	public List<String> validateBeforeUpdate(final FolderEntity folder) {
 		List<String> errors = new ArrayList<String>();
+		FolderEntity securityFolder = folder;
 		if (folder.getId() == null) {
 			FolderEntity myFolder = getDao().getFolderDao().getByParentName(
 					folder.getParent(), folder.getName());
 			if (myFolder != null) {
 				errors.add("Folder with such name already exists");
 			}
+			securityFolder = getDao().getFolderDao().getById(folder.getParent());
+		}
+		if (!haveWriteAccess(securityFolder)) {
+			errors.add("Secutity error");
 		}
 		if (StringUtil.isEmpty(folder.getTitle())) {
 			errors.add("Title is empty");
@@ -121,7 +138,8 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 	}
 
 	@Override
-	public FolderEntity createFolder(String aPath) throws UnsupportedEncodingException {
+	public FolderEntity createFolder(String aPath) 
+			throws UnsupportedEncodingException {
 		logger.debug("createFolder " + aPath);
 		if (StringUtils.isEmpty(aPath)) {
 			return null;
@@ -140,10 +158,13 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 			TreeItemDecorator<FolderEntity> folder = findFolderByPath(root, 
 					currentDir);
 			if (folder == null) {
-				FolderEntity newFolder = new FolderEntity(dir);
-				newFolder.setParent(parent.getId());
-				getDao().getFolderDao().save(newFolder);
-				parent = newFolder;
+				if (haveWriteAccess(parent)) {
+					FolderEntity newFolder = new FolderEntity(dir);
+					newFolder.setParent(parent.getId());
+					getDao().getFolderDao().save(newFolder);
+					parent = newFolder;
+				}
+				else return null;
 			}
 			else {
 				parent = folder.getEntity();
@@ -194,6 +215,9 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 	}
 	
 	private void recursiveRemove(final FolderEntity folder) {
+		if (!haveWriteAccess(folder)) {
+			return;
+		}
 		List<FolderEntity> children = getDao().getFolderDao().getByParent(
 				folder.getId());
 		for (FolderEntity child : children) {
@@ -201,6 +225,68 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 		}
 		getDao().getFileDao().removeByFolder(folder.getId());
 		getDao().getFolderDao().remove(folder.getId());
+	}
+	
+	private TreeItemDecorator<FolderEntity> securityFilter(
+			TreeItemDecorator<FolderEntity> root) {
+		if (!haveReadAccess(root.getEntity())) {
+			return null;
+		}
+		List<TreeItemDecorator<FolderEntity>> newChildren = 
+				new ArrayList<TreeItemDecorator<FolderEntity>>();
+		for (TreeItemDecorator<FolderEntity> child : root.getChildren()) {
+			TreeItemDecorator<FolderEntity> filteredChild = securityFilter(
+					child);
+			if (filteredChild != null) {
+				newChildren.add(filteredChild);
+			}
+		}
+		root.setChildren(newChildren);
+		return root;
+	}
+
+	@Override
+	public FolderPermissionBusiness getFolderPermissionBusiness() {
+		return folderPermissionBusiness;
+	}
+
+	@Override
+	public void setFolderPermissionBusiness(FolderPermissionBusiness bean) {
+		folderPermissionBusiness = bean;		
+	}
+
+	private boolean haveReadAccess(FolderEntity folder) {
+		return !getFolderPermissionBusiness().getPermission(folder, 
+				CurrentUser.getInstance()).isDenied();
+	}
+
+	private boolean haveWriteAccess(FolderEntity folder) {
+		return getFolderPermissionBusiness().getPermission(folder, 
+				CurrentUser.getInstance()).isChangeGranted();
+	}
+
+	@Override
+	public FolderEntity getById(String id) {
+		FolderEntity folder = getDao().getFolderDao().getById(id);
+		if (folder != null && haveReadAccess(folder)) {
+			return folder;
+		}
+		return null;
+	}
+
+	@Override
+	public List<FolderEntity> getByParent(String id) {
+		return securityReadFilter(getDao().getFolderDao().getByParent(id));
+	}
+
+	private List<FolderEntity> securityReadFilter(List<FolderEntity> list) {
+		List<FolderEntity> result = new ArrayList<FolderEntity>();
+		for (FolderEntity folder : list) {
+			if (haveReadAccess(folder)) {
+				result.add(folder);
+			}
+		}
+		return result;
 	}
 	
 }

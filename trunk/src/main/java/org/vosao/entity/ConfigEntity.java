@@ -71,6 +71,9 @@ public class ConfigEntity implements Serializable {
 	@Persistent
 	private String version;
 
+	@Persistent
+	private String siteUserLoginUrl;
+
 	public ConfigEntity() {
 	}
 	
@@ -85,6 +88,7 @@ public class ConfigEntity implements Serializable {
 		setSiteEmail(entity.getSiteEmail());
 		setEnableRecaptcha(entity.isEnableRecaptcha());
 		setVersion(entity.getVersion());
+		setSiteUserLoginUrl(entity.getSiteUserLoginUrl());
 	}
 	
 	private String getNotNull(String value) {
@@ -196,6 +200,14 @@ public class ConfigEntity implements Serializable {
 
 	public void setVersion(String version) {
 		this.version = version;
+	}
+
+	public String getSiteUserLoginUrl() {
+		return siteUserLoginUrl;
+	}
+
+	public void setSiteUserLoginUrl(String siteUserLoginUrl) {
+		this.siteUserLoginUrl = siteUserLoginUrl;
 	}
 	
 }

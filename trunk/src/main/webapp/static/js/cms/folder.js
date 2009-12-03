@@ -78,6 +78,7 @@ function loadData() {
 function loadFolder() {
 	folder = folderRequest.folder;
 	initFormFields();
+	loadFolderPermission();
 }
 
 function initFormFields() {
@@ -365,7 +366,7 @@ function onPermissionCancel() {
 }
 
 function loadFolderPermission() {
-    var r = pageRequest.folderPermission;
+    var r = folderRequest.folderPermission;
    	if (r.changeGranted) {
    		$('#saveButton').show();
    		$('#createFileButton').show();

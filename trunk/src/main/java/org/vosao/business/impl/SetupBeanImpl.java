@@ -147,6 +147,16 @@ public class SetupBeanImpl implements SetupBean {
 			getDao().getPageDao().setContent(root.getId(), 
 					LanguageEntity.ENGLISH_CODE, content);
 	        log.info("Adding root page.");
+			content = loadResource("org/vosao/resources/html/login.html");
+			PageEntity login = new PageEntity("Site user Login", "/login", 
+					template.getId());
+			login.setCreateUserEmail("admin@test.com");
+			login.setModUserEmail("admin@test.com");
+			login.setState(PageState.APPROVED);
+			getDao().getPageDao().save(login);
+			getDao().getPageDao().setContent(login.getId(), 
+					LanguageEntity.ENGLISH_CODE, content);
+	        log.info("Adding login page.");
 		}
 	}
 
@@ -203,6 +213,7 @@ public class SetupBeanImpl implements SetupBean {
 	        config.setSiteEmail("");
 	        config.setSiteDomain("");
 	        config.setEditExt("css,js,xml");
+	        config.setSiteUserLoginUrl("/login");
 	        config.setCommentsTemplate(loadResource(
 	        		COMMENTS_TEMPLATE_FILE));
 	        getDao().getConfigDao().save(config);

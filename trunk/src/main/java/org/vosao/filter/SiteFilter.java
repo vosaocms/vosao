@@ -31,10 +31,14 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.business.CurrentUser;
+import org.vosao.common.AccessDeniedException;
+import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.SeoUrlEntity;
 
@@ -75,16 +79,34 @@ public class SiteFilter extends AbstractFilter implements Filter {
             httpResponse.sendRedirect(seoUrl.getToLink());
             return;
         }
-    	PageEntity page = getPage(url, httpRequest);
-        if (page != null) {
-        	renderPage(httpRequest, httpResponse, page);
-        	return;
-        }
-        if (url.equals("/")) {
-            httpResponse.sendRedirect("/setup");
-            return;
-        }
-        httpResponse.sendRedirect("/");
+    	try {
+    		PageEntity page = getPage(url, httpRequest);
+    		if (page != null) {
+    			renderPage(httpRequest, httpResponse, page);
+    			return;
+    		}
+    		if (url.equals("/")) {
+    			httpResponse.sendRedirect("/setup");
+    			return;
+    		}
+    		httpResponse.sendRedirect("/");
+    	}
+    	catch (AccessDeniedException e) {
+    		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
+    		if (StringUtils.isEmpty(config.getSiteUserLoginUrl())) {
+    			renderMessage(httpResponse, 
+    				"<h1>Access denied</h1>" +
+    				"<h3>You need to login before access this page</h3>" +
+    				"<h4>Unfortunately webmaster forgot to configure Site user login page Url.</h4>");
+    		}
+    		else {
+    			HttpSession session = httpRequest.getSession(true);
+    			session.setAttribute(AuthenticationFilter.ORIGINAL_VIEW_KEY, 
+    					httpRequest.getRequestURI());
+    			httpResponse.sendRedirect(httpRequest.getContextPath()
+    					+ config.getSiteUserLoginUrl());
+    		}
+    	}
     }
 
     public static boolean isSkipUrl(final String url) {
@@ -116,9 +138,14 @@ public class SiteFilter extends AbstractFilter implements Filter {
     	}
     }
     
-    private PageEntity getPage(String url, HttpServletRequest request) {
+    private PageEntity getPage(String url, HttpServletRequest request) 
+    		throws AccessDeniedException {
     	Integer version = getVersion(request);
     	PageEntity page;
+    	if (getBusiness().getContentPermissionBusiness().getPermission(url, 
+    			CurrentUser.getInstance()).isDenied()) {
+    		throw new AccessDeniedException();
+    	}
     	if (version == null) {
             page = getDao().getPageDao().getByUrl(url);
     	}
@@ -126,5 +153,14 @@ public class SiteFilter extends AbstractFilter implements Filter {
             page = getDao().getPageDao().getByUrlVersion(url, version);
     	}
     	return page;
-    }    
+    }
+    
+    private void renderMessage(HttpServletResponse response, 
+    		final String msg) throws IOException {
+    	response.setContentType("text/html");
+    	response.setCharacterEncoding("UTF-8");
+    	Writer out = response.getWriter();
+    	out.write(msg);
+    }
+    
 }

@@ -23,88 +23,14 @@ package org.vosao.dao.impl;
 
 import java.util.List;
 
-import javax.jdo.PersistenceManager;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.ConfigDao;
 import org.vosao.entity.ConfigEntity;
 
-public class ConfigDaoImpl extends AbstractDaoImpl implements ConfigDao {
+public class ConfigDaoImpl extends BaseDaoImpl<Long, ConfigEntity> 
+		implements ConfigDao {
 
-	@Override
-	public void save(final ConfigEntity entity) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			if (entity.getId() != null) {
-				ConfigEntity p = pm.getObjectById(ConfigEntity.class, entity.getId());
-				p.copy(entity);
-			}
-			else {
-				pm.makePersistent(entity);
-			}
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public ConfigEntity getById(final Long id) {
-		if (id == null) {
-			return null;
-		}
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			return pm.getObjectById(ConfigEntity.class, id);
-		}
-		catch (NucleusObjectNotFoundException e) {
-			return null;
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public List<ConfigEntity> select() {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + ConfigEntity.class.getName();
-			List<ConfigEntity> result = (List<ConfigEntity>)pm.newQuery(query).execute();
-			return copy(result);
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public void remove(final Long id) {
-		if (id == null) {
-			return;
-		}
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			pm.deletePersistent(pm.getObjectById(ConfigEntity.class, id));
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public void remove(final List<Long> ids) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			for (Long id : ids) {
-				pm.deletePersistent(pm.getObjectById(ConfigEntity.class, id));
-			}
-		}
-		finally {
-			pm.close();
-		}
+	public ConfigDaoImpl() {
+		super(ConfigEntity.class);
 	}
 
 	@Override

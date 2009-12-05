@@ -21,27 +21,15 @@
 
 package org.vosao.dao;
 
-import java.util.List;
-
 import org.vosao.entity.GroupEntity;
 
 /**
  * @author Alexander Oleynik
  */
-public interface GroupDao extends AbstractDao {
-
-	void save(final GroupEntity entity);
-	
-	GroupEntity getById(final Long id);
+public interface GroupDao extends BaseDao<Long, GroupEntity> {
 
 	GroupEntity getByName(final String name);
 
-	List<GroupEntity> select();
-	
-	void remove(final Long id);
-	
-	void remove(final List<Long> ids);
-	
 	GroupEntity getGuestsGroup();
 	
 }

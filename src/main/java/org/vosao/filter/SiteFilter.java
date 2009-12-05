@@ -80,13 +80,13 @@ public class SiteFilter extends AbstractFilter implements Filter {
             return;
         }
     	try {
+    		if (getDao().getGroupDao().getGuestsGroup() == null) {
+    			httpResponse.sendRedirect("/setup");
+    			return;
+    		}
     		PageEntity page = getPage(url, httpRequest);
     		if (page != null) {
     			renderPage(httpRequest, httpResponse, page);
-    			return;
-    		}
-    		if (url.equals("/")) {
-    			httpResponse.sendRedirect("/setup");
     			return;
     		}
     		httpResponse.sendRedirect("/");

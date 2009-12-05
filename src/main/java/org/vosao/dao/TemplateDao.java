@@ -25,19 +25,8 @@ import java.util.List;
 
 import org.vosao.entity.TemplateEntity;
 
-public interface TemplateDao extends AbstractDao {
-
-	void save(final TemplateEntity page);
-	
-	TemplateEntity getById(final String id);
+public interface TemplateDao extends BaseDao<String, TemplateEntity> {
 
 	TemplateEntity getByUrl(final String url);
 
-	List<TemplateEntity> select();
-	
-	void remove(final String id);
-	
-	void remove(final List<String> ids);
-	
-	
 }

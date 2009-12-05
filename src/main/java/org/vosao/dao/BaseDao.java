@@ -19,22 +19,29 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao.impl;
+package org.vosao.dao;
 
-import org.vosao.dao.SeoUrlDao;
-import org.vosao.entity.SeoUrlEntity;
+import java.util.List;
 
-public class SeoUrlDaoImpl extends BaseDaoImpl<String, SeoUrlEntity> 
-		implements SeoUrlDao {
 
-	public SeoUrlDaoImpl() {
-		super(SeoUrlEntity.class);
-	}
+public interface BaseDao<K, T> extends AbstractDao {
 
-	public SeoUrlEntity getByFrom(final String from) {
-		String query = "select from " + SeoUrlEntity.class.getName() 
-					+ " where fromLink == pFrom parameters String pFrom";
-		return selectOne(query, params(from));
-	}
+	void save(final T entity);
+	
+	T getById(final K id);
+	
+	void remove(final K id);
+	
+	void remove(final List<K> ids);
 
+	List<T> select();
+
+	List<T> select(String query, Object[] params);
+
+	T selectOne(String query, Object[] params);
+
+	List<T> select(DaoAction<T> action);
+
+	T selectOne(DaoActionOne<T> action);
+	
 }

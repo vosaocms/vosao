@@ -21,104 +21,25 @@
 
 package org.vosao.dao.impl;
 
-import java.util.List;
-
-import javax.jdo.PersistenceManager;
-
-import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.GroupDao;
 import org.vosao.entity.GroupEntity;
 
 /**
  * @author Alexander Oleynik
  */
-public class GroupDaoImpl extends AbstractDaoImpl implements GroupDao {
+public class GroupDaoImpl extends BaseDaoImpl<Long, GroupEntity> 
+		implements GroupDao {
 
-	@Override
-	public void save(final GroupEntity group) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			if (group.getId() != null) {
-				GroupEntity p = pm.getObjectById(GroupEntity.class, group.getId());
-				p.copy(group);
-			}
-			else {
-				pm.makePersistent(group);
-			}
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public GroupEntity getById(final Long id) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			return pm.getObjectById(GroupEntity.class, id);
-		}
-		catch (NucleusObjectNotFoundException e) {
-			return null;
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public List<GroupEntity> select() {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + GroupEntity.class.getName();
-			List<GroupEntity> result = (List<GroupEntity>)pm.newQuery(query).execute();
-			return copy(result);
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public void remove(final Long id) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			pm.deletePersistent(pm.getObjectById(GroupEntity.class, id));
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public void remove(final List<Long> ids) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			for (Long id : ids) {
-				pm.deletePersistent(pm.getObjectById(GroupEntity.class, id));
-			}
-		}
-		finally {
-			pm.close();
-		}
+	public GroupDaoImpl() {
+		super(GroupEntity.class);
 	}
 
 	@Override
 	public GroupEntity getByName(String name) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + GroupEntity.class.getName()
+		String query = "select from " + GroupEntity.class.getName()
 				+ " where name == pName"
 				+ " parameters String pName";
-			List<GroupEntity> result = (List<GroupEntity>)
-					pm.newQuery(query).execute(name);
-			if (result.size() > 0) {
-				return result.get(0);
-			}
-			return null;
-		}
-		finally {
-			pm.close();
-		}
+		return selectOne(query, params(name));
 	}
 
 	@Override

@@ -23,122 +23,36 @@ package org.vosao.dao.impl;
 
 import java.util.List;
 
-import javax.jdo.PersistenceManager;
-
-import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.ContentPermissionDao;
 import org.vosao.entity.ContentPermissionEntity;
 
 /**
  * @author Alexander Oleynik
  */
-public class ContentPermissionDaoImpl extends AbstractDaoImpl implements ContentPermissionDao {
+public class ContentPermissionDaoImpl extends 
+		BaseDaoImpl<Long, ContentPermissionEntity> 
+		implements ContentPermissionDao {
+
+	public ContentPermissionDaoImpl() {
+		super(ContentPermissionEntity.class);
+	}
 
 	@Override
-	public void save(final ContentPermissionEntity ContentPermission) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			if (ContentPermission.getId() != null) {
-				ContentPermissionEntity p = pm.getObjectById(ContentPermissionEntity.class, ContentPermission.getId());
-				p.copy(ContentPermission);
-			}
-			else {
-				pm.makePersistent(ContentPermission);
-			}
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public ContentPermissionEntity getById(final Long id) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			return pm.getObjectById(ContentPermissionEntity.class, id);
-		}
-		catch (NucleusObjectNotFoundException e) {
-			return null;
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public List<ContentPermissionEntity> select() {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + ContentPermissionEntity.class.getName();
-			List<ContentPermissionEntity> result = 
-				(List<ContentPermissionEntity>)pm.newQuery(query).execute();
-			return copy(result);
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
 	public List<ContentPermissionEntity> selectByUrl(final String url) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " 
+		String query = "select from " 
 				+ ContentPermissionEntity.class.getName()
 				+ " where url == pUrl"
 				+ " parameters String pUrl";
-			List<ContentPermissionEntity> result = 
-				(List<ContentPermissionEntity>)pm.newQuery(query).execute(url);
-			return copy(result);
-		}
-		finally {
-			pm.close();
-		}
+		return select(query, params(url));
 	}
 
 	@Override
 	public ContentPermissionEntity getByUrlGroup(final String url, 
 			final Long groupId) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + ContentPermissionEntity.class.getName()
+		String query = "select from " + ContentPermissionEntity.class.getName()
 				+ " where url == pUrl && groupId == pGroupId"
 				+ " parameters String pUrl, Long pGroupId";
-			List<ContentPermissionEntity> result = 
-				(List<ContentPermissionEntity>)pm.newQuery(query).execute(
-						url, groupId);
-			if (result.size() > 0) {
-				return result.get(0);
-			}
-			return null;
-		}
-		finally {
-			pm.close();
-		}
-	}
-
-	@Override
-	public void remove(final Long id) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			pm.deletePersistent(pm.getObjectById(ContentPermissionEntity.class, id));
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public void remove(final List<Long> ids) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			for (Long id : ids) {
-				pm.deletePersistent(pm.getObjectById(ContentPermissionEntity.class, id));
-			}
-		}
-		finally {
-			pm.close();
-		}
+		return selectOne(query, params(url, groupId));
 	}
 
 }

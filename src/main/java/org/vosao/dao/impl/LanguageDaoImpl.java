@@ -21,98 +21,20 @@
 
 package org.vosao.dao.impl;
 
-import java.util.List;
-
-import javax.jdo.PersistenceManager;
-
-import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.LanguageDao;
 import org.vosao.entity.LanguageEntity;
 
-public class LanguageDaoImpl extends AbstractDaoImpl implements LanguageDao {
+public class LanguageDaoImpl extends BaseDaoImpl<String, LanguageEntity> 
+		implements LanguageDao {
 
-	public void save(final LanguageEntity entity) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			if (entity.getId() != null) {
-				LanguageEntity p = pm.getObjectById(LanguageEntity.class, 
-						entity.getId());
-				p.copy(entity);
-			}
-			else {
-				pm.makePersistent(entity);
-			}
-		}
-		finally {
-			pm.close();
-		}
+	public LanguageDaoImpl() {
+		super(LanguageEntity.class);
 	}
-	
-	public LanguageEntity getById(final String id) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			return pm.getObjectById(LanguageEntity.class, id);
-		}
-		catch (NucleusObjectNotFoundException e) {
-			return null;
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	public List<LanguageEntity> select() {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + LanguageEntity.class.getName();
-			List<LanguageEntity> result = (List<LanguageEntity>)
-					pm.newQuery(query).execute();
-			return copy(result);
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
+
 	public LanguageEntity getByCode(final String code) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + LanguageEntity.class.getName() 
+		String query = "select from " + LanguageEntity.class.getName() 
 					+ " where code == pCode parameters String pCode";
-			List<LanguageEntity> result = (List<LanguageEntity>)pm.newQuery(query)
-					.execute(code);
-			if (result.size() == 0) {
-				return null;
-			}
-			else {
-				return result.get(0);
-			}
-		}
-		finally {
-			pm.close();
-		}
-	}
-
-	public void remove(final String id) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			pm.deletePersistent(pm.getObjectById(LanguageEntity.class, id));
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	public void remove(final List<String> ids) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			for (String id : ids) {
-				pm.deletePersistent(pm.getObjectById(LanguageEntity.class, id));
-			}
-		}
-		finally {
-			pm.close();
-		}
+		return selectOne(query, params(code));
 	}
 
 }

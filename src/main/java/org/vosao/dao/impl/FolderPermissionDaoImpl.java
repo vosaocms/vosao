@@ -23,125 +23,36 @@ package org.vosao.dao.impl;
 
 import java.util.List;
 
-import javax.jdo.PersistenceManager;
-
-import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.FolderPermissionDao;
 import org.vosao.entity.FolderPermissionEntity;
 
 /**
  * @author Alexander Oleynik
  */
-public class FolderPermissionDaoImpl extends AbstractDaoImpl 
+public class FolderPermissionDaoImpl 
+		extends BaseDaoImpl<Long, FolderPermissionEntity> 
 		implements FolderPermissionDao {
 
-	@Override
-	public void save(final FolderPermissionEntity FolderPermission) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			if (FolderPermission.getId() != null) {
-				FolderPermissionEntity p = pm.getObjectById(
-						FolderPermissionEntity.class, FolderPermission.getId());
-				p.copy(FolderPermission);
-			}
-			else {
-				pm.makePersistent(FolderPermission);
-			}
-		}
-		finally {
-			pm.close();
-		}
+	public FolderPermissionDaoImpl() {
+		super(FolderPermissionEntity.class);
 	}
-	
-	@Override
-	public FolderPermissionEntity getById(final Long id) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			return pm.getObjectById(FolderPermissionEntity.class, id);
-		}
-		catch (NucleusObjectNotFoundException e) {
-			return null;
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public List<FolderPermissionEntity> select() {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + FolderPermissionEntity.class.getName();
-			List<FolderPermissionEntity> result = 
-				(List<FolderPermissionEntity>)pm.newQuery(query).execute();
-			return copy(result);
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
+
 	@Override
 	public List<FolderPermissionEntity> selectByFolder(final String folderId) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " 
+		String query = "select from " 
 				+ FolderPermissionEntity.class.getName()
 				+ " where folderId == pFolderId"
 				+ " parameters String pFolderId";
-			List<FolderPermissionEntity> result = 
-				(List<FolderPermissionEntity>)pm.newQuery(query).execute(
-						folderId);
-			return copy(result);
-		}
-		finally {
-			pm.close();
-		}
+		return select(query, params(folderId));
 	}
 
 	@Override
 	public FolderPermissionEntity getByFolderGroup(final String folderId, 
 			final Long groupId) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + FolderPermissionEntity.class.getName()
+		String query = "select from " + FolderPermissionEntity.class.getName()
 				+ " where folderId == pFolderId && groupId == pGroupId"
 				+ " parameters String pFolderId, Long pGroupId";
-			List<FolderPermissionEntity> result = 
-				(List<FolderPermissionEntity>)pm.newQuery(query).execute(
-						folderId, groupId);
-			if (result.size() > 0) {
-				return result.get(0);
-			}
-			return null;
-		}
-		finally {
-			pm.close();
-		}
-	}
-
-	@Override
-	public void remove(final Long id) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			pm.deletePersistent(pm.getObjectById(FolderPermissionEntity.class, id));
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public void remove(final List<Long> ids) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			for (Long id : ids) {
-				pm.deletePersistent(pm.getObjectById(FolderPermissionEntity.class, id));
-			}
-		}
-		finally {
-			pm.close();
-		}
+		return selectOne(query, params(folderId, groupId));
 	}
 
 }

@@ -28,21 +28,9 @@ import org.vosao.entity.UserGroupEntity;
 /**
  * @author Alexander Oleynik
  */
-public interface UserGroupDao extends AbstractDao {
+public interface UserGroupDao extends BaseDao<Long, UserGroupEntity> {
 
-	void save(final UserGroupEntity entity);
-	
-	UserGroupEntity getById(final Long id);
-
-	List<UserGroupEntity> select();
-	
 	List<UserGroupEntity> selectByUser(Long userId);
 
 	List<UserGroupEntity> selectByGroup(Long groupId);
-
-	void remove(final Long id);
-	
-	void remove(final List<Long> ids);
-	
-	
 }

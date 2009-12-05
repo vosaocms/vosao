@@ -33,84 +33,20 @@ import org.vosao.entity.CommentEntity;
 /**
  * @author Alexander Oleynik
  */
-public class CommentDaoImpl extends AbstractDaoImpl implements CommentDao {
+public class CommentDaoImpl extends BaseDaoImpl<String, CommentEntity> 
+		implements CommentDao {
 
-	@Override
-	public void save(final CommentEntity entity) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			if (entity.getId() != null) {
-				CommentEntity p = pm.getObjectById(CommentEntity.class, 
-						entity.getId());
-				p.copy(entity);
-			}
-			else {
-				pm.makePersistent(entity);
-			}
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public CommentEntity getById(final String id) {
-		if (id == null) {
-			return null;
-		}
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			return pm.getObjectById(CommentEntity.class, id);
-		}
-		catch (NucleusObjectNotFoundException e) {
-			return null;
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public void remove(final String id) {
-		if (id == null) {
-			return;
-		}
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			pm.deletePersistent(pm.getObjectById(CommentEntity.class, id));
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public void remove(final List<String> ids) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			for (String id : ids) {
-				pm.deletePersistent(pm.getObjectById(CommentEntity.class, id));
-			}
-		}
-		finally {
-			pm.close();
-		}
+	public CommentDaoImpl() {
+		super(CommentEntity.class);
 	}
 
 	@Override
 	public List<CommentEntity> getByPage(final String pageUrl) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + CommentEntity.class.getName()
+		String query = "select from " + CommentEntity.class.getName()
 			    + " where pageUrl == pPageUrl parameters String pPageUrl";
-			List<CommentEntity> result = (List<CommentEntity>)pm.newQuery(query)
-				.execute(pageUrl);
-			Collections.sort(result, new CommentEntity.PublishDateDesc());
-			return result;
-		}
-		finally {
-			pm.close();
-		}
+		List<CommentEntity> result = select(query, params(pageUrl));
+		Collections.sort(result, new CommentEntity.PublishDateDesc());
+		return result;
 	}
 	
 	private CommentEntity getById(final String id, PersistenceManager pm) {
@@ -159,19 +95,12 @@ public class CommentDaoImpl extends AbstractDaoImpl implements CommentDao {
 
 	@Override
 	public List<CommentEntity> getByPage(String pageUrl, boolean disabled) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + CommentEntity.class.getName()
+		String query = "select from " + CommentEntity.class.getName()
 			    + " where pageUrl == pPageUrl && disabled == pDisabled"
 			    + " parameters String pPageUrl, boolean pDisabled";
-			List<CommentEntity> result = (List<CommentEntity>)pm.newQuery(query)
-				.execute(pageUrl, disabled);
-			Collections.sort(result, new CommentEntity.PublishDateDesc());
-			return result;
-		}
-		finally {
-			pm.close();
-		}
+		List<CommentEntity> result = select(query, params(pageUrl, disabled));
+		Collections.sort(result, new CommentEntity.PublishDateDesc());
+		return result;
 	}
 	
 }

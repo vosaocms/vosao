@@ -26,18 +26,10 @@ import java.util.List;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormEntity;
 
-public interface FieldDao extends AbstractDao {
-
-	void save(final FieldEntity entity);
-	
-	FieldEntity getById(final String id);
+public interface FieldDao extends BaseDao<String, FieldEntity> {
 
 	List<FieldEntity> getByForm(final FormEntity form);
 
 	FieldEntity getByName(final FormEntity form, final String name);
 
-	void remove(final String id);
-	
-	void remove(final List<String> ids);
-	
 }

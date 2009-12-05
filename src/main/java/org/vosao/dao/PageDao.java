@@ -26,11 +26,7 @@ import java.util.List;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 
-public interface PageDao extends AbstractDao {
-
-	void save(final PageEntity page);
-	
-	PageEntity getById(final String id);
+public interface PageDao extends BaseDao<String, PageEntity> {
 
 	/**
 	 * Select pages latest versions by parent page.
@@ -55,12 +51,6 @@ public interface PageDao extends AbstractDao {
 
 	PageEntity getByUrlVersion(final String url, final Integer version);
 
-	List<PageEntity> select();
-	
-	void remove(final String id);
-	
-	void remove(final List<String> ids);
-	
 	String getContent(final String pageId, final String languageCode);
 
 	void setContent(final String pageId, final String languageCode, 

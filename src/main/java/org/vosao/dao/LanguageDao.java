@@ -21,23 +21,10 @@
 
 package org.vosao.dao;
 
-import java.util.List;
-
 import org.vosao.entity.LanguageEntity;
 
-public interface LanguageDao extends AbstractDao {
-
-	void save(final LanguageEntity entity);
-	
-	LanguageEntity getById(final String id);
+public interface LanguageDao extends BaseDao<String, LanguageEntity> {
 
 	LanguageEntity getByCode(final String code);
 
-	List<LanguageEntity> select();
-	
-	void remove(final String id);
-	
-	void remove(final List<String> ids);
-	
-	
 }

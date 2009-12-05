@@ -28,21 +28,11 @@ import org.vosao.entity.ContentPermissionEntity;
 /**
  * @author Alexander Oleynik
  */
-public interface ContentPermissionDao extends AbstractDao {
-
-	void save(final ContentPermissionEntity entity);
-	
-	ContentPermissionEntity getById(final Long id);
+public interface ContentPermissionDao extends 
+		BaseDao<Long, ContentPermissionEntity> {
 
 	ContentPermissionEntity getByUrlGroup(final String url, final Long groupId);
 
-	List<ContentPermissionEntity> select();
-	
 	List<ContentPermissionEntity> selectByUrl(final String url);
 
-	void remove(final Long id);
-	
-	void remove(final List<Long> ids);
-	
-	
 }

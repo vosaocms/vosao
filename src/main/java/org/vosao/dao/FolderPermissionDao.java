@@ -28,22 +28,12 @@ import org.vosao.entity.FolderPermissionEntity;
 /**
  * @author Alexander Oleynik
  */
-public interface FolderPermissionDao extends AbstractDao {
-
-	void save(final FolderPermissionEntity entity);
-	
-	FolderPermissionEntity getById(final Long id);
+public interface FolderPermissionDao 
+		extends BaseDao<Long, FolderPermissionEntity> {
 
 	FolderPermissionEntity getByFolderGroup(final String folderId, 
 			final Long groupId);
 
-	List<FolderPermissionEntity> select();
-	
 	List<FolderPermissionEntity> selectByFolder(final String folderId);
 
-	void remove(final Long id);
-	
-	void remove(final List<Long> ids);
-	
-	
 }

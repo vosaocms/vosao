@@ -25,16 +25,8 @@ import java.util.List;
 
 import org.vosao.entity.ContentEntity;
 
-public interface ContentDao extends AbstractDao {
+public interface ContentDao extends BaseDao<String, ContentEntity> {
 
-	void save(final ContentEntity entity);
-	
-	ContentEntity getById(final String id);
-	
-	void remove(final String id);
-	
-	void remove(final List<String> ids);
-	
 	List<ContentEntity> select(final String parentClass, 
 			final String parentKey);
 

@@ -21,21 +21,9 @@
 
 package org.vosao.dao;
 
-import java.util.List;
-
 import org.vosao.entity.ConfigEntity;
 
-public interface ConfigDao extends AbstractDao {
-
-	void save(final ConfigEntity entity);
-	
-	ConfigEntity getById(final Long id);
-
-	List<ConfigEntity> select();
-	
-	void remove(final Long id);
-	
-	void remove(final List<Long> ids);
+public interface ConfigDao extends BaseDao<Long, ConfigEntity> {
 
 	ConfigEntity getConfig();
 	

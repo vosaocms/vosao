@@ -28,11 +28,7 @@ import org.vosao.entity.FolderEntity;
 /**
  * @author Alexander Oleynik
  */
-public interface FolderDao extends AbstractDao {
-
-	void save(final FolderEntity page);
-	
-	FolderEntity getById(final String id);
+public interface FolderDao extends BaseDao<String, FolderEntity> {
 
 	FolderEntity getByPath(final String path);
 
@@ -41,12 +37,5 @@ public interface FolderDao extends AbstractDao {
 	List<FolderEntity> getByParent(final String id);
 
 	FolderEntity getByParentName(final String parentid, final String name);
-	
-	List<FolderEntity> select();
-	
-	void remove(final String id);
-	
-	void remove(final List<String> ids);
-	
 	
 }

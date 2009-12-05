@@ -23,108 +23,30 @@ package org.vosao.dao.impl;
 
 import java.util.List;
 
-import javax.jdo.PersistenceManager;
-
-import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.FieldDao;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormEntity;
 
-public class FieldDaoImpl extends AbstractDaoImpl implements FieldDao {
+public class FieldDaoImpl extends BaseDaoImpl<String, FieldEntity> 
+		implements FieldDao {
 
-	@Override
-	public void save(final FieldEntity entity) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			if (entity.getId() != null) {
-				FieldEntity p = pm.getObjectById(FieldEntity.class, entity.getId());
-				p.copy(entity);
-			}
-			else {
-				pm.makePersistent(entity);
-			}
-		}
-		finally {
-			pm.close();
-		}
+	public FieldDaoImpl() {
+		super(FieldEntity.class);
 	}
-	
-	@Override
-	public FieldEntity getById(final String id) {
-		if (id == null) {
-			return null;
-		}
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			return pm.getObjectById(FieldEntity.class, id);
-		}
-		catch (NucleusObjectNotFoundException e) {
-			return null;
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
+
 	@Override
 	public List<FieldEntity> getByForm(final FormEntity form) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + FieldEntity.class.getName()
+		String query = "select from " + FieldEntity.class.getName()
 				+ " where formId == pFormId parameters String pFormId";
-			List<FieldEntity> result = (List<FieldEntity>)pm.newQuery(query)
-				.execute(form.getId());
-			return copy(result);
-		}
-		finally {
-			pm.close();
-		}
+		return select(query, params(form.getId()));
 	}
 	
-	@Override
-	public void remove(final String id) {
-		if (id == null) {
-			return;
-		}
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			pm.deletePersistent(pm.getObjectById(FieldEntity.class, id));
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public void remove(final List<String> ids) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			for (String id : ids) {
-				pm.deletePersistent(pm.getObjectById(FieldEntity.class, id));
-			}
-		}
-		finally {
-			pm.close();
-		}
-	}
-
 	@Override
 	public FieldEntity getByName(final FormEntity form, final String name) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + FieldEntity.class.getName()
+		String query = "select from " + FieldEntity.class.getName()
 				+ " where formId == pFormId && name == pName"
 				+ " parameters String pFormId, String pName";
-			List<FieldEntity> result = (List<FieldEntity>)pm.newQuery(query)
-				.execute(form.getId(), name);
-			if (result.size() > 0) {
-				return result.get(0);
-			}
-			return null;
-		}
-		finally {
-			pm.close();
-		}
+		return selectOne(query, params(form.getId(), name));
 	}
 	
 }

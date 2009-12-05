@@ -28,11 +28,7 @@ import org.vosao.entity.CommentEntity;
 /**
  * @author Alexander Oleynik
  */
-public interface CommentDao extends AbstractDao {
-
-	void save(final CommentEntity page);
-	
-	CommentEntity getById(final String id);
+public interface CommentDao extends BaseDao<String, CommentEntity> {
 
 	/**
 	 * Get comments by page's friendlyURL.
@@ -49,10 +45,6 @@ public interface CommentDao extends AbstractDao {
 	 */
 	List<CommentEntity> getByPage(final String pageUrl, boolean disabled);
 
-	void remove(final String id);
-	
-	void remove(final List<String> ids);
-	
 	void enable(final List<String> ids);
 	
 	void disable(final List<String> ids);

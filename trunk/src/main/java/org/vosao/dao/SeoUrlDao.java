@@ -28,19 +28,8 @@ import org.vosao.entity.SeoUrlEntity;
 /**
  * @author Alexander Oleynik
  */
-public interface SeoUrlDao extends AbstractDao {
-
-	void save(final SeoUrlEntity entity);
-	
-	SeoUrlEntity getById(final String id);
+public interface SeoUrlDao extends BaseDao<String, SeoUrlEntity> {
 
 	SeoUrlEntity getByFrom(final String from);
 
-	List<SeoUrlEntity> select();
-	
-	void remove(final String id);
-	
-	void remove(final List<String> ids);
-	
-	
 }

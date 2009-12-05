@@ -28,21 +28,11 @@ import org.vosao.entity.MessageEntity;
 /**
  * @author Alexander Oleynik
  */
-public interface MessageDao extends AbstractDao {
-
-	void save(final MessageEntity entity);
-	
-	MessageEntity getById(final String id);
+public interface MessageDao extends BaseDao<String, MessageEntity> {
 
 	List<MessageEntity> selectByCode(final String code);
 	
-	List<MessageEntity> select();
-
 	MessageEntity getByCode(final String code, final String languageCode);
-
-	void remove(final String id);
-	
-	void remove(final List<String> ids);
 
 	List<MessageEntity> select(final String languageCode);
 	

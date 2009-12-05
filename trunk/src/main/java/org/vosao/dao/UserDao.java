@@ -29,22 +29,12 @@ import org.vosao.enums.UserRole;
 /**
  * @author Alexander Oleynik
  */
-public interface UserDao extends AbstractDao {
-
-	void save(final UserEntity entity);
-	
-	UserEntity getById(final Long id);
+public interface UserDao extends BaseDao<Long, UserEntity> {
 
 	UserEntity getByEmail(final String email);
 
 	List<UserEntity> getByRole(final UserRole role);
 
-	List<UserEntity> select();
-	
-	void remove(final Long id);
-	
-	void remove(final List<Long> ids);
-	
 	List<UserEntity> selectByGroup(final Long groupId);
 	
 }

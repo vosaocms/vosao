@@ -26,20 +26,12 @@ import java.util.List;
 import org.vosao.entity.FileChunkEntity;
 import org.vosao.entity.FileEntity;
 
-public interface FileDao extends AbstractDao {
-
-	void save(final FileEntity page);
-	
-	FileEntity getById(final String id);
+public interface FileDao extends BaseDao<String, FileEntity> {
 
 	List<FileEntity> getByFolder(final String folderId);
 
 	FileEntity getByName(final String folderId, final String name);
 
-	void remove(final String id);
-	
-	void remove(final List<String> ids);
-	
 	void save(final FileEntity file, byte[] content);
 	
 	byte[] getFileContent(final FileEntity file);

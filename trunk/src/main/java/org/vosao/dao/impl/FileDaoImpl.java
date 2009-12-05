@@ -30,45 +30,18 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 
-import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.FileDao;
 import org.vosao.entity.FileChunkEntity;
 import org.vosao.entity.FileEntity;
 
-public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
+public class FileDaoImpl extends BaseDaoImpl<String, FileEntity> 
+		implements FileDao {
 
-	public void save(final FileEntity entity) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			if (entity.getId() != null) {
-				FileEntity p = pm.getObjectById(FileEntity.class, entity.getId());
-				p.copy(entity);
-			}
-			else {
-				pm.makePersistent(entity);
-			}
-		}
-		finally {
-			pm.close();
-		}
+	public FileDaoImpl() {
+		super(FileEntity.class);
 	}
-	
-	public FileEntity getById(final String id) {
-		if (id == null) {
-			return null;
-		}
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			return pm.getObjectById(FileEntity.class, id);
-		}
-		catch (NucleusObjectNotFoundException e) {
-			return null;
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
+
+	@Override
 	public void remove(final String fileId) {
 		if (fileId == null) {
 			return;
@@ -91,6 +64,7 @@ public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 		}
 	}
 	
+	@Override
 	public void remove(final List<String> ids) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
@@ -106,36 +80,17 @@ public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 
 	@Override
 	public List<FileEntity> getByFolder(String folderId) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + FileEntity.class.getName()
+		String query = "select from " + FileEntity.class.getName()
 			    + " where folderId == pFolderId parameters String pFolderId";
-			List<FileEntity> result = (List<FileEntity>)pm.newQuery(query)
-				.execute(folderId);
-			return copy(result);
-		}
-		finally {
-			pm.close();
-		}
+		return select(query, params(folderId));
 	}
 
 	@Override
 	public FileEntity getByName(String folderId, String name) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + FileEntity.class.getName()
+		String query = "select from " + FileEntity.class.getName()
 			    + " where folderId == pFolderId && filename == pName" 
 			    + " parameters String pFolderId, String pName";
-			List<FileEntity> result = (List<FileEntity>)pm.newQuery(query)
-				.execute(folderId, name);
-			if (result.size() > 0) {
-				return result.get(0);
-			}
-			return null;
-		}
-		finally {
-			pm.close();
-		}
+		return selectOne(query, params(folderId, name));
 	}
 
 	@Override
@@ -150,6 +105,7 @@ public class FileDaoImpl extends AbstractDaoImpl implements FileDao {
 	
 	public static int ENTITY_SIZE_LIMIT = 1000000; 
 	
+	@Override
 	public List<FileChunkEntity> createChunks(FileEntity file, 
 			byte[] content) {
 		List<FileChunkEntity> result = new ArrayList<FileChunkEntity>();

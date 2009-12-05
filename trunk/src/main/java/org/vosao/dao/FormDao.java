@@ -21,25 +21,13 @@
 
 package org.vosao.dao;
 
-import java.util.List;
-
 import org.vosao.entity.FormConfigEntity;
 import org.vosao.entity.FormEntity;
 
-public interface FormDao extends AbstractDao {
-
-	void save(final FormEntity entity);
-	
-	FormEntity getById(final String id);
+public interface FormDao extends BaseDao<String, FormEntity> {
 
 	FormEntity getByName(final String name);
 
-	List<FormEntity> select();
-	
-	void remove(final String id);
-	
-	void remove(final List<String> ids);
-	
 	FormConfigEntity getConfig();
 
 	void save(final FormConfigEntity entity);

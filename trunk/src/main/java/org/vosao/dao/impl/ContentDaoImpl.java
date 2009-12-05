@@ -23,110 +23,36 @@ package org.vosao.dao.impl;
 
 import java.util.List;
 
-import javax.jdo.PersistenceManager;
-
-import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.ContentDao;
 import org.vosao.entity.ContentEntity;
 
-public class ContentDaoImpl extends AbstractDaoImpl implements ContentDao {
+public class ContentDaoImpl extends BaseDaoImpl<String, ContentEntity> 
+		implements ContentDao {
 
-	@Override
-	public void save(final ContentEntity entity) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			if (entity.getId() != null) {
-				ContentEntity p = pm.getObjectById(ContentEntity.class, 
-						entity.getId());
-				p.copy(entity);
-			}
-			else {
-				pm.makePersistent(entity);
-			}
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public ContentEntity getById(final String id) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			return pm.getObjectById(ContentEntity.class, id);
-		}
-		catch (NucleusObjectNotFoundException e) {
-			return null;
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public void remove(final String id) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			pm.deletePersistent(pm.getObjectById(ContentEntity.class, id));
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public void remove(final List<String> ids) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			for (String id : ids) {
-				pm.deletePersistent(pm.getObjectById(ContentEntity.class, id));
-			}
-		}
-		finally {
-			pm.close();
-		}
+	public ContentDaoImpl() {
+		super(ContentEntity.class);
 	}
 
 	@Override
 	public List<ContentEntity> select(final String parentClass, 
 			final String parentKey) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + ContentEntity.class.getName() 
+		String query = "select from " + ContentEntity.class.getName() 
 					+ " where parentClass == pParentClass" 
 					+ "   && parentKey == pParentKey" 
 					+ " parameters String pParentClass, String pParentKey";
-			List<ContentEntity> result = (List<ContentEntity>) 
-					pm.newQuery(query).execute(parentClass, parentKey);
-			return copy(result);
-		}
-		finally {
-			pm.close();
-		}
+		return select(query, params(parentClass, parentKey));
 	}
 	
 	@Override
 	public ContentEntity getByLanguage(final String parentClass, 
 			final String parentKey, final String language) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + ContentEntity.class.getName() 
+		String query = "select from " + ContentEntity.class.getName() 
 					+ " where parentClass == pParentClass" 
 					+ "   && parentKey == pParentKey"
 					+ "   && languageCode == pLanguage"
 					+ " parameters String pParentClass, String pParentKey," 
 					+ "   String pLanguage";
-			List<ContentEntity> result =  (List<ContentEntity>)
-					pm.newQuery(query).execute(
-							parentClass, parentKey, language);
-			if (result.size() > 0) {
-				return result.get(0);
-			}
-			return null;
-		}
-		finally {
-			pm.close();
-		}
+		return selectOne(query, params(parentClass, parentKey, language));
 	}
 	
 }

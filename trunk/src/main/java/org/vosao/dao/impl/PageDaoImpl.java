@@ -29,7 +29,6 @@ import java.util.Map;
 
 import javax.jdo.PersistenceManager;
 
-import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.ContentDao;
 import org.vosao.dao.PageDao;
 import org.vosao.entity.ContentEntity;
@@ -38,85 +37,15 @@ import org.vosao.entity.PageEntity;
 /**
  * @author Alexander Oleynik
  */
-public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
+public class PageDaoImpl extends BaseDaoImpl<String, PageEntity> 
+		implements PageDao {
 
 	private static final String PAGE_CLASS_NAME = PageEntity.class.getName();
 
 	private ContentDao contentDao;
 	
-	@Override
-	public void save(final PageEntity page) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			if (page.getId() != null) {
-				PageEntity p = pm.getObjectById(PageEntity.class, page.getId());
-				p.copy(page);
-			}
-			else {
-				pm.makePersistent(page);
-			}
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public PageEntity getById(final String id) {
-		if (id == null) {
-			return null;
-		}
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			return pm.getObjectById(PageEntity.class, id);
-		}
-		catch (NucleusObjectNotFoundException e) {
-			return null;
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public List<PageEntity> select() {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + PageEntity.class.getName();
-			List<PageEntity> result = filterLatestVersion((List<PageEntity>)
-					pm.newQuery(query).execute());
-			return copy(result);
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public void remove(final String id) {
-		if (id == null) {
-			return;
-		}
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			removePage(id, pm);
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public void remove(final List<String> ids) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			for (String id : ids) {
-				removePage(id, pm);
-			}
-		}
-		finally {
-			pm.close();
-		}
+	public PageDaoImpl() {
+		super(PageEntity.class);
 	}
 
 	private void removePage(String pageId, PersistenceManager pm) {
@@ -131,19 +60,13 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 	
 	@Override
 	public List<PageEntity> getByParent(final String url) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + PageEntity.class.getName()
+		String query = "select from " + PageEntity.class.getName()
 			    + " where parentUrl == pParentUrl" 
 			    + " parameters String pParentUrl";
-			List<PageEntity> result = filterLatestVersion((List<PageEntity>)
-					pm.newQuery(query).execute(url));
-			Collections.sort(result, new PageEntity.PublishDateDesc());
-			return copy(result);
-		}
-		finally {
-			pm.close();
-		}
+		List<PageEntity> result = filterLatestVersion(
+				select(query, params(url)));
+		Collections.sort(result, new PageEntity.PublishDateDesc());
+		return result;
 	}
 
 	@Override
@@ -227,54 +150,30 @@ public class PageDaoImpl extends AbstractDaoImpl implements PageDao {
 	
 	@Override
 	public List<PageEntity> selectByUrl(final String url) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + PageEntity.class.getName()
+		String query = "select from " + PageEntity.class.getName()
 			    + " where friendlyURL == pUrl"
 			    + " parameters String pUrl";
-			List<PageEntity> result = (List<PageEntity>)
-					pm.newQuery(query).execute(url);
-			Collections.sort(result, new PageEntity.VersionAsc());
-			return result;
-		}
-		finally {
-			pm.close();
-		}
+		List<PageEntity> result = select(query, params(url));
+		Collections.sort(result, new PageEntity.VersionAsc());
+		return result;
 	}
 	
 	@Override
 	public PageEntity getByUrlVersion(final String url, final Integer version) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + PageEntity.class.getName()
+		String query = "select from " + PageEntity.class.getName()
 			    + " where friendlyURL == pUrl && version == pVersion"
 			    + " parameters String pUrl, Integer pVersion";
-			List<PageEntity> result = (List<PageEntity>)
-					pm.newQuery(query).execute(url, version);
-			if (result.size() > 0) {
-				return result.get(0);
-			}
-			return null;
-		}
-		finally {
-			pm.close();
-		}
+		return selectOne(query, params(url, version));
 	}
 	
 	@Override
 	public List<PageEntity> getByParentApproved(final String url) {
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			String query = "select from " + PageEntity.class.getName()
+		String query = "select from " + PageEntity.class.getName()
 			    + " where parentUrl == pParentUrl" 
 			    + " parameters String pParentUrl";
-			List<PageEntity> result = filterApproved((List<PageEntity>)
-					pm.newQuery(query).execute(url));
-			Collections.sort(result, new PageEntity.PublishDateDesc());
-			return result;
-		}
-		finally {
-			pm.close();
-		}
+		List<PageEntity> result = filterApproved(select(
+					query, params(url)));
+		Collections.sort(result, new PageEntity.PublishDateDesc());
+		return result;
 	}
 }

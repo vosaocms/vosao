@@ -39,9 +39,6 @@ public class UserEntity implements Serializable {
 
 	private static final long serialVersionUID = 2L;
 
-	public static UserEntity GUEST = new UserEntity("guest","","",
-			UserRole.GUEST);
-	
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Long id;

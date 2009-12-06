@@ -22,6 +22,7 @@
 package org.vosao.dao;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface BaseDao<K, T> extends AbstractDao {
@@ -35,7 +36,7 @@ public interface BaseDao<K, T> extends AbstractDao {
 	void remove(final List<K> ids);
 
 	List<T> select();
-
+	
 	List<T> select(String query, Object[] params);
 
 	T selectOne(String query, Object[] params);

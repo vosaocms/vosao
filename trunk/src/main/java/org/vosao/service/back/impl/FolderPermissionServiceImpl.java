@@ -32,6 +32,7 @@ import org.vosao.business.CurrentUser;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FolderPermissionEntity;
 import org.vosao.entity.GroupEntity;
+import org.vosao.entity.helper.GroupHelper;
 import org.vosao.enums.FolderPermissionType;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.FolderPermissionService;
@@ -102,7 +103,7 @@ public class FolderPermissionServiceImpl extends AbstractServiceImpl
 		List<FolderPermissionEntity> direct = getDao()
 				.getFolderPermissionDao().selectByFolder(folderId);
 		logger.info("direct " + direct.size());
-		Map<Long, GroupEntity> groups = GroupEntity.createIdMap(getDao()
+		Map<Long, GroupEntity> groups = GroupHelper.createIdMap(getDao()
 				.getGroupDao().select());
 		List<FolderPermissionVO> result = new ArrayList<FolderPermissionVO>();
 		for (FolderPermissionEntity perm : inherited) {

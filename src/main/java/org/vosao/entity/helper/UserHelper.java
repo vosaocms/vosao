@@ -9,10 +9,7 @@ import org.vosao.enums.UserRole;
 
 public class UserHelper {
 
-	public static UserEntity GUEST = new UserEntity("guest","","",
-			UserRole.GUEST);
-
-	public static Map<Long, UserEntity> getMap(List<UserEntity> list) {
+	public static Map<Long, UserEntity> createIdMap(List<UserEntity> list) {
 		Map<Long, UserEntity> map = new HashMap<Long, UserEntity>();
 		for (UserEntity user : list) {
 			map.put(user.getId(), user);

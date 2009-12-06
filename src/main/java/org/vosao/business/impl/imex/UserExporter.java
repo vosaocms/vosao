@@ -29,6 +29,7 @@ import org.vosao.business.Business;
 import org.vosao.dao.Dao;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.UserRole;
+import static org.vosao.utils.XmlUtil.notNull;
 
 /**
  * @author Alexander Oleynik
@@ -51,7 +52,7 @@ public class UserExporter extends AbstractExporter {
 		Element userElement = usersElement.addElement("user");
 		userElement.addElement("name").setText(user.getName());
 		userElement.addElement("email").setText(user.getEmail());
-		userElement.addElement("password").setText(user.getPassword());
+		userElement.addElement("password").setText(notNull(user.getPassword()));
 		userElement.addElement("role").setText(user.getRole().name());
 	}
 	

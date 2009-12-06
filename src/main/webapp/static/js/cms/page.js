@@ -551,6 +551,13 @@ function getPermissionName(perm) {
 	}
 }
 
+function callLoadPermissions() {
+	jsonrpc.contentPermissionService.selectByUrl(function (r) {
+		pageRequest.permissions = r;
+		loadPermissions();
+	}, page.friendlyURL);
+}
+
 function loadPermissions() {
 	var r = pageRequest.permissions;
 	permissions = idMap(r.list);
@@ -641,7 +648,7 @@ function onPermissionSave() {
 		showServiceMessages(r);
 		$('#permission-dialog').dialog('close');
 		if (r.result == 'success') {
-			loadPermissions();
+			callLoadPermissions();
 		}
 	}, javaMap(vo));
 }
@@ -664,7 +671,7 @@ function onDeletePermission() {
 	if (confirm('Are you sure?')) {
 		jsonrpc.contentPermissionService.remove(function(r) {
 			showServiceMessages(r);
-			loadPermissions();
+			callLoadPermissions();
 		}, javaList(ids));
 	}
 }

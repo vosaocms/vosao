@@ -71,6 +71,9 @@ public class XmlUtil {
 		}
 	}
 
-	
+	public static String notNull(String s) {
+		if (s == null) return "";
+		return s;
+	}
 	
 }

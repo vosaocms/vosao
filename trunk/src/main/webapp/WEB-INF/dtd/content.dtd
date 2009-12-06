@@ -22,10 +22,11 @@
 -->
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE site [
-<!ELEMENT site (config,pages,forms,users)>
+<!ELEMENT site (users,groups,config,pages,forms,folders)>
 
 <!ELEMENT config (google-analytics,email,domain,edit-ext,recaptchaPrivateKey,
-recaptchaPublicKey,commentsEmail,commentsTemplate,enableRecaptcha,languages)>
+recaptchaPublicKey,commentsEmail,commentsTemplate,enableRecaptcha,languages,
+siteUserLoginUrl)>
 
 <!ELEMENT google-analytics (#PCDATA)>
 <!ELEMENT email (#PCDATA)>
@@ -38,10 +39,11 @@ recaptchaPublicKey,commentsEmail,commentsTemplate,enableRecaptcha,languages)>
 <!ELEMENT enableRecaptcha (#PCDATA)>
 <!ELEMENT languages (language*)>
 <!ELEMENT language EMPTY>
+<!ELEMENT siteUserLoginUrl (#PCDATA)>
 
 <!ELEMENT pages (page*)>
 <!ELEMENT page (version,versionTitle,state,createUserEmail,modUserEmail,
-createDate,modDate,content*,page-version*,comments,page*)>
+createDate,modDate,content*,page-version*,comments,page*,permissions)>
 
 <!ELEMENT version (#PCDATA)>
 <!ELEMENT versionTitle (#PCDATA)>
@@ -55,6 +57,13 @@ createDate,modDate,content*,page-version*,comments,page*)>
 createDate,modDate,content*)>
 <!ELEMENT comments (comment*)>
 <!ELEMENT comment (#PCDATA)>
+
+<!ELEMENT permissions (permission*)>
+<!ELEMENT permission (group,permissionType,allLanguages,languages)>
+<!ELEMENT group (#PCDATA)>
+<!ELEMENT permission-type (#PCDATA)>
+<!ELEMENT allLanguages (#PCDATA)>
+<!ELEMENT languages (#PCDATA)>
 
 <!ELEMENT forms (form-config,form*)>
 
@@ -70,6 +79,19 @@ createDate,modDate,content*)>
 <!ELEMENT name (#PCDATA)>
 <!ELEMENT password (#PCDATA)>
 <!ELEMENT role (#PCDATA)>
+
+<!ELEMENT groups (group*)>
+<!ELEMENT group (name,users)>
+<!ELEMENT users (user*)>
+<!ELEMENT user (#PCDATA)>
+
+<!ELEMENT folders (folder*)>
+<!ELEMENT folder (name,title,permissions,folder*)>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT permissions (permission*)>
+<!ELEMENT permission (group,permissionType)>
+<!ELEMENT group (#PCDATA)>
+<!ELEMENT permissionType (#PCDATA)>
 
 <!ATTLIST language code CDATA #REQUIERED>
 <!ATTLIST language title CDATA #REQUIERED>

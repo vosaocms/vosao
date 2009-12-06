@@ -70,12 +70,19 @@ input[type=text], input[type=password], select {
 #topbar {
 	border-bottom: 1px solid #a5c4d5;
 	padding: 4px;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	background-color: white;
+	z-index: 1;
 }
 #leftmenu {
 	float: left;
 }
 #rightmenu {
     float: right;
+    padding-right: 4px;
 }
 #topbar #leftmenu a, #topbar #rightmenu a {
 	padding: 2px 4px;
@@ -87,7 +94,7 @@ input[type=text], input[type=password], select {
 }
 
 #wrapper {
-	margin: 20px;
+	margin: 40px 20px 20px 20px;
 }
 #wrapper textarea {
     font-family: monospace;

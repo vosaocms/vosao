@@ -30,6 +30,7 @@ import org.vosao.dao.Dao;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.utils.XmlUtil;
+import static org.vosao.utils.XmlUtil.notNull;;
 
 public class ConfigExporter extends AbstractExporter {
 
@@ -40,41 +41,28 @@ public class ConfigExporter extends AbstractExporter {
 	public void createConfigXML(Element siteElement) {
 		Element configElement = siteElement.addElement("config");
 		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
-		if (config.getGoogleAnalyticsId() != null) {
-			Element googleAnalytics = configElement.addElement("google-analytics");
-			googleAnalytics.setText(config.getGoogleAnalyticsId());
-		}
-		if (config.getSiteEmail() != null) {
-			Element siteEmail = configElement.addElement("email");
-			siteEmail.setText(config.getSiteEmail());
-		}
-		if (config.getSiteDomain() != null) {
-			Element siteDomain = configElement.addElement("domain");
-			siteDomain.setText(config.getSiteDomain());
-		}
-		if (config.getEditExt() != null) {
-			Element editExt = configElement.addElement("edit-ext");
-			editExt.setText(config.getEditExt());
-		}
-		if (config.getRecaptchaPrivateKey() != null) {
-			Element recaptcha = configElement.addElement("recaptchaPrivateKey");
-			recaptcha.setText(config.getRecaptchaPrivateKey());
-		}
-		if (config.getRecaptchaPublicKey() != null) {
-			Element elem = configElement.addElement("recaptchaPublicKey");
-			elem.setText(config.getRecaptchaPublicKey());
-		}
-		if (config.getCommentsEmail() != null) {
-			Element elem = configElement.addElement("commentsEmail");
-			elem.setText(config.getCommentsEmail());
-		}
-		if (config.getCommentsTemplate() != null) {
-			Element elem = configElement.addElement("commentsTemplate");
-			elem.setText(config.getCommentsTemplate());
-		}
+		configElement.addElement("google-analytics").setText(notNull(
+				config.getGoogleAnalyticsId()));
+		configElement.addElement("email").setText(notNull(
+				config.getSiteEmail()));
+		configElement.addElement("domain").setText(notNull(
+				config.getSiteDomain()));
+		configElement.addElement("edit-ext").setText(notNull(
+				config.getEditExt()));
+		configElement.addElement("recaptchaPrivateKey").setText(notNull(
+				config.getRecaptchaPrivateKey()));
+		configElement.addElement("recaptchaPublicKey").setText(notNull(
+				config.getRecaptchaPublicKey()));
+		configElement.addElement("commentsEmail").setText(notNull(
+				config.getCommentsEmail()));
+		configElement.addElement("commentsTemplate").setText(notNull(
+				config.getCommentsTemplate()));
 		configElement.addElement("enableRecaptcha").setText(
-				String.valueOf(config.isEnableRecaptcha()));
-		configElement.addElement("version").setText(config.getVersion());
+			String.valueOf(config.isEnableRecaptcha()));
+		configElement.addElement("version").setText(notNull(
+				config.getVersion()));
+		configElement.addElement("siteUserLoginUrl").setText(notNull(
+				config.getSiteUserLoginUrl()));
 		createLanguagesXML(configElement);
 	}
 
@@ -125,6 +113,9 @@ public class ConfigExporter extends AbstractExporter {
             if (element.getName().equals("enableRecaptcha")) {
             	config.setEnableRecaptcha(XmlUtil.readBooleanText(
             			element, false));
+            }
+            if (element.getName().equals("siteUserLoginUrl")) {
+            	config.setSiteUserLoginUrl(element.getText());
             }
 		}
 		getDao().getConfigDao().save(config);

@@ -32,9 +32,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.Business;
-import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.dao.Dao;
-import org.vosao.entity.PageEntity;
 import org.vosao.servlet.FolderUtil;
 
 public class SiteExporter extends AbstractExporter {
@@ -43,6 +41,8 @@ public class SiteExporter extends AbstractExporter {
 	private PageExporter pageExporter;
 	private FormExporter formExporter;
 	private UserExporter userExporter;
+	private GroupExporter groupExporter;
+	private FolderExporter folderExporter;
 
 	public SiteExporter(Dao aDao, Business aBusiness) {
 		super(aDao, aBusiness);
@@ -50,6 +50,8 @@ public class SiteExporter extends AbstractExporter {
 		pageExporter = new PageExporter(aDao, aBusiness);
 		formExporter = new FormExporter(aDao, aBusiness);
 		userExporter = new UserExporter(aDao, aBusiness);
+		groupExporter = new GroupExporter(aDao, aBusiness);
+		folderExporter = new FolderExporter(aDao, aBusiness);
 	}
 
 	public boolean isSiteContent(final ZipEntry entry)
@@ -72,10 +74,12 @@ public class SiteExporter extends AbstractExporter {
 	private String createSiteExportXML() {
 		Document doc = DocumentHelper.createDocument();
 		Element siteElement = doc.addElement("site");
+		userExporter.createUsersXML(siteElement);
+		groupExporter.createGroupsXML(siteElement);
 		configExporter.createConfigXML(siteElement);
 		pageExporter.createPagesXML(siteElement);
 		formExporter.createFormsXML(siteElement);
-		userExporter.createUsersXML(siteElement);
+		folderExporter.createFoldersXML(siteElement);
 		return doc.asXML();
 	}
 	
@@ -97,6 +101,12 @@ public class SiteExporter extends AbstractExporter {
 			}
 			if (element.getName().equals("users")) {
 				userExporter.readUsers(element);
+			}
+			if (element.getName().equals("groups")) {
+				groupExporter.readGroups(element);
+			}
+			if (element.getName().equals("folders")) {
+				folderExporter.readFolders(element);
 			}
 		}
 	}

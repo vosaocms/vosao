@@ -55,6 +55,7 @@ public class PageExporter extends AbstractExporter {
 	private ConfigExporter configExporter;
 	private FormExporter formExporter;
 	private UserExporter userExporter;
+	private PagePermissionExporter pagePermissionExporter;
 	
 	public PageExporter(Dao aDao, Business aBusiness) {
 		super(aDao, aBusiness);
@@ -62,6 +63,7 @@ public class PageExporter extends AbstractExporter {
 		configExporter = new ConfigExporter(aDao, aBusiness);
 		formExporter = new FormExporter(aDao, aBusiness);
 		userExporter = new UserExporter(aDao, aBusiness);
+		pagePermissionExporter = new PagePermissionExporter(aDao, aBusiness);
 	}
 	
 	private void createPageXML(TreeItemDecorator<PageEntity> page,
@@ -73,6 +75,8 @@ public class PageExporter extends AbstractExporter {
 		for (TreeItemDecorator<PageEntity> child : page.getChildren()) {
 			createPageXML(child, pageElement);
 		}
+		pagePermissionExporter.createPagePermissionsXML(pageElement, 
+				page.getEntity().getFriendlyURL());
 	}
 	
 	private void createPageVersionXML(PageEntity page, Element pageElement) {
@@ -179,6 +183,10 @@ public class PageExporter extends AbstractExporter {
 			}
 			if (element.getName().equals("page-version")) {
 				readPageVersion(element);
+			}
+			if (element.getName().equals("permissions")) {
+				pagePermissionExporter.readPagePermissions(element, 
+						page.getFriendlyURL());
 			}
 		}
 	}

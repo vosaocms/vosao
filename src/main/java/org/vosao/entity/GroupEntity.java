@@ -40,15 +40,6 @@ public class GroupEntity implements Serializable {
 
 	private static final long serialVersionUID = 2L;
 
-	public static Map<Long, GroupEntity> createIdMap(
-			final List<GroupEntity> list) {
-		Map<Long, GroupEntity> result = new HashMap<Long, GroupEntity>();
-		for (GroupEntity group : list) {
-			result.put(group.getId(), group);
-		}
-		return result;
-	}
-	
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Long id;

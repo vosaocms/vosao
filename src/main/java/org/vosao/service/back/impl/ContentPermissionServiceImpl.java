@@ -31,6 +31,7 @@ import org.datanucleus.util.StringUtils;
 import org.vosao.business.CurrentUser;
 import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.GroupEntity;
+import org.vosao.entity.helper.GroupHelper;
 import org.vosao.enums.ContentPermissionType;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.ContentPermissionService;
@@ -92,7 +93,7 @@ public class ContentPermissionServiceImpl extends AbstractServiceImpl
 		List<ContentPermissionEntity> inherited = getBusiness()
 				.getContentPermissionBusiness().getInheritedPermissions(
 						UrlUtil.getParentFriendlyURL(pageUrl));
-		Map<Long, GroupEntity> groups = GroupEntity.createIdMap(getDao()
+		Map<Long, GroupEntity> groups = GroupHelper.createIdMap(getDao()
 				.getGroupDao().select());
 		List<ContentPermissionVO> result = new ArrayList<ContentPermissionVO>();
 		for (ContentPermissionEntity perm : inherited) {

@@ -42,19 +42,6 @@ public class CommentEntity implements Serializable {
 
 	private static final long serialVersionUID = 7L;
 
-	public static class PublishDateDesc implements Comparator<CommentEntity> {
-		@Override
-		public int compare(CommentEntity o1, CommentEntity o2) {
-			if (o1.getPublishDate().after(o2.getPublishDate())) {
-				return -1;
-			}
-			if (o1.getPublishDate().equals(o2.getPublishDate())) {
-				return 0;
-			}
-			return 1;
-		}
-	}
-
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")

@@ -33,6 +33,7 @@ import org.vosao.dao.ContentDao;
 import org.vosao.dao.PageDao;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.helper.PageHelper;
 
 /**
  * @author Alexander Oleynik
@@ -65,7 +66,7 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 			    + " parameters String pParentUrl";
 		List<PageEntity> result = filterLatestVersion(
 				select(query, params(url)));
-		Collections.sort(result, new PageEntity.PublishDateDesc());
+		Collections.sort(result, new PageHelper.PublishDateDesc());
 		return result;
 	}
 
@@ -154,7 +155,7 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 			    + " where friendlyURL == pUrl"
 			    + " parameters String pUrl";
 		List<PageEntity> result = select(query, params(url));
-		Collections.sort(result, new PageEntity.VersionAsc());
+		Collections.sort(result, new PageHelper.VersionAsc());
 		return result;
 	}
 	
@@ -173,7 +174,7 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 			    + " parameters String pParentUrl";
 		List<PageEntity> result = filterApproved(select(
 					query, params(url)));
-		Collections.sort(result, new PageEntity.PublishDateDesc());
+		Collections.sort(result, new PageHelper.PublishDateDesc());
 		return result;
 	}
 }

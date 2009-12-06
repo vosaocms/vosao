@@ -29,6 +29,7 @@ import javax.jdo.PersistenceManager;
 import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.CommentDao;
 import org.vosao.entity.CommentEntity;
+import org.vosao.entity.helper.CommentHelper;
 
 /**
  * @author Alexander Oleynik
@@ -45,7 +46,7 @@ public class CommentDaoImpl extends BaseDaoImpl<String, CommentEntity>
 		String query = "select from " + CommentEntity.class.getName()
 			    + " where pageUrl == pPageUrl parameters String pPageUrl";
 		List<CommentEntity> result = select(query, params(pageUrl));
-		Collections.sort(result, new CommentEntity.PublishDateDesc());
+		Collections.sort(result, new CommentHelper.PublishDateDesc());
 		return result;
 	}
 	
@@ -99,7 +100,7 @@ public class CommentDaoImpl extends BaseDaoImpl<String, CommentEntity>
 			    + " where pageUrl == pPageUrl && disabled == pDisabled"
 			    + " parameters String pPageUrl, boolean pDisabled";
 		List<CommentEntity> result = select(query, params(pageUrl, disabled));
-		Collections.sort(result, new CommentEntity.PublishDateDesc());
+		Collections.sort(result, new CommentHelper.PublishDateDesc());
 		return result;
 	}
 	

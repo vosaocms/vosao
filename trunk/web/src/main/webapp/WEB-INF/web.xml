@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5">
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            /WEB-INF/applicationContext.xml,
+            /WEB-INF/setupContext.xml
+        </param-value>
+    </context-param>
+
+    <!-- Spring Listener -->
+    
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>
+            org.springframework.web.context.request.RequestContextListener
+        </listener-class>
+    </listener>
+
+    <!-- GAE specific InitFilter -->
+    
+    <filter>
+        <filter-name>InitFilter</filter-name>
+        <filter-class>org.vosao.filter.InitFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>InitFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>    
+
+    <!-- Update filter -->
+    
+    <filter>
+        <filter-name>UpdateFilter</filter-name>
+        <filter-class>org.vosao.filter.UpdateFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>UpdateFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>    
+
+    <!-- i18n filter -->
+    
+    <filter>
+        <filter-name>LanguageFilter</filter-name>
+        <filter-class>org.vosao.filter.LanguageFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LanguageFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>    
+
+    <!-- AuthenticationFilter -->
+    
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>org.vosao.filter.AuthenticationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>    
+
+    <!-- ServiceFilter -->
+    
+    <filter>
+        <filter-name>ServiceFilter</filter-name>
+        <filter-class>org.vosao.filter.ServiceFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ServiceFilter</filter-name>
+        <url-pattern>/JSON-RPC/*</url-pattern>
+    </filter-mapping>    
+
+    <!-- SiteFilter -->
+    
+    <filter>
+        <filter-name>SiteFilter</filter-name>
+        <filter-class>org.vosao.filter.SiteFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SiteFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>    
+
+    <!-- Sitemesh -->
+    
+    <filter>
+        <filter-name>sitemesh</filter-name>
+        <filter-class>
+            com.opensymphony.module.sitemesh.filter.PageFilter
+        </filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>sitemesh</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>    
+
+    <!-- JSON-RPC -->
+
+    <servlet>
+        <servlet-name>org.jabsorb.JSONRPCServlet</servlet-name>
+        <servlet-class>org.jabsorb.JSONRPCServlet</servlet-class>
+        <init-param>
+            <param-name>gzip_threshold</param-name>
+            <param-value>200</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>org.jabsorb.JSONRPCServlet</servlet-name>
+        <url-pattern>/JSON-RPC/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- File upload servlet -->
+
+    <servlet>
+        <servlet-name>FileUpload</servlet-name>
+        <servlet-class>org.vosao.servlet.FileUploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FileUpload</servlet-name>
+        <url-pattern>/cms/upload</url-pattern>
+    </servlet-mapping>
+
+    <!-- File export servlet -->
+
+    <servlet>
+        <servlet-name>ExportUpload</servlet-name>
+        <servlet-class>org.vosao.servlet.ExportServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ExportUpload</servlet-name>
+        <url-pattern>/cms/export</url-pattern>
+    </servlet-mapping>
+
+    <!-- File download servlet -->
+
+    <servlet>
+        <servlet-name>FileDownload</servlet-name>
+        <servlet-class>org.vosao.servlet.FileDownloadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FileDownload</servlet-name>
+        <url-pattern>/file/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Form plugin send servlet -->
+
+    <servlet>
+        <servlet-name>FormSend</servlet-name>
+        <servlet-class>org.vosao.servlet.FormSendServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FormSend</servlet-name>
+        <url-pattern>/plugin/form/send</url-pattern>
+    </servlet-mapping>
+    
+</web-app>

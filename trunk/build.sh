@@ -1,1 +1,1 @@
-mvn -Dappname=vosaocms clean package
+mvn -Dappname=vosaocms clean install

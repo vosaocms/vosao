@@ -1,0 +1,32 @@
+Hi,
+
+<p>User has filled out a form $form.title on the site $config.siteDomain</p>
+<table>
+#foreach($field in $fields)
+
+#if($field.fieldType == 'CHECKBOX') 
+  #set($valueExists = false)
+  #foreach($f in $values.keySet())
+    #if($f.startsWith($field.name))
+      #set($valueExists = true)
+    #end
+  #end
+  #if($valueExists)
+    <tr><td>$field.title</td><td>
+    #foreach($f in $values.keySet())
+      #if($f.startsWith($field.name))
+        $values.get($f) <br/>
+      #end
+    #end
+    </td></tr>
+  #end
+#end
+
+#if($values.containsKey($field.name))
+  <tr><td>$field.title</td><td>$values.get($field.name)</td></tr>
+#end
+
+#end
+</table>
+
+<p>Best,<br/>Vosao CMS working on $config.siteDomain</p>

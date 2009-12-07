@@ -1,0 +1,129 @@
+<!-- 
+/**
+ * Vosao CMS. Simple CMS for Google App Engine.
+ * Copyright (C) 2009 Vosao development team
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * email: vosao.dev@gmail.com
+ */
+-->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE site [
+<!ELEMENT site (users,groups,config,pages,forms,folders)>
+
+<!ELEMENT config (google-analytics,email,domain,edit-ext,recaptchaPrivateKey,
+recaptchaPublicKey,commentsEmail,commentsTemplate,enableRecaptcha,languages,
+siteUserLoginUrl)>
+
+<!ELEMENT google-analytics (#PCDATA)>
+<!ELEMENT email (#PCDATA)>
+<!ELEMENT domain (#PCDATA)>
+<!ELEMENT edit-ext (#PCDATA)>
+<!ELEMENT recaptchaPrivateKey (#PCDATA)>
+<!ELEMENT recaptchaPublicKey (#PCDATA)>
+<!ELEMENT commentsEmail (#PCDATA)>
+<!ELEMENT commentsTemplate (#PCDATA)>
+<!ELEMENT enableRecaptcha (#PCDATA)>
+<!ELEMENT languages (language*)>
+<!ELEMENT language EMPTY>
+<!ELEMENT siteUserLoginUrl (#PCDATA)>
+
+<!ELEMENT pages (page*)>
+<!ELEMENT page (version,versionTitle,state,createUserEmail,modUserEmail,
+createDate,modDate,content*,page-version*,comments,page*,permissions)>
+
+<!ELEMENT version (#PCDATA)>
+<!ELEMENT versionTitle (#PCDATA)>
+<!ELEMENT state (#PCDATA)>
+<!ELEMENT createUserEmail (#PCDATA)>
+<!ELEMENT modUserEmail (#PCDATA)>
+<!ELEMENT createDate (#PCDATA)>
+<!ELEMENT modDate (#PCDATA)>
+<!ELEMENT content (#PCDATA)>
+<!ELEMENT page-version (version,versionTitle,state,createUserId,modUserId,
+createDate,modDate,content*)>
+<!ELEMENT comments (comment*)>
+<!ELEMENT comment (#PCDATA)>
+
+<!ELEMENT permissions (permission*)>
+<!ELEMENT permission (group,permissionType,allLanguages,languages)>
+<!ELEMENT group (#PCDATA)>
+<!ELEMENT permission-type (#PCDATA)>
+<!ELEMENT allLanguages (#PCDATA)>
+<!ELEMENT languages (#PCDATA)>
+
+<!ELEMENT forms (form-config,form*)>
+
+<!ELEMENT form-config (formTemplate,letterTemplate)>
+<!ELEMENT formTemplate (#PCDATA)>
+<!ELEMENT letterTemplate (#PCDATA)>
+
+<!ELEMENT form (field*)>
+<!ELEMENT field EMPTY>
+
+<!ELEMENT users (user*)>
+<!ELEMENT user (name,email,password,role)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT password (#PCDATA)>
+<!ELEMENT role (#PCDATA)>
+
+<!ELEMENT groups (group*)>
+<!ELEMENT group (name,users)>
+<!ELEMENT users (user*)>
+<!ELEMENT user (#PCDATA)>
+
+<!ELEMENT folders (folder*)>
+<!ELEMENT folder (name,title,permissions,folder*)>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT permissions (permission*)>
+<!ELEMENT permission (group,permissionType)>
+<!ELEMENT group (#PCDATA)>
+<!ELEMENT permissionType (#PCDATA)>
+
+<!ATTLIST language code CDATA #REQUIERED>
+<!ATTLIST language title CDATA #REQUIERED>
+
+<!ATTLIST page url CDATA #REQUIERED>
+<!ATTLIST page title CDATA #REQUIERED>
+<!ATTLIST page commentsEnabled CDATA #REQUIERED>
+<!ATTLIST page publishDate CDATA #REQUIERED>
+<!ATTLIST page theme CDATA #REQUIERED>
+
+<!ATTLIST content language CDATA #REQUIERED>
+
+<!ATTLIST comment name CDATA #REQUIERED>
+<!ATTLIST comment disabled CDATA #REQUIERED>
+<!ATTLIST comment publishDate CDATA #REQUIERED>
+
+<!ATTLIST form name CDATA #REQUIERED>
+<!ATTLIST form title CDATA #REQUIERED>
+<!ATTLIST form email CDATA #REQUIERED>
+<!ATTLIST form letterSubject CDATA #REQUIERED>
+<!ATTLIST form showResetButton CDATA #REQUIERED>
+<!ATTLIST form enableCaptcha CDATA #REQUIERED>
+<!ATTLIST form sendButtonTitle CDATA #REQUIERED>
+<!ATTLIST form resetButtonTitle CDATA #REQUIERED>
+
+<!ATTLIST field name CDATA #REQUIERED>
+<!ATTLIST field title CDATA #REQUIERED>
+<!ATTLIST field fieldType CDATA #REQUIERED>
+<!ATTLIST field mandatory CDATA #REQUIERED>
+<!ATTLIST field values CDATA #REQUIERED>
+<!ATTLIST field defaultValue CDATA #REQUIERED>
+<!ATTLIST field height CDATA #REQUIERED>
+<!ATTLIST field width CDATA #REQUIERED>
+
+]>

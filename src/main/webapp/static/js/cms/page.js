@@ -331,6 +331,13 @@ function onPageCancel() {
 	location.href = '/cms/pages.jsp';
 }
 
+function callLoadChildren() {
+	jsonrpc.pageService.getChildren(function(r) {
+		pageRequest.children = r;
+		loadChildren();
+	}, page.friendlyURL);
+}
+
 function loadChildren() {
 	var r = pageRequest.children;
     var html = '<table class="form-table"><tr><th></th><th>Title</th>\
@@ -366,7 +373,7 @@ function onDelete() {
 	if (confirm('Are you sure?')) {
 		jsonrpc.pageService.deletePages(function(r) {
 			showServiceMessages(r);
-			loadChildren();
+			callLoadChildren();
 		}, javaList(ids));
 	}
 }

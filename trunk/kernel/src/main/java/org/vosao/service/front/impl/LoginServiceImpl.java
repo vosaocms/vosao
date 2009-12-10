@@ -42,9 +42,14 @@ public class LoginServiceImpl extends AbstractServiceImpl
 		userPreferences.setUser(user);
 		String originalView = (String) request.getSession().getAttribute(
 				AuthenticationFilter.ORIGINAL_VIEW_KEY);
-		request.getSession().removeAttribute(
-				AuthenticationFilter.ORIGINAL_VIEW_KEY);
-		if (originalView.equals("/login.jsp")) {
+		if (originalView != null) {
+			request.getSession().removeAttribute(
+					AuthenticationFilter.ORIGINAL_VIEW_KEY);
+			if (originalView.equals("/login.jsp")) {
+				originalView = "/cms/index.jsp";
+			}
+		}
+		else {
 			originalView = "/cms/index.jsp";
 		}
 		return ServiceResponse.createSuccessResponse(originalView);

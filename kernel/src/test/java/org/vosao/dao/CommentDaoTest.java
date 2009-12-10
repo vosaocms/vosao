@@ -21,6 +21,7 @@
 
 package org.vosao.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -120,6 +121,41 @@ public class CommentDaoTest extends AbstractDaoTest {
 		assertEquals(2, list.size());
 		list = getDao().getCommentDao().getByPage(page2.getFriendlyURL(), false);
 		assertEquals(1, list.size());
+	}	
+	
+	public void testGetById()  {
+		PageEntity page = addPage("test");
+		CommentEntity c = addComment("alex", "content1", page);
+		CommentEntity c2 = getDao().getCommentDao().getById(null);
+		assertNull(c2);
+		c2 = getDao().getCommentDao().getById(c.getId());
+		assertNotNull(c2);
+		assertEquals(c.getId(), c2.getId());
+	}
+
+	public void testDisableEnable() {
+		PageEntity page = addPage("test");
+		CommentEntity alex = addComment("alex", "content1", page);
+		CommentEntity roma = addComment("roma", "content3", page);
+		CommentEntity roma1 = addComment("roma1", "content4", page);
+		CommentEntity roma3 = addComment("roma3", "content6", page);
+		List<String> ids = new ArrayList<String>();
+		ids.add(alex.getId());
+		ids.add(roma.getId());
+		getDao().getCommentDao().disable(ids);
+		CommentEntity r = getDao().getCommentDao().getById(alex.getId());
+		assertTrue(r.isDisabled());
+		r = getDao().getCommentDao().getById(roma.getId());
+		assertTrue(r.isDisabled());
+		r = getDao().getCommentDao().getById(roma1.getId());
+		assertFalse(r.isDisabled());
+		r = getDao().getCommentDao().getById(roma3.getId());
+		assertFalse(r.isDisabled());
+		getDao().getCommentDao().enable(ids);
+		r = getDao().getCommentDao().getById(alex.getId());
+		assertFalse(r.isDisabled());
+		r = getDao().getCommentDao().getById(roma.getId());
+		assertFalse(r.isDisabled());
 	}	
 	
 }

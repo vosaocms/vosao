@@ -76,9 +76,9 @@ public class CommentEntity implements Serializable {
 	}
 
 	public CommentEntity(final String aName, final String aContent, 
-			final Date aPublishDate, final String aPageId, 
+			final Date aPublishDate, final String aPageUrl, 
 			final boolean aDisabled) {
-		this(aName, aContent, aPublishDate, aPageId);
+		this(aName, aContent, aPublishDate, aPageUrl);
 		setDisabled(aDisabled);
 	}
 	

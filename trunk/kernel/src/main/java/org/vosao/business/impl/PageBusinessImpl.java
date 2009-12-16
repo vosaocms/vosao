@@ -32,6 +32,13 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.tools.generic.DateTool;
+import org.apache.velocity.tools.generic.EscapeTool;
+import org.apache.velocity.tools.generic.ListTool;
+import org.apache.velocity.tools.generic.NumberTool;
+import org.apache.velocity.tools.generic.RenderTool;
+import org.apache.velocity.tools.generic.SortTool;
+import org.apache.velocity.tools.view.tools.LinkTool;
 import org.vosao.business.ConfigBusiness;
 import org.vosao.business.ContentPermissionBusiness;
 import org.vosao.business.CurrentUser;
@@ -128,6 +135,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 				languageCode);
 		VelocityContext context = new VelocityContext();
 		ConfigEntity configEntity = getConfigBusiness().getConfig();
+		addVelocityTools(context);
 		context.put("language", language);
 		context.put("config", configEntity);
 		VelocityService velocityService = new VelocityServiceImpl(getDao(),
@@ -136,6 +144,16 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		context.put("plugin", getVelocityPluginService());
 		context.put("messages", getMessageBusiness().getBundle(languageCode));
 		return context;
+	}
+	
+	private void addVelocityTools(final VelocityContext context) {
+		context.put("date", new DateTool());
+		context.put("esc", new EscapeTool());
+		context.put("link", new LinkTool());
+		context.put("lists", new ListTool());
+		context.put("number", new NumberTool());
+		context.put("render", new RenderTool());
+		context.put("sorter", new SortTool());
 	}
 	
 	private String pagePostProcess(final String page) {

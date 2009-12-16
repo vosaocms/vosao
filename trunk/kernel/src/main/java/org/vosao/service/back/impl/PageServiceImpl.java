@@ -152,8 +152,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 			.getContentPermissionBusiness().getPermission(
 				page.getFriendlyURL(), CurrentUser.getInstance());
 		boolean approve = Boolean.valueOf(vo.get("approve"));
-		if (approve
-			&& perm.isPublishGranted()) {
+		if (approve	&& perm.isPublishGranted()) {
 			page.setState(PageState.APPROVED);
 		}
 		else {

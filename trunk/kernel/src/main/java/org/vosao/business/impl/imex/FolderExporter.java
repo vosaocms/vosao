@@ -103,14 +103,18 @@ public class FolderExporter extends AbstractExporter {
 	private void readFolder(Element element, final FolderEntity parent) {
 		String name = element.elementText("name");
 		String title = element.elementText("title");
-		FolderEntity folder = getDao().getFolderDao().getByParentName(
-				parent.getId(), name);
-		if (folder == null) {
-			folder = new FolderEntity(title, name, parent.getId());
+		FolderEntity folder;
+		if (name.equals("/") && parent.isRoot()) {
+			folder = getDao().getFolderDao().getByPath("/");
 		}
 		else {
-			folder.setTitle(title);
+			folder = getDao().getFolderDao().getByParentName(
+					parent.getId(), name);
+			if (folder == null) {
+				folder = new FolderEntity(title, name, parent.getId());
+			}
 		}
+		folder.setTitle(title);
 		getDao().getFolderDao().save(folder);
 		readFolderPermissions(element.element("permissions"), folder);
 		for (Iterator<Element> i = element.elementIterator(); i

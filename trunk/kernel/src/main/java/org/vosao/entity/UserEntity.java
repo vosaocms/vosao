@@ -140,5 +140,12 @@ public class UserEntity implements Serializable {
 		}
 		return role.equals(UserRole.ADMIN);
 	}
+
+	public boolean isSiteUser() {
+		if (role == null) {
+			return false;
+		}
+		return role.equals(UserRole.SITE_USER);
+	}
 	
 }

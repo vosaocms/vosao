@@ -33,7 +33,7 @@ import org.vosao.service.vo.FolderPermissionVO;
  * @author Alexander Oleynik
  */
 public interface FolderPermissionService extends AbstractService {
-	
+
 	ServiceResponse remove(final List<String> ids);
 
 	FolderPermissionEntity getById(final Long id);

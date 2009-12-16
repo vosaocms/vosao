@@ -37,6 +37,7 @@ public class LoginServiceImpl extends AbstractServiceImpl
 				return passwordIncorrect;
 			}
 		}
+		getBusiness().setUserPreferences(null, request);
 		UserPreferences userPreferences = getBusiness().getUserPreferences(
 				request);
 		userPreferences.setUser(user);

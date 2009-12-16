@@ -45,6 +45,8 @@ public class FolderPermissionBusinessImpl extends AbstractBusinessImpl
 
 	private static final Log logger = LogFactory.getLog(
 			FolderPermissionBusinessImpl.class);
+
+	private static final String PAGE = "/page";
 	
 	private ContentPermissionBusiness contentPermissionBusiness;
 	
@@ -170,8 +172,8 @@ public class FolderPermissionBusinessImpl extends AbstractBusinessImpl
 		String path = getDao().getFolderDao().getFolderPath(folder.getId());
 		FolderPermissionEntity result = new FolderPermissionEntity();
 		result.setPermission(FolderPermissionType.DENIED);
-		if (path.startsWith("/pages")) {
-			String pageUrl = path.equals("/pages") ? "/" : path.substring(6); 
+		if (path.startsWith(PAGE)) {
+			String pageUrl = getFolderFromPageUrl(path);			
 			ContentPermissionEntity pagePermission = 
 				getContentPermissionBusiness().getPermission(
 					pageUrl, CurrentUser.getInstance());
@@ -181,14 +183,18 @@ public class FolderPermissionBusinessImpl extends AbstractBusinessImpl
 		return result;
 	}
 
+	private String getFolderFromPageUrl(String url) {
+		return url.equals(PAGE) ? "/" : url.substring(PAGE.length()); 
+	}
+	
 	private List<FolderPermissionEntity> getPagePermissions(
 			FolderEntity folder) {
 		String path = getDao().getFolderDao().getFolderPath(folder.getId());
 		logger.info(folder.getName() + " " + path);
 		List<FolderPermissionEntity> result = 
 			new ArrayList<FolderPermissionEntity>();
-		if (path.startsWith("/pages")) {
-			String pageUrl = path.equals("/pages") ? "/" : path.substring(6); 
+		if (path.startsWith(PAGE)) {
+			String pageUrl = getFolderFromPageUrl(path); 
 			List<ContentPermissionEntity> pagePermissions = 
 				getContentPermissionBusiness().selectByUrl(pageUrl);
 			logger.info(pagePermissions.size());

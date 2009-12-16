@@ -241,7 +241,8 @@ function onPageUpdate() {
 		commentsEnabled : String($('#commentsEnabled:checked').size() > 0),
 		content : getEditorContent(),
 		template : $('#templates option:selected').val(),
-		approve : String($('#approveOnPageSave:checked').size() > 0)
+		approve : String($('#approveOnPageSave:checked').size() > 0),
+		languageCode : currentLanguage
 	});
 	jsonrpc.pageService.savePage(function(r) {
 		if (r.result == 'success') {

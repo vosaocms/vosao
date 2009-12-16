@@ -205,6 +205,7 @@
     <div>
         <label>User role</label>
         <select id="userRole">
+            <option value="SITE_USER">Site user</option>
             <option value="USER">User</option>
             <option value="ADMIN">Administrator</option>
         </select>

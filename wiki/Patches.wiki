@@ -1,3 +1,4 @@
+#labels Featured
 = Accepting patches =
 
 We are accepting patches. 

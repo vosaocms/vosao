@@ -66,6 +66,11 @@ public class AuthenticationFilter extends AbstractFilter implements Filter {
 		else {
 			CurrentUser.setInstance(getBusiness().getUserPreferences(
 					httpRequest).getUser());
+			if (url.startsWith(CMS) && CurrentUser.getInstance().isSiteUser()) {
+				getBusiness().setUserPreferences(null, httpRequest);
+				httpResponse.sendRedirect("/");
+				return;
+			}			
 		}
 		chain.doFilter(request, response);
 	}

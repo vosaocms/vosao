@@ -600,7 +600,9 @@ function loadUsers() {
 }
 
 function getRole(role) {
-    return role == 'ADMIN' ? 'Administrator' : 'User';
+    if (role == 'ADMIN') return 'Administrator';
+    if (role == 'USER') return 'User';
+    if (role == 'SITE_USER') return 'Site user';
 }
 
 function onUserEdit(id) {

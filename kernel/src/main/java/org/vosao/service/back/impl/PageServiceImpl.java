@@ -137,21 +137,22 @@ public class PageServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public ServiceResponse savePage(Map<String, String> pageMap) {
+	public ServiceResponse savePage(Map<String, String> vo) {
 		UserEntity user = CurrentUser.getInstance();
-		PageEntity page = getPage(pageMap.get("id"));
+		PageEntity page = getPage(vo.get("id"));
 		if (page == null) {
 			page = new PageEntity();
 			page.setCreateUserEmail(user.getEmail());
 		}
 		page.setModDate(new Date());
 		page.setModUserEmail(user.getEmail());
-		page.setCommentsEnabled(Boolean.valueOf(pageMap.get("commentsEnabled")));
-		page.setFriendlyURL(pageMap.get("friendlyUrl"));
+		page.setCommentsEnabled(Boolean.valueOf(vo.get("commentsEnabled")));
+		page.setFriendlyURL(vo.get("friendlyUrl"));
 		ContentPermissionEntity perm = getBusiness()
 			.getContentPermissionBusiness().getPermission(
 				page.getFriendlyURL(), CurrentUser.getInstance());
-		if (Boolean.valueOf(pageMap.get("approve")) 
+		boolean approve = Boolean.valueOf(vo.get("approve"));
+		if (approve
 			&& perm.isPublishGranted()) {
 			page.setState(PageState.APPROVED);
 		}
@@ -162,17 +163,19 @@ public class PageServiceImpl extends AbstractServiceImpl
 			return ServiceResponse.createErrorResponse("Access denied");
 		}
 		try {
-			page.setPublishDate(DateUtil.toDate(pageMap.get("publishDate")));
+			page.setPublishDate(DateUtil.toDate(vo.get("publishDate")));
 		}
 		catch (ParseException e) {
 			return ServiceResponse.createErrorResponse("Date is in wrong format");
 		}
-		page.setTemplate(pageMap.get("template"));
-		page.setTitle(pageMap.get("title"));
+		page.setTemplate(vo.get("template"));
+		page.setTitle(vo.get("title"));
 		List<String> errors = getBusiness().getPageBusiness()
 			.validateBeforeUpdate(page);
 		if (errors.isEmpty()) {
 			getDao().getPageDao().save(page);
+			getDao().getPageDao().setContent(page.getId(), 
+					vo.get("languageCode"), vo.get("content"));
 			return ServiceResponse.createSuccessResponse(
 					"Page was successfully saved.");
 		}

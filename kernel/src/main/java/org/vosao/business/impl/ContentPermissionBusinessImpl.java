@@ -21,21 +21,21 @@
 
 package org.vosao.business.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.ContentPermissionBusiness;
+import org.vosao.business.FolderBusiness;
 import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.GroupEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.entity.UserGroupEntity;
 import org.vosao.enums.ContentPermissionType;
-import org.vosao.service.vo.ContentPermissionVO;
 import org.vosao.utils.UrlUtil;
 
 /**
@@ -47,6 +47,8 @@ public class ContentPermissionBusinessImpl extends AbstractBusinessImpl
 	private static final Log logger = LogFactory
 			.getLog(ContentPermissionBusinessImpl.class);
 
+	private FolderBusiness folderBusiness;
+	
 	@Override
 	public ContentPermissionEntity getGuestPermission(final String url) {
 		GroupEntity guests = getDao().getGroupDao().getGuestsGroup();
@@ -146,6 +148,11 @@ public class ContentPermissionBusinessImpl extends AbstractBusinessImpl
 		}
 		perm.setPermission(permission);
 		getDao().getContentPermissionDao().save(perm);
+		try {
+			getFolderBusiness().createFolder("/page" + url);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -198,6 +205,16 @@ public class ContentPermissionBusinessImpl extends AbstractBusinessImpl
 			result.add(perm);
 		}
 		return result;
+	}
+
+	@Override
+	public FolderBusiness getFolderBusiness() {
+		return folderBusiness;
+	}
+
+	@Override
+	public void setFolderBusiness(FolderBusiness bean) {
+		folderBusiness = bean;
 	}
 
 }

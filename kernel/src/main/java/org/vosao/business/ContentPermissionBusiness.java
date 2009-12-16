@@ -33,6 +33,9 @@ import org.vosao.enums.ContentPermissionType;
  */
 public interface ContentPermissionBusiness {
 	
+	FolderBusiness getFolderBusiness();
+	void setFolderBusiness(FolderBusiness bean);
+	
 	ContentPermissionEntity getPermission(final String url, 
 			final UserEntity user);
 

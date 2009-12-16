@@ -143,7 +143,9 @@
         parent="abstractBusiness" />  
     
     <bean id="contentPermissionBusiness" class="org.vosao.business.impl.ContentPermissionBusinessImpl"
-        parent="abstractBusiness" />  
+        parent="abstractBusiness">
+        <property name="folderBusiness" ref="folderBusiness"/>  
+    </bean>      
 
     <bean id="folderPermissionBusiness" class="org.vosao.business.impl.FolderPermissionBusinessImpl"
         parent="abstractBusiness">

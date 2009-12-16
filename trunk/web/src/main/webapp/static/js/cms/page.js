@@ -701,9 +701,13 @@ function loadPagePermission() {
     var r = pageRequest.pagePermission;
    	if (r.publishGranted) {
    		$('#approveButton').show();
+   		$('#approveOnPageSaveDiv').show();
+   		$('#approveOnContentSaveDiv').show();
    	}
    	else {
    		$('#approveButton').hide();
+   		$('#approveOnPageSaveDiv').hide();
+   		$('#approveOnContentSaveDiv').hide();
    	}
    	if (r.changeGranted) {
    		$('#pageSaveButton').show();

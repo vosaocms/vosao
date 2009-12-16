@@ -22,6 +22,7 @@
 package org.vosao.velocity.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.vosao.business.PageBusiness;
@@ -32,6 +33,7 @@ import org.vosao.entity.UserEntity;
 import org.vosao.enums.UserRole;
 import org.vosao.service.vo.CommentVO;
 import org.vosao.service.vo.UserVO;
+import org.vosao.utils.ListUtil;
 import org.vosao.velocity.VelocityService;
 
 /**
@@ -119,6 +121,18 @@ public class VelocityServiceImpl implements VelocityService {
 					UserRole.USER);
 		}
 		return new UserVO(user);
+	}
+
+	@Override
+	public List<PageEntity> findPageChildren(final String path, 
+			final Date publishDate) {
+		return ListUtil.filter(findPageChildren(path),
+				new ListUtil.Filter<PageEntity>() {
+					@Override
+					public boolean filter(PageEntity entity) {
+						return entity.getPublishDate().equals(publishDate);
+					}
+				});
 	}
 	
 }

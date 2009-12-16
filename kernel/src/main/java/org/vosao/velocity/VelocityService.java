@@ -21,6 +21,7 @@
 
 package org.vosao.velocity;
 
+import java.util.Date;
 import java.util.List;
 
 import org.vosao.entity.PageEntity;
@@ -46,6 +47,16 @@ public interface VelocityService {
 	 * @return list of found pages.
 	 */
 	List<PageEntity> findPageChildren(final String path);
+
+	/**
+	 * Find approved last versions of children pages entity by parent page
+	 * friendlyURL and publish date.
+	 * @param path - firnedly url.
+	 * @param publishDate - publishDate.
+	 * @return list of found pages.
+	 */
+	List<PageEntity> findPageChildren(final String path, 
+			final Date publishDate);
 
 	List<CommentVO> getCommentsByPage(final String pageUrl);
 	

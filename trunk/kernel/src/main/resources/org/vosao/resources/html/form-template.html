@@ -88,19 +88,18 @@
 $(function() {
   $('#form-$form.name').ajaxForm({
     dataType:'json',
+    beforeSubmit: formValidate,
     success: function(r) {
       if (r.result == 'success') {
-         $('#messages-$form.name').html('<span class="info">' + r.message
-           + '</span>');
+         formInfo(r.message);
          $('#form-$form.name')[0].reset();
       }
       else {
-         $('#messages-$form.name').html('<span class="error">' + r.message
-           + '</span>');
+         formError(r.message);
       }
     },
     error : function() {
-      $('#messages-$form.name').html('<span class="error">Error occured during form submition.</span>');
+      formError('Error occured during form submition.');
     }
   });
 
@@ -110,5 +109,51 @@ $(function() {
         theme:'red', callback: Recaptcha.focus_response_field});
 #end 
 });
+
+function formInfo(msg) {
+    $('#messages-$form.name').html('<span class="info">' + msg + '</span>');
+}
+
+function formError(msg) {
+    $('#messages-$form.name').html('<span class="error">' + msg + '</span>');
+}
+
+function formValidate(values, jQuerySet, options) {
+	var valid = true;
+#foreach($field in $fields)
+#if ($field.fieldType == 'TEXT' && $field.mandatory)
+    var value = $('input[name="$field.name"], textarea[name="$field.name"]').val(); 
+    if (value == '') {
+        formError('$field.title is empty. Please provide the value.');
+        valid = false;
+    }
+#elseif ($field.fieldType == 'PASSWORD' && $field.mandatory)
+    var value = $('input[name="$field.name"]').val(); 
+    if (value == '') {
+        formError('$field.title is empty. Please provide the value.');
+        valid = false;
+    }
+#elseif ($field.fieldType == 'FILE' && $field.mandatory)
+    var value = $('input[name="$field.name"]').val(); 
+    if (value == '') {
+        formError('$field.title is empty. Please provide the value.');
+        valid = false;
+    }
+#elseif ($field.fieldType == 'CHECKBOX' && $field.mandatory)
+    var checkedItems = $('input[name="$field.name"]:checked') > 0; 
+    if (checkedItems) {
+        formError('$field.title not selected. Please select.');
+        valid = false;
+    }
+#elseif ($field.fieldType == 'LISTBOX' && $field.mandatory)
+    var value = $('select[name="$field.name"]').val(); 
+    if (value == '') {
+        formError('$field.title is not selected. Please select.');
+        valid = false;
+    }
+#end
+#end	
+	return valid;
+}
 
 </script>

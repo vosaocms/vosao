@@ -27,9 +27,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.datanucleus.util.StringUtils;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.MessageEntity;
 import org.vosao.service.ServiceResponse;
@@ -96,7 +96,7 @@ public class MessageServiceImpl extends AbstractServiceImpl
 			errors.add("Code is empty");
 		}
 		else {
-			String code = vo.get("code");
+			String code = StringUtils.strip(vo.get("code"));
 			List<LanguageEntity> languages = getDao().getLanguageDao().select();
 			for (LanguageEntity lang : languages) {
 				if (!StringUtils.isEmpty(vo.get(lang.getCode()))) {

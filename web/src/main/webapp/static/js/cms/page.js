@@ -101,6 +101,14 @@ function loadData() {
 	}, pageId, pageParentUrl);
 }
 
+function callLoadPage() {
+	jsonrpc.pageService.getPageRequest(function(r) {
+		pageRequest = r;
+		page = pageRequest.page;
+		loadPage();
+	}, pageId, pageParentUrl);
+}
+
 function loadPage() {
 	if (editMode) {
 		pageId = page.id;
@@ -115,6 +123,14 @@ function loadPage() {
 	}
 	initPageForm();
 	loadPagePermission();
+}
+
+function callLoadVersions() {
+	jsonrpc.pageService.getPageRequest(function(r) {
+		pageRequest = r;
+		page = pageRequest.page;
+		loadVersions();
+	}, pageId, pageParentUrl);
 }
 
 function loadVersions() {
@@ -143,8 +159,10 @@ function loadVersions() {
                ><span class="ui-icon ui-icon-triangle-1-e"></span> \
                Version ' + version + '</a>';
         }
-        h += '<img class="button" src="/static/images/delete-16.png" \
-            onclick="onVersionDelete(\'' + version + '\')"/></div>';
+        if (versions.length > 1) {
+        	h += '<img class="button" src="/static/images/delete-16.png" \
+        		onclick="onVersionDelete(\'' + version + '\')"/></div>';
+        }
     });
     $('#versions .vertical-buttons-panel').html(h);
 }
@@ -241,7 +259,7 @@ function onPageUpdate() {
 		commentsEnabled : String($('#commentsEnabled:checked').size() > 0),
 		content : getEditorContent(),
 		template : $('#templates option:selected').val(),
-		approve : String($('#approveOnPageSave:checked').size() > 0),
+		approve : String($('#approveOnPageSave:checked, #approveOnContentSave:checked').size() > 0),
 		languageCode : currentLanguage
 	});
 	jsonrpc.pageService.savePage(function(r) {
@@ -307,7 +325,7 @@ function saveContent() {
 		if (r.result == 'success') {
 			var now = new Date();
 			info(r.message + " " + now);
-			loadPage();
+			callLoadPage();
 		} else {
 			error(r.message);
 		}
@@ -502,7 +520,7 @@ function onVersionDelete(version) {
 					loadData();
 				}
 			} else {
-				loadVersions(page.friendlyURL);
+				callLoadVersions();
 			}
 		}, javaList( [ delPage.id ]));
 	}
@@ -515,11 +533,14 @@ function onAddVersion() {
 
 function onVersionTitleSave() {
 	jsonrpc.pageService.addVersion(function(r) {
-		showServiceMessages(r);
 		if (r.result == 'success') {
 			pageId = r.message;
 			loadData();
+			info('Version was successfully added.');
 		}
+		else {
+			showServiceMessages(r);
+		}			
 		$('#version-dialog').dialog('close');
 	}, page.friendlyURL, $('#version-title').val());
 }
@@ -537,7 +558,7 @@ function onVersionSelect(version) {
 function onPageApprove() {
 	jsonrpc.pageService.approve(function(r) {
 		showServiceMessages(r);
-		loadPage();
+		callLoadPage();
 	}, pageId);
 }
 

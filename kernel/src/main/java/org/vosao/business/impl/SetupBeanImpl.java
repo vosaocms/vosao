@@ -77,8 +77,8 @@ public class SetupBeanImpl implements SetupBean {
 		initGroups();
 		initUsers();
 		initTemplates();
-		initPages();
 		initFolders();
+		initPages();
 		initConfigs();
 		initForms();
 		initLanguages();
@@ -129,8 +129,6 @@ public class SetupBeanImpl implements SetupBean {
 		if (guests == null) {
 			guests = new GroupEntity("guests");
 			getDao().getGroupDao().save(guests);
-			getBusiness().getContentPermissionBusiness().setPermission(
-					"/", guests, ContentPermissionType.READ);
 		}
 	}
 
@@ -146,6 +144,8 @@ public class SetupBeanImpl implements SetupBean {
 			getDao().getPageDao().save(root);
 			getDao().getPageDao().setContent(root.getId(), 
 					LanguageEntity.ENGLISH_CODE, content);
+			getBusiness().getContentPermissionBusiness().setPermission(
+					"/", guests, ContentPermissionType.READ);
 	        log.info("Adding root page.");
 			content = loadResource("org/vosao/resources/html/login.html");
 			PageEntity login = new PageEntity("Site user Login", "/login", 

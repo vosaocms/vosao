@@ -22,23 +22,25 @@
 package org.vosao.dao.tool;
 
 import org.vosao.dao.Dao;
-import org.vosao.entity.GroupEntity;
-import org.vosao.entity.UserGroupEntity;
+import org.vosao.entity.FieldEntity;
+import org.vosao.entity.FormEntity;
+import org.vosao.enums.FieldType;
 
-public class GroupTool {
+public class FieldTool {
 
 	private Dao dao;
 	
-	public GroupTool(Dao aDao) {
+	public FieldTool(Dao aDao) {
 		dao = aDao;
 	}
-	
-	public GroupEntity addGroup(String name) {
-		return dao.getGroupDao().save(new GroupEntity(name));
+
+	public FieldEntity addField(final String name, final FieldType type,
+			final String defaultValue, final FormEntity form) {
+		FieldEntity field = new FieldEntity(form.getId(), name, name, type, 
+				false, defaultValue);
+		dao.getFieldDao().save(field);
+		return field;
 	}
 	
-	public void addUserGroup(Long groupId, Long userId) {
-		dao.getUserGroupDao().save(new UserGroupEntity(groupId, userId));
-	}
 	
 }

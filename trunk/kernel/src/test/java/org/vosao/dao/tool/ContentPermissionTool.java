@@ -19,30 +19,24 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.dao.tool;
 
-import java.util.List;
-import java.util.Map;
+import org.vosao.dao.Dao;
+import org.vosao.entity.ContentPermissionEntity;
+import org.vosao.enums.ContentPermissionType;
 
+public class ContentPermissionTool {
 
-public interface BaseDao<K, T> extends AbstractDao {
-
-	T save(final T entity);
+	private Dao dao;
 	
-	T getById(final K id);
+	public ContentPermissionTool(Dao aDao) {
+		dao = aDao;
+	}
 	
-	void remove(final K id);
-	
-	void remove(final List<K> ids);
-
-	List<T> select();
-	
-	List<T> select(String query, Object[] params);
-
-	T selectOne(String query, Object[] params);
-
-	List<T> select(DaoAction<T> action);
-
-	T selectOne(DaoActionOne<T> action);
+	public ContentPermissionEntity addPermission(String anUrl, 
+			ContentPermissionType perm,	Long aGroupId) {
+		return dao.getContentPermissionDao().save(new ContentPermissionEntity(
+				anUrl, perm, aGroupId));
+	}
 	
 }

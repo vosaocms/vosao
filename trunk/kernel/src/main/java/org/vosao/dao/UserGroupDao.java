@@ -33,4 +33,6 @@ public interface UserGroupDao extends BaseDao<Long, UserGroupEntity> {
 	List<UserGroupEntity> selectByUser(Long userId);
 
 	List<UserGroupEntity> selectByGroup(Long groupId);
+	
+	UserGroupEntity getByUserGroup(Long groupId, Long userId);
 }

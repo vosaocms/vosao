@@ -28,6 +28,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.GroupBusiness;
 import org.vosao.entity.GroupEntity;
+import org.vosao.entity.UserEntity;
+import org.vosao.entity.UserGroupEntity;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 
@@ -58,6 +60,16 @@ public class GroupBusinessImpl extends AbstractBusinessImpl
 			errors.add("Name is empty");
 		}
 		return errors;
+	}
+
+	@Override
+	public void addUserToGroup(GroupEntity group, UserEntity user) {
+		UserGroupEntity userGroup = getDao().getUserGroupDao().getByUserGroup(
+				group.getId(), user.getId());
+		if (userGroup == null) {
+			getDao().getUserGroupDao().save(new UserGroupEntity(
+					group.getId(), user.getId()));
+		}
 	}
 	
 }

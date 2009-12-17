@@ -19,30 +19,32 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.dao.tool;
 
-import java.util.List;
-import java.util.Map;
+import org.vosao.dao.Dao;
+import org.vosao.entity.UserEntity;
+import org.vosao.enums.UserRole;
 
+public class UserTool {
 
-public interface BaseDao<K, T> extends AbstractDao {
-
-	T save(final T entity);
+	private Dao dao;
 	
-	T getById(final K id);
+	public UserTool(Dao aDao) {
+		dao = aDao;
+	}
 	
-	void remove(final K id);
-	
-	void remove(final List<K> ids);
+	public UserEntity addUser(String name, String password, String email, 
+			UserRole role) {
+		return dao.getUserDao().save(new UserEntity(name, password, email, 
+				role));
+	}
 
-	List<T> select();
-	
-	List<T> select(String query, Object[] params);
+	public UserEntity addUser(String name, String email, UserRole role) {
+		return addUser(name, "", email, role);
+	}
 
-	T selectOne(String query, Object[] params);
-
-	List<T> select(DaoAction<T> action);
-
-	T selectOne(DaoActionOne<T> action);
+	public UserEntity addUser(String name, UserRole role) {
+		return addUser(name, name, role);
+	}
 	
 }

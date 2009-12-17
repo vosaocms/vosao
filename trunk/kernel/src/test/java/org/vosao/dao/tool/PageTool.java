@@ -19,30 +19,30 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.dao.tool;
 
-import java.util.List;
-import java.util.Map;
+import org.vosao.dao.Dao;
+import org.vosao.entity.PageEntity;
+import org.vosao.enums.PageState;
 
+public class PageTool {
 
-public interface BaseDao<K, T> extends AbstractDao {
-
-	T save(final T entity);
+	private Dao dao;
 	
-	T getById(final K id);
+	public PageTool(Dao aDao) {
+		dao = aDao;
+	}
 	
-	void remove(final K id);
+	public PageEntity addPage(final String title, 
+			final String url) {
+		PageEntity page = new PageEntity(title, url);
+		page.setState(PageState.APPROVED);
+		dao.getPageDao().save(page);
+		return page;
+	}
 	
-	void remove(final List<K> ids);
-
-	List<T> select();
-	
-	List<T> select(String query, Object[] params);
-
-	T selectOne(String query, Object[] params);
-
-	List<T> select(DaoAction<T> action);
-
-	T selectOne(DaoActionOne<T> action);
+	public PageEntity addPage(final String name) {
+		return addPage(name, "/" + name);
+	}
 	
 }

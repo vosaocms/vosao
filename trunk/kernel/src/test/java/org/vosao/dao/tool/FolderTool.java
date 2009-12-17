@@ -19,30 +19,25 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.dao.tool;
 
-import java.util.List;
-import java.util.Map;
+import org.vosao.dao.Dao;
+import org.vosao.entity.FolderEntity;
 
+public class FolderTool {
 
-public interface BaseDao<K, T> extends AbstractDao {
-
-	T save(final T entity);
+	private Dao dao;
 	
-	T getById(final K id);
+	public FolderTool(Dao aDao) {
+		dao = aDao;
+	}
 	
-	void remove(final K id);
-	
-	void remove(final List<K> ids);
+	public FolderEntity addFolder(final String name, final String parent) {
+		return dao.getFolderDao().save(new FolderEntity(name, parent));
+	}
 
-	List<T> select();
-	
-	List<T> select(String query, Object[] params);
-
-	T selectOne(String query, Object[] params);
-
-	List<T> select(DaoAction<T> action);
-
-	T selectOne(DaoActionOne<T> action);
+	public FolderEntity addFolder(final String name) {
+		return addFolder(name, null);
+	}	
 	
 }

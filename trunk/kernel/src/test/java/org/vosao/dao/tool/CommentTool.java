@@ -19,30 +19,37 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.dao.tool;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Date;
 
+import org.vosao.dao.Dao;
+import org.vosao.entity.CommentEntity;
+import org.vosao.entity.PageEntity;
 
-public interface BaseDao<K, T> extends AbstractDao {
+public class CommentTool {
 
-	T save(final T entity);
+	private Dao dao;
 	
-	T getById(final K id);
+	public CommentTool(Dao aDao) {
+		dao = aDao;
+	}
 	
-	void remove(final K id);
+	public CommentEntity addComment(final String name, final String content, 
+			final PageEntity page) {
+		CommentEntity comment = new CommentEntity(name, content, new Date(), 
+				page.getFriendlyURL());
+		dao.getCommentDao().save(comment);
+		return comment;
+	}
 	
-	void remove(final List<K> ids);
-
-	List<T> select();
-	
-	List<T> select(String query, Object[] params);
-
-	T selectOne(String query, Object[] params);
-
-	List<T> select(DaoAction<T> action);
-
-	T selectOne(DaoActionOne<T> action);
+	public CommentEntity addComment(final String name, final String content, 
+			final PageEntity page, final boolean disabled) {
+		CommentEntity comment = new CommentEntity(name, content, new Date(), 
+				page.getFriendlyURL());
+		comment.setDisabled(disabled);
+		dao.getCommentDao().save(comment);
+		return comment;
+	}
 	
 }

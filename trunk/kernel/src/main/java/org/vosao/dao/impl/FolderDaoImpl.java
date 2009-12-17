@@ -53,6 +53,9 @@ public class FolderDaoImpl extends BaseDaoImpl<String, FolderEntity>
 	public FolderEntity getByPath(String path) {
 		FolderEntity result = getByParentName(null, "/");
 		for (String name : path.split("/")) {
+			if (name.equals("")) {
+				continue;
+			}
 			result = getByParentName(result.getId(), name);
 			if (result == null) {
 				return null;

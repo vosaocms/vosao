@@ -23,21 +23,22 @@ package org.vosao.dao;
 
 import java.util.List;
 
+import org.vosao.dao.tool.PageTool;
+import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
-import org.vosao.enums.PageState;
 
 public class PageDaoTest extends AbstractDaoTest {
 
-	private PageEntity addPage(final String title, 
-			final String url) {
-		PageEntity page = new PageEntity(title, url);
-		page.setState(PageState.APPROVED);
-		getDao().getPageDao().save(page);
-		return page;
-	}
+	private PageTool pageTool;
+	
+	@Override
+    public void setUp() throws Exception {
+        super.setUp();
+        pageTool = new PageTool(getDao());
+	}    
 	
 	public void testSave() {
-		addPage("title", "/url");
+		pageTool.addPage("title", "/url");
 		List<PageEntity> pages = getDao().getPageDao().select();
 		assertEquals(1, pages.size());
 		PageEntity page1 = pages.get(0);
@@ -45,7 +46,7 @@ public class PageDaoTest extends AbstractDaoTest {
 	}	
 	
 	public void testGetById() {
-		PageEntity page = addPage("title","/url");
+		PageEntity page = pageTool.addPage("title","/url");
 		assertNotNull(page.getId());
 		PageEntity page2 = getDao().getPageDao().getById(page.getId());
 		assertEquals(page.getTitle(), page2.getTitle());
@@ -54,15 +55,15 @@ public class PageDaoTest extends AbstractDaoTest {
 	}	
 
 	public void testSelect() {
-		addPage("title1", "/url1");
-		addPage("title2", "/url2");
-		addPage("title3", "/url3");
+		pageTool.addPage("title1", "/url1");
+		pageTool.addPage("title2", "/url2");
+		pageTool.addPage("title3", "/url3");
 		List<PageEntity> pages = getDao().getPageDao().select();
 		assertEquals(3, pages.size());
 	}	
 	
 	public void testUpdate() {
-		PageEntity page = addPage("title1", "/url1");
+		PageEntity page = pageTool.addPage("title1", "/url1");
 		assertNotNull(page.getId());
 		PageEntity page2 = getDao().getPageDao().getById(page.getId());
 		page2.setTitle("update");
@@ -72,9 +73,9 @@ public class PageDaoTest extends AbstractDaoTest {
 	}
 	
 	public void testResultList() {
-		addPage("title1", "/url1");
-		addPage("title2", "/url2");
-		addPage("title3", "/url3");
+		pageTool.addPage("title1", "/url1");
+		pageTool.addPage("title2", "/url2");
+		pageTool.addPage("title3", "/url3");
 		List<PageEntity> pages = getDao().getPageDao().select();
 		PageEntity page = new PageEntity("title", "/url", null);
 		pages.add(page);
@@ -82,12 +83,12 @@ public class PageDaoTest extends AbstractDaoTest {
 	}
 
 	public void testGetByParent() {
-		addPage("root", "/");
-		PageEntity page = addPage("title1", "/url1");
+		pageTool.addPage("root", "/");
+		PageEntity page = pageTool.addPage("title1", "/url1");
 		assertEquals("/", page.getParentUrl());
-		page = addPage("title2", "/url1/2");
+		page = pageTool.addPage("title2", "/url1/2");
 		assertEquals("/url1", page.getParentUrl());
-		page = addPage("title3", "/url1/3");
+		page = pageTool.addPage("title3", "/url1/3");
 		assertEquals("/url1", page.getParentUrl());
 		List<PageEntity> pages = getDao().getPageDao().getByParent("/");
 		assertEquals(1, pages.size());
@@ -96,13 +97,29 @@ public class PageDaoTest extends AbstractDaoTest {
 	}	
 	
 	public void testGetByUrl() {
-		PageEntity root = addPage("root", "/");
-		addPage("title1", "/url1");
-		addPage("title2", "/url2");
-		addPage("title3", "/url3");
+		PageEntity root = pageTool.addPage("root", "/");
+		pageTool.addPage("title1", "/url1");
+		pageTool.addPage("title2", "/url2");
+		pageTool.addPage("title3", "/url3");
 		PageEntity page = getDao().getPageDao().getByUrl("/url3");
 		assertNotNull(page);
 		assertEquals("title3", page.getTitle());
 	}	
+
+	public void testContent() {
+		PageEntity root = pageTool.addPage("root", "/");
+		getDao().getPageDao().setContent(root.getId(), "en", "english");
+		getDao().getPageDao().setContent(root.getId(), "ru", "russian");
+		getDao().getPageDao().setContent(root.getId(), "uk", "ukranian");
+		String c = getDao().getPageDao().getContent(root.getId(), "en");
+		assertEquals("english", c);
+		c = getDao().getPageDao().getContent(root.getId(), "ru");
+		assertEquals("russian", c);
+		c = getDao().getPageDao().getContent(root.getId(), "uk");
+		assertEquals("ukranian", c);
+		List<ContentEntity> list = getDao().getContentDao().select(
+				PageEntity.class.getName(), root.getId());
+		assertEquals(3, list.size());
+	}
 	
 }

@@ -19,30 +19,29 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.dao.tool;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Date;
 
+import org.vosao.dao.Dao;
+import org.vosao.entity.FileEntity;
+import org.vosao.entity.FolderEntity;
 
-public interface BaseDao<K, T> extends AbstractDao {
+public class FileTool {
 
-	T save(final T entity);
+	private Dao dao;
 	
-	T getById(final K id);
-	
-	void remove(final K id);
-	
-	void remove(final List<K> ids);
+	public FileTool(Dao aDao) {
+		dao = aDao;
+	}
 
-	List<T> select();
-	
-	List<T> select(String query, Object[] params);
-
-	T selectOne(String query, Object[] params);
-
-	List<T> select(DaoAction<T> action);
-
-	T selectOne(DaoActionOne<T> action);
+	public FileEntity addFile(final String title, final String name, 
+			final String contentType,final byte[] data, 
+			final FolderEntity folder) {
+		FileEntity file = new FileEntity(title, name, folder.getId(), 
+				contentType, new Date(), data.length);
+		dao.getFileDao().save(file, data);
+		return file;
+	}
 	
 }

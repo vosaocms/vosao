@@ -22,23 +22,21 @@
 package org.vosao.dao.tool;
 
 import org.vosao.dao.Dao;
-import org.vosao.entity.GroupEntity;
-import org.vosao.entity.UserGroupEntity;
+import org.vosao.entity.FormEntity;
 
-public class GroupTool {
+public class FormTool {
 
 	private Dao dao;
 	
-	public GroupTool(Dao aDao) {
+	public FormTool(Dao aDao) {
 		dao = aDao;
 	}
-	
-	public GroupEntity addGroup(String name) {
-		return dao.getGroupDao().save(new GroupEntity(name));
+
+	public FormEntity addForm(final String name) {
+		FormEntity form = new FormEntity(name, name, name, name);
+		dao.getFormDao().save(form);
+		return form;
 	}
 	
-	public void addUserGroup(Long groupId, Long userId) {
-		dao.getUserGroupDao().save(new UserGroupEntity(groupId, userId));
-	}
 	
 }

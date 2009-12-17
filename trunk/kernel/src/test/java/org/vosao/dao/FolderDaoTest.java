@@ -131,6 +131,8 @@ public class FolderDaoTest extends AbstractDaoTest {
 		assertNull(r);
 		r = getDao().getFolderDao().getByPath("/t1s1/m1/f");
 		assertNull(r);
+		assertEquals("/t1", getDao().getFolderDao().getFolderPath(
+				t1.getId()));
 		assertEquals("/t1/s1/m1", getDao().getFolderDao().getFolderPath(
 				m1.getId()));
 	}

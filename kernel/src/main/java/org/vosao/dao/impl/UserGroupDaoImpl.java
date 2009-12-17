@@ -52,4 +52,12 @@ public class UserGroupDaoImpl extends BaseDaoImpl<Long, UserGroupEntity>
 		return select(query, params(groupId));
 	}
 
+	@Override
+	public UserGroupEntity getByUserGroup(Long groupId, Long userId) {
+		String query = "select from " + UserGroupEntity.class.getName()
+			    + " where groupId == pGroupId && userId == pUserId"
+			    + " parameters String pGroupId, String pUserId";
+		return selectOne(query, params(groupId, userId));
+	}
+	
 }

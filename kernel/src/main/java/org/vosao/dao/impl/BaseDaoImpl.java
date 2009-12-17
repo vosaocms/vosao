@@ -23,9 +23,9 @@ package org.vosao.dao.impl;
 
 import java.util.List;
 
+import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 
-import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.BaseDao;
 import org.vosao.dao.DaoAction;
 import org.vosao.dao.DaoActionOne;
@@ -42,10 +42,10 @@ public class BaseDaoImpl<K,T> extends AbstractDaoImpl implements BaseDao<K,T> {
 	}
 	
 	@Override
-	public void save(final T entity) {
+	public T save(final T entity) {
 		PersistenceManager pm = getPersistenceManager();
 		try {
-			pm.makePersistent(entity);
+			return pm.makePersistent(entity);
 		}
 		finally {
 			pm.close();
@@ -62,7 +62,7 @@ public class BaseDaoImpl<K,T> extends AbstractDaoImpl implements BaseDao<K,T> {
 		try {
 			return (T)pm.getObjectById(clazz, id);
 		}
-		catch (NucleusObjectNotFoundException e) {
+		catch (JDOObjectNotFoundException e) {
 			return null;
 		}
 		finally {

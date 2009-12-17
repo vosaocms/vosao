@@ -24,6 +24,7 @@ package org.vosao.business;
 import java.util.List;
 
 import org.vosao.entity.GroupEntity;
+import org.vosao.entity.UserEntity;
 
 /**
  * @author Alexander Oleynik
@@ -31,5 +32,7 @@ import org.vosao.entity.GroupEntity;
 public interface GroupBusiness {
 
 	List<String> validateBeforeUpdate(final GroupEntity Group);
+	
+	void addUserToGroup(GroupEntity group, UserEntity user);
 	
 }

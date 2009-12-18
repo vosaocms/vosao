@@ -52,6 +52,10 @@ public class FormDaoTest extends AbstractDaoTest {
 		getDao().getFormDao().save(c);
 		c = getDao().getFormDao().getConfig();
 		assertEquals("template", c.getFormTemplate());
+		c.setFormTemplate("template2");
+		getDao().getFormDao().save(c);
+		c = getDao().getFormDao().getConfig();
+		assertEquals("template2", c.getFormTemplate());
 	}
 	
 }

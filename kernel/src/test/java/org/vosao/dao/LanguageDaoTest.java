@@ -19,35 +19,29 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao.tool;
+package org.vosao.dao;
 
-import org.vosao.dao.Dao;
-import org.vosao.entity.PageEntity;
-import org.vosao.enums.PageState;
+import org.vosao.entity.LanguageEntity;
 
-public class PageTool {
 
-	private Dao dao;
-	
-	public PageTool(Dao aDao) {
-		dao = aDao;
+public class LanguageDaoTest extends AbstractDaoTest {
+
+	private LanguageEntity addLanguage(String code) {
+		return getDao().getLanguageDao().save(new LanguageEntity(code, code));
 	}
 	
-	public PageEntity addPage(final String title, 
-			final String url) {
-		return addPage(title, url, PageState.APPROVED);
-	}
-	
-	public PageEntity addPage(final String name) {
-		return addPage(name, "/" + name);
-	}
-
-	public PageEntity addPage(final String title, final String url, 
-			PageState state) {
-		PageEntity page = new PageEntity(title, url);
-		page.setState(state);
-		dao.getPageDao().save(page);
-		return page;
-	}
+	public void testGetByCode() {
+		addLanguage("en");
+		addLanguage("ru");
+		addLanguage("uk");
+		addLanguage("fr");
+		LanguageEntity l = getDao().getLanguageDao().getByCode("eng");
+		assertNull(l);
+		l = getDao().getLanguageDao().getByCode(null);
+		assertNull(l);
+		l = getDao().getLanguageDao().getByCode("en");
+		assertNotNull(l);
+		assertEquals("en", l.getCode());
+	}	
 	
 }

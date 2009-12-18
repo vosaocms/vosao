@@ -26,6 +26,7 @@ import java.util.List;
 import org.vosao.dao.tool.PageTool;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.enums.PageState;
 
 public class PageDaoTest extends AbstractDaoTest {
 
@@ -121,5 +122,54 @@ public class PageDaoTest extends AbstractDaoTest {
 				PageEntity.class.getName(), root.getId());
 		assertEquals(3, list.size());
 	}
+	
+	public void testGetByParentApproved() {
+		pageTool.addPage("root", "/");
+		pageTool.addPage("title1", "/url1");
+		pageTool.addPage("about1", "/url1/about1");
+		pageTool.addPage("about2", "/url1/about2");
+		pageTool.addPage("about3", "/url1/about3", PageState.EDIT);
+		pageTool.addPage("title2", "/url2");
+		pageTool.addPage("title3", "/url3", PageState.EDIT);
+		List<PageEntity> list = getDao().getPageDao().getByParentApproved("/");
+		assertEquals(2, list.size());
+		list = getDao().getPageDao().getByParentApproved("/url1");
+		assertEquals(2, list.size());
+	}
+
+	public void testGetByUrlVersion() {
+		pageTool.addPage("root", "/");
+		pageTool.addPage("title1", "/url1");
+		pageTool.addPage("about1", "/url1/about1");
+		pageTool.addPage("about2", "/url1/about2");
+		pageTool.addPage("about3", "/url1/about3", PageState.EDIT);
+		pageTool.addPage("title2", "/url2");
+		pageTool.addPage("title3", "/url3", PageState.EDIT);
+		PageEntity p = pageTool.addPage("about2", "/url1/about2");
+		p.setVersion(2);
+		p.setState(PageState.EDIT);
+		getDao().getPageDao().save(p);
+		p = pageTool.addPage("about2", "/url1/about2");
+		p.setVersion(3);
+		getDao().getPageDao().save(p);
+		p = getDao().getPageDao().getByUrlVersion("/url1/about2", 1);
+		assertNotNull(p);
+		assertEquals(new Integer(1), p.getVersion());
+		p = getDao().getPageDao().getByUrlVersion("/url1/about2", 2);
+		assertNotNull(p);
+		assertEquals(new Integer(2), p.getVersion());
+		p = getDao().getPageDao().getByUrlVersion("/url1/about2", 3);
+		assertNotNull(p);
+		assertEquals(new Integer(3), p.getVersion());
+		p = getDao().getPageDao().getByUrlVersion("/url1/about2", 4);
+		assertNull(p);
+		p = getDao().getPageDao().getByUrlVersion(null, 4);
+		assertNull(p);
+		p = getDao().getPageDao().getByUrlVersion("/", null);
+		assertNull(p);
+		p = getDao().getPageDao().getByUrlVersion(null, null);
+		assertNull(p);
+	}
+	
 	
 }

@@ -19,35 +19,28 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao.tool;
+package org.vosao.dao;
 
-import org.vosao.dao.Dao;
-import org.vosao.entity.PageEntity;
-import org.vosao.enums.PageState;
+import org.vosao.entity.SeoUrlEntity;
 
-public class PageTool {
 
-	private Dao dao;
-	
-	public PageTool(Dao aDao) {
-		dao = aDao;
+public class SeoUrlDaoTest extends AbstractDaoTest {
+
+	private SeoUrlEntity addSeoUrl(String from, String to) {
+		return getDao().getSeoUrlDao().save(new SeoUrlEntity(from, to));
 	}
 	
-	public PageEntity addPage(final String title, 
-			final String url) {
-		return addPage(title, url, PageState.APPROVED);
-	}
-	
-	public PageEntity addPage(final String name) {
-		return addPage(name, "/" + name);
-	}
-
-	public PageEntity addPage(final String title, final String url, 
-			PageState state) {
-		PageEntity page = new PageEntity(title, url);
-		page.setState(state);
-		dao.getPageDao().save(page);
-		return page;
-	}
+	public void testGetByFrom() {
+		addSeoUrl("/man", "/woman");
+		addSeoUrl("/black", "/white");
+		addSeoUrl("/super/man", "/ordinal/woman");
+		SeoUrlEntity s = getDao().getSeoUrlDao().getByFrom("/man");
+		assertNotNull(s);
+		assertEquals("/woman", s.getToLink());
+		s = getDao().getSeoUrlDao().getByFrom(null);
+		assertNull(s);
+		s = getDao().getSeoUrlDao().getByFrom("/megahit");
+		assertNull(s);
+	}	
 	
 }

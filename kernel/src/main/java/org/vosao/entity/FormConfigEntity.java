@@ -53,6 +53,8 @@ public class FormConfigEntity implements Serializable {
 	private Text letterTemplate;
 
 	public FormConfigEntity() {
+		setFormTemplate("");
+		setLetterTemplate("");
 	}
 	
 	public void copy(final FormConfigEntity entity) {

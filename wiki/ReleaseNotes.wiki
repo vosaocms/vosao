@@ -1,6 +1,35 @@
 #labels Featured
 = Release Notes =
 
+== Version 0.1 01.01.2010 ==
+
+Vosao CMS version 0.1 is out. This is the first version in alpha cycle releases.
+
+This release introduce security model based on ACL for user groups in the CMS administration area for pages/resources and web site access control. It's now possible to create restricted content on the web site when only registered users can access content (web pages, file downloads). Hope this will help accelerate Vosao use in the enterprise.
+
+Clean installation:
+
+ # Upload version 0.1 and select it as the default version
+ # Run site root url /. Default site will be installed.
+
+Version upgrade steps:
+
+ # Upload version 0.1 and select it as the default version
+ # Run update url "/update". Database schema will be automatically updated.
+
+Implemented and fixed issues:
+
+ # [http://code.google.com/p/vosao/issues/detail?id=53 Can't create new folder ]
+ # [http://code.google.com/p/vosao/issues/detail?id=54 Approve on save option ]
+ # [http://code.google.com/p/vosao/issues/detail?id=55 User security based on privileges, ACL and groups. ]
+ # [http://code.google.com/p/vosao/issues/detail?id=56 Current version preview ] 
+ # [http://code.google.com/p/vosao/issues/detail?id=57 Strip message bundle code ]
+ # [http://code.google.com/p/vosao/issues/detail?id=58 Mandatory fields in forms plugin don't work]
+ # [http://code.google.com/p/vosao/issues/detail?id=59 Update GAE/J 1.2.8]
+ # [http://code.google.com/p/vosao/issues/detail?id=61 VelocityTools]
+ # [http://code.google.com/p/vosao/issues/detail?id=62 Add date search to $service.findPageChildren ]
+
+
 == Version 0.0.4 17.11.2009 ==
 
 Vosao CMS version 0.0.4 is out. This is the last version in working prototype cycle releases. Next releases cycle will be alpha. This means that project has stabilized architecture and framework set.

@@ -5,7 +5,7 @@
 
 Vosao CMS version 0.1 is out. This is the first version in alpha cycle releases.
 
-This release introduce security model based on ACL for user groups in the CMS administration area for pages/resources and web site access control. It's now possible to create restricted content on the web site when only registered users can access content (web pages, file downloads). Hope this will help accelerate Vosao use in the enterprise.
+This release introduce security model based on ACL for user groups in the CMS administration area for pages/resources and web site access control. It's now possible to create restricted content on the web site when only registered users can access content (web pages, file downloads). Hope this will help accelerate Vosao usage in the enterprise.
 
 Clean installation:
 

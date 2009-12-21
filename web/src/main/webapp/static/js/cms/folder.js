@@ -105,12 +105,19 @@ function afterUpload(data) {
     var msg = s[2]; 
     if (result == 'success') {
         info('File was successfully uploaded.');
-        loadFiles();
+        callLoadFiles();
     }
     else {
         error("Error during uploading file. " + msg);
     }
     $("#file-upload").dialog("close");
+}
+
+function callLoadFiles() {
+	jsonrpc.fileService.getByFolder(function (r) {
+		folderRequest.files = r;
+		loadFiles();
+	}, folderId);
 }
 
 function loadFiles() {
@@ -148,7 +155,7 @@ function onDeleteFiles() {
     if (confirm('Are you sure?')) {
     	jsonrpc.fileService.deleteFiles(function (r) {
             if (r.result == "success") {
-                loadFiles();
+                callLoadFiles();
                 info("Files was successfully deleted.");
                 }
             else {
@@ -201,6 +208,7 @@ function onUpdate() {
             if (folderId == '') {
             	folderId = r.message;
             	editMode = true;
+            	$('#file-upload input[name="folderId"]').val(folderId);
             	loadData();
             }
         }

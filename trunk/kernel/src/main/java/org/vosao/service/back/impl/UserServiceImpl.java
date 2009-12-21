@@ -74,11 +74,15 @@ public class UserServiceImpl extends AbstractServiceImpl
 			user = new UserEntity();
 		}
 		user.setName(vo.get("name"));
-		user.setEmail(vo.get("email"));
+		if (!StringUtils.isEmpty(vo.get("email"))) {
+			user.setEmail(vo.get("email"));
+		}
 		if (!StringUtils.isEmpty(vo.get("password"))) {
 			user.setPassword(vo.get("password"));
 		}
-		user.setRole(UserRole.valueOf(vo.get("role")));
+		if (!StringUtils.isEmpty(vo.get("role"))) {
+			user.setRole(UserRole.valueOf(vo.get("role")));
+		}
 		List<String> errors = getBusiness().getUserBusiness()
 				.validateBeforeUpdate(user);
 		if (errors.isEmpty()) {

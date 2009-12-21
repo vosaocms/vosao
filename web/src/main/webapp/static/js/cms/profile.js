@@ -22,7 +22,8 @@
 var user = null;
 
 $(function(){
-    initJSONRpc(loadUser);
+	$("#tabs").tabs();
+	initJSONRpc(loadUser);
     $('#saveButton').click(onSave);
 });
 
@@ -60,7 +61,6 @@ function onSave() {
     var vo = {
      	id : String(user.id),
         name : $('#name').val(),   
-        email : $('#email').val(),   
         password : pass,   
     };
     jsonrpc.userService.save(function (r) {

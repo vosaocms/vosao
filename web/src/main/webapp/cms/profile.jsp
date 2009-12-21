@@ -29,29 +29,38 @@
 </head>
 <body>
 
-<h1>User profile</h1>
+<div id="tabs">
 
-<div class="form-row">
-    <label>User name</label>
-    <input id="name" type="text" />
-</div>
+    <ul>
+        <li><a href="#tab-1">User profile</a></li>
+    </ul>
+    <div id="tab-1">
 
-<div class="form-row">
-    <label>User email</label>
-    <input id="email" type="text" />
-</div>
+        <div class="form-row">
+            <label>User name</label>
+            <input id="name" type="text" />
+        </div>
 
-<div class="form-row">
-    <label>Password</label>
-    <input id="password1" type="password" />
-</div>
-<div class="form-row">
-    <label>Retype the password</label>
-    <input id="password2" type="password" />
-</div>
+        <div class="form-row">
+            <label>User email</label>
+            <input id="email" type="text" disabled="disabled"/>
+        </div>
 
-<div class="buttons">
-    <input id="saveButton" type="button" value="Save" />
+        <div class="form-row">
+            <label>Password</label>
+            <input id="password1" type="password" />
+        </div>
+        <div class="form-row">
+            <label>Retype the password</label>
+            <input id="password2" type="password" />
+        </div>
+
+        <div class="buttons">
+            <input id="saveButton" type="button" value="Save" />
+        </div>
+
+    </div>
+
 </div>
 
 </body>

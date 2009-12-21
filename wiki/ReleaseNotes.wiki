@@ -27,7 +27,12 @@ Implemented and fixed issues:
  # [http://code.google.com/p/vosao/issues/detail?id=58 Mandatory fields in forms plugin don't work]
  # [http://code.google.com/p/vosao/issues/detail?id=59 Update GAE/J 1.2.8]
  # [http://code.google.com/p/vosao/issues/detail?id=61 VelocityTools]
- # [http://code.google.com/p/vosao/issues/detail?id=62 Add date search to $service.findPageChildren ]
+ # [http://code.google.com/p/vosao/issues/detail?id=62 Add date search to $service.findPageChildren]
+ # [http://code.google.com/p/vosao/issues/detail?id=63 Error creating template ]
+ # [http://code.google.com/p/vosao/issues/detail?id=64 File list is not in sync after file upload]
+ # [http://code.google.com/p/vosao/issues/detail?id=65 File list is not in sync after file delete ]
+ # [http://code.google.com/p/vosao/issues/detail?id=66 Error during changing password in Profile ]
+ # [http://code.google.com/p/vosao/issues/detail?id=68 Folders child list doesn't refresh after folder delete. ]
 
 
 == Version 0.0.4 17.11.2009 ==

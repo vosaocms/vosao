@@ -180,6 +180,13 @@ function onTitleChange() {
     }
 }
 
+function callLoadChildren() {
+	jsonrpc.folderService.getByParent(function(r) {
+		folderRequest.children = r;
+		loadChildren();
+	}, folderId);
+}
+
 function loadChildren() {
 	if (!editMode) {
 		return;
@@ -227,7 +234,7 @@ function onExport() {
 }
 
 function onAddChild() {
-    location.href = '/cms/folder.jsp?parent=' + folderParentId;
+    location.href = '/cms/folder.jsp?parent=' + folderId;
 }
 
 function getParentFolderIds() {
@@ -247,7 +254,7 @@ function onDelete() {
     if (confirm('Are you sure?')) {
     	jsonrpc.folderService.deleteFolder(function (r) {
             if (r.result == "success") {
-                loadChildren();
+                callLoadChildren();
                 info("Folders was successfully deleted.");
             }
             else {

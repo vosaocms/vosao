@@ -80,6 +80,7 @@ function onAutosave() {
 }
 
 function loadTemplate() {
+	editMode = templateId != '';
 	if (!editMode) {
 		template = null;
         initTemplateForm();
@@ -115,10 +116,19 @@ function onUpdate(cont) {
         content : $('#content').val(),
 	});
 	jsonrpc.templateService.saveTemplate(function (r) {
-		showServiceMessages(r);
-		if (r.result == 'success' && !cont) {
-			location.href = '/cms/templates.jsp';
+		if (r.result == 'success') {
+			info('Template was successfully saved.');
+			if (!cont) {
+				location.href = '/cms/templates.jsp';
+			}
+			else if (!editMode) {
+				templateId = r.message;
+				loadTemplate();
+			}
 		}
+		else {
+			showServiceMessages(r);
+		}			
 	}, templateVO);
 }
 

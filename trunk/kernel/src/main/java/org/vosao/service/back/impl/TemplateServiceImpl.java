@@ -84,8 +84,7 @@ public class TemplateServiceImpl extends AbstractServiceImpl
 			.validateBeforeUpdate(template);
 		if (errors.isEmpty()) {
 			getDao().getTemplateDao().save(template);
-			return ServiceResponse.createSuccessResponse(
-					"Template was successfully saved.");
+			return ServiceResponse.createSuccessResponse(template.getId());
 		}
 		else {
 			return ServiceResponse.createErrorResponse(

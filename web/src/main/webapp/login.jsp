@@ -23,6 +23,7 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ page import="org.vosao.business.CurrentUser" %>
 <%@ page import="org.vosao.entity.UserEntity" %>
+<%@ page import="org.vosao.business.impl.SetupBeanImpl" %>
 <% 
     UserEntity user = CurrentUser.getInstance();
 %>
@@ -91,7 +92,7 @@
 <div class="clear"> </div>
 
 <div class="version">
-  <span>Vosao CMS Version 0.1</span>
+  <span>Vosao CMS Version <%= SetupBeanImpl.VERSION %></span>
 </div>
 
 </div>

@@ -37,7 +37,6 @@ import org.vosao.business.Business;
 import org.vosao.business.SetupBean;
 import org.vosao.dao.Dao;
 import org.vosao.entity.ConfigEntity;
-import org.vosao.entity.ContentEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FormConfigEntity;
 import org.vosao.entity.GroupEntity;
@@ -60,6 +59,8 @@ import com.google.appengine.api.datastore.Query;
 public class SetupBeanImpl implements SetupBean {
 
 	private static Log log = LogFactory.getLog(SetupBeanImpl.class);
+
+	public static final String VERSION = "0.1";
 
 	private Dao dao;
 	private Business business;
@@ -209,7 +210,8 @@ public class SetupBeanImpl implements SetupBean {
 	private void initConfigs() {
 		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
 		if (config.getId() == null || config.getId() == 0) {
-	        config.setGoogleAnalyticsId("");
+	        config.setVersion(VERSION);
+			config.setGoogleAnalyticsId("");
 	        config.setSiteEmail("");
 	        config.setSiteDomain("");
 	        config.setEditExt("css,js,xml");

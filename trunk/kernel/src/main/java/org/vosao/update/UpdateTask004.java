@@ -91,6 +91,9 @@ public class UpdateTask004 implements UpdateTask {
 		Query query = new Query("PageEntity");
 		String userEmail = "admin@test.com";
 		for (Entity e : datastore.prepare(query).asIterable()) {
+			if (e.getProperty("content") == null) {
+				continue;
+			}
 			String pageId = KeyFactory.keyToString(e.getKey());
 			ContentEntity contentEntity = new ContentEntity(
 					PageEntity.class.getName(),

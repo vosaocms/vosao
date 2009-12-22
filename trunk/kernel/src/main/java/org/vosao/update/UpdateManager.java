@@ -46,6 +46,7 @@ public class UpdateManager {
 		tasks = new ArrayList<UpdateTask>();
 		tasks.add(new UpdateTask003());
 		tasks.add(new UpdateTask004(dao));
+		tasks.add(new UpdateTask01(dao));
 	}
 	
 	public void update() throws UpdateException {

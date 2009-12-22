@@ -14,6 +14,14 @@ Clean installation:
 
 Version upgrade steps:
 
+ From 0.0.4 version
+
+ # Change ConfigEntity.version field from "null" to "0.0.4" in Data Viewer 
+ # Upload version 0.1 and select it as the default version
+ # Run update url "/update". Database schema will be automatically updated.
+
+ From version prior to 0.0.4
+
  # Upload version 0.1 and select it as the default version
  # Run update url "/update". Database schema will be automatically updated.
 

@@ -27,12 +27,13 @@ Version 0.1 Alpha version.
 == 01.02.2010 Alpha version ==
 
 Version 0.2 Alpha version.
- * Plugins system.
  * Structured content with templates
+ * Datastore queries caching in memcache
 
 == 01.03.2010 Alpha version ==
 
 Version 0.3 Alpha version.
+ * Plugins system.
  * Develop various plugins.
 
 == 01.04.2010 Alpha version ==

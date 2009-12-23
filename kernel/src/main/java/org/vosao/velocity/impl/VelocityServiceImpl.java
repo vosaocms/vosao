@@ -22,6 +22,7 @@
 package org.vosao.velocity.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -133,6 +134,15 @@ public class VelocityServiceImpl implements VelocityService {
 						return entity.getPublishDate().equals(publishDate);
 					}
 				});
+	}
+
+	@Override
+	public List<PageEntity> findPageChildren(String path, int count) {
+		List<PageEntity> list = findPageChildren(path);
+		if (list.size() > count) {
+			return findPageChildren(path).subList(0, count);
+		}
+		return list;
 	}
 	
 }

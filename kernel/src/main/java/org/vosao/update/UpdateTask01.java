@@ -79,6 +79,8 @@ public class UpdateTask01 implements UpdateTask {
 		addLoginPage();
 		addGroups();
 		setPermissions();
+		updatePages();
+		updateFields();
 	}
 
 	private void updateConfig() {
@@ -133,6 +135,31 @@ public class UpdateTask01 implements UpdateTask {
 			FolderPermissionEntity folderPermission = new FolderPermissionEntity(
 					root.getId(), FolderPermissionType.READ, guests.getId()); 
 			getDao().getFolderPermissionDao().save(folderPermission);
+		}
+	}
+
+	private void updatePages() {
+		Query query = new Query("PageEntity");
+		for (Entity e : datastore.prepare(query).asIterable()) {
+			if (e.hasProperty("parent")) {
+				e.removeProperty("parent");
+			}
+			datastore.put(e);
+		}
+	}
+
+	private void updateFields() {
+		Query query = new Query("FieldEntity");
+		for (Entity e : datastore.prepare(query).asIterable()) {
+			Boolean mandatory = false;
+			if (e.hasProperty("optional")) {
+				mandatory = ! (Boolean) e.getProperty("optional");
+				e.removeProperty("optional");
+			}
+			if (!e.hasProperty("mandatory")) {
+				e.setProperty("mandatory", mandatory);
+			}
+			datastore.put(e);
 		}
 	}
 	

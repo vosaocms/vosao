@@ -55,9 +55,16 @@ public class TemplateServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse deleteTemplates(List<String> ids) {
-		getDao().getTemplateDao().remove(ids);
-		return ServiceResponse.createSuccessResponse(
+		List<String> errors = getBusiness().getTemplateBusiness().remove(ids);
+		if (errors.isEmpty()) {
+			return ServiceResponse.createSuccessResponse(
 				"Templates were successfully deleted");
+		}
+		else {
+			return ServiceResponse.createErrorResponse(
+				"Templates were deleted with errors", errors);
+			
+		}
 	}
 
 	@Override

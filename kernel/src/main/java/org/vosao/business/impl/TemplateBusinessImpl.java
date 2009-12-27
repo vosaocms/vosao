@@ -27,6 +27,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.TemplateBusiness;
+import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
@@ -56,6 +57,26 @@ public class TemplateBusinessImpl extends AbstractBusinessImpl
 			errors.add("Content is empty");
 		}
 		return errors;
+	}
+
+	@Override
+	public List<String> remove(List<String> ids) {
+		List<String> result = new ArrayList<String>();
+		for (String id : ids) {
+			TemplateEntity template = getDao().getTemplateDao().getById(id);
+			if (template == null) {
+				continue;
+			}
+			List<PageEntity> pages = getDao().getPageDao().selectByTemplate(id);
+			if (pages.size() > 0) {
+				result.add("Template " + template.getTitle() 
+						+ " has references " + pages.get(0).getFriendlyURL());
+			}
+			else {
+				getDao().getTemplateDao().remove(id);
+			}
+		}	
+		return result;
 	}
 	
 }

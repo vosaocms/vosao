@@ -177,4 +177,12 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 		Collections.sort(result, new PageHelper.PublishDateDesc());
 		return result;
 	}
+
+	@Override
+	public List<PageEntity> selectByTemplate(String templateId) {
+		String query = "select from " + PageEntity.class.getName()
+				+ " where template == pTemplate"
+				+ " parameters String pTemplate";
+		return select(query, params(templateId));
+	}
 }

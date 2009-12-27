@@ -29,4 +29,10 @@ public interface TemplateBusiness {
 
 	List<String> validateBeforeUpdate(final TemplateEntity template);
 	
+	/**
+	 * Delete templates by id with reference integrity check.
+	 * @param ids
+	 * @return list of reference integrity check messages.
+	 */
+	List<String> remove(List<String> ids);
 }

@@ -48,6 +48,13 @@ public class ServiceResponse {
 		return new ServiceResponse(SUCCESS_RESULT, msg);
 	}
 
+	public static ServiceResponse createSuccessResponse(final String msg, 
+			final List<String> messages) {
+		ServiceResponse result = new ServiceResponse(SUCCESS_RESULT, msg);
+		result.setMessages(messages);
+		return result;
+	}
+
 	public ServiceResponse() {
 		messages = new ArrayList<String>();
 	}

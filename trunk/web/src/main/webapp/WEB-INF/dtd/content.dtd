@@ -22,7 +22,7 @@
 -->
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE site [
-<!ELEMENT site (users,groups,config,pages,forms,folders)>
+<!ELEMENT site (users,groups,config,pages,forms,folders,messages)>
 
 <!ELEMENT config (google-analytics,email,domain,edit-ext,recaptchaPrivateKey,
 recaptchaPublicKey,commentsEmail,commentsTemplate,enableRecaptcha,languages,
@@ -92,6 +92,13 @@ createDate,modDate,content*)>
 <!ELEMENT permission (group,permissionType)>
 <!ELEMENT group (#PCDATA)>
 <!ELEMENT permissionType (#PCDATA)>
+
+<!ELEMENT messages (mesage*)>
+<!ELEMENT message (language, code, value)>
+<!ELEMENT language (#PCDATA)>
+<!ELEMENT code (#PCDATA)>
+<!ELEMENT value (#PCDATA)>
+
 
 <!ATTLIST language code CDATA #REQUIERED>
 <!ATTLIST language title CDATA #REQUIERED>

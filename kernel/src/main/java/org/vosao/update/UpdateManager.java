@@ -50,14 +50,13 @@ public class UpdateManager {
 	}
 	
 	public void update() throws UpdateException {
-		Entity config = getConfig();
-		if (config.getProperty("version") == null) {
+		if (getConfig().getProperty("version") == null) {
 			addConfigVersion();
 		}
-		config = getConfig();
 		for (UpdateTask task : tasks) {
-			if (config.getProperty("version").equals(task.getFromVersion())) {
+			if (getConfig().getProperty("version").equals(task.getFromVersion())) {
 				task.update();
+				Entity config = getConfig();
 				config.setProperty("version", task.getToVersion());
 				datastore.put(config);
 			}

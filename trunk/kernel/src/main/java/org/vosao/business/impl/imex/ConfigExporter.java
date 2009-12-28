@@ -104,9 +104,6 @@ public class ConfigExporter extends AbstractExporter {
             if (element.getName().equals("commentsTemplate")) {
             	config.setCommentsTemplate(element.getText());
             }
-            if (element.getName().equals("version")) {
-            	config.setVersion(element.getText());
-            }
             if (element.getName().equals("languages")) {
             	readLanguages(element);
             }

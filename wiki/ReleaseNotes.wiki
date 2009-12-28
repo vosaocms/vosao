@@ -5,7 +5,7 @@
 
 Vosao CMS version 0.1 is out. This is the first version in alpha cycle releases.
 
-This release introduce security model based on ACL for user groups in the CMS administration area for pages/resources and web site access control. It's now possible to create restricted content on the web site when only registered users can access content (web pages, file downloads). I hope this will help Vosao adoption in the enterprise.
+This release introduce security model based on ACL for user groups in the CMS administration area for pages/resources and web site access control. It's now possible to create restricted area on the web site where only registered users can access content (web pages, file downloads). 
 
 Clean installation:
 
@@ -41,7 +41,8 @@ Implemented and fixed issues:
  # [http://code.google.com/p/vosao/issues/detail?id=65 File list is not in sync after file delete ]
  # [http://code.google.com/p/vosao/issues/detail?id=66 Error during changing password in Profile ]
  # [http://code.google.com/p/vosao/issues/detail?id=68 Folders child list doesn't refresh after folder delete. ]
-
+ # [http://code.google.com/p/vosao/issues/detail?id=71 Add checks for reference integrity when deleting referenced objects]
+ # [http://code.google.com/p/vosao/issues/detail?id=72 Implement message bundle import/export]
 
 == Version 0.0.4 17.11.2009 ==
 

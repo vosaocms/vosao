@@ -21,6 +21,7 @@
 
 package org.vosao.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.vosao.dao.UserGroupDao;
@@ -58,6 +59,30 @@ public class UserGroupDaoImpl extends BaseDaoImpl<Long, UserGroupEntity>
 			    + " where groupId == pGroupId && userId == pUserId"
 			    + " parameters String pGroupId, String pUserId";
 		return selectOne(query, params(groupId, userId));
+	}
+
+	@Override
+	public void removeByGroup(List<Long> groupIds) {
+		for (Long groupId : groupIds) {
+			List<UserGroupEntity> list = selectByGroup(groupId);
+		    remove(getIds(list));	
+		}
+	}
+
+	private List<Long> getIds(List<UserGroupEntity> list) {
+		List<Long> result = new ArrayList<Long>();
+		for (UserGroupEntity e : list) {
+			result.add(e.getId());
+		}
+		return result;
+	}
+	
+	@Override
+	public void removeByUser(List<Long> userIds) {
+		for (Long userId : userIds) {
+			List<UserGroupEntity> list = selectByUser(userId);
+		    remove(getIds(list));	
+		}
 	}
 	
 }

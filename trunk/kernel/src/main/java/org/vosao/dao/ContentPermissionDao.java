@@ -34,5 +34,7 @@ public interface ContentPermissionDao extends
 	ContentPermissionEntity getByUrlGroup(final String url, final Long groupId);
 
 	List<ContentPermissionEntity> selectByUrl(final String url);
+	
+	void removeByGroup(final List<Long> groupIds);
 
 }

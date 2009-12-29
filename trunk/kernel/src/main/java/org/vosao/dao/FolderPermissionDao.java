@@ -35,5 +35,7 @@ public interface FolderPermissionDao
 			final Long groupId);
 
 	List<FolderPermissionEntity> selectByFolder(final String folderId);
+	
+	void removeByGroup(final List<Long> groupIds);
 
 }

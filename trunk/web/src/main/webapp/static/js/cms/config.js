@@ -580,6 +580,7 @@ function onRemoveUser() {
     	jsonrpc.userService.remove(function (r) {
             info(r.message);
             loadUsers();
+            loadGroups();
         }, javaList(ids));
     }
 }

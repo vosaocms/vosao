@@ -21,6 +21,7 @@
 
 package org.vosao.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.vosao.dao.FolderPermissionDao;
@@ -53,6 +54,29 @@ public class FolderPermissionDaoImpl
 				+ " where folderId == pFolderId && groupId == pGroupId"
 				+ " parameters String pFolderId, Long pGroupId";
 		return selectOne(query, params(folderId, groupId));
+	}
+
+	private List<FolderPermissionEntity> selectByGroup(final Long groupId) {
+		String query = "select from " + FolderPermissionEntity.class.getName()
+				+ " where groupId == pGroupId"
+				+ " parameters Long pGroupId";
+		return select(query, params(groupId));
+	}
+
+	@Override
+	public void removeByGroup(List<Long> groupIds) {
+		for (Long groupId : groupIds) {
+			List<FolderPermissionEntity> list = selectByGroup(groupId);
+			remove(getIds(list));
+		}
+	}
+
+	private List<Long> getIds(List<FolderPermissionEntity> list) {
+		List<Long> result = new ArrayList<Long>();
+		for (FolderPermissionEntity e : list) {
+			result.add(e.getId());
+		}
+		return result;
 	}
 
 }

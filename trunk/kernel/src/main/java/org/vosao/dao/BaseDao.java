@@ -37,12 +37,4 @@ public interface BaseDao<K, T> extends AbstractDao {
 
 	List<T> select();
 	
-	List<T> select(String query, Object[] params);
-
-	T selectOne(String query, Object[] params);
-
-	List<T> select(DaoAction<T> action);
-
-	T selectOne(DaoActionOne<T> action);
-	
 }

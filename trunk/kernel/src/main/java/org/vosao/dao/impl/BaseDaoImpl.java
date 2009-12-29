@@ -99,8 +99,7 @@ public class BaseDaoImpl<K,T> extends AbstractDaoImpl implements BaseDao<K,T> {
 		}
 	}
 
-	@Override
-	public List<T> select(String query, Object[] params) {
+	protected List<T> select(String query, Object[] params) {
 		PersistenceManager pm = getPersistenceManager();
 		pm.setDetachAllOnCommit(true);
 		try {
@@ -124,8 +123,7 @@ public class BaseDaoImpl<K,T> extends AbstractDaoImpl implements BaseDao<K,T> {
 		}
 	}
 
-	@Override
-	public T selectOne(String query, Object[] params) {
+	protected T selectOne(String query, Object[] params) {
 		List<T> list = select(query, params);
 		if (list.isEmpty()) {
 			return null;
@@ -137,8 +135,7 @@ public class BaseDaoImpl<K,T> extends AbstractDaoImpl implements BaseDao<K,T> {
 		return objects;
 	}
 
-	@Override
-	public List<T> select(DaoAction<T> action) {
+	protected List<T> select(DaoAction<T> action) {
 		PersistenceManager pm = getPersistenceManager();
 		pm.setDetachAllOnCommit(true);
 		try {
@@ -149,8 +146,7 @@ public class BaseDaoImpl<K,T> extends AbstractDaoImpl implements BaseDao<K,T> {
 		}
 	}
 
-	@Override
-	public T selectOne(DaoActionOne<T> action) {
+	protected T selectOne(DaoActionOne<T> action) {
 		PersistenceManager pm = getPersistenceManager();
 		pm.setDetachAllOnCommit(true);
 		try {

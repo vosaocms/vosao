@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.business.CurrentUser;
 import org.vosao.business.GroupBusiness;
 import org.vosao.entity.GroupEntity;
 import org.vosao.entity.UserEntity;
@@ -69,6 +70,16 @@ public class GroupBusinessImpl extends AbstractBusinessImpl
 		if (userGroup == null) {
 			getDao().getUserGroupDao().save(new UserGroupEntity(
 					group.getId(), user.getId()));
+		}
+	}
+	
+	@Override
+	public void remove(List<Long> ids) {
+		if (CurrentUser.getInstance().isAdmin()) {
+			getDao().getUserGroupDao().removeByGroup(ids);
+			getDao().getContentPermissionDao().removeByGroup(ids);
+			getDao().getFolderPermissionDao().removeByGroup(ids);
+			getDao().getGroupDao().remove(ids);
 		}
 	}
 	

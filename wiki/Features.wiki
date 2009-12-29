@@ -17,3 +17,4 @@
   * SEO urls. Redirect table for indexed links.
   * Multilanguage content support. Localized messages bundle. User browser language auto selection.
   * Content versioning support.
+  * [http://www.vosao.org/documentation/security ACL based security model for pages and resources.]

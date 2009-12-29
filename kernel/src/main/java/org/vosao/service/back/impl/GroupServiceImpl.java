@@ -60,7 +60,7 @@ public class GroupServiceImpl extends AbstractServiceImpl
 		for (String id : ids) {
 			idList.add(Long.valueOf(id));
 		}
-		getDao().getGroupDao().remove(idList);
+		getBusiness().getGroupBusiness().remove(idList);
 		return ServiceResponse.createSuccessResponse(
 				"Groups were successfully deleted");
 	}

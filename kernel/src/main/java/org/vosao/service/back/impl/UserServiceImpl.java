@@ -54,7 +54,7 @@ public class UserServiceImpl extends AbstractServiceImpl
 		for (String id : ids) {
 			idList.add(Long.valueOf(id));
 		}
-		getDao().getUserDao().remove(idList);
+		getBusiness().getUserBusiness().remove(idList);
 		return ServiceResponse.createSuccessResponse(
 				"Users were successfully deleted");
 	}

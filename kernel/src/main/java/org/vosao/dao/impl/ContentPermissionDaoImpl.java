@@ -21,10 +21,12 @@
 
 package org.vosao.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.vosao.dao.ContentPermissionDao;
 import org.vosao.entity.ContentPermissionEntity;
+import org.vosao.entity.UserGroupEntity;
 
 /**
  * @author Alexander Oleynik
@@ -55,4 +57,27 @@ public class ContentPermissionDaoImpl extends
 		return selectOne(query, params(url, groupId));
 	}
 
+	private List<ContentPermissionEntity> selectByGroup(final Long groupId) {
+		String query = "select from " + ContentPermissionEntity.class.getName()
+				+ " where groupId == pGroupId"
+				+ " parameters Long pGroupId";
+		return select(query, params(groupId));
+	}
+		
+	@Override
+	public void removeByGroup(List<Long> groupIds) {
+		for (Long groupId : groupIds) {
+			List<ContentPermissionEntity> list = selectByGroup(groupId);
+			remove(getIds(list));
+		}
+	}
+
+	private List<Long> getIds(List<ContentPermissionEntity> list) {
+		List<Long> result = new ArrayList<Long>();
+		for (ContentPermissionEntity e : list) {
+			result.add(e.getId());
+		}
+		return result;
+	}
+	
 }

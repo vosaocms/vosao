@@ -35,4 +35,6 @@ public interface GroupBusiness {
 	
 	void addUserToGroup(GroupEntity group, UserEntity user);
 	
+	void remove(final List<Long> ids);
+	
 }

@@ -35,4 +35,8 @@ public interface UserGroupDao extends BaseDao<Long, UserGroupEntity> {
 	List<UserGroupEntity> selectByGroup(Long groupId);
 	
 	UserGroupEntity getByUserGroup(Long groupId, Long userId);
+	
+	void removeByUser(final List<Long> userIds);
+	
+	void removeByGroup(final List<Long> groupIds);
 }

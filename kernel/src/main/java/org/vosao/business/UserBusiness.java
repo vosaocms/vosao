@@ -29,4 +29,6 @@ public interface UserBusiness {
 
 	List<String> validateBeforeUpdate(final UserEntity User);
 	
+	void remove(final List<Long> ids);
+	
 }

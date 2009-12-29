@@ -1,7 +1,7 @@
 #labels Featured
 = Release Notes =
 
-== Version 0.1 01.01.2010 ==
+== Version 0.1 29.12.2009 ==
 
 Vosao CMS version 0.1 is out. This is the first version in alpha cycle releases.
 

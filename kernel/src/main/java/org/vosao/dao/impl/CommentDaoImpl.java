@@ -64,12 +64,14 @@ public class CommentDaoImpl extends BaseDaoImpl<String, CommentEntity>
 	
 	@Override
 	public void disable(List<String> ids) {
+		getQueryCache().removeQueries(CommentEntity.class);
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			for (String id : ids) {
 				CommentEntity comment = getById(id, pm);
 				if (comment != null) {
 					comment.setDisabled(true);
+					getEntityCache().removeEntity(CommentEntity.class, id);
 				}
 			}
 		}
@@ -80,12 +82,14 @@ public class CommentDaoImpl extends BaseDaoImpl<String, CommentEntity>
 
 	@Override
 	public void enable(List<String> ids) {
+		getQueryCache().removeQueries(CommentEntity.class);
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			for (String id : ids) {
 				CommentEntity comment = getById(id, pm);
 				if (comment != null) {
 					comment.setDisabled(false);
+					getEntityCache().removeEntity(CommentEntity.class, id);
 				}
 			}
 		}

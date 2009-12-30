@@ -34,7 +34,7 @@ import javax.jdo.annotations.PrimaryKey;
  * @author Alexander Oleynik
  */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class MessageEntity implements Serializable {
+public class MessageEntity implements BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
@@ -60,6 +60,11 @@ public class MessageEntity implements Serializable {
 		this.code = code;
 		this.languageCode = languageCode;
 		this.value = value;
+	}
+
+	@Override
+	public Object getEntityId() {
+		return id;
 	}
 
 	public void copy(final MessageEntity entity) {

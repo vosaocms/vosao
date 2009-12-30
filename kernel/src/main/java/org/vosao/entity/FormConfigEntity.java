@@ -35,7 +35,7 @@ import com.google.appengine.api.datastore.Text;
 
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class FormConfigEntity implements Serializable {
+public class FormConfigEntity implements BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
@@ -57,6 +57,11 @@ public class FormConfigEntity implements Serializable {
 		setLetterTemplate("");
 	}
 	
+	@Override
+	public Object getEntityId() {
+		return id;
+	}
+
 	public void copy(final FormConfigEntity entity) {
 		setFormTemplate(entity.getFormTemplate());
 		setLetterTemplate(entity.getLetterTemplate());

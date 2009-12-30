@@ -38,7 +38,7 @@ import com.google.appengine.api.datastore.Text;
  * @author Alexander Oleynik
  */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class CommentEntity implements Serializable {
+public class CommentEntity implements BaseEntity {
 
 	private static final long serialVersionUID = 7L;
 
@@ -64,6 +64,11 @@ public class CommentEntity implements Serializable {
 
 	public CommentEntity() {
 		publishDate = new Date();
+	}
+	
+	@Override
+	public Object getEntityId() {
+		return id;
 	}
 	
 	public CommentEntity(final String aName, final String aContent, 

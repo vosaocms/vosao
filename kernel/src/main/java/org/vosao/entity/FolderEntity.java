@@ -32,7 +32,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class FolderEntity implements Serializable {
+public class FolderEntity implements BaseEntity {
 
 	private static final long serialVersionUID = 3L;
 
@@ -69,6 +69,11 @@ public class FolderEntity implements Serializable {
 		title = aTitle;
 	}
 
+	@Override
+	public Object getEntityId() {
+		return id;
+	}
+	
 	public void copy(final FolderEntity entity) {
 		setName(entity.getName());
 		setTitle(entity.getTitle());

@@ -36,7 +36,7 @@ import javax.jdo.annotations.PrimaryKey;
  * @author Alexander Oleynik
  */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class GroupEntity implements Serializable {
+public class GroupEntity implements BaseEntity {
 
 	private static final long serialVersionUID = 2L;
 
@@ -55,6 +55,11 @@ public class GroupEntity implements Serializable {
 		name = aName;
 	}
 	
+	@Override
+	public Object getEntityId() {
+		return id;
+	}
+
 	public void copy(final GroupEntity entity) {
 		setName(entity.getName());
 	}

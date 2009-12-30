@@ -35,9 +35,19 @@
     
     <!--============================== DAO ==================================-->
     
+    <bean id="entityCache"  class="org.vosao.dao.cache.impl.EntityCacheImpl">
+        <property name="systemService" ref="systemService"/>
+    </bean>
+
+    <bean id="queryCache"  class="org.vosao.dao.cache.impl.QueryCacheImpl">
+        <property name="systemService" ref="systemService"/>
+    </bean>
+
     <bean id="abstractDao" abstract="true"
         class="org.vosao.dao.impl.AbstractDaoImpl">
-        <property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>  
+        <property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>
+        <property name="entityCache" ref="entityCache"/>
+        <property name="queryCache" ref="queryCache"/>
     </bean>
       
     <bean id="fileDao" class="org.vosao.dao.impl.FileDaoImpl"

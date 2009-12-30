@@ -36,7 +36,7 @@ import com.google.appengine.api.datastore.Text;
  * @author Alexander Oleynik
  */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class ContentEntity implements Serializable {
+public class ContentEntity implements BaseEntity {
 
 	private static final long serialVersionUID = 7L;
 
@@ -69,6 +69,11 @@ public class ContentEntity implements Serializable {
 		setContent(content);
 	}
 	
+	@Override
+	public Object getEntityId() {
+		return id;
+	}
+
 	public void copy(final ContentEntity entity) {
 		setParentClass(entity.getParentClass());
 		setParentKey(entity.getParentKey());

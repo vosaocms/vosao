@@ -33,7 +33,7 @@ import javax.jdo.annotations.PrimaryKey;
  * @author Alexander Oleynik
  */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class UserGroupEntity implements Serializable {
+public class UserGroupEntity implements BaseEntity {
 
 	private static final long serialVersionUID = 2L;
 
@@ -56,6 +56,11 @@ public class UserGroupEntity implements Serializable {
 		userId = aUserId;
 	}
 	
+	@Override
+	public Object getEntityId() {
+		return id;
+	}
+
 	public void copy(final UserGroupEntity entity) {
 		setUserId(entity.getUserId());
 		setGroupId(entity.getGroupId());

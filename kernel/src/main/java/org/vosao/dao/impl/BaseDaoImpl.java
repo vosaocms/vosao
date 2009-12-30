@@ -29,20 +29,29 @@ import javax.jdo.PersistenceManager;
 import org.vosao.dao.BaseDao;
 import org.vosao.dao.DaoAction;
 import org.vosao.dao.DaoActionOne;
+import org.vosao.dao.cache.EntityCache;
+import org.vosao.dao.cache.QueryCache;
+import org.vosao.entity.BaseEntity;
 
 /**
  * @author Alexander Oleynik
  */
-public class BaseDaoImpl<K,T> extends AbstractDaoImpl implements BaseDao<K,T> {
+public class BaseDaoImpl<K,T extends BaseEntity> extends AbstractDaoImpl implements BaseDao<K,T> {
 
 	private Class clazz;
+	private EntityCache entityCache;
+	private QueryCache queryCache;
 	
 	public BaseDaoImpl(Class aClass) {
 		clazz = aClass;
 	}
-	
+
 	@Override
 	public T save(final T entity) {
+		getQueryCache().removeQueries(clazz);
+		if (entity.getEntityId() != null) {
+			getEntityCache().removeEntity(clazz, entity.getEntityId());
+		}
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			return pm.makePersistent(entity);
@@ -57,17 +66,22 @@ public class BaseDaoImpl<K,T> extends AbstractDaoImpl implements BaseDao<K,T> {
 		if (id == null) {
 			return null;
 		}
-		PersistenceManager pm = getPersistenceManager();
-		pm.setDetachAllOnCommit(true);
-		try {
-			return (T)pm.getObjectById(clazz, id);
+		T entity = (T) getEntityCache().getEntity(clazz, id);
+		if (entity == null) {
+			PersistenceManager pm = getPersistenceManager();
+			pm.setDetachAllOnCommit(true);
+			try {
+				entity = (T)pm.getObjectById(clazz, id);
+				getEntityCache().putEntity(clazz, id, entity);
+			}
+			catch (JDOObjectNotFoundException e) {
+				entity = null;
+			}
+			finally {
+				pm.close();
+			}
 		}
-		catch (JDOObjectNotFoundException e) {
-			return null;
-		}
-		finally {
-			pm.close();
-		}
+		return entity;
 	}
 	
 	@Override
@@ -75,6 +89,8 @@ public class BaseDaoImpl<K,T> extends AbstractDaoImpl implements BaseDao<K,T> {
 		if (id == null) {
 			return;
 		}
+		getEntityCache().removeEntity(clazz, id);
+		getQueryCache().removeQueries(clazz);
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			pm.deletePersistent(pm.getObjectById(clazz, id));
@@ -86,10 +102,12 @@ public class BaseDaoImpl<K,T> extends AbstractDaoImpl implements BaseDao<K,T> {
 	
 	@Override
 	public void remove(final List<K> ids) {
+		getQueryCache().removeQueries(clazz);
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			for (K id : ids) {
 				if (id != null) {
+					getEntityCache().removeEntity(clazz, id);
 					pm.deletePersistent(pm.getObjectById(clazz, id));
 				}
 			}
@@ -100,27 +118,39 @@ public class BaseDaoImpl<K,T> extends AbstractDaoImpl implements BaseDao<K,T> {
 	}
 
 	protected List<T> select(String query, Object[] params) {
-		PersistenceManager pm = getPersistenceManager();
-		pm.setDetachAllOnCommit(true);
-		try {
-			return copy((List<T>)pm.newQuery(query).executeWithArray(params));
+		List<T> result = (List<T>) getQueryCache().getQuery(clazz, query, params);
+		if (result == null) {
+			PersistenceManager pm = getPersistenceManager();
+			pm.setDetachAllOnCommit(true);
+			try {
+				result =  copy((List<T>) pm.newQuery(query)
+						.executeWithArray(params));
+				getQueryCache().putQuery(clazz, query, params, result);
+			}
+			finally {
+				pm.close();
+			}
 		}
-		finally {
-			pm.close();
-		}
+		return result;
 	}
 
 	@Override
 	public List<T> select() {
-		PersistenceManager pm = getPersistenceManager();
-		pm.setDetachAllOnCommit(true);
-		try {
-			return copy((List<T>)pm.newQuery("select from " + clazz.getName())
-					.execute());
+		List<T> result = (List<T>) getQueryCache().getQuery(clazz, 
+				clazz.getName(), null);
+		if (result == null) {
+			PersistenceManager pm = getPersistenceManager();
+			pm.setDetachAllOnCommit(true);
+			try {
+				result = copy((List<T>)pm.newQuery("select from " + clazz.getName())
+						.execute());
+				getQueryCache().putQuery(clazz, clazz.getName(), null, result);
+			}
+			finally {
+				pm.close();
+			}
 		}
-		finally {
-			pm.close();
-		}
+		return result;
 	}
 
 	protected T selectOne(String query, Object[] params) {
@@ -136,6 +166,7 @@ public class BaseDaoImpl<K,T> extends AbstractDaoImpl implements BaseDao<K,T> {
 	}
 
 	protected List<T> select(DaoAction<T> action) {
+		getQueryCache().removeQueries(clazz);
 		PersistenceManager pm = getPersistenceManager();
 		pm.setDetachAllOnCommit(true);
 		try {
@@ -147,6 +178,7 @@ public class BaseDaoImpl<K,T> extends AbstractDaoImpl implements BaseDao<K,T> {
 	}
 
 	protected T selectOne(DaoActionOne<T> action) {
+		getQueryCache().removeQueries(clazz);
 		PersistenceManager pm = getPersistenceManager();
 		pm.setDetachAllOnCommit(true);
 		try {
@@ -155,6 +187,22 @@ public class BaseDaoImpl<K,T> extends AbstractDaoImpl implements BaseDao<K,T> {
 		finally {
 			pm.close();
 		}
+	}
+
+	public EntityCache getEntityCache() {
+		return entityCache;
+	}
+
+	public void setEntityCache(EntityCache bean) {
+		this.entityCache = bean;
+	}
+
+	public QueryCache getQueryCache() {
+		return queryCache;
+	}
+
+	public void setQueryCache(QueryCache queryCache) {
+		this.queryCache = queryCache;
 	}
 	
 }

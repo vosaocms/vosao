@@ -33,7 +33,7 @@ import javax.jdo.annotations.PrimaryKey;
 import com.google.appengine.api.datastore.Blob;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class FileChunkEntity implements Serializable {
+public class FileChunkEntity implements BaseEntity {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -60,6 +60,11 @@ public class FileChunkEntity implements Serializable {
 		this.fileId = fileId;
 		this.data = new Blob(content);
 		this.index = index;
+	}
+
+    @Override
+	public Object getEntityId() {
+		return id;
 	}
     
     public void copy(FileChunkEntity entity) {

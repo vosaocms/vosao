@@ -35,7 +35,7 @@ import org.vosao.enums.FolderPermissionType;
  * @author Alexander Oleynik
  */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class FolderPermissionEntity implements Serializable {
+public class FolderPermissionEntity implements BaseEntity {
 
 	private static final long serialVersionUID = 2L;
 
@@ -69,6 +69,11 @@ public class FolderPermissionEntity implements Serializable {
 			Long aGroupId) {
 		this(aFolderId, perm);
 		groupId = aGroupId;
+	}
+
+	@Override
+	public Object getEntityId() {
+		return id;
 	}
 
 	public void copy(final FolderPermissionEntity entity) {

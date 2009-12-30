@@ -46,10 +46,12 @@ public class FileDaoImpl extends BaseDaoImpl<String, FileEntity>
 		if (fileId == null) {
 			return;
 		}
+		getQueryCache().removeQueries(FileEntity.class);
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			removeChunks(pm, fileId);
 			pm.deletePersistent(pm.getObjectById(FileEntity.class, fileId));
+			getEntityCache().removeEntity(FileEntity.class, fileId);
 		}
 		finally {
 			pm.close();
@@ -66,11 +68,13 @@ public class FileDaoImpl extends BaseDaoImpl<String, FileEntity>
 	
 	@Override
 	public void remove(final List<String> ids) {
+		getQueryCache().removeQueries(FileEntity.class);
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			for (String fileId : ids) {
 				removeChunks(pm, fileId);
 				pm.deletePersistent(pm.getObjectById(FileEntity.class, fileId));
+				getEntityCache().removeEntity(FileEntity.class, fileId);
 			}
 		}
 		finally {

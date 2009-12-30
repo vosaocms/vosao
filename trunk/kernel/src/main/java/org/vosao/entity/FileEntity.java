@@ -35,7 +35,7 @@ import org.vosao.servlet.FolderUtil;
 
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class FileEntity implements Serializable {
+public class FileEntity implements BaseEntity {
 
 	private static final long serialVersionUID = 4L;
 
@@ -79,6 +79,11 @@ public class FileEntity implements Serializable {
 		size = aSize;
 	}
 	
+	@Override
+	public Object getEntityId() {
+		return id;
+	}
+
 	public void copy(final FileEntity entity) {
 		setTitle(entity.getTitle());
 		setFilename(entity.getFilename());

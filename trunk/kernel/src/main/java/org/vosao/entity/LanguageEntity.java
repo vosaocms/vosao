@@ -32,7 +32,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class LanguageEntity implements Serializable {
+public class LanguageEntity implements BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
@@ -56,6 +56,11 @@ public class LanguageEntity implements Serializable {
 	public LanguageEntity(final String code, final String title) {
 		this.code = code;
 		this.title = title;
+	}
+
+	@Override
+	public Object getEntityId() {
+		return id;
 	}
 
 	public void copy(final LanguageEntity entity) {

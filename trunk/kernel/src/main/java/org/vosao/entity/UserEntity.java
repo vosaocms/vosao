@@ -35,7 +35,7 @@ import org.vosao.enums.UserRole;
  * @author Alexander Oleynik
  */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class UserEntity implements Serializable {
+public class UserEntity implements BaseEntity {
 
 	private static final long serialVersionUID = 2L;
 
@@ -67,6 +67,11 @@ public class UserEntity implements Serializable {
 		role = aRole;
 	}
 	
+	@Override
+	public Object getEntityId() {
+		return id;
+	}
+
 	public void copy(final UserEntity entity) {
 		setName(entity.getName());
 		setPassword(entity.getPassword());

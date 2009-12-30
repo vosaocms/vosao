@@ -23,10 +23,17 @@ package org.vosao.dao;
 
 import javax.jdo.PersistenceManagerFactory;
 
+import org.vosao.dao.cache.EntityCache;
+import org.vosao.global.SystemService;
+
 public interface AbstractDao {
 
 	void setPersistenceManagerFactory(PersistenceManagerFactory factory);
 	
 	PersistenceManagerFactory getPersistenceManagerFactory();
 
+	void setDaoCache(EntityCache bean);
+	
+	EntityCache getDaoCache();
+	
 }

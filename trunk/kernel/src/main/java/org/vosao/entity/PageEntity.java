@@ -40,7 +40,7 @@ import org.vosao.utils.UrlUtil;
  * @author Alexander Oleynik
  */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class PageEntity implements Serializable {
+public class PageEntity implements BaseEntity {
 
 	private static final long serialVersionUID = 7L;
 	
@@ -117,6 +117,11 @@ public class PageEntity implements Serializable {
 		setFriendlyURL(aFriendlyURL);
 	}
 	
+	@Override
+	public Object getEntityId() {
+		return id;
+	}
+
 	public void copy(final PageEntity entity) {
 		setTitle(entity.getTitle());
 		setFriendlyURL(entity.getFriendlyURL());

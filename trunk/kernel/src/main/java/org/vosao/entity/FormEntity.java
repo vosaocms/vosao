@@ -32,7 +32,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class FormEntity implements Serializable {
+public class FormEntity implements BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
@@ -77,6 +77,11 @@ public class FormEntity implements Serializable {
 		letterSubject = aSubject;
 	}
 	
+	@Override
+	public Object getEntityId() {
+		return id;
+	}
+
 	public void copy(final FormEntity entity) {
 		setTitle(entity.getTitle());
 		setName(entity.getName());

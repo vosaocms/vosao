@@ -36,7 +36,7 @@ import org.vosao.enums.FieldType;
 
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class FieldEntity implements Serializable {
+public class FieldEntity implements BaseEntity {
 
 	public static class Option {
 		private String value;
@@ -97,6 +97,11 @@ public class FieldEntity implements Serializable {
 		width = 20;
 	}
 	
+	@Override
+	public Object getEntityId() {
+		return id;
+	}
+
 	public void copy(final FieldEntity entity) {
 		setFormId(entity.getFormId());
 		setName(entity.getName());

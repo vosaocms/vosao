@@ -35,7 +35,7 @@ import javax.jdo.annotations.PrimaryKey;
  * @author Alexander Oleynik
  */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class SeoUrlEntity implements Serializable {
+public class SeoUrlEntity implements BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
@@ -59,6 +59,11 @@ public class SeoUrlEntity implements Serializable {
 		toLink = aTo;
 	}
 	
+	@Override
+	public Object getEntityId() {
+		return id;
+	}
+
 	public void copy(final SeoUrlEntity entity) {
 		setFromLink(entity.getFromLink());
 		setToLink(entity.getToLink());

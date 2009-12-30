@@ -37,7 +37,7 @@ import org.vosao.enums.ContentPermissionType;
  * @author Alexander Oleynik
  */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class ContentPermissionEntity implements Serializable {
+public class ContentPermissionEntity implements BaseEntity {
 
 	private static final long serialVersionUID = 2L;
 
@@ -78,6 +78,11 @@ public class ContentPermissionEntity implements Serializable {
 			Long aGroupId) {
 		this(anUrl, perm);
 		groupId = aGroupId;
+	}
+
+	@Override
+	public Object getEntityId() {
+		return id;
 	}
 
 	public void copy(final ContentPermissionEntity entity) {

@@ -34,7 +34,7 @@ import com.google.appengine.api.datastore.Text;
 
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class TemplateEntity implements Serializable {
+public class TemplateEntity implements BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
@@ -66,6 +66,11 @@ public class TemplateEntity implements Serializable {
 		this.content = new Text(content);
 	}
 	
+	@Override
+	public Object getEntityId() {
+		return id;
+	}
+
 	public void copy(final TemplateEntity entity) {
 		setTitle(entity.getTitle());
 		setContent(entity.getContent());

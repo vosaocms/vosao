@@ -33,7 +33,7 @@ import com.google.appengine.api.datastore.Text;
 
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class ConfigEntity implements Serializable {
+public class ConfigEntity implements BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
@@ -77,6 +77,11 @@ public class ConfigEntity implements Serializable {
 	public ConfigEntity() {
 	}
 	
+	@Override
+	public Object getEntityId() {
+		return id;
+	}
+
 	public void copy(final ConfigEntity entity) {
 		setCommentsEmail(entity.getCommentsEmail());
 		setCommentsTemplate(entity.getCommentsTemplate());

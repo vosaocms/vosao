@@ -1,7 +1,10 @@
 #labels Featured
 = Building Vosao =
 
-Vosao uses Maven2 as a project build tool. So you need maven configured on your system. Unfortunately I was unable to make Eclipse build the project with Maven plugin so I recommend to use maven command line for build process.
+Vosao uses Maven2 as a project build tool. So you need maven2 configured on your system. 
+To develop using Eclipse we recommend [http://m2eclipse.sonatype.org/ m2eclipse] plugin.
+
+Unfortunately I was unable to make GAE/J Eclipse plugin to deploy the project so I recommend to use maven command line for deploying process.
 
 Build project steps:
 
@@ -20,5 +23,3 @@ Build project steps:
 {{{
   > update.sh
 }}}
-
-If your OS is Windows please look inside these .sh scripts, you will find ordinal commands which you can put inside .bat files.

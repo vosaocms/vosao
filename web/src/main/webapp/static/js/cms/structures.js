@@ -1,0 +1,61 @@
+/**
+ * Vosao CMS. Simple CMS for Google App Engine.
+ * Copyright (C) 2009 Vosao development team
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * email: vosao.dev@gmail.com
+ */
+
+$(function(){
+    initJSONRpc(loadStructures);
+    $('#addButton').click(onAdd);
+    $('#deleteButton').click(onDelete);
+});
+
+function loadStructures() {
+    jsonrpc.structureService.select(function (r) {
+        var html = '<table class="form-table"><tr><th></th><th>Title</th></tr>';
+        $.each(r.list, function (n, value) {
+            html += '<tr><td><input type="checkbox" value="' + value.id 
+                + '" /></td><td><a href="/cms/structure.jsp?id=' + value.id
+                +'">' + value.title + '</a></td></tr>';
+        });
+        $('#structures').html(html + '</table>');
+        $('#structures tr:even').addClass('even');
+    });
+}
+
+function onAdd() {
+	location.href = '/cms/structure.jsp';
+}
+
+function onDelete() {
+    var ids = new Array();
+    $('#structures input:checked').each(function () {
+        ids.push(this.value);
+    });
+    if (ids.length == 0) {
+        info('Nothing selected.');
+        return;
+    }
+    if (confirm('Are you sure?')) {
+    	jsonrpc.structureService.remove(function(r) {
+            showServiceMessages(r);
+            loadStructures();
+        }, javaList(ids));
+    }
+}
+

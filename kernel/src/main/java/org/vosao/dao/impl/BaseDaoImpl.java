@@ -36,7 +36,8 @@ import org.vosao.entity.BaseEntity;
 /**
  * @author Alexander Oleynik
  */
-public class BaseDaoImpl<K,T extends BaseEntity> extends AbstractDaoImpl implements BaseDao<K,T> {
+public class BaseDaoImpl<K,T extends BaseEntity> extends AbstractDaoImpl 
+		implements BaseDao<K,T> {
 
 	private Class clazz;
 	private EntityCache entityCache;

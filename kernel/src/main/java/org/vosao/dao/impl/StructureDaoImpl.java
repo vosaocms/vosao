@@ -19,29 +19,26 @@
  * email: vosao.dev@gmail.com
  */
 
-$(function() {
-	initJSONRpc(loadTree);
-});
+package org.vosao.dao.impl;
 
-function loadTree() {
-	jsonrpc.pageService.getTree(function(r) {
-		$('#pages-tree').html(renderPage(r));
-		$("#pages-tree").treeview();
-	});
-}
+import org.vosao.dao.StructureDao;
+import org.vosao.entity.StructureEntity;
 
-function renderPage(vo) {
-	var pageUrl = encodeURIComponent(vo.entity.friendlyURL);
-	var html = '<li><a href="page.jsp?id=' + vo.entity.id + '">'
-			+ vo.entity.title
-			+ '</a> <a title="Add child" href="page.jsp?parent=' + pageUrl
-			+ '">+</a>';
-	if (vo.children.list.length > 0) {
-		html += '<ul>';
-		$.each(vo.children.list, function(n, value) {
-			html += renderPage(value);
-		});
-		html += '</ul>';
+/**
+ * @author Alexander Oleynik
+ */
+public class StructureDaoImpl extends BaseDaoImpl<String, StructureEntity> 
+		implements StructureDao {
+
+	public StructureDaoImpl() {
+		super(StructureEntity.class);
 	}
-	return html + '</li>';
+
+	@Override
+	public StructureEntity getByTitle(String title) {
+		String query = "select from " + StructureEntity.class.getName()
+				+ " where title == pTitle"
+				+ " parameters String pTitle";
+		return selectOne(query, params(title));
+	}
 }

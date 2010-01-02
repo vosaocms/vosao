@@ -1,3 +1,4 @@
+<!-- 
 /**
  * Vosao CMS. Simple CMS for Google App Engine.
  * Copyright (C) 2009 Vosao development team
@@ -18,30 +19,14 @@
  *
  * email: vosao.dev@gmail.com
  */
+-->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE structure [
 
-$(function() {
-	initJSONRpc(loadTree);
-});
+<!ELEMENT structure (field*)>
+<!ELEMENT field (title, name, type)>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT type (#PCDATA)>
 
-function loadTree() {
-	jsonrpc.pageService.getTree(function(r) {
-		$('#pages-tree').html(renderPage(r));
-		$("#pages-tree").treeview();
-	});
-}
-
-function renderPage(vo) {
-	var pageUrl = encodeURIComponent(vo.entity.friendlyURL);
-	var html = '<li><a href="page.jsp?id=' + vo.entity.id + '">'
-			+ vo.entity.title
-			+ '</a> <a title="Add child" href="page.jsp?parent=' + pageUrl
-			+ '">+</a>';
-	if (vo.children.list.length > 0) {
-		html += '<ul>';
-		$.each(vo.children.list, function(n, value) {
-			html += renderPage(value);
-		});
-		html += '</ul>';
-	}
-	return html + '</li>';
-}
+]>

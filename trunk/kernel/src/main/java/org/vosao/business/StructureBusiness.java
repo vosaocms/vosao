@@ -19,29 +19,19 @@
  * email: vosao.dev@gmail.com
  */
 
-$(function() {
-	initJSONRpc(loadTree);
-});
+package org.vosao.business;
 
-function loadTree() {
-	jsonrpc.pageService.getTree(function(r) {
-		$('#pages-tree').html(renderPage(r));
-		$("#pages-tree").treeview();
-	});
-}
+import java.util.List;
 
-function renderPage(vo) {
-	var pageUrl = encodeURIComponent(vo.entity.friendlyURL);
-	var html = '<li><a href="page.jsp?id=' + vo.entity.id + '">'
-			+ vo.entity.title
-			+ '</a> <a title="Add child" href="page.jsp?parent=' + pageUrl
-			+ '">+</a>';
-	if (vo.children.list.length > 0) {
-		html += '<ul>';
-		$.each(vo.children.list, function(n, value) {
-			html += renderPage(value);
-		});
-		html += '</ul>';
-	}
-	return html + '</li>';
+import org.vosao.business.vo.StructureFieldVO;
+import org.vosao.entity.StructureEntity;
+
+/**
+ * @author Alexander Oleynik
+ */
+public interface StructureBusiness {
+
+	List<String> validateBeforeUpdate(final StructureEntity entity);
+	
+	List<StructureFieldVO> getFields(final StructureEntity structure);
 }

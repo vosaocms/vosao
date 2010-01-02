@@ -33,6 +33,7 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import org.vosao.enums.PageState;
+import org.vosao.enums.PageType;
 import org.vosao.utils.DateUtil;
 import org.vosao.utils.UrlUtil;
 
@@ -88,6 +89,15 @@ public class PageEntity implements BaseEntity {
 	@Persistent
 	private Date modDate;
 	
+	@Persistent
+	private String pageType;
+	
+	@Persistent
+	private String structureId;
+	
+	@Persistent
+	private String structureTemplateId;
+	
 	public PageEntity() {
 		publishDate = new Date();
 		state = PageState.EDIT.name();
@@ -97,6 +107,7 @@ public class PageEntity implements BaseEntity {
 		modDate = createDate;
 		createUserEmail = "";
 		modUserEmail = "";
+		pageType = PageType.SIMPLE.name();
 	}
 	
 	public PageEntity(String title, String friendlyURL, 
@@ -135,6 +146,9 @@ public class PageEntity implements BaseEntity {
 		setCreateUserEmail(entity.getCreateUserEmail());
 		setModDate(entity.getModDate());
 		setModUserEmail(entity.getModUserEmail());
+		setPageType(entity.getPageType());
+		setStructureId(entity.getStructureId());
+		setStructureTemplateId(entity.getStructureTemplateId());
 	}
 	
 	public String getId() {
@@ -316,6 +330,34 @@ public class PageEntity implements BaseEntity {
 
 	public void setParentUrl(String parentUrl) {
 		this.parentUrl = parentUrl;
+	}
+
+	public PageType getPageType() {
+		return pageType == null ? null : PageType.valueOf(pageType);
+	}
+
+	public String getPageTypeString() {
+		return pageType;
+	}
+	
+	public void setPageType(PageType pageType) {
+		this.pageType = pageType.name();
+	}
+
+	public String getStructureId() {
+		return structureId;
+	}
+
+	public void setStructureId(String structureId) {
+		this.structureId = structureId;
+	}
+
+	public String getStructureTemplateId() {
+		return structureTemplateId;
+	}
+
+	public void setStructureTemplateId(String structureTemplateId) {
+		this.structureTemplateId = structureTemplateId;
 	}
 	
 }

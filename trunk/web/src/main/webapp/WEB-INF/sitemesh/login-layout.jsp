@@ -31,9 +31,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="expires" content="0" />
-    <title>Google App Engine JSF application 
-        <decorator:title default="default title" />
-    </title>
+    <title>Vosao CMS - <decorator:title default="default title" /></title>
 
     <link rel="stylesheet" href="/static/css/jquery-ui/redmond/jquery-ui.css" type="text/css" />
 

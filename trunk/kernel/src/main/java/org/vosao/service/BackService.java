@@ -35,6 +35,8 @@ import org.vosao.service.back.LanguageService;
 import org.vosao.service.back.MessageService;
 import org.vosao.service.back.PageService;
 import org.vosao.service.back.SeoUrlService;
+import org.vosao.service.back.StructureService;
+import org.vosao.service.back.StructureTemplateService;
 import org.vosao.service.back.TemplateService;
 import org.vosao.service.back.UserService;
 
@@ -87,5 +89,10 @@ public interface BackService {
 
 	FolderPermissionService getFolderPermissionService();
 	void setFolderPermissionService(FolderPermissionService bean);
+
+	StructureService getStructureService();
+	void setStructureService(StructureService bean);
 	
+	StructureTemplateService getStructureTemplateService();
+	void setStructureTemplateService(StructureTemplateService bean);
 }

@@ -40,6 +40,8 @@ import org.vosao.service.back.LanguageService;
 import org.vosao.service.back.MessageService;
 import org.vosao.service.back.PageService;
 import org.vosao.service.back.SeoUrlService;
+import org.vosao.service.back.StructureService;
+import org.vosao.service.back.StructureTemplateService;
 import org.vosao.service.back.TemplateService;
 import org.vosao.service.back.UserService;
 
@@ -62,6 +64,8 @@ public class BackServiceImpl implements BackService, Serializable {
 	private GroupService groupService;
 	private ContentPermissionService contentPermissionService;
 	private FolderPermissionService folderPermissionService;
+	private StructureService structureService;
+	private StructureTemplateService structureTemplateService;
 	
 	public void init() {
 	}
@@ -83,6 +87,8 @@ public class BackServiceImpl implements BackService, Serializable {
 		bridge.registerObject("groupService", groupService);
 		bridge.registerObject("contentPermissionService", contentPermissionService);
 		bridge.registerObject("folderPermissionService", folderPermissionService);
+		bridge.registerObject("structureService", structureService);
+		bridge.registerObject("structureTemplateService", structureTemplateService);
 	}
 	
 	@Override
@@ -102,6 +108,8 @@ public class BackServiceImpl implements BackService, Serializable {
 		bridge.unregisterObject("groupService");
 		bridge.unregisterObject("contentPermissionService");
 		bridge.unregisterObject("folderPermissionService");
+		bridge.unregisterObject("structureService");
+		bridge.unregisterObject("structureTemplateService");
 	}
 
 	@Override
@@ -252,6 +260,27 @@ public class BackServiceImpl implements BackService, Serializable {
 	@Override
 	public void setFolderPermissionService(FolderPermissionService bean) {
 		folderPermissionService = bean;		
+	}
+
+	@Override
+	public StructureService getStructureService() {
+		return structureService;
+	}
+
+	@Override
+	public void setStructureService(StructureService structureService) {
+		this.structureService = structureService;
+	}
+
+	@Override
+	public StructureTemplateService getStructureTemplateService() {
+		return structureTemplateService;
+	}
+
+	@Override
+	public void setStructureTemplateService(
+			StructureTemplateService structureTemplateService) {
+		this.structureTemplateService = structureTemplateService;
 	}
 	
 }

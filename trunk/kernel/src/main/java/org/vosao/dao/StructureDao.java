@@ -19,29 +19,15 @@
  * email: vosao.dev@gmail.com
  */
 
-$(function() {
-	initJSONRpc(loadTree);
-});
+package org.vosao.dao;
 
-function loadTree() {
-	jsonrpc.pageService.getTree(function(r) {
-		$('#pages-tree').html(renderPage(r));
-		$("#pages-tree").treeview();
-	});
-}
+import org.vosao.entity.StructureEntity;
 
-function renderPage(vo) {
-	var pageUrl = encodeURIComponent(vo.entity.friendlyURL);
-	var html = '<li><a href="page.jsp?id=' + vo.entity.id + '">'
-			+ vo.entity.title
-			+ '</a> <a title="Add child" href="page.jsp?parent=' + pageUrl
-			+ '">+</a>';
-	if (vo.children.list.length > 0) {
-		html += '<ul>';
-		$.each(vo.children.list, function(n, value) {
-			html += renderPage(value);
-		});
-		html += '</ul>';
-	}
-	return html + '</li>';
+/**
+ * @author Alexander Oleynik
+ */
+public interface StructureDao extends BaseDao<String, StructureEntity> {
+
+	StructureEntity getByTitle(final String title);
+	
 }

@@ -48,6 +48,21 @@ function formatDate(date) {
 	return $.datepicker.formatDate('dd.mm.yy', date);
 }
 
+var identifier_regex = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
+
+function isValidIdentifier(s) {
+	return identifier_regex.test(s);
+}
+
+function strip(s) {
+	var i = 0;
+	while (i < s.length && s[i] == ' ') i++;
+	var s1 = s.substring(i);
+	i = s1.length - 1;
+	while (i >= 0 && s1[i] == ' ') i--;
+	return s1.slice(0, i + 1);
+}
+
 /**
  * Global JSON-RPC entry point.
  */

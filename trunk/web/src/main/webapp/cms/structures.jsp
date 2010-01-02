@@ -25,23 +25,25 @@
 <html>
 <head>
     <title>Pages</title>
-    <script src="/static/js/jquery.treeview.pack.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="/static/css/jquery.treeview.css" type="text/css" />
-    <script src="/static/js/cms/pages.js" type="text/javascript"></script>
+    <script src="/static/js/cms/structures.js" type="text/javascript"></script>
 </head>
 <body>
 
 <div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
     <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-        <li class="ui-corner-top ui-tabs-selected ui-state-active">
-            <a href="#tab-1">Pages</a>
-        </li>
         <li class="ui-corner-top ui-state-default">
-            <a href="structures.jsp">Structures</a>
+            <a href="pages.jsp">Pages</a>
+        </li>
+        <li class="ui-corner-top ui-tabs-selected ui-state-active">
+            <a href="#">Structures</a>
         </li>
     </ul>
-    <div id="tab-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
-        <ul id="pages-tree"><img src="/static/images/ajax-loader.gif" /></ul>
+    <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+        <div id="structures"><img src="/static/images/ajax-loader.gif" /></div>
+        <div class="buttons">
+            <input id="addButton" type="button" value="Add"/>
+            <input id="deleteButton" type="button" value="Delete"/>
+        </div>    
     </div>
 </div>
 

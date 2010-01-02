@@ -74,4 +74,9 @@ public interface Dao {
 	FolderPermissionDao getFolderPermissionDao();
 	void setFolderPermissionDao(final FolderPermissionDao bean);
 
+	StructureDao getStructureDao();
+	void setStructureDao(final StructureDao bean);
+
+	StructureTemplateDao getStructureTemplateDao();
+	void setStructureTemplateDao(final StructureTemplateDao bean);
 }

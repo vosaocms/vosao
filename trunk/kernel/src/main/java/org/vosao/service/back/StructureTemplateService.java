@@ -19,29 +19,26 @@
  * email: vosao.dev@gmail.com
  */
 
-$(function() {
-	initJSONRpc(loadTree);
-});
+package org.vosao.service.back;
 
-function loadTree() {
-	jsonrpc.pageService.getTree(function(r) {
-		$('#pages-tree').html(renderPage(r));
-		$("#pages-tree").treeview();
-	});
-}
+import java.util.List;
+import java.util.Map;
 
-function renderPage(vo) {
-	var pageUrl = encodeURIComponent(vo.entity.friendlyURL);
-	var html = '<li><a href="page.jsp?id=' + vo.entity.id + '">'
-			+ vo.entity.title
-			+ '</a> <a title="Add child" href="page.jsp?parent=' + pageUrl
-			+ '">+</a>';
-	if (vo.children.list.length > 0) {
-		html += '<ul>';
-		$.each(vo.children.list, function(n, value) {
-			html += renderPage(value);
-		});
-		html += '</ul>';
-	}
-	return html + '</li>';
+import org.vosao.entity.StructureTemplateEntity;
+import org.vosao.service.AbstractService;
+import org.vosao.service.ServiceResponse;
+
+/**
+ * @author Alexander Oleynik
+ */
+public interface StructureTemplateService extends AbstractService {
+	
+	List<StructureTemplateEntity> selectByStructure(final String structureId);
+	
+	ServiceResponse remove(final List<String> ids);
+
+	StructureTemplateEntity getById(final String id);
+	
+	ServiceResponse save(final Map<String, String> vo); 
+	
 }

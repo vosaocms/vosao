@@ -38,6 +38,8 @@ import org.vosao.dao.LanguageDao;
 import org.vosao.dao.MessageDao;
 import org.vosao.dao.PageDao;
 import org.vosao.dao.SeoUrlDao;
+import org.vosao.dao.StructureDao;
+import org.vosao.dao.StructureTemplateDao;
 import org.vosao.dao.TemplateDao;
 import org.vosao.dao.UserDao;
 import org.vosao.dao.UserGroupDao;
@@ -61,6 +63,8 @@ public class DaoImpl implements Dao, Serializable {
 	private UserGroupDao userGroupDao;
 	private ContentPermissionDao contentPermissionDao;
 	private FolderPermissionDao folderPermissionDao;
+	private StructureDao structureDao;
+	private StructureTemplateDao structureTemplateDao;
 	
 	public PageDao getPageDao() {
 		return pageDao;
@@ -193,6 +197,22 @@ public class DaoImpl implements Dao, Serializable {
 	
 	public void setFolderPermissionDao(FolderPermissionDao bean) {
 		this.folderPermissionDao = bean;
+	}
+	
+	public StructureDao getStructureDao() {
+		return structureDao;
+	}
+	
+	public void setStructureDao(StructureDao structureDao) {
+		this.structureDao = structureDao;
+	}
+	
+	public StructureTemplateDao getStructureTemplateDao() {
+		return structureTemplateDao;
+	}
+	
+	public void setStructureTemplateDao(StructureTemplateDao structureTemplateDao) {
+		this.structureTemplateDao = structureTemplateDao;
 	}
 	
 }

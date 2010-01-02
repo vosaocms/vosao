@@ -79,4 +79,9 @@ public interface Business {
 	FolderPermissionBusiness getFolderPermissionBusiness();
 	void setFolderPermissionBusiness(final FolderPermissionBusiness bean);
 	
+	StructureBusiness getStructureBusiness();
+	void setStructureBusiness(final StructureBusiness bean);
+
+	StructureTemplateBusiness getStructureTemplateBusiness();
+	void setStructureTemplateBusiness(final StructureTemplateBusiness bean);
 }

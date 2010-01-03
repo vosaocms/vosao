@@ -21,14 +21,22 @@
 
 package org.vosao.global.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.cache.Cache;
 import javax.cache.CacheException;
 import javax.cache.CacheManager;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -45,6 +53,8 @@ public class SystemServiceImpl implements SystemService, Serializable {
 
 	private Cache cache;
 	private VelocityEngine velocityEngine;
+	private TransformerFactory xsltFactory;
+	private Map<String, Transformer> transformers;
 	
 	public void init() {
 		try {
@@ -59,6 +69,8 @@ public class SystemServiceImpl implements SystemService, Serializable {
 		} catch (Exception e) {
             log.error("Can't init velocity engine. " + e.getMessage());
 		}
+		xsltFactory = TransformerFactory.newInstance();
+		transformers = new HashMap<String, Transformer>();
 	}
 	
 
@@ -88,6 +100,26 @@ public class SystemServiceImpl implements SystemService, Serializable {
 		} catch (IOException e) {
 			return e.toString();
 		}
+	}
+
+	@Override
+	public Transformer getTransformer(String template) {
+		String key = String.valueOf(template.hashCode());
+		if (!transformers.containsKey(key)) {
+			try {
+				Transformer transformer = xsltFactory.newTransformer(
+						new StreamSource(new ByteArrayInputStream(
+								template.getBytes("UTF-8"))));
+				transformers.put(key, transformer);				
+			} catch (TransformerConfigurationException e) {
+				log.error(e.getMessage());
+				return null;
+			} catch (UnsupportedEncodingException e) {
+				log.error(e.getMessage());
+				return null;
+			}
+		}
+		return transformers.get(key);
 	}
 	
 	

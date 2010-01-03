@@ -21,6 +21,10 @@
 
 package org.vosao.business.impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -28,6 +32,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
@@ -131,8 +140,28 @@ public class StructurePageRenderDecorator implements PageRenderDecorator {
 					context);
 		}
 		if (structureTemplate.isXSLT()) {
-			content = getPageBusiness().getPageContent(page, languageCode)
-					.getContent();
+			String xml = createContentXML(contentMap);
+			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			try {
+				InputStream input = new ByteArrayInputStream(xml.getBytes("UTF-8"));
+				Transformer transformer = getSystemService().getTransformer(
+						structureTemplate.getContent());
+				if (transformer != null) {
+					transformer.transform(new StreamSource(input), 
+							new StreamResult(output));
+					content = output.toString();				
+					content = content.replaceAll("\\<\\?.*?\\?>", "");
+				}
+				else {
+					content = "There is a problem during creating XSLT transfomer.";
+				}					
+			} catch (TransformerException e) {
+				logger.error(e.getMessage());
+				content = e.getMessage();
+			} catch (UnsupportedEncodingException e) {
+				logger.error(e.getMessage());
+				content = e.getMessage();
+			}
 		}
 	}
 	
@@ -156,6 +185,18 @@ public class StructurePageRenderDecorator implements PageRenderDecorator {
 				result.put(field.getName(), fieldContent);
 		}
 		return result;
+	}
+	
+	private String createContentXML(Map<String, String> contentMap) {
+		StringBuffer xml = new StringBuffer("<content>");
+		List<StructureFieldVO> fields = structure.getFields();
+		for (StructureFieldVO field : fields) {
+			String fieldContent = contentMap.get(field.getName());
+			xml.append("<").append(field.getName()).append(">")
+					.append(StringEscapeUtils.escapeHtml(fieldContent))
+					.append("</").append(field.getName()).append(">");
+		}
+		return xml + "</content>";
 	}
 	
 	public String getTitle() {

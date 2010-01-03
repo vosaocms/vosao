@@ -22,6 +22,7 @@
 package org.vosao.global;
 
 import javax.cache.Cache;
+import javax.xml.transform.Transformer;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -40,5 +41,7 @@ public interface SystemService {
 	 * @return rendered html.
 	 */
 	String render(final String template, final VelocityContext context);
+	
+	Transformer getTransformer(String template);
 	
 }

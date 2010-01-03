@@ -324,6 +324,7 @@ function stopAutosave() {
 }
 
 function getEditorContent() {
+	if (!editMode) return '';
 	if (page.simple) {
 		return contentEditor.getData();
 	}

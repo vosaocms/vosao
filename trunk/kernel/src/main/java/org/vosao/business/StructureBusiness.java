@@ -33,5 +33,4 @@ public interface StructureBusiness {
 
 	List<String> validateBeforeUpdate(final StructureEntity entity);
 	
-	List<StructureFieldVO> getFields(final StructureEntity structure);
 }

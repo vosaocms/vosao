@@ -91,7 +91,7 @@ public class StructureServiceImpl extends AbstractServiceImpl
 		if (entity == null) {
 			return Collections.EMPTY_LIST;
 		}
-		return getBusiness().getStructureBusiness().getFields(entity);
+		return entity.getFields();
 	}
 
 }

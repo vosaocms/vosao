@@ -269,8 +269,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 				StructureEntity structure = getDao().getStructureDao().getById(
 						result.getPage().getStructureId());
 				if (structure != null) {
-					result.setStructureFields(getBusiness().getStructureBusiness()
-							.getFields(structure));
+					result.setStructureFields(structure.getFields());
 				}
 			}
 		}

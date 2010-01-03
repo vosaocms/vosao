@@ -125,8 +125,16 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	@Override	
 	public PageRenderDecorator createPageRenderDecorator(final PageEntity page,
 			final String languageCode) {
-		return new PageRenderDecorator(page, languageCode, getDao(), this, 
-				getSystemService());
+		if (page.isSimple()) {
+			return new SimplePageRenderDecorator(page, languageCode, 
+					getDao(), this, getSystemService());
+		}
+		if (page.isStructured()) {
+			return new StructurePageRenderDecorator(page, languageCode, 
+					getDao(), this, getSystemService());
+		}
+		logger.error("Wrong page type " + page.getTitle());
+		return null;
 	}
 	
 	@Override

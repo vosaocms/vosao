@@ -139,4 +139,11 @@ public class StructureTemplateEntity implements BaseEntity {
 		this.type = value;
 	}
 
+	public boolean isVelocity() {
+		return type.equals(StructureTemplateType.VELOCITY);
+	}
+
+	public boolean isXSLT() {
+		return type.equals(StructureTemplateType.XSLT);
+	}
 }

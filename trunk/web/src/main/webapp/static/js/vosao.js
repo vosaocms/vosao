@@ -80,6 +80,13 @@ function selectTabFromQueryParam(tab) {
 	}
 }
 
+function escapeHtml(s) {
+	var div = document.createElement('div');
+	var text = document.createTextNode(s);
+	div.appendChild(text);
+	return div.innerHTML;
+}
+
 /**
  * Global JSON-RPC entry point.
  */

@@ -75,26 +75,4 @@ public class StructureBusinessImpl extends AbstractBusinessImpl
 		return errors;
 	}
 
-	@Override
-	public List<StructureFieldVO> getFields(StructureEntity structure) {
-		try {
-			Document doc = DocumentHelper.parseText(structure.getContent());
-			List<StructureFieldVO> result = new ArrayList<StructureFieldVO>();
-			for (Iterator<Element> i = doc.getRootElement().elementIterator(); 
-					i.hasNext(); ) {
-					Element element = i.next();
-					if (element.getName().equals("field")) {
-						result.add(new StructureFieldVO(
-								element.elementText("title"),
-								element.elementText("name"),
-								element.elementText("type")));
-					}
-			}
-			return result;
-		} catch (DocumentException e) {
-			logger.error(e.getMessage());
-			return Collections.EMPTY_LIST;
-		}	
-	}
-	
 }

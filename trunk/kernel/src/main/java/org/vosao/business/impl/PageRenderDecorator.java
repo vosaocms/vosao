@@ -23,148 +23,114 @@ package org.vosao.business.impl;
 
 import java.util.Date;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.velocity.VelocityContext;
-import org.vosao.business.ConfigBusiness;
-import org.vosao.business.PageBusiness;
-import org.vosao.dao.Dao;
-import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
-import org.vosao.global.SystemService;
-import org.vosao.utils.DateUtil;
 
-import com.google.appengine.repackaged.com.google.common.base.StringUtil;
+public interface PageRenderDecorator {
 
-public class PageRenderDecorator {
+	PageEntity getPage();
 
-	private Log logger = LogFactory.getLog(PageRenderDecorator.class);
-	
-	private PageEntity page;
-	private String languageCode;
-	private String content;
-	private Dao dao;
-	private PageBusiness pageBusiness;
-	private SystemService systemService;
-	
-	public PageRenderDecorator(PageEntity page,	String languageCode, 
-			Dao dao,
-			PageBusiness pageBusiness, 
-			SystemService systemService) {
-		super();
-		this.page = page;
-		this.languageCode = languageCode;
-		this.dao = dao;
-		this.pageBusiness = pageBusiness;
-		this.systemService = systemService;
-		pluginContentRender();
-	}
+	void setPage(PageEntity page);
 
-	public PageEntity getPage() {
-		return page;
-	}
-	
-	public void setPage(PageEntity page) {
-		this.page = page;
-	}
-	
-	public String getId() {
-		return page.getId();
-	}
+	/**
+	 * Get page id.
+	 * @return page id.
+	 */
+	String getId();
 
-	public String getContent() {
-		return content;
-	}
-	
-	public String getComments() {
-		if (isCommentsEnabled()) {
-			String commentsTemplate = getDao().getConfigDao().getConfig()
-				.getCommentsTemplate();
-			if (StringUtil.isEmpty(commentsTemplate)) {
-				logger.error("comments template is empty");
-				return "comments template is empty";
-			}
-			VelocityContext context = getPageBusiness().createContext(
-					languageCode);
-			context.put("page", page);
-			return getSystemService().render(commentsTemplate, context);
-		}
-		return "";
-	}
-	
-	private void pluginContentRender() {
-		ContentEntity contentEntity = pageBusiness.getPageContent(
-				page, languageCode);
-		content = getSystemService().render(contentEntity.getContent(), 
-				getPageBusiness().createContext(languageCode));
-	}
+	/**
+	 * Get page content processed by velocity. 
+	 * @return page content.
+	 */
+	String getContent();
 
-	public String getTitle() {
-		return page.getTitle();
-	}
+	/**
+	 * Get comments block for page. 
+	 * @return comments block when comments are enabled for page.
+	 */
+	String getComments();
 
-	public String getFriendlyUrl() {
-		return page.getFriendlyURL();
-	}
+	/**
+	 * Get page title.
+	 * @return page title.
+	 */
+	String getTitle();
 
-	public String getParentUrl() {
-		return page.getParentUrl();
-	}
-	
-	public String getTemplate() {
-		return page.getTemplate();
-	}
-	
-	public Date getPublishDate() {
-		return page.getPublishDate();
-	}
-	
-	public String getPublishDateString() {
-		return DateUtil.toString(page.getPublishDate());
-	}
+	/**
+	 * Get page friendlyURL.
+	 * @return page friendlyURL.
+	 */
+	String getFriendlyUrl();
 
-	public boolean isCommentsEnabled() {
-		return page.isCommentsEnabled();
-	}
+	/**
+	 * Get parent friendlyURL.
+	 * @return parent friendlyURL. For root page returns empty page.
+	 */
+	String getParentUrl();
 
-	private Dao getDao() {
-		return dao;
-	}
+	/**
+	 * Get template id for page.
+	 * @return template id.
+	 */
+	String getTemplate();
 
-	private PageBusiness getPageBusiness() {
-		return pageBusiness;
-	}
+	/**
+	 * Get page publish date.
+	 * @return publish date.
+	 */
+	Date getPublishDate();
 
-	private SystemService getSystemService() {
-		return systemService;
-	}
-	
-	public Integer getVersion() {
-		return page.getVersion();
-	}
+	/**
+	 * Get page publish date in dd.mm.yyyy format.
+	 * @return publish date in dd.mm.yyyy format
+	 */
+	String getPublishDateString();
 
-	public String getVersionTitle() {
-		return page.getVersionTitle();
-	}
+	/**
+	 * Comments enabled for page.
+	 * @return comments enabled or page flag.
+	 */
+	boolean isCommentsEnabled();
 
-	public String getState() {
-		return page.getState().name();
-	}
+	/**
+	 * Get page version.
+	 * @return page version.
+	 */
+	Integer getVersion();
 
-	public String getCreateUserEmail() {
-		return page.getCreateUserEmail();
-	}
-	
-	public String getCreateDate() {
-		return DateUtil.dateTimeToString(page.getCreateDate());
-	}
+	/**
+	 * Get version title.
+	 * @return version title.
+	 */
+	String getVersionTitle();
 
-	public String getModUserEmail() {
-		return page.getModUserEmail();
-	}
-	
-	public String getModDate() {
-		return DateUtil.dateTimeToString(page.getModDate());
-	}
-	
+    /**
+     * Get page state.
+	 * @return page state.
+     */
+	String getState();
+
+	/**
+	 * Get page created user email.
+	 * @return page created user email.
+	 */
+	String getCreateUserEmail();
+
+	/**
+	 * Get page created date.
+	 * @return page created date in dd.mm.yyyy format.
+	 */
+	String getCreateDate();
+
+	/**
+	 * Get modify user email.
+	 * @return modify uer email.
+	 */
+	String getModUserEmail();
+
+	/**
+	 * Get page modification date.
+	 * @return page modification date in dd.mm.yyyy format.
+	 */
+	String getModDate();
+
 }

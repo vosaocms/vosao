@@ -99,7 +99,7 @@ function initStructureTemplateForm() {
 }
 
 function onCancel() {
-    location.href = '/cms/structure.jsp?id=' + structureId;
+    location.href = '/cms/structure.jsp?tab=2&id=' + structureId;
 }
 
 function onUpdate(cont) {

@@ -34,20 +34,17 @@ var currentLanguage = '';
 var languages = null;
 var children = {list:[]};
 var editMode = pageId != '';
-var contentEditor;
+var contentEditor = null;
 var etalonContent = '';
 var autosaveTimer = '';
 var permission = null;
 var permissions = null;
 var groups = null;
 var pageRequest = null;
+var structureTemplates = null;
+var contentEditors = null;
     
 $(function(){
-    contentEditor = CKEDITOR.replace('content', {
-        height: 350, width: 'auto;padding-right:140px;',
-        filebrowserUploadUrl : '/cms/upload',
-        filebrowserBrowseUrl : '/cms/fileBrowser.jsp'
-    });
     $("#tabs").tabs();
     $("#tabs").bind('tabsselect', tabSelected);       
     $(".datepicker").datepicker({dateFormat:'dd.mm.yy'});
@@ -63,6 +60,8 @@ $(function(){
     $("#permission-dialog").dialog({ width: 400, autoOpen: false });
 
     $('#title').change(onTitleChange);
+    $('#pageType').change(onPageTypeChange);
+    $('#structure').change(onStructureChange);
     $('#pageSaveButton').click(onPageUpdate);
     $('#pagePreview').click(onPagePreview);
     $('#pageCancelButton').click(onPageCancel);
@@ -94,6 +93,7 @@ function loadData() {
 		page = pageRequest.page;
 		loadLanguages();
 		loadTemplates();
+		loadStructures();
 		loadPage();
 		if (editMode) {
 			loadContents();
@@ -213,6 +213,7 @@ function initPageForm() {
 			$('#friendlyUrl').val(page.pageFriendlyURL);
 			$('#parentFriendlyUrl').html(page.parentFriendlyURL + urlEnd);
 		}
+		$('#pageType').val(page.pageTypeString);
 		$('#publishDate').val(page.publishDateString);
 		$('#commentsEnabled').each(function() {
 			this.checked = page.commentsEnabled
@@ -228,11 +229,13 @@ function initPageForm() {
 		$('.commentsTab').show();
 		$('.securityTab').show();
 		$('#pagePreview').show();
+		showContentEditor();
 	} else {
 		$('#title').val('');
 		$('#friendlyUrl').show();
 		$('#friendlyUrl').val('');
 		$('#parentFriendlyUrl').html(pageParentUrl + urlEnd);
+		$('#pageType').val('SIMPLE');
 		$('#publishDate').val(formatDate(new Date()));
 		$('#commentsEnabled').each(function() {
 			this.checked = false
@@ -248,6 +251,7 @@ function initPageForm() {
 		$('.securityTab').hide();
 		$('#pagePreview').hide();
 	}
+	onPageTypeChange();
 }
 
 function onPageUpdate() {
@@ -260,7 +264,10 @@ function onPageUpdate() {
 		content : getEditorContent(),
 		template : $('#templates option:selected').val(),
 		approve : String($('#approveOnPageSave:checked, #approveOnContentSave:checked').size() > 0),
-		languageCode : currentLanguage
+		languageCode : currentLanguage,
+		pageType: $('#pageType').val(),
+		structureId: $('#structure').val(),
+		structureTemplateId: $('#structureTemplate').val()		
 	});
 	jsonrpc.pageService.savePage(function(r) {
 		if (r.result == 'success') {
@@ -279,6 +286,17 @@ function onTitleChange() {
 	var title = $("#title").val();
 	if (url == '') {
 		$("#friendlyUrl").val(urlFromTitle(title));
+	}
+}
+
+function onPageTypeChange() {
+	if ($('#pageType').val() == 'SIMPLE') {
+		$('#structuredControls').hide();
+	}
+	if ($('#pageType').val() == 'STRUCTURED') {
+		$('#structuredControls').show();
+		$('#structure').val(page.structureId);
+		onStructureChange();
 	}
 }
 
@@ -306,11 +324,46 @@ function stopAutosave() {
 }
 
 function getEditorContent() {
-	return contentEditor.getData();
+	if (page.simple) {
+		return contentEditor.getData();
+	}
+	if (page.structured) {
+		var xml = '<content>';
+		$.each(pageRequest.structureFields.list, function(i, field) {
+			if (field.type == 'TEXT' || field.type == 'DATE' 
+				|| field.type == 'RESOURCE') {
+				xml += '<' + field.name + '>' + $('#field' + field.name).val()
+					+ '</' + field.name + '>';
+			}
+			if (field.type == 'TEXTAREA') {
+				xml += '<' + field.name + '>'
+					+ escape(contentEditors[field.name].getData())  
+					+ '</' + field.name + '>';
+			}
+		});
+		return xml + '</content>';
+	}
 }
 
 function setEditorContent(data) {
-	contentEditor.setData(data);
+	if (page.simple) {
+	    contentEditor.setData(data);
+	}
+	if (page.structured) {
+		$.each(pageRequest.structureFields.list, function(i, field) {
+			if (field.type == 'TEXT' || field.type == 'DATE' 
+				|| field.type == 'RESOURCE') {
+				$(data).find(field.name).each(function() {
+					$('#field' + field.name).val($(this).text())					
+				});
+			}
+			if (field.type == 'TEXTAREA') {
+				$(data).find(field.name).each(function() {
+					contentEditors[field.name].setData(unescape($(this).text()));					
+				});
+			}
+		});
+	}
 }
 
 function isContentChanged() {
@@ -757,3 +810,75 @@ function loadPagePermission() {
    		$('.securityTab').hide();
    	}
 }
+
+function loadStructures() {
+	var h = '';
+	$.each(pageRequest.structures.list, function(i, struct) {
+		var sel = i == 0 ? 'selected="selected"' : '';
+		h += '<option ' + sel + ' value="' + struct.id + '">' + struct.title 
+			+ '</option>';
+	});
+	$('#structure').html(h);
+}
+
+function onStructureChange() {
+	var structureId = $('#structure').val();
+	var h = '';
+	jsonrpc.structureTemplateService.selectByStructure(function(r) {
+		var h = '';
+		$.each(r.list, function(i, template) {
+			var sel = i == 0 ? 'selected="selected"' : '';
+			h += '<option ' + sel + ' value="' + template.id + '">' + template.title 
+				+ '</option>';
+		});
+		$('#structureTemplate').html(h);
+		$('#structureTemplate').val(page.structureTemplateId);
+	}, structureId)
+}
+
+function showContentEditor() {
+	if (page.simple && contentEditor == null) {
+		$('#page-content').html('<textarea id="content" rows="20" cols="80"></textarea>');
+	    contentEditor = CKEDITOR.replace('content', {
+	        height: 350, width: 'auto;padding-right:140px;',
+	        filebrowserUploadUrl : '/cms/upload',
+	        filebrowserBrowseUrl : '/cms/fileBrowser.jsp'
+	    });
+	}
+	if (page.structured && contentEditors == null) {
+		var h = '';
+		$.each(pageRequest.structureFields.list, function(i, field) {
+			h += '<div><div class="label">' + field.title + ':</div>';
+			if (field.type == 'TEXT') {
+				h += '<input id="field' + field.name + '" size="30"/>';
+			}
+			if (field.type == 'TEXTAREA') {
+				h += '<textarea id="field' + field.name + '"></textarea>';
+			}
+			if (field.type == 'DATE') {
+				h += '<input id="field' + field.name + '" class="datepicker" size="8" />';
+			}
+			if (field.type == 'RESOURCE') {
+				h += '<input id="field' + field.name + '" />';
+			}
+			h += '</div>';
+		});
+		$('#page-content').html(h);
+		$('#page-content').css('float','left');
+	    $(".datepicker").datepicker({dateFormat:'dd.mm.yy'});
+		contentEditors = [];
+		$.each(pageRequest.structureFields.list, function(i, field) {
+			if (field.type == 'TEXTAREA') {
+				if (contentEditors[field.name] == undefined) {
+					var ceditor = CKEDITOR.replace('field' + field.name, {
+				        height: 150, width: 'auto',
+				        filebrowserUploadUrl : '/cms/upload',
+				        filebrowserBrowseUrl : '/cms/fileBrowser.jsp'
+				    });
+					contentEditors[field.name] = ceditor;
+				}
+			}
+		});
+	}
+}
+

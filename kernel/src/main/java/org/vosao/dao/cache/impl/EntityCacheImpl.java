@@ -26,16 +26,26 @@ import java.util.Set;
 
 import javax.cache.Cache;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.vosao.dao.cache.CacheStat;
 import org.vosao.dao.cache.EntityCache;
 import org.vosao.global.SystemService;
 
 public class EntityCacheImpl implements EntityCache {
 
+	protected static final Log logger = LogFactory.getLog(
+			EntityCacheImpl.class);
+	
 	private SystemService systemService;
 	private boolean disabled;
+	private long calls;
+	private long hits;
 	
 	public EntityCacheImpl() {
 		disabled = false;
+		calls = 0;
+		hits = 0;
 	}
 	
 	private String getEntityKey(Class clazz, Object id) {
@@ -44,10 +54,15 @@ public class EntityCacheImpl implements EntityCache {
 	
 	@Override
 	public Object getEntity(Class clazz, Object id) {
+		calls++;
 		Set<String> entityKeys = getEntityKeySet(clazz);
 		String key = getEntityKey(clazz, id);
 		if (entityKeys.contains(key) && getCache().containsKey(key)) {
-			return getCache().get(key);
+			Object result = getCache().get(key);
+			if (result != null) {
+				hits++;
+			}
+			return result;
 		}
 		return null;
 	}
@@ -126,5 +141,10 @@ public class EntityCacheImpl implements EntityCache {
 	@Override
 	public boolean isDisabled() {
 		return disabled;		
+	}
+
+	@Override
+	public CacheStat getStat() {
+		return new CacheStat(calls, hits);
 	}
 }

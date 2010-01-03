@@ -35,6 +35,10 @@ function urlFromTitle(title) {
     return title.toLowerCase().replace(/\W/g, '-');
 }
 
+function nameFromTitle(title) {
+    return title.toLowerCase().replace(/\W/g, '_');
+}
+
 function isImage(filename) {
     var ext = getFileExt(filename);
 	return ext.toLowerCase().match(/gif|jpg|jpeg|png|ico/) != null;
@@ -61,6 +65,19 @@ function strip(s) {
 	i = s1.length - 1;
 	while (i >= 0 && s1[i] == ' ') i--;
 	return s1.slice(0, i + 1);
+}
+
+function getQueryParam(param) {
+    var result =  window.location.search.match(
+        new RegExp("(\\?|&)" + param + "(\\[\\])?=([^&]*)")
+    );
+    return result ? result[3] : false;
+}
+
+function selectTabFromQueryParam(tab) {
+	if (getQueryParam('tab')) {
+		tab.tabs('select', Number(getQueryParam('tab')));
+	}
 }
 
 /**

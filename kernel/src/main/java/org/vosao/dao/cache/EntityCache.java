@@ -34,5 +34,6 @@ public interface EntityCache {
 	void setDisabled(boolean value);
 	
 	boolean isDisabled();
-
+	
+	CacheStat getStat();
 }

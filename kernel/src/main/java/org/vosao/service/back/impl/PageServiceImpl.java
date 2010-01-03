@@ -35,8 +35,10 @@ import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.StructureEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.PageState;
+import org.vosao.enums.PageType;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.CommentService;
 import org.vosao.service.back.ContentPermissionService;
@@ -169,6 +171,9 @@ public class PageServiceImpl extends AbstractServiceImpl
 		}
 		page.setTemplate(vo.get("template"));
 		page.setTitle(vo.get("title"));
+		page.setPageType(PageType.valueOf(vo.get("pageType")));
+		page.setStructureId(vo.get("structureId"));
+		page.setStructureTemplateId(vo.get("structureTemplateId"));
 		List<String> errors = getBusiness().getPageBusiness()
 			.validateBeforeUpdate(page);
 		if (errors.isEmpty()) {
@@ -260,12 +265,21 @@ public class PageServiceImpl extends AbstractServiceImpl
 			result.setPermissions(getContentPermissionService().selectByUrl(
 					url));
 			permUrl = result.getPage().getFriendlyURL();
+			if (result.getPage().isStructured()) {
+				StructureEntity structure = getDao().getStructureDao().getById(
+						result.getPage().getStructureId());
+				if (structure != null) {
+					result.setStructureFields(getBusiness().getStructureBusiness()
+							.getFields(structure));
+				}
+			}
 		}
 		result.setTemplates(getTemplateService().getTemplates());
 		result.setLanguages(getLanguageService().select());
 		result.setGroups(getGroupService().select());
 		result.setPagePermission(getContentPermissionService().getPermission(
 				permUrl));
+		result.setStructures(getDao().getStructureDao().select());
 		return result;
 		}
 		catch(Exception e) {

@@ -27,7 +27,7 @@ var templates = [];
 
 $(function(){
     initJSONRpc(loadData);
-    $("#tabs").tabs();
+    selectTabFromQueryParam($("#tabs").tabs());
     $('#autosave').change(onAutosave);
     $('#bigLink').click(onBig);
     $('#smallLink').click(onSmall);
@@ -40,6 +40,7 @@ $(function(){
     $('#addField').click(onAddField);
     $('#addTemplateButton').click(onAddTemplate);
     $('#deleteTemplateButton').click(onDeleteTemplate);
+    $('#fieldTitle').change(onFieldTitleChange);
 });
 
 function loadData() {
@@ -126,6 +127,7 @@ function onUpdate(cont) {
 			else if (!editMode) {
 				structureId = r.message;
 				loadStructure();
+				loadTemplates();
 			}
 		}
 		else {
@@ -142,6 +144,14 @@ function onBig() {
 function onSmall() {
     $('#content').attr('cols','80');
     $('#content').attr('rows','20');
+}
+
+function onFieldTitleChange() {
+	var name = $("#fieldName").val();
+	var title = $("#fieldTitle").val();
+	if (name == '') {
+		$("#fieldName").val(nameFromTitle(title));
+	}
 }
 
 function loadFields() {

@@ -32,4 +32,6 @@ public interface QueryCache {
 	Object getQuery(Class clazz, String query, Object[] params);
 	
 	void removeQueries(Class clazz);
+	
+	CacheStat getStat();
 }

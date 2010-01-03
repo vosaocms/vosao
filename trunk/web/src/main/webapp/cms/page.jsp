@@ -80,6 +80,24 @@
     <input id="commentsEnabled" type="checkbox" />
 </div>
 
+<div class="form-row">
+    <label>Page type</label>
+    <select id="pageType">
+        <option value="SIMPLE">Simple</option>
+        <option value="STRUCTURED">Structured</option>
+    </select>
+</div>
+<div id="structuredControls">
+<div class="form-row">
+    <label>Structure</label>
+    <select id="structure"></select>
+</div>
+<div class="form-row">
+    <label>Structure template</label>
+    <select id="structureTemplate"></select>
+</div>
+</div>
+
 <div class="buttons">
     <div id="approveOnPageSaveDiv" class="checkboxes">
         <input id="approveOnPageSave" type="checkbox"> Approve on Save
@@ -108,7 +126,7 @@
     </div>
 </div>
 
-<div style="padding-right:10px;">
+<div style="padding-right:10px">
     <div style="float:right">
         <input id="autosave" type="checkbox"> Autosave</input>
     </div>
@@ -116,11 +134,8 @@
         Select content language: 
         <select id="language"></select>
     </div>
-    <div id="ckeditor-form-row">
-        <textarea id="content" rows="20" cols="80"></textarea>
-    </div>
+    <div id="page-content"></div>
 </div>
-
 <div class="buttons">
     <div id="approveOnContentSaveDiv" class="checkboxes">
         <input id="approveOnContentSave" type="checkbox"> Approve on Save

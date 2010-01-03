@@ -24,10 +24,12 @@ package org.vosao.service.vo;
 import java.util.Collections;
 import java.util.List;
 
+import org.vosao.business.vo.StructureFieldVO;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.StructureEntity;
 import org.vosao.entity.TemplateEntity;
 
 /**
@@ -46,6 +48,8 @@ public class PageRequestVO {
     private List<ContentPermissionVO> permissions;
     private List<GroupVO> groups;
     private ContentPermissionEntity pagePermission;
+    private List<StructureEntity> structures;
+    private List<StructureFieldVO> structureFields;
 	
     public PageRequestVO() {
     	versions = Collections.EMPTY_LIST;
@@ -56,6 +60,8 @@ public class PageRequestVO {
     	contents = Collections.EMPTY_LIST;
     	permissions = Collections.EMPTY_LIST;
     	groups = Collections.EMPTY_LIST;
+    	structures = Collections.EMPTY_LIST;
+    	structureFields = Collections.EMPTY_LIST;
     }
     
     public PageEntity getPage() {
@@ -136,6 +142,22 @@ public class PageRequestVO {
 	
     public void setPagePermission(ContentPermissionEntity pagePermission) {
 		this.pagePermission = pagePermission;
+	}
+
+	public List<StructureEntity> getStructures() {
+		return structures;
+	}
+
+	public void setStructures(List<StructureEntity> structures) {
+		this.structures = structures;
+	}
+
+	public List<StructureFieldVO> getStructureFields() {
+		return structureFields;
+	}
+
+	public void setStructureFields(List<StructureFieldVO> structureFields) {
+		this.structureFields = structureFields;
 	}   
     
 }

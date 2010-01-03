@@ -22,5 +22,5 @@
 package org.vosao.enums;
 
 public enum PageType {
-	SIMPLE, STRUCTERED;
+	SIMPLE, STRUCTURED;
 }

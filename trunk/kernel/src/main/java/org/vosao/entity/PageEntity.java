@@ -360,4 +360,17 @@ public class PageEntity implements BaseEntity {
 		this.structureTemplateId = structureTemplateId;
 	}
 	
+	public boolean isSimple() {
+		if (pageType != null) {
+			return getPageType().equals(PageType.SIMPLE);
+		}
+		return true;
+	}
+
+	public boolean isStructured() {
+		if (pageType != null) {
+			return getPageType().equals(PageType.STRUCTURED);
+		}
+		return false;
+	}
 }

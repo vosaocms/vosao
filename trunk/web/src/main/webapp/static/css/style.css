@@ -196,6 +196,7 @@ a.button span.ui-icon {
     -moz-border-radius-topleft:5px;
     -moz-border-radius-topright:5px;
     border-radius: 5px;
+    clear: both;
 }
 .buttons-dlg {
     margin: 20px 0;

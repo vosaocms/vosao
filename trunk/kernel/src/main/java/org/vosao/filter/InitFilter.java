@@ -34,6 +34,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.SetupBean;
+import org.vosao.dao.cache.EntityCache;
+import org.vosao.dao.cache.QueryCache;
 
 
 public class InitFilter extends AbstractFilter implements Filter {
@@ -60,7 +62,7 @@ public class InitFilter extends AbstractFilter implements Filter {
         	return;
         }
         if (url.equals(HOT_CRON_URL)) {
-        	writeContent(httpResponse, "OK");
+        	writeContent(httpResponse, "<h4>OK</h4>" + logCacheStat());
         	return;
         }
         chain.doFilter(request, response);
@@ -71,6 +73,19 @@ public class InitFilter extends AbstractFilter implements Filter {
     	response.setContentType("text/html");
     	response.setCharacterEncoding("UTF-8");
     	response.getWriter().append("<html><body>" + content + "</body></html>");
+    }
+    
+    private String logCacheStat() {
+        return "<p>Entity cache: " + getEntityCache().getStat() +
+                " Query cache: " + getQueryCache().getStat() + "</p>";
+    }
+    
+    private EntityCache getEntityCache() {
+    	return (EntityCache) getSpringBean("entityCache");
+    }
+
+    private QueryCache getQueryCache() {
+    	return (QueryCache) getSpringBean("queryCache");
     }
     
 }

@@ -21,12 +21,26 @@
 
 package org.vosao.entity;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.vosao.business.impl.StructureBusinessImpl;
+import org.vosao.business.vo.StructureFieldVO;
 
 import com.google.appengine.api.datastore.Text;
 
@@ -35,6 +49,7 @@ import com.google.appengine.api.datastore.Text;
 public class StructureEntity implements BaseEntity {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log logger = LogFactory.getLog(StructureEntity.class);
 
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -106,4 +121,24 @@ public class StructureEntity implements BaseEntity {
 		return false;
 	}
 
+	public List<StructureFieldVO> getFields() {
+		try {
+			Document doc = DocumentHelper.parseText(getContent());
+			List<StructureFieldVO> result = new ArrayList<StructureFieldVO>();
+			for (Iterator<Element> i = doc.getRootElement().elementIterator(); 
+					i.hasNext(); ) {
+					Element element = i.next();
+					if (element.getName().equals("field")) {
+						result.add(new StructureFieldVO(
+								element.elementText("title"),
+								element.elementText("name"),
+								element.elementText("type")));
+					}
+			}
+			return result;
+		} catch (DocumentException e) {
+			logger.error(e.getMessage());
+			return Collections.EMPTY_LIST;
+		}
+	}
 }

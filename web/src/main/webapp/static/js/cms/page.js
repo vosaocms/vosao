@@ -337,7 +337,7 @@ function getEditorContent() {
 			}
 			if (field.type == 'TEXTAREA') {
 				xml += '<' + field.name + '>'
-					+ escape(contentEditors[field.name].getData())  
+					+ escapeHtml(contentEditors[field.name].getData())  
 					+ '</' + field.name + '>';
 			}
 		});
@@ -359,7 +359,7 @@ function setEditorContent(data) {
 			}
 			if (field.type == 'TEXTAREA') {
 				$(data).find(field.name).each(function() {
-					contentEditors[field.name].setData(unescape($(this).text()));					
+					contentEditors[field.name].setData($(this).text());					
 				});
 			}
 		});

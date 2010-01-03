@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.vosao.business.PageBusiness;
-import org.vosao.business.impl.PageRenderDecorator;
+import org.vosao.business.impl.SimplePageRenderDecorator;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.UserEntity;

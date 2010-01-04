@@ -27,6 +27,8 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.StructureTemplateBusiness;
+import org.vosao.entity.PageEntity;
+import org.vosao.entity.StructureEntity;
 import org.vosao.entity.StructureTemplateEntity;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
@@ -62,4 +64,25 @@ public class StructureTemplateBusinessImpl extends AbstractBusinessImpl
 		return errors;
 	}
 	
+	@Override
+	public List<String> remove(List<String> ids) {
+		List<String> result = new ArrayList<String>();
+		for (String id : ids) {
+			StructureTemplateEntity entity = getDao().getStructureTemplateDao()
+					.getById(id);
+			if (entity == null) {
+				continue;
+			}
+			List<PageEntity> pages = getDao().getPageDao()
+					.selectByStructureTemplate(id);
+			if (pages.size() > 0) {
+				result.add("Structure template " + entity.getTitle() 
+						+ " has references " + pages.get(0).getFriendlyURL());
+			}
+			else {
+				getDao().getStructureTemplateDao().remove(id);
+			}
+		}	
+		return result;
+	}
 }

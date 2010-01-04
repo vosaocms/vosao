@@ -21,6 +21,7 @@
 
 package org.vosao.dao.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.jdo.JDOObjectNotFoundException;

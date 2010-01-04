@@ -31,5 +31,11 @@ import org.vosao.entity.StructureTemplateEntity;
 public interface StructureTemplateBusiness {
 
 	List<String> validateBeforeUpdate(final StructureTemplateEntity entity);
-	
+
+	/**
+	 * Delete structure templates by id with reference integrity check.
+	 * @param ids
+	 * @return list of reference integrity check messages.
+	 */
+	List<String> remove(List<String> ids);
 }

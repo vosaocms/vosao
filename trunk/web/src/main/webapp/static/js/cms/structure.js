@@ -309,5 +309,18 @@ function onAddTemplate() {
 }
 
 function onDeleteTemplate() {
-	alert('TODO');
+    var ids = new Array();
+    $('#templates input:checked').each(function () {
+        ids.push(this.value);
+    });
+    if (ids.length == 0) {
+        info('Nothing selected.');
+        return;
+    }
+    if (confirm('Are you sure?')) {
+    	jsonrpc.structureTemplateService.remove(function(r) {
+            showServiceMessages(r);
+            loadTemplates();
+        }, javaList(ids));
+    }
 }

@@ -44,9 +44,16 @@ public class StructureTemplateServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse remove(List<String> ids) {
-		getDao().getStructureTemplateDao().remove(ids);
-		return ServiceResponse.createSuccessResponse(
+		List<String> errors = getBusiness().getStructureTemplateBusiness()
+				.remove(ids);
+		if (errors.isEmpty()) {
+			return ServiceResponse.createSuccessResponse(
 				"Structure templates were successfully deleted");
+		}
+		else {
+			return ServiceResponse.createErrorResponse(
+				"Structure templates were deleted with errors", errors);
+		}
 	}
 
 	@Override

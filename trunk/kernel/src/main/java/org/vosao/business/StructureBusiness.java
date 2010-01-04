@@ -23,7 +23,6 @@ package org.vosao.business;
 
 import java.util.List;
 
-import org.vosao.business.vo.StructureFieldVO;
 import org.vosao.entity.StructureEntity;
 
 /**
@@ -33,4 +32,10 @@ public interface StructureBusiness {
 
 	List<String> validateBeforeUpdate(final StructureEntity entity);
 	
+	/**
+	 * Delete structures by id with reference integrity check.
+	 * @param ids
+	 * @return list of reference integrity check messages.
+	 */
+	List<String> remove(List<String> ids);
 }

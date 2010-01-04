@@ -185,4 +185,21 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 				+ " parameters String pTemplate";
 		return select(query, params(templateId));
 	}
+
+	@Override
+	public List<PageEntity> selectByStructure(String structureId) {
+		String query = "select from " + PageEntity.class.getName()
+				+ " where structureId == pStructureId"
+				+ " parameters String pStructureId";
+		return select(query, params(structureId));
+	}
+
+	@Override
+	public List<PageEntity> selectByStructureTemplate(
+			String structureTemplateId) {
+		String query = "select from " + PageEntity.class.getName()
+				+ " where structureTemplateId == pStructureTemplateId"
+				+ " parameters String pStructureTemplateId";
+		return select(query, params(structureTemplateId));
+	}
 }

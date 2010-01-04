@@ -22,8 +22,6 @@
 package org.vosao.business.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -31,9 +29,8 @@ import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
 import org.vosao.business.StructureBusiness;
-import org.vosao.business.vo.StructureFieldVO;
+import org.vosao.entity.PageEntity;
 import org.vosao.entity.StructureEntity;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
@@ -75,4 +72,23 @@ public class StructureBusinessImpl extends AbstractBusinessImpl
 		return errors;
 	}
 
+	@Override
+	public List<String> remove(List<String> ids) {
+		List<String> result = new ArrayList<String>();
+		for (String id : ids) {
+			StructureEntity structure = getDao().getStructureDao().getById(id);
+			if (structure == null) {
+				continue;
+			}
+			List<PageEntity> pages = getDao().getPageDao().selectByStructure(id);
+			if (pages.size() > 0) {
+				result.add("Structure " + structure.getTitle() 
+						+ " has references " + pages.get(0).getFriendlyURL());
+			}
+			else {
+				getDao().getStructureDao().remove(id);
+			}
+		}	
+		return result;
+	}
 }

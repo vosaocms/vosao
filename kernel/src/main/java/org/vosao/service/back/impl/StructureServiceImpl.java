@@ -49,9 +49,15 @@ public class StructureServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse remove(List<String> ids) {
-		getDao().getStructureDao().remove(ids);
-		return ServiceResponse.createSuccessResponse(
+		List<String> errors = getBusiness().getStructureBusiness().remove(ids);
+		if (errors.isEmpty()) {
+			return ServiceResponse.createSuccessResponse(
 				"Structures were successfully deleted");
+		}
+		else {
+			return ServiceResponse.createErrorResponse(
+				"Structures were deleted with errors", errors);
+		}
 	}
 
 	@Override

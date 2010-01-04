@@ -98,11 +98,13 @@
     <bean id="folderPermissionDao" class="org.vosao.dao.impl.FolderPermissionDaoImpl"
         parent="abstractDao" />  
 
-    <bean id="structureDao" class="org.vosao.dao.impl.StructureDaoImpl"
-        parent="abstractDao" />  
-
     <bean id="structureTemplateDao" class="org.vosao.dao.impl.StructureTemplateDaoImpl"
         parent="abstractDao" />  
+
+    <bean id="structureDao" class="org.vosao.dao.impl.StructureDaoImpl"
+        parent="abstractDao">
+        <property name="structureTemplateDao" ref="structureTemplateDao"/>
+    </bean>      
 
     <bean id="pageDao" class="org.vosao.dao.impl.PageDaoImpl"
         parent="abstractDao">

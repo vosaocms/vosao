@@ -81,6 +81,7 @@
         <input id="saveButton" type="button" value="Save" />
         <input id="exportButton" type="button" value="Export" />
         <input id="importButton" type="button" value="Import" />
+        <input id="resetButton" type="button" value="Reset" />
     </div>
 </div>
 

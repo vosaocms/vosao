@@ -123,6 +123,7 @@ public class BaseDaoImpl<K,T extends BaseEntity> extends AbstractDaoImpl
 	}
 
 	protected void removeSelected(String query, Object[] params) {
+		getEntityCache().removeEntities(clazz);
 		getQueryCache().removeQueries(clazz);
 		PersistenceManager pm = getPersistenceManager();
 		try {
@@ -221,6 +222,11 @@ public class BaseDaoImpl<K,T extends BaseEntity> extends AbstractDaoImpl
 
 	public void setQueryCache(QueryCache queryCache) {
 		this.queryCache = queryCache;
+	}
+
+	@Override
+	public void removeAll() {
+		removeSelected("select from " + clazz.getName(), params());
 	}
 	
 }

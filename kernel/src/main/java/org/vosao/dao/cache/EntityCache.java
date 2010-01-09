@@ -31,9 +31,5 @@ public interface EntityCache {
 	
 	void removeEntities(Class clazz);
 	
-	void setDisabled(boolean value);
-	
-	boolean isDisabled();
-	
 	CacheStat getStat();
 }

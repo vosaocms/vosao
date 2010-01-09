@@ -220,6 +220,13 @@
         <property name="structureTemplateBusiness" ref="structureTemplateBusiness"/>  
     </bean>
 
+    <!--======================= Setup bean ===========================-->
+    
+    <bean id="setupBean" class="org.vosao.business.impl.SetupBeanImpl">
+        <property name="dao" ref="dao"/>  
+        <property name="business" ref="business"/>  
+    </bean>    
+
     <!--========================== ImportExport =============================-->
 
     <bean id="importExportBusiness" 
@@ -253,9 +260,6 @@
     <bean id="fieldService" class="org.vosao.service.back.impl.FieldServiceImpl"
         parent="abstractService" />
 
-    <bean id="configService" class="org.vosao.service.back.impl.ConfigServiceImpl"
-        parent="abstractService" />
-
     <bean id="seoUrlService" class="org.vosao.service.back.impl.SeoUrlServiceImpl"
         parent="abstractService" />
 
@@ -283,6 +287,11 @@
     <bean id="structureTemplateService" class="org.vosao.service.back.impl.StructureTemplateServiceImpl"
         parent="abstractService" />
 
+    <bean id="configService" class="org.vosao.service.back.impl.ConfigServiceImpl"
+        parent="abstractService" >
+        <property name="setupBean" ref="setupBean"/>  
+    </bean>
+ 
     <bean id="folderService" class="org.vosao.service.back.impl.FolderServiceImpl"
         parent="abstractService">
         <property name="fileService" ref="fileService"/>  

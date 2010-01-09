@@ -247,5 +247,28 @@ public class SetupBeanImpl implements SetupBean {
 			getDao().getFormDao().save(config);			
 		}
 	}
+
+	@Override
+	public void clear() {
+		getDao().getCommentDao().removeAll();
+		getDao().getConfigDao().removeAll();
+		getDao().getContentDao().removeAll();
+		getDao().getContentPermissionDao().removeAll();
+		getDao().getFieldDao().removeAll();
+		getDao().getFileDao().removeAll();
+		getDao().getFolderDao().removeAll();
+		getDao().getFolderPermissionDao().removeAll();
+		getDao().getFormDao().removeAll();
+		getDao().getGroupDao().removeAll();
+		getDao().getLanguageDao().removeAll();
+		getDao().getMessageDao().removeAll();
+		getDao().getPageDao().removeAll();
+		getDao().getSeoUrlDao().removeAll();
+		getDao().getStructureDao().removeAll();
+		getDao().getStructureTemplateDao().removeAll();
+		getDao().getTemplateDao().removeAll();
+		getDao().getUserDao().removeAll();
+		getDao().getUserGroupDao().removeAll();
+	}
 	
 }

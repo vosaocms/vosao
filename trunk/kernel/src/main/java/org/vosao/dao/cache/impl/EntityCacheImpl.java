@@ -38,12 +38,10 @@ public class EntityCacheImpl implements EntityCache {
 			EntityCacheImpl.class);
 	
 	private SystemService systemService;
-	private boolean disabled;
 	private long calls;
 	private long hits;
 	
 	public EntityCacheImpl() {
-		disabled = false;
 		calls = 0;
 		hits = 0;
 	}
@@ -134,17 +132,8 @@ public class EntityCacheImpl implements EntityCache {
 	}
 
 	@Override
-	public void setDisabled(boolean value) {
-		disabled = value;		
-	}
-
-	@Override
-	public boolean isDisabled() {
-		return disabled;		
-	}
-
-	@Override
 	public CacheStat getStat() {
 		return new CacheStat(calls, hits);
 	}
+
 }

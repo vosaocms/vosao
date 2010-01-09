@@ -38,4 +38,6 @@ public interface ConfigService extends AbstractService {
 	ServiceResponse saveConfig(final Map<String, String> vo);
 	
 	ServiceResponse restoreCommentsTemplate() throws IOException;
+	
+	ServiceResponse reset();
 }

@@ -41,12 +41,10 @@ public class QueryCacheImpl implements QueryCache {
 			QueryCacheImpl.class);
 
 	private SystemService systemService;
-	private boolean disabled;
 	private long calls;
 	private long hits;
 	
 	public QueryCacheImpl() {
-		disabled = false;
 		calls = 0;
 		hits = 0;
 	}
@@ -61,16 +59,6 @@ public class QueryCacheImpl implements QueryCache {
 	
 	private Cache getCache() {
 		return systemService.getCache();
-	}
-
-	@Override
-	public void setDisabled(boolean value) {
-		disabled = value;		
-	}
-
-	@Override
-	public boolean isDisabled() {
-		return disabled;		
 	}
 
 	private String getQueryMapKey(Class clazz) {

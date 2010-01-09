@@ -27,6 +27,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.business.SetupBean;
 import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FormConfigEntity;
@@ -40,6 +41,8 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 
 	private static Log logger = LogFactory.getLog(ConfigServiceImpl.class);
 
+	private SetupBean setupBean;
+	
 	@Override
 	public ConfigEntity getConfig() {
 		return getBusiness().getConfigBusiness().getConfig();
@@ -79,6 +82,21 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 		getDao().getConfigDao().save(config);			
 		return ServiceResponse.createSuccessResponse(
 				"Comments template was successfully restored.");
+	}
+
+	@Override
+	public ServiceResponse reset() {
+		getSetupBean().clear();
+		getSetupBean().setup();
+		return ServiceResponse.createSuccessResponse("Site was successfully reseted.");
+	}
+
+	public SetupBean getSetupBean() {
+		return setupBean;
+	}
+
+	public void setSetupBean(SetupBean setupBean) {
+		this.setupBean = setupBean;
 	}
 	
 }

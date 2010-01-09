@@ -42,6 +42,8 @@ $(function(){
     $('#saveButton').click(onSave);
     $('#exportButton').click(onExport);
     $('#importButton').click(onImport);
+    $('#resetButton').click(onReset);
+    
     $('#commentsSaveButton').click(onSave);
     $('#restoreButton').click(onRestore);
     $('#importCancelButton').click(onImportCancel);
@@ -830,4 +832,15 @@ function onUserGroupSave() {
 	    $('#user-group-dialog').dialog('close');
 	    loadGroups();
 	}, group.id, Vosao.javaList(usersId));
+}
+
+function onReset() {
+	if (confirm('Are you going to REMOVE ALL DATA from application?')) {
+		if (confirm("ALL DATA WILL BE LOST! Are you shure?")) {
+			Vosao.jsonrpc.configService.reset(function(r) {
+				Vosao.showServiceMessages(r);
+				loadData();
+			});
+		}
+	}
 }

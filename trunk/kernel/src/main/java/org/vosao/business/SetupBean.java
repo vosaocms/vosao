@@ -25,7 +25,15 @@ import org.vosao.dao.Dao;
 
 public interface SetupBean {
 	
+	/**
+	 * Initial setup with default site.
+	 */
 	void setup();
+	
+	/**
+	 * Clear datastore before setup.
+	 */
+	void clear();
 
 	Dao getDao();
 	void setDao(Dao dao);

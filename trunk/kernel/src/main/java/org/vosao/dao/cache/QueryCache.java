@@ -23,10 +23,6 @@ package org.vosao.dao.cache;
 
 public interface QueryCache {
 
-	void setDisabled(boolean value);
-	
-	boolean isDisabled();
-
 	void putQuery(Class clazz, String query, Object[] params, Object value);
 
 	Object getQuery(Class clazz, String query, Object[] params);

@@ -36,7 +36,7 @@ $(function(){
     $("#user-group-dialog").dialog({ width: 300, autoOpen: false });
     $("#tabs").tabs();
     $('#upload').ajaxForm(afterUpload);
-    initJSONRpc(loadData);
+    Vosao.initJSONRpc(loadData);
     $('#enableRecaptcha').click(toggleRecaptcha);
     initLanguagesList();
     $('#saveButton').click(onSave);
@@ -118,7 +118,7 @@ function onAfterUploadOk() {
 }
 
 function loadConfig() {
-	jsonrpc.configService.getConfig(function (r) {
+	Vosao.jsonrpc.configService.getConfig(function (r) {
         config = r;
         initFormFields();
     }); 
@@ -139,7 +139,7 @@ function initFormFields() {
 }
 
 function onSave() {
-    var vo = javaMap({
+    var vo = Vosao.javaMap({
     	googleAnalyticsId : $('#googleAnalyticsId').val(),
         siteEmail : $('#siteEmail').val(),
         siteDomain : $('#siteDomain').val(),
@@ -151,8 +151,8 @@ function onSave() {
         commentsTemplate : $('#commentsTemplate').val(),        
         siteUserLoginUrl : $('#siteUserLoginUrl').val(),        
     });
-    jsonrpc.configService.saveConfig(function(r) {
-        showServiceMessages(r);
+    Vosao.jsonrpc.configService.saveConfig(function(r) {
+    	Vosao.showServiceMessages(r);
     }, vo); 
 }
 
@@ -161,8 +161,8 @@ function onExport() {
 }
 
 function onRestore() {
-	jsonrpc.configService.restoreCommentsTemplate(function (r) {
-        showServiceMessages(r);
+	Vosao.jsonrpc.configService.restoreCommentsTemplate(function (r) {
+		Vosao.showServiceMessages(r);
         loadConfig();
     });
 }
@@ -186,27 +186,27 @@ function onRemoveLanguage() {
         ids.push(this.value);
     });
     if (ids.length == 0) {
-        info('Nothing selected');
+    	Vosao.info('Nothing selected');
         return;
     }
     if (confirm('Are you sure?')) {
-    	jsonrpc.languageService.remove(function (r) {
-            info(r.message);
+    	Vosao.jsonrpc.languageService.remove(function (r) {
+    		Vosao.info(r.message);
             loadLanguages();
-        }, javaList(ids));
+        }, Vosao.javaList(ids));
     }
 }
 
 function languageInfo(msg) {
-    infoMessage('#language-dialog .messages', msg);
+	Vosao.infoMessage('#language-dialog .messages', msg);
 }
 
 function languageError(msg) {
-    errorMessage('#language-dialog .messages', msg);
+	Vosao.errorMessage('#language-dialog .messages', msg);
 }
 
 function languageErrors(errors) {
-    errorMessages('#language-dialog .messages', errors);
+	Vosao.errorMessages('#language-dialog .messages', errors);
 }
 
 function languageValidate(vo) {
@@ -228,7 +228,7 @@ function onLanguageSave() {
     };
     var errors = languageValidate(vo);
     if (errors.length == 0) {
-    	jsonrpc.languageService.save(function (r) {
+    	Vosao.jsonrpc.languageService.save(function (r) {
             if (r.result == 'success') {
                 $('#language-dialog').dialog('close');
                 loadLanguages();
@@ -236,7 +236,7 @@ function onLanguageSave() {
             else {
                 languageErrors(r.messages.list);
             }
-        }, javaMap(vo));
+        }, Vosao.javaMap(vo));
     }	
     else {
         languageErrors(errors);
@@ -248,7 +248,7 @@ function onLanguageCancel() {
 }
 
 function loadLanguages() {
-	jsonrpc.languageService.select(function (r) {
+	Vosao.jsonrpc.languageService.select(function (r) {
         languages = r.list;
         var h = '<table class="form-table"><tr><th></th><th>Code</th><th>Title</th></tr>';
         $.each(r.list, function (i, lang) {
@@ -264,7 +264,7 @@ function loadLanguages() {
 }
 
 function onLanguageEdit(id) {
-	jsonrpc.languageService.getById(function (r) {
+	Vosao.jsonrpc.languageService.getById(function (r) {
         language = r;
         $('#languageCode').val(r.code);
         $('#languageTitle').val(r.title);
@@ -488,19 +488,19 @@ function onRemoveMessage() {
         codes.push(this.value);
     });
     if (codes.length == 0) {
-        info('Nothing selected');
+    	Vosao.info('Nothing selected');
         return;
     }
     if (confirm('Are you sure?')) {
-    	jsonrpc.messageService.remove(function (r) {
-            info(r.message);
+    	Vosao.jsonrpc.messageService.remove(function (r) {
+    		Vosao.info(r.message);
             loadMessages();
-        }, javaList(codes));
+        }, Vosao.javaList(codes));
     }
 }
 
 function loadMessages() {
-	jsonrpc.messageService.select(function (r) {
+	Vosao.jsonrpc.messageService.select(function (r) {
         var h = '<table class="form-table"><tr><th></th><th>Code</th>';
         $.each(languages, function (i, lang) {
             h += '<th>' + lang.title + '</th>';
@@ -521,7 +521,7 @@ function loadMessages() {
 }
 
 function onMessageEdit(code) {
-	jsonrpc.messageService.selectByCode(function (r) {
+	Vosao.jsonrpc.messageService.selectByCode(function (r) {
         onAddMessage();
         $('#messageCode').val(code);
         $.each(r.list, function (i, msg) {
@@ -535,7 +535,7 @@ function onMessageSave() {
     $.each(languages, function (i, lang) {
         vo[lang.code] = $('#message_' + lang.code).val();
     });
-    jsonrpc.messageService.save(function (r) {
+    Vosao.jsonrpc.messageService.save(function (r) {
         if (r.result == 'success') {
             loadMessages();
             $('#message-dialog').dialog('close');
@@ -543,7 +543,7 @@ function onMessageSave() {
         else {
             messageErrors(r.messages.list);
         }
-    }, javaMap(vo));
+    }, Vosao.javaMap(vo));
     
 }
 
@@ -552,11 +552,11 @@ function onMessageCancel() {
 }
 
 function messageError(msg) {
-    errorMessage('#message-dialog .messages', msg);
+	Vosao.errorMessage('#message-dialog .messages', msg);
 }
 
 function messageErrors(errors) {
-	errorsMessages('#message-dialog .messages', errors);
+	Vosao.errorsMessages('#message-dialog .messages', errors);
 }
 
 // User 
@@ -573,20 +573,20 @@ function onRemoveUser() {
         ids.push(String(this.value));
     });
     if (ids.length == 0) {
-        info('Nothing selected');
+    	Vosao.info('Nothing selected');
         return;
     }
     if (confirm('Are you sure?')) {
-    	jsonrpc.userService.remove(function (r) {
-            info(r.message);
+    	Vosao.jsonrpc.userService.remove(function (r) {
+    		Vosao.info(r.message);
             loadUsers();
             loadGroups();
-        }, javaList(ids));
+        }, Vosao.javaList(ids));
     }
 }
 
 function loadUsers() {
-	jsonrpc.userService.select(function (r) {
+	Vosao.jsonrpc.userService.select(function (r) {
         var h = '<table class="form-table"><tr><th></th><th>Name</th><th>Email</th><th>Role</th></tr>';
         $.each(r.list, function (i, user) {
             h += '<tr><td><input type="checkbox" value="' + user.id 
@@ -607,7 +607,7 @@ function getRole(role) {
 }
 
 function onUserEdit(id) {
-	jsonrpc.userService.getById(function (r) {
+	Vosao.jsonrpc.userService.getById(function (r) {
         user = r;
         initUserForm();
         $('#user-dialog').dialog('open');
@@ -655,16 +655,16 @@ function onUserSave() {
     };
     var errors = validateUser(vo);
     if (errors.length == 0) {
-    	jsonrpc.userService.save(function (r) {
+    	Vosao.jsonrpc.userService.save(function (r) {
             if (r.result == 'success') {
                 $('#user-dialog').dialog('close');
-                info(r.message);
+                Vosao.info(r.message);
                 loadUsers();
             }
             else {
                 userErrors(r.messages.list);
             }
-        }, javaMap(vo));
+        }, Vosao.javaMap(vo));
     }
     else {
         userErrors(errors);
@@ -676,18 +676,18 @@ function onUserCancel() {
 }
 
 function userError(msg) {
-    errorMessage('#user-dialog .messages', msg);
+	Vosao.errorMessage('#user-dialog .messages', msg);
 }
 
 function userErrors(errors) {
-    errorMessages('#user-dialog .messages', errors);
+	Vosao.errorMessages('#user-dialog .messages', errors);
 }
 
 // Group
 
 function loadGroups() {
-	jsonrpc.groupService.select(function (r) {
-    	groups = idMap(r.list);
+	Vosao.jsonrpc.groupService.select(function (r) {
+    	groups = Vosao.idMap(r.list);
         var h = '<table class="form-table"><tr><th></th><th>Name</th><th>Users</th></tr>';
         $.each(r.list, function (i, group) {
         	if (group.name == 'guests') {
@@ -725,19 +725,19 @@ function onRemoveGroup() {
         ids.push(String(this.value));
     });
     if (ids.length == 0) {
-        info('Nothing selected');
+    	Vosao.info('Nothing selected');
         return;
     }
     if (confirm('Are you sure?')) {
-    	jsonrpc.groupService.remove(function (r) {
-            info(r.message);
+    	Vosao.jsonrpc.groupService.remove(function (r) {
+    		Vosao.info(r.message);
             loadGroups();
-        }, javaList(ids));
+        }, Vosao.javaList(ids));
     }
 }
 
 function onGroupEdit(id) {
-	jsonrpc.groupService.getById(function (r) {
+	Vosao.jsonrpc.groupService.getById(function (r) {
         group = r;
         initGroupForm();
         $('#group-dialog').dialog('open');
@@ -769,16 +769,16 @@ function onGroupSave() {
     };
     var errors = validateGroup(vo);
     if (errors.length == 0) {
-    	jsonrpc.groupService.save(function (r) {
+    	Vosao.jsonrpc.groupService.save(function (r) {
             if (r.result == 'success') {
                 $('#group-dialog').dialog('close');
-                info(r.message);
+                Vosao.info(r.message);
                 loadGroups();
             }
             else {
                 groupErrors(r.messages.list);
             }
-        }, javaMap(vo));
+        }, Vosao.javaMap(vo));
     }
     else {
         groupErrors(errors);
@@ -790,18 +790,18 @@ function onGroupCancel() {
 }
 
 function groupError(msg) {
-    errorMessage('#group-dialog .messages', msg);
+	Vosao.errorMessage('#group-dialog .messages', msg);
 }
 
 function groupErrors(errors) {
-    errorMessages('#group-dialog .messages', errors);
+	Vosao.errorMessages('#group-dialog .messages', errors);
 }
 
 function onEditUserGroup(id) {
 	group = groups[id];
-	jsonrpc.userService.select(function (r) {
-		users = idMap(r.list);
-		var groupUsers = idMap(group.users.list);
+	Vosao.jsonrpc.userService.select(function (r) {
+		users = Vosao.idMap(r.list);
+		var groupUsers = Vosao.idMap(group.users.list);
 		var h = '';
 		$.each(users, function (i, value) {
 			var checked = '';
@@ -825,9 +825,9 @@ function onUserGroupSave() {
 	$('#user-group-dialog input:checked').each(function () {
 		usersId.push(this.value);
 	});
-	jsonrpc.groupService.setGroupUsers(function (r) {
-		showServiceMessages(r);
+	Vosao.jsonrpc.groupService.setGroupUsers(function (r) {
+		Vosao.showServiceMessages(r);
 	    $('#user-group-dialog').dialog('close');
 	    loadGroups();
-	}, group.id, javaList(usersId));
+	}, group.id, Vosao.javaList(usersId));
 }

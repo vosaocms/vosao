@@ -205,6 +205,14 @@
             <version>1.6.1</version>
         </dependency>
 
+        <!-- xslt -->
+        
+        <dependency>
+            <groupId>saxon</groupId>
+            <artifactId>saxon</artifactId>
+            <version>9.2.0.3j</version>
+        </dependency>
+
         <!-- json -->
         
         <dependency>

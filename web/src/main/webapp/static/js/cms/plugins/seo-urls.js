@@ -23,7 +23,7 @@ var seoUrl = null;
 
 $(function() {
     $("#url-dialog").dialog({ width :500, autoOpen :false });
-    initJSONRpc(loadUrls);
+    Vosao.initJSONRpc(loadUrls);
     $('#tabs').tabs();
     $('#addButton').click(onAdd);
     $('#removeButton').click(onRemove);
@@ -33,7 +33,7 @@ $(function() {
 });
 
 function loadUrls() {
-	jsonrpc.seoUrlService.select(function (r) {
+	Vosao.jsonrpc.seoUrlService.select(function (r) {
         var html = '<table class="form-table"><tr><th></th><th>From</th><th>To</th></tr>';
         $.each(r.list, function (i, url) {
             html += '<tr><td><input type="checkbox" value="' 
@@ -48,7 +48,7 @@ function loadUrls() {
 
 function onEdit(id) {
     clearMessages();
-    jsonrpc.seoUrlService.getById(function(r) {
+    Vosao.jsonrpc.seoUrlService.getById(function(r) {
         seoUrl = r;
         urlDialogInit();
         $("#url-dialog").dialog("open");
@@ -79,14 +79,14 @@ function onRemove() {
         ids.push(this.value);
     });
     if (ids.length == 0) {
-        info('Nothing selected.');
+    	Vosao.info('Nothing selected.');
         return;
     }
     if (confirm('Are you sure?')) {
-    	jsonrpc.seoUrlService.remove(function(r) {
-            showServiceMessages(r);
+    	Vosao.jsonrpc.seoUrlService.remove(function(r) {
+    		Vosao.showServiceMessages(r);
             loadUrls();
-        }, javaList(ids));
+        }, Vosao.javaList(ids));
     }
 }
 
@@ -113,7 +113,7 @@ function onSave(closeFlag, addFlag) {
     };
     var errors = validateSeoUrl(vo);
     if (errors.length == 0) {
-    	jsonrpc.seoUrlService.save(function(r) {
+    	Vosao.jsonrpc.seoUrlService.save(function(r) {
             if (r.result == 'success') {
                 if (closeFlag) {
                     $("#url-dialog").dialog("close");
@@ -125,7 +125,7 @@ function onSave(closeFlag, addFlag) {
             } else {
                 errorUrlMessages(r.messages.list);
             }
-        }, javaMap(vo));
+        }, Vosao.javaMap(vo));
     } else {
         errorUrlMessages(errors);
     }
@@ -140,5 +140,5 @@ function clearMessages() {
 }
 
 function errorUrlMessages(messages) {
-    errorMessages("#url-messages", messages);
+	Vosao.errorMessages("#url-messages", messages);
 }

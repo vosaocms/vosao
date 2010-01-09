@@ -24,7 +24,7 @@ var editMode = structureTemplateId != '';
 var autosaveTimer = '';
     
 $(function(){
-    initJSONRpc(loadStructureTemplate);
+	Vosao.initJSONRpc(loadStructureTemplate);
     $("#tabs").tabs();
     $('#autosave').change(onAutosave);
     $('#bigLink').click(onBig);
@@ -45,7 +45,8 @@ function onSave() {
 function startAutosave() {
     if (structureTemplateId != 'null') {
         if (autosaveTimer == '') {
-            autosaveTimer = setInterval(saveContent, AUTOSAVE_TIMEOUT * 1000);
+            autosaveTimer = setInterval(saveContent, 
+            		Vosao.AUTOSAVE_TIMEOUT * 1000);
         }
     }
 }
@@ -76,7 +77,7 @@ function loadStructureTemplate() {
 		structureTemplate = null;
         initStructureTemplateForm();
 	}
-	jsonrpc.structureTemplateService.getById(function (r) {
+	Vosao.jsonrpc.structureTemplateService.getById(function (r) {
 		structureTemplate = r;
 		if (editMode) {
 			structureId = structureTemplate.structureId;
@@ -103,16 +104,16 @@ function onCancel() {
 }
 
 function onUpdate(cont) {
-	var structureTemplateVO = javaMap({
+	var structureTemplateVO = Vosao.javaMap({
 	    id : structureTemplateId,
-	    title : strip($('#title').val()),
+	    title : Vosao.strip($('#title').val()),
 	    type: $('#type').val(),
 	    structureId: structureId,
         content : $('#content').val(),
 	});
-	jsonrpc.structureTemplateService.save(function (r) {
+	Vosao.jsonrpc.structureTemplateService.save(function (r) {
 		if (r.result == 'success') {
-			info('Structure template was successfully saved.');
+			Vosao.info('Structure template was successfully saved.');
 			if (!cont) {
 				onCancel();
 			}
@@ -122,7 +123,7 @@ function onUpdate(cont) {
 			}
 		}
 		else {
-			showServiceMessages(r);
+			Vosao.showServiceMessages(r);
 		}			
 	}, structureTemplateVO);
 }

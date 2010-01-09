@@ -23,80 +23,85 @@
 // This is CMS related JS code.
 //******************************************************************************
 
+// Vosao namespace should exists.
+
+if (Vosao == undefined) {
+	alert('Vosao global namespace was not found. Please include vosao.js first.');
+}
 
 // ****************************** Constants ************************************
 
 /**
  * Autosave timeout in seconds.
  */
-var AUTOSAVE_TIMEOUT = 60;
+Vosao.AUTOSAVE_TIMEOUT = 60;
 
-var ENGLISH_CODE = 'en';
+Vosao.ENGLISH_CODE = 'en';
 
 //************************** Utility functions *********************************
 
-function info(msg) {
-	infoMessage('#wrapper .messages', msg);
+Vosao.info = function(msg) {
+	Vosao.infoMessage('#wrapper .messages', msg);
     $('#wrapper .messages').fadeIn();
     setTimeout(function() {
     	$('#wrapper .messages').fadeOut();
     }, 5000);
-}
+};
 
-function error(msg) {
-    errorMessage('#wrapper .messages', msg);	
+Vosao.error = function(msg) {
+    Vosao.errorMessage('#wrapper .messages', msg);	
     $('#wrapper .messages').fadeIn();
     setTimeout(function() {
     	$('#wrapper .messages').fadeOut();
     }, 30000);
-}
+};
 
-function infoMessage(widget, msg) {
+Vosao.infoMessage = function(widget, msg) {
 	$(widget).html('<div class="ui-widget">\
 		<div class="ui-state-highlight ui-corner-all" style="padding: 0.5em 0.7em;margin: 4px;"><p>\
 		<span class="ui-icon ui-icon-info" style="float:left;margin-right:0.3em" />\
 		<strong>Hey!</strong> ' + msg + '</p></div></div>');
-}
+};
 
-function errorMessage(widget, msg) {
+Vosao.errorMessage = function(widget, msg) {
 	$(widget).html('<div class="ui-widget">\
 		<div class="ui-state-error ui-corner-all" style="padding: 0.5em 0.7em;margin: 4px;"><p>\
 		<span class="ui-icon ui-icon-alert" style="float:left;margin-right:0.3em" />\
 		<strong>Alert:</strong> ' + msg + '</p></div></div>');
-}
+};
 
-function errorMessages(widget, errors) {
+Vosao.errorMessages = function(widget, errors) {
     var msg = '';
     $.each(errors, function (i, m) {
         msg += (i == 0 ? '' : '<br />') + m;
     });
-    errorMessage(widget, msg);
-}
+    Vosao.errorMessage(widget, msg);
+};
 
-function showServiceMessages(r) {
+Vosao.showServiceMessages = function(r) {
 	if (r.result == 'success') {
-		info(r.message);
+		Vosao.info(r.message);
 		if (r.messages.list.length > 0) {
-			$.each(r.messages.list, function(n,value) { info(value) });
+			$.each(r.messages.list, function(n,value) { Vosao.info(value) });
 		}
 	}
 	else {
-		error(r.message);
+		Vosao.error(r.message);
 		if (r.messages.list.length > 0) {
-			$.each(r.messages.list, function(n,value) { error(value) });
+			$.each(r.messages.list, function(n,value) { Vosao.error(value) });
 		}
 	}
-}
+};
 
 /**
  * Create map from list of object with id field as key.
  * @param list - list of objects.
  * @return - map of objects.
  */
-function idMap(list) {
+Vosao.idMap = function(list) {
 	var map = {};
 	$.each(list, function (i, value) {
 		map[value.id] = value;
 	});
 	return map;
-}
+};

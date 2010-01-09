@@ -62,8 +62,8 @@ function onAddComment() {
         commentError(error);
         return;        
     }
-    jsonrpc.commentFrontService.addComment(function (data, e) {
-        if (serviceFailed(e)) return;
+    Vosao.jsonrpc.commentFrontService.addComment(function (data, e) {
+        if (Vosao.serviceFailed(e)) return;
         if (data.result == 'success') {
             $("#messages").html('');
             $("#comment-form textarea[name=comment]").val('');
@@ -91,8 +91,8 @@ function commentError(msg) {
 }
 
 function loadComments(pageUrl) {
-    jsonrpc.commentFrontService.getByPage(function(r, e) {
-        if (serviceFailed(e)) return;
+	Vosao.jsonrpc.commentFrontService.getByPage(function(r, e) {
+        if (Vosao.serviceFailed(e)) return;
         var s = "";
         if (r.list.length > 0) {
             for (var i = 0; i < r.list.length; i++) {

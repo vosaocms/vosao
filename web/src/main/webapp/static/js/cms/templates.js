@@ -22,7 +22,7 @@
 $(function(){
     $("#import-dialog").dialog({ width: 400, autoOpen: false });
     $('#upload').ajaxForm(afterUpload);
-    initJSONRpc(loadTemplates);
+    Vosao.initJSONRpc(loadTemplates);
     $("#tabs").tabs();
     $('#addButton').click(onAdd);
     $('#deleteButton').click(onDelete);
@@ -60,7 +60,7 @@ function onAfterUploadOk() {
 }
 
 function loadTemplates() {
-    jsonrpc.templateService.getTemplates(function (r) {
+	Vosao.jsonrpc.templateService.getTemplates(function (r) {
         var html = '<table class="form-table"><tr><th></th><th>Title</th></tr>';
         $.each(r.list, function (n, value) {
             html += '<tr><td><input type="checkbox" value="' + value.id 
@@ -82,14 +82,14 @@ function onDelete() {
         ids.push(this.value);
     });
     if (ids.length == 0) {
-        info('Nothing selected.');
+    	Vosao.info('Nothing selected.');
         return;
     }
     if (confirm('Are you sure?')) {
-    	jsonrpc.templateService.deleteTemplates(function(r) {
-            showServiceMessages(r);
+    	Vosao.jsonrpc.templateService.deleteTemplates(function(r) {
+    		Vosao.showServiceMessages(r);
             loadTemplates();
-        }, javaList(ids));
+        }, Vosao.javaList(ids));
     }
 }
 
@@ -99,7 +99,7 @@ function onExport() {
         ids.push(this.value);
     });
     if (ids.length == 0) {
-        info('Nothing selected.');
+    	Vosao.info('Nothing selected.');
         return;
     }
     var link = '/cms/export?type=theme&ids=';
@@ -115,6 +115,6 @@ function onExport() {
     $('#templates input:checked').each(function () {
         this.checked = false;
     });
-    info('Themes were successfully exported.');
+    Vosao.info('Themes were successfully exported.');
 }
 

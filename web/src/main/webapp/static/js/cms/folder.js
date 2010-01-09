@@ -37,7 +37,7 @@ $(function() {
     $("#file-upload").dialog({ width: 400, autoOpen: false });
     $("#permission-dialog").dialog({ width: 400, autoOpen: false });
     $('#upload').ajaxForm(afterUpload);
-    initJSONRpc(loadData);
+    Vosao.initJSONRpc(loadData);
     $('#title').change(onTitleChange);
     $('#saveButton').click(onUpdate);
     $('#cancelButton').click(onCancel);
@@ -57,7 +57,7 @@ $(function() {
 });
 
 function loadData() {
-	jsonrpc.folderService.getFolderRequest(function (r) {
+	Vosao.jsonrpc.folderService.getFolderRequest(function (r) {
 		folderRequest = r;
 	    loadFolder();
 	    loadGroups();
@@ -104,17 +104,17 @@ function afterUpload(data) {
     var result = s[1];
     var msg = s[2]; 
     if (result == 'success') {
-        info('File was successfully uploaded.');
+    	Vosao.info('File was successfully uploaded.');
         callLoadFiles();
     }
     else {
-        error("Error during uploading file. " + msg);
+    	Vosao.error("Error during uploading file. " + msg);
     }
     $("#file-upload").dialog("close");
 }
 
 function callLoadFiles() {
-	jsonrpc.fileService.getByFolder(function (r) {
+	Vosao.jsonrpc.fileService.getByFolder(function (r) {
 		folderRequest.files = r;
 		loadFiles();
 	}, folderId);
@@ -147,20 +147,20 @@ function getCheckedFilesIds() {
 }
 
 function onDeleteFiles() {
-    var ids = javaList(getCheckedFilesIds());
+    var ids = Vosao.javaList(getCheckedFilesIds());
     if (ids.list.length == 0) {
-        info('Nothing selected.');
+    	Vosao.info('Nothing selected.');
         return;
     }
     if (confirm('Are you sure?')) {
-    	jsonrpc.fileService.deleteFiles(function (r) {
+    	Vosao.jsonrpc.fileService.deleteFiles(function (r) {
             if (r.result == "success") {
                 callLoadFiles();
-                info("Files was successfully deleted.");
-                }
+                Vosao.info("Files was successfully deleted.");
+            }
             else {
-                error("Error during deleting files. " + r.messsage);
-                        }
+            	Vosao.error("Error during deleting files. " + r.messsage);
+            }
         }, ids);
     }
 }
@@ -176,12 +176,12 @@ function onTitleChange() {
     var url = $("#name").val();
     var title = $("#title").val();
     if (url == "") {
-        $("#name").val(urlFromTitle(title));
+        $("#name").val(Vosao.urlFromTitle(title));
     }
 }
 
 function callLoadChildren() {
-	jsonrpc.folderService.getByParent(function(r) {
+	Vosao.jsonrpc.folderService.getByParent(function(r) {
 		folderRequest.children = r;
 		loadChildren();
 	}, folderId);
@@ -203,15 +203,15 @@ function loadChildren() {
 }
 
 function onUpdate() {
-    var vo = javaMap({
+    var vo = Vosao.javaMap({
         id : folderId,
         parent : folderParentId,
         name : $('#name').val(),
         title : $('#title').val(),
     });
-    jsonrpc.folderService.saveFolder(function (r) {
+    Vosao.jsonrpc.folderService.saveFolder(function (r) {
         if (r.result == 'success') {
-            info("Folder was successfully saved.");
+        	Vosao.info("Folder was successfully saved.");
             if (folderId == '') {
             	folderId = r.message;
             	editMode = true;
@@ -220,7 +220,7 @@ function onUpdate() {
             }
         }
         else {
-        	showServiceMessages(r);
+        	Vosao.showServiceMessages(r);
         }
     }, vo);
 }
@@ -246,19 +246,19 @@ function getParentFolderIds() {
 }
 
 function onDelete() {
-    var ids = javaList(getParentFolderIds());
+    var ids = Vosao.javaList(getParentFolderIds());
     if (ids.list.length == 0) {
-        info('Nothing selected.');
+    	Vosao.info('Nothing selected.');
         return;
     }
     if (confirm('Are you sure?')) {
-    	jsonrpc.folderService.deleteFolder(function (r) {
+    	Vosao.jsonrpc.folderService.deleteFolder(function (r) {
             if (r.result == "success") {
                 callLoadChildren();
-                info("Folders was successfully deleted.");
+                Vosao.info("Folders was successfully deleted.");
             }
             else {
-                error("Error during deleting folders. " + r.messsage);
+            	Vosao.error("Error during deleting folders. " + r.messsage);
             }
         }, ids);
     }
@@ -282,7 +282,7 @@ function getPermissionName(perm) {
 }
 
 function loadPermissions(r) {
-	permissions = idMap(r.list);
+	permissions = Vosao.idMap(r.list);
 	var h = '<table class="form-table"><tr><th></th><th>Group</th><th>Permission</th></tr>';
 	$.each(permissions, function(i,value) {
 		var checkbox = '';
@@ -300,14 +300,14 @@ function loadPermissions(r) {
 }
 
 function callLoadPermissions() {
-	jsonrpc.folderPermissionService.selectByFolder(function (r) {
+	Vosao.jsonrpc.folderPermissionService.selectByFolder(function (r) {
 		loadPermissions(r);
 	}, folderId);
 }
 
 function loadGroups() {
 	var r = folderRequest.groups;
-	groups = idMap(r.list);
+	groups = Vosao.idMap(r.list);
 	var h = '';
 	$.each(groups, function(i,value) {
 		h += '<option value="' + value.id + '">' + value.name + '</option>';
@@ -344,13 +344,13 @@ function onPermissionSave() {
 			String(permission.group.id),
 		permission: $('#permissionList input:checked')[0].value,
 	};
-	jsonrpc.folderPermissionService.save(function(r) {
-		showServiceMessages(r);
+	Vosao.jsonrpc.folderPermissionService.save(function(r) {
+		Vosao.showServiceMessages(r);
 		$('#permission-dialog').dialog('close');
 		if (r.result == 'success') {
 			callLoadPermissions();
 		}
-	}, javaMap(vo));
+	}, Vosao.javaMap(vo));
 }
 
 function onAddPermission() {
@@ -365,14 +365,14 @@ function onDeletePermission() {
 		ids.push(this.value);
 	});
 	if (ids.length == 0) {
-		info('Nothing selected.');
+		Vosao.info('Nothing selected.');
 		return;
 	}
 	if (confirm('Are you sure?')) {
-		jsonrpc.folderPermissionService.remove(function(r) {
-			showServiceMessages(r);
+		Vosao.jsonrpc.folderPermissionService.remove(function(r) {
+			Vosao.showServiceMessages(r);
 			callLoadPermissions();
-		}, javaList(ids));
+		}, Vosao.javaList(ids));
 	}
 }
 

@@ -37,6 +37,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.CurrentUser;
+import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.common.AccessDeniedException;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.PageEntity;
@@ -89,6 +90,10 @@ public class SiteFilter extends AbstractFilter implements Filter {
     			renderPage(httpRequest, httpResponse, page);
     			return;
     		}
+    		if (url.equals("/")) {
+    			showNoApprovedContent(httpResponse);
+    			return;
+    		}
     		httpResponse.sendRedirect("/");
     	}
     	catch (AccessDeniedException e) {
@@ -109,7 +114,14 @@ public class SiteFilter extends AbstractFilter implements Filter {
     	}
     }
 
-    public static boolean isSkipUrl(final String url) {
+    private void showNoApprovedContent(HttpServletResponse httpResponse) 
+    		throws IOException {
+    	renderMessage(httpResponse, "<h3>Sorry, but there is no approved content" +
+    			" available for this page.</h3><p>Vosao CMS "+ 
+    			SetupBeanImpl.VERSION +"</p>");
+    }
+
+	public static boolean isSkipUrl(final String url) {
     	for (String u : SKIP_URLS) {
     		if (url.startsWith(u)) {
     			return true;

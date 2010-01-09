@@ -48,4 +48,6 @@ public interface CommentDao extends BaseDao<String, CommentEntity> {
 	void enable(final List<String> ids);
 	
 	void disable(final List<String> ids);
+	
+	void removeByPage(final String url);
 }

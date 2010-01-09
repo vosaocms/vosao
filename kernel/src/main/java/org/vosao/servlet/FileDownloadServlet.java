@@ -99,7 +99,6 @@ public class FileDownloadServlet extends BaseSpringServlet {
 	
 	private void sendFromCache(HttpServletRequest request, 
 			HttpServletResponse response) throws IOException {
-        log.info("taking from memcache " + request.getPathInfo());
 		FileEntity file = (FileEntity) getBusiness().getSystemService()
 				.getCache().get(request.getPathInfo());
 		sendFile(file, request, response);

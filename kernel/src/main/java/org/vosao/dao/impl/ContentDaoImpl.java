@@ -54,5 +54,14 @@ public class ContentDaoImpl extends BaseDaoImpl<String, ContentEntity>
 					+ "   String pLanguage";
 		return selectOne(query, params(parentClass, parentKey, language));
 	}
+
+	@Override
+	public void removeById(String className, String id) {
+		String query = "select from " + ContentEntity.class.getName() 
+			+ " where parentClass == pParentClass" 
+			+ "   && parentKey == pParentKey" 
+			+ " parameters String pParentClass, String pParentKey";
+		removeSelected(query, params(className, id));
+	}
 	
 }

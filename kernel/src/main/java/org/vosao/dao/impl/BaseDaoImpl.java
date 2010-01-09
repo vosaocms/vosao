@@ -122,6 +122,19 @@ public class BaseDaoImpl<K,T extends BaseEntity> extends AbstractDaoImpl
 		}
 	}
 
+	protected void removeSelected(String query, Object[] params) {
+		getQueryCache().removeQueries(clazz);
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			List<T> result =  (List<T>) pm.newQuery(query).executeWithArray(
+					params);
+			pm.deletePersistentAll(result);
+		}
+		finally {
+			pm.close();
+		}
+	}
+	
 	protected List<T> select(String query, Object[] params) {
 		List<T> result = (List<T>) getQueryCache().getQuery(clazz, query, params);
 		if (result == null) {

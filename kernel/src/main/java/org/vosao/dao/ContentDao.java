@@ -33,4 +33,5 @@ public interface ContentDao extends BaseDao<String, ContentEntity> {
 	ContentEntity getByLanguage(final String parentClass, 
 			final String parentKey, final String language);
 	
+	void removeById(final String className, final String id);
 }

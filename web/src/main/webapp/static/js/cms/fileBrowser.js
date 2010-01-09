@@ -20,9 +20,13 @@
  */
 
 var rootFolder;
+var browserMode = 'ckeditor';
 
 $(document).ready(function(){
     initJSONRpc(loadFolderTree);
+    if (getQueryParam('mode')) {
+    	browserMode = getQueryParam('mode');
+    }
 });
 
 function loadFolderTree() {
@@ -80,8 +84,14 @@ function onFolderSelected(folderId) {
 
 function onFileSelected(fileId) {
     jsonrpc.fileService.getFilePath(function(path) {
-       	window.opener.CKEDITOR.tools.callFunction(1, path);
-        window.close();                
+       	if (browserMode == 'ckeditor') {
+       		window.opener.CKEDITOR.tools.callFunction(1, path);
+       		window.close();
+       	}
+       	if (browserMode == 'page') {
+       		window.opener.setResource(path);
+       		window.close();
+       	}
     }, fileId);
 } 
 

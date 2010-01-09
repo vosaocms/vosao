@@ -79,6 +79,9 @@ public class BaseDaoImpl<K,T extends BaseEntity> extends AbstractDaoImpl
 			catch (JDOObjectNotFoundException e) {
 				entity = null;
 			}
+			catch (IllegalArgumentException e) {
+				entity = null;
+			}
 			finally {
 				pm.close();
 			}

@@ -20,8 +20,13 @@
  */
 
 $(function() {
-	initJSONRpc(loadTree);
+	initJSONRpc(loadData);
 });
+
+function loadData() {
+	loadTree();
+	loadUser();
+}
 
 function loadTree() {
 	jsonrpc.pageService.getTree(function(r) {
@@ -44,4 +49,12 @@ function renderPage(vo) {
 		html += '</ul>';
 	}
 	return html + '</li>';
+}
+
+function loadUser() {
+	jsonrpc.userService.getLoggedIn(function(r) {
+		if (!r.admin) {
+		    $('#structuresTab').hide();
+		}
+	});
 }

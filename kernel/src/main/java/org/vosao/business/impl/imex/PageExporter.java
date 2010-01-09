@@ -42,8 +42,11 @@ import org.vosao.entity.ContentEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.StructureEntity;
+import org.vosao.entity.StructureTemplateEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.enums.PageState;
+import org.vosao.enums.PageType;
 import org.vosao.utils.DateUtil;
 import org.vosao.utils.XmlUtil;
 
@@ -120,6 +123,15 @@ public class PageExporter extends AbstractExporter {
 			pageElement.addElement("modDate").setText(
 					DateUtil.dateTimeToString(page.getModDate()));
 		}
+		StructureEntity structure = getDao().getStructureDao().getById(
+				page.getStructureId());
+		pageElement.addElement("structure").setText(
+				structure == null ? "" : structure.getTitle());
+		StructureTemplateEntity structureTemplate = getDao()
+				.getStructureTemplateDao().getById(page.getStructureTemplateId());
+		pageElement.addElement("structureTemplate").setText(
+				structureTemplate == null ? ""	: structureTemplate.getTitle());
+		pageElement.addElement("pageType").setText(page.getPageType().name());
 		List<ContentEntity> contents = getDao().getPageDao().getContents(
 				page.getId()); 
 		for (ContentEntity content : contents) {
@@ -233,6 +245,20 @@ public class PageExporter extends AbstractExporter {
 			}
 			if (element.getName().equals("modUserEmail")) {
 				newPage.setModUserEmail(element.getText());
+			}
+			if (element.getName().equals("pageType")) {
+				newPage.setPageType(PageType.valueOf(element.getText()));
+			}
+			if (element.getName().equals("structure")) {
+				StructureEntity structure = getDao().getStructureDao().getById(
+						element.getText());
+				newPage.setStructureId(structure == null ? "" : structure.getId());
+			}
+			if (element.getName().equals("structureTemplate")) {
+				StructureTemplateEntity structureTemplate = getDao()
+						.getStructureTemplateDao().getById(element.getText());
+				newPage.setStructureTemplateId(structureTemplate == null ? "" : 
+						structureTemplate.getId());
 			}
 			if (element.getName().equals("createDate")) {
 				try {

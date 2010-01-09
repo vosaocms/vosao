@@ -22,7 +22,7 @@
 -->
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE site [
-<!ELEMENT site (users,groups,config,pages,forms,folders,messages)>
+<!ELEMENT site (users,groups,config,structures,pages,forms,folders,messages)>
 
 <!ELEMENT config (google-analytics,email,domain,edit-ext,recaptchaPrivateKey,
 recaptchaPublicKey,commentsEmail,commentsTemplate,enableRecaptcha,languages,
@@ -43,7 +43,8 @@ siteUserLoginUrl)>
 
 <!ELEMENT pages (page*)>
 <!ELEMENT page (version,versionTitle,state,createUserEmail,modUserEmail,
-createDate,modDate,content*,page-version*,comments,page*,permissions)>
+createDate,modDate,structure,structureTemplate,pageType,
+content*,page-version*,comments,page*,permissions)>
 
 <!ELEMENT version (#PCDATA)>
 <!ELEMENT versionTitle (#PCDATA)>
@@ -52,6 +53,9 @@ createDate,modDate,content*,page-version*,comments,page*,permissions)>
 <!ELEMENT modUserEmail (#PCDATA)>
 <!ELEMENT createDate (#PCDATA)>
 <!ELEMENT modDate (#PCDATA)>
+<!ELEMENT structure (#PCDATA)>
+<!ELEMENT structureTemplate (#PCDATA)>
+<!ELEMENT pageType (#PCDATA)>
 <!ELEMENT content (#PCDATA)>
 <!ELEMENT page-version (version,versionTitle,state,createUserId,modUserId,
 createDate,modDate,content*)>
@@ -98,6 +102,14 @@ createDate,modDate,content*)>
 <!ELEMENT language (#PCDATA)>
 <!ELEMENT code (#PCDATA)>
 <!ELEMENT value (#PCDATA)>
+
+<!ELEMENT structures (structure*)>
+<!ELEMENT structure (title, content, templates)>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT content (#PCDATA)>
+<!ELEMENT templates (template*)>
+<!ELEMENT template (title, type, content)>
+<!ELEMENT type (#PCDATA)>
 
 
 <!ATTLIST language code CDATA #REQUIERED>

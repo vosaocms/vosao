@@ -27,8 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.jdo.PersistenceManager;
-
+import org.vosao.dao.CommentDao;
 import org.vosao.dao.ContentDao;
 import org.vosao.dao.PageDao;
 import org.vosao.entity.ContentEntity;
@@ -44,28 +43,43 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 	private static final String PAGE_CLASS_NAME = PageEntity.class.getName();
 
 	private ContentDao contentDao;
+	private CommentDao commentDao;
 	
 	public PageDaoImpl() {
 		super(PageEntity.class);
 	}
 
-	private void removePage(String pageId, PersistenceManager pm) {
-		List<ContentEntity> contents = getContentDao().select(
-				PAGE_CLASS_NAME, pageId);
-		for (ContentEntity content : contents) {
-			pm.deletePersistent(pm.getObjectById(ContentEntity.class, 
-					content.getId()));
+	@Override
+	public void remove(String id) {
+		PageEntity page = getById(id);
+		if (page != null) {
+			List<PageEntity> children = selectAllChildren(page.getFriendlyURL());
+			for (PageEntity child : children) {
+				remove(child.getId());
+			}
+			getContentDao().removeById(PAGE_CLASS_NAME, id);
+			getCommentDao().removeByPage(page.getFriendlyURL());
 		}
-		pm.deletePersistent(pm.getObjectById(PageEntity.class, pageId));
+		super.remove(id);
+	}
+	
+	private List<PageEntity> selectAllChildren(final String parentUrl) {
+		String query = "select from " + PageEntity.class.getName()
+			+ " where parentUrl == pParentUrl" 
+			+ " parameters String pParentUrl";
+		return copy(select(query, params(parentUrl)));
 	}
 	
 	@Override
+	public void remove(List<String> ids) {
+		for (String id : ids) {
+			remove(id);
+		}
+	}
+
+	@Override
 	public List<PageEntity> getByParent(final String url) {
-		String query = "select from " + PageEntity.class.getName()
-			    + " where parentUrl == pParentUrl" 
-			    + " parameters String pParentUrl";
-		List<PageEntity> result = filterLatestVersion(
-				select(query, params(url)));
+		List<PageEntity> result = filterLatestVersion(selectAllChildren(url));
 		Collections.sort(result, new PageHelper.PublishDateDesc());
 		return result;
 	}
@@ -169,11 +183,7 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 	
 	@Override
 	public List<PageEntity> getByParentApproved(final String url) {
-		String query = "select from " + PageEntity.class.getName()
-			    + " where parentUrl == pParentUrl" 
-			    + " parameters String pParentUrl";
-		List<PageEntity> result = filterApproved(select(
-					query, params(url)));
+		List<PageEntity> result = filterApproved(selectAllChildren(url));
 		Collections.sort(result, new PageHelper.PublishDateDesc());
 		return result;
 	}
@@ -201,5 +211,13 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 				+ " where structureTemplateId == pStructureTemplateId"
 				+ " parameters String pStructureTemplateId";
 		return select(query, params(structureTemplateId));
+	}
+
+	public CommentDao getCommentDao() {
+		return commentDao;
+	}
+
+	public void setCommentDao(CommentDao commentDao) {
+		this.commentDao = commentDao;
 	}
 }

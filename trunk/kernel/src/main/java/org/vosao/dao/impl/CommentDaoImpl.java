@@ -107,5 +107,13 @@ public class CommentDaoImpl extends BaseDaoImpl<String, CommentEntity>
 		Collections.sort(result, new CommentHelper.PublishDateDesc());
 		return result;
 	}
+
+	@Override
+	public void removeByPage(String url) {
+		String query = "select from " + CommentEntity.class.getName()
+	    	+ " where pageUrl == pPageUrl"
+	    	+ " parameters String pPageUrl";
+		removeSelected(query, params(url));
+	}
 	
 }

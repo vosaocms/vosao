@@ -74,4 +74,5 @@ public interface PageDao extends BaseDao<String, PageEntity> {
 	List<PageEntity> selectByStructure(String structureId);
 
 	List<PageEntity> selectByStructureTemplate(String structureTemplateId);
+	
 }

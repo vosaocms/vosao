@@ -42,6 +42,7 @@ import org.apache.velocity.tools.view.tools.LinkTool;
 import org.vosao.business.ConfigBusiness;
 import org.vosao.business.ContentPermissionBusiness;
 import org.vosao.business.CurrentUser;
+import org.vosao.business.FolderBusiness;
 import org.vosao.business.MessageBusiness;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
@@ -51,6 +52,7 @@ import org.vosao.business.impl.pagefilter.PageFilter;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.ContentPermissionEntity;
+import org.vosao.entity.FolderEntity;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
@@ -74,6 +76,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
     private MessageBusiness messageBusiness;
     private ContentPermissionBusiness contentPermissionBusiness;
 	private VelocityPluginService velocityPluginService;
+	private FolderBusiness folderBusiness;
 
 	public void init() throws Exception {
 		velocityPluginService = new VelocityPluginServiceImpl(getDao(), 
@@ -353,6 +356,17 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 				}
 			}
 		}
+		TreeItemDecorator<FolderEntity> root = getFolderBusiness().getTree();
+		List<String> folderIds = new ArrayList<String>();
+		for (String id : removeIds) {
+			PageEntity page = getDao().getPageDao().getById(id);
+			TreeItemDecorator<FolderEntity> folder = getFolderBusiness()
+					.findFolderByPath(root, "/page" + page.getFriendlyURL()); 
+			if (folder != null) {	
+				folderIds.add(folder.getEntity().getId());
+			}
+		}
+		getFolderBusiness().recursiveRemove(folderIds);
 		getDao().getPageDao().remove(removeIds);
 	}
 
@@ -400,6 +414,14 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		}
 		return perm.isChangeGranted() && perm.getLanguagesList().contains(
 				languageCode);
+	}
+
+	public FolderBusiness getFolderBusiness() {
+		return folderBusiness;
+	}
+
+	public void setFolderBusiness(FolderBusiness folderBusiness) {
+		this.folderBusiness = folderBusiness;
 	}
 }
 

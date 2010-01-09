@@ -109,6 +109,7 @@
     <bean id="pageDao" class="org.vosao.dao.impl.PageDaoImpl"
         parent="abstractDao">
         <property name="contentDao" ref="contentDao"/>  
+        <property name="commentDao" ref="commentDao"/>  
     </bean>      
 
     <bean id="dao" class="org.vosao.dao.impl.DaoImpl">  
@@ -196,6 +197,7 @@
         <property name="configBusiness" ref="configBusiness"/>  
         <property name="messageBusiness" ref="messageBusiness"/>  
         <property name="contentPermissionBusiness" ref="contentPermissionBusiness"/>  
+        <property name="folderBusiness" ref="folderBusiness"/>  
     </bean>      
 
     <bean id="business" class="org.vosao.business.impl.BusinessImpl"

@@ -26,22 +26,12 @@ var autosaveTimer = '';
 $(function() {
 	$("#tabs").tabs();
 	$("#tabs").bind('tabsselect', tabSelected);
-	initJSONRpc(loadFile);
+	Vosao.initJSONRpc(loadFile);
 	$('#saveButton').click(onUpdate);
 	$('#cancelButton').click(onCancel);
 	$('#autosave').change(onAutosave);
 	$('#saveContentButton').click(saveContent);
 	$('#contentCancelButton').click(onCancel);
-	$('#').click();
-	$('#').click();
-	$('#').click();
-	$('#').click();
-	$('#').click();
-	$('#').click();
-	$('#').click();
-	$('#').click();
-	$('#').click();
-	$('#').click();
 });
 
 function tabSelected(event, ui) {
@@ -55,7 +45,8 @@ function tabSelected(event, ui) {
 function startAutosave() {
 	if (fileId != 'null') {
 		if (autosaveTimer == '') {
-			autosaveTimer = setInterval(saveContent, AUTOSAVE_TIMEOUT * 1000);
+			autosaveTimer = setInterval(saveContent, 
+					Vosao.AUTOSAVE_TIMEOUT * 1000);
 		}
 	}
 }
@@ -69,12 +60,12 @@ function stopAutosave() {
 
 function saveContent() {
 	var content = $("textarea").val();
-	jsonrpc.fileService.updateContent(function(r) {
+	Vosao.jsonrpc.fileService.updateContent(function(r) {
 		if (r.result == 'success') {
 			var now = new Date();
-			info(r.message + " " + now);
+			Vosao.info(r.message + " " + now);
 		} else {
-			error(r.message);
+			Vosao.error(r.message);
 		}
 	}, fileId, content);
 }
@@ -88,7 +79,7 @@ function onAutosave() {
 }
 
 function loadFile() {
-	jsonrpc.fileService.getFile(function(r) {
+	Vosao.jsonrpc.fileService.getFile(function(r) {
 		file = r;
 		if (editMode) {
 			folderId = file.folderId;
@@ -127,17 +118,17 @@ function initFormFields() {
 }
 
 function onUpdate() {
-	var vo = javaMap( {
+	var vo = Vosao.javaMap( {
 		id : fileId,
 		folderId : folderId,
 		title : $('#title').val(),
 		name : $('#name').val()
 	});
-	jsonrpc.fileService.saveFile(function(r) {
+	Vosao.jsonrpc.fileService.saveFile(function(r) {
 		if (r.result == 'success') {
 			location.href = '/cms/folder.jsp?id=' + folderId;
 		} else {
-			showServiceMessages(r);
+			Vosao.showServiceMessages(r);
 		}
 	}, vo);
 }

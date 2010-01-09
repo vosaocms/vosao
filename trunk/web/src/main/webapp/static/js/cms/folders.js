@@ -20,12 +20,12 @@
  */
 
 $(function(){
-    initJSONRpc(loadTree);
+	Vosao.initJSONRpc(loadTree);
     $("#tabs").tabs();
 });
 
 function loadTree() {
-	jsonrpc.folderService.getTree(function(r) {
+	Vosao.jsonrpc.folderService.getTree(function(r) {
         $('#folders-tree').html(renderFolder(r));
         $("#folders-tree").treeview();
     });

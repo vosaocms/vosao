@@ -19,51 +19,54 @@
  * email: vosao.dev@gmail.com
  */
 
+// Vosao namespace should exists.
 
-function backServiceFailed(e) {
+if (Vosao == undefined) {
+	alert('Vosao global namespace was not found. Please include vosao.js first.');
+}
+
+Vosao.backServiceFailed = function(e) {
 	if (e != null) {
-		error('Can\'t connect to server. ' + e + ' ' + e.message + ' ' 
+		Vosao.error('Can\'t connect to server. ' + e + ' ' + e.message + ' ' 
 				+ e.code + ' ' + e.msg);
 		return true;
 	}
 	return false;
-}
+};
 
-function serviceHandler(serviceFunc) {
+Vosao.serviceHandler = function(serviceFunc) {
 	return function() {
 		var callback = arguments[0];
 		var serviceFuncArgs = arguments;
 		serviceFuncArgs[0] = function (r, e) {
-			if (backServiceFailed(e)) return;
+			if (Vosao.backServiceFailed(e)) return;
 			callback(r);
 		};
 		serviceFunc.apply(null, serviceFuncArgs);
 	}
-}
+};
 
-function setupJSONRpcHooks() {
-	for (var serviceName in jsonrpc) {
+Vosao.setupJSONRpcHooks = function() {
+	for (var serviceName in Vosao.jsonrpc) {
 		if (serviceName.indexOf('Service') != -1 
 			&& serviceName.indexOf('FrontService') == -1) {
-			for (var methodName in jsonrpc[serviceName]) {
-				if (typeof jsonrpc[serviceName][methodName] == 'function') {
-					var func = jsonrpc[serviceName][methodName];
-					jsonrpc[serviceName][methodName] = serviceHandler(func);
+			for (var methodName in Vosao.jsonrpc[serviceName]) {
+				if (typeof Vosao.jsonrpc[serviceName][methodName] == 'function') {
+					var func = Vosao.jsonrpc[serviceName][methodName];
+					Vosao.jsonrpc[serviceName][methodName] = Vosao.serviceHandler(func);
 				}
 			}
 		}
 	}
-}
-
+};
 
 /**
  * Backend services.
  */
+Vosao.initBackServices = function() {
+	Vosao.setupJSONRpcHooks();
+};
 
 $(function() {
-    initJSONRpcSystem(initBackServices);
+    Vosao.initJSONRpcSystem(Vosao.initBackServices);
 });
-
-function initBackServices() {
-	setupJSONRpcHooks();
-}

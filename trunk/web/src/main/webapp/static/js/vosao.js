@@ -20,140 +20,143 @@
  */
 
 //******************************************************************************
-// This is for frontend and backend use.
+// Global Vosao namespace.
+// For frontend and backend use.
 //******************************************************************************
 
-function javaList(array) {
+var Vosao = {};
+
+Vosao.javaList = function(array) {
 	return {javaClass: 'java.util.ArrayList', list: array};
-}
+};
 
-function javaMap(aMap) {
+Vosao.javaMap = function(aMap) {
 	return {javaClass: 'java.util.HashMap', map: aMap};
-}
+};
 
-function urlFromTitle(title) {
+Vosao.urlFromTitle = function(title) {
     return title.toLowerCase().replace(/\W/g, '-');
-}
+};
 
-function nameFromTitle(title) {
+Vosao.nameFromTitle = function(title) {
     return title.toLowerCase().replace(/\W/g, '_');
-}
+};
 
-function isImage(filename) {
-    var ext = getFileExt(filename);
+Vosao.isImage = function(filename) {
+    var ext = Vosao.getFileExt(filename);
 	return ext.toLowerCase().match(/gif|jpg|jpeg|png|ico/) != null;
-}
+};
 
-function getFileExt(filename) {
+Vosao.getFileExt = function(filename) {
 	return filename.substring(filename.lastIndexOf('.') + 1, filename.length);
-}
+};
 
-function formatDate(date) {
+Vosao.formatDate = function(date) {
 	return $.datepicker.formatDate('dd.mm.yy', date);
-}
+};
 
-var identifier_regex = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
+Vosao.identifier_regex = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
 
-function isValidIdentifier(s) {
-	return identifier_regex.test(s);
-}
+Vosao.isValidIdentifier = function(s) {
+	return Vosao.identifier_regex.test(s);
+};
 
-function strip(s) {
+Vosao.strip = function(s) {
 	var i = 0;
 	while (i < s.length && s[i] == ' ') i++;
 	var s1 = s.substring(i);
 	i = s1.length - 1;
 	while (i >= 0 && s1[i] == ' ') i--;
 	return s1.slice(0, i + 1);
-}
+};
 
-function getQueryParam(param) {
+Vosao.getQueryParam = function(param) {
     var result =  window.location.search.match(
         new RegExp("(\\?|&)" + param + "(\\[\\])?=([^&]*)")
     );
     return result ? result[3] : false;
-}
+};
 
-function selectTabFromQueryParam(tab) {
-	if (getQueryParam('tab')) {
-		tab.tabs('select', Number(getQueryParam('tab')));
+Vosao.selectTabFromQueryParam = function(tab) {
+	if (Vosao.getQueryParam('tab')) {
+		tab.tabs('select', Number(Vosao.getQueryParam('tab')));
 	}
-}
+};
 
-function escapeHtml(s) {
+Vosao.escapeHtml = function(s) {
 	var div = document.createElement('div');
 	var text = document.createTextNode(s);
 	div.appendChild(text);
 	return div.innerHTML;
-}
+};
 
 /**
  * Global JSON-RPC entry point.
  */
 
-var jsonrpc = '';
-var jsonrpcListeners = [];
-var jsonrpcSystemListeners = [];
-var jsonrpcInitialized = false;
+Vosao.jsonrpc = '';
+Vosao.jsonrpcListeners = [];
+Vosao.jsonrpcSystemListeners = [];
+Vosao.jsonrpcInitialized = false;
 
 /**
  * Don't call this function directly.
  */
-function createJSONRpc() {
-	jsonrpc = new JSONRpcClient(function(result, e) {
+Vosao.createJSONRpc = function() {
+	Vosao.jsonrpc = new JSONRpcClient(function(result, e) {
 		if (e) {
 			alert("Error during initializing JSON-RPC." + e);
 		}
 		else {
-			while (jsonrpcSystemListeners.length > 0) {
-				var func = jsonrpcSystemListeners.pop();
+			while (Vosao.jsonrpcSystemListeners.length > 0) {
+				var func = Vosao.jsonrpcSystemListeners.pop();
 				func();
 			}
-			while (jsonrpcListeners.length > 0) {
-				var func = jsonrpcListeners.pop();
+			while (Vosao.jsonrpcListeners.length > 0) {
+				var func = Vosao.jsonrpcListeners.pop();
 				func();
 			}
 		}
-		jsonrpcInitialized = true;
+		Vosao.jsonrpcInitialized = true;
 	}, '/JSON-RPC/');
-}
+};
 
-createJSONRpc();
+Vosao.createJSONRpc();
 
 /**
  * Add application JSON-RPC initialization callback.
  * @param func - callback to run after successful initialization.
  */
-function initJSONRpc(func) {
+Vosao.initJSONRpc = function(func) {
 	if (func == undefined) {
 		return;
 	}
-	if (jsonrpcInitialized) {
+	if (Vosao.jsonrpcInitialized) {
         func();
     } else {
-    	jsonrpcListeners.push(func);
+    	Vosao.jsonrpcListeners.push(func);
     }
-}
+};
 
 /**
  * Add system (high priority) JSON-RPC initialization callback.
  * @param func - callback to run after successful initialization.
  */
-function initJSONRpcSystem(func) {
+Vosao.initJSONRpcSystem = function(func) {
 	if (func == undefined) {
 		return;
 	}
-	if (jsonrpcInitialized) {
+	if (Vosao.jsonrpcInitialized) {
         func();
     } else {
-    	jsonrpcSystemListeners.push(func);
+    	Vosao.jsonrpcSystemListeners.push(func);
     }
-}
+};
 
-function serviceFailed(e) {
+Vosao.serviceFailed = function(e) {
 	if (e != null) {
 		alert('Can\'t connect to server. ' + e + ' '+ e.message);
 		return true;
 	}
 	return false;
-}
+};

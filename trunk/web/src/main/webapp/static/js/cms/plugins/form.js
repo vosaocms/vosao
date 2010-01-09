@@ -27,7 +27,7 @@ var test = null;
 $( function() {
 	$("#tabs").tabs();
 	$("#field-dialog").dialog({ width :500, autoOpen :false });
-	initJSONRpc(loadData);
+	Vosao.initJSONRpc(loadData);
 	$('#saveButton').click(onUpdate);
 	$('#cancelButton').click(onCancel);
 	$('#addFieldButton').click(onAddField);
@@ -47,7 +47,7 @@ function loadFields() {
 	if (formId == '') {
 		return;
 	}
-	jsonrpc.fieldService.getByForm(function(r, e) {
+	Vosao.jsonrpc.fieldService.getByForm(function(r, e) {
 		fields = r;
 		if (r.list.length > 0) {
 			var h = '<table class="form-table"><tr><th></th><th>Title</th><th>Name</th><th>Type</th></tr>';
@@ -92,7 +92,7 @@ function onFieldSave(closeFlag) {
 	var fieldVO = createFieldVO();
 	var errors = validateField(fieldVO);
 	if (errors.length == 0) {
-		jsonrpc.fieldService.updateField( function(r, e) {
+		Vosao.jsonrpc.fieldService.updateField( function(r, e) {
 			if (r.result == 'success') {
 				if (closeFlag) {
 					$("#field-dialog").dialog("close");
@@ -175,7 +175,7 @@ function fieldDialogInit() {
 }
 
 function createFieldVO() {
-	return javaMap( {
+	return Vosao.javaMap( {
 		id :field != null ? field.id : null,
 				formId :formId,
 				name :$('input[name=field.name]').val(),
@@ -209,15 +209,15 @@ function validateField(fieldVO) {
 }
 
 function fieldInfoMessage(message) {
-	infoMessage('#field-messages', message);
+	Vosao.infoMessage('#field-messages', message);
 }
 
 function fieldErrorMessages(messages) {
-	errorMessages('#field-messages', messages);
+	Vosao.errorMessages('#field-messages', messages);
 }
 
 function fieldErrorMessage(message) {
-	errorMessage('#field-messages', message);
+	Vosao.errorMessage('#field-messages', message);
 }
 
 function clearFieldMessage() {
@@ -226,7 +226,7 @@ function clearFieldMessage() {
 
 function onFieldEdit(fieldId) {
 	clearFieldMessage();
-	jsonrpc.fieldService.getById( function(r) {
+	Vosao.jsonrpc.fieldService.getById( function(r) {
 		field = r;
 		fieldDialogInit();
 		$("#field-dialog").dialog("open");
@@ -239,14 +239,14 @@ function onDeleteFields() {
 		ids.push(this.value);
 	});
 	if (ids.length == 0) {
-		info('Nothing selected');
+		Vosao.info('Nothing selected');
 		return;
 	}
 	if (confirm('Are you sure?')) {
-		jsonrpc.fieldService.remove(function() {
-			info(ids.length + ' fields was successfully deleted.');
+		Vosao.jsonrpc.fieldService.remove(function() {
+			Vosao.info(ids.length + ' fields was successfully deleted.');
 			loadFields();
-		}, javaList(ids));
+		}, Vosao.javaList(ids));
 	}
 }
 
@@ -256,7 +256,7 @@ function onSaveAndAdd() {
 }
 
 function loadForm() {
-	jsonrpc.formService.getForm(function (r) {
+	Vosao.jsonrpc.formService.getForm(function (r) {
 		if (r != null) {
 			$('#title').val(r.title);
 			$('#name').val(r.name);
@@ -291,7 +291,7 @@ function loadForm() {
 }
 
 function onUpdate() {
-	var vo = javaMap({
+	var vo = Vosao.javaMap({
 		id : formId,
 		title : $('#title').val(),
 		name : $('#name').val(),
@@ -302,12 +302,12 @@ function onUpdate() {
 		showResetButton : String($('#showResetButton:checked').size() > 0),
 		enableCaptcha : String($('#enableCaptcha:checked').size() > 0),
 	});
-	jsonrpc.formService.saveForm(function (r) {
+	Vosao.jsonrpc.formService.saveForm(function (r) {
 		if (r.result = 'success') {
 			location.href = '/cms/plugins/forms.jsp';
 		}
 		else {
-			showServiceMessages(r);
+			Vosao.showServiceMessages(r);
 		}
 	}, vo);
 }

@@ -23,14 +23,14 @@ var rootFolder;
 var browserMode = 'ckeditor';
 
 $(document).ready(function(){
-    initJSONRpc(loadFolderTree);
-    if (getQueryParam('mode')) {
-    	browserMode = getQueryParam('mode');
+	Vosao.initJSONRpc(loadFolderTree);
+    if (Vosao.getQueryParam('mode')) {
+    	browserMode = Vosao.getQueryParam('mode');
     }
 });
 
 function loadFolderTree() {
-	jsonrpc.folderService.getTree(function(rootItem) {
+	Vosao.jsonrpc.folderService.getTree(function(rootItem) {
         rootFolder = rootItem;
         $("#folders-tree").html(renderFolderList(rootItem));        
        	$("#folders-tree").treeview();
@@ -59,15 +59,15 @@ function renderFolderList(item) {
 }
 
 function onFolderSelected(folderId) {
-	jsonrpc.folderService.getFolderPath(function(folderPath) {
-		jsonrpc.fileService.getByFolder(function(files) {
+	Vosao.jsonrpc.folderService.getFolderPath(function(folderPath) {
+		Vosao.jsonrpc.fileService.getByFolder(function(files) {
             var result = "";
             for (i = 0; i < files.list.length; i++) {
                 var file = files.list[i];
                 var title = " title=\"" + file.title + "\"";
                 var onClick = " onclick=\"onFileSelected('" + file.id + "')\"";
                 var thumbnail = '';
-                if (isImage(file.filename)) {
+                if (Vosao.isImage(file.filename)) {
                     thumbnail = '<img width="160" height="120" src="/file' 
                         + folderPath + '/' + file.filename + '" />';
                 }
@@ -83,7 +83,7 @@ function onFolderSelected(folderId) {
 }
 
 function onFileSelected(fileId) {
-    jsonrpc.fileService.getFilePath(function(path) {
+	Vosao.jsonrpc.fileService.getFilePath(function(path) {
        	if (browserMode == 'ckeditor') {
        		window.opener.CKEDITOR.tools.callFunction(1, path);
        		window.close();

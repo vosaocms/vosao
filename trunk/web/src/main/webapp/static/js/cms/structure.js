@@ -26,8 +26,8 @@ var fields  = [];
 var templates = [];
 
 $(function(){
-    initJSONRpc(loadData);
-    selectTabFromQueryParam($("#tabs").tabs());
+	Vosao.initJSONRpc(loadData);
+    Vosao.selectTabFromQueryParam($("#tabs").tabs());
     $('#autosave').change(onAutosave);
     $('#bigLink').click(onBig);
     $('#smallLink').click(onSmall);
@@ -60,7 +60,8 @@ function onSaveXML() {
 function startAutosave() {
     if (structureId != 'null') {
         if (autosaveTimer == '') {
-            autosaveTimer = setInterval(saveContent, AUTOSAVE_TIMEOUT * 1000);
+            autosaveTimer = setInterval(saveContent, 
+            		Vosao.AUTOSAVE_TIMEOUT * 1000);
         }
     }
 }
@@ -91,7 +92,7 @@ function loadStructure() {
 		structure = null;
         initStructureForm();
 	}
-	jsonrpc.structureService.getById(function (r) {
+	Vosao.jsonrpc.structureService.getById(function (r) {
 		structure = r;
 		initStructureForm();
 	}, structureId);
@@ -113,14 +114,14 @@ function onCancel() {
 }
 
 function onUpdate(cont) {
-	var vo = javaMap({
+	var vo = Vosao.javaMap({
 	    id : structureId,
 	    title : $('#title').val(),
         content : $('#content').val(),
 	});
-	jsonrpc.structureService.save(function (r) {
+	Vosao.jsonrpc.structureService.save(function (r) {
 		if (r.result == 'success') {
-			info('Structure was successfully saved.');
+			Vosao.info('Structure was successfully saved.');
 			if (!cont) {
 				location.href = '/cms/structures.jsp';
 			}
@@ -131,7 +132,7 @@ function onUpdate(cont) {
 			}
 		}
 		else {
-			showServiceMessages(r);
+			Vosao.showServiceMessages(r);
 		}			
 	}, vo);
 }
@@ -150,17 +151,16 @@ function onFieldTitleChange() {
 	var name = $("#fieldName").val();
 	var title = $("#fieldTitle").val();
 	if (name == '') {
-		$("#fieldName").val(nameFromTitle(title));
+		$("#fieldName").val(Vosao.nameFromTitle(title));
 	}
 }
 
 function loadFields() {
 	if (editMode) {
-		jsonrpc.structureService.getFields(function(r) {
+		Vosao.jsonrpc.structureService.getFields(function(r) {
 			fields = r.list;
 			showFields();
 		}, structureId);
-	
 	}
 }
 
@@ -197,23 +197,23 @@ function onFieldRemove(i) {
 function validateField(field) {
 	var valid = true;
 	if (field.name == '') {
-		error('Field tag name is empty');
+		Vosao.error('Field tag name is empty');
 		valid = false;
 	}
 	else {
 		$(fields, function(i,value) {
 			if (value.name == field.name) {
-				error('Field with such a tag name already exists');
+				Vosao.error('Field with such a tag name already exists');
 				valid = false;
 			}
 		});
 	}
-	if (!isValidIdentifier(field.name)) {
-		error('Field tag name ' + field.name + ' must be valid identifier');
+	if (!Vosao.isValidIdentifier(field.name)) {
+		Vosao.error('Field tag name ' + field.name + ' must be valid identifier');
 		valid = false;
 	}
 	if (field.title == '') {
-		error('Field title is empty');
+		Vosao.error('Field title is empty');
 		valid = false;
 	}
 	return valid;
@@ -222,8 +222,8 @@ function validateField(field) {
 function onAddField() {
 	$('#fieldTitle').focus();
 	var field = {
-			title: strip($('#fieldTitle').val()),
-			name: strip($('#fieldName').val()),
+			title: Vosao.strip($('#fieldTitle').val()),
+			name: Vosao.strip($('#fieldName').val()),
 			type: $('#fieldType').val()
 	};
 	if (validateField(field)) {
@@ -231,7 +231,7 @@ function onAddField() {
 		showFields();
 		$('#fieldTitle').val('').focus();
 		$('#fieldName').val('');
-		info('Field was successfully added.');
+		Vosao.info('Field was successfully added.');
 	}
 }
 
@@ -279,7 +279,7 @@ function saveFields(cont) {
 
 function loadTemplates() {
 	if (editMode) {
-		jsonrpc.structureTemplateService.selectByStructure(function(r) {
+		Vosao.jsonrpc.structureTemplateService.selectByStructure(function(r) {
 			templates = r.list;
 			showTemplates();
 		}, structureId);
@@ -314,13 +314,13 @@ function onDeleteTemplate() {
         ids.push(this.value);
     });
     if (ids.length == 0) {
-        info('Nothing selected.');
+    	Vosao.info('Nothing selected.');
         return;
     }
     if (confirm('Are you sure?')) {
-    	jsonrpc.structureTemplateService.remove(function(r) {
-            showServiceMessages(r);
+    	Vosao.jsonrpc.structureTemplateService.remove(function(r) {
+    		Vosao.showServiceMessages(r);
             loadTemplates();
-        }, javaList(ids));
+        }, Vosao.javaList(ids));
     }
 }

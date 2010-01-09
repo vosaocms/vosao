@@ -23,12 +23,12 @@ var user = null;
 
 $(function(){
 	$("#tabs").tabs();
-	initJSONRpc(loadUser);
+	Vosao.initJSONRpc(loadUser);
     $('#saveButton').click(onSave);
 });
 
 function loadUser() {
-	jsonrpc.userService.getLoggedIn(function (r) {
+	Vosao.jsonrpc.userService.getLoggedIn(function (r) {
         user = r;
         $('#name').val(user.name);
         $('#email').val(user.email);
@@ -55,7 +55,7 @@ function onSave() {
         pass = $('#password1').val();
     }
     else {
-        error('Passwords don\'t match.');
+    	Vosao.error('Passwords don\'t match.');
         return;
     }
     var vo = {
@@ -63,8 +63,8 @@ function onSave() {
         name : $('#name').val(),   
         password : pass,   
     };
-    jsonrpc.userService.save(function (r) {
-        showServiceMessages(r);
-    }, javaMap(vo));
+    Vosao.jsonrpc.userService.save(function (r) {
+    	Vosao.showServiceMessages(r);
+    }, Vosao.javaMap(vo));
 }
 

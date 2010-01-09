@@ -42,17 +42,17 @@
             var email = $('#loginEmail').val();
             var password = $('#loginPassword').val();
             if (email == '') {
-                errorMessage('#login-messages', 'Email is empty!');
+                Vosao.errorMessage('#login-messages', 'Email is empty!');
             }
             else {
-                jsonrpc.loginFrontService.login(function (r, e) {
-                    if (serviceFailed(e)) return;
+            	Vosao.jsonrpc.loginFrontService.login(function (r, e) {
+                    if (Vosao.serviceFailed(e)) return;
                     if (r.result == 'success') {
-                        infoMessage('#login-messages', 'Success. Logging in...');
+                    	Vosao.infoMessage('#login-messages', 'Success. Logging in...');
                         document.location.href = r.message;
                     }
                     else {
-                        errorMessage('#login-messages', r.message);
+                    	Vosao.errorMessage('#login-messages', r.message);
                     }
                 }, email, password);
             }                

@@ -20,13 +20,13 @@
  */
 
 $(function(){
-    initJSONRpc(loadStructures);
+	Vosao.initJSONRpc(loadStructures);
     $('#addButton').click(onAdd);
     $('#deleteButton').click(onDelete);
 });
 
 function loadStructures() {
-    jsonrpc.structureService.select(function (r) {
+	Vosao.jsonrpc.structureService.select(function (r) {
         var html = '<table class="form-table"><tr><th></th><th>Title</th></tr>';
         $.each(r.list, function (n, value) {
             html += '<tr><td><input type="checkbox" value="' + value.id 
@@ -48,14 +48,14 @@ function onDelete() {
         ids.push(this.value);
     });
     if (ids.length == 0) {
-        info('Nothing selected.');
+    	Vosao.info('Nothing selected.');
         return;
     }
     if (confirm('Are you sure?')) {
-    	jsonrpc.structureService.remove(function(r) {
-            showServiceMessages(r);
+    	Vosao.jsonrpc.structureService.remove(function(r) {
+    		Vosao.showServiceMessages(r);
             loadStructures();
-        }, javaList(ids));
+        }, Vosao.javaList(ids));
     }
 }
 

@@ -23,7 +23,7 @@ var formConfig = '';
 
 $(function() {
     $("#tabs").tabs();
-    initJSONRpc(loadData);
+    Vosao.initJSONRpc(loadData);
     $('#addButton').click(onAdd);
     $('#deleteButton').click(onDelete);
     $('#editFormTemplateLink').click(function() { $('#formTemplate').toggle(); });
@@ -39,7 +39,7 @@ function loadData() {
 }
     
 function loadForms() {
-	jsonrpc.formService.select(function (r) {
+	Vosao.jsonrpc.formService.select(function (r) {
         var html = '<table class="form-table"><tr><th></th><th>Title</th>\
 <th>Name</th><th>Email</th></tr>';
         $.each(r.list, function(i, form) {
@@ -63,19 +63,19 @@ function onDelete() {
         ids.push(this.value);
     });
     if (ids.length == 0) {
-        info('Nothing selected');
+    	Vosao.info('Nothing selected');
         return;
     }
     if (confirm('Are you sure?')) {
-    	jsonrpc.formService.deleteForm(function (r) {
-            showServiceMessages(r);
+    	Vosao.jsonrpc.formService.deleteForm(function (r) {
+    		Vosao.showServiceMessages(r);
             loadForms();
-        }, javaList(ids));
+        }, Vosao.javaList(ids));
     }
 }
 
 function loadFormConfig() {
-	jsonrpc.formService.getFormConfig(function (r) {
+	Vosao.jsonrpc.formService.getFormConfig(function (r) {
         formConfig = r;
         $('#formTemplate').val(r.formTemplate);
         $('#letterTemplate').val(r.letterTemplate);
@@ -83,25 +83,25 @@ function loadFormConfig() {
 }
     
 function onSaveConfig() {
-    var vo = javaMap({
+    var vo = Vosao.javaMap({
    	    formTemplate : $('#formTemplate').val(),
    	    letterTemplate : $('#letterTemplate').val()
     });
-    jsonrpc.formService.saveFormConfig(function (r) {
-        showServiceMessages(r);
+    Vosao.jsonrpc.formService.saveFormConfig(function (r) {
+    	Vosao.showServiceMessages(r);
     }, vo);
 }
 
 function onFormTemplateRestore() {
-	jsonrpc.formService.restoreFormTemplate(function (r) {
-        showServiceMessages(r);
+	Vosao.jsonrpc.formService.restoreFormTemplate(function (r) {
+		Vosao.showServiceMessages(r);
         loadFormConfig();
     });
 }
 
 function onFormLetterRestore() {
-	jsonrpc.formService.restoreFormLetter(function (r) {
-        showServiceMessages(r);
+	Vosao.jsonrpc.formService.restoreFormLetter(function (r) {
+		Vosao.showServiceMessages(r);
         loadFormConfig();
     });
 }

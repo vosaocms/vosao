@@ -20,7 +20,7 @@
  */
 
 $(function() {
-	initJSONRpc(loadData);
+	Vosao.initJSONRpc(loadData);
 });
 
 function loadData() {
@@ -29,7 +29,7 @@ function loadData() {
 }
 
 function loadTree() {
-	jsonrpc.pageService.getTree(function(r) {
+	Vosao.jsonrpc.pageService.getTree(function(r) {
 		$('#pages-tree').html(renderPage(r));
 		$("#pages-tree").treeview();
 	});
@@ -52,7 +52,7 @@ function renderPage(vo) {
 }
 
 function loadUser() {
-	jsonrpc.userService.getLoggedIn(function(r) {
+	Vosao.jsonrpc.userService.getLoggedIn(function(r) {
 		if (!r.admin) {
 		    $('#structuresTab').hide();
 		}

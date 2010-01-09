@@ -24,7 +24,7 @@ var editMode = templateId != '';
 var autosaveTimer = '';
     
 $(function(){
-    initJSONRpc(loadTemplate);
+	Vosao.initJSONRpc(loadTemplate);
     $("#tabs").tabs();
     $('#autosave').change(onAutosave);
     $('#bigLink').click(onBig);
@@ -45,7 +45,8 @@ function onSave() {
 function startAutosave() {
     if (templateId != 'null') {
         if (autosaveTimer == '') {
-            autosaveTimer = setInterval(saveContent, AUTOSAVE_TIMEOUT * 1000);
+            autosaveTimer = setInterval(saveContent, 
+            		Vosao.AUTOSAVE_TIMEOUT * 1000);
         }
     }
 }
@@ -59,13 +60,13 @@ function stopAutosave() {
 
 function saveContent() {
     var content = $("#content").val();
-    jsonrpc.templateService.updateContent(function(r) {
+    Vosao.jsonrpc.templateService.updateContent(function(r) {
         if (r.result == 'success') {
             var now = new Date();
-            info(r.message + " " + now);
+            Vosao.info(r.message + " " + now);
         }
         else {
-            error(r.message);
+        	Vosao.error(r.message);
         }            
     }, templateId, content);        
 }
@@ -85,7 +86,7 @@ function loadTemplate() {
 		template = null;
         initTemplateForm();
 	}
-	jsonrpc.templateService.getTemplate(function (r) {
+	Vosao.jsonrpc.templateService.getTemplate(function (r) {
 		template = r;
 		initTemplateForm();
 	}, templateId);
@@ -109,15 +110,15 @@ function onCancel() {
 }
 
 function onUpdate(cont) {
-	var templateVO = javaMap({
+	var templateVO = Vosao.javaMap({
 	    id : templateId,
 	    title : $('#title').val(),
         url : $('#url').val(),
         content : $('#content').val(),
 	});
-	jsonrpc.templateService.saveTemplate(function (r) {
+	Vosao.jsonrpc.templateService.saveTemplate(function (r) {
 		if (r.result == 'success') {
-			info('Template was successfully saved.');
+			Vosao.info('Template was successfully saved.');
 			if (!cont) {
 				location.href = '/cms/templates.jsp';
 			}
@@ -127,7 +128,7 @@ function onUpdate(cont) {
 			}
 		}
 		else {
-			showServiceMessages(r);
+			Vosao.showServiceMessages(r);
 		}			
 	}, templateVO);
 }

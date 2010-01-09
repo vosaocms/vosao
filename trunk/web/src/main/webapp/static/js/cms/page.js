@@ -49,7 +49,7 @@ $(function(){
     $("#tabs").tabs();
     $("#tabs").bind('tabsselect', tabSelected);       
     $(".datepicker").datepicker({dateFormat:'dd.mm.yy'});
-    initJSONRpc(loadData);
+    Vosao.initJSONRpc(loadData);
 
     // hover states on the link buttons
     $('a.button').hover(
@@ -89,7 +89,7 @@ $(function(){
 });
 
 function loadData() {
-	jsonrpc.pageService.getPageRequest(function(r) {
+	Vosao.jsonrpc.pageService.getPageRequest(function(r) {
 		pageRequest = r;
 		page = pageRequest.page;
 		loadLanguages();
@@ -103,7 +103,7 @@ function loadData() {
 }
 
 function callLoadPage() {
-	jsonrpc.pageService.getPageRequest(function(r) {
+	Vosao.jsonrpc.pageService.getPageRequest(function(r) {
 		pageRequest = r;
 		page = pageRequest.page;
 		loadPage();
@@ -127,7 +127,7 @@ function loadPage() {
 }
 
 function callLoadVersions() {
-	jsonrpc.pageService.getPageRequest(function(r) {
+	Vosao.jsonrpc.pageService.getPageRequest(function(r) {
 		pageRequest = r;
 		page = pageRequest.page;
 		loadVersions();
@@ -237,7 +237,7 @@ function initPageForm() {
 		$('#friendlyUrl').val('');
 		$('#parentFriendlyUrl').html(pageParentUrl + urlEnd);
 		$('#pageType').val('SIMPLE');
-		$('#publishDate').val(formatDate(new Date()));
+		$('#publishDate').val(Vosao.formatDate(new Date()));
 		$('#commentsEnabled').each(function() {
 			this.checked = false
 		});
@@ -256,7 +256,7 @@ function initPageForm() {
 }
 
 function onPageUpdate() {
-	var pageVO = javaMap( {
+	var pageVO = Vosao.javaMap( {
 		id : pageId,
 		title : $('#title').val(),
 		friendlyUrl : $('#parentFriendlyUrl').text() + $('#friendlyUrl').val(),
@@ -270,11 +270,11 @@ function onPageUpdate() {
 		structureId: $('#structure').val(),
 		structureTemplateId: $('#structureTemplate').val()		
 	});
-	jsonrpc.pageService.savePage(function(r) {
+	Vosao.jsonrpc.pageService.savePage(function(r) {
 		if (r.result == 'success') {
 			location.href = '/cms/pages.jsp';
 		} else {
-			showServiceMessages(r);
+			Vosao.showServiceMessages(r);
 		}
 	}, pageVO);
 }
@@ -286,7 +286,7 @@ function onTitleChange() {
 	var url = $("#friendlyUrl").val();
 	var title = $("#title").val();
 	if (url == '') {
-		$("#friendlyUrl").val(urlFromTitle(title));
+		$("#friendlyUrl").val(Vosao.urlFromTitle(title));
 	}
 }
 
@@ -312,7 +312,8 @@ function tabSelected(event, ui) {
 function startAutosave() {
 	if (editMode) {
 		if (autosaveTimer == '') {
-			autosaveTimer = setInterval(saveContent, AUTOSAVE_TIMEOUT * 1000);
+			autosaveTimer = setInterval(saveContent, 
+					Vosao.AUTOSAVE_TIMEOUT * 1000);
 		}
 	}
 }
@@ -339,7 +340,7 @@ function getEditorContent() {
 			}
 			if (field.type == 'TEXTAREA') {
 				xml += '<' + field.name + '>'
-					+ escapeHtml(contentEditors[field.name].getData())  
+					+ Vosao.escapeHtml(contentEditors[field.name].getData())  
 					+ '</' + field.name + '>';
 			}
 		});
@@ -376,13 +377,13 @@ function saveContent() {
 	var content = getEditorContent();
 	var approve = $('#approveOnContentSave:checked').size() > 0;
 	contents[currentLanguage] = content;
-	jsonrpc.pageService.updateContent(function(r) {
+	Vosao.jsonrpc.pageService.updateContent(function(r) {
 		if (r.result == 'success') {
 			var now = new Date();
-			info(r.message + " " + now);
+			Vosao.info(r.message + " " + now);
 			callLoadPage();
 		} else {
-			error(r.message);
+			Vosao.error(r.message);
 		}
 	}, pageId, content, currentLanguage, approve);
 }
@@ -406,7 +407,7 @@ function onPageCancel() {
 }
 
 function callLoadChildren() {
-	jsonrpc.pageService.getChildren(function(r) {
+	Vosao.jsonrpc.pageService.getChildren(function(r) {
 		pageRequest.children = r;
 		loadChildren();
 	}, page.friendlyURL);
@@ -441,14 +442,14 @@ function onDelete() {
 		ids.push(this.value);
 	});
 	if (ids.length == 0) {
-		info('Nothing selected.');
+		Vosao.info('Nothing selected.');
 		return;
 	}
 	if (confirm('Are you sure?')) {
-		jsonrpc.pageService.deletePages(function(r) {
-			showServiceMessages(r);
+		Vosao.jsonrpc.pageService.deletePages(function(r) {
+			Vosao.showServiceMessages(r);
 			callLoadChildren();
-		}, javaList(ids));
+		}, Vosao.javaList(ids));
 	}
 }
 
@@ -472,13 +473,13 @@ function onEnableComments() {
 		ids.push(this.value);
 	});
 	if (ids.length == 0) {
-		info('Nothing selected.');
+		Vosao.info('Nothing selected.');
 		return;
 	}
-	jsonrpc.commentService.enableComments(function(r) {
-		showServiceMessages(r);
+	Vosao.jsonrpc.commentService.enableComments(function(r) {
+		Vosao.showServiceMessages(r);
 		loadComments();
-	}, javaList(ids));
+	}, Vosao.javaList(ids));
 }
 
 function onDisableComments() {
@@ -487,13 +488,13 @@ function onDisableComments() {
 		ids.push(this.value);
 	});
 	if (ids.length == 0) {
-		info('Nothing selected.');
+		Vosao.info('Nothing selected.');
 		return;
 	}
-	jsonrpc.commentService.disableComments(function(r) {
-		showServiceMessages(r);
+	Vosao.jsonrpc.commentService.disableComments(function(r) {
+		Vosao.showServiceMessages(r);
 		loadComments();
-	}, javaList(ids));
+	}, Vosao.javaList(ids));
 }
 
 function onDeleteComments() {
@@ -502,14 +503,14 @@ function onDeleteComments() {
 		ids.push(this.value);
 	});
 	if (ids.length == 0) {
-		info('Nothing selected.');
+		Vosao.info('Nothing selected.');
 		return;
 	}
 	if (confirm('Are you sure?')) {
-		jsonrpc.commentService.deleteComments(function(r) {
-			showServiceMessages(r);
+		Vosao.jsonrpc.commentService.deleteComments(function(r) {
+			Vosao.showServiceMessages(r);
 			loadComments();
-		}, javaList(ids));
+		}, Vosao.javaList(ids));
 	}
 }
 
@@ -544,8 +545,8 @@ function loadContents() {
 			});
 		}
 		fillLanguagesList(allowedLangs);
-		if (allowedLangs[ENGLISH_CODE] != undefined) {
-			currentLanguage = ENGLISH_CODE;
+		if (allowedLangs[Vosao.ENGLISH_CODE] != undefined) {
+			currentLanguage = Vosao.ENGLISH_CODE;
 		}
 		else {
 			currentLanguage = r.list[0].languageCode;
@@ -559,7 +560,7 @@ function loadContents() {
 function onVersionDelete(version) {
 	if (confirm('Are you sure?')) {
 		var delPage = pages[version];
-		jsonrpc.pageService.deletePages(function(r) {
+		Vosao.jsonrpc.pageService.deletePages(function(r) {
 			if (version == String(page.version)) {
 				if (versions.length == 1) {
 					location.href = '/cms/pages.jsp';
@@ -577,7 +578,7 @@ function onVersionDelete(version) {
 			} else {
 				callLoadVersions();
 			}
-		}, javaList( [ delPage.id ]));
+		}, Vosao.javaList( [ delPage.id ]));
 	}
 }
 
@@ -587,14 +588,14 @@ function onAddVersion() {
 }
 
 function onVersionTitleSave() {
-	jsonrpc.pageService.addVersion(function(r) {
+	Vosao.jsonrpc.pageService.addVersion(function(r) {
 		if (r.result == 'success') {
 			pageId = r.message;
 			loadData();
-			info('Version was successfully added.');
+			Vosao.info('Version was successfully added.');
 		}
 		else {
-			showServiceMessages(r);
+			Vosao.showServiceMessages(r);
 		}			
 		$('#version-dialog').dialog('close');
 	}, page.friendlyURL, $('#version-title').val());
@@ -611,8 +612,8 @@ function onVersionSelect(version) {
 }
 
 function onPageApprove() {
-	jsonrpc.pageService.approve(function(r) {
-		showServiceMessages(r);
+	Vosao.jsonrpc.pageService.approve(function(r) {
+		Vosao.showServiceMessages(r);
 		callLoadPage();
 	}, pageId);
 }
@@ -636,7 +637,7 @@ function getPermissionName(perm) {
 }
 
 function callLoadPermissions() {
-	jsonrpc.contentPermissionService.selectByUrl(function (r) {
+	Vosao.jsonrpc.contentPermissionService.selectByUrl(function (r) {
 		pageRequest.permissions = r;
 		loadPermissions();
 	}, page.friendlyURL);
@@ -644,7 +645,7 @@ function callLoadPermissions() {
 
 function loadPermissions() {
 	var r = pageRequest.permissions;
-	permissions = idMap(r.list);
+	permissions = Vosao.idMap(r.list);
 	var h = '<table class="form-table"><tr><th></th><th>Group</th><th>Permission</th><th>Languages</th></tr>';
 	$.each(permissions, function(i,value) {
 		var checkbox = '';
@@ -665,7 +666,7 @@ function loadPermissions() {
 
 function loadGroups() {
 	var r = pageRequest.groups;
-	groups = idMap(r.list);
+	groups = Vosao.idMap(r.list);
 	var h = '';
 	$.each(groups, function(i,value) {
 		h += '<option value="' + value.id + '">' + value.name + '</option>';
@@ -728,13 +729,13 @@ function onPermissionSave() {
 		permission: $('#permissionList input:checked')[0].value,
 		languages: $('#allLanguages')[0].checked ? '' : langs,
 	};
-	jsonrpc.contentPermissionService.save(function(r) {
-		showServiceMessages(r);
+	Vosao.jsonrpc.contentPermissionService.save(function(r) {
+		Vosao.showServiceMessages(r);
 		$('#permission-dialog').dialog('close');
 		if (r.result == 'success') {
 			callLoadPermissions();
 		}
-	}, javaMap(vo));
+	}, Vosao.javaMap(vo));
 }
 
 function onAddPermission() {
@@ -749,14 +750,14 @@ function onDeletePermission() {
 		ids.push(this.value);
 	});
 	if (ids.length == 0) {
-		info('Nothing selected.');
+		Vosao.info('Nothing selected.');
 		return;
 	}
 	if (confirm('Are you sure?')) {
-		jsonrpc.contentPermissionService.remove(function(r) {
-			showServiceMessages(r);
+		Vosao.jsonrpc.contentPermissionService.remove(function(r) {
+			Vosao.showServiceMessages(r);
 			callLoadPermissions();
-		}, javaList(ids));
+		}, Vosao.javaList(ids));
 	}
 }
 
@@ -826,7 +827,7 @@ function loadStructures() {
 function onStructureChange() {
 	var structureId = $('#structure').val();
 	var h = '';
-	jsonrpc.structureTemplateService.selectByStructure(function(r) {
+	Vosao.jsonrpc.structureTemplateService.selectByStructure(function(r) {
 		var h = '';
 		$.each(r.list, function(i, template) {
 			var sel = i == 0 ? 'selected="selected"' : '';

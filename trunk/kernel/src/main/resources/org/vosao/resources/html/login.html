@@ -23,11 +23,11 @@
             var email = $('#loginEmail').val();
             var password = $('#loginPassword').val();
             if (email == '') {
-                errorMessage('#login-messages', 'Email is empty!');
+            	Vosao.errorMessage('#login-messages', 'Email is empty!');
             }
             else {
-                jsonrpc.loginFrontService.login(function (r, e) {
-                    if (serviceFailed(e)) return;
+            	Vosao.jsonrpc.loginFrontService.login(function (r, e) {
+                    if (Vosao.serviceFailed(e)) return;
                     if (r.result == 'success') {
                         $('#login-messages').html('<span style="color:green">Success. Logging in...</span>');
                         document.location.href = r.message;

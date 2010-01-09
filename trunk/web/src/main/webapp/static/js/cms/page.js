@@ -43,6 +43,7 @@ var groups = null;
 var pageRequest = null;
 var structureTemplates = null;
 var contentEditors = null;
+var browseId = '';
     
 $(function(){
     $("#tabs").tabs();
@@ -860,7 +861,9 @@ function showContentEditor() {
 				h += '<input id="field' + field.name + '" class="datepicker" size="8" />';
 			}
 			if (field.type == 'RESOURCE') {
-				h += '<input id="field' + field.name + '" />';
+				h += '<input id="field' + field.name + '" size="60"/> '
+					+ '<a href="#" onclick="browseResources(\'field' + field.name 
+					+ '\')">Browse</a>';
 			}
 			h += '</div>';
 		});
@@ -883,3 +886,11 @@ function showContentEditor() {
 	}
 }
 
+function browseResources(id) {
+	browseId = id;
+	window.open('fileBrowser.jsp?mode=page');
+}
+
+function setResource(path) {
+	$('#' + browseId).val(path);
+}

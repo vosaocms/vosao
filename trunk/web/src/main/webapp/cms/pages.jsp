@@ -36,7 +36,7 @@
         <li class="ui-corner-top ui-tabs-selected ui-state-active">
             <a href="#tab-1">Pages</a>
         </li>
-        <li class="ui-corner-top ui-state-default">
+        <li id="structuresTab" class="ui-corner-top ui-state-default">
             <a href="structures.jsp">Structures</a>
         </li>
     </ul>

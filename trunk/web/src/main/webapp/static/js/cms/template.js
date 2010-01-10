@@ -27,8 +27,8 @@ $(function(){
 	Vosao.initJSONRpc(loadTemplate);
     $("#tabs").tabs();
     $('#autosave').change(onAutosave);
-    $('#bigLink').click(onBig);
-    $('#smallLink').click(onSmall);
+    $('#sizeLink').click(onSize);
+    $('#wrapLink').click(onWrap);
     $('#saveContinueButton').click(onSaveContinue);
     $('#saveButton').click(onSave);
     $('#cancelButton').click(onCancel);
@@ -133,13 +133,35 @@ function onUpdate(cont) {
 	}, templateVO);
 }
 
-function onBig() {
-	$('#content').attr('cols','120');
-    $('#content').attr('rows','30');
+function onSize() {
+	var label = $('#sizeLink').text();
+	if (label == 'Big') {
+		$('#content').attr('cols','120');
+		$('#content').attr('rows','30');
+		$('#sizeLink').text('Small');
+	}
+	if (label == 'Small') {
+		$('#content').attr('cols','80');
+		$('#content').attr('rows','20');
+		$('#sizeLink').text('Big');
+	}
 }
 
-function onSmall() {
-    $('#content').attr('cols','80');
-    $('#content').attr('rows','20');
+function onWrap() {
+	var wrap = $('#content').attr('wrap');
+	var text = $('#content').val();
+	var cols = $('#content').attr('cols');
+	var rows = $('#content').attr('rows');
+	if (wrap == 'off') {
+		$('#contentDiv').html('<textarea id="content" cols="' + cols
+				+'" rows="' + rows + '"></textarea>');
+		$('#content').val(text);
+		$('#wrapLink').text(' Unwrap');
+	}
+	if (wrap == undefined) {
+		$('#contentDiv').html('<textarea id="content" cols="' + cols
+				+'" rows="' + rows + '" wrap="off"></textarea>');
+		$('#content').val(text);
+		$('#wrapLink').text(' Wrap');
+	}
 }
-

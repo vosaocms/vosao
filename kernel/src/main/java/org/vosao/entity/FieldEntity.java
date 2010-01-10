@@ -21,7 +21,6 @@
 
 package org.vosao.entity;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,6 +91,9 @@ public class FieldEntity implements BaseEntity {
 	@Persistent
 	private int width;
 
+	@Persistent
+	private int index;
+
 	public FieldEntity() {
 		height = 1;
 		width = 20;
@@ -112,6 +114,7 @@ public class FieldEntity implements BaseEntity {
 		setDefaultValue(entity.getDefaultValue());
 		setHeight(entity.getHeight());
 		setWidth(entity.getWidth());
+		setIndex(entity.getIndex());
 	}
 	
 	public FieldEntity(String formId, String name, String title,
@@ -227,6 +230,14 @@ public class FieldEntity implements BaseEntity {
 			result.add(new Option(val, selected));
 		}
 		return result;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
 	}
 	
 }

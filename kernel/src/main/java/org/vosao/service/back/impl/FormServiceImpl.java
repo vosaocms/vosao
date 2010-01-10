@@ -71,8 +71,7 @@ public class FormServiceImpl extends AbstractServiceImpl
 			.validateBeforeUpdate(form);
 		if (errors.isEmpty()) {
 			getDao().getFormDao().save(form);
-			return ServiceResponse.createSuccessResponse(
-					"Form was successfully saved.");
+			return ServiceResponse.createSuccessResponse(form.getId());
 		}
 		else {
 			return ServiceResponse.createErrorResponse(

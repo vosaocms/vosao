@@ -28,6 +28,7 @@ $( function() {
 	$("#tabs").tabs();
 	$("#field-dialog").dialog({ width :500, autoOpen :false });
 	Vosao.initJSONRpc(loadData);
+	$('#title').change(onTitleChange);
 	$('#saveButton').click(onUpdate);
 	$('#cancelButton').click(onCancel);
 	$('#addFieldButton').click(onAddField);
@@ -36,6 +37,7 @@ $( function() {
 	$('#saveAndAddButton').click(onSaveAndAdd);
 	$('#fieldSaveButton').click(function() { onFieldSave(true); });
 	$('#fieldCancelButton').click(onFieldCancel);
+	$('input[name=field.title]').change(onFieldTitleChange);
 });
 
 function loadData() {
@@ -48,24 +50,28 @@ function loadFields() {
 		return;
 	}
 	Vosao.jsonrpc.fieldService.getByForm(function(r, e) {
-		fields = r;
-		if (r.list.length > 0) {
-			var h = '<table class="form-table"><tr><th></th><th>Title</th><th>Name</th><th>Type</th></tr>';
-			for ( var i = 0; i < r.list.length; i++) {
-				var field = r.list[i];
-				h += 
-					'<tr>\
-					<td><input type="checkbox" name="item' + i + '" value="' + field.id + '"/></td>\
-					<td><a href="#" onclick="onFieldEdit(\'' + field.id + '\')">'   + field.title + '</a></td>\
-					<td>' + field.name + '</td>\
-					<td>'   + fieldTypeString(field.fieldType) + '</td>\
-					</tr>';
-			}
-			h += '</table>';
-			$('#fieldsTable').html(h);
-			$('#fieldsTable tr:even').addClass('even');
-		}
+		fields = r.list;
+		showFields();
 	}, formId);
+}
+
+function showFields() {
+	var h = '<table class="form-table"><tr><th></th><th>Title</th>\
+		<th>Name</th><th>Type</th><th></th></tr>';
+	$.each(fields, function(i, field) {
+		h += 
+			'<tr>\
+			<td><input type="checkbox" name="item' + i + '" value="' + field.id + '"/></td>\
+			<td><a href="#" onclick="onFieldEdit(\'' + field.id + '\')">'   + field.title + '</a></td>\
+			<td>' + field.name + '</td>\
+			<td>'   + fieldTypeString(field.fieldType) + '</td>\
+			<td><a href="#" onclick="onFieldUp(' + i+ ')"><img src="/static/images/02_up.png"/></a>\
+			        <a href="#" onclick="onFieldDown(' + i + ')"><img src="/static/images/02_down.png"/></a>\
+			</td>\
+			</tr>';
+	});
+	$('#fieldsTable').html(h + '</table>');
+	$('#fieldsTable tr:even').addClass('even');
 }
 
 function fieldTypeString(v) {
@@ -175,6 +181,8 @@ function fieldDialogInit() {
 }
 
 function createFieldVO() {
+	var fieldIndex = field != null ? field.index : 
+		(fields == null ? 0 : fields.length);
 	return Vosao.javaMap( {
 		id :field != null ? field.id : null,
 				formId :formId,
@@ -185,6 +193,7 @@ function createFieldVO() {
 				defaultValue :$('input[name=field.defaultValue]').val(),
 				height :$('input[name=field.height]').val(),
 				width :$('input[name=field.width]').val(),
+				index : String(fieldIndex),
 				mandatory :String($('input[name=field.mandatory]:checked').size() > 0)
 	});
 }
@@ -304,7 +313,15 @@ function onUpdate() {
 	});
 	Vosao.jsonrpc.formService.saveForm(function (r) {
 		if (r.result = 'success') {
-			location.href = '/cms/plugins/forms.jsp';
+			if (!editMode) {
+				formId = r.message;
+				editMode = true;
+				loadData();
+				Vosao.info('Form was successfully created.');
+			}
+			else {
+				location.href = '/cms/plugins/forms.jsp';
+			}
 		}
 		else {
 			Vosao.showServiceMessages(r);
@@ -314,4 +331,52 @@ function onUpdate() {
 
 function onCancel() {
 	location.href = '/cms/plugins/forms.jsp';
+}
+
+function onTitleChange() {
+	if (editMode) {
+		return;
+	}
+	var name = $("#name").val();
+	var title = $("#title").val();
+	if (name == '') {
+		$("#name").val(Vosao.urlFromTitle(title));
+	}
+}
+
+function onFieldTitleChange() {
+	if (field != null) {
+		return;
+	}
+	var name = $('input[name=field.name]').val();
+	var title = $('input[name=field.title]').val();
+	if (name == '') {
+		$('input[name=field.name]').val(Vosao.urlFromTitle(title));
+	}
+}
+
+function onFieldUp(i) {
+	if (i - 1 >= 0) {
+		Vosao.jsonrpc.fieldService.moveUp(function(r) {}, formId, fields[i].id);
+        fields[i].index--;
+        fields[i - 1].index++;
+		swapFields(i, i - 1);
+		showFields();
+	}
+}
+
+function onFieldDown(i) {
+	if (i + 1 < fields.length) {
+		Vosao.jsonrpc.fieldService.moveDown(function(r) {}, formId, fields[i].id);
+        fields[i + 1].index--;
+        fields[i].index++;
+		swapFields(i, i + 1);
+		showFields();
+	}
+}
+
+function swapFields(i, j) {
+	var tmp = fields[j];
+	fields[j] = fields[i];
+	fields[i] = tmp;
 }

@@ -21,11 +21,13 @@
 
 package org.vosao.dao.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.vosao.dao.FieldDao;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormEntity;
+import org.vosao.entity.helper.FieldHelper;
 
 public class FieldDaoImpl extends BaseDaoImpl<String, FieldEntity> 
 		implements FieldDao {
@@ -38,7 +40,9 @@ public class FieldDaoImpl extends BaseDaoImpl<String, FieldEntity>
 	public List<FieldEntity> getByForm(final FormEntity form) {
 		String query = "select from " + FieldEntity.class.getName()
 				+ " where formId == pFormId parameters String pFormId";
-		return select(query, params(form.getId()));
+		List<FieldEntity> result = select(query, params(form.getId()));
+		Collections.sort(result, new FieldHelper.IndexAsc());
+		return result;
 	}
 	
 	@Override

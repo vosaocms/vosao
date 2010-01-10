@@ -86,4 +86,7 @@ public class FieldVO {
 		return field.getWidth();
 	}
 	
+	public int getIndex() {
+		return field.getIndex();
+	}
 }

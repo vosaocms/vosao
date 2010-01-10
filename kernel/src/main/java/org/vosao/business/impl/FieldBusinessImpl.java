@@ -22,6 +22,7 @@
 package org.vosao.business.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ import org.apache.commons.logging.LogFactory;
 import org.vosao.business.FieldBusiness;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormEntity;
+import org.vosao.entity.helper.FieldHelper;
 import org.vosao.enums.FieldType;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
@@ -79,11 +81,25 @@ public class FieldBusinessImpl extends AbstractBusinessImpl
 			field.setValues(vo.get("values"));
 			field.setHeight(Integer.valueOf(vo.get("height")));
 			field.setWidth(Integer.valueOf(vo.get("width")));
+			field.setIndex(Integer.valueOf(vo.get("index")));
 		}
 		catch (Exception e) {
 			errors.add(e.getMessage());
 		}
 		return errors;
+	}
+
+	@Override
+	public List<FieldEntity> checkOrder(FormEntity form) {
+		List<FieldEntity> fields = getDao().getFieldDao().getByForm(form);
+		for (int i = 0; i < fields.size(); i++) {
+			FieldEntity field = fields.get(i);
+			if (i != field.getIndex()) {
+				field.setIndex(i);
+				getDao().getFieldDao().save(field);
+			}
+		}
+		return getDao().getFieldDao().getByForm(form);
 	}
 	
 }

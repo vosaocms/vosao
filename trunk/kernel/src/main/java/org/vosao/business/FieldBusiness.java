@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.vosao.entity.FieldEntity;
+import org.vosao.entity.FormEntity;
 
 public interface FieldBusiness {
 
@@ -38,4 +39,10 @@ public interface FieldBusiness {
 	 */
 	List<String> convertFromVO(FieldEntity entity, final Map<String, String> vo);
 	
+	/**
+	 * Check fields order and set index field if required.
+	 * @param form
+	 * @return form fields ordered by index.
+	 */
+	List<FieldEntity> checkOrder(final FormEntity form);
 }

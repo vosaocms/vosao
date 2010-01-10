@@ -178,9 +178,9 @@ function showFields() {
 		h += '<tr><td>' + field.title + '</td>'
 		    + '<td>' + field.name + '</td>'
 		    + '<td>' + getFieldType(field.type) + '</td>'
-		    + '<td><a href="#" onclick="onFieldRemove(' + i + ')">remove</a> '
-		    + '<a href="#" onclick="onFieldUp(' + i + ')">Up</a> '
-		    + '<a href="#" onclick="onFieldDown(' + i + ')">Down</a> '
+		    + '<td><a href="#" onclick="onFieldRemove(' + i + ')"><img src="/static/images/02_x.png"/></a> '
+		    + '<a href="#" onclick="onFieldUp(' + i + ')"><img src="/static/images/02_up.png"/></a> '
+		    + '<a href="#" onclick="onFieldDown(' + i + ')"><img src="/static/images/02_down.png"/></a> '
 		    + '</td></tr>';		
 	});
 	$('#fields').html(h + '</table>');

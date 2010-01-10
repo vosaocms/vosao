@@ -29,6 +29,10 @@ a:hover, .ui-widget-content a:hover {
     color: #148fd5;
 }
 
+a img {
+	border: none;
+}
+
 fieldset {
 	padding: 10px;
 	border: 1px solid #ccc;

@@ -27,6 +27,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.datanucleus.util.StringUtils;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormEntity;
 import org.vosao.service.ServiceResponse;
@@ -41,7 +42,6 @@ public class FieldServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse updateField(Map<String, String> fieldMap) {
-		logger.info("updateField");
 		FieldEntity field = new FieldEntity(); 
 		List<String> errors = getBusiness().getFieldBusiness().convertFromVO(
 				field, fieldMap);
@@ -49,7 +49,12 @@ public class FieldServiceImpl extends AbstractServiceImpl
 			List<String> validateErrors = getBusiness().getFieldBusiness()
 					.validateBeforeUpdate(field);
 			if (validateErrors.isEmpty()) {
+				boolean newField = StringUtils.isEmpty(field.getId());
 				getDao().getFieldDao().save(field);
+				if (newField) {
+					FormEntity form = getDao().getFormDao().getById(field.getFormId());
+					getBusiness().getFieldBusiness().checkOrder(form);
+				}
 				return ServiceResponse.createSuccessResponse(
 						"Field was successfully updated");
 			}
@@ -89,7 +94,70 @@ public class FieldServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public void remove(List<String> ids) {
-		getDao().getFieldDao().remove(ids);
+		if (ids.size() > 0) {
+			FieldEntity field = null;
+			FormEntity form = null;
+			for (String id : ids) {
+				field = getDao().getFieldDao().getById(id);
+				if (field != null) {
+					form = getDao().getFormDao().getById(field.getFormId());
+					break;
+				}
+			}
+			if (form == null) {
+				return;
+			}
+			getDao().getFieldDao().remove(ids);
+			getBusiness().getFieldBusiness().checkOrder(form);
+		}
+	}
+
+	@Override
+	public void moveDown(String formId, String fieldId) {
+		FormEntity form = getDao().getFormDao().getById(formId);
+		if (form == null) {
+			return;
+		}
+		List<FieldEntity> fields = getBusiness().getFieldBusiness().checkOrder(form);
+		int index = indexOf(fields, fieldId);
+		if (index == -1) {
+			return;
+		}
+		if (index + 1 < fields.size()) {
+			fields.get(index).setIndex(index + 1);
+			getDao().getFieldDao().save(fields.get(index));
+			fields.get(index + 1).setIndex(index);
+			getDao().getFieldDao().save(fields.get(index + 1));
+		}		
+	}
+	
+	private int indexOf(List<FieldEntity> fields, final String fieldId) {
+		for (int i = 0; i < fields.size(); i++) {
+			FieldEntity field = fields.get(i);
+			if (field.getId().equals(fieldId)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	@Override
+	public void moveUp(String formId, String fieldId) {
+		FormEntity form = getDao().getFormDao().getById(formId);
+		if (form == null) {
+			return;
+		}
+		List<FieldEntity> fields = getBusiness().getFieldBusiness().checkOrder(form);
+		int index = indexOf(fields, fieldId);
+		if (index == -1) {
+			return;
+		}
+		if (index - 1 >= 0) {
+			fields.get(index).setIndex(index - 1);
+			getDao().getFieldDao().save(fields.get(index));
+			fields.get(index - 1).setIndex(index);
+			getDao().getFieldDao().save(fields.get(index - 1));
+		}		
 	}
 
 }

@@ -50,11 +50,13 @@
     <div class="form-row">
         <div>
             <input id="autosave" type="checkbox"> Autosave</input>
-            Editor size:
-            <a id="bigLink" href="#"> Big</a>
-            <a id="smallLink" href="#"> Small</a>
+            Editor size: &nbsp;
+            <a id="sizeLink" href="#">Big</a>&nbsp;
+            <a id="wrapLink" href="#">Wrap</a>
         </div>
-        <textarea id="content" rows="20" cols="80" wrap="off"></textarea>
+        <div id="contentDiv">
+            <textarea id="content" rows="20" cols="80" wrap="off"></textarea>
+        </div>
     </div>
     <div class="buttons">
         <input id="saveContinueButton" type="button" value="Save and continue" />

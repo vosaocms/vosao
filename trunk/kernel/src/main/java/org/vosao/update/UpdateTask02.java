@@ -77,6 +77,7 @@ public class UpdateTask02 implements UpdateTask {
 	public void update() throws UpdateException {
 		datastore = DatastoreServiceFactory.getDatastoreService();
 		updatePages();
+		updateFields();
 	}
 
 	private void updatePages() {
@@ -85,6 +86,14 @@ public class UpdateTask02 implements UpdateTask {
 			e.setProperty("pageType", PageType.SIMPLE.name());
 			e.setProperty("structureId", "");
 			e.setProperty("structureTemplateId", "");
+			datastore.put(e);
+		}
+	}
+	
+	private void updateFields() {
+		Query query = new Query("FieldEntity");
+		for (Entity e : datastore.prepare(query).asIterable()) {
+			e.setProperty("index", (int) 0);
 			datastore.put(e);
 		}
 	}

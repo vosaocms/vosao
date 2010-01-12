@@ -27,7 +27,13 @@ $(function(){
 function loadTree() {
 	Vosao.jsonrpc.folderService.getTree(function(r) {
         $('#folders-tree').html(renderFolder(r));
-        $("#folders-tree").treeview();
+        $("#folders-tree").treeview({
+			animated: "fast",
+			collapsed: true,
+			unique: true,
+			persist: "cookie",
+			cookieId: "folderTree"
+		});
     });
 }
 

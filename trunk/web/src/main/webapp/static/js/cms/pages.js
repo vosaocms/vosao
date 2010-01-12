@@ -31,7 +31,13 @@ function loadData() {
 function loadTree() {
 	Vosao.jsonrpc.pageService.getTree(function(r) {
 		$('#pages-tree').html(renderPage(r));
-		$("#pages-tree").treeview();
+		$("#pages-tree").treeview({
+			animated: "fast",
+			collapsed: true,
+			unique: true,
+			persist: "cookie",
+			cookieId: "pageTree"
+		});
 	});
 }
 

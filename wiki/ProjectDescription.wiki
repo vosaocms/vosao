@@ -6,6 +6,6 @@ Vosao (vo-za) is a content management system (CMS) that enables you to build web
 
 The Vosao project was started in August 2009 in order to develop an open source tool for free site hosting on Google App Engine. 
 
-Visit [[http://www.vosao.org/ www.vosao.org]] to learn more about the latest production release. 
+Visit [http://www.vosao.org/ www.vosao.org] to learn more about the latest production release. 
 
-Visit [[http://staging.vosao.org staging.vosao.org]] for the work-in-progress on the next release. 
+Visit [http://staging.vosao.org staging.vosao.org] for the work-in-progress on the next release.

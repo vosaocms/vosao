@@ -9,7 +9,7 @@
  * Provide placeholders for any "TODO" pages (#89).
  * Use staging site to update documentation and test next release (#92).
 
-[[http://code.google.com/p/vosao/issues/list?can=2&q=status:Accepted%20milestone=Release-0.2&colspec=ID%20Type%20Status%20Priority%20Milestone%20Owner%20Summary Accepted for RC2 but not implemented.]]
+[http://code.google.com/p/vosao/issues/list?can=2&q=status:Accepted%20milestone=Release-0.2&colspec=ID%20Type%20Status%20Priority%20Milestone%20Owner%20Summary Accepted for RC2 but not implemented.]
 
 == 01.10.2010 RC1 ==
 

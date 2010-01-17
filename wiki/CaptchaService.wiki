@@ -1,7 +1,0 @@
-= Captcha Service =
-
-To protect site against spam Vosao CMS uses [http://en.wikipedia.org/wiki/CAPTCHA captcha] technology. We decided not to invent the wheel and integrated [http://recaptcha.net reCaptcha] service. It's free and stable.
-
-To start using reCaptcha service you need to provide reCaptcha private and public keys. To obtain them register your website on [http://recaptcha.net reCaptcha] site. 
-
-In Vosao CMS you can enter reCaptcha keys on Site Configuration panel.

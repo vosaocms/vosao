@@ -1,65 +1,17 @@
 #labels Featured
 = Project road map =
 
-== Project start 14.08.2009 ==
+== (TBD) RC2 ==
 
-== 01.10.2009 Technology investigation. ==
+ * Structured page layout based on custom data-entry form (#60).
+ * Enhanced caching to increase performance (#69).
+ * Enable user commenting for Vosao web site (#88).
+ * Provide placeholders for any "TODO" pages (#89).
+ * Use staging site to update documentation and test next release (#92).
 
-Version 0.0.1 Working prototype.
-Create pilot project. Test all required libraries in GAE/J environment.
+== 01.10.2010 RC1 ==
 
-== 01.11.2009 Creating user interface ==
-
-Version 0.0.3 Working prototype.
-Develop CMS look&feel. Create all user interface elements.
-
-== 01.12.2009 Working prototype. ==
-
-Version 0.0.4 Working prototype.
- * Multilanguage support. 
- * Content versioning. 
-
-== 01.01.2010 Alpha version ==
-
-Version 0.1 Alpha version.
- * User security based on privileges, ACL and groups.
-
-== 01.02.2010 Alpha version ==
-
-Version 0.2 Alpha version.
- * Structured content with templates
- * Datastore queries caching in memcache
-
-== 01.03.2010 Alpha version ==
-
-Version 0.3 Alpha version.
- * Plugins system.
- * Develop various plugins.
-
-== 01.04.2010 Alpha version ==
-
-Version 0.4 Alpha version.
- * Develop various plugins.
-
-== 01.05.2010 Alpha version ==
-
-Version 0.5 Alpha version.
- * Develop various plugins.
-
-== 01.06.2010 Alpha version ==
-
-Version 0.6 Alpha version.
- * Develop various plugins.
-
-== 01.07.2010 Alpha version ==
-
-Version 0.7 Alpha version.
- * Develop various plugins.
-
-== 01.08.2010 Alpha version ==
-
-Version 0.8 Alpha version.
- * Develop various plugins.
+Version 1.0 Release candidate.
 
 == 01.09.2010 Beta version ==
 
@@ -67,6 +19,62 @@ Version 0.9 Beta version.
  * Intensive testing.
  * Develop unit tests for coverage 75%.
 
-== 01.10.2010 RC1 ==
+== 01.08.2010 Alpha version ==
 
-Version 1.0 Release candidate.
+Version 0.8 Alpha version.
+ * Develop various plugins.
+
+== 01.07.2010 Alpha version ==
+
+Version 0.7 Alpha version.
+ * Develop various plugins.
+
+== 01.06.2010 Alpha version ==
+
+Version 0.6 Alpha version.
+ * Develop various plugins.
+
+== 01.05.2010 Alpha version ==
+
+Version 0.5 Alpha version.
+ * Develop various plugins.
+
+== 01.04.2010 Alpha version ==
+
+Version 0.4 Alpha version.
+ * Develop various plugins.
+
+== 01.03.2010 Alpha version ==
+
+Version 0.3 Alpha version.
+ * Plugins system.
+ * Develop various plugins.
+
+== 01.02.2010 Alpha version ==
+
+Version 0.2 Alpha version.
+ * Structured content with templates
+ * Datastore queries caching in memcache
+
+== 01.01.2010 Alpha version ==
+
+Version 0.1 Alpha version.
+ * User security based on privileges, ACL and groups.
+
+== 01.12.2009 Working prototype. ==
+
+Version 0.0.4 Working prototype.
+ * Multilanguage support. 
+ * Content versioning. 
+
+== 01.11.2009 Creating user interface ==
+
+Version 0.0.3 Working prototype.
+Develop CMS look&feel. Create all user interface elements.
+
+== 01.10.2009 Technology investigation. ==
+
+Version 0.0.1 Working prototype.
+Create pilot project. Test all required libraries in GAE/J environment.
+
+== Project start 14.08.2009 ==

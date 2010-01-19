@@ -47,6 +47,9 @@ import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.vosao.global.SystemService;
 
+import com.google.appengine.api.labs.taskqueue.Queue;
+import com.google.appengine.api.labs.taskqueue.QueueFactory;
+
 public class SystemServiceImpl implements SystemService, Serializable {
 
 	private static final Log log = LogFactory.getLog(SystemServiceImpl.class);
@@ -120,6 +123,18 @@ public class SystemServiceImpl implements SystemService, Serializable {
 			}
 		}
 		return transformers.get(key);
+	}
+
+
+	@Override
+	public Queue getDefaultQueue() {
+		return QueueFactory.getDefaultQueue();
+	}
+
+
+	@Override
+	public Queue getQueue(String name) {
+		return QueueFactory.getQueue(name);
 	}
 	
 	

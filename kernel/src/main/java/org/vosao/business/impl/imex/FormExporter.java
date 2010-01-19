@@ -26,6 +26,8 @@ import java.util.List;
 
 import org.dom4j.Element;
 import org.vosao.business.Business;
+import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
+import org.vosao.business.impl.imex.dao.DaoTaskException;
 import org.vosao.dao.Dao;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormConfigEntity;
@@ -35,8 +37,9 @@ import org.vosao.utils.XmlUtil;
 
 public class FormExporter extends AbstractExporter {
 
-	public FormExporter(Dao aDao, Business aBusiness) {
-		super(aDao, aBusiness);
+	public FormExporter(Dao aDao, Business aBusiness,
+			DaoTaskAdapter daoTaskAdapter) {
+		super(aDao, aBusiness, daoTaskAdapter);
 	}
 	
 	public void createFormsXML(Element siteElement) {
@@ -75,7 +78,7 @@ public class FormExporter extends AbstractExporter {
 		}
 	}
 	
-	public void readForms(Element formsElement) {
+	public void readForms(Element formsElement) throws DaoTaskException {
 		for (Iterator<Element> i = formsElement.elementIterator(); 
 				i.hasNext(); ) {
             Element element = i.next();
@@ -92,7 +95,7 @@ public class FormExporter extends AbstractExporter {
             	form.setEnableCaptcha(XmlUtil.readBooleanAttr(element, 
             			"enableCaptcha", false));
             	form.setResetButtonTitle(element.attributeValue("resetButtonTitle"));
-            	getDao().getFormDao().save(form);
+            	getDaoTaskAdapter().formSave(form);
             	readFields(element, form);
             }
             if (element.getName().equals("form-config")) {
@@ -113,7 +116,8 @@ public class FormExporter extends AbstractExporter {
 		fieldElement.addAttribute("width", String.valueOf(field.getWidth()));
 	}
 	
-	public void readFields(Element formElement, FormEntity form) {
+	public void readFields(Element formElement, FormEntity form) 
+			throws DaoTaskException {
 		for (Iterator<Element> i = formElement.elementIterator(); i.hasNext(); ) {
             Element element = i.next();
             if (element.getName().equals("field")) {
@@ -134,12 +138,12 @@ public class FormExporter extends AbstractExporter {
             	field.setDefaultValue(element.attributeValue("defaultValue"));
             	field.setHeight(XmlUtil.readIntAttr(element, "height", 0));
             	field.setWidth(XmlUtil.readIntAttr(element, "width", 20));
-            	getDao().getFieldDao().save(field);
+            	getDaoTaskAdapter().fieldSave(field);
             }
 		}		
 	}
 
-	public void readFormConfig(Element configElement) {
+	public void readFormConfig(Element configElement) throws DaoTaskException {
 		FormConfigEntity config = getDao().getFormDao().getConfig();
 		for (Iterator<Element> i = configElement.elementIterator(); 
 				i.hasNext(); ) {
@@ -151,7 +155,7 @@ public class FormExporter extends AbstractExporter {
             	config.setLetterTemplate(element.getText());
             }
 		}
-		getDao().getFormDao().save(config);
+		getDaoTaskAdapter().formConfigSave(config);
 	}
 	
 	

@@ -161,5 +161,14 @@
         <servlet-name>FormSend</servlet-name>
         <url-pattern>/plugin/form/send</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ImportTask</servlet-name>
+        <servlet-class>org.vosao.servlet.ImportTaskServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ImportTask</servlet-name>
+        <url-pattern>/_ah/queue/import</url-pattern>
+    </servlet-mapping>
     
 </web-app>

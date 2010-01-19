@@ -27,10 +27,16 @@ import javax.xml.transform.Transformer;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 
+import com.google.appengine.api.labs.taskqueue.Queue;
+
 
 public interface SystemService {
 	
 	Cache getCache();
+	
+	Queue getDefaultQueue();
+
+	Queue getQueue(String name);
 
 	VelocityEngine getVelocityEngine();
 

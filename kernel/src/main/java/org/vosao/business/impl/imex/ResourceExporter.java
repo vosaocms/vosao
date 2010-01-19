@@ -32,6 +32,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
+import org.vosao.business.impl.imex.dao.DaoTaskException;
 import org.vosao.dao.Dao;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
@@ -42,8 +44,9 @@ public class ResourceExporter extends AbstractExporter {
 
 	private static final Log logger = LogFactory.getLog(ResourceExporter.class);
 
-	public ResourceExporter(Dao aDao, Business aBusiness) {
-		super(aDao, aBusiness);
+	public ResourceExporter(Dao aDao, Business aBusiness,
+			DaoTaskAdapter daoTaskAdapter) {
+		super(aDao, aBusiness, daoTaskAdapter);
 	}
 	
 	/**
@@ -76,19 +79,16 @@ public class ResourceExporter extends AbstractExporter {
 
 
 	public String importResourceFile(final ZipEntry entry, byte[] data)
-			throws UnsupportedEncodingException {
+			throws UnsupportedEncodingException, DaoTaskException {
 
 		String[] chain = FolderUtil.getPathChain(entry);
 		String folderPath = FolderUtil.getFilePath(entry);
 		String fileName = chain[chain.length - 1];
-		logger.debug("importResourceFile: " + folderPath + " " + fileName + " "
-				+ data.length);
-		getBusiness().getFolderBusiness().createFolder(folderPath);
-		TreeItemDecorator<FolderEntity> root = getBusiness()
-				.getFolderBusiness().getTree();
-		FolderEntity folderEntity = getBusiness()
-				.getFolderBusiness().findFolderByPath(root,
-				folderPath).getEntity();
+		//logger.debug("importResourceFile: " + folderPath + " " + fileName + " "
+		//		+ data.length);
+		FolderEntity folderEntity = getBusiness().getFolderBusiness()
+				.createFolder(folderPath);
+		//logger.debug("folderEntity: " + folderEntity);
 		String contentType = MimeType.getContentTypeByExt(FolderUtil
 				.getFileExt(fileName));
 		FileEntity fileEntity = getDao().getFileDao().getByName(
@@ -100,7 +100,7 @@ public class ResourceExporter extends AbstractExporter {
 			fileEntity = new FileEntity(fileName, fileName, folderEntity
 					.getId(), contentType, new Date(), data.length);
 		}
-		getDao().getFileDao().save(fileEntity, data);
+		getDaoTaskAdapter().fileSave(fileEntity, data);
 		return "/" + entry.getName();
 	}
 	

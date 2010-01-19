@@ -26,6 +26,8 @@ import java.util.List;
 
 import org.dom4j.Element;
 import org.vosao.business.Business;
+import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
+import org.vosao.business.impl.imex.dao.DaoTaskException;
 import org.vosao.dao.Dao;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.StructureTemplateEntity;
@@ -36,8 +38,9 @@ import org.vosao.enums.StructureTemplateType;
  */
 public class StructureExporter extends AbstractExporter {
 
-	public StructureExporter(Dao aDao, Business aBusiness) {
-		super(aDao, aBusiness);
+	public StructureExporter(Dao aDao, Business aBusiness,
+			DaoTaskAdapter daoTaskAdapter) {
+		super(aDao, aBusiness, daoTaskAdapter);
 	}
 	
 	public void createStructuresXML(Element siteElement) {
@@ -74,7 +77,8 @@ public class StructureExporter extends AbstractExporter {
 		templateElement.addElement("content").setText(template.getContent());
 	}	
 	
-	public void readStructures(Element structuresElement) {
+	public void readStructures(Element structuresElement) 
+			throws DaoTaskException {
 		for (Iterator<Element> i = structuresElement.elementIterator(); 
 				i.hasNext(); ) {
             Element element = i.next();
@@ -87,7 +91,7 @@ public class StructureExporter extends AbstractExporter {
             		structure = new StructureEntity(title, content);
             	}
             	structure.setContent(content);
-            	getDao().getStructureDao().save(structure);
+            	getDaoTaskAdapter().structureSave(structure);
             	readTemplates(element.element("templates"), structure);
             }
 		}		
@@ -103,8 +107,12 @@ public class StructureExporter extends AbstractExporter {
             	String content = element.elementText("content");
             	StructureTemplateType type = StructureTemplateType.valueOf(
             			element.elementText("type"));
-            	StructureTemplateEntity template = new StructureTemplateEntity(
+            	StructureTemplateEntity template = getDao()
+            			.getStructureTemplateDao().getByTitle(title);
+            	if (template == null) {
+            		template = new StructureTemplateEntity(
             			title, structure.getId(), type, content);
+            	}
             	getDao().getStructureTemplateDao().save(template);
             }
 		}

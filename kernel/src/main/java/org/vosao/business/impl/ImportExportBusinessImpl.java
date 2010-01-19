@@ -40,6 +40,8 @@ import org.vosao.business.impl.imex.PageExporter;
 import org.vosao.business.impl.imex.ResourceExporter;
 import org.vosao.business.impl.imex.SiteExporter;
 import org.vosao.business.impl.imex.ThemeExporter;
+import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
+import org.vosao.business.impl.imex.dao.DaoTaskException;
 import org.vosao.dao.Dao;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
@@ -51,25 +53,26 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 	
 	private Business business;
 	private Dao dao;
+	private DaoTaskAdapter daoTaskAdapter;
 	
 	private ThemeExporter createThemeExporter() {
-		return new ThemeExporter(getDao(), getBusiness());
+		return new ThemeExporter(getDao(), getBusiness(), getDaoTaskAdapter());
 	}
 	
 	private ResourceExporter createResourceExporter() {
-		return new ResourceExporter(getDao(), getBusiness());
+		return new ResourceExporter(getDao(), getBusiness(), getDaoTaskAdapter());
 	}
 
 	private ConfigExporter createConfigExporter() {
-		return new ConfigExporter(getDao(), getBusiness());
+		return new ConfigExporter(getDao(), getBusiness(), getDaoTaskAdapter());
 	}
 
 	private SiteExporter createSiteExporter() {
-		return new SiteExporter(getDao(), getBusiness());
+		return new SiteExporter(getDao(), getBusiness(), getDaoTaskAdapter());
 	}
 
 	private PageExporter createPageExporter() {
-		return new PageExporter(getDao(), getBusiness());
+		return new PageExporter(getDao(), getBusiness(), getDaoTaskAdapter());
 	}
 
 	@Override
@@ -88,8 +91,8 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		return outData.toByteArray();
 	}
 
-	public List<String> importZip(ZipInputStream in) throws IOException, 
-			DocumentException {
+	public void importZip(ZipInputStream in) throws IOException, 
+			DocumentException, DaoTaskException {
 		
 		ResourceExporter resourceExporter = createResourceExporter();
 		ThemeExporter themeExporter = createThemeExporter();
@@ -126,7 +129,14 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 				}
 			}
 		}
-		return result;
+		clearResourcesCache(result);
+	}
+	
+	private void clearResourcesCache(List<String> files) {
+		for (String file : files) {
+			getBusiness().getSystemService().getCache().remove(file);
+			logger.debug("Clear cache " + file);
+		}
 	}
 	
 	@Override
@@ -189,6 +199,14 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 
 	public void setDao(Dao dao) {
 		this.dao = dao;
+	}
+
+	public DaoTaskAdapter getDaoTaskAdapter() {
+		return daoTaskAdapter;
+	}
+
+	public void setDaoTaskAdapter(DaoTaskAdapter daoTaskAdapter) {
+		this.daoTaskAdapter = daoTaskAdapter;
 	}
 	
 }

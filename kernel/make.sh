@@ -1,1 +1,1 @@
-mvn install -o
+mvn install

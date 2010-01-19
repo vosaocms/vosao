@@ -27,6 +27,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.vosao.business.Business;
 import org.vosao.dao.Dao;
+import org.vosao.global.SystemService;
 
 /**
  * Base spring servlet.
@@ -60,6 +61,10 @@ public class BaseSpringServlet extends HttpServlet {
 		return (Dao) getSpringBean("dao");
 	}
 	
+	public SystemService getSystemService() {
+		return (SystemService) getSpringBean("systemService");
+	}
+
 	public Object getSpringBean(final String name) {
 		return WebApplicationContextUtils.getRequiredWebApplicationContext(
 				getServletContext()).getBean(name);

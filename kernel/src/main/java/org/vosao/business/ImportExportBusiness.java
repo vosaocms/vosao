@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.zip.ZipInputStream;
 
 import org.dom4j.DocumentException;
+import org.vosao.business.impl.imex.dao.DaoTaskException;
 import org.vosao.dao.Dao;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
@@ -50,9 +51,10 @@ public interface ImportExportBusiness {
 	/**
 	 * Import site data from zip file.
 	 * @return list of imported resources.
+	 * @throws DaoTaskException 
 	 */
-	List<String> importZip(ZipInputStream in) throws IOException,
-		DocumentException;
+	void importZip(ZipInputStream in) throws IOException,
+		DocumentException, DaoTaskException;
 
 	/**
 	 * Create export file for folder with files and subfolders.

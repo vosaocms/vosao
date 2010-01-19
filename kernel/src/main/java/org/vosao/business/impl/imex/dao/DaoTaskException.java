@@ -19,35 +19,15 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.impl.imex;
+package org.vosao.business.impl.imex.dao;
 
-import org.vosao.business.Business;
-import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
-import org.vosao.dao.Dao;
-
-public abstract class AbstractExporter {
-
-	private Dao dao;
-	private Business business;
-	private DaoTaskAdapter daoTaskAdapter;
+public class DaoTaskException extends Exception {
 	
-	public AbstractExporter(Dao aDao, Business aBusiness, 
-			DaoTaskAdapter aDaoTaskAdapter) {
-		dao = aDao;
-		business = aBusiness;
-		daoTaskAdapter = aDaoTaskAdapter;
+	public DaoTaskException() {
+		super("Task exception");
 	}
 
-	public Dao getDao() {
-		return dao;
+	public DaoTaskException(String msg) {
+		super(msg);
 	}
-
-	public Business getBusiness() {
-		return business;
-	}
-	
-	public DaoTaskAdapter getDaoTaskAdapter() {
-		return daoTaskAdapter;
-	}
-	
 }

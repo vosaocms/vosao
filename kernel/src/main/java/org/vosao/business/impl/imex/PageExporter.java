@@ -36,6 +36,8 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
+import org.vosao.business.impl.imex.dao.DaoTaskException;
 import org.vosao.dao.Dao;
 import org.vosao.entity.CommentEntity;
 import org.vosao.entity.ContentEntity;
@@ -60,13 +62,15 @@ public class PageExporter extends AbstractExporter {
 	private UserExporter userExporter;
 	private PagePermissionExporter pagePermissionExporter;
 	
-	public PageExporter(Dao aDao, Business aBusiness) {
-		super(aDao, aBusiness);
-		resourceExporter = new ResourceExporter(aDao, aBusiness);
-		configExporter = new ConfigExporter(aDao, aBusiness);
-		formExporter = new FormExporter(aDao, aBusiness);
-		userExporter = new UserExporter(aDao, aBusiness);
-		pagePermissionExporter = new PagePermissionExporter(aDao, aBusiness);
+	public PageExporter(Dao aDao, Business aBusiness, 
+			DaoTaskAdapter daoTaskAdapter) {
+		super(aDao, aBusiness, daoTaskAdapter);
+		resourceExporter = new ResourceExporter(aDao, aBusiness, daoTaskAdapter);
+		configExporter = new ConfigExporter(aDao, aBusiness, daoTaskAdapter);
+		formExporter = new FormExporter(aDao, aBusiness, daoTaskAdapter);
+		userExporter = new UserExporter(aDao, aBusiness, daoTaskAdapter);
+		pagePermissionExporter = new PagePermissionExporter(aDao, aBusiness,
+				daoTaskAdapter);
 	}
 	
 	private void createPageXML(TreeItemDecorator<PageEntity> page,
@@ -176,14 +180,15 @@ public class PageExporter extends AbstractExporter {
 		resourceExporter.addResourcesFromFolder(out, folder, "page/");
 	}
 
-	public void readPages(Element pages) {
+	public void readPages(Element pages) throws DaoTaskException {
 		for (Iterator<Element> i = pages.elementIterator(); i.hasNext(); ) {
 			Element pageElement = i.next();
 			readPage(pageElement, null);
 		}
 	}
 
-	private void readPage(Element pageElement, PageEntity parentPage) {
+	private void readPage(Element pageElement, PageEntity parentPage) 
+			throws DaoTaskException {
 		PageEntity page = readPageVersion(pageElement);
 		for (Iterator<Element> i = pageElement.elementIterator(); i.hasNext();) {
 			Element element = i.next();
@@ -203,7 +208,8 @@ public class PageExporter extends AbstractExporter {
 		}
 	}
 
-	private PageEntity readPageVersion(Element pageElement) {
+	private PageEntity readPageVersion(Element pageElement) 
+			throws DaoTaskException {
 		String title = pageElement.attributeValue("title");
 		String url = pageElement.attributeValue("url");
 		String themeUrl = pageElement.attributeValue("theme");
@@ -286,12 +292,13 @@ public class PageExporter extends AbstractExporter {
 		} else {
 			page = newPage;
 		}
-		getDao().getPageDao().save(page);
+		getDaoTaskAdapter().pageSave(page);
 		readContents(pageElement, page);
 		return page;
 	}
 	
-	private void readContents(Element pageElement, PageEntity page) {
+	private void readContents(Element pageElement, PageEntity page) 
+			throws DaoTaskException {
 		for (Iterator<Element> i = pageElement.elementIterator(); i.hasNext();) {
 			Element element = i.next();
 			if (element.getName().equals("content")) {
@@ -300,13 +307,14 @@ public class PageExporter extends AbstractExporter {
 				if (language == null) {
 					language = LanguageEntity.ENGLISH_CODE;
 				}
-				getDao().getPageDao().setContent(page.getId(), language, 
+				getDaoTaskAdapter().setPageContent(page.getId(), language, 
 						content);
 			}
 		}
 	}
 	
-	private void readComments(Element commentsElement, PageEntity page) {
+	private void readComments(Element commentsElement, PageEntity page) 
+			throws DaoTaskException {
 		for (Iterator<Element> i = commentsElement.elementIterator(); i
 				.hasNext();) {
 			Element element = i.next();
@@ -325,7 +333,7 @@ public class PageExporter extends AbstractExporter {
 				String content = element.getText();
 				CommentEntity comment = new CommentEntity(name, content,
 						publishDate, page.getId(), disabled);
-				getDao().getCommentDao().save(comment);
+				getDaoTaskAdapter().commentSave(comment);
 			}
 		}
 	}

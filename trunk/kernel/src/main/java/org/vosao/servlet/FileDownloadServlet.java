@@ -78,34 +78,40 @@ public class FileDownloadServlet extends BaseSpringServlet {
 			return;
 		}	
 		FileEntity file = getDao().getFileDao().getByName(
-				folder.getEntity().getId(), filename); 
+				folder.getEntity().getId(), filename);
 		if (file != null) {
+			byte[] content = getDao().getFileDao().getFileContent(file);
 			if (file.getSize() < CACHE_LIMIT) {
 				getBusiness().getSystemService().getCache()
 					.put(request.getPathInfo(), file);
+				getBusiness().getSystemService().getCache()
+					.put("data:" + request.getPathInfo(), content);
 			}
-			sendFile(file, request, response);
+			sendFile(file, content, request, response);
 		}
 		else {
-	        log.info("file " + request.getPathInfo() + " was not found");
-			response.getWriter().append("file " + request.getPathInfo() 
-					+ " was not found");
+			response.sendError(response.SC_NOT_FOUND, "File was not found");
+	        log.debug("not found file " + request.getPathInfo());
 		}
 	}
 	
 	private boolean isInCache(final String path) {
-		return getBusiness().getSystemService().getCache().containsKey(path);
+		return getBusiness().getSystemService().getCache().containsKey(path)
+			&& getBusiness().getSystemService().getCache().containsKey(
+					"data:" + path);
 	}
 	
 	private void sendFromCache(HttpServletRequest request, 
 			HttpServletResponse response) throws IOException {
 		FileEntity file = (FileEntity) getBusiness().getSystemService()
 				.getCache().get(request.getPathInfo());
-		sendFile(file, request, response);
+		byte[] content = (byte[]) getBusiness().getSystemService()
+				.getCache().get("data:" + request.getPathInfo());
+		sendFile(file, content, request, response);
 	}
 	
-	private void sendFile(final FileEntity file, HttpServletRequest request,
-			HttpServletResponse response) 
+	private void sendFile(final FileEntity file, byte[] content, 
+			HttpServletRequest request,	HttpServletResponse response) 
 			throws IOException {
 		if(DateUtil.toHeaderString(file.getLastModifiedTime()).equals(
 				request.getHeader("If-Modified-Since"))){
@@ -120,7 +126,7 @@ public class FileDownloadServlet extends BaseSpringServlet {
 					DateUtil.toHeaderString(file.getLastModifiedTime()));
 			BufferedOutputStream output = new BufferedOutputStream(
 					response.getOutputStream());
-			output.write(getDao().getFileDao().getFileContent(file));
+			output.write(content);
 			output.flush();
 			output.close();
 		}

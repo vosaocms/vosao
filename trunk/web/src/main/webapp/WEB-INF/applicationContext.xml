@@ -51,7 +51,7 @@
     </bean>
       
     <bean id="fileDao" class="org.vosao.dao.impl.FileDaoImpl"
-        parent="abstractDao" />  
+        parent="abstractDao"/>
     
     <bean id="folderDao" class="org.vosao.dao.impl.FolderDaoImpl"
         parent="abstractDao" />  

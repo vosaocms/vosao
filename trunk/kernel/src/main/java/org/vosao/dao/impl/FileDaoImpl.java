@@ -223,6 +223,6 @@ public class FileDaoImpl extends BaseDaoImpl<String, FileEntity>
 		}
 		remove(ids);
 	}
-	
+
 
 }

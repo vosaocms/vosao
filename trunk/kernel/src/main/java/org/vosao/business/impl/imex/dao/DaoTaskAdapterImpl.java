@@ -84,6 +84,9 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 		if (current < start) {
 			return true;
 		}
+		if (current == start) {
+			//logger.info("current == start");
+		}
 		return false;
 	}
 	

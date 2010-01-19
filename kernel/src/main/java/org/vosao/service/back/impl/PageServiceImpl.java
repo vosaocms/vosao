@@ -180,8 +180,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 			getDao().getPageDao().save(page);
 			getDao().getPageDao().setContent(page.getId(), 
 					vo.get("languageCode"), vo.get("content"));
-			return ServiceResponse.createSuccessResponse(
-					"Page was successfully saved.");
+			return ServiceResponse.createSuccessResponse(page.getId());
 		}
 		else {
 			return ServiceResponse.createErrorResponse(

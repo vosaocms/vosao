@@ -43,7 +43,7 @@ function loadTree() {
 
 function renderPage(vo) {
 	var pageUrl = encodeURIComponent(vo.entity.friendlyURL);
-	var html = '<li><a href="page.jsp?id=' + vo.entity.id + '">'
+	var html = '<li><a href="page.jsp?tab=1&id=' + vo.entity.id + '">'
 			+ vo.entity.title
 			+ '</a> <a title="Add child" href="page.jsp?parent=' + pageUrl
 			+ '">+</a>';

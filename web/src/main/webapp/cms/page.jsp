@@ -46,6 +46,21 @@
 </head>
 <body>
 
+<div id="versions" class="ui-tabs ui-widget ui-corner-all ui-widget-content">
+    <div class="vertical-buttons-panel"> </div>      
+    <a id="addVersionLink" class="button ui-state-default ui-corner-all" 
+        href="#">
+        <span class="ui-icon ui-icon-plus"></span> Add version
+    </a>
+    <div id="auditData">
+        <div>Page state: <span id="pageState"> </span></div>
+        <div>User created: <span id="pageCreateUser"> </span></div>
+        <div>Creation date: <span id="pageCreateDate"> </span></div>
+        <div>User modified: <span id="pageModUser"> </span></div>
+        <div>Modify date: <span id="pageModDate"> </span></div>
+    </div>
+</div>
+
 <div id="tabs">
 <ul>
     <li><a href="#tab-1">Page</a></li>
@@ -110,21 +125,6 @@
 </div>
 
 <div id="tab-2" class="contentTab">
-
-<div id="versions">
-    <div class="vertical-buttons-panel"> </div>      
-    <a id="addVersionLink" class="button ui-state-default ui-corner-all" 
-        href="#">
-        <span class="ui-icon ui-icon-plus"></span> Add version
-    </a>
-    <div id="auditData">
-        <div>Page state: <span id="pageState"> </span></div>
-        <div>User created: <span id="pageCreateUser"> </span></div>
-        <div>Creation date: <span id="pageCreateDate"> </span></div>
-        <div>User modified: <span id="pageModUser"> </span></div>
-        <div>Modify date: <span id="pageModDate"> </span></div>
-    </div>
-</div>
 
 <div style="padding-right:10px">
     <div style="float:right">

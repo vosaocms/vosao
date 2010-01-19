@@ -44,10 +44,12 @@ var pageRequest = null;
 var structureTemplates = null;
 var contentEditors = null;
 var browseId = '';
+var tab = null;
     
 $(function(){
-    $("#tabs").tabs();
-    $("#tabs").bind('tabsselect', tabSelected);       
+    tab = $("#tabs").tabs();
+    $("#tabs").bind('tabsselect', tabSelected);
+    Vosao.selectTabFromQueryParam(tab);
     $(".datepicker").datepicker({dateFormat:'dd.mm.yy'});
     Vosao.initJSONRpc(loadData);
 
@@ -106,6 +108,7 @@ function callLoadPage() {
 	Vosao.jsonrpc.pageService.getPageRequest(function(r) {
 		pageRequest = r;
 		page = pageRequest.page;
+		editMode = pageId != null;
 		loadPage();
 	}, pageId, pageParentUrl);
 }
@@ -179,6 +182,9 @@ function loadTemplates() {
     if (page != null) {
         $('#templates').val(page.template);
     }
+    else {
+        $('#templates').val($.cookie("page_template"));
+    }
 }
 
 function loadLanguages() {
@@ -230,6 +236,7 @@ function initPageForm() {
 		$('.commentsTab').show();
 		$('.securityTab').show();
 		$('#pagePreview').show();
+		$('#versions').show();
 		showContentEditor();
 	} else {
 		$('#title').val('');
@@ -251,6 +258,7 @@ function initPageForm() {
 		$('.commentsTab').hide();
 		$('.securityTab').hide();
 		$('#pagePreview').hide();
+		$('#versions').hide();
 	}
 	onPageTypeChange();
 }
@@ -270,9 +278,17 @@ function onPageUpdate() {
 		structureId: $('#structure').val(),
 		structureTemplateId: $('#structureTemplate').val()		
 	});
+	$.cookie("page_template", pageVO.map.template, {path:'/', expires: 10});
 	Vosao.jsonrpc.pageService.savePage(function(r) {
 		if (r.result == 'success') {
-			location.href = '/cms/pages.jsp';
+			if (editMode) {
+				location.href = '/cms/pages.jsp';
+			}
+			pageId = r.message;
+			editMode = pageId != null;
+			loadData();
+			tab.tabs('select', 1);
+			Vosao.info("Page was successfully saved.");
 		} else {
 			Vosao.showServiceMessages(r);
 		}
@@ -843,7 +859,7 @@ function showContentEditor() {
 	if (page.simple && contentEditor == null) {
 		$('#page-content').html('<textarea id="content" rows="20" cols="80"></textarea>');
 	    contentEditor = CKEDITOR.replace('content', {
-	        height: 350, width: 'auto;padding-right:140px;',
+	        height: 350, width: 'auto',
 	        filebrowserUploadUrl : '/cms/upload',
 	        filebrowserBrowseUrl : '/cms/fileBrowser.jsp'
 	    });

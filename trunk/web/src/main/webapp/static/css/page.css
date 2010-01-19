@@ -2,8 +2,7 @@
 	float:right;
 	width:125px;
 	min-width:0;
-	margin-top:45px;
-	margin-right:20px;
+	padding: 15px 10px;
 }
 
 #auditData {
@@ -23,4 +22,9 @@
 
 .label {
 	margin: 20px 0 10px 0;
+}
+
+#tabs {
+	float: left;
+	width: 85%;
 }

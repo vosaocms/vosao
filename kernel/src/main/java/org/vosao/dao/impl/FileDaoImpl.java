@@ -224,5 +224,19 @@ public class FileDaoImpl extends BaseDaoImpl<String, FileEntity>
 		remove(ids);
 	}
 
+	@Override
+	public void removeAll() {
+		super.removeAll();
+		PersistenceManager pm = getPersistenceManager();
+		try {
+			String query = "select from " + FileChunkEntity.class.getName();
+			List<FileChunkEntity> result =  (List<FileChunkEntity>) 
+					pm.newQuery(query).execute();
+			pm.deletePersistentAll(result);
+		}
+		finally {
+			pm.close();
+		}
+	}
 
 }

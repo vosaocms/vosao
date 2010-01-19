@@ -27,6 +27,8 @@ import java.util.Map;
 
 import org.dom4j.Element;
 import org.vosao.business.Business;
+import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
+import org.vosao.business.impl.imex.dao.DaoTaskException;
 import org.vosao.dao.Dao;
 import org.vosao.entity.GroupEntity;
 import org.vosao.entity.UserEntity;
@@ -38,8 +40,9 @@ import org.vosao.entity.helper.UserHelper;
  */
 public class GroupExporter extends AbstractExporter {
 
-	public GroupExporter(Dao aDao, Business aBusiness) {
-		super(aDao, aBusiness);
+	public GroupExporter(Dao aDao, Business aBusiness,
+			DaoTaskAdapter daoTaskAdapter) {
+		super(aDao, aBusiness, daoTaskAdapter);
 	}
 	
 	public void createGroupsXML(Element siteElement) {
@@ -66,7 +69,7 @@ public class GroupExporter extends AbstractExporter {
 		}
 	}
 	
-	public void readGroups(Element groupsElement) {
+	public void readGroups(Element groupsElement) throws DaoTaskException {
 		Map<Long, UserEntity> usersMap = UserHelper.createIdMap(getDao()
 				.getUserDao().select()); 
 		for (Iterator<Element> i = groupsElement.elementIterator(); 
@@ -77,16 +80,24 @@ public class GroupExporter extends AbstractExporter {
             	GroupEntity group = getDao().getGroupDao().getByName(name);
             	if (group == null) {
             		group = new GroupEntity(name);
-                	getDao().getGroupDao().save(group);
             	}
+            	else {
+            		group.setName(name);
+            	}
+            	getDaoTaskAdapter().groupSave(group);
             	for (Iterator<Element> j = element.element("users").elementIterator();
         				j.hasNext(); ) {
                     Element userElement = j.next();
                     UserEntity user = getDao().getUserDao().getByEmail(
                     		userElement.getText());
                     if (user != null) {
-            			getDao().getUserGroupDao().save(new UserGroupEntity(
-            					group.getId(), user.getId()));
+                    	UserGroupEntity userGroup = getDao().getUserGroupDao()
+                    			.getByUserGroup(group.getId(), user.getId());
+            			if (userGroup == null) {
+            				userGroup = new UserGroupEntity(group.getId(), 
+            						user.getId());
+            			}
+                    	getDaoTaskAdapter().userGroupSave(userGroup);
                     }
         		}
             	

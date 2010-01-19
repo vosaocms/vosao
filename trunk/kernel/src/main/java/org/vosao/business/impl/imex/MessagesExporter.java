@@ -27,6 +27,8 @@ import java.util.Map;
 
 import org.dom4j.Element;
 import org.vosao.business.Business;
+import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
+import org.vosao.business.impl.imex.dao.DaoTaskException;
 import org.vosao.dao.Dao;
 import org.vosao.entity.MessageEntity;
 import org.vosao.entity.UserEntity;
@@ -37,8 +39,9 @@ import org.vosao.entity.helper.UserHelper;
  */
 public class MessagesExporter extends AbstractExporter {
 
-	public MessagesExporter(Dao aDao, Business aBusiness) {
-		super(aDao, aBusiness);
+	public MessagesExporter(Dao aDao, Business aBusiness,
+			DaoTaskAdapter daoTaskAdapter) {
+		super(aDao, aBusiness, daoTaskAdapter);
 	}
 	
 	public void createMessagesXML(Element siteElement) {
@@ -58,7 +61,7 @@ public class MessagesExporter extends AbstractExporter {
 		messageElement.addElement("value").setText(message.getValue());
 	}
 	
-	public void readMessages(Element messagesElement) {
+	public void readMessages(Element messagesElement) throws DaoTaskException {
 		for (Iterator<Element> i = messagesElement.elementIterator(); 
 				i.hasNext(); ) {
             Element element = i.next();
@@ -72,7 +75,7 @@ public class MessagesExporter extends AbstractExporter {
             		message = new MessageEntity(code, language, value);
             	}
             	message.setValue(value);
-            	getDao().getMessageDao().save(message);
+            	getDaoTaskAdapter().messageSave(message);
             }
 		}		
 	}

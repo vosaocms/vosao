@@ -51,6 +51,9 @@ import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.utils.StreamUtil;
 
+import com.google.appengine.api.labs.taskqueue.Queue;
+import static com.google.appengine.api.labs.taskqueue.TaskOptions.Builder.*;
+
 /**
  * Servlet for uploading images into database.
  * 
@@ -217,34 +220,27 @@ public class FileUploadServlet extends BaseSpringServlet {
 	private String processImportFile(FileItemStream fileItem, byte[] data) 
 		throws UploadException {
 
-		log.debug("Process import file filename " + fileItem.getName());
 		String ext = FolderUtil.getFileExt(fileItem.getName());
 		if (!ext.toLowerCase().equals("zip")) {
 			throw new UploadException("Wrong file extension.");
 		}
-		String message = null;
-		ByteArrayInputStream inputData = new ByteArrayInputStream(data);
+		FolderEntity folder;
 		try {
-			ZipInputStream in = new ZipInputStream(inputData);
-			List<String> files = getImportExportBusiness().importZip(in);
-			clearResourcesCache(files);
-			message = createMessage("success", "Imported.");
-			in.close();
-		}
-		catch (IOException e) {
+			folder = getBusiness().getFolderBusiness().createFolder(
+					"/tmp");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 			throw new UploadException(e.getMessage());
 		}
-		catch (DocumentException e) {
-			throw new UploadException(e.getMessage());
-		}
-		return message;
-	}
+		FileEntity file = new FileEntity(fileItem.getName(), fileItem.getName(),
+				folder.getId(), fileItem.getContentType(), new Date(),
+				data.length);
+		getDao().getFileDao().save(file, data);
+		Queue queue = getSystemService().getQueue("import");
+		queue.add(url(ImportTaskServlet.IMPORT_TASK_URL).param("start", "1")
+				.param("filename", file.getFilename()));
+		return createMessage("success", "Saved for import.");
 
-	private void clearResourcesCache(List<String> files) {
-		for (String file : files) {
-			getBusiness().getSystemService().getCache().remove(file);
-			log.debug("Clear cache " + file);
-		}
 	}
 
 	/**

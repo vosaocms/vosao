@@ -26,6 +26,8 @@ import java.util.List;
 
 import org.dom4j.Element;
 import org.vosao.business.Business;
+import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
+import org.vosao.business.impl.imex.dao.DaoTaskException;
 import org.vosao.dao.Dao;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.UserRole;
@@ -36,8 +38,9 @@ import static org.vosao.utils.XmlUtil.notNull;
  */
 public class UserExporter extends AbstractExporter {
 
-	public UserExporter(Dao aDao, Business aBusiness) {
-		super(aDao, aBusiness);
+	public UserExporter(Dao aDao, Business aBusiness,
+			DaoTaskAdapter daoTaskAdapter) {
+		super(aDao, aBusiness, daoTaskAdapter);
 	}
 	
 	public void createUsersXML(Element siteElement) {
@@ -56,7 +59,7 @@ public class UserExporter extends AbstractExporter {
 		userElement.addElement("role").setText(user.getRole().name());
 	}
 	
-	public void readUsers(Element usersElement) {
+	public void readUsers(Element usersElement) throws DaoTaskException {
 		for (Iterator<Element> i = usersElement.elementIterator(); 
 				i.hasNext(); ) {
             Element element = i.next();
@@ -68,8 +71,11 @@ public class UserExporter extends AbstractExporter {
             	UserEntity user = getDao().getUserDao().getByEmail(email);
             	if (user == null) {
             		user = new UserEntity(name, password, email, role);
-                	getDao().getUserDao().save(user);
             	}
+            	user.setName(name);
+            	user.setPassword(password);
+            	user.setRole(role);
+            	getDaoTaskAdapter().userSave(user);
             }
 		}		
 	}

@@ -228,11 +228,17 @@
     </bean>    
 
     <!--========================== ImportExport =============================-->
-
+    
+    <bean id="daoTaskAdapter"
+        class="org.vosao.business.impl.imex.dao.DaoTaskAdapterImpl">
+        <property name="dao" ref="dao"/>  
+    </bean>
+    
     <bean id="importExportBusiness" 
         class="org.vosao.business.impl.ImportExportBusinessImpl">
         <property name="dao" ref="dao"/>  
         <property name="business" ref="business"/>  
+        <property name="daoTaskAdapter" ref="daoTaskAdapter"/>  
     </bean>
 
     <!--======================= JSON-RPC services ===========================-->

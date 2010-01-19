@@ -17,4 +17,7 @@ public class UserHelper {
 		return map;
 	}
 	
+	public static UserEntity ADMIN = new UserEntity("System", "", 
+			"system@vosao.org", UserRole.ADMIN);
+	
 }

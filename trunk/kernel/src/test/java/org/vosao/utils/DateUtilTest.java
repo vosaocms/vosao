@@ -19,35 +19,18 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.impl.imex;
+package org.vosao.utils;
 
-import org.vosao.business.Business;
-import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
-import org.vosao.dao.Dao;
+import java.util.Date;
 
-public abstract class AbstractExporter {
+import junit.framework.TestCase;
 
-	private Dao dao;
-	private Business business;
-	private DaoTaskAdapter daoTaskAdapter;
-	
-	public AbstractExporter(Dao aDao, Business aBusiness, 
-			DaoTaskAdapter aDaoTaskAdapter) {
-		dao = aDao;
-		business = aBusiness;
-		daoTaskAdapter = aDaoTaskAdapter;
-	}
+public class DateUtilTest extends TestCase {
 
-	public Dao getDao() {
-		return dao;
-	}
-
-	public Business getBusiness() {
-		return business;
-	}
-	
-	public DaoTaskAdapter getDaoTaskAdapter() {
-		return daoTaskAdapter;
+	public void testToString() {
+		/*String s = DateUtil.toString(null);
+		assertEquals("", s);
+		Date d = new Date();*/
 	}
 	
 }

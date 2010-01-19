@@ -97,7 +97,7 @@ function afterUpload(data) {
     var result = s[1];
     var msg = s[2]; 
     if (result == 'success') {
-        msg = 'Success. File was successfully imported.';
+        msg = 'Success. File was successfully saved for imported.';
     }
     else {
         msg = "Error. " + msg;
@@ -839,7 +839,9 @@ function onReset() {
 		if (confirm("ALL DATA WILL BE LOST! Are you shure?")) {
 			Vosao.jsonrpc.configService.reset(function(r) {
 				Vosao.showServiceMessages(r);
-				loadData();
+				if (r.result == 'success') {
+					location.href = '/';
+				}
 			});
 		}
 	}

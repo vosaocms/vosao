@@ -26,6 +26,8 @@ import java.util.List;
 
 import org.dom4j.Element;
 import org.vosao.business.Business;
+import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
+import org.vosao.business.impl.imex.dao.DaoTaskException;
 import org.vosao.dao.Dao;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.LanguageEntity;
@@ -34,8 +36,9 @@ import static org.vosao.utils.XmlUtil.notNull;;
 
 public class ConfigExporter extends AbstractExporter {
 
-	public ConfigExporter(Dao aDao, Business aBusiness) {
-		super(aDao, aBusiness);
+	public ConfigExporter(Dao aDao, Business aBusiness, 
+			DaoTaskAdapter daoTaskAdapter) {
+		super(aDao, aBusiness, daoTaskAdapter);
 	}
 	
 	public void createConfigXML(Element siteElement) {
@@ -76,7 +79,7 @@ public class ConfigExporter extends AbstractExporter {
 		}
 	}
 	
-	public void readConfigs(Element configElement) {
+	public void readConfigs(Element configElement) throws DaoTaskException {
 		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
 		for (Iterator<Element> i = configElement.elementIterator(); i.hasNext(); ) {
             Element element = i.next();
@@ -115,10 +118,10 @@ public class ConfigExporter extends AbstractExporter {
             	config.setSiteUserLoginUrl(element.getText());
             }
 		}
-		getDao().getConfigDao().save(config);
+		getDaoTaskAdapter().configSave(config);
 	}
 	
-	public void readLanguages(Element languagesElement) {
+	public void readLanguages(Element languagesElement) throws DaoTaskException {
 		for (Iterator<Element> i = languagesElement.elementIterator(); i.hasNext(); ) {
             Element element = i.next();
             if (element.getName().equals("language")) {
@@ -128,8 +131,11 @@ public class ConfigExporter extends AbstractExporter {
             			code);
             	if (language == null) {
                 	language = new LanguageEntity(code, title);
-                	getDao().getLanguageDao().save(language);
             	}
+            	else {
+            		language.setTitle(title);
+            	}
+            	getDaoTaskAdapter().languageSave(language);
             }
 		}
 	}

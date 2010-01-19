@@ -33,6 +33,8 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
+import org.vosao.business.impl.imex.dao.DaoTaskException;
 import org.vosao.dao.Dao;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
@@ -44,9 +46,10 @@ public class ThemeExporter extends AbstractExporter {
 
 	private ResourceExporter resourceExporter;
 	
-	public ThemeExporter(Dao aDao, Business aBusiness) {
-		super(aDao, aBusiness);
-		resourceExporter = new ResourceExporter(aDao, aBusiness);
+	public ThemeExporter(Dao aDao, Business aBusiness,
+			DaoTaskAdapter daoTaskAdapter) {
+		super(aDao, aBusiness, daoTaskAdapter);
+		resourceExporter = new ResourceExporter(aDao, aBusiness, daoTaskAdapter);
 	}
 	
 	public void exportTheme(final ZipOutputStream out, 
@@ -122,7 +125,8 @@ public class ThemeExporter extends AbstractExporter {
 	}	
 
 	public void createThemeByDescription(final ZipEntry entry, String xml)
-			throws UnsupportedEncodingException, DocumentException {
+			throws UnsupportedEncodingException, DocumentException, 
+			DaoTaskException {
 		String[] chain = FolderUtil.getPathChain(entry);
 		String themeName = chain[1];
 		TemplateEntity theme = getDao().getTemplateDao().getByUrl(themeName);
@@ -134,7 +138,7 @@ public class ThemeExporter extends AbstractExporter {
 		TemplateEntity parsedEntity = readThemeImportXML(xml);
 		theme.copy(parsedEntity);
 		theme.setContent(content);
-		getDao().getTemplateDao().save(theme);
+		getDaoTaskAdapter().templateSave(theme);
 	}	
 	
 	public boolean isThemeContent(final ZipEntry entry)
@@ -150,7 +154,8 @@ public class ThemeExporter extends AbstractExporter {
 	
 	public void createThemeByContent(final ZipEntry entry, 
 			final String content) 
-			throws UnsupportedEncodingException, DocumentException {
+			throws UnsupportedEncodingException, DocumentException, 
+			DaoTaskException {
 		String[] chain = FolderUtil.getPathChain(entry);
 		String themeName = chain[1];
 		TemplateEntity theme = getDao().getTemplateDao().getByUrl(themeName);
@@ -160,7 +165,7 @@ public class ThemeExporter extends AbstractExporter {
 			theme.setUrl(themeName);
 		}
 		theme.setContent(content);
-		getDao().getTemplateDao().save(theme);
+		getDaoTaskAdapter().templateSave(theme);
 	}
 	
 }

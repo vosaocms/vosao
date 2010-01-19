@@ -32,6 +32,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.Business;
+import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
+import org.vosao.business.impl.imex.dao.DaoTaskException;
 import org.vosao.dao.Dao;
 import org.vosao.servlet.FolderUtil;
 
@@ -46,16 +48,17 @@ public class SiteExporter extends AbstractExporter {
 	private MessagesExporter messagesExporter;
 	private StructureExporter structureExporter;
 
-	public SiteExporter(Dao aDao, Business aBusiness) {
-		super(aDao, aBusiness);
-		configExporter = new ConfigExporter(aDao, aBusiness);
-		pageExporter = new PageExporter(aDao, aBusiness);
-		formExporter = new FormExporter(aDao, aBusiness);
-		userExporter = new UserExporter(aDao, aBusiness);
-		groupExporter = new GroupExporter(aDao, aBusiness);
-		folderExporter = new FolderExporter(aDao, aBusiness);
-		messagesExporter = new MessagesExporter(aDao, aBusiness);
-		structureExporter = new StructureExporter(aDao, aBusiness);
+	public SiteExporter(Dao aDao, Business aBusiness,
+			DaoTaskAdapter daoTaskAdapter) {
+		super(aDao, aBusiness, daoTaskAdapter);
+		configExporter = new ConfigExporter(aDao, aBusiness, daoTaskAdapter);
+		pageExporter = new PageExporter(aDao, aBusiness, daoTaskAdapter);
+		formExporter = new FormExporter(aDao, aBusiness, daoTaskAdapter);
+		userExporter = new UserExporter(aDao, aBusiness, daoTaskAdapter);
+		groupExporter = new GroupExporter(aDao, aBusiness, daoTaskAdapter);
+		folderExporter = new FolderExporter(aDao, aBusiness, daoTaskAdapter);
+		messagesExporter = new MessagesExporter(aDao, aBusiness, daoTaskAdapter);
+		structureExporter = new StructureExporter(aDao, aBusiness, daoTaskAdapter);
 	}
 
 	public boolean isSiteContent(final ZipEntry entry)
@@ -91,7 +94,7 @@ public class SiteExporter extends AbstractExporter {
 	
 	
 	public void readSiteContent(final ZipEntry entry, final String xml)
-			throws DocumentException {
+			throws DocumentException, DaoTaskException {
 		Document doc = DocumentHelper.parseText(xml);
 		Element root = doc.getRootElement();
 		for (Iterator<Element> i = root.elementIterator(); i.hasNext();) {

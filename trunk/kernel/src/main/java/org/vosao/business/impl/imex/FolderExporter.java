@@ -29,15 +29,13 @@ import org.apache.commons.logging.LogFactory;
 import org.dom4j.Element;
 import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
+import org.vosao.business.impl.imex.dao.DaoTaskException;
 import org.vosao.dao.Dao;
-import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FolderPermissionEntity;
 import org.vosao.entity.GroupEntity;
-import org.vosao.enums.ContentPermissionType;
 import org.vosao.enums.FolderPermissionType;
-
-import static org.vosao.utils.XmlUtil.notNull;
 
 /**
  * @author Alexander Oleynik
@@ -47,8 +45,9 @@ public class FolderExporter extends AbstractExporter {
 	private static final Log logger = LogFactory.getLog(
 			FolderExporter.class);
 
-	public FolderExporter(Dao aDao, Business aBusiness) {
-		super(aDao, aBusiness);
+	public FolderExporter(Dao aDao, Business aBusiness,
+			DaoTaskAdapter daoTaskAdapter) {
+		super(aDao, aBusiness, daoTaskAdapter);
 	}
 	
 	public void createFoldersXML(final Element siteElement) {
@@ -89,7 +88,7 @@ public class FolderExporter extends AbstractExporter {
 				permission.getPermission().name());
 	}
 	
-	public void readFolders(Element foldersElement) {
+	public void readFolders(Element foldersElement) throws DaoTaskException {
 		for (Iterator<Element> i = foldersElement.elementIterator(); 
 				i.hasNext(); ) {
             Element element = i.next();
@@ -100,7 +99,8 @@ public class FolderExporter extends AbstractExporter {
 		}
 	}
 	
-	private void readFolder(Element element, final FolderEntity parent) {
+	private void readFolder(Element element, final FolderEntity parent) 
+			throws DaoTaskException {
 		String name = element.elementText("name");
 		String title = element.elementText("title");
 		FolderEntity folder;
@@ -115,7 +115,7 @@ public class FolderExporter extends AbstractExporter {
 			}
 		}
 		folder.setTitle(title);
-		getDao().getFolderDao().save(folder);
+		getDaoTaskAdapter().folderSave(folder);
 		readFolderPermissions(element.element("permissions"), folder);
 		for (Iterator<Element> i = element.elementIterator(); i
 				.hasNext();) {

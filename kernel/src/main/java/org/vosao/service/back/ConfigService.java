@@ -40,4 +40,5 @@ public interface ConfigService extends AbstractService {
 	ServiceResponse restoreCommentsTemplate() throws IOException;
 	
 	ServiceResponse reset();
+	
 }

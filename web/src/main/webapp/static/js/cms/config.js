@@ -97,7 +97,7 @@ function afterUpload(data) {
     var result = s[1];
     var msg = s[2]; 
     if (result == 'success') {
-        msg = 'Success. File was successfully saved for imported.';
+        msg = 'Success. File was successfully saved for import. Please wait the import process can take long time.';
     }
     else {
         msg = "Error. " + msg;

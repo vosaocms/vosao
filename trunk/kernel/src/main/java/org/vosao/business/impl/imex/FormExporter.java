@@ -114,6 +114,7 @@ public class FormExporter extends AbstractExporter {
 		fieldElement.addAttribute("defaultValue", field.getDefaultValue());
 		fieldElement.addAttribute("height", String.valueOf(field.getHeight()));
 		fieldElement.addAttribute("width", String.valueOf(field.getWidth()));
+		fieldElement.addAttribute("index", String.valueOf(field.getIndex()));
 	}
 	
 	public void readFields(Element formElement, FormEntity form) 
@@ -138,6 +139,7 @@ public class FormExporter extends AbstractExporter {
             	field.setDefaultValue(element.attributeValue("defaultValue"));
             	field.setHeight(XmlUtil.readIntAttr(element, "height", 0));
             	field.setWidth(XmlUtil.readIntAttr(element, "width", 20));
+            	field.setIndex(XmlUtil.readIntAttr(element, "index", 0));
             	getDaoTaskAdapter().fieldSave(field);
             }
 		}		

@@ -51,10 +51,10 @@ public class FileDownloadServlet extends BaseSpringServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-        log.debug("get file " + request.getPathInfo());
+        //log.debug("get file " + request.getPathInfo());
 		String[] chain = FolderUtil.getPathChain(request.getPathInfo());
 		if (chain.length == 0) {
-			response.getWriter().append("file was not specified");
+			response.sendError(response.SC_NOT_FOUND, "File was not specified");
 			return;
 		}
 		String filename = chain[chain.length-1];		
@@ -64,13 +64,13 @@ public class FileDownloadServlet extends BaseSpringServlet {
 				.findFolderByPath(tree, FolderUtil.getFilePath(
 						request.getPathInfo()));
 		if (folder == null) {
-	        log.info("folder " + request.getPathInfo() + " was not found");
-			response.getWriter().append("folder " + request.getPathInfo() 
-					+ " was not found");
+	        //log.info("folder " + request.getPathInfo() + " was not found");
+			response.sendError(response.SC_NOT_FOUND, "Folder " 
+					+ request.getPathInfo() + " was not found");
 			return;
 		}
 		if (isAccessDenied(folder.getEntity())) {
-			response.getWriter().append("Access denied");
+			response.sendError(response.SC_FORBIDDEN, "Access denied");
 			return;
 		}
 		if (isInCache(request.getPathInfo())) {

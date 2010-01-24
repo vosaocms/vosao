@@ -26,6 +26,7 @@ public class CacheServiceImpl implements CacheService {
 	private Cache cache;
 	private Map<String, Object> localCache;
 	private long localCacheTime;
+	private int localHits;
 
 	public CacheServiceImpl() {
 		try {
@@ -124,6 +125,7 @@ public class CacheServiceImpl implements CacheService {
 	@Override
 	public Object get(Object arg0) {
 		if (localCache.containsKey(arg0)) {
+			localHits++;
 			return localCache.get(arg0);
 		}
 		return cache.get(arg0);
@@ -168,6 +170,11 @@ public class CacheServiceImpl implements CacheService {
 	public Collection values() {
 		log.error("values() not implemented");		
 		return null;
+	}
+
+	@Override
+	public int getLocalHits() {
+		return localHits;
 	}
 
 }

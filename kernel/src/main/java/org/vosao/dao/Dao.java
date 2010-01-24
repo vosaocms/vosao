@@ -21,7 +21,16 @@
 
 package org.vosao.dao;
 
+import org.vosao.dao.cache.EntityCache;
+import org.vosao.dao.cache.QueryCache;
+
 public interface Dao {
+	
+	EntityCache getEntityCache();
+	void setEntityCache(EntityCache entityCache);
+	
+	QueryCache getQueryCache();
+	void setQueryCache(QueryCache queryCache);
 
 	PageDao getPageDao();
 	void setPageDao(final PageDao pageDao);

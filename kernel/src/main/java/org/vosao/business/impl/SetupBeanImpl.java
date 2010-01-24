@@ -22,14 +22,9 @@
 package org.vosao.business.impl;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
-import javax.cache.Cache;
 import javax.cache.CacheException;
-import javax.cache.CacheFactory;
-import javax.cache.CacheManager;
-import javax.cache.CacheStatistics;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -70,11 +65,7 @@ public class SetupBeanImpl implements SetupBean {
 	public void setup() {
 		log.info("setup...");
 		clearSessions();
-		try {
-			clearCache();
-		} catch (CacheException e) {
-			log.error(e);
-		}
+		clearCache();
 		initGroups();
 		initUsers();
 		initTemplates();
@@ -106,13 +97,8 @@ public class SetupBeanImpl implements SetupBean {
         }
 	} 
 	
-	private void clearCache() throws CacheException {
-        CacheFactory cacheFactory = CacheManager.getInstance()
-        		.getCacheFactory();
-        Cache cache = cacheFactory.createCache(Collections.emptyMap());
-        CacheStatistics stats = cache.getCacheStatistics();
-        log.info("Clearing " + stats.getObjectCount() + " objects in cache");
-        cache.clear();
+	private void clearCache() {
+		business.getSystemService().getCache().clear();
 	} 
 
 	private void initUsers() {
@@ -269,6 +255,7 @@ public class SetupBeanImpl implements SetupBean {
 		getDao().getTemplateDao().removeAll();
 		getDao().getUserDao().removeAll();
 		getDao().getUserGroupDao().removeAll();
+		clearCache();
 	}
 	
 }

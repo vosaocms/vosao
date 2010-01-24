@@ -43,9 +43,14 @@ import org.vosao.dao.StructureTemplateDao;
 import org.vosao.dao.TemplateDao;
 import org.vosao.dao.UserDao;
 import org.vosao.dao.UserGroupDao;
+import org.vosao.dao.cache.EntityCache;
+import org.vosao.dao.cache.QueryCache;
 
 public class DaoImpl implements Dao, Serializable {
 
+	private EntityCache entityCache;
+	private QueryCache queryCache;
+	
 	private PageDao pageDao;
 	private FileDao fileDao;
 	private FolderDao folderDao;
@@ -213,6 +218,22 @@ public class DaoImpl implements Dao, Serializable {
 	
 	public void setStructureTemplateDao(StructureTemplateDao structureTemplateDao) {
 		this.structureTemplateDao = structureTemplateDao;
+	}
+	
+	public EntityCache getEntityCache() {
+		return entityCache;
+	}
+	
+	public void setEntityCache(EntityCache entityCache) {
+		this.entityCache = entityCache;
+	}
+	
+	public QueryCache getQueryCache() {
+		return queryCache;
+	}
+	
+	public void setQueryCache(QueryCache queryCache) {
+		this.queryCache = queryCache;
 	}
 	
 }

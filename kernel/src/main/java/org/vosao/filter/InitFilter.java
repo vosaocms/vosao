@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.SetupBean;
+import org.vosao.dao.cache.CacheStat;
 import org.vosao.dao.cache.EntityCache;
 import org.vosao.dao.cache.QueryCache;
 
@@ -44,6 +45,10 @@ public class InitFilter extends AbstractFilter implements Filter {
 
     private static final String SETUP_URL = "/setup";
     private static final String HOT_CRON_URL = "/hotCron";
+    
+    private int localHits;
+    private CacheStat entityStat;
+    private CacheStat queryStat;    
     
     public InitFilter() {
     	super();
@@ -65,8 +70,28 @@ public class InitFilter extends AbstractFilter implements Filter {
         	writeContent(httpResponse, "<h4>OK</h4>" + logCacheStat());
         	return;
         }
+        //startProfile();
         chain.doFilter(request, response);
+        //endProfile(httpRequest.getRequestURL().toString());
         getBusiness().getSystemService().getCache().resetLocalCache();
+    }
+    
+    private void startProfile() {
+        localHits = getBusiness().getSystemService().getCache().getLocalHits();
+        entityStat = getDao().getEntityCache().getStat();
+        queryStat = getDao().getQueryCache().getStat();
+    }
+    
+    private void endProfile(String url) {
+        logger.info(url);
+        logger.info("local cache hits: " + (
+                getBusiness().getSystemService().getCache().getLocalHits() - localHits));
+        CacheStat entity = getDao().getEntityCache().getStat();
+        CacheStat query = getDao().getQueryCache().getStat();
+        logger.info("memcache hits: " + (entity.getHits() - entityStat.getHits() + 
+        		query.getHits() - queryStat.getHits()));
+        logger.info("calls: " + (entity.getCalls() - entityStat.getCalls() + 
+        		query.getCalls() - queryStat.getCalls()));
     }
     
     private void writeContent(HttpServletResponse response, String content)

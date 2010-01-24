@@ -45,6 +45,8 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.vosao.dao.cache.EntityCache;
+import org.vosao.dao.cache.QueryCache;
 import org.vosao.global.CacheService;
 import org.vosao.global.SystemService;
 

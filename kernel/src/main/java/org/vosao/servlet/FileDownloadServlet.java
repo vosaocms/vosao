@@ -57,6 +57,11 @@ public class FileDownloadServlet extends BaseSpringServlet {
 			response.sendError(response.SC_NOT_FOUND, "File was not specified");
 			return;
 		}
+		if (isInPublicCache(request.getPathInfo())) {
+			log.info("from public cache " + request.getPathInfo());
+			sendFromCache(request, response);
+			return;
+		}	
 		String filename = chain[chain.length-1];		
 		TreeItemDecorator<FolderEntity> tree = getBusiness().getFolderBusiness()
 				.getTree();
@@ -74,6 +79,11 @@ public class FileDownloadServlet extends BaseSpringServlet {
 			return;
 		}
 		if (isInCache(request.getPathInfo())) {
+			log.info("from cache " + request.getPathInfo());
+			if (CurrentUser.getInstance() == null) {
+				getBusiness().getSystemService().getCache()
+					.put("public:" + request.getPathInfo(), true);
+			}
 			sendFromCache(request, response);
 			return;
 		}	
@@ -86,6 +96,10 @@ public class FileDownloadServlet extends BaseSpringServlet {
 					.put(request.getPathInfo(), file);
 				getBusiness().getSystemService().getCache()
 					.put("data:" + request.getPathInfo(), content);
+				if (CurrentUser.getInstance() == null) {
+					getBusiness().getSystemService().getCache()
+						.put("public:" + request.getPathInfo(), true);
+				}
 			}
 			sendFile(file, content, request, response);
 		}
@@ -101,6 +115,13 @@ public class FileDownloadServlet extends BaseSpringServlet {
 					"data:" + path);
 	}
 	
+	private boolean isInPublicCache(final String path) {
+		return getBusiness().getSystemService().getCache().containsKey(
+				"public:" + path)
+			&& getBusiness().getSystemService().getCache().containsKey(
+				"data:" + path);
+	}
+
 	private void sendFromCache(HttpServletRequest request, 
 			HttpServletResponse response) throws IOException {
 		FileEntity file = (FileEntity) getBusiness().getSystemService()

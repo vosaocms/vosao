@@ -113,6 +113,9 @@
     </bean>      
 
     <bean id="dao" class="org.vosao.dao.impl.DaoImpl">  
+        <property name="entityCache" ref="entityCache"/>  
+        <property name="queryCache" ref="queryCache"/>
+          
         <property name="pageDao" ref="pageDao"/>  
         <property name="fileDao" ref="fileDao"/>  
         <property name="folderDao" ref="folderDao"/>  

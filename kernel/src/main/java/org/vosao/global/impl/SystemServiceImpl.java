@@ -45,6 +45,7 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.vosao.global.CacheService;
 import org.vosao.global.SystemService;
 
 import com.google.appengine.api.labs.taskqueue.Queue;
@@ -54,18 +55,13 @@ public class SystemServiceImpl implements SystemService, Serializable {
 
 	private static final Log log = LogFactory.getLog(SystemServiceImpl.class);
 
-	private Cache cache;
+	private CacheService cache;
 	private VelocityEngine velocityEngine;
 	private TransformerFactory xsltFactory;
 	private Map<String, Transformer> transformers;
 	
 	public void init() {
-		try {
-            cache = CacheManager.getInstance().getCacheFactory().createCache(
-            		Collections.emptyMap());
-        } catch (CacheException e) {
-            log.error("Can't init cache manager. " + e.getMessage());
-        }
+		cache = new CacheServiceImpl();
         velocityEngine = new VelocityEngine();
         try {
 			velocityEngine.init();
@@ -78,7 +74,7 @@ public class SystemServiceImpl implements SystemService, Serializable {
 	
 
 	@Override
-	public Cache getCache() {
+	public CacheService getCache() {
 		return cache;
 	}
 
@@ -125,17 +121,14 @@ public class SystemServiceImpl implements SystemService, Serializable {
 		return transformers.get(key);
 	}
 
-
 	@Override
 	public Queue getDefaultQueue() {
 		return QueueFactory.getDefaultQueue();
 	}
 
-
 	@Override
 	public Queue getQueue(String name) {
 		return QueueFactory.getQueue(name);
 	}
-	
-	
+
 }

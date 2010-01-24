@@ -66,6 +66,7 @@ public class InitFilter extends AbstractFilter implements Filter {
         	return;
         }
         chain.doFilter(request, response);
+        getBusiness().getSystemService().getCache().resetLocalCache();
     }
     
     private void writeContent(HttpServletResponse response, String content)

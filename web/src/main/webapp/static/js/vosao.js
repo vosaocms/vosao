@@ -98,6 +98,7 @@ Vosao.jsonrpc = '';
 Vosao.jsonrpcListeners = [];
 Vosao.jsonrpcSystemListeners = [];
 Vosao.jsonrpcInitialized = false;
+Vosao.jsonrpcInitError = null;
 
 /**
  * Don't call this function directly.
@@ -105,7 +106,8 @@ Vosao.jsonrpcInitialized = false;
 Vosao.createJSONRpc = function() {
 	Vosao.jsonrpc = new JSONRpcClient(function(result, e) {
 		if (e) {
-			alert("Error during initializing JSON-RPC." + e);
+			Vosao.jsonrpcInitError = "Error during initializing JSON-RPC. " + e + 
+				' ' + e.message;
 		}
 		else {
 			while (Vosao.jsonrpcSystemListeners.length > 0) {

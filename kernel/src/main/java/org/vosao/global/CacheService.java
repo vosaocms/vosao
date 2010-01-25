@@ -7,5 +7,7 @@ public interface CacheService extends Cache {
 	void resetLocalCache();
 	
 	int getLocalHits();
-	
+
+	int getCacheHits();
+
 }

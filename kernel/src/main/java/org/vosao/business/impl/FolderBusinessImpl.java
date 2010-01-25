@@ -54,8 +54,8 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 			final List<FolderEntity> folders) {
 		Map<String, TreeItemDecorator<FolderEntity>> buf = 
 			new HashMap<String, TreeItemDecorator<FolderEntity>>();
-		for (FolderEntity page : folders) {
-			buf.put(page.getId(), new TreeItemDecorator<FolderEntity>(page, 
+		for (FolderEntity folder : folders) {
+			buf.put(folder.getId(), new TreeItemDecorator<FolderEntity>(folder, 
 					null));
 		}
 		TreeItemDecorator<FolderEntity> root = null;

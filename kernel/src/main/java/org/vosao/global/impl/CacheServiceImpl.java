@@ -1,3 +1,24 @@
+/**
+ * Vosao CMS. Simple CMS for Google App Engine.
+ * Copyright (C) 2009 Vosao development team
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * email: vosao.dev@gmail.com
+ */
+
 package org.vosao.global.impl;
 
 import java.util.Collection;
@@ -27,6 +48,7 @@ public class CacheServiceImpl implements CacheService {
 	private Map<String, Object> localCache;
 	private long localCacheTime;
 	private int localHits;
+	private int cacheHits;
 
 	public CacheServiceImpl() {
 		try {
@@ -128,7 +150,12 @@ public class CacheServiceImpl implements CacheService {
 			localHits++;
 			return localCache.get(arg0);
 		}
-		return cache.get(arg0);
+		Object value = cache.get(arg0);
+		if (value != null) {
+			cacheHits++;
+			localCache.put((String)arg0, value);
+		}
+		return value;
 	}
 
 	@Override
@@ -175,6 +202,10 @@ public class CacheServiceImpl implements CacheService {
 	@Override
 	public int getLocalHits() {
 		return localHits;
+	}
+
+	public int getCacheHits() {
+		return cacheHits;
 	}
 
 }

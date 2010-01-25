@@ -41,46 +41,46 @@ public class FolderPermissionDaoImpl
 
 	@Override
 	public List<FolderPermissionEntity> selectByFolder(final String folderId) {
-		/*String query = "select from " 
+		String query = "select from " 
 				+ FolderPermissionEntity.class.getName()
 				+ " where folderId == pFolderId"
 				+ " parameters String pFolderId";
-		return select(query, params(folderId));*/
-		return select(new DaoFilter<FolderPermissionEntity>() {
+		return select(query, params(folderId));
+		/*return select(new DaoFilter<FolderPermissionEntity>() {
 			@Override
 			public boolean inResult(FolderPermissionEntity entity) {
 				return entity.getFolderId().equals(folderId);
 			}
-		});
+		});*/
 	}
 
 	@Override
 	public FolderPermissionEntity getByFolderGroup(final String folderId, 
 			final Long groupId) {
-		/*String query = "select from " + FolderPermissionEntity.class.getName()
+		String query = "select from " + FolderPermissionEntity.class.getName()
 				+ " where folderId == pFolderId && groupId == pGroupId"
 				+ " parameters String pFolderId, Long pGroupId";
-		return selectOne(query, params(folderId, groupId));*/
-		return selectOne(new DaoFilter<FolderPermissionEntity>() {
+		return selectOne(query, params(folderId, groupId));
+		/*return selectOne(new DaoFilter<FolderPermissionEntity>() {
 			@Override
 			public boolean inResult(FolderPermissionEntity entity) {
 				return entity.getFolderId().equals(folderId)
 					&& entity.getGroupId().equals(groupId);
 			}
-		});
+		});*/
 	}
 
 	private List<FolderPermissionEntity> selectByGroup(final Long groupId) {
-		/*String query = "select from " + FolderPermissionEntity.class.getName()
+		String query = "select from " + FolderPermissionEntity.class.getName()
 				+ " where groupId == pGroupId"
 				+ " parameters Long pGroupId";
-		return select(query, params(groupId));*/
-		return select(new DaoFilter<FolderPermissionEntity>() {
+		return select(query, params(groupId));
+		/*return select(new DaoFilter<FolderPermissionEntity>() {
 			@Override
 			public boolean inResult(FolderPermissionEntity entity) {
 				return entity.getGroupId().equals(groupId);
 			}
-		});
+		});*/
 	}
 
 	@Override

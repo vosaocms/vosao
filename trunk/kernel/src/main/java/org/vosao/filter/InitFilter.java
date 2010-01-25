@@ -47,6 +47,7 @@ public class InitFilter extends AbstractFilter implements Filter {
     private static final String HOT_CRON_URL = "/hotCron";
     
     private int localHits;
+    private int cacheHits;
     private CacheStat entityStat;
     private CacheStat queryStat;    
     
@@ -78,6 +79,7 @@ public class InitFilter extends AbstractFilter implements Filter {
     
     private void startProfile() {
         localHits = getBusiness().getSystemService().getCache().getLocalHits();
+        cacheHits = getBusiness().getSystemService().getCache().getCacheHits();
         entityStat = getDao().getEntityCache().getStat();
         queryStat = getDao().getQueryCache().getStat();
     }
@@ -88,9 +90,9 @@ public class InitFilter extends AbstractFilter implements Filter {
                 getBusiness().getSystemService().getCache().getLocalHits() - localHits));
         CacheStat entity = getDao().getEntityCache().getStat();
         CacheStat query = getDao().getQueryCache().getStat();
-        logger.info("memcache hits: " + (entity.getHits() - entityStat.getHits() + 
-        		query.getHits() - queryStat.getHits()));
-        logger.info("calls: " + (entity.getCalls() - entityStat.getCalls() + 
+        logger.info("memcache hits: " + (
+        		getBusiness().getSystemService().getCache().getCacheHits() - cacheHits));
+        logger.info("dao calls: " + (entity.getCalls() - entityStat.getCalls() + 
         		query.getCalls() - queryStat.getCalls()));
     }
     

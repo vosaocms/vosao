@@ -54,9 +54,7 @@ public class FolderPermissionBusinessImpl extends AbstractBusinessImpl
 	public FolderPermissionEntity getGuestPermission(
 			final FolderEntity folder) {
 		GroupEntity guests = getDao().getGroupDao().getGuestsGroup();
-		FolderPermissionEntity result = getGroupPermission(folder, guests.getId());
-		result.setFolderId(folder.getId());
-		return result;
+		return getGroupPermission(folder, guests.getId());
 	}
 
 	@Override
@@ -103,6 +101,8 @@ public class FolderPermissionBusinessImpl extends AbstractBusinessImpl
 	private FolderPermissionEntity getGroupPermission(FolderEntity folder,
 			Long groupId) {
 		FolderEntity myFolder = folder;
+		FolderPermissionEntity result = new FolderPermissionEntity(folder.getId());
+		result.setPermission(FolderPermissionType.DENIED);
 		while (myFolder != null) {
 			FolderPermissionEntity perm = getDao().getFolderPermissionDao()
 				.getByFolderGroup(myFolder.getId(), groupId);
@@ -116,7 +116,7 @@ public class FolderPermissionBusinessImpl extends AbstractBusinessImpl
 				myFolder = getDao().getFolderDao().getById(myFolder.getParent());
 			}
 		};		
-		return null;
+		return result;
 	}
 
 	@Override

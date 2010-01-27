@@ -19,11 +19,27 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.enums;
+package org.vosao.dao.impl;
 
-/**
- * @author Alexander Oleynik
- */
-public enum UserRole {
-	USER, ADMIN, SITE_USER, GUEST;
+import org.vosao.dao.DaoFilter;
+import org.vosao.dao.PluginDao;
+import org.vosao.entity.PluginEntity;
+
+public class PluginDaoImpl extends BaseDaoImpl<String, PluginEntity> 
+		implements PluginDao {
+
+	public PluginDaoImpl() {
+		super(PluginEntity.class);
+	}
+
+	@Override
+	public PluginEntity getByName(final String name) {
+		return selectOne(new DaoFilter<PluginEntity>() {
+			@Override
+			public boolean inResult(PluginEntity entity) {
+				return entity.getName().equals(name);
+			}		
+		});
+	}
+	
 }

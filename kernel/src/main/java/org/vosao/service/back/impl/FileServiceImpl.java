@@ -36,8 +36,8 @@ import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.FileService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.FileVO;
-import org.vosao.servlet.FolderUtil;
-import org.vosao.servlet.MimeType;
+import org.vosao.utils.FolderUtil;
+import org.vosao.utils.MimeType;
 
 public class FileServiceImpl extends AbstractServiceImpl 
 		implements FileService {

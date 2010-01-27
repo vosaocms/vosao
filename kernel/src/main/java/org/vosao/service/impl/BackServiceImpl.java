@@ -39,6 +39,7 @@ import org.vosao.service.back.GroupService;
 import org.vosao.service.back.LanguageService;
 import org.vosao.service.back.MessageService;
 import org.vosao.service.back.PageService;
+import org.vosao.service.back.PluginService;
 import org.vosao.service.back.SeoUrlService;
 import org.vosao.service.back.StructureService;
 import org.vosao.service.back.StructureTemplateService;
@@ -66,6 +67,7 @@ public class BackServiceImpl implements BackService, Serializable {
 	private FolderPermissionService folderPermissionService;
 	private StructureService structureService;
 	private StructureTemplateService structureTemplateService;
+	private PluginService pluginService;
 	
 	public void init() {
 	}
@@ -89,6 +91,7 @@ public class BackServiceImpl implements BackService, Serializable {
 		bridge.registerObject("folderPermissionService", folderPermissionService);
 		bridge.registerObject("structureService", structureService);
 		bridge.registerObject("structureTemplateService", structureTemplateService);
+		bridge.registerObject("pluginService", pluginService);
 	}
 	
 	@Override
@@ -110,6 +113,7 @@ public class BackServiceImpl implements BackService, Serializable {
 		bridge.unregisterObject("folderPermissionService");
 		bridge.unregisterObject("structureService");
 		bridge.unregisterObject("structureTemplateService");
+		bridge.unregisterObject("pluginService");
 	}
 
 	@Override
@@ -283,4 +287,13 @@ public class BackServiceImpl implements BackService, Serializable {
 		this.structureTemplateService = structureTemplateService;
 	}
 	
+	@Override
+	public PluginService getPluginService() {
+		return pluginService;
+	}
+
+	@Override
+	public void setPluginService(PluginService bean) {
+		this.pluginService = bean;
+	}
 }

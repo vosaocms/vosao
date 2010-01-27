@@ -41,7 +41,7 @@ import org.vosao.business.impl.imex.ResourceExporter;
 import org.vosao.business.impl.imex.SiteExporter;
 import org.vosao.business.impl.imex.ThemeExporter;
 import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
-import org.vosao.business.impl.imex.dao.DaoTaskException;
+import org.vosao.dao.DaoTaskException;
 import org.vosao.dao.Dao;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;

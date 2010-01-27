@@ -37,6 +37,8 @@ import org.vosao.dao.GroupDao;
 import org.vosao.dao.LanguageDao;
 import org.vosao.dao.MessageDao;
 import org.vosao.dao.PageDao;
+import org.vosao.dao.PluginDao;
+import org.vosao.dao.PluginResourceDao;
 import org.vosao.dao.SeoUrlDao;
 import org.vosao.dao.StructureDao;
 import org.vosao.dao.StructureTemplateDao;
@@ -70,6 +72,8 @@ public class DaoImpl implements Dao, Serializable {
 	private FolderPermissionDao folderPermissionDao;
 	private StructureDao structureDao;
 	private StructureTemplateDao structureTemplateDao;
+	private PluginDao pluginDao;
+	private PluginResourceDao pluginResourceDao;
 	
 	public PageDao getPageDao() {
 		return pageDao;
@@ -235,5 +239,20 @@ public class DaoImpl implements Dao, Serializable {
 	public void setQueryCache(QueryCache queryCache) {
 		this.queryCache = queryCache;
 	}
+
+	public PluginDao getPluginDao() {
+		return pluginDao;
+	}
 	
+	public void setPluginDao(PluginDao value) {
+		this.pluginDao = value;
+	}
+
+	public PluginResourceDao getPluginResourceDao() {
+		return pluginResourceDao;
+	}
+	
+	public void setPluginResourceDao(PluginResourceDao value) {
+		this.pluginResourceDao = value;
+	}
 }

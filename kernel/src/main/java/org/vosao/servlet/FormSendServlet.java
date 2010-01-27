@@ -41,8 +41,10 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.common.UploadException;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FormEntity;
+import org.vosao.utils.FileItem;
 import org.vosao.utils.RecaptchaUtil;
 import org.vosao.utils.StreamUtil;
 

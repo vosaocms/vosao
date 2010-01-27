@@ -23,16 +23,13 @@ package org.vosao.business.impl.imex;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.dom4j.Element;
 import org.vosao.business.Business;
 import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
-import org.vosao.business.impl.imex.dao.DaoTaskException;
 import org.vosao.dao.Dao;
+import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.MessageEntity;
-import org.vosao.entity.UserEntity;
-import org.vosao.entity.helper.UserHelper;
 
 /**
  * @author Alexander Oleynik

@@ -39,12 +39,15 @@ import org.apache.velocity.tools.generic.NumberTool;
 import org.apache.velocity.tools.generic.RenderTool;
 import org.apache.velocity.tools.generic.SortTool;
 import org.apache.velocity.tools.view.tools.LinkTool;
+import org.vosao.business.Business;
 import org.vosao.business.ConfigBusiness;
 import org.vosao.business.ContentPermissionBusiness;
 import org.vosao.business.CurrentUser;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.MessageBusiness;
 import org.vosao.business.PageBusiness;
+import org.vosao.business.PageRenderDecorator;
+import org.vosao.business.PluginBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.business.impl.pagefilter.GoogleAnalyticsPageFilter;
 import org.vosao.business.impl.pagefilter.JavaScriptPageFilter;
@@ -72,15 +75,12 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 
     private static final Log logger = LogFactory.getLog(PageBusinessImpl.class);
 
-    private ConfigBusiness configBusiness;
-    private MessageBusiness messageBusiness;
-    private ContentPermissionBusiness contentPermissionBusiness;
 	private VelocityPluginService velocityPluginService;
-	private FolderBusiness folderBusiness;
+	private Business business;
 
 	public void init() throws Exception {
 		velocityPluginService = new VelocityPluginServiceImpl(getDao(), 
-				getSystemService());
+				getSystemService(), getBusiness());
 	}
 	
 	@Override
@@ -145,15 +145,15 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		LanguageEntity language = getDao().getLanguageDao().getByCode(
 				languageCode);
 		VelocityContext context = new VelocityContext();
-		ConfigEntity configEntity = getConfigBusiness().getConfig();
+		ConfigEntity configEntity = business.getConfigBusiness().getConfig();
 		addVelocityTools(context);
 		context.put("language", language);
 		context.put("config", configEntity);
 		VelocityService velocityService = new VelocityServiceImpl(getDao(),
 				this, languageCode);
 		context.put("service", velocityService);
-		context.put("plugin", getVelocityPluginService());
-		context.put("messages", getMessageBusiness().getBundle(languageCode));
+		context.put("plugin", getVelocityPluginService().getPlugins());
+		context.put("messages", business.getMessageBusiness().getBundle(languageCode));
 		return context;
 	}
 	
@@ -178,8 +178,9 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	
 	private List<PageFilter> createFilters() {
 		List<PageFilter> result = new ArrayList<PageFilter>();
-		result.add(new GoogleAnalyticsPageFilter(configBusiness, this));
-		result.add(new JavaScriptPageFilter(configBusiness, this));
+		result.add(new GoogleAnalyticsPageFilter(business.getConfigBusiness(), 
+				this));
+		result.add(new JavaScriptPageFilter(business.getConfigBusiness(), this));
 		return result;
 	}
 
@@ -214,36 +215,6 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	@Override
 	public TreeItemDecorator<PageEntity> getTree() {
 		return getTree(getDao().getPageDao().select());
-	}
-
-	@Override
-	public ConfigBusiness getConfigBusiness() {
-		return configBusiness;
-	}
-
-	@Override
-	public void setConfigBusiness(ConfigBusiness bean) {
-		configBusiness = bean;		
-	}
-
-	@Override
-	public MessageBusiness getMessageBusiness() {
-		return messageBusiness;
-	}
-
-	@Override
-	public void setMessageBusiness(MessageBusiness bean) {
-		messageBusiness = bean;		
-	}
-
-	@Override
-	public ContentPermissionBusiness getContentPermissionBusiness() {
-		return contentPermissionBusiness;
-	}
-
-	@Override
-	public void setContentPermissionBusiness(ContentPermissionBusiness bean) {
-		contentPermissionBusiness = bean;		
 	}
 
 	public VelocityPluginService getVelocityPluginService() {
@@ -326,12 +297,12 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	}
 
 	private boolean canReadPage(String url) {
-		return !getContentPermissionBusiness().getPermission(
+		return !business.getContentPermissionBusiness().getPermission(
 				url, CurrentUser.getInstance()).isDenied();
 	}
 
 	private boolean canWritePage(String url) {
-		return getContentPermissionBusiness().getPermission(
+		return business.getContentPermissionBusiness().getPermission(
 				url, CurrentUser.getInstance()).isChangeGranted();
 	}
 
@@ -356,17 +327,18 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 				}
 			}
 		}
-		TreeItemDecorator<FolderEntity> root = getFolderBusiness().getTree();
+		TreeItemDecorator<FolderEntity> root = business.getFolderBusiness()
+				.getTree();
 		List<String> folderIds = new ArrayList<String>();
 		for (String id : removeIds) {
 			PageEntity page = getDao().getPageDao().getById(id);
-			TreeItemDecorator<FolderEntity> folder = getFolderBusiness()
+			TreeItemDecorator<FolderEntity> folder = business.getFolderBusiness()
 					.findFolderByPath(root, "/page" + page.getFriendlyURL()); 
 			if (folder != null) {	
 				folderIds.add(folder.getEntity().getId());
 			}
 		}
-		getFolderBusiness().recursiveRemove(folderIds);
+		business.getFolderBusiness().recursiveRemove(folderIds);
 		getDao().getPageDao().remove(removeIds);
 	}
 
@@ -382,7 +354,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 
 	private List<ContentEntity> securityFilter(String url, 
 			List<ContentEntity> list) {
-		ContentPermissionEntity perm = getContentPermissionBusiness()
+		ContentPermissionEntity perm = business.getContentPermissionBusiness()
 				.getPermission(url, CurrentUser.getInstance());
 		if (perm.isAllLanguages()) {
 			return list;
@@ -407,7 +379,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 
 	@Override
 	public boolean canChangeContent(String url, String languageCode) {
-		ContentPermissionEntity perm = getContentPermissionBusiness()
+		ContentPermissionEntity perm = business.getContentPermissionBusiness()
 				.getPermission(url, CurrentUser.getInstance());
 		if (perm.isAllLanguages()) {
 			return perm.isChangeGranted();
@@ -416,12 +388,12 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 				languageCode);
 	}
 
-	public FolderBusiness getFolderBusiness() {
-		return folderBusiness;
+	public Business getBusiness() {
+		return business;
 	}
 
-	public void setFolderBusiness(FolderBusiness folderBusiness) {
-		this.folderBusiness = folderBusiness;
+	public void setBusiness(Business bean) {
+		this.business = bean;
 	}
 }
 

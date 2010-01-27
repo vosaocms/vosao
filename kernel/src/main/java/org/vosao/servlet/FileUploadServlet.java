@@ -49,6 +49,8 @@ import org.vosao.business.ImportExportBusiness;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.utils.FolderUtil;
+import org.vosao.utils.MimeType;
 import org.vosao.utils.StreamUtil;
 
 import com.google.appengine.api.labs.taskqueue.Queue;
@@ -71,6 +73,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 	private static final String FILE_TYPE_PARAM = "fileType";
 	private static final String FILE_TYPE_RESOURCE = "resource";
 	private static final String FILE_TYPE_IMPORT = "import";
+	private static final String FILE_TYPE_PLUGIN = "plugin";
 
 	private static final String TEXT_MESSAGE = "::%s::%s::";
 
@@ -158,6 +161,9 @@ public class FileUploadServlet extends BaseSpringServlet {
 		if (fileType.equals(FILE_TYPE_IMPORT)) {
 			return processImportFile(fileItem, data);
 		}
+		if (fileType.equals(FILE_TYPE_PLUGIN)) {
+			return processPluginFile(fileItem, data);
+		}
 		return null;
 	}
 	
@@ -240,7 +246,6 @@ public class FileUploadServlet extends BaseSpringServlet {
 		queue.add(url(ImportTaskServlet.IMPORT_TASK_URL).param("start", "1")
 				.param("filename", file.getFilename()));
 		return createMessage("success", "Saved for import.");
-
 	}
 
 	/**
@@ -286,4 +291,20 @@ public class FileUploadServlet extends BaseSpringServlet {
 		return (ImportExportBusiness) getSpringBean("importExportBusiness");
 	}
 	
+	private String processPluginFile(FileItemStream fileItem, byte[] data)
+			throws UploadException {
+		String ext = FolderUtil.getFileExt(fileItem.getName());
+		if (!ext.toLowerCase().equals("war")) {
+			throw new UploadException("Wrong file extension.");
+		}
+		try {
+			getBusiness().getPluginBusiness().install(fileItem.getName(), data);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			throw new UploadException(e.getMessage());
+		}
+		return createMessage("success", "Saved for import.");
+	}
+
 }

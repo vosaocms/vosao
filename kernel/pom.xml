@@ -5,13 +5,19 @@
     <parent>
         <groupId>org.vosao</groupId>
         <artifactId>cms</artifactId>
-        <version>1.0</version>
+        <version>0.3</version>
     </parent>    
-    <artifactId>kernel</artifactId>
+    <artifactId>vosao-kernel</artifactId>
     <packaging>jar</packaging>
     <name>Vosao CMS java kernel</name>
     
     <dependencies>
+
+        <dependency>
+            <groupId>org.vosao</groupId>
+            <artifactId>vosao-api</artifactId>
+            <version>0.3</version>
+        </dependency>
 
         <!--unit test related dependencies-->
 
@@ -244,7 +250,6 @@
 
     <!-- Build Settings -->
     <build>
-        <finalName>kernel</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

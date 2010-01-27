@@ -40,7 +40,6 @@ public class AbstractDaoImpl implements AbstractDao, Serializable {
 	protected static final Log logger = LogFactory.getLog(AbstractDaoImpl.class);
 
 	private PersistenceManagerFactory pmf;
-	private EntityCache daoCache;
 
 	public PersistenceManagerFactory getPersistenceManagerFactory() {
 		return pmf;
@@ -59,16 +58,6 @@ public class AbstractDaoImpl implements AbstractDao, Serializable {
 		List<T> result = new ArrayList<T>();
 		result.addAll(list);
 		return result;
-	}
-
-	@Override
-	public EntityCache getDaoCache() {
-		return daoCache;
-	}
-
-	@Override
-	public void setDaoCache(EntityCache bean) {
-		daoCache = bean;		
 	}
 
 }

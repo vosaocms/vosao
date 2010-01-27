@@ -101,6 +101,12 @@
     <bean id="structureTemplateDao" class="org.vosao.dao.impl.StructureTemplateDaoImpl"
         parent="abstractDao" />  
 
+    <bean id="pluginDao" class="org.vosao.dao.impl.PluginDaoImpl"
+        parent="abstractDao" />  
+
+    <bean id="pluginResourceDao" class="org.vosao.dao.impl.PluginResourceDaoImpl"
+        parent="abstractDao" />  
+
     <bean id="structureDao" class="org.vosao.dao.impl.StructureDaoImpl"
         parent="abstractDao">
         <property name="structureTemplateDao" ref="structureTemplateDao"/>
@@ -135,6 +141,8 @@
         <property name="folderPermissionDao" ref="folderPermissionDao"/>  
         <property name="structureDao" ref="structureDao"/>  
         <property name="structureTemplateDao" ref="structureTemplateDao"/>  
+        <property name="pluginDao" ref="pluginDao"/>  
+        <property name="pluginResourceDao" ref="pluginResourceDao"/>  
     </bean>
 
     <!--=========================== Business ================================-->
@@ -185,6 +193,14 @@
     <bean id="groupBusiness" class="org.vosao.business.impl.GroupBusinessImpl"
         parent="abstractBusiness" />  
 
+    <bean id="pluginResourceBusiness" class="org.vosao.business.impl.PluginResourceBusinessImpl"
+        parent="abstractBusiness" />  
+
+     <bean id="pluginBusiness" class="org.vosao.business.impl.PluginBusinessImpl"
+        parent="abstractBusiness" >
+        <property name="pluginResourceBusiness" ref="pluginResourceBusiness"/>  
+     </bean>      
+ 
     <bean id="commentBusiness" class="org.vosao.business.impl.CommentBusinessImpl"
         parent="abstractBusiness">  
         <property name="contentPermissionBusiness" ref="contentPermissionBusiness"/>  
@@ -197,10 +213,7 @@
     
     <bean id="pageBusiness" class="org.vosao.business.impl.PageBusinessImpl"
         init-method="init" parent="abstractBusiness">
-        <property name="configBusiness" ref="configBusiness"/>  
-        <property name="messageBusiness" ref="messageBusiness"/>  
-        <property name="contentPermissionBusiness" ref="contentPermissionBusiness"/>  
-        <property name="folderBusiness" ref="folderBusiness"/>  
+        <property name="business" ref="business"/>  
     </bean>      
 
     <bean id="business" class="org.vosao.business.impl.BusinessImpl"
@@ -221,6 +234,8 @@
         <property name="folderPermissionBusiness" ref="folderPermissionBusiness"/>  
         <property name="structureBusiness" ref="structureBusiness"/>  
         <property name="structureTemplateBusiness" ref="structureTemplateBusiness"/>  
+        <property name="pluginBusiness" ref="pluginBusiness"/>  
+        <property name="pluginResourceBusiness" ref="pluginResourceBusiness"/>  
     </bean>
 
     <!--======================= Setup bean ===========================-->
@@ -296,6 +311,9 @@
     <bean id="structureTemplateService" class="org.vosao.service.back.impl.StructureTemplateServiceImpl"
         parent="abstractService" />
 
+    <bean id="pluginService" class="org.vosao.service.back.impl.PluginServiceImpl"
+        parent="abstractService" />
+
     <bean id="configService" class="org.vosao.service.back.impl.ConfigServiceImpl"
         parent="abstractService" >
         <property name="setupBean" ref="setupBean"/>  
@@ -336,6 +354,7 @@
         <property name="folderPermissionService" ref="folderPermissionService"/>  
         <property name="structureService" ref="structureService"/>  
         <property name="structureTemplateService" ref="structureTemplateService"/>  
+        <property name="pluginService" ref="pluginService"/>  
     </bean>
 
     <!--================== JSON-RPC front services ==========================-->

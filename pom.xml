@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.vosao</groupId>
     <artifactId>cms</artifactId>
-    <version>1.0</version>
+    <version>0.3</version>
     <packaging>pom</packaging>   
     <name>Vosao CMS</name>
     <url>http://www.vosao.org</url>
@@ -72,6 +72,7 @@
     </repositories>
     
     <modules>
+        <module>api</module>
         <module>kernel</module>
         <module>web</module>
     </modules>

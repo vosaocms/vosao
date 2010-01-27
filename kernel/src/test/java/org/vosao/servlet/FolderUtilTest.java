@@ -23,6 +23,8 @@ package org.vosao.servlet;
 
 import java.io.UnsupportedEncodingException;
 
+import org.vosao.utils.FolderUtil;
+
 import junit.framework.TestCase;
 
 public class FolderUtilTest extends TestCase {

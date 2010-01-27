@@ -41,6 +41,8 @@ import org.vosao.business.FormBusiness;
 import org.vosao.business.GroupBusiness;
 import org.vosao.business.MessageBusiness;
 import org.vosao.business.PageBusiness;
+import org.vosao.business.PluginBusiness;
+import org.vosao.business.PluginResourceBusiness;
 import org.vosao.business.StructureBusiness;
 import org.vosao.business.StructureTemplateBusiness;
 import org.vosao.business.TemplateBusiness;
@@ -69,6 +71,8 @@ public class BusinessImpl implements Business, Serializable {
 	private FolderPermissionBusiness folderPermissionBusiness;
 	private StructureBusiness structureBusiness;
 	private StructureTemplateBusiness structureTemplateBusiness;
+	private PluginBusiness pluginBusiness;
+	private PluginResourceBusiness pluginResourceBusiness;
 
 	public void init() {
 	}
@@ -268,5 +272,23 @@ public class BusinessImpl implements Business, Serializable {
 		this.structureTemplateBusiness = structureTemplateBusiness;
 	}
 	
+	@Override
+	public PluginBusiness getPluginBusiness() {
+		return pluginBusiness;
+	}
+
+	@Override
+	public void setPluginBusiness(PluginBusiness bean) {
+		this.pluginBusiness = bean;
+	}
 	
+	@Override
+	public PluginResourceBusiness getPluginResourceBusiness() {
+		return pluginResourceBusiness;
+	}
+
+	@Override
+	public void setPluginResourceBusiness(PluginResourceBusiness bean) {
+		this.pluginResourceBusiness = bean;
+	}
 }

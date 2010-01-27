@@ -35,7 +35,7 @@ import org.vosao.business.FolderBusiness;
 import org.vosao.business.FolderPermissionBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FolderEntity;
-import org.vosao.servlet.FolderUtil;
+import org.vosao.utils.FolderUtil;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 

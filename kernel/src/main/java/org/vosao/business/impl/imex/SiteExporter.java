@@ -33,9 +33,9 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.Business;
 import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
-import org.vosao.business.impl.imex.dao.DaoTaskException;
 import org.vosao.dao.Dao;
-import org.vosao.servlet.FolderUtil;
+import org.vosao.dao.DaoTaskException;
+import org.vosao.utils.FolderUtil;
 
 public class SiteExporter extends AbstractExporter {
 

@@ -31,6 +31,12 @@
 <div id="main-panel">
     <div>
         <img src="/static/images/form.png" />
+        <a href="/cms/plugins/config.jsp">Plugins Configuration</a>
+        <p>You can install and configure existing plugins.
+        </p>
+    </div>
+    <div>
+        <img src="/static/images/form.png" />
         <a href="/cms/plugins/forms.jsp">Forms</a>
         <p>Forms plugin will help you to create different kinds of forms. 
            User entered data will be emailed to specified address.

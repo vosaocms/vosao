@@ -19,30 +19,17 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business;
+package org.vosao.dao.impl;
 
-import java.util.List;
-import java.util.Map;
+import org.vosao.dao.PluginResourceDao;
+import org.vosao.entity.PluginResourceEntity;
 
-import org.vosao.entity.FieldEntity;
-import org.vosao.entity.FormEntity;
+public class PluginResourceDaoImpl extends 
+		BaseDaoImpl<String, PluginResourceEntity> 
+		implements PluginResourceDao {
 
-public interface FieldBusiness {
+	public PluginResourceDaoImpl() {
+		super(PluginResourceEntity.class);
+	}
 
-	List<String> validateBeforeUpdate(final FieldEntity entity);
-	
-	/**
-	 * Convert from JSON field value object.
-	 * @param entity - field entity will be filled by vo's values.
-	 * @param vo - from JSON vo map object.
-	 * @return - list of errors.
-	 */
-	List<String> convertFromVO(FieldEntity entity, final Map<String, String> vo);
-	
-	/**
-	 * Check fields order and set index field if required.
-	 * @param form
-	 * @return form fields ordered by index.
-	 */
-	List<FieldEntity> checkOrder(final FormEntity form);
 }

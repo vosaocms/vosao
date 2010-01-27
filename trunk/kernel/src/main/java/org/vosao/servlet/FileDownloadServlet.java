@@ -35,6 +35,7 @@ import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.utils.DateUtil;
+import org.vosao.utils.FolderUtil;
 
 /**
  * Servlet for download files from database.

@@ -33,12 +33,12 @@ import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
-import org.vosao.business.impl.imex.dao.DaoTaskException;
 import org.vosao.dao.Dao;
+import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
-import org.vosao.servlet.FolderUtil;
-import org.vosao.servlet.MimeType;
+import org.vosao.utils.FolderUtil;
+import org.vosao.utils.MimeType;
 
 public class ResourceExporter extends AbstractExporter {
 

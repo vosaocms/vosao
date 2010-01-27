@@ -19,16 +19,21 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business;
+package org.vosao.service.back;
 
 import java.util.List;
 
-import org.vosao.entity.UserEntity;
+import org.vosao.entity.PluginEntity;
+import org.vosao.service.AbstractService;
+import org.vosao.service.ServiceResponse;
 
-public interface UserBusiness {
-
-	List<String> validateBeforeUpdate(final UserEntity User);
+/**
+ * @author Alexander Oleynik
+ */
+public interface PluginService extends AbstractService {
 	
-	void remove(final List<Long> ids);
+	List<PluginEntity> select();
+
+	ServiceResponse remove(String id);
 	
 }

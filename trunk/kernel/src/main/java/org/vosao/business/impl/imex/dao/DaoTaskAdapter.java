@@ -21,6 +21,7 @@
 
 package org.vosao.business.impl.imex.dao;
 
+import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.CommentEntity;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FieldEntity;

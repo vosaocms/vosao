@@ -34,6 +34,7 @@ import org.vosao.service.back.GroupService;
 import org.vosao.service.back.LanguageService;
 import org.vosao.service.back.MessageService;
 import org.vosao.service.back.PageService;
+import org.vosao.service.back.PluginService;
 import org.vosao.service.back.SeoUrlService;
 import org.vosao.service.back.StructureService;
 import org.vosao.service.back.StructureTemplateService;
@@ -95,4 +96,8 @@ public interface BackService {
 	
 	StructureTemplateService getStructureTemplateService();
 	void setStructureTemplateService(StructureTemplateService bean);
+
+	PluginService getPluginService();
+	void setPluginService(PluginService bean);
+
 }

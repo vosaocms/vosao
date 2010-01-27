@@ -19,24 +19,41 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.service.back.impl;
 
+import java.util.Collections;
 import java.util.List;
 
-import org.vosao.entity.UserGroupEntity;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.vosao.entity.PluginEntity;
+import org.vosao.service.ServiceResponse;
+import org.vosao.service.back.PluginService;
+import org.vosao.service.impl.AbstractServiceImpl;
 
 /**
  * @author Alexander Oleynik
  */
-public interface UserGroupDao extends BaseDao<Long, UserGroupEntity> {
+public class PluginServiceImpl extends AbstractServiceImpl 
+		implements PluginService {
 
-	List<UserGroupEntity> selectByUser(Long userId);
+	private static final Log logger = LogFactory.getLog(PluginServiceImpl.class);
 
-	List<UserGroupEntity> selectByGroup(Long groupId);
-	
-	UserGroupEntity getByUserGroup(Long groupId, Long userId);
-	
-	void removeByUser(final List<Long> userIds);
-	
-	void removeByGroup(final List<Long> groupIds);
+	@Override
+	public List<PluginEntity> select() {
+		return getDao().getPluginDao().select();
+	}
+
+	@Override
+	public ServiceResponse remove(String id) {
+		try {
+			getDao().getPluginDao().remove(id);
+			return ServiceResponse.createSuccessResponse("Plugin was successfully uninstalled");
+		}
+		catch (Exception e) {
+			logger.error(e.getMessage());
+			return ServiceResponse.createErrorResponse(e.getMessage());
+		}
+	}
+
 }

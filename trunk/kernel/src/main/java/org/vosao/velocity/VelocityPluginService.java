@@ -21,8 +21,10 @@
 
 package org.vosao.velocity;
 
+import java.util.Map;
+
 public interface VelocityPluginService {
 	
-	FormVelocityService getForm();
+	Map<String, Object> getPlugins();
 	
 }

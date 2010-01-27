@@ -35,6 +35,7 @@ import org.apache.commons.logging.LogFactory;
 import org.vosao.business.ImportExportBusiness;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
+import org.vosao.utils.MimeType;
 
 /**
  * Servlet for export.

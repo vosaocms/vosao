@@ -21,17 +21,18 @@
 
 package org.vosao.business.impl.imex;
 
+import static org.vosao.utils.XmlUtil.notNull;
+
 import java.util.Iterator;
 import java.util.List;
 
 import org.dom4j.Element;
 import org.vosao.business.Business;
 import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
-import org.vosao.business.impl.imex.dao.DaoTaskException;
 import org.vosao.dao.Dao;
+import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.UserRole;
-import static org.vosao.utils.XmlUtil.notNull;
 
 /**
  * @author Alexander Oleynik

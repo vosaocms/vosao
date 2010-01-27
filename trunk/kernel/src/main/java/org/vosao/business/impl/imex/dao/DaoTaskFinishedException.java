@@ -21,6 +21,8 @@
 
 package org.vosao.business.impl.imex.dao;
 
+import org.vosao.dao.DaoTaskException;
+
 public class DaoTaskFinishedException extends DaoTaskException {
 	
 	public DaoTaskFinishedException() {

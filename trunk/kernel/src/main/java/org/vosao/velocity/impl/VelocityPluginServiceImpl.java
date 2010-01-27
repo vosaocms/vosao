@@ -21,25 +21,52 @@
 
 package org.vosao.velocity.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.datanucleus.util.StringUtils;
+import org.vosao.business.Business;
+import org.vosao.business.PluginBusiness;
 import org.vosao.dao.Dao;
+import org.vosao.entity.PluginEntity;
 import org.vosao.global.SystemService;
 import org.vosao.velocity.FormVelocityService;
 import org.vosao.velocity.VelocityPluginService;
+import org.vosao.velocity.plugin.VelocityPlugin;
 
 public class VelocityPluginServiceImpl implements VelocityPluginService {
 
 	private Dao dao;
 	private SystemService systemService;
 	private FormVelocityService form;
+	private Business business;
 	
-	public VelocityPluginServiceImpl(Dao aDao, SystemService aSystemService) {
+	public VelocityPluginServiceImpl(Dao aDao, SystemService aSystemService,
+			Business aBusiness) {
 		dao = aDao;
 		systemService= aSystemService;
 		form = new FormVelocityServiceImpl(dao, systemService);
+		business = aBusiness;
 	}
 	
 	@Override
-	public FormVelocityService getForm() {
-		return form;
+	public Map<String, Object> getPlugins() {
+		Map<String, Object> services = new HashMap<String, Object>();
+		services.put("form", form);
+		for (PluginEntity plugin : dao.getPluginDao().select()) {
+			if (!StringUtils.isEmpty(plugin.getVelocityPluginClass())) {
+				try {
+					VelocityPlugin velocityPlugin = business.getPluginBusiness()
+						.getVelocityPlugin(plugin);
+					velocityPlugin.setDao(dao);
+					velocityPlugin.setBusiness(business);
+					services.put(plugin.getName(), velocityPlugin);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return services;
 	}
 }

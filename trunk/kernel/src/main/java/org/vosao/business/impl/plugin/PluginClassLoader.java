@@ -21,6 +21,10 @@
 
 package org.vosao.business.impl.plugin;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.vosao.business.PluginResourceBusiness;
 
 public class PluginClassLoader extends ClassLoader {
@@ -49,6 +53,15 @@ public class PluginClassLoader extends ClassLoader {
 		}
 	}
 
+	@Override
+	public InputStream getResourceAsStream(String name) {
+		byte[] b = pluginResourceBusiness.findResource(name);
+		if (b == null) {
+			throw new ResourceNotFoundException(name);
+		}
+		return new ByteArrayInputStream(b);
+	}
+	
 	public PluginResourceBusiness getPluginResourceBusiness() {
 		return pluginResourceBusiness;
 	}

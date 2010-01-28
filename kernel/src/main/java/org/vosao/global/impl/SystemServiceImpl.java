@@ -88,7 +88,7 @@ public class SystemServiceImpl implements SystemService, Serializable {
 	@Override
 	public String render(String template, VelocityContext context) {
 		StringWriter wr = new StringWriter();
-		String log = null;
+		String log = "vm";
 		try {
 			getVelocityEngine().evaluate(context, wr, log, template);
 			return wr.toString();

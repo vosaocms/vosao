@@ -1,0 +1,15 @@
+#macro( renderSitemap $treeItem )
+  <li>$treeItem.entity.title
+  #if ($treeItem.hasChildren)
+    <ul>
+      #foreach($child in $treeItem.children) 
+        #renderTree($child)
+      #end
+    </ul> 
+  #end
+   </li>
+#end
+
+<ul id="sitemap">
+    <li>#renderSitemap($root)</li>
+</ul>

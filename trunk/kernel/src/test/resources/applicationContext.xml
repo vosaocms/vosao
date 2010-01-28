@@ -196,10 +196,15 @@
     <bean id="pluginResourceBusiness" class="org.vosao.business.impl.PluginResourceBusinessImpl"
         parent="abstractBusiness" />  
 
-     <bean id="pluginBusiness" class="org.vosao.business.impl.PluginBusinessImpl"
-        parent="abstractBusiness" >
+    <bean id="pluginClassLoader" class="org.vosao.business.impl.plugin.PluginClassLoader">
         <property name="pluginResourceBusiness" ref="pluginResourceBusiness"/>  
-     </bean>      
+    </bean>      
+
+    <bean id="pluginBusiness" class="org.vosao.business.impl.PluginBusinessImpl"
+        parent="abstractBusiness" init-method="init">
+        <property name="business" ref="business"/>  
+        <property name="pluginClassLoader" ref="pluginClassLoader"/>  
+    </bean>      
  
     <bean id="commentBusiness" class="org.vosao.business.impl.CommentBusinessImpl"
         parent="abstractBusiness">  

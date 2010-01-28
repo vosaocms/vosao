@@ -41,7 +41,13 @@ public class PluginResourceBusinessImpl extends AbstractBusinessImpl
 	
 	@Override
 	public byte[] findResource(String name) {
-		List<String> refs = getResourcesChunksKeyList();
+		PluginResourceEntity entity = getDao().getPluginResourceDao().getByUrl(
+				name);
+		if (entity != null) {
+			return entity.getContent();
+		}
+		return null;
+		/*List<String> refs = getResourcesChunksKeyList();
 		for (String ref : refs) {
 			Map<String, PluginResourceEntity> map = (Map<String, PluginResourceEntity>) 
 					getSystemService().getCache().get(ref);
@@ -49,7 +55,7 @@ public class PluginResourceBusinessImpl extends AbstractBusinessImpl
 				return map.get(name).getContent();
 			}
 		}
-		return null;
+		return null;*/
 	}
 
 	private List<String> getResourcesChunksKeyList() {

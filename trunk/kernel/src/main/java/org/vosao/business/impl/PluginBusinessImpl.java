@@ -21,22 +21,17 @@
 
 package org.vosao.business.impl;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
+import org.vosao.business.Business;
 import org.vosao.business.PluginBusiness;
-import org.vosao.business.PluginResourceBusiness;
+import org.vosao.business.impl.plugin.PluginClassLoader;
+import org.vosao.business.impl.plugin.PluginLoader;
 import org.vosao.common.PluginException;
 import org.vosao.entity.PluginEntity;
 import org.vosao.velocity.plugin.VelocityPlugin;
@@ -46,94 +41,71 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 
 	private static final Log logger = LogFactory.getLog(PluginBusinessImpl.class);
 
-	private static final String VOSAO_PLUGIN = "WEB-INF/vosao-plugin.xml";
+	private Business business;
+	private PluginLoader pluginLoader;
+	private PluginClassLoader pluginClassLoader;
+	private Map<String, VelocityPlugin> velocityPlugins;
 	
-	private PluginResourceBusiness pluginResourceBusiness;
-	
-	private static class ZipItem {
-		public String path;
-		public ByteArrayOutputStream data;
-
-		public ZipItem(String path, ByteArrayOutputStream data) {
-			super();
-			this.path = path;
-			this.data = data;
-		}
+	public void init() {
+		velocityPlugins = new HashMap<String, VelocityPlugin>();
 	}
 	
+	/**
+	 * Plugin installation:
+	 * - PluginEntity created
+	 * - All resources are placed to /plugins/PLUGIN_NAME/
+	 * - all classes are placed to PluginResourceEntity
+	 */
 	@Override
 	public void install(String filename, byte[] data) throws IOException, 
 			PluginException, DocumentException {
-		Map<String, ZipItem> war = readWar(data);
-		if (!war.containsKey(VOSAO_PLUGIN)) {
-			throw new PluginException(VOSAO_PLUGIN + " not found");
-		}
-		PluginEntity plugin = readPluginConfig(war.get(VOSAO_PLUGIN));
-		PluginEntity p = getDao().getPluginDao().getByName(plugin.getName());
-		if (p != null) {
-			throw new PluginException("Plugin " + plugin.getTitle() + " already installed.");
-		}
-		getDao().getPluginDao().save(plugin);
+		getPluginLoader().install(filename, data);
 	}
 	
-	private Map<String, ZipItem> readWar(byte[] data) throws IOException {
-		ByteArrayInputStream inputData = new ByteArrayInputStream(data);
-		ZipInputStream in = new ZipInputStream(inputData);
-		Map<String, ZipItem> map = new HashMap<String, ZipItem>();
-		ZipEntry entry;
-		byte[] buffer = new byte[4096];
-		while((entry = in.getNextEntry()) != null) {
-			if (entry.getName().startsWith("META-INF")) {
-				continue;
-			}
-			if (entry.isDirectory()) {
-			}
-			else {
-				ByteArrayOutputStream itemData = new ByteArrayOutputStream();
-				int len = 0;
-				while ((len = in.read(buffer)) > 0) {
-					itemData.write(buffer, 0, len);
-				}
-				ZipItem item = new ZipItem(entry.getName(), itemData);
-				map.put(entry.getName(), item);
-				logger.info(entry.getName());
-			}
-		}
-		in.close();
-		return map;
-	}
-
-	private PluginEntity readPluginConfig(ZipItem zipItem) 
-			throws UnsupportedEncodingException, DocumentException {
-		PluginEntity result = new PluginEntity();
-		Element root = DocumentHelper.parseText(zipItem.data.toString("UTF-8"))
-				.getRootElement();
-		result.setName(root.elementText("name"));	
-		result.setTitle(root.elementText("title"));
-		result.setDescription(root.elementText("description"));
-		result.setWebsite(root.elementText("website"));
-		if (root.element("velocity-plugin-class") != null) {
-			result.setVelocityPluginClass(root.elementText("velocity-plugin-class"));
-		}
-		// TODO load config xml
-		return result; 
-	}
 
 	@Override
-	public VelocityPlugin getVelocityPlugin(PluginEntity plugin) 
-			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-		PluginClassLoader loader = new PluginClassLoader(pluginResourceBusiness);
-		Class velocityPluginClass = loader.findClass(plugin.getVelocityPluginClass());
+	public synchronized VelocityPlugin getVelocityPlugin(PluginEntity plugin) 
+			throws ClassNotFoundException, InstantiationException, 
+			IllegalAccessException {
+		if (velocityPlugins.containsKey(plugin.getName())) {
+			return velocityPlugins.get(plugin.getName());
+		}
+		Class velocityPluginClass = pluginClassLoader
+				.findClass(plugin.getVelocityPluginClass());
 		return (VelocityPlugin) velocityPluginClass.newInstance();
 	}
 
-	public PluginResourceBusiness getPluginResourceBusiness() {
-		return pluginResourceBusiness;
+	@Override
+	public void refreshPlugin(PluginEntity plugin) {
+		velocityPlugins.remove(plugin.getName());
 	}
 
-	public void setPluginResourceBusiness(
-			PluginResourceBusiness pluginResourceBusiness) {
-		this.pluginResourceBusiness = pluginResourceBusiness;
+	public PluginClassLoader getPluginClassLoader() {
+		return pluginClassLoader;
+	}
+
+	public void setPluginClassLoader(PluginClassLoader pluginClassLoader) {
+		this.pluginClassLoader = pluginClassLoader;
+	}
+
+	@Override
+	public void uninstall(PluginEntity plugin) {
+		getPluginLoader().uninstall(plugin);
+	}
+	
+	public Business getBusiness() {
+		return business;
+	}
+
+	public void setBusiness(Business business) {
+		this.business = business;
+	}
+
+	public PluginLoader getPluginLoader() {
+		if (pluginLoader == null) {
+			pluginLoader = new PluginLoader(getDao(), getBusiness());
+		}
+		return pluginLoader;
 	}
 
 }

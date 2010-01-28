@@ -60,6 +60,10 @@ public class FolderUtilTest extends TestCase {
 		assertEquals("/home/x", FolderUtil.getFilePath("/home/x/file.zip"));
 	}
 
+	public void testGetFileName() {
+		assertEquals("file.zip", FolderUtil.getFileName("/home/x/file.zip"));
+	}
+
 	public void testGetFolderName() {
 		assertEquals("file", FolderUtil.getFolderName("/home/x/file"));
 	}

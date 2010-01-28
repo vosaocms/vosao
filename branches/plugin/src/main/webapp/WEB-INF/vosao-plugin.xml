@@ -1,0 +1,13 @@
+<vosao-plugin>
+    <name>sitemap</name>
+    <title>Sitemap plugin</title>
+    <description>This is sitemap plugin.</description>
+    <website>www.vosao.org</website>
+    <config>
+        <param name="title" type="String" value="No title" />
+        <param name="level" type="Integer" value="2" />
+    </config>
+    <velocity-plugin-class>
+        org.vosao.plugins.sitemap.SitemapVelocityPlugin
+    </velocity-plugin-class>
+</vosao-plugin>

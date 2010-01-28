@@ -22,6 +22,7 @@
 package org.vosao.dao.impl;
 
 import org.vosao.dao.PluginResourceDao;
+import org.vosao.entity.PageEntity;
 import org.vosao.entity.PluginResourceEntity;
 
 public class PluginResourceDaoImpl extends 
@@ -30,6 +31,14 @@ public class PluginResourceDaoImpl extends
 
 	public PluginResourceDaoImpl() {
 		super(PluginResourceEntity.class);
+	}
+
+	@Override
+	public PluginResourceEntity getByUrl(String url) {
+		String query = "select from " + PluginResourceEntity.class.getName()
+			+ " where url == pUrl" 
+			+ " parameters String pUrl";
+		return selectOne(query, params(url));
 	}
 
 }

@@ -286,5 +286,14 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 		}
 		return result;
 	}
+
+	@Override
+	public void recursiveRemove(String path) {
+		TreeItemDecorator<FolderEntity> root = getTree();
+		TreeItemDecorator<FolderEntity> folder = findFolderByPath(root, path);
+		if (folder != null) {
+			recursiveRemove(folder.getEntity());
+		}
+	}
 	
 }

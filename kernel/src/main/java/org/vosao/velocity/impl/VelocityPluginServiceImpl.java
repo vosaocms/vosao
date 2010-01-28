@@ -24,9 +24,7 @@ package org.vosao.velocity.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.datanucleus.util.StringUtils;
 import org.vosao.business.Business;
-import org.vosao.business.PluginBusiness;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PluginEntity;
 import org.vosao.global.SystemService;
@@ -54,7 +52,7 @@ public class VelocityPluginServiceImpl implements VelocityPluginService {
 		Map<String, Object> services = new HashMap<String, Object>();
 		services.put("form", form);
 		for (PluginEntity plugin : dao.getPluginDao().select()) {
-			if (!StringUtils.isEmpty(plugin.getVelocityPluginClass())) {
+			if (plugin.isVelocityPlugin()) {
 				try {
 					VelocityPlugin velocityPlugin = business.getPluginBusiness()
 						.getVelocityPlugin(plugin);

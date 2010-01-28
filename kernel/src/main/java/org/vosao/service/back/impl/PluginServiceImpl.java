@@ -47,8 +47,15 @@ public class PluginServiceImpl extends AbstractServiceImpl
 	@Override
 	public ServiceResponse remove(String id) {
 		try {
-			getDao().getPluginDao().remove(id);
-			return ServiceResponse.createSuccessResponse("Plugin was successfully uninstalled");
+			PluginEntity plugin = getDao().getPluginDao().getById(id);
+			if (plugin != null) {
+				getBusiness().getPluginBusiness().uninstall(plugin);
+				return ServiceResponse.createSuccessResponse(
+						"Plugin was successfully uninstalled");
+			}
+			else {
+				return ServiceResponse.createErrorResponse("Plugin was not found");
+			}
 		}
 		catch (Exception e) {
 			logger.error(e.getMessage());

@@ -116,7 +116,8 @@ public class FileDownloadServlet extends BaseSpringServlet {
 	}
 	
 	private boolean isInPublicCache(final String path) {
-		return getBusiness().getSystemService().getCache().containsKey(
+		return getBusiness().getSystemService().getCache().containsKey(path)
+		    && getBusiness().getSystemService().getCache().containsKey(
 				"public:" + path)
 			&& getBusiness().getSystemService().getCache().containsKey(
 				"data:" + path);

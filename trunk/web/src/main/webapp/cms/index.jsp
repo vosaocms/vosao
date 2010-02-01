@@ -65,7 +65,7 @@
     </div>
     <div>
         <img src="/static/images/shoppingcart.png" />
-        <a href="/cms/plugins.jsp">Plugins</a>
+        <a href="/cms/plugins">Plugins</a>
         <p>Various plugins configuration. Forms. SEO Urls</p>
     </div>
 <% } %>    

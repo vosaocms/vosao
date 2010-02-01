@@ -1,6 +1,41 @@
 #labels Featured
 = Release Notes =
 
+== Version 0.2 01.02.2010 ==
+
+This release adds structured content support stored as XML and Velocity and XSLT templates for rendering.
+
+Also datastore query caching implemented using instance local cache and memcache.
+
+Clean installation:
+
+ # Upload version 0.2 and select it as the default version
+ # Run site root url /. Default site will be installed.
+
+Version upgrade steps:
+
+ # Upload version 0.2 and select it as the default version
+ # Run update url "/update". Database schema will be automatically updated.
+
+Implemented and fixed issues:
+
+ # [http://code.google.com/p/vosao/issues/detail?id=60 Structured content]
+ # [http://code.google.com/p/vosao/issues/detail?id=67 Add form field reorder ]
+ # [http://code.google.com/p/vosao/issues/detail?id=69 memcache support ]
+ # [http://code.google.com/p/vosao/issues/detail?id=81 Deleting a parent page is permitted but it doesn't really delete child pages ]
+ # [http://code.google.com/p/vosao/issues/detail?id=82 Site reset feature ]
+ # [http://code.google.com/p/vosao/issues/detail?id=83 Show "There is no approved content" message on not approved root page. ]
+ # [http://code.google.com/p/vosao/issues/detail?id=84 Refactor JS global functions to namespace Vosao ]
+ # [http://code.google.com/p/vosao/issues/detail?id=85 Enhance page tree UI. ]
+ # [http://code.google.com/p/vosao/issues/detail?id=86 Enhance page editing UI ]
+ # [http://code.google.com/p/vosao/issues/detail?id=87 Enance template editor UI ]
+ # [http://code.google.com/p/vosao/issues/detail?id=91 Request DeadlineExceededException while restoring site. ]
+ # [http://code.google.com/p/vosao/issues/detail?id=95 Add in memory first level query cache. ]
+ # [http://code.google.com/p/vosao/issues/detail?id=96 Remove JSON alerts when other page requested inside non finished request. ]
+ # [http://code.google.com/p/vosao/issues/detail?id=98 NPE during downloading resources ]
+ # [http://code.google.com/p/vosao/issues/detail?id=100 Update links on Vosao workarea page ]
+
+
 == Version 0.1 29.12.2009 ==
 
 Vosao CMS version 0.1 is out. This is the first version in alpha cycle releases.

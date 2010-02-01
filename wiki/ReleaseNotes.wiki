@@ -1,7 +1,8 @@
 #labels Featured
 = Release Notes =
 
-== Version 0.2 01.02.2010 ==
+== Version 0.2 ==
+===01.02.2010 ===
 
 This release adds structured content support stored as XML and Velocity and XSLT templates for rendering.
 

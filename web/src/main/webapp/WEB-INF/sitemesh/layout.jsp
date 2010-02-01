@@ -91,6 +91,7 @@
         <%= user.getEmail() %> 
         | <a href="/cms/profile.jsp">Profile</a> 
         | <a href="#" onclick="onLogout()">Logout</a>
+        | <a href="http://code.google.com/p/vosao/issues/list">Support</a>    
     </div>
     <span class="clear">&#160;</span>
 </div>

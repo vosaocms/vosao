@@ -1,7 +1,7 @@
 #labels Featured
 = Release Notes =
 
-== Version 0.2 ==
+== Vosao CMS 0.2 ==
 *01.02.2010*
 
 This release adds structured content support stored as XML and Velocity and XSLT templates for rendering.
@@ -37,7 +37,7 @@ Implemented and fixed issues:
  # [http://code.google.com/p/vosao/issues/detail?id=100 Update links on Vosao workarea page ]
 
 
-== Version 0.1 ==
+== Vosao CMS 0.1 ==
 *29.12.2009*
 
 Vosao CMS version 0.1 is out. This is the first version in alpha cycle releases.
@@ -81,7 +81,7 @@ Implemented and fixed issues:
  # [http://code.google.com/p/vosao/issues/detail?id=71 Add checks for reference integrity when deleting referenced objects]
  # [http://code.google.com/p/vosao/issues/detail?id=72 Implement message bundle import/export]
 
-== Version 0.0.4 ==
+== Vosao CMS 0.0.4 ==
 *17.11.2009*
 
 Vosao CMS version 0.0.4 is out. This is the last version in working prototype cycle releases. Next releases cycle will be alpha. This means that project has stabilized architecture and framework set.
@@ -107,7 +107,7 @@ Implemented and fixed issues:
  # [http://code.google.com/p/vosao/issues/detail?id=50 Refactor js messages]
  # [http://code.google.com/p/vosao/issues/detail?id=51 Add content versioning support]
 
-== Version 0.0.3 ==
+== Vosao CMS 0.0.3 ==
 *02.11.2009*
 
 I am proud to announce availability of version 0.0.3 of Vosao CMS.
@@ -137,7 +137,7 @@ Implemented and fixed issues:
  # [http://code.google.com/p/vosao/issues/detail?id=46 Lightened application frameworks stack]
  # [http://code.google.com/p/vosao/issues/detail?id=47 Datanucleus error: Command line too long.]
 
-== Version 0.0.2 ==
+== Vosao CMS 0.0.2 ==
 *02.10.2009*
 
 In this version database schema was changed and unfortunately complete database cleaning is required. Please follow these instructions to upgrade running sites.
@@ -168,6 +168,6 @@ Implemented and fixed issues:
  # [http://code.google.com/p/vosao/issues/detail?id=36&can=1 Add "save and continue" button to text editors ]
 
 
-== Version 0.0.1 ==
+== Vosao CMS 0.0.1 ==
 *25.09.2009*
  * first prototype release 

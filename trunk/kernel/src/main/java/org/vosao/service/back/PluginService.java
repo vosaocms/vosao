@@ -26,6 +26,7 @@ import java.util.List;
 import org.vosao.entity.PluginEntity;
 import org.vosao.service.AbstractService;
 import org.vosao.service.ServiceResponse;
+import org.vosao.service.vo.PluginPropertyVO;
 
 /**
  * @author Alexander Oleynik
@@ -36,4 +37,7 @@ public interface PluginService extends AbstractService {
 
 	ServiceResponse remove(String id);
 	
+	List<PluginPropertyVO> getProperties(String pluginId);
+	
+	PluginEntity getById(String pluginId);
 }

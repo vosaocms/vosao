@@ -190,7 +190,7 @@ public class PluginLoader {
 			result.setVelocityPluginClass(StringUtils.strip(
 					root.elementText("velocity-plugin-class")));
 		}
-		// TODO load config xml
+		result.setConfigStructure(root.element("config").asXML());
 		return result; 
 	}
 

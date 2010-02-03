@@ -56,8 +56,10 @@ public class AuthenticationFilter extends AbstractFilter implements Filter {
 		if (!isLoggedIn(httpRequest)) {
 			CurrentUser.setInstance(null);
 			if (url.startsWith(CMS)) {
-				session.setAttribute(ORIGINAL_VIEW_KEY, httpRequest
-						.getRequestURI());
+				String originalUrl = httpRequest.getRequestURI() 
+					+ (httpRequest.getQueryString() == null ? "" : 
+						"?" + httpRequest.getQueryString());
+				session.setAttribute(ORIGINAL_VIEW_KEY, originalUrl);
 				httpResponse.sendRedirect(httpRequest.getContextPath()
 						+ LOGIN_VIEW);
 				return;

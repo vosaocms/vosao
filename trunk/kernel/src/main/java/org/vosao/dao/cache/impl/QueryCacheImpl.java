@@ -82,8 +82,7 @@ public class QueryCacheImpl implements QueryCache {
 		StringBuffer result = new StringBuffer(String.valueOf(query.hashCode()));
 		if (params != null) {
 			for (Object param : params) {
-				result.append(param != null ? 
-						String.valueOf(param.toString().hashCode()) : "null"); 
+				result.append(param != null ? param.toString() : "null"); 
 			}
 		}
 		return result.toString();

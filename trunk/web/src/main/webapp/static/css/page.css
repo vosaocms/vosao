@@ -1,6 +1,6 @@
 #versions {
 	float:right;
-	width:125px;
+	width:140px;
 	min-width:0;
 	padding: 15px 10px;
 }
@@ -26,5 +26,5 @@
 
 #tabs {
 	float: left;
-	width: 85%;
+	width: 80%;
 }

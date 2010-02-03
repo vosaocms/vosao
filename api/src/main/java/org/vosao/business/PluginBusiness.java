@@ -51,4 +51,5 @@ public interface PluginBusiness {
 			IllegalAccessException;
 	
 	void refreshPlugin(PluginEntity plugin);
+	
 }

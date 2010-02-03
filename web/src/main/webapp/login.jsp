@@ -68,7 +68,7 @@
 </div>
 
 <div id="login-form">
-<form>
+<form onsubmit="onLogin(); return false;">
 
 <h4>Sign in with your</h4>
 <h3>Vosao CMS account</h3>
@@ -83,7 +83,7 @@
 </div>
 <div id="login-messages"> </div>
 <div class="buttons-dlg">
-    <input type="button" value="Login" onclick="onLogin()" />
+    <input type="submit" value="Login" />
 </div>    
 
 </form>

@@ -22,6 +22,7 @@
 package org.vosao.service.back;
 
 import java.util.List;
+import java.util.Map;
 
 import org.vosao.entity.PluginEntity;
 import org.vosao.service.AbstractService;
@@ -40,4 +41,6 @@ public interface PluginService extends AbstractService {
 	List<PluginPropertyVO> getProperties(String pluginId);
 	
 	PluginEntity getById(String pluginId);
+	
+	ServiceResponse savePluginConfig(String pluginId, String xml);
 }

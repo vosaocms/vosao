@@ -26,6 +26,7 @@ $(function() {
     $("#tabs").tabs();
     Vosao.initJSONRpc(loadData);
     $('#cancelButton').click(onCancel);
+    $('#saveButton').click(onSave);
 });
 
 function loadData() {
@@ -52,6 +53,10 @@ function onCancel() {
 	location.href = 'config.jsp';
 }
 
+function notNull(s) {
+	return s == null ? '' : s;
+}
+
 function showPlugin() {
 	if (plugin == null || properties == null) {
 		return;
@@ -59,11 +64,15 @@ function showPlugin() {
 	var h = '';
 	var configData = getConfigData();
 	$.each(properties, function(i,value) {
-		var data = configData[value.name] ? configData[value.name] : '';
-		if (value.type == 'String' || value.type == 'Integer'
-			|| value.type == 'Date') {
+		var data = notNull(configData[value.name.toLowerCase()] ? 
+				configData[value.name.toLowerCase()] : value.defaultValue);
+		if (value.type == 'String' || value.type == 'Integer') {
 			h += '<div class="form-row"><label>' + value.title + '</label>'
 				+ '<input id="property-' + value.name + '" value="' + data + '"/></div>';
+		}
+		if (value.type == 'Date') {
+			h += '<div class="form-row"><label>' + value.title + '</label>'
+				+ '<input id="property-' + value.name + '"/></div>';
 		}
 		if (value.type == 'Boolean') {
 			h += '<div class="form-row"><label>' + value.title + '</label>'
@@ -78,13 +87,18 @@ function showPlugin() {
 	});
 	$('#properties').html(h);
 	$.each(properties, function(i,value) {
-		var data = configData[value.name] ? configData[value.name] : '';
+		var id = "#property-" + value.name;
+		var data = configData[value.name.toLowerCase()] ? 
+				configData[value.name.toLowerCase()] : '';
 		if (value.type == 'Date') {
-		    $("#property-" + value.name).datepicker({dateFormat:'dd.mm.yy'});
+		    if (data) {
+		    	$(id).val(data);
+		    }
+		    $(id).datepicker({dateFormat:'dd.mm.yy'});
 		}
 		if (value.type == 'Boolean') {
 		    var checked = data == 'true';
-			$("#property-" + value.name).each(function() {this.checked = checked});
+			$(id).each(function() {this.checked = checked});
 		}
 	});
 }
@@ -95,8 +109,48 @@ function showPlugin() {
  */
 function getConfigData() {
 	var result = {};
-	$(plugin.configData).each(function() {
-		result[this.tagName] = $(this).text();  
-	});
+	if (plugin.configData != '') {
+		$(plugin.configData, 'plugin-config').children().each(function() {
+			result[this.tagName.toLowerCase()] = $(this).text();
+		});
+	}
 	return result;
+}
+
+function validate(vo) {
+	$.each(properties, function(i,value) {
+		var data = vo[value.name];
+		if (value.type == 'Integer' && parseInt(data) == NaN) {
+			return 'Integer expected for ' + value.name;
+		}
+	});
+}
+
+function onSave() {
+	var vo = {};
+	var xml = '<plugin-config>\n';
+	$.each(properties, function(i,value) {
+		var id = '#property-' + value.name;
+		if (value.type == 'String' || value.type == 'Integer'
+			|| value.type == 'Date' || value.type == 'Text') {
+			vo[value.name] = $(id).val();
+			xml += '<' + value.name + '>' + vo[value.name] + '</' + value.name 
+				+ '>\n';
+		}
+		if (value.type == 'Boolean') {
+			vo[value.name] = String($(id + ':checked').size() > 0);
+			xml += '<' + value.name + '>' + vo[value.name] + '</' + value.name 
+				+ '>\n';
+		}
+	});
+	xml += '</plugin-config>\n'
+	var error = validate(vo);
+	if (error) {
+		Vosao.error(error);
+	}
+	else {
+		Vosao.jsonrpc.pluginService.savePluginConfig(function(r) {
+			Vosao.showServiceMessages(r);
+		}, pluginId, xml);
+	}	
 }

@@ -24,6 +24,7 @@ package org.vosao.service.back.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -112,6 +113,21 @@ public class PluginServiceImpl extends AbstractServiceImpl
 	@Override
 	public PluginEntity getById(String pluginId) {
 		return getDao().getPluginDao().getById(pluginId);
+	}
+
+	@Override
+	public ServiceResponse savePluginConfig(String pluginId, String xml) {
+		PluginEntity plugin = getById(pluginId);
+		if (plugin != null) {
+			plugin.setConfigData(xml);
+			getDao().getPluginDao().save(plugin);
+			return ServiceResponse.createSuccessResponse(
+					"Config was successfully saved.");
+		}
+		else {
+			return ServiceResponse.createErrorResponse(
+				"Plugin was not found.");
+		}
 	}
 
 }

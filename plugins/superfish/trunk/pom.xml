@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.vosao.plugins</groupId>
+	<artifactId>superfish</artifactId>
+	<version>0.3</version>
+	<packaging>war</packaging>
+	<name>Vosao CMS superfish menu plugin.</name> 
+
+	<dependencies>
+
+        <dependency>
+            <groupId>org.vosao</groupId>
+            <artifactId>vosao-api</artifactId>
+            <version>0.3</version>
+            <scope>provided</scope>
+        </dependency>
+
+	</dependencies>
+
+	<properties>
+		<project_charset>UTF-8</project_charset>
+	</properties>
+
+	<!-- Build Settings -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+		</plugins>
+	</build>
+
+</project>

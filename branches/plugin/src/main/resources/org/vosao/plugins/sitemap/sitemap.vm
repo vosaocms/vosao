@@ -3,7 +3,7 @@
   #if ($treeItem.hasChildren)
     <ul>
       #foreach($child in $treeItem.children) 
-        #renderTree($child)
+        #renderSitemap($child)
       #end
     </ul> 
   #end
@@ -11,5 +11,12 @@
 #end
 
 <ul id="sitemap">
-    <li>#renderSitemap($root)</li>
+    #renderSitemap($root)
 </ul>
+
+<hr/>
+$config.title <br/>
+$config.level <br/>
+$config.published <br/>
+$config.hint <br/>
+$config.showHint <br/>

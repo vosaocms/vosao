@@ -4,8 +4,11 @@
     <description>This is sitemap plugin.</description>
     <website>www.vosao.org</website>
     <config>
-        <param name="title" type="String" value="No title" />
-        <param name="level" type="Integer" value="2" />
+        <param name="title" title="Title" type="String" value="No title" />
+        <param name="level" title="Sitemap level" type="Integer" value="2" />
+        <param name="published" title="Filter by publish date" type="Date" />
+        <param name="hint" title="Show sitemap hint" type="Text" />
+        <param name="showHint" title="Show hint flag" type="Boolean" value="true" />
     </config>
     <velocity-plugin-class>
         org.vosao.plugins.sitemap.SitemapVelocityPlugin

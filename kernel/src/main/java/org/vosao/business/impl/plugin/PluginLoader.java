@@ -119,7 +119,9 @@ public class PluginLoader {
 						res.setContent(fileData);
 					}
 					getDao().getPluginResourceDao().save(res);
-					resourceList.add(resourceName);
+					getBusiness().getPluginResourceBusiness()
+						.updateResourceCache(res);
+					resourceList.add(res.getId());
 				}
 				if (!url.startsWith("WEB-INF")) {
 					String folderPath = pluginBase + "/" + FolderUtil.getFilePath(
@@ -145,9 +147,13 @@ public class PluginLoader {
 			result.append((count == 0 ? "" : ",")).append(item);
 			count++;
 		}
-		getDao().getPluginResourceDao().save(
-				new PluginResourceEntity(plugin.getName() + RESOURCE_LIST, 
-						result.toString().getBytes()));
+		try {
+			getDao().getPluginResourceDao().save(
+					new PluginResourceEntity(plugin.getName() + RESOURCE_LIST, 
+							result.toString().getBytes("UTF-8")));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private Map<String, WarItem> readWar(byte[] data) throws IOException {
@@ -195,7 +201,6 @@ public class PluginLoader {
 	}
 
 	public void uninstall(PluginEntity plugin) {
-		getBusiness().getPluginBusiness().refreshPlugin(plugin);
 		removePluginResources(plugin);
 		getBusiness().getFolderBusiness().recursiveRemove(
 				"/plugins/" + plugin.getName());
@@ -208,15 +213,16 @@ public class PluginLoader {
 		if (listResource == null) {
 			return;
 		}
-		String list = listResource.getContent().toString();
-		String[] resources = list.split(",");
 		List<String> ids = new ArrayList<String>();
-		for (String url : resources) {
-			PluginResourceEntity entity = getDao().getPluginResourceDao()
-					.getByUrl(url);
-			if (entity != null) {
-				ids.add(entity.getId());
+		ids.add(listResource.getId());
+		try {
+			String list = new String(listResource.getContent(), "UTF-8");
+			String[] resources = list.split(",");
+			for (String id : resources) {
+				ids.add(id);
 			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		}
 		getDao().getPluginResourceDao().remove(ids);
 	}

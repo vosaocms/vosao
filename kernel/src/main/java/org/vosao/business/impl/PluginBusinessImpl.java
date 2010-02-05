@@ -30,8 +30,11 @@ import org.apache.commons.logging.LogFactory;
 import org.dom4j.DocumentException;
 import org.vosao.business.Business;
 import org.vosao.business.PluginBusiness;
-import org.vosao.business.impl.plugin.PluginClassLoader;
+import org.vosao.business.impl.plugin.PluginClassLoaderFactoryImpl;
 import org.vosao.business.impl.plugin.PluginLoader;
+import org.vosao.business.impl.plugin.PluginResourceCacheImpl;
+import org.vosao.business.plugin.PluginClassLoaderFactory;
+import org.vosao.business.plugin.PluginResourceCache;
 import org.vosao.common.PluginException;
 import org.vosao.entity.PluginEntity;
 import org.vosao.velocity.plugin.VelocityPlugin;
@@ -43,8 +46,9 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 
 	private Business business;
 	private PluginLoader pluginLoader;
-	private PluginClassLoader pluginClassLoader;
+	private PluginClassLoaderFactory pluginClassLoaderFactory;
 	private Map<String, VelocityPlugin> velocityPlugins;
+	private PluginResourceCache cache;
 	
 	public void init() {
 		velocityPlugins = new HashMap<String, VelocityPlugin>();
@@ -62,35 +66,41 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 		getPluginLoader().install(filename, data);
 	}
 	
-
 	@Override
-	public synchronized VelocityPlugin getVelocityPlugin(PluginEntity plugin) 
+	public VelocityPlugin getVelocityPlugin(PluginEntity plugin) 
 			throws ClassNotFoundException, InstantiationException, 
 			IllegalAccessException {
-		if (velocityPlugins.containsKey(plugin.getName())) {
-			return velocityPlugins.get(plugin.getName());
+		if (!velocityPlugins.containsKey(plugin.getName())) {
+			ClassLoader pluginClassLoader = getPluginClassLoaderFactory()
+				.getClassLoader(plugin.getName());
+			Class velocityPluginClass = pluginClassLoader
+				.loadClass(plugin.getVelocityPluginClass());
+			logger.info("Creating velocityPlugin");
+			velocityPlugins.put(plugin.getName(), 
+					(VelocityPlugin)velocityPluginClass.newInstance());
 		}
-		Class velocityPluginClass = pluginClassLoader
-				.findClass(plugin.getVelocityPluginClass());
-		return (VelocityPlugin) velocityPluginClass.newInstance();
+		return velocityPlugins.get(plugin.getName());
 	}
 
 	@Override
-	public void refreshPlugin(PluginEntity plugin) {
+	public void resetPlugin(PluginEntity plugin) {
 		velocityPlugins.remove(plugin.getName());
+		getPluginClassLoaderFactory().resetPlugin(plugin.getName());
+		cache.reset(plugin.getName());
 	}
 
-	public PluginClassLoader getPluginClassLoader() {
-		return pluginClassLoader;
+	public PluginClassLoaderFactory getPluginClassLoaderFactory() {
+		return pluginClassLoaderFactory;
 	}
 
-	public void setPluginClassLoader(PluginClassLoader pluginClassLoader) {
-		this.pluginClassLoader = pluginClassLoader;
+	public void setPluginClassLoaderFactory(PluginClassLoaderFactory bean) {
+		this.pluginClassLoaderFactory = bean;
 	}
 
 	@Override
 	public void uninstall(PluginEntity plugin) {
 		getPluginLoader().uninstall(plugin);
+		resetPlugin(plugin);
 	}
 	
 	public Business getBusiness() {
@@ -106,6 +116,14 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 			pluginLoader = new PluginLoader(getDao(), getBusiness());
 		}
 		return pluginLoader;
+	}
+
+	public PluginResourceCache getCache() {
+		return cache;
+	}
+
+	public void setCache(PluginResourceCache cache) {
+		this.cache = cache;
 	}
 
 }

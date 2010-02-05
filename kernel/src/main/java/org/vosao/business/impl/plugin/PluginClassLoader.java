@@ -24,17 +24,40 @@ package org.vosao.business.impl.plugin;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.exception.ResourceNotFoundException;
-import org.vosao.business.PluginResourceBusiness;
+import org.vosao.business.plugin.PluginResourceCache;
+import org.vosao.dao.Dao;
+import org.vosao.entity.PluginResourceEntity;
+import org.vosao.global.SystemService;
+
+import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Query;
 
 public class PluginClassLoader extends ClassLoader {
 
-	private PluginResourceBusiness pluginResourceBusiness;
-
+	private static final Log logger = LogFactory.getLog(PluginClassLoader.class);
+	
+	private SystemService systemService;
+	private Dao dao;
+	private PluginResourceCache cache;
+	private String pluginName;
+	
 	public PluginClassLoader() {
 		super(PluginClassLoader.class.getClassLoader());
 	}
 	
+	public PluginClassLoader(SystemService systemService, Dao dao,
+			PluginResourceCache cache, String pluginName) {
+		this();
+		this.systemService = systemService;
+		this.dao = dao;
+		this.cache = cache;
+		this.pluginName = pluginName;
+	}
+
 	@Override
 	public Class findClass(String name) throws ClassNotFoundException {
 		Class cls = findLoadedClass(name);
@@ -42,7 +65,7 @@ public class PluginClassLoader extends ClassLoader {
 			return cls;
 		}
 		try {
-			byte[] b = pluginResourceBusiness.findResource(name);
+			byte[] b = findPluginResource(name);
 			if (b == null) {
 				throw new ClassNotFoundException(name);
 			}
@@ -55,20 +78,76 @@ public class PluginClassLoader extends ClassLoader {
 
 	@Override
 	public InputStream getResourceAsStream(String name) {
-		byte[] b = pluginResourceBusiness.findResource(name);
+		byte[] b = findPluginResource(name);
 		if (b == null) {
 			throw new ResourceNotFoundException(name);
 		}
 		return new ByteArrayInputStream(b);
 	}
 	
-	public PluginResourceBusiness getPluginResourceBusiness() {
-		return pluginResourceBusiness;
+	private byte[] findPluginResource(String name) {
+		if (!getCache().contains(pluginName, name)) {
+			byte[] data = loadPluginResource(name);
+			if (data != null) {
+				getCache().put(pluginName, name, data);
+			}
+			else {
+				return null;
+			}
+		}
+		return getCache().get(pluginName, name);
 	}
 
-	public void setPluginResourceBusiness(
-			PluginResourceBusiness pluginResourceBusiness) {
-		this.pluginResourceBusiness = pluginResourceBusiness;
+	private byte[] loadPluginResourceNative(String name) {
+		Query query = new Query("PluginResourceEntity");
+		query.addFilter("url", Query.FilterOperator.EQUAL, name);
+		Entity e = getSystemService().getDatastore().prepare(query)
+			.asSingleEntity();
+		if (e != null) {
+			return ((Blob)e.getProperty("data")).getBytes();
+		}
+		return null;
+	}
+	
+	private byte[] loadPluginResource(String name) {
+		PluginResourceEntity resource = getDao().getPluginResourceDao()
+				.getByUrl(name);
+		if (resource != null) {
+			return resource.getContent(); 
+		}
+		return null;
+	}
+	
+	public SystemService getSystemService() {
+		return systemService;
+	}
+
+	public void setSystemService(SystemService systemService) {
+		this.systemService = systemService;
+	}
+
+	public Dao getDao() {
+		return dao;
+	}
+
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
+	
+	public String getPluginName() {
+		return pluginName;
+	}
+
+	public void setPluginName(String pluginName) {
+		this.pluginName = pluginName;
+	}
+
+	public PluginResourceCache getCache() {
+		return cache;
+	}
+
+	public void setCache(PluginResourceCache bean) {
+		cache = bean;
 	}
 	
 }

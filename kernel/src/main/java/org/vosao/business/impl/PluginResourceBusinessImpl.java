@@ -36,69 +36,11 @@ public class PluginResourceBusinessImpl extends AbstractBusinessImpl
 
 	private static final Log logger = LogFactory.getLog(PluginResourceBusinessImpl.class);
 
-	private static final String PLUGIN_RESOURCES = "pluginResources";
-	private static final int CHUNK_SIZE = 720000;
-	
 	@Override
-	public byte[] findResource(String name) {
-		PluginResourceEntity entity = getDao().getPluginResourceDao().getByUrl(
-				name);
-		if (entity != null) {
-			return entity.getContent();
-		}
-		return null;
-		/*List<String> refs = getResourcesChunksKeyList();
-		for (String ref : refs) {
-			Map<String, PluginResourceEntity> map = (Map<String, PluginResourceEntity>) 
-					getSystemService().getCache().get(ref);
-			if (map.containsKey(name)) {
-				return map.get(name).getContent();
-			}
-		}
-		return null;*/
+	public void updateResourceCache(PluginResourceEntity resource) {
+		String key = "plugin:" + resource.getUrl();
+		getSystemService().getCache().put(key, resource.getContent());
 	}
 
-	private List<String> getResourcesChunksKeyList() {
-		if (!getSystemService().getCache().containsKey(
-				PLUGIN_RESOURCES)) {
-			initResources();
-		}
-		else {
-			List<String> refs = (List<String>) getSystemService().getCache()
-					.get(PLUGIN_RESOURCES);
-			for (String ref : refs) {
-				if (!getSystemService().getCache().containsKey(ref)) {
-					initResources();
-					break;
-				}
-			}
-		}
-		return (List<String>) getSystemService().getCache()
-			.get(PLUGIN_RESOURCES);
-	}
-
-	private void initResources() {
-		List<PluginResourceEntity> list = getDao().getPluginResourceDao().select();
-		List<String> refs = new ArrayList<String>();
-		int size = 0;
-		int chunkCount = 0;
-		Map<String, PluginResourceEntity> map = 
-				new HashMap<String, PluginResourceEntity>();
-		for (PluginResourceEntity r : list) {
-			if (size < CHUNK_SIZE) {
-				map.put(r.getUrl(), r);
-				size += r.getContent().length;
-			}
-			else {
-				String key = PLUGIN_RESOURCES + chunkCount; 
-				refs.add(key);
-				getSystemService().getCache().put(key, map);
-				size = 0;
-				chunkCount++;
-				map = new HashMap<String, PluginResourceEntity>();
-			}
-		}
-		getSystemService().getCache().put(PLUGIN_RESOURCES, refs);
-	}
-
+	
 }

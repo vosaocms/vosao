@@ -61,6 +61,15 @@ public class PluginEntity implements BaseEntity {
 	@Persistent
 	private String velocityPluginClass;
 
+	@Persistent
+	private String frontServiceClass;
+
+	@Persistent
+	private String backServiceClass;
+
+	@Persistent
+	private String configURL;
+
 	public PluginEntity() {
     }
     
@@ -86,6 +95,9 @@ public class PluginEntity implements BaseEntity {
     	setTitle(entity.getTitle());
     	setWebsite(entity.getWebsite());
     	setVelocityPluginClass(entity.getVelocityPluginClass());
+    	setFrontServiceClass(entity.getFrontServiceClass());
+    	setBackServiceClass(entity.getBackServiceClass());
+    	setConfigURL(entity.getConfigURL());
     }
     
 	public String getId() {
@@ -167,6 +179,38 @@ public class PluginEntity implements BaseEntity {
 	
 	public boolean isVelocityPlugin() {
 		return !StringUtils.isEmpty(velocityPluginClass);
+	}
+
+	public boolean isFrontServicePlugin() {
+		return !StringUtils.isEmpty(frontServiceClass);
+	}
+
+	public boolean isBackServicePlugin() {
+		return !StringUtils.isEmpty(backServiceClass);
+	}
+	
+	public String getFrontServiceClass() {
+		return frontServiceClass;
+	}
+
+	public void setFrontServiceClass(String frontServiceClass) {
+		this.frontServiceClass = frontServiceClass;
+	}
+
+	public String getBackServiceClass() {
+		return backServiceClass;
+	}
+
+	public void setBackServiceClass(String backServiceClass) {
+		this.backServiceClass = backServiceClass;
+	}
+
+	public String getConfigURL() {
+		return configURL;
+	}
+
+	public void setConfigURL(String configURL) {
+		this.configURL = configURL;
 	}
 	
 }

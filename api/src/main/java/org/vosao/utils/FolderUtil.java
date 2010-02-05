@@ -93,6 +93,9 @@ public class FolderUtil {
 	
 	public static String getFilePath(final String path) {
 		int s = path.lastIndexOf("/");
+		if (s == -1) {
+			return "";
+		}
 		return path.substring(0, s);
 	}
 	

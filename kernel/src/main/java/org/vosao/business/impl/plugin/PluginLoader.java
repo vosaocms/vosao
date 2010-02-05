@@ -196,6 +196,18 @@ public class PluginLoader {
 			result.setVelocityPluginClass(StringUtils.strip(
 					root.elementText("velocity-plugin-class")));
 		}
+		if (root.element("plugin-config-url") != null) {
+			result.setConfigURL(StringUtils.strip(
+					root.elementText("plugin-config-url")));
+		}
+		if (root.element("back-service-manager-class") != null) {
+			result.setBackServiceClass(StringUtils.strip(
+					root.elementText("back-service-manager-class")));
+		}
+		if (root.element("front-service-manager-class") != null) {
+			result.setFrontServiceClass(StringUtils.strip(
+					root.elementText("front-service-manager-class")));
+		}
 		result.setConfigStructure(root.element("config").asXML());
 		return result; 
 	}

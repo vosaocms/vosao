@@ -26,6 +26,7 @@ import java.io.Serializable;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jabsorb.JSONRPCBridge;
+import org.vosao.business.Business;
 import org.vosao.service.BackService;
 import org.vosao.service.back.CommentService;
 import org.vosao.service.back.ConfigService;
@@ -50,6 +51,8 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	private static final Log log = LogFactory.getLog(BackServiceImpl.class);
 
+	private Business business;
+	
 	private FileService fileService;
 	private FolderService folderService;
 	private CommentService commentService;
@@ -68,9 +71,6 @@ public class BackServiceImpl implements BackService, Serializable {
 	private StructureService structureService;
 	private StructureTemplateService structureTemplateService;
 	private PluginService pluginService;
-	
-	public void init() {
-	}
 	
 	@Override
 	public void register(JSONRPCBridge bridge) {
@@ -92,6 +92,7 @@ public class BackServiceImpl implements BackService, Serializable {
 		bridge.registerObject("structureService", structureService);
 		bridge.registerObject("structureTemplateService", structureTemplateService);
 		bridge.registerObject("pluginService", pluginService);
+		getBusiness().getPluginBusiness().registerBackServices(bridge);
 	}
 	
 	@Override
@@ -114,6 +115,7 @@ public class BackServiceImpl implements BackService, Serializable {
 		bridge.unregisterObject("structureService");
 		bridge.unregisterObject("structureTemplateService");
 		bridge.unregisterObject("pluginService");
+		getBusiness().getPluginBusiness().unregisterBackServices(bridge);
 	}
 
 	@Override
@@ -295,5 +297,13 @@ public class BackServiceImpl implements BackService, Serializable {
 	@Override
 	public void setPluginService(PluginService bean) {
 		this.pluginService = bean;
+	}
+
+	public Business getBusiness() {
+		return business;
+	}
+
+	public void setBusiness(Business business) {
+		this.business = business;
 	}
 }

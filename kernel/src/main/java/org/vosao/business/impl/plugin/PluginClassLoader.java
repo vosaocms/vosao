@@ -51,7 +51,7 @@ public class PluginClassLoader extends ClassLoader {
 	
 	public PluginClassLoader(SystemService systemService, Dao dao,
 			PluginResourceCache cache, String pluginName) {
-		this();
+		super(PluginClassLoader.class.getClassLoader());
 		this.systemService = systemService;
 		this.dao = dao;
 		this.cache = cache;

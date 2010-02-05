@@ -82,8 +82,8 @@ public class FileDownloadServlet extends BaseSpringServlet {
 		if (isInCache(request.getPathInfo())) {
 			log.info("from cache " + request.getPathInfo());
 			if (CurrentUser.getInstance() == null) {
-				getBusiness().getSystemService().getCache()
-					.put("public:" + request.getPathInfo(), true);
+				getBusiness().getSystemService().getFileCache()
+					.makePublic(request.getPathInfo());
 			}
 			sendFromCache(request, response);
 			return;
@@ -93,13 +93,11 @@ public class FileDownloadServlet extends BaseSpringServlet {
 		if (file != null) {
 			byte[] content = getDao().getFileDao().getFileContent(file);
 			if (file.getSize() < CACHE_LIMIT) {
-				getBusiness().getSystemService().getCache()
-					.put(request.getPathInfo(), file);
-				getBusiness().getSystemService().getCache()
-					.put("data:" + request.getPathInfo(), content);
+				getBusiness().getSystemService().getFileCache()
+					.put(request.getPathInfo(), file, content);
 				if (CurrentUser.getInstance() == null) {
-					getBusiness().getSystemService().getCache()
-						.put("public:" + request.getPathInfo(), true);
+					getBusiness().getSystemService().getFileCache()
+						.makePublic(request.getPathInfo());
 				}
 			}
 			sendFile(file, content, request, response);
@@ -111,23 +109,20 @@ public class FileDownloadServlet extends BaseSpringServlet {
 	}
 	
 	private boolean isInCache(final String path) {
-		return getBusiness().getSystemService().getCache().containsKey(path)
-			&& getBusiness().getSystemService().getCache().containsKey(
-					"data:" + path);
+		return getBusiness().getSystemService().getFileCache().isInCache(path);
 	}
 	
 	private boolean isInPublicCache(final String path) {
-		return isInCache(path)
-			&& getBusiness().getSystemService().getCache().containsKey(
-						"public:" + path);
+		return getBusiness().getSystemService().getFileCache().isInPublicCache(
+				path);
 	}
 
 	private void sendFromCache(HttpServletRequest request, 
 			HttpServletResponse response) throws IOException {
-		FileEntity file = (FileEntity) getBusiness().getSystemService()
-				.getCache().get(request.getPathInfo());
-		byte[] content = (byte[]) getBusiness().getSystemService()
-				.getCache().get("data:" + request.getPathInfo());
+		FileEntity file = getBusiness().getSystemService().getFileCache()
+				.getFile(request.getPathInfo());
+		byte[] content = getBusiness().getSystemService().getFileCache()
+				.getContent(request.getPathInfo());
 		sendFile(file, content, request, response);
 	}
 	

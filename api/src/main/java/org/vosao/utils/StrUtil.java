@@ -19,29 +19,30 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service.back;
+package org.vosao.utils;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
-import org.vosao.business.vo.PluginPropertyVO;
-import org.vosao.entity.PluginEntity;
-import org.vosao.service.AbstractService;
-import org.vosao.service.ServiceResponse;
 
-/**
- * @author Alexander Oleynik
- */
-public interface PluginService extends AbstractService {
+public class StrUtil {
 	
-	List<PluginEntity> select();
+	private static String _toCSV(Collection<String> list) {
+		StringBuffer result = new StringBuffer();
+		int count = 0;
+		for (String item : list) {
+			result.append((count == 0 ? "" : ",")).append(item);
+			count++;
+		}
+		return result.toString();
+	}
 
-	ServiceResponse remove(String id);
+	public static String toCSV(Set<String> list) {
+		return _toCSV(list);
+	}
 	
-	List<PluginPropertyVO> getProperties(String pluginId);
-	
-	PluginEntity getById(String pluginId);
-	
-	ServiceResponse savePluginConfig(String pluginId, String xml);
-
-	PluginEntity getByName(String pluginName);
+	public static String toCSV(List<String> list) {
+		return _toCSV(list);
+	}
 }

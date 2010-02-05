@@ -353,6 +353,7 @@
     </bean>    
 
     <bean id="backService" class="org.vosao.service.impl.BackServiceImpl">
+        <property name="dao" ref="dao"/>  
         <property name="business" ref="business"/>  
       
         <property name="fileService" ref="fileService"/>  
@@ -387,6 +388,7 @@
         parent="abstractService" />  
 
     <bean id="frontService" class="org.vosao.service.impl.FrontServiceImpl">  
+        <property name="dao" ref="dao"/>  
         <property name="business" ref="business"/>  
       
         <property name="loginService" ref="loginFrontService"/>  

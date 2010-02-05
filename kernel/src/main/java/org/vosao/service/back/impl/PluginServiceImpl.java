@@ -85,6 +85,11 @@ public class PluginServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
+	public PluginEntity getByName(String pluginName) {
+		return getDao().getPluginDao().getByName(pluginName);
+	}
+
+	@Override
 	public ServiceResponse savePluginConfig(String pluginId, String xml) {
 		PluginEntity plugin = getById(pluginId);
 		if (plugin != null) {

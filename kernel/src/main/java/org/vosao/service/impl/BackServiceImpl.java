@@ -27,6 +27,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jabsorb.JSONRPCBridge;
 import org.vosao.business.Business;
+import org.vosao.dao.Dao;
+import org.vosao.entity.PluginEntity;
 import org.vosao.service.BackService;
 import org.vosao.service.back.CommentService;
 import org.vosao.service.back.ConfigService;
@@ -46,11 +48,13 @@ import org.vosao.service.back.StructureService;
 import org.vosao.service.back.StructureTemplateService;
 import org.vosao.service.back.TemplateService;
 import org.vosao.service.back.UserService;
+import org.vosao.service.plugin.PluginServiceManager;
 
 public class BackServiceImpl implements BackService, Serializable {
 
 	private static final Log log = LogFactory.getLog(BackServiceImpl.class);
 
+	private Dao dao;
 	private Business business;
 	
 	private FileService fileService;
@@ -92,7 +96,7 @@ public class BackServiceImpl implements BackService, Serializable {
 		bridge.registerObject("structureService", structureService);
 		bridge.registerObject("structureTemplateService", structureTemplateService);
 		bridge.registerObject("pluginService", pluginService);
-		getBusiness().getPluginBusiness().registerBackServices(bridge);
+		registerPluginServices(bridge);
 	}
 	
 	@Override
@@ -115,7 +119,7 @@ public class BackServiceImpl implements BackService, Serializable {
 		bridge.unregisterObject("structureService");
 		bridge.unregisterObject("structureTemplateService");
 		bridge.unregisterObject("pluginService");
-		getBusiness().getPluginBusiness().unregisterBackServices(bridge);
+		unregisterPluginServices(bridge);
 	}
 
 	@Override
@@ -306,4 +310,52 @@ public class BackServiceImpl implements BackService, Serializable {
 	public void setBusiness(Business business) {
 		this.business = business;
 	}
+	
+	private void registerPluginServices(JSONRPCBridge bridge) {
+		for (PluginEntity plugin : getDao().getPluginDao().select()) {
+			try {
+				if (plugin.isBackServicePlugin()) {
+					PluginServiceManager manager = getBusiness()
+						.getPluginBusiness().getBackServices(plugin);
+					manager.setBackService(this);
+					manager.register(bridge);
+				}				
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private void unregisterPluginServices(JSONRPCBridge bridge) {
+		for (PluginEntity plugin : getDao().getPluginDao().select()) {
+			try {
+				if (plugin.isBackServicePlugin()) {
+					PluginServiceManager manager = getBusiness()
+						.getPluginBusiness().getBackServices(plugin);
+					manager.setBackService(this);
+					manager.unregister(bridge);
+				}				
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public Dao getDao() {
+		return dao;
+	}
+
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
+	
+	
 }

@@ -22,12 +22,18 @@
 package org.vosao.business.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dom4j.Document;
 import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.vosao.business.Business;
 import org.vosao.business.PluginBusiness;
 import org.vosao.business.impl.plugin.PluginClassLoaderFactoryImpl;
@@ -35,6 +41,7 @@ import org.vosao.business.impl.plugin.PluginLoader;
 import org.vosao.business.impl.plugin.PluginResourceCacheImpl;
 import org.vosao.business.plugin.PluginClassLoaderFactory;
 import org.vosao.business.plugin.PluginResourceCache;
+import org.vosao.business.vo.PluginPropertyVO;
 import org.vosao.common.PluginException;
 import org.vosao.entity.PluginEntity;
 import org.vosao.velocity.plugin.VelocityPlugin;
@@ -124,6 +131,53 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 
 	public void setCache(PluginResourceCache cache) {
 		this.cache = cache;
+	}
+
+	@Override
+	public List<PluginPropertyVO> getProperties(PluginEntity plugin) {
+		List<PluginPropertyVO> result = new ArrayList<PluginPropertyVO>();
+		try {
+			Document doc = DocumentHelper.parseText(plugin.getConfigStructure());
+			for (Element e : (List<Element>)doc.getRootElement().elements()) {
+				if (e.getName().equals("param")) {
+					PluginPropertyVO p = new PluginPropertyVO();
+					if (e.attributeValue("name") == null) {
+						logger.error("There must be name attribute for param tag.");
+						continue;
+					}
+					if (e.attributeValue("type") == null) {
+						logger.error("There must be type attribute for param tag.");
+						continue;
+					}
+					p.setName(e.attributeValue("name"));
+					p.setType(e.attributeValue("type"));
+					p.setDefaultValue(e.attributeValue("value"));
+					if (e.attributeValue("title") == null) {
+						p.setTitle(p.getName());
+					}
+					else {
+						p.setTitle(e.attributeValue("title"));
+					}
+					result.add(p);
+				}
+			}
+			return result;
+		}
+		catch (DocumentException e) {
+			logger.error(e.getMessage());
+			return Collections.EMPTY_LIST;
+		}
+	}
+
+	@Override
+	public Map<String, PluginPropertyVO> getPropertiesMap(PluginEntity plugin) {
+		Map<String, PluginPropertyVO> map = 
+				new HashMap<String, PluginPropertyVO>();
+		List<PluginPropertyVO> list = getProperties(plugin);
+		for (PluginPropertyVO p : list) {
+			map.put(p.getName(), p);
+		}
+		return map;
 	}
 
 }

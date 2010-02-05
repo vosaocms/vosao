@@ -15,13 +15,13 @@
     </config>
 
     <velocity-plugin-class>
-        org.vosao.plugins.supefish.SuperfishVelocityPlugin
+        org.vosao.plugins.superfish.SuperfishVelocityPlugin
     </velocity-plugin-class>
 
     <plugin-config-url>config.html</plugin-config-url>
 
     <back-service-manager-class>
-        org.vosao.plugins.supefish.SuperfishBackServiceManager
+        org.vosao.plugins.superfish.SuperfishBackServiceManager
     </back-service-manager-class>
     
 </vosao-plugin>

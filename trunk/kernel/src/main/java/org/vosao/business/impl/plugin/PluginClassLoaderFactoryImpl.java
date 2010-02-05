@@ -42,6 +42,7 @@ public class PluginClassLoaderFactoryImpl implements PluginClassLoaderFactory {
 	
 	public ClassLoader getClassLoader(String pluginName) {
 		if (!getClassLoaders().containsKey(pluginName)) {
+			logger.info("creating class loader " + pluginName);
 			PluginClassLoader classLoader = new PluginClassLoader(
 					getSystemService(), getDao(), getCache(), pluginName);
 			getClassLoaders().put(pluginName, classLoader);			

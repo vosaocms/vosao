@@ -352,8 +352,9 @@
         <property name="groupService" ref="groupService"/>  
     </bean>    
 
-    <bean id="backService" class="org.vosao.service.impl.BackServiceImpl"
-        init-method="init">  
+    <bean id="backService" class="org.vosao.service.impl.BackServiceImpl">
+        <property name="business" ref="business"/>  
+      
         <property name="fileService" ref="fileService"/>  
         <property name="folderService" ref="folderService"/>  
         <property name="commentService" ref="commentService"/>  
@@ -385,8 +386,9 @@
     <bean id="commentFrontService" class="org.vosao.service.front.impl.CommentServiceImpl"
         parent="abstractService" />  
 
-    <bean id="frontService" class="org.vosao.service.impl.FrontServiceImpl"
-        init-method="init">  
+    <bean id="frontService" class="org.vosao.service.impl.FrontServiceImpl">  
+        <property name="business" ref="business"/>  
+      
         <property name="loginService" ref="loginFrontService"/>  
         <property name="formService" ref="formFrontService"/>  
         <property name="commentService" ref="commentFrontService"/>  

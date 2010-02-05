@@ -26,6 +26,7 @@ import java.io.Serializable;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jabsorb.JSONRPCBridge;
+import org.vosao.business.Business;
 import org.vosao.service.FrontService;
 import org.vosao.service.front.CommentService;
 import org.vosao.service.front.FormService;
@@ -35,18 +36,18 @@ public class FrontServiceImpl implements FrontService, Serializable {
 
 	private static final Log log = LogFactory.getLog(FrontServiceImpl.class);
 
+	private Business business;
+	
 	private LoginService loginService;
 	private FormService formService;
 	private CommentService commentService;
 	
-	public void init() {
-	}
-
 	@Override
 	public void register(JSONRPCBridge bridge) {
 		bridge.registerObject("loginFrontService", loginService);
 		bridge.registerObject("formFrontService", formService);
 		bridge.registerObject("commentFrontService", commentService);
+		getBusiness().getPluginBusiness().registerFrontServices(bridge);
 	}
 	
 	@Override
@@ -54,6 +55,7 @@ public class FrontServiceImpl implements FrontService, Serializable {
 		bridge.unregisterObject("loginFrontService");
 		bridge.unregisterObject("formFrontService");
 		bridge.unregisterObject("commentFrontService");
+		getBusiness().getPluginBusiness().unregisterFrontServices(bridge);
 	}
 
 	@Override
@@ -84,6 +86,14 @@ public class FrontServiceImpl implements FrontService, Serializable {
 	@Override
 	public void setCommentService(CommentService bean) {
 		commentService = bean;
+	}
+
+	public Business getBusiness() {
+		return business;
+	}
+
+	public void setBusiness(Business business) {
+		this.business = business;
 	}
 	
 }

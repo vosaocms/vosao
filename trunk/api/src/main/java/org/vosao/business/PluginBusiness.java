@@ -26,9 +26,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.dom4j.DocumentException;
+import org.jabsorb.JSONRPCBridge;
 import org.vosao.business.vo.PluginPropertyVO;
 import org.vosao.common.PluginException;
 import org.vosao.entity.PluginEntity;
+import org.vosao.service.plugin.PluginServiceManager;
 import org.vosao.velocity.plugin.VelocityPlugin;
 
 /**
@@ -47,16 +49,52 @@ public interface PluginBusiness {
 	void install(String filename, byte[] data) 
 			throws IOException, PluginException, DocumentException;
 	
+	/**
+	 * Remove plugin from system.
+	 * @param plugin - plugin for remove.
+	 */
 	void uninstall(PluginEntity plugin);
 	
+	/**
+	 * Get plugin Velocity service for page rendering.
+	 * @param plugin - plugin.
+	 * @return - Velocity service.
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
 	VelocityPlugin getVelocityPlugin(PluginEntity plugin) 
 			throws ClassNotFoundException, InstantiationException, 
 			IllegalAccessException;
 	
+	/**
+	 * Reload all plugins resources and cache reset.
+	 * @param plugin - plugin for reset.
+	 */
 	void resetPlugin(PluginEntity plugin);
 	
+	/**
+	 * Get plugin config XML structure. Config values are stored as XML in 
+	 * plugin.getConfigData()
+	 * @param plugin - plugin for structure.
+	 * @return - list of config structure properties.
+	 */
 	List<PluginPropertyVO> getProperties(PluginEntity plugin);
 
+	/**
+	 * Get plugin config XML structure. Config values are stored as XML in 
+	 * plugin.getConfigData()
+	 * @param plugin - plugin for structure.
+	 * @return - map of config structure properties. Property name as key.
+	 */
 	Map<String, PluginPropertyVO> getPropertiesMap(PluginEntity plugin);
+	
+	void registerBackServices(JSONRPCBridge bridge);
+
+	void unregisterBackServices(JSONRPCBridge bridge);
+
+	void registerFrontServices(JSONRPCBridge bridge);
+
+	void unregisterFrontServices(JSONRPCBridge bridge);
 	
 }

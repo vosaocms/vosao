@@ -46,8 +46,12 @@ function showPlugins() {
     var html = '<table class="form-table"><th>Title</th>\
        <th>Name</th><th>Description</th><th>Website</th><th></th></tr>';
     $.each(plugins, function(i, plugin) {
-        html += '<tr><td><a href="/cms/plugins/plugin.jsp?id=' + plugin.id 
-            + '">' + plugin.title + '</a></td><td>' + plugin.name 
+        var configURL = '/cms/plugins/plugin.jsp?id=' + plugin.id;
+    	if (plugin.configURL) {
+        	configURL = '/file/plugins/' + plugin.name + '/' + plugin.configURL;
+        }
+    	html += '<tr><td><a href="' + configURL + '">' 
+    		+ plugin.title + '</a></td><td>' + plugin.name 
             + '</td><td>' + plugin.description + '</td>'
             + '<td>' + plugin.website + '</td>'
             + '<td><a href="#" onclick="onRemove(' + i + ')">\

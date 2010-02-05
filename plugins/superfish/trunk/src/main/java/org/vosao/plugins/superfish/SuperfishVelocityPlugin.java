@@ -19,7 +19,7 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.plugins.sitemap;
+package org.vosao.plugins.superfish;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,10 +40,10 @@ import org.vosao.utils.ParamUtil;
 import org.vosao.utils.StreamUtil;
 import org.vosao.velocity.plugin.AbstractVelocityPlugin;
 
-public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
+public class SuperfishVelocityPlugin extends AbstractVelocityPlugin {
 
 	private static final Log logger = LogFactory.getLog(
-			SitemapVelocityPlugin.class);
+			SuperfishVelocityPlugin.class);
 
 	public String render() {
 		try {
@@ -51,8 +51,8 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 			TreeItemDecorator<PageEntity> root = getBusiness().getPageBusiness()
 				.getTree();
 			String template = StreamUtil.getTextResource(
-				SitemapVelocityPlugin.class.getClassLoader(), 
-				"org/vosao/plugins/sitemap/sitemap.vm");
+				SuperfishVelocityPlugin.class.getClassLoader(), 
+				"org/vosao/plugins/superfish/sitemap.vm");
 			VelocityContext context = new VelocityContext();
 			context.put("root", root);
 			context.put("config", getConfig(plugin));

@@ -1,0 +1,37 @@
+<html> 
+<head> 
+    <link rel="stylesheet" href="/static/css/jquery-ui/redmond/jquery-ui.css" type="text/css" />
+
+    <script src="/static/js/jquery.js" language="javascript"></script>
+    <script src="/static/js/jquery.cookie.js" language="javascript"></script>
+    <script src="/static/js/jquery-ui.js" language="javascript"></script>
+    <script src="/static/js/jsonrpc.js" language="javascript"></script>
+    <script src="/static/js/vosao.js" language="javascript"></script>
+    <script src="/static/js/cms.js" language="javascript"></script>
+    <script src="/static/js/back-services.js" language="javascript"></script>
+ 
+    <title>Superfish Vosao plugin config</title>
+   
+<script language="javascript">
+
+function onTest() {
+	Vosao.jsonrpc.superfishBackService.test(function(r) {
+		alert(r);
+		$('#msg').html(r);
+	}, $('#letter').val());
+}
+
+</script>
+   
+</head>  
+<body> 
+
+  <h2>Superfish Vosao plugin config</h2>
+
+  <div id="msg"> </div>
+  <input id="letter" type="text" />
+  <input type="button" onclick="onTest()" />
+ 
+</body> 
+ 
+</html> 

@@ -22,8 +22,11 @@
 package org.vosao.business;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import org.dom4j.DocumentException;
+import org.vosao.business.vo.PluginPropertyVO;
 import org.vosao.common.PluginException;
 import org.vosao.entity.PluginEntity;
 import org.vosao.velocity.plugin.VelocityPlugin;
@@ -51,5 +54,9 @@ public interface PluginBusiness {
 			IllegalAccessException;
 	
 	void resetPlugin(PluginEntity plugin);
+	
+	List<PluginPropertyVO> getProperties(PluginEntity plugin);
+
+	Map<String, PluginPropertyVO> getPropertiesMap(PluginEntity plugin);
 	
 }

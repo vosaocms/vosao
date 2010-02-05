@@ -19,28 +19,22 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service.back;
-
-import java.util.List;
-import java.util.Map;
-
-import org.vosao.business.vo.PluginPropertyVO;
-import org.vosao.entity.PluginEntity;
-import org.vosao.service.AbstractService;
-import org.vosao.service.ServiceResponse;
+package org.vosao.utils;
 
 /**
  * @author Alexander Oleynik
  */
-public interface PluginService extends AbstractService {
-	
-	List<PluginEntity> select();
+public class ParamUtil {
 
-	ServiceResponse remove(String id);
+	static public Integer getInteger(final String s, 
+			final Integer defaultValue) {
+		try {
+			return Integer.valueOf(s);
+		}
+		catch (NumberFormatException e) {
+			return defaultValue;
+		}
+	}
 	
-	List<PluginPropertyVO> getProperties(String pluginId);
 	
-	PluginEntity getById(String pluginId);
-	
-	ServiceResponse savePluginConfig(String pluginId, String xml);
 }

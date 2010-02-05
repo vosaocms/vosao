@@ -32,11 +32,11 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.vosao.business.vo.PluginPropertyVO;
 import org.vosao.entity.PluginEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.PluginService;
 import org.vosao.service.impl.AbstractServiceImpl;
-import org.vosao.service.vo.PluginPropertyVO;
 
 /**
  * @author Alexander Oleynik
@@ -76,38 +76,7 @@ public class PluginServiceImpl extends AbstractServiceImpl
 		if (plugin == null) {
 			return Collections.EMPTY_LIST;
 		}
-		List<PluginPropertyVO> result = new ArrayList<PluginPropertyVO>();
-		try {
-			Document doc = DocumentHelper.parseText(plugin.getConfigStructure());
-			for (Element e : (List<Element>)doc.getRootElement().elements()) {
-				if (e.getName().equals("param")) {
-					PluginPropertyVO p = new PluginPropertyVO();
-					if (e.attributeValue("name") == null) {
-						logger.error("There must be name attribute for param tag.");
-						continue;
-					}
-					if (e.attributeValue("type") == null) {
-						logger.error("There must be type attribute for param tag.");
-						continue;
-					}
-					p.setName(e.attributeValue("name"));
-					p.setType(e.attributeValue("type"));
-					p.setDefaultValue(e.attributeValue("value"));
-					if (e.attributeValue("title") == null) {
-						p.setTitle(p.getName());
-					}
-					else {
-						p.setTitle(e.attributeValue("title"));
-					}
-					result.add(p);
-				}
-			}
-			return result;
-		}
-		catch (DocumentException e) {
-			logger.error(e.getMessage());
-			return Collections.EMPTY_LIST;
-		}
+		return getBusiness().getPluginBusiness().getProperties(plugin);	
 	}
 
 	@Override

@@ -19,7 +19,7 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service.vo;
+package org.vosao.business.vo;
 
 public class PluginPropertyVO {
 

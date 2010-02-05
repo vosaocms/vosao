@@ -21,12 +21,13 @@
 
 package org.vosao.business;
 
+import org.vosao.entity.PluginResourceEntity;
+
 
 /**
  * @author Alexander Oleynik
  */
 public interface PluginResourceBusiness {
 
-	byte[] findResource(String name);
-	
+	void updateResourceCache(PluginResourceEntity resource);
 }

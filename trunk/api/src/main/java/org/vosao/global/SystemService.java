@@ -29,6 +29,7 @@ import javax.xml.transform.Transformer;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 
+import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.labs.taskqueue.Queue;
 
 
@@ -52,4 +53,5 @@ public interface SystemService {
 	
 	Transformer getTransformer(String template);
 	
+	DatastoreService getDatastore();
 }

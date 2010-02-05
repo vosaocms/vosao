@@ -50,6 +50,6 @@ public interface PluginBusiness {
 			throws ClassNotFoundException, InstantiationException, 
 			IllegalAccessException;
 	
-	void refreshPlugin(PluginEntity plugin);
+	void resetPlugin(PluginEntity plugin);
 	
 }

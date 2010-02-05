@@ -50,6 +50,8 @@ import org.vosao.dao.cache.QueryCache;
 import org.vosao.global.CacheService;
 import org.vosao.global.SystemService;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.labs.taskqueue.Queue;
 import com.google.appengine.api.labs.taskqueue.QueueFactory;
 
@@ -61,17 +63,19 @@ public class SystemServiceImpl implements SystemService, Serializable {
 	private VelocityEngine velocityEngine;
 	private TransformerFactory xsltFactory;
 	private Map<String, Transformer> transformers;
+	DatastoreService datastore;
 	
 	public void init() {
 		cache = new CacheServiceImpl();
-        velocityEngine = new VelocityEngine();
         try {
+            velocityEngine = new VelocityEngine("WEB-INF/velocity.properties");
 			velocityEngine.init();
 		} catch (Exception e) {
             log.error("Can't init velocity engine. " + e.getMessage());
 		}
 		xsltFactory = TransformerFactory.newInstance();
 		transformers = new HashMap<String, Transformer>();
+		datastore = DatastoreServiceFactory.getDatastoreService();
 	}
 	
 
@@ -131,6 +135,11 @@ public class SystemServiceImpl implements SystemService, Serializable {
 	@Override
 	public Queue getQueue(String name) {
 		return QueueFactory.getQueue(name);
+	}
+
+	@Override
+	public DatastoreService getDatastore() {
+		return datastore;
 	}
 
 }

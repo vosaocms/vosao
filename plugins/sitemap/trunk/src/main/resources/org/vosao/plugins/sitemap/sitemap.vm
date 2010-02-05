@@ -1,22 +1,18 @@
-#macro( renderSitemap $treeItem )
-  <li>$treeItem.entity.title
-  #if ($treeItem.hasChildren)
+#macro( renderSitemap $treeItem $level)
+  <li>
+    <a href="$treeItem.entity.friendlyURL">$treeItem.entity.title</a>
+  #if ($treeItem.hasChildren && $level < $config.level)
     <ul>
-      #foreach($child in $treeItem.children) 
-        #renderSitemap($child)
+      #foreach($child in $treeItem.children)
+        #set($newlevel = $level + 1) 
+        #renderSitemap($child $newlevel)
       #end
     </ul> 
   #end
    </li>
 #end
 
+#set($current=1)
 <ul id="sitemap">
-    #renderSitemap($root)
+    #renderSitemap($root $current)
 </ul>
-
-<hr/>
-$config.title <br/>
-$config.level <br/>
-$config.published <br/>
-$config.hint <br/>
-$config.showHint <br/>

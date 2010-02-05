@@ -1,7 +1,26 @@
+/**
+ * Vosao CMS. Simple CMS for Google App Engine.
+ * Copyright (C) 2009 Vosao development team
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * email: vosao.dev@gmail.com
+ */
+
 package org.vosao.plugins.sitemap;
 
-import java.text.ParseException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,9 +33,10 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.business.vo.PluginPropertyVO;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PluginEntity;
-import org.vosao.utils.DateUtil;
+import org.vosao.utils.ParamUtil;
 import org.vosao.utils.StreamUtil;
 import org.vosao.velocity.plugin.AbstractVelocityPlugin;
 
@@ -47,31 +67,23 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 	private Map<String, Object> getConfig(PluginEntity plugin) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		if (StringUtils.isEmpty(plugin.getConfigData())) {
+			Map<String, PluginPropertyVO> map = getBusiness().getPluginBusiness()
+					.getPropertiesMap(plugin);
+			PluginPropertyVO level = map.get("level");
+			if (level != null) {
+				result.put("level", ParamUtil.getInteger(
+						level.getDefaultValue(), 2));
+			}
 			return result;
 		}
 		try {
 			Document doc = DocumentHelper.parseText(plugin.getConfigData());
 			Element root = doc.getRootElement();
-			result.put("title", root.elementText("title"));
-			result.put("level", Integer.valueOf(root.elementText("level")));
-			result.put("hint", root.elementText("hint"));
-			result.put("showHint", Boolean.valueOf(root.elementText("showHint")));
-			if (StringUtils.isEmpty(root.elementText("published"))) {
-				result.put("published", new Date());
-			}
-			else {
-				result.put("published", DateUtil.toDate(root.elementText(
-						"published")));
-			}
+			result.put("level", ParamUtil.getInteger(root.elementText("level"), 
+					2));
 		}
 		catch (DocumentException e) {
-			logger.error("Sitemap plugin config " + e.getMessage());
-		}
-		catch (NumberFormatException e) {
-			logger.error("Sitemap plugin config " + e.getMessage());
-		}
-		catch (ParseException e) {
-			logger.error("Sitemap plugin config " + e.getMessage());
+			logger.error("Sitemap plugin config DocumentException" + e.getMessage());
 		}
 		return result;
 	}

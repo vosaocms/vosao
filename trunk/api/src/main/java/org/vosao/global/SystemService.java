@@ -21,9 +21,6 @@
 
 package org.vosao.global;
 
-import java.util.Map;
-
-import javax.cache.Cache;
 import javax.xml.transform.Transformer;
 
 import org.apache.velocity.VelocityContext;
@@ -36,6 +33,8 @@ import com.google.appengine.api.labs.taskqueue.Queue;
 public interface SystemService {
 	
 	CacheService getCache();
+	
+	FileCache getFileCache();
 	
 	Queue getDefaultQueue();
 

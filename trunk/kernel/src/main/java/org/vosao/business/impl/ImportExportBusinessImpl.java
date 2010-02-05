@@ -134,7 +134,8 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 	
 	private void clearResourcesCache(List<String> files) {
 		for (String file : files) {
-			getBusiness().getSystemService().getCache().remove(file);
+			getBusiness().getSystemService().getFileCache()
+					.remove(file);
 			logger.debug("Clear cache " + file);
 		}
 	}

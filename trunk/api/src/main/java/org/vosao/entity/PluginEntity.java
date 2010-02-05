@@ -30,6 +30,8 @@ import javax.jdo.annotations.PrimaryKey;
 
 import org.datanucleus.util.StringUtils;
 
+import com.google.appengine.api.datastore.Text;
+
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class PluginEntity implements BaseEntity {
 	
@@ -52,11 +54,11 @@ public class PluginEntity implements BaseEntity {
 	@Persistent
 	private String website;
 
-	@Persistent
-	private String configStructure;
+	@Persistent(defaultFetchGroup = "true")
+	private Text configStructure;
 
-	@Persistent
-	private String configData;
+	@Persistent(defaultFetchGroup = "true")
+	private Text configData;
 
 	@Persistent
 	private String velocityPluginClass;
@@ -78,8 +80,8 @@ public class PluginEntity implements BaseEntity {
 		this();
 		this.name = name;
 		this.title = title;
-		this.configStructure = configStructure;
-		this.configData = configData;
+		setConfigStructure(configStructure);
+		setConfigData(configData);
 	}
 
     @Override
@@ -138,19 +140,19 @@ public class PluginEntity implements BaseEntity {
 	}
 
 	public String getConfigStructure() {
-		return configStructure;
+		return configStructure == null ? null : configStructure.getValue();
 	}
 
 	public void setConfigStructure(String configStructure) {
-		this.configStructure = configStructure;
+		this.configStructure = new Text(configStructure);
 	}
 
 	public String getConfigData() {
-		return configData;
+		return configData == null ? null : configData.getValue();
 	}
 
 	public void setConfigData(String configData) {
-		this.configData = configData;
+		this.configData = new Text(configData);
 	}
 
 	public String getDescription() {

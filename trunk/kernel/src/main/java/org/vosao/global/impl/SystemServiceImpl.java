@@ -26,13 +26,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.cache.Cache;
-import javax.cache.CacheException;
-import javax.cache.CacheManager;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
@@ -45,9 +41,8 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
-import org.vosao.dao.cache.EntityCache;
-import org.vosao.dao.cache.QueryCache;
 import org.vosao.global.CacheService;
+import org.vosao.global.FileCache;
 import org.vosao.global.SystemService;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -63,7 +58,8 @@ public class SystemServiceImpl implements SystemService, Serializable {
 	private VelocityEngine velocityEngine;
 	private TransformerFactory xsltFactory;
 	private Map<String, Transformer> transformers;
-	DatastoreService datastore;
+	private DatastoreService datastore;
+	private FileCache fileCache;	
 	
 	public void init() {
 		cache = new CacheServiceImpl();
@@ -140,6 +136,14 @@ public class SystemServiceImpl implements SystemService, Serializable {
 	@Override
 	public DatastoreService getDatastore() {
 		return datastore;
+	}
+
+	@Override
+	public FileCache getFileCache() {
+		if (fileCache == null) {
+			fileCache = new FileCacheImpl(getCache());			
+		}
+		return fileCache;
 	}
 
 }

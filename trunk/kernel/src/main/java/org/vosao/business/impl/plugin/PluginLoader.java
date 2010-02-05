@@ -48,13 +48,15 @@ import org.vosao.entity.PluginEntity;
 import org.vosao.entity.PluginResourceEntity;
 import org.vosao.servlet.MimeType;
 import org.vosao.utils.FolderUtil;
+import org.vosao.utils.StrUtil;
 
 public class PluginLoader {
 
 	private static final Log logger = LogFactory.getLog(PluginLoader.class);
 
 	private static final String VOSAO_PLUGIN = "WEB-INF/vosao-plugin.xml";
-	private static final String RESOURCE_LIST = "resourceList";
+	private static final String RESOURCE_LIST = ".resourceList";
+	private static final String FILE_LIST = ".fileList";
 	
 	private Dao dao;
 	private Business business;
@@ -99,6 +101,8 @@ public class PluginLoader {
 		String pluginBase = "/plugins/" + plugin.getName();
 		getBusiness().getFolderBusiness().createFolder(pluginBase);
 		List<String> resourceList = new ArrayList<String>();
+		List<String> fileCacheList = new ArrayList<String>();
+		String filePrefix = pluginBase + "/";
 		for (String url : war.keySet()) {
 			if (!url.equals(VOSAO_PLUGIN)) {
 				WarItem item = war.get(url);
@@ -124,6 +128,7 @@ public class PluginLoader {
 					resourceList.add(res.getId());
 				}
 				if (!url.startsWith("WEB-INF")) {
+					fileCacheList.add(filePrefix + item.path);
 					String folderPath = pluginBase + "/" + FolderUtil.getFilePath(
 							item.path);
 					FolderEntity folder = getBusiness().getFolderBusiness()
@@ -137,20 +142,20 @@ public class PluginLoader {
 				}
 			}
 		}
-		saveResourceList(plugin, resourceList);
+		saveResourceList(plugin, resourceList, fileCacheList);
 	}
 	
-	private void saveResourceList(PluginEntity plugin, List<String> list) {
-		StringBuffer result = new StringBuffer();
-		int count = 0;
-		for (String item : list) {
-			result.append((count == 0 ? "" : ",")).append(item);
-			count++;
-		}
+	private void saveResourceList(PluginEntity plugin, 
+			List<String> resourceList, List<String> fileList) {
+		String resourceListStr = StrUtil.toCSV(resourceList);
+		String fileListStr = StrUtil.toCSV(fileList);
 		try {
 			getDao().getPluginResourceDao().save(
 					new PluginResourceEntity(plugin.getName() + RESOURCE_LIST, 
-							result.toString().getBytes("UTF-8")));
+							resourceListStr.getBytes("UTF-8")));
+			getDao().getPluginResourceDao().save(
+					new PluginResourceEntity(plugin.getName() + FILE_LIST, 
+							fileListStr.getBytes("UTF-8")));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -214,6 +219,7 @@ public class PluginLoader {
 
 	public void uninstall(PluginEntity plugin) {
 		removePluginResources(plugin);
+		removePluginFileCache(plugin);
 		getBusiness().getFolderBusiness().recursiveRemove(
 				"/plugins/" + plugin.getName());
 		getDao().getPluginDao().remove(plugin.getId());
@@ -239,6 +245,24 @@ public class PluginLoader {
 		getDao().getPluginResourceDao().remove(ids);
 	}
 
+	private void removePluginFileCache(PluginEntity plugin) {
+		PluginResourceEntity listResource = getDao().getPluginResourceDao()
+			.getByUrl(plugin.getName() + FILE_LIST);
+		if (listResource == null) {
+			return;
+		}
+		getDao().getPluginResourceDao().remove(listResource.getId());
+		try {
+			String list = new String(listResource.getContent(), "UTF-8");
+			String[] resources = list.split(",");
+			for (String path : resources) {
+				getBusiness().getSystemService().getFileCache().remove(path);
+			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}	
+	
 	public Dao getDao() {
 		return dao;
 	}

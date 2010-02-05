@@ -183,7 +183,8 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 		return map;
 	}
 
-	private PluginServiceManager getBackServices(PluginEntity plugin)
+	@Override
+	public PluginServiceManager getBackServices(PluginEntity plugin)
 			throws ClassNotFoundException, InstantiationException,
 			IllegalAccessException {
 		if (!backServices.containsKey(plugin.getName())) {
@@ -191,13 +192,17 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 				.getClassLoader(plugin.getName());
 			Class backServicesClass = pluginClassLoader
 				.loadClass(plugin.getBackServiceClass());
-			backServices.put(plugin.getName(), 
-					(PluginServiceManager)backServicesClass.newInstance());
+			PluginServiceManager manager = (PluginServiceManager)
+					backServicesClass.newInstance();
+			manager.setDao(getDao());
+			manager.setBusiness(getBusiness());
+			backServices.put(plugin.getName(), manager);
 		}
 		return backServices.get(plugin.getName());
 	}
 
-	private PluginServiceManager getFrontServices(PluginEntity plugin)
+	@Override
+	public PluginServiceManager getFrontServices(PluginEntity plugin)
 			throws ClassNotFoundException, InstantiationException,
 			IllegalAccessException {
 		if (!backServices.containsKey(plugin.getName())) {
@@ -205,82 +210,13 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 				.getClassLoader(plugin.getName());
 			Class frontServicesClass = pluginClassLoader
 				.loadClass(plugin.getBackServiceClass());
-			frontServices.put(plugin.getName(), 
-					(PluginServiceManager)frontServicesClass.newInstance());
+			PluginServiceManager manager = (PluginServiceManager)
+					frontServicesClass.newInstance();
+			manager.setDao(getDao());
+			manager.setBusiness(getBusiness());
+			frontServices.put(plugin.getName(), manager);
 		}
 		return frontServices.get(plugin.getName());
-	}
-
-	@Override
-	public void registerBackServices(JSONRPCBridge bridge) {
-		for (PluginEntity plugin : getDao().getPluginDao().select()) {
-			try {
-				if (plugin.isBackServicePlugin()) {
-					PluginServiceManager manager = getBackServices(plugin);
-					manager.register(bridge);
-				}				
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	@Override
-	public void registerFrontServices(JSONRPCBridge bridge) {
-		for (PluginEntity plugin : getDao().getPluginDao().select()) {
-			try {
-				if (plugin.isFrontServicePlugin()) {
-					PluginServiceManager manager = getFrontServices(plugin);
-					manager.register(bridge);
-				}				
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	@Override
-	public void unregisterBackServices(JSONRPCBridge bridge) {
-		for (PluginEntity plugin : getDao().getPluginDao().select()) {
-			try {
-				if (plugin.isBackServicePlugin()) {
-					PluginServiceManager manager = getBackServices(plugin);
-					manager.unregister(bridge);
-				}				
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	@Override
-	public void unregisterFrontServices(JSONRPCBridge bridge) {
-		for (PluginEntity plugin : getDao().getPluginDao().select()) {
-			try {
-				if (plugin.isFrontServicePlugin()) {
-					PluginServiceManager manager = getFrontServices(plugin);
-					manager.unregister(bridge);
-				}				
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 }

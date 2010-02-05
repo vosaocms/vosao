@@ -27,15 +27,19 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jabsorb.JSONRPCBridge;
 import org.vosao.business.Business;
+import org.vosao.dao.Dao;
+import org.vosao.entity.PluginEntity;
 import org.vosao.service.FrontService;
 import org.vosao.service.front.CommentService;
 import org.vosao.service.front.FormService;
 import org.vosao.service.front.LoginService;
+import org.vosao.service.plugin.PluginServiceManager;
 
 public class FrontServiceImpl implements FrontService, Serializable {
 
 	private static final Log log = LogFactory.getLog(FrontServiceImpl.class);
 
+	private Dao dao;
 	private Business business;
 	
 	private LoginService loginService;
@@ -47,7 +51,7 @@ public class FrontServiceImpl implements FrontService, Serializable {
 		bridge.registerObject("loginFrontService", loginService);
 		bridge.registerObject("formFrontService", formService);
 		bridge.registerObject("commentFrontService", commentService);
-		getBusiness().getPluginBusiness().registerFrontServices(bridge);
+		registerPluginServices(bridge);
 	}
 	
 	@Override
@@ -55,7 +59,7 @@ public class FrontServiceImpl implements FrontService, Serializable {
 		bridge.unregisterObject("loginFrontService");
 		bridge.unregisterObject("formFrontService");
 		bridge.unregisterObject("commentFrontService");
-		getBusiness().getPluginBusiness().unregisterFrontServices(bridge);
+		unregisterPluginServices(bridge);
 	}
 
 	@Override
@@ -95,5 +99,52 @@ public class FrontServiceImpl implements FrontService, Serializable {
 	public void setBusiness(Business business) {
 		this.business = business;
 	}
+
+	public Dao getDao() {
+		return dao;
+	}
+
+	public void setDao(Dao dao) {
+		this.dao = dao;
+	}
+	
+	private void registerPluginServices(JSONRPCBridge bridge) {
+		for (PluginEntity plugin : getDao().getPluginDao().select()) {
+			try {
+				if (plugin.isFrontServicePlugin()) {
+					PluginServiceManager manager = getBusiness()
+						.getPluginBusiness().getFrontServices(plugin);
+					manager.setFrontService(this);
+					manager.register(bridge);
+				}				
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void unregisterPluginServices(JSONRPCBridge bridge) {
+		for (PluginEntity plugin : getDao().getPluginDao().select()) {
+			try {
+				if (plugin.isFrontServicePlugin()) {
+					PluginServiceManager manager = getBusiness()
+						.getPluginBusiness().getFrontServices(plugin);
+					manager.setFrontService(this);
+					manager.unregister(bridge);
+				}				
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	
 }

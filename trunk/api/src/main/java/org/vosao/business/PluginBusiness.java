@@ -89,12 +89,12 @@ public interface PluginBusiness {
 	 */
 	Map<String, PluginPropertyVO> getPropertiesMap(PluginEntity plugin);
 	
-	void registerBackServices(JSONRPCBridge bridge);
+	PluginServiceManager getBackServices(PluginEntity plugin)
+			throws ClassNotFoundException, InstantiationException,
+			IllegalAccessException;
 
-	void unregisterBackServices(JSONRPCBridge bridge);
-
-	void registerFrontServices(JSONRPCBridge bridge);
-
-	void unregisterFrontServices(JSONRPCBridge bridge);
+	PluginServiceManager getFrontServices(PluginEntity plugin)
+			throws ClassNotFoundException, InstantiationException,
+			IllegalAccessException;
 	
 }

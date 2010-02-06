@@ -178,9 +178,8 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	
 	private List<PageFilter> createFilters() {
 		List<PageFilter> result = new ArrayList<PageFilter>();
-		result.add(new GoogleAnalyticsPageFilter(business.getConfigBusiness(), 
-				this));
-		result.add(new JavaScriptPageFilter(business.getConfigBusiness(), this));
+		result.add(new GoogleAnalyticsPageFilter(business));
+		result.add(new JavaScriptPageFilter(business));
 		return result;
 	}
 

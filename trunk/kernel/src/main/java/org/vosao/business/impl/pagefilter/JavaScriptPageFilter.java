@@ -22,15 +22,14 @@
 package org.vosao.business.impl.pagefilter;
 
 import org.apache.commons.lang.StringUtils;
-import org.vosao.business.ConfigBusiness;
-import org.vosao.business.PageBusiness;
+import org.vosao.business.Business;
+import org.vosao.entity.PluginEntity;
 
 public class JavaScriptPageFilter extends AbstractPageFilter 
 		implements PageFilter {
 
-	public JavaScriptPageFilter(ConfigBusiness configBusiness,
-			PageBusiness pageBusiness) {
-		super(configBusiness, pageBusiness);
+	public JavaScriptPageFilter(Business business) {
+		super(business);
 	}
 	
 	@Override
@@ -42,13 +41,19 @@ public class JavaScriptPageFilter extends AbstractPageFilter
 		return StringUtils.replace(page, tag, getJavaScriptCode());
 	}
 	
-	private static String getJavaScriptCode() { 
-		return "<head>\n" 
+	private String getJavaScriptCode() { 
+		StringBuffer code = new StringBuffer("<head>\n" 
 		    +  "<script src=\"/static/js/jquery.js\" type=\"text/javascript\"></script>\n"
 		    +  "<script src=\"/static/js/jquery.form.js\" type=\"text/javascript\"></script>\n"
             +  "<script src=\"/static/js/jsonrpc.js\" type=\"text/javascript\"></script>\n"
             +  "<script src=\"/static/js/vosao.js\" type=\"text/javascript\"></script>\n"
-            +  "<script src=\"http://api.recaptcha.net/js/recaptcha_ajax.js\" type=\"text/javascript\" ></script>\n";
+            +  "<script src=\"http://api.recaptcha.net/js/recaptcha_ajax.js\" type=\"text/javascript\" ></script>\n");
+		for (PluginEntity plugin : getBusiness().getDao().getPluginDao().select()) {
+			if (!StringUtils.isEmpty(plugin.getPageHeader())) {
+				code.append(plugin.getPageHeader());
+			}
+		}
+		return code.toString();
 	}
 
 }

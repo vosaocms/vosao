@@ -22,21 +22,19 @@
 package org.vosao.business.impl.pagefilter;
 
 import org.apache.commons.lang.StringUtils;
-import org.vosao.business.ConfigBusiness;
-import org.vosao.business.PageBusiness;
+import org.vosao.business.Business;
 import org.vosao.entity.ConfigEntity;
 
 public class GoogleAnalyticsPageFilter extends AbstractPageFilter 
 		implements PageFilter {
 
-	public GoogleAnalyticsPageFilter(ConfigBusiness configBusiness,
-			PageBusiness pageBusiness) {
-		super(configBusiness, pageBusiness);
+	public GoogleAnalyticsPageFilter(Business business) {
+		super(business);
 	}
 	
 	@Override
 	public String apply(String page) {
-		ConfigEntity config = getConfigBusiness().getConfig();
+		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
 		if (!StringUtils.isEmpty(config.getGoogleAnalyticsId())) {
 			String id = config.getGoogleAnalyticsId();
 			String htmlTag = "</html>";

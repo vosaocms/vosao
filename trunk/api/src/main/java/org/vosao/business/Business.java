@@ -23,6 +23,7 @@ package org.vosao.business;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.vosao.dao.Dao;
 import org.vosao.entity.UserEntity;
 import org.vosao.global.SystemService;
 
@@ -32,6 +33,9 @@ public interface Business {
 	SystemService getSystemService();
 	void setSystemService(final SystemService bean);
 
+	Dao getDao();
+	void setDao(Dao bean);
+	
 	UserPreferences getUserPreferences(final HttpServletRequest request);
 	void setUserPreferences(UserPreferences bean, final HttpServletRequest request);
 

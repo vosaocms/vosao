@@ -48,6 +48,7 @@ import org.vosao.business.StructureTemplateBusiness;
 import org.vosao.business.TemplateBusiness;
 import org.vosao.business.UserBusiness;
 import org.vosao.business.UserPreferences;
+import org.vosao.dao.Dao;
 import org.vosao.entity.UserEntity;
 import org.vosao.global.SystemService;
 
@@ -56,6 +57,8 @@ public class BusinessImpl implements Business, Serializable {
 	private static final Log log = LogFactory.getLog(BusinessImpl.class);
 
 	private SystemService systemService;
+	private Dao dao;
+	
 	private PageBusiness pageBusiness;
 	private FolderBusiness folderBusiness;
 	private TemplateBusiness templateBusiness;
@@ -291,4 +294,15 @@ public class BusinessImpl implements Business, Serializable {
 	public void setPluginResourceBusiness(PluginResourceBusiness bean) {
 		this.pluginResourceBusiness = bean;
 	}
+	
+	@Override
+	public Dao getDao() {
+		return dao;
+	}
+
+	@Override
+	public void setDao(Dao bean) {
+		this.dao = bean;
+	}
+	
 }

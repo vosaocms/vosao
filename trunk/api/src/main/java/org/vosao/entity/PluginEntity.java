@@ -72,6 +72,9 @@ public class PluginEntity implements BaseEntity {
 	@Persistent
 	private String configURL;
 
+	@Persistent(defaultFetchGroup = "true")
+	private Text pageHeader;
+
 	public PluginEntity() {
     }
     
@@ -100,6 +103,7 @@ public class PluginEntity implements BaseEntity {
     	setFrontServiceClass(entity.getFrontServiceClass());
     	setBackServiceClass(entity.getBackServiceClass());
     	setConfigURL(entity.getConfigURL());
+    	setPageHeader(entity.getPageHeader());
     }
     
 	public String getId() {
@@ -213,6 +217,14 @@ public class PluginEntity implements BaseEntity {
 
 	public void setConfigURL(String configURL) {
 		this.configURL = configURL;
+	}
+
+	public String getPageHeader() {
+		return pageHeader == null ? null : pageHeader.getValue();
+	}
+
+	public void setPageHeader(String pageHeader) {
+		this.pageHeader = new Text(pageHeader);
 	}
 	
 }

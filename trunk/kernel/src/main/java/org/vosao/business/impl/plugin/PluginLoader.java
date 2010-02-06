@@ -213,7 +213,25 @@ public class PluginLoader {
 			result.setFrontServiceClass(StringUtils.strip(
 					root.elementText("front-service-manager-class")));
 		}
-		result.setConfigStructure(root.element("config").asXML());
+		StringBuffer header = new StringBuffer();
+		if (root.element("header-javascript") != null) {
+			for (Element e : (List<Element>)root.elements("header-javascript")) {
+				header.append("<script type=\"text/javascript\" src=\"/file/plugins/")
+					.append(result.getName()).append("/").append(e.getText())
+					.append("\"></script>\n");
+			}
+		}
+		if (root.element("header-css") != null) {
+			for (Element e : (List<Element>)root.elements("header-css")) {
+				header.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"/file/plugins/")
+					.append(result.getName()).append("/").append(e.getText())
+					.append("\"/>\n");
+			}
+		}
+		result.setPageHeader(header.toString());
+		if (root.element("config") != null) {
+			result.setConfigStructure(root.element("config").asXML());
+		}
 		return result; 
 	}
 

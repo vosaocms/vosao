@@ -235,7 +235,9 @@
 
     <bean id="business" class="org.vosao.business.impl.BusinessImpl"
         init-method="init">  
-        <property name="systemService" ref="systemService"/>  
+        <property name="systemService" ref="systemService"/>
+        <property name="dao" ref="dao"/>
+          
         <property name="pageBusiness" ref="pageBusiness"/>  
         <property name="folderBusiness" ref="folderBusiness"/>  
         <property name="templateBusiness" ref="templateBusiness"/>  

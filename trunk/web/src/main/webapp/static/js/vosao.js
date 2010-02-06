@@ -84,11 +84,11 @@ Vosao.selectTabFromQueryParam = function(tab) {
 };
 
 Vosao.escapeHtml = function(s) {
-	var div = document.createElement('div');
-	var text = document.createTextNode(s);
-	div.appendChild(text);
-	return div.innerHTML;
-};
+	return s.replace(/&/g,'&amp;').                                         
+		replace(/>/g,'&gt;').                                           
+		replace(/</g,'&lt;').                                           
+		replace(/"/g,'&quot;');
+}
 
 /**
  * Global JSON-RPC entry point.

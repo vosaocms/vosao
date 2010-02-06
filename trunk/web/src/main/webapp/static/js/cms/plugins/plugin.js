@@ -68,7 +68,8 @@ function showPlugin() {
 				configData[value.name.toLowerCase()] : value.defaultValue);
 		if (value.type == 'String' || value.type == 'Integer') {
 			h += '<div class="form-row"><label>' + value.title + '</label>'
-				+ '<input id="property-' + value.name + '" value="' + data + '"/></div>';
+				+ '<input id="property-' + value.name + '" value="' 
+				+ Vosao.escapeHtml(data) + '"/></div>';
 		}
 		if (value.type == 'Date') {
 			h += '<div class="form-row"><label>' + value.title + '</label>'
@@ -134,8 +135,8 @@ function onSave() {
 		if (value.type == 'String' || value.type == 'Integer'
 			|| value.type == 'Date' || value.type == 'Text') {
 			vo[value.name] = $(id).val();
-			xml += '<' + value.name + '>' + vo[value.name] + '</' + value.name 
-				+ '>\n';
+			xml += '<' + value.name + '>' + Vosao.escapeHtml(vo[value.name]) 
+				+ '</' + value.name + '>\n';
 		}
 		if (value.type == 'Boolean') {
 			vo[value.name] = String($(id + ':checked').size() > 0);

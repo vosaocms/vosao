@@ -59,7 +59,7 @@ public interface PageRenderDecorator {
 	 * Get page friendlyURL.
 	 * @return page friendlyURL.
 	 */
-	String getFriendlyUrl();
+	String getFriendlyURL();
 
 	/**
 	 * Get parent friendlyURL.

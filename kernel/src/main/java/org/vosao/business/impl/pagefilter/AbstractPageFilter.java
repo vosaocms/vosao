@@ -21,35 +21,23 @@
 
 package org.vosao.business.impl.pagefilter;
 
-import org.vosao.business.ConfigBusiness;
-import org.vosao.business.PageBusiness;
+import org.vosao.business.Business;
 
 public abstract class AbstractPageFilter implements PageFilter {
 
-	private ConfigBusiness configBusiness;
-	private PageBusiness pageBusiness;
+	private Business business;
 	
-	public AbstractPageFilter(ConfigBusiness configBusiness,
-			PageBusiness pageBusiness) {
+	public AbstractPageFilter(Business business) {
 		super();
-		this.configBusiness = configBusiness;
-		this.pageBusiness = pageBusiness;
+		this.business = business;
 	}
 
-	public ConfigBusiness getConfigBusiness() {
-		return configBusiness;
+	public Business getBusiness() {
+		return business;
 	}
 	
-	public void setConfigBusiness(ConfigBusiness configBusiness) {
-		this.configBusiness = configBusiness;
-	}
-	
-	public PageBusiness getPageBusiness() {
-		return pageBusiness;
-	}
-	
-	public void setPageBusiness(PageBusiness pageBusiness) {
-		this.pageBusiness = pageBusiness;
+	public void setBusiness(Business bean) {
+		this.business = bean;
 	}
 	
 }

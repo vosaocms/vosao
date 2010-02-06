@@ -95,6 +95,8 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 	@Override
 	public void resetPlugin(PluginEntity plugin) {
 		velocityPlugins.remove(plugin.getName());
+		frontServices.remove(plugin.getName());
+		backServices.remove(plugin.getName());
 		getPluginClassLoaderFactory().resetPlugin(plugin.getName());
 		cache.reset(plugin.getName());
 	}

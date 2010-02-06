@@ -21,22 +21,15 @@
 
 package org.vosao.plugins.superfish;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
-import org.datanucleus.util.StringUtils;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
 import org.vosao.business.decorators.TreeItemDecorator;
-import org.vosao.business.vo.PluginPropertyVO;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PluginEntity;
-import org.vosao.utils.ParamUtil;
 import org.vosao.utils.StreamUtil;
 import org.vosao.velocity.plugin.AbstractVelocityPlugin;
 
@@ -47,15 +40,16 @@ public class SuperfishVelocityPlugin extends AbstractVelocityPlugin {
 
 	public String render() {
 		try {
-			PluginEntity plugin = getDao().getPluginDao().getByName("sitemap");
+			PluginEntity plugin = getDao().getPluginDao().getByName("superfish");
+			SuperfishConfig config = new SuperfishConfig(plugin.getConfigData());
 			TreeItemDecorator<PageEntity> root = getBusiness().getPageBusiness()
 				.getTree();
+			filterEnabled(root, config.getEnabledPages());
 			String template = StreamUtil.getTextResource(
 				SuperfishVelocityPlugin.class.getClassLoader(), 
-				"org/vosao/plugins/superfish/sitemap.vm");
+				"org/vosao/plugins/superfish/menu.vm");
 			VelocityContext context = new VelocityContext();
-			context.put("root", root);
-			context.put("config", getConfig(plugin));
+			context.put("pages", root.getChildren());
 			return getBusiness().getSystemService().render(template, context);
 		}
 		catch (Exception e) {
@@ -64,28 +58,17 @@ public class SuperfishVelocityPlugin extends AbstractVelocityPlugin {
 		}
 	}
 	
-	private Map<String, Object> getConfig(PluginEntity plugin) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		if (StringUtils.isEmpty(plugin.getConfigData())) {
-			Map<String, PluginPropertyVO> map = getBusiness().getPluginBusiness()
-					.getPropertiesMap(plugin);
-			PluginPropertyVO level = map.get("level");
-			if (level != null) {
-				result.put("level", ParamUtil.getInteger(
-						level.getDefaultValue(), 2));
+	private void filterEnabled(TreeItemDecorator<PageEntity> page, 
+			List<String> enabledPages) {
+		List<TreeItemDecorator<PageEntity>> children = 
+				new ArrayList<TreeItemDecorator<PageEntity>>();
+		for (TreeItemDecorator<PageEntity> child : page.getChildren()) {
+			if (enabledPages.contains(child.getEntity().getFriendlyURL())) {
+				filterEnabled(child, enabledPages);
+				children.add(child);
 			}
-			return result;
 		}
-		try {
-			Document doc = DocumentHelper.parseText(plugin.getConfigData());
-			Element root = doc.getRootElement();
-			result.put("level", ParamUtil.getInteger(root.elementText("level"), 
-					2));
-		}
-		catch (DocumentException e) {
-			logger.error("Sitemap plugin config DocumentException" + e.getMessage());
-		}
-		return result;
+		page.setChildren(children);
 	}
 	
 }

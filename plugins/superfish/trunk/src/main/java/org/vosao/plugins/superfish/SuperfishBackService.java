@@ -21,18 +21,13 @@
 
 package org.vosao.plugins.superfish;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.datanucleus.util.StringUtils;
 import org.vosao.business.Business;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PluginEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.plugin.AbstractServicePlugin;
-import org.vosao.utils.StrUtil;
 
 public class SuperfishBackService extends AbstractServicePlugin {
 
@@ -48,17 +43,18 @@ public class SuperfishBackService extends AbstractServicePlugin {
 		
 		boolean enabled = Boolean.valueOf(enabledStr);	
 		PluginEntity plugin = getDao().getPluginDao().getByName("superfish");
-		Set<String> pages = new HashSet<String>();
-		if (!StringUtils.isEmpty(plugin.getConfigData())) {
-			pages = getEnabledPages(plugin.getConfigData());
-		}
+		SuperfishConfig config = new SuperfishConfig(plugin.getConfigData());
 		if (enabled) {
-			pages.add(page);
+			if (!config.getEnabledPages().contains(page)) {
+				config.getEnabledPages().add(page);
+			}
 		}
-		else if (pages.contains(page)) {
-			pages.remove(page);
+		else {
+			if (config.getEnabledPages().contains(page)) {
+				config.getEnabledPages().remove(page);
+			}
 		}
-		plugin.setConfigData(StrUtil.toCSV(pages));
+		plugin.setConfigData(config.toXML());
 		getDao().getPluginDao().save(plugin);
 		return ServiceResponse.createSuccessResponse("Changes successfully saved.");
 		
@@ -69,12 +65,5 @@ public class SuperfishBackService extends AbstractServicePlugin {
 		}
 	}
 	
-	private Set<String> getEnabledPages(String config) {
-		Set<String> pages = new HashSet<String>();
-		for (String page : config.split(",")) {
-			pages.add(page);
-		}
-		return pages;
-	}
 	
 }

@@ -87,22 +87,27 @@ public class StructurePageRenderDecorator implements PageRenderDecorator {
 				page.getStructureTemplateId());
 	}
 	
+	@Override
 	public PageEntity getPage() {
 		return page;
 	}
 	
+	@Override
 	public void setPage(PageEntity page) {
 		this.page = page;
 	}
 	
+	@Override
 	public String getId() {
 		return page.getId();
 	}
 
+	@Override
 	public String getContent() {
 		return content;
 	}
 	
+	@Override
 	public String getComments() {
 		if (isCommentsEnabled()) {
 			String commentsTemplate = getDao().getConfigDao().getConfig()
@@ -196,30 +201,37 @@ public class StructurePageRenderDecorator implements PageRenderDecorator {
 		return xml + "</content>";
 	}
 	
+	@Override
 	public String getTitle() {
 		return page.getTitle();
 	}
 
-	public String getFriendlyUrl() {
+	@Override
+	public String getFriendlyURL() {
 		return page.getFriendlyURL();
 	}
 
+	@Override
 	public String getParentUrl() {
 		return page.getParentUrl();
 	}
 	
+	@Override
 	public String getTemplate() {
 		return page.getTemplate();
 	}
 	
+	@Override
 	public Date getPublishDate() {
 		return page.getPublishDate();
 	}
 	
+	@Override
 	public String getPublishDateString() {
 		return DateUtil.toString(page.getPublishDate());
 	}
 
+	@Override
 	public boolean isCommentsEnabled() {
 		return page.isCommentsEnabled();
 	}
@@ -236,30 +248,37 @@ public class StructurePageRenderDecorator implements PageRenderDecorator {
 		return systemService;
 	}
 	
+	@Override
 	public Integer getVersion() {
 		return page.getVersion();
 	}
 
+	@Override
 	public String getVersionTitle() {
 		return page.getVersionTitle();
 	}
 
+	@Override
 	public String getState() {
 		return page.getState().name();
 	}
 
+	@Override
 	public String getCreateUserEmail() {
 		return page.getCreateUserEmail();
 	}
 	
+	@Override
 	public String getCreateDate() {
 		return DateUtil.dateTimeToString(page.getCreateDate());
 	}
 
+	@Override
 	public String getModUserEmail() {
 		return page.getModUserEmail();
 	}
 	
+	@Override
 	public String getModDate() {
 		return DateUtil.dateTimeToString(page.getModDate());
 	}

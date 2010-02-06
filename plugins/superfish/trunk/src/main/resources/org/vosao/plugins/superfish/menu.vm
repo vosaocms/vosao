@@ -16,3 +16,9 @@
         #superfishMenu($page)
     #end
 </ul>
+
+<script type="text/javascript">
+  $(function(){
+    $('ul.sf-menu').superfish();
+  });
+</script>

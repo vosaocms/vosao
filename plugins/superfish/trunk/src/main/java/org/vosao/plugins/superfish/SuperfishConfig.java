@@ -22,37 +22,49 @@
 package org.vosao.plugins.superfish;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.datanucleus.util.StringUtils;
 import org.vosao.utils.StrUtil;
 
 public class SuperfishConfig {
 
-	private List<String> enabledPages;
+	private Map<String, Integer> enabledPages;
 
 	public SuperfishConfig() {
-		enabledPages = new ArrayList<String>();
+		enabledPages = new HashMap<String, Integer>();
 	}
 	
 	public SuperfishConfig(String xml) {
 		this();
 		if (!StringUtils.isEmpty(xml)) {
 			for (String page : xml.split(",")) {
-				enabledPages.add(page);
+				String[] items = page.split(":");
+				try {
+					enabledPages.put(items[0], Integer.valueOf(items[1]));
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
 	
 	public String toXML() {
-		return StrUtil.toCSV(enabledPages);
+		List<String> list = new ArrayList<String>();
+		for (String key : enabledPages.keySet()) {
+			list.add(key + ":" + enabledPages.get(key));
+		}
+		return StrUtil.toCSV(list);
 	}
 	
-	public List<String> getEnabledPages() {
+	public Map<String, Integer> getEnabledPages() {
 		return enabledPages;
 	}
 
-	public void setEnabledPages(List<String> enabledPages) {
+	public void setEnabledPages(Map<String, Integer> enabledPages) {
 		this.enabledPages = enabledPages;
 	}
 	

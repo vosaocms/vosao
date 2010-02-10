@@ -22,7 +22,10 @@
 package org.vosao.plugins.superfish;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -59,15 +62,16 @@ public class SuperfishVelocityPlugin extends AbstractVelocityPlugin {
 	}
 	
 	private void filterEnabled(TreeItemDecorator<PageEntity> page, 
-			List<String> enabledPages) {
+			final Map<String, Integer> enabledPages) {
 		List<TreeItemDecorator<PageEntity>> children = 
 				new ArrayList<TreeItemDecorator<PageEntity>>();
 		for (TreeItemDecorator<PageEntity> child : page.getChildren()) {
-			if (enabledPages.contains(child.getEntity().getFriendlyURL())) {
+			if (enabledPages.keySet().contains(child.getEntity().getFriendlyURL())) {
 				filterEnabled(child, enabledPages);
 				children.add(child);
 			}
 		}
+		Collections.sort(children, new MenuComparator(enabledPages));
 		page.setChildren(children);
 	}
 	

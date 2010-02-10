@@ -28,7 +28,7 @@ $(function(){
 });
 
 function loadTree() {
-    Vosao.jsonrpc.pageService.getTree(function(r) {
+    Vosao.jsonrpc.superfishBackService.getTree(function(r) {
         $('#tree').html(renderPage(r));
         $("#tree").treeview({
             animated: "fast",
@@ -38,7 +38,10 @@ function loadTree() {
             cookieId: "superfishTree"
         });
         $('#tree input').change(function() {
-            enablePage(this.value, this.checked);
+            var ul = this.parentNode.parentNode;
+            var li = this.parentNode;
+            var index = $.inArray(li, ul.childNodes);
+            enablePage(this.value, index, this.checked);
         });
     });
 }
@@ -49,8 +52,13 @@ function renderPage(vo) {
     if ($.inArray(vo.entity.friendlyURL, enabledPages) != -1) {
         checked = ' checked="checked"'
     }
-    var html = '<li> <input type="checkbox" value="' + vo.entity.friendlyURL 
-        + checked + '"/> ' + vo.entity.title;
+    var html = '<li> \
+        <a href="#"><img src="/static/images/02_up.png" onclick="moveUp(\''  
+        + vo.entity.friendlyURL + '\')"/></a>' 
+        +'<a href="#"><img src="/static/images/02_down.png" onclick="moveDown(\''  
+        + vo.entity.friendlyURL + '\')"/></a>' 
+        + '<input type="checkbox" value="' + vo.entity.friendlyURL + '"' 
+        + checked + '/> ' + vo.entity.title;
     if (vo.children.list.length > 0) {
         html += '<ul>';
         $.each(vo.children.list, function(n, value) {
@@ -67,17 +75,47 @@ function loadPlugin() {
 	    enabledPages = [];
 	    if (plugin.configData) {
 	        $.each(plugin.configData.split(','), function(i,value) {
-		        enabledPages.push(value);
+		        enabledPages.push(value.split(':')[0]);
 		    });
 	    }
 	    loadTree();		
 	}, 'superfish');
 }
 
-function enablePage(page, enabled) {
+function enablePage(page, index, enabled) {
 	Vosao.jsonrpc.superfishBackService.enablePage(function(r) {
 		Vosao.showServiceMessages(r);
-	}, page, String(enabled));
+	}, page, String(enabled), index);
+}
+
+function moveUp(url) {
+    var li = $('input[value="' + url + '"]')[0].parentNode;
+    var ul = li.parentNode;
+    var index = $.inArray(li, ul.childNodes);
+    if (index > 0) {
+        var tmp = ul.childNodes[index - 1];
+        var tmpUrl = $('input', $(tmp))[0].value;
+        ul.insertBefore(li.cloneNode(true), tmp);
+        ul.removeChild(li);
+        Vosao.jsonrpc.superfishBackService.saveIndex(function(r) {
+            Vosao.showServiceMessages(r);
+        }, url, index - 1, tmpUrl, index);
+    }
+}
+
+function moveDown(url) {
+    var li = $('input[value="' + url + '"]')[0].parentNode;
+    var ul = li.parentNode;
+    var index = $.inArray(li, ul.childNodes);
+    if (index < ul.childNodes.length - 1) {
+        var tmp = ul.childNodes[index + 1];
+        var tmpUrl = $('input', $(tmp))[0].value;
+        ul.insertBefore(tmp.cloneNode(true), li);
+        ul.removeChild(tmp);
+        Vosao.jsonrpc.superfishBackService.saveIndex(function(r) {
+            Vosao.showServiceMessages(r);
+        }, tmpUrl, index, url, index + 1);
+    }
 }
 
 </script>

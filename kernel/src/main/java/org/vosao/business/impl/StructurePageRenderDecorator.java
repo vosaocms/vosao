@@ -282,5 +282,15 @@ public class StructurePageRenderDecorator implements PageRenderDecorator {
 	public String getModDate() {
 		return DateUtil.dateTimeToString(page.getModDate());
 	}
+
+	@Override
+	public String getDescription() {
+		return page.getDescription();
+	}
+
+	@Override
+	public String getKeywords() {
+		return page.getKeywords();
+	}
 	
 }

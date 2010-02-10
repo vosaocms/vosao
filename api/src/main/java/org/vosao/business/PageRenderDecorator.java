@@ -132,5 +132,9 @@ public interface PageRenderDecorator {
 	 * @return page modification date in dd.mm.yyyy format.
 	 */
 	String getModDate();
+	
+	String getKeywords();
+	
+	String getDescription();
 
 }

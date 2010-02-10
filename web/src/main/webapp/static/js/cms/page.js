@@ -231,6 +231,8 @@ function initPageForm() {
 		$('#pageModDate').html(page.modDateString);
 		$('#pageCreateUser').html(page.createUserEmail);
 		$('#pageModUser').html(page.modUserEmail);
+		$('#keywords').html(page.keywords);
+		$('#description').html(page.description);
 		$('.contentTab').show();
 		$('.childrenTab').show();
 		$('.commentsTab').show();
@@ -253,6 +255,8 @@ function initPageForm() {
 		$('#pageCreateDate').html('');
 		$('#pageModUser').html('');
 		$('#pageModDate').html('');
+		$('#keywords').html('');
+		$('#description').html('');
 		$('.contentTab').hide();
 		$('.childrenTab').hide();
 		$('.commentsTab').hide();
@@ -276,7 +280,9 @@ function onPageUpdate() {
 		languageCode : currentLanguage,
 		pageType: $('#pageType').val(),
 		structureId: $('#structure').val(),
-		structureTemplateId: $('#structureTemplate').val()		
+		structureTemplateId: $('#structureTemplate').val(),
+		keywords: $('#keywords').val(),
+		description: $('#description').val()
 	});
 	$.cookie("page_template", pageVO.map.template, {path:'/', expires: 10});
 	Vosao.jsonrpc.pageService.savePage(function(r) {

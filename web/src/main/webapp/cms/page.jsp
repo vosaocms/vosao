@@ -102,6 +102,7 @@
         <option value="STRUCTURED">Structured</option>
     </select>
 </div>
+
 <div id="structuredControls">
 <div class="form-row">
     <label>Structure</label>
@@ -111,6 +112,15 @@
     <label>Structure template</label>
     <select id="structureTemplate"></select>
 </div>
+</div>
+
+<div class="form-row">
+    <label>META Keywords</label>
+    <textarea id="keywords" rows="5" cols="80"></textarea>
+</div>
+<div class="form-row">
+    <label>META Description</label>
+    <textarea id="description" rows="5" cols="80"></textarea>
 </div>
 
 <div class="buttons">

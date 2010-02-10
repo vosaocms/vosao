@@ -166,7 +166,7 @@ public class SetupBeanImpl implements SetupBean {
 		List<FolderEntity> roots = getDao().getFolderDao().getByParent(null);
 		if (roots.size() == 0) {
 	        log.info("Adding default folders.");
-			FolderEntity root = new FolderEntity("/", null);
+			FolderEntity root = new FolderEntity("file", "/", null);
 			getDao().getFolderDao().save(root);
 			FolderEntity theme = new FolderEntity("Themes resources", "theme", root.getId());
 			getDao().getFolderDao().save(theme);

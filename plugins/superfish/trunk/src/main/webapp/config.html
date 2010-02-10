@@ -30,19 +30,24 @@ $(function(){
 function loadTree() {
     Vosao.jsonrpc.superfishBackService.getTree(function(r) {
         $('#tree').html(renderPage(r));
-        $("#tree").treeview({
-            animated: "fast",
-            collapsed: true,
-            unique: true,
-            persist: "cookie",
-            cookieId: "superfishTree"
-        });
+        treeview();
         $('#tree input').change(function() {
             var ul = this.parentNode.parentNode;
             var li = this.parentNode;
             var index = $.inArray(li, ul.childNodes);
             enablePage(this.value, index, this.checked);
         });
+    });
+}
+
+function treeview() {
+    $("#tree .hitarea").remove();
+    $("#tree").treeview({
+        animated: "fast",
+        collapsed: true,
+        unique: true,
+        persist: "cookie",
+        cookieId: "superfishTree"
     });
 }
 
@@ -97,6 +102,7 @@ function moveUp(url) {
         var tmpUrl = $('input', $(tmp))[0].value;
         ul.insertBefore(li.cloneNode(true), tmp);
         ul.removeChild(li);
+        treeview();
         Vosao.jsonrpc.superfishBackService.saveIndex(function(r) {
             Vosao.showServiceMessages(r);
         }, url, index - 1, tmpUrl, index);
@@ -112,6 +118,7 @@ function moveDown(url) {
         var tmpUrl = $('input', $(tmp))[0].value;
         ul.insertBefore(tmp.cloneNode(true), li);
         ul.removeChild(tmp);
+        treeview();
         Vosao.jsonrpc.superfishBackService.saveIndex(function(r) {
             Vosao.showServiceMessages(r);
         }, tmpUrl, index, url, index + 1);

@@ -76,8 +76,12 @@ public class SuperfishBackService extends AbstractServicePlugin {
 		try {
 			PluginEntity plugin = getDao().getPluginDao().getByName("superfish");
 			SuperfishConfig config = new SuperfishConfig(plugin.getConfigData());
-			config.getEnabledPages().put(page1, index1);
-			config.getEnabledPages().put(page2, index2);
+			if (config.getEnabledPages().containsKey(page1)) {
+				config.getEnabledPages().put(page1, index1);
+			}
+			if (config.getEnabledPages().containsKey(page2)) {
+				config.getEnabledPages().put(page2, index2);
+			}
 			plugin.setConfigData(config.toXML());
 			getDao().getPluginDao().save(plugin);
 			return ServiceResponse.createSuccessResponse(

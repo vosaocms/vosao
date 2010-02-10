@@ -37,6 +37,8 @@ import org.vosao.enums.PageType;
 import org.vosao.utils.DateUtil;
 import org.vosao.utils.UrlUtil;
 
+import com.google.appengine.api.datastore.Text;
+
 /**
  * @author Alexander Oleynik
  */
@@ -98,6 +100,12 @@ public class PageEntity implements BaseEntity {
 	@Persistent
 	private String structureTemplateId;
 	
+	@Persistent
+	private Text keywords;
+	
+	@Persistent
+	private Text description;
+
 	public PageEntity() {
 		publishDate = new Date();
 		state = PageState.EDIT.name();
@@ -149,6 +157,8 @@ public class PageEntity implements BaseEntity {
 		setPageType(entity.getPageType());
 		setStructureId(entity.getStructureId());
 		setStructureTemplateId(entity.getStructureTemplateId());
+		setKeywords(entity.getKeywords());
+		setDescription(entity.getDescription());
 	}
 	
 	public String getId() {
@@ -372,5 +382,21 @@ public class PageEntity implements BaseEntity {
 			return getPageType().equals(PageType.STRUCTURED);
 		}
 		return false;
+	}
+
+	public String getKeywords() {
+		return keywords == null ? null : keywords.getValue();
+	}
+
+	public void setKeywords(String keywords) {
+		this.keywords = new Text(keywords);
+	}
+
+	public String getDescription() {
+		return description == null ? null : description.getValue();
+	}
+
+	public void setDescription(String description) {
+		this.description = new Text(description);
 	}
 }

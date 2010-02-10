@@ -174,6 +174,8 @@ public class PageServiceImpl extends AbstractServiceImpl
 		page.setPageType(PageType.valueOf(vo.get("pageType")));
 		page.setStructureId(vo.get("structureId"));
 		page.setStructureTemplateId(vo.get("structureTemplateId"));
+		page.setKeywords(vo.get("keywords"));
+		page.setDescription(vo.get("description"));
 		List<String> errors = getBusiness().getPageBusiness()
 			.validateBeforeUpdate(page);
 		if (errors.isEmpty()) {

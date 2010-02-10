@@ -110,5 +110,14 @@ public class PageVO {
 	public String getModDate() {
 		return DateUtil.dateTimeToString(page.getModDate());
 	}
+
+	public String getKeywords() {
+		return page.getKeywords();
+	}
+
+	public String getDescription() {
+		return page.getDescription();
+	}
+	
 	
 }

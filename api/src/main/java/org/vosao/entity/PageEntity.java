@@ -116,6 +116,8 @@ public class PageEntity implements BaseEntity {
 		createUserEmail = "";
 		modUserEmail = "";
 		pageType = PageType.SIMPLE.name();
+		setKeywords("");
+		setDescription("");
 	}
 	
 	public PageEntity(String title, String friendlyURL, 

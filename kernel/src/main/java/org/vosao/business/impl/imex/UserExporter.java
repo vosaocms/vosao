@@ -29,6 +29,7 @@ import java.util.List;
 import org.dom4j.Element;
 import org.vosao.business.Business;
 import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
+import org.vosao.common.BCrypt;
 import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.UserEntity;
@@ -68,6 +69,12 @@ public class UserExporter extends AbstractExporter {
             	String email = element.elementText("email");
             	String name = element.elementText("name");
             	String password = element.elementText("password");
+            	try {
+            		BCrypt.checkpw("test", password);
+            	}
+            	catch (Exception e) {
+            		password = BCrypt.hashpw(password, BCrypt.gensalt());
+            	}
             	UserRole role = UserRole.valueOf(element.elementText("role"));
             	UserEntity user = getDao().getUserDao().getByEmail(email);
             	if (user == null) {

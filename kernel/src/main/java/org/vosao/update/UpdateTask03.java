@@ -21,24 +21,10 @@
 
 package org.vosao.update;
 
-import java.io.IOException;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.common.BCrypt;
 import org.vosao.dao.Dao;
-import org.vosao.entity.ContentPermissionEntity;
-import org.vosao.entity.FolderEntity;
-import org.vosao.entity.FolderPermissionEntity;
-import org.vosao.entity.GroupEntity;
-import org.vosao.entity.LanguageEntity;
-import org.vosao.entity.PageEntity;
-import org.vosao.entity.TemplateEntity;
-import org.vosao.enums.ContentPermissionType;
-import org.vosao.enums.FolderPermissionType;
-import org.vosao.enums.PageState;
-import org.vosao.enums.PageType;
-import org.vosao.utils.StreamUtil;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -78,6 +64,7 @@ public class UpdateTask03 implements UpdateTask {
 	public void update() throws UpdateException {
 		datastore = DatastoreServiceFactory.getDatastoreService();
 		updatePages();
+		updateUsers();
 	}
 
 	private void updatePages() {
@@ -89,4 +76,13 @@ public class UpdateTask03 implements UpdateTask {
 		}
 	}
 
+	private void updateUsers() {
+		Query query = new Query("UserEntity");
+		for (Entity e : datastore.prepare(query).asIterable()) {
+			e.setProperty("password", BCrypt.hashpw(
+					(String)e.getProperty("password"), BCrypt.gensalt()));
+			datastore.put(e);
+		}
+	}
+	
 }

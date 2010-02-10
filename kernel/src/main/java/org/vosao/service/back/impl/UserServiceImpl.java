@@ -25,13 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
+import org.vosao.common.BCrypt;
 import org.vosao.entity.UserEntity;
-import org.vosao.entity.UserGroupEntity;
 import org.vosao.enums.UserRole;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.UserService;
@@ -78,7 +76,8 @@ public class UserServiceImpl extends AbstractServiceImpl
 			user.setEmail(vo.get("email"));
 		}
 		if (!StringUtils.isEmpty(vo.get("password"))) {
-			user.setPassword(vo.get("password"));
+			user.setPassword(BCrypt.hashpw(vo.get("password"), 
+					BCrypt.gensalt()));
 		}
 		if (!StringUtils.isEmpty(vo.get("role"))) {
 			user.setRole(UserRole.valueOf(vo.get("role")));

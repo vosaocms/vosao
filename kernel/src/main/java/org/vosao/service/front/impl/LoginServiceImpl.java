@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.UserPreferences;
+import org.vosao.common.BCrypt;
 import org.vosao.entity.UserEntity;
 import org.vosao.filter.AuthenticationFilter;
 import org.vosao.service.ServiceResponse;
@@ -33,7 +34,13 @@ public class LoginServiceImpl extends AbstractServiceImpl
 			}
 		}
 		else {		
-			if (!user.getPassword().equals(password)) {
+			try {
+				if (!BCrypt.checkpw(password, user.getPassword())) {
+					return passwordIncorrect;
+				}
+			}
+			catch (Exception e) {
+				e.printStackTrace();
 				return passwordIncorrect;
 			}
 		}

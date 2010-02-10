@@ -30,6 +30,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.business.SetupBean;
+import org.vosao.common.BCrypt;
 import org.vosao.dao.Dao;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FolderEntity;
@@ -104,7 +105,9 @@ public class SetupBeanImpl implements SetupBean {
 	private void initUsers() {
 		List<UserEntity> admins = getDao().getUserDao().getByRole(UserRole.ADMIN);
 		if (admins.size() == 0) {
-			UserEntity admin = new UserEntity("admin", "admin", "admin@test.com", 
+			UserEntity admin = new UserEntity("admin", 
+					BCrypt.hashpw("admin", BCrypt.gensalt()), 
+					"admin@test.com", 
 					UserRole.ADMIN);
 			getDao().getUserDao().save(admin);
 	        log.info("Adding admin user admin@test.com.");

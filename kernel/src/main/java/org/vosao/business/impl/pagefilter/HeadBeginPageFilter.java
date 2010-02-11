@@ -21,10 +21,23 @@
 
 package org.vosao.business.impl.pagefilter;
 
+import org.vosao.business.Business;
+import org.vosao.business.impl.pagefilter.fragments.JavaScriptFragment;
+import org.vosao.business.impl.pagefilter.fragments.PluginHeadFragment;
 import org.vosao.entity.PageEntity;
 
-public interface PageFilter {
+public class HeadBeginPageFilter extends AbstractPageFilter 
+		implements PageFilter {
 
-	String apply(final String content, final PageEntity page);
+	public HeadBeginPageFilter(Business business) {
+		super(business);
+		getFragments().add(new JavaScriptFragment());
+		getFragments().add(new PluginHeadFragment());
+	}
 	
+	@Override
+	public String apply(String content, PageEntity page) {
+		return applyTag(content, page, "<head");
+	}
+
 }

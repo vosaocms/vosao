@@ -21,10 +21,21 @@
 
 package org.vosao.business.impl.pagefilter;
 
+import org.vosao.business.Business;
+import org.vosao.business.impl.pagefilter.fragments.EditorPanelFragment;
 import org.vosao.entity.PageEntity;
 
-public interface PageFilter {
+public class BodyBeginPageFilter extends AbstractPageFilter 
+		implements PageFilter {
 
-	String apply(final String content, final PageEntity page);
+	public BodyBeginPageFilter(Business business) {
+		super(business);
+		getFragments().add(new EditorPanelFragment());
+	}
 	
+	@Override
+	public String apply(String content, PageEntity pageEntity) {
+		return applyTag(content, pageEntity, "<body");
+	}
+
 }

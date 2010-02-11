@@ -40,17 +40,13 @@ import org.apache.velocity.tools.generic.RenderTool;
 import org.apache.velocity.tools.generic.SortTool;
 import org.apache.velocity.tools.view.tools.LinkTool;
 import org.vosao.business.Business;
-import org.vosao.business.ConfigBusiness;
-import org.vosao.business.ContentPermissionBusiness;
 import org.vosao.business.CurrentUser;
-import org.vosao.business.FolderBusiness;
-import org.vosao.business.MessageBusiness;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.PageRenderDecorator;
-import org.vosao.business.PluginBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
-import org.vosao.business.impl.pagefilter.GoogleAnalyticsPageFilter;
-import org.vosao.business.impl.pagefilter.JavaScriptPageFilter;
+import org.vosao.business.impl.pagefilter.BodyBeginPageFilter;
+import org.vosao.business.impl.pagefilter.HeadBeginPageFilter;
+import org.vosao.business.impl.pagefilter.HtmlEndPageFilter;
 import org.vosao.business.impl.pagefilter.PageFilter;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.ContentEntity;
@@ -77,10 +73,21 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 
 	private VelocityPluginService velocityPluginService;
 	private Business business;
+	private List<PageFilter> pageFilters;
 
 	public void init() throws Exception {
 		velocityPluginService = new VelocityPluginServiceImpl(getDao(), 
 				getSystemService(), getBusiness());
+	}
+	
+	private List<PageFilter> getPageFilters() {
+		if (pageFilters == null) {
+			pageFilters = new ArrayList<PageFilter>();
+			pageFilters.add(new HeadBeginPageFilter(getBusiness()));
+			pageFilters.add(new HtmlEndPageFilter(getBusiness()));
+			pageFilters.add(new BodyBeginPageFilter(getBusiness()));
+		}
+		return pageFilters;
 	}
 	
 	@Override
@@ -117,11 +124,11 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			VelocityContext context = createContext(languageCode);
 			context.put("page", createPageRenderDecorator(page, languageCode));
 			return pagePostProcess(getSystemService()
-					.render(template.getContent(), context));
+					.render(template.getContent(), context), page);
 		}
 		else {
 			ContentEntity content = getPageContent(page, languageCode);
-			return pagePostProcess(content.getContent());
+			return pagePostProcess(content.getContent(), page);
 		}
 	}
 	
@@ -167,22 +174,15 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		context.put("sorter", new SortTool());
 	}
 	
-	private String pagePostProcess(final String page) {
-		List<PageFilter> filters = createFilters();
-		String result = page;
-		for (PageFilter filter : filters) {
-			result = filter.apply(result);
+	private String pagePostProcess(final String content, 
+			final PageEntity pageEntity) {
+		String result = content;
+		for (PageFilter filter : getPageFilters()) {
+			result = filter.apply(result, pageEntity);
 		}
 		return result;
 	}
 	
-	private List<PageFilter> createFilters() {
-		List<PageFilter> result = new ArrayList<PageFilter>();
-		result.add(new GoogleAnalyticsPageFilter(business));
-		result.add(new JavaScriptPageFilter(business));
-		return result;
-	}
-
 	@Override
 	public List<String> validateBeforeUpdate(final PageEntity page) {
 		List<String> errors = new ArrayList<String>();

@@ -21,10 +21,11 @@
 
 package org.vosao.business.impl.pagefilter;
 
+import org.vosao.business.Business;
 import org.vosao.entity.PageEntity;
 
-public interface PageFilter {
+public interface ContentFragment {
 
-	String apply(final String content, final PageEntity page);
+	String get(Business business, PageEntity page);
 	
 }

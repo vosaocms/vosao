@@ -19,36 +19,20 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.impl.pagefilter;
+package org.vosao.business.impl.pagefilter.fragments;
 
 import org.apache.commons.lang.StringUtils;
 import org.vosao.business.Business;
+import org.vosao.business.impl.pagefilter.ContentFragment;
+import org.vosao.entity.PageEntity;
 import org.vosao.entity.PluginEntity;
 
-public class JavaScriptPageFilter extends AbstractPageFilter 
-		implements PageFilter {
+public class PluginHeadFragment	implements ContentFragment {
 
-	public JavaScriptPageFilter(Business business) {
-		super(business);
-	}
-	
 	@Override
-	public String apply(String page) {
-		String tag = "<head>";
-		if (page.indexOf("<HEAD>") != -1) {
-			tag = "<HEAD>";
-		}
-		return StringUtils.replace(page, tag, getJavaScriptCode());
-	}
-	
-	private String getJavaScriptCode() { 
-		StringBuffer code = new StringBuffer("<head>\n" 
-		    +  "<script src=\"/static/js/jquery.js\" type=\"text/javascript\"></script>\n"
-		    +  "<script src=\"/static/js/jquery.form.js\" type=\"text/javascript\"></script>\n"
-            +  "<script src=\"/static/js/jsonrpc.js\" type=\"text/javascript\"></script>\n"
-            +  "<script src=\"/static/js/vosao.js\" type=\"text/javascript\"></script>\n"
-            +  "<script src=\"http://api.recaptcha.net/js/recaptcha_ajax.js\" type=\"text/javascript\" ></script>\n");
-		for (PluginEntity plugin : getBusiness().getDao().getPluginDao().select()) {
+	public String get(Business business, PageEntity page) {
+		StringBuffer code = new StringBuffer(); 
+		for (PluginEntity plugin : business.getDao().getPluginDao().select()) {
 			if (!StringUtils.isEmpty(plugin.getPageHeader())) {
 				code.append(plugin.getPageHeader());
 			}

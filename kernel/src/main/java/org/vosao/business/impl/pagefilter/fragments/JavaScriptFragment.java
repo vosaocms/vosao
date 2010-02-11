@@ -19,12 +19,23 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.impl.pagefilter;
+package org.vosao.business.impl.pagefilter.fragments;
 
+import org.vosao.business.Business;
+import org.vosao.business.impl.pagefilter.ContentFragment;
 import org.vosao.entity.PageEntity;
 
-public interface PageFilter {
+public class JavaScriptFragment	implements ContentFragment {
 
-	String apply(final String content, final PageEntity page);
-	
+	@Override
+	public String get(Business business, PageEntity page) {
+		StringBuffer code = new StringBuffer( 
+		    "<script src=\"/static/js/jquery.js\" type=\"text/javascript\"></script>\n"
+		    +  "<script src=\"/static/js/jquery.form.js\" type=\"text/javascript\"></script>\n"
+            +  "<script src=\"/static/js/jsonrpc.js\" type=\"text/javascript\"></script>\n"
+            +  "<script src=\"/static/js/vosao.js\" type=\"text/javascript\"></script>\n"
+            +  "<script src=\"http://api.recaptcha.net/js/recaptcha_ajax.js\" type=\"text/javascript\" ></script>\n");
+		return code.toString();
+	}
+
 }

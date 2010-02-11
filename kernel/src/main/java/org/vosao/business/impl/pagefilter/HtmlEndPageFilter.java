@@ -21,10 +21,21 @@
 
 package org.vosao.business.impl.pagefilter;
 
+import org.vosao.business.Business;
+import org.vosao.business.impl.pagefilter.fragments.GoogleAnalyticsFragment;
 import org.vosao.entity.PageEntity;
 
-public interface PageFilter {
+public class HtmlEndPageFilter extends AbstractPageFilter 
+		implements PageFilter {
 
-	String apply(final String content, final PageEntity page);
+	public HtmlEndPageFilter(Business business) {
+		super(business);
+		getFragments().add(new GoogleAnalyticsFragment());
+	}
 	
+	@Override
+	public String apply(String content, PageEntity page) {
+		return applyTag(content, page, "</html");
+	}
+
 }

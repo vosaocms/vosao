@@ -152,5 +152,16 @@ public class UserEntity implements BaseEntity {
 		}
 		return role.equals(UserRole.SITE_USER);
 	}
+
+	public boolean isUser() {
+		if (role == null) {
+			return false;
+		}
+		return role.equals(UserRole.USER);
+	}
+	
+	public boolean isEditor() {
+		return isAdmin() || isUser();
+	}
 	
 }

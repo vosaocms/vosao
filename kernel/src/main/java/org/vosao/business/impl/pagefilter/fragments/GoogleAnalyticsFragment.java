@@ -19,34 +19,24 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.impl.pagefilter;
+package org.vosao.business.impl.pagefilter.fragments;
 
 import org.apache.commons.lang.StringUtils;
 import org.vosao.business.Business;
+import org.vosao.business.impl.pagefilter.ContentFragment;
 import org.vosao.entity.ConfigEntity;
+import org.vosao.entity.PageEntity;
 
-public class GoogleAnalyticsPageFilter extends AbstractPageFilter 
-		implements PageFilter {
+public class GoogleAnalyticsFragment implements ContentFragment {
 
-	public GoogleAnalyticsPageFilter(Business business) {
-		super(business);
-	}
-	
 	@Override
-	public String apply(String page) {
-		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
+	public String get(Business business, PageEntity page) {
+		ConfigEntity config = business.getConfigBusiness().getConfig();
 		if (!StringUtils.isEmpty(config.getGoogleAnalyticsId())) {
 			String id = config.getGoogleAnalyticsId();
-			String htmlTag = "</html>";
-			if (page.indexOf("</HTML>") != -1) {
-				htmlTag = "</HTML>";
-			}
-			return StringUtils.replace(page, htmlTag, 
-					getGoogleAnalyticsCode(id));
+			return getGoogleAnalyticsCode(id);
 		}
-		else {
-			return page;
-		}
+		return "";
 	}
 	
 	private static String getGoogleAnalyticsCode(final String id) { 
@@ -59,9 +49,7 @@ public class GoogleAnalyticsPageFilter extends AbstractPageFilter
 	    + "<script type=\"text/javascript\">\n"
 	    + "var pageTracker = _gat._getTracker(\"" + id +"\");\n"
 	    + "pageTracker._trackPageview();\n"
-	    + "</script>\n"
-	    + "</html>";
+	    + "</script>\n";
 	}
-	
 
 }

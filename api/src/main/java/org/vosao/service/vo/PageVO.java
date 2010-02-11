@@ -23,6 +23,7 @@ package org.vosao.service.vo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.vosao.entity.PageEntity;
 import org.vosao.utils.DateUtil;
@@ -53,6 +54,10 @@ public class PageVO {
 
 	public String getTitle() {
 		return page.getTitle();
+	}
+
+	public Map<String, String> getTitles() {
+		return page.getTitles();
 	}
 
 	public String getFriendlyURL() {

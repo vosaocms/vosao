@@ -235,7 +235,9 @@
 
     <bean id="business" class="org.vosao.business.impl.BusinessImpl"
         init-method="init">  
-        <property name="systemService" ref="systemService"/>  
+        <property name="systemService" ref="systemService"/>
+        <property name="dao" ref="dao"/>
+          
         <property name="pageBusiness" ref="pageBusiness"/>  
         <property name="folderBusiness" ref="folderBusiness"/>  
         <property name="templateBusiness" ref="templateBusiness"/>  
@@ -353,6 +355,7 @@
     </bean>    
 
     <bean id="backService" class="org.vosao.service.impl.BackServiceImpl">
+        <property name="dao" ref="dao"/>  
         <property name="business" ref="business"/>  
       
         <property name="fileService" ref="fileService"/>  
@@ -387,6 +390,7 @@
         parent="abstractService" />  
 
     <bean id="frontService" class="org.vosao.service.impl.FrontServiceImpl">  
+        <property name="dao" ref="dao"/>  
         <property name="business" ref="business"/>  
       
         <property name="loginService" ref="loginFrontService"/>  

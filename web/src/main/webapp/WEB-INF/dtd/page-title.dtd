@@ -1,3 +1,4 @@
+<!-- 
 /**
  * Vosao CMS. Simple CMS for Google App Engine.
  * Copyright (C) 2009 Vosao development team
@@ -18,40 +19,13 @@
  *
  * email: vosao.dev@gmail.com
  */
+-->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE title [
 
-package org.vosao.utils;
+<!ELEMENT title (content*)>
+<!ELEMENT content (#PCDATA)>
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+<!ATTLIST content lang CDATA #REQUIERED>
 
-
-public class StrUtil {
-	
-	private static String _toCSV(Collection<String> list) {
-		StringBuffer result = new StringBuffer();
-		int count = 0;
-		for (String item : list) {
-			result.append((count == 0 ? "" : ",")).append(item);
-			count++;
-		}
-		return result.toString();
-	}
-
-	public static String toCSV(Set<String> list) {
-		return _toCSV(list);
-	}
-	
-	public static String toCSV(List<String> list) {
-		return _toCSV(list);
-	}
-	
-	public static List<String> fromCSV(String data) {
-		List<String> result = new ArrayList<String>();
-		for (String s : data.split(",")) {
-			result.add(s);
-		}
-		return result;
-	}
-}
+]>

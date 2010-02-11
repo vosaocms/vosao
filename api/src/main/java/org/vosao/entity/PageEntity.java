@@ -21,13 +21,16 @@
 
 package org.vosao.entity;
 
-import java.io.Serializable;
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
@@ -52,9 +55,16 @@ public class PageEntity implements BaseEntity {
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
     private String id;
 	
-	@Persistent
-	private String title;
-	
+	/**
+	 * Titles are stored in string list. Content language stored in first two 
+	 * chars. 
+	 */
+	@Persistent(defaultFetchGroup = "true")
+	private Text title;
+
+	@NotPersistent
+	private Map<String, String> titles;
+
 	@Persistent
 	private String friendlyURL;
 	
@@ -100,10 +110,10 @@ public class PageEntity implements BaseEntity {
 	@Persistent
 	private String structureTemplateId;
 	
-	@Persistent
+	@Persistent(defaultFetchGroup = "true")
 	private Text keywords;
 	
-	@Persistent
+	@Persistent(defaultFetchGroup = "true")
 	private Text description;
 
 	public PageEntity() {
@@ -118,6 +128,7 @@ public class PageEntity implements BaseEntity {
 		pageType = PageType.SIMPLE.name();
 		setKeywords("");
 		setDescription("");
+		setTitle("");
 	}
 	
 	public PageEntity(String title, String friendlyURL, 
@@ -134,7 +145,7 @@ public class PageEntity implements BaseEntity {
 
 	public PageEntity(String aTitle, String aFriendlyURL) {
 		this();
-		title = aTitle;
+		setTitle(aTitle);
 		setFriendlyURL(aFriendlyURL);
 	}
 	
@@ -144,7 +155,7 @@ public class PageEntity implements BaseEntity {
 	}
 
 	public void copy(final PageEntity entity) {
-		setTitle(entity.getTitle());
+		setTitleValue(entity.getTitleValue());
 		setFriendlyURL(entity.getFriendlyURL());
 		setTemplate(entity.getTemplate());
 		setPublishDate(entity.getPublishDate());
@@ -169,14 +180,6 @@ public class PageEntity implements BaseEntity {
 	
 	public void setId(String id) {
 		this.id = id;
-	}
-	
-	public String getTitle() {
-		return title;
-	}
-	
-	public void setTitle(String title) {
-		this.title = title;
 	}
 	
 	public String getFriendlyURL() {
@@ -401,4 +404,67 @@ public class PageEntity implements BaseEntity {
 	public void setDescription(String description) {
 		this.description = new Text(description);
 	}
+
+	public String getTitleValue() {
+		return title == null ? null : title.getValue();
+	}
+
+	public void setTitleValue(String t) {
+		title = new Text(t);
+		parseTitle();
+	}
+
+	public String getTitle() {
+		return getLocalTitle("en");
+	}
+
+	public void setTitle(String title) {
+		setLocalTitle(title, "en");
+	}
+
+	public String getLocalTitle(String lang) {
+		parseTitle();
+		return titles.get(lang);
+	}
+
+	public void setLocalTitle(String title, String lang) {
+		parseTitle();
+		titles.put(lang, title);
+		packTitle();
+	}
+	
+	private void parseTitle() {
+		if (title == null) {
+			titles = new HashMap<String, String>();
+		}
+		else {
+			for (String s : getTitleValue().split(",")) {
+				titles.put(s.substring(0, 2), s.substring(2)); 
+			}
+		}
+	}
+	
+	private void packTitle() {
+		if (titles != null) {
+			StringBuffer s = new StringBuffer();
+			int count = 0;
+			for (String lang : titles.keySet()) {
+				if (count++ > 0) {
+					s.append(",");
+				}
+				s.append(lang).append(titles.get(lang));
+			}
+			setTitleValue(s.toString());
+		}
+	}
+
+	public Map<String, String> getTitles() {
+		return titles;
+	}
+
+	public void setTitles(Map<String, String> titles) {
+		this.titles = titles;
+		packTitle();
+	}
+	
 }

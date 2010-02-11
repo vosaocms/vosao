@@ -22,6 +22,7 @@
 package org.vosao.service.vo;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -35,14 +36,15 @@ import org.vosao.utils.DateUtil;
 public class PageVO {
 
     private PageEntity page;
+    private boolean hasPublishedVersion;
 
 	public PageVO(final PageEntity entity) {
 		page = entity;
 	}
 
-	public static List<PageVO> create(List<PageEntity> list) {
+	public static List<PageVO> create(Collection<PageEntity> pages) {
 		List<PageVO> result = new ArrayList<PageVO>();
-		for (PageEntity entity : list) {
+		for (PageEntity entity : pages) {
 			result.add(new PageVO(entity));
 		}
 		return result;
@@ -122,6 +124,14 @@ public class PageVO {
 
 	public String getDescription() {
 		return page.getDescription();
+	}
+
+	public boolean isHasPublishedVersion() {
+		return hasPublishedVersion;
+	}
+
+	public void setHasPublishedVersion(boolean value) {
+		this.hasPublishedVersion = value;
 	}
 	
 	

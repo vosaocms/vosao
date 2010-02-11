@@ -47,6 +47,7 @@ import org.vosao.entity.TemplateEntity;
 import org.vosao.enums.PageState;
 import org.vosao.enums.PageType;
 import org.vosao.utils.DateUtil;
+import org.vosao.utils.StrUtil;
 import org.vosao.utils.XmlUtil;
 
 public class PageExporter extends AbstractExporter {
@@ -94,9 +95,22 @@ public class PageExporter extends AbstractExporter {
 		}
 	}
 
+	private static String packTitle(PageEntity page) {
+		StringBuffer b = new StringBuffer("<title>");
+		b.append(page.getTitleValue()).append("</title>");
+		return b.toString();
+	}
+
+	private static String unpackTitle(String xml) {
+		if (!xml.startsWith("<title>")) {
+			return "en" + xml;
+		}
+		return xml.replace("<title>", "").replace("</title>", "");
+	}
+	
 	private void createPageDetailsXML(PageEntity page, Element pageElement) {
 		pageElement.addAttribute("url", page.getFriendlyURL());
-		pageElement.addAttribute("title", page.getTitle());
+		pageElement.addAttribute("title", packTitle(page));
 		pageElement.addAttribute("commentsEnabled", String.valueOf(
 				page.isCommentsEnabled()));
 		if (page.getPublishDate() != null) {
@@ -207,7 +221,7 @@ public class PageExporter extends AbstractExporter {
 
 	private PageEntity readPageVersion(Element pageElement) 
 			throws DaoTaskException {
-		String title = pageElement.attributeValue("title");
+		String title = unpackTitle(pageElement.attributeValue("title"));
 		String url = pageElement.attributeValue("url");
 		String themeUrl = pageElement.attributeValue("theme");
 		String commentsEnabled = pageElement.attributeValue("commentsEnabled");
@@ -227,7 +241,11 @@ public class PageExporter extends AbstractExporter {
 		if (template != null) {
 			templateId = template.getId();
 		}
-		PageEntity newPage = new PageEntity(title, url,	templateId, publishDate);
+		PageEntity newPage = new PageEntity();
+		newPage.setTitleValue(title);
+		newPage.setFriendlyURL(url);
+		newPage.setTemplate(templateId);
+		newPage.setPublishDate(publishDate);
 		if (commentsEnabled != null) {
 			newPage.setCommentsEnabled(Boolean.valueOf(commentsEnabled));
 		}

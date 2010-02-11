@@ -67,7 +67,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 	
 	@Override
 	public ServiceResponse updateContent(String pageId, String content,
-			String languageCode, boolean approve) {
+			String title, String languageCode, boolean approve) {
 		PageEntity page = getBusiness().getPageBusiness().getById(pageId);
 		if (page != null) {
 			if (!getBusiness().getPageBusiness().canChangeContent(
@@ -86,6 +86,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 			}
 			page.setModDate(new Date());
 			page.setModUserEmail(user.getEmail());
+			page.setLocalTitle(title, languageCode);
 			getDao().getPageDao().save(page);
 			getDao().getPageDao().setContent(pageId, languageCode, content);
 			return ServiceResponse.createSuccessResponse(
@@ -170,7 +171,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 			return ServiceResponse.createErrorResponse("Date is in wrong format");
 		}
 		page.setTemplate(vo.get("template"));
-		page.setTitle(vo.get("title"));
+		page.setTitleValue(vo.get("titles"));
 		page.setPageType(PageType.valueOf(vo.get("pageType")));
 		page.setStructureId(vo.get("structureId"));
 		page.setStructureTemplateId(vo.get("structureTemplateId"));

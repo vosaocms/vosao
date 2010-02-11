@@ -55,6 +55,10 @@ public interface PageRenderDecorator {
 	 */
 	String getTitle();
 
+	String getLocalTitle();
+
+	String getLocalTitle(String language);
+	
 	/**
 	 * Get page friendlyURL.
 	 * @return page friendlyURL.

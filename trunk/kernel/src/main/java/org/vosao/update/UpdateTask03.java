@@ -21,6 +21,9 @@
 
 package org.vosao.update;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.common.BCrypt;
@@ -72,6 +75,8 @@ public class UpdateTask03 implements UpdateTask {
 		for (Entity e : datastore.prepare(query).asIterable()) {
 			e.setProperty("keywords", new Text(""));
 			e.setProperty("description", new Text(""));
+			String title = "en" + (String)e.getProperty("title");
+			e.setProperty("title", new Text(title));
 			datastore.put(e);
 		}
 	}

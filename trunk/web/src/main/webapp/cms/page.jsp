@@ -72,7 +72,7 @@
 
 <div id="tab-1">
 
-<div class="form-row">
+<div id="titleDiv" class="form-row">
     <label>Title</label>
     <input id="title" type="text" class="form-title" size="40" />
 </div>
@@ -143,6 +143,10 @@
     <div>
         Select content language: 
         <select id="language"></select>
+    </div>
+    <div class="form-row" style="margin-top:10px;">
+        <label>Title</label>
+        <input id="titleLocal" type="text" class="form-title" size="40" />
     </div>
     <div id="page-content"></div>
 </div>

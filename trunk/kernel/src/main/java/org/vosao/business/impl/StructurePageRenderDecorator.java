@@ -25,7 +25,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,20 +49,12 @@ import org.vosao.entity.PageEntity;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.StructureTemplateEntity;
 import org.vosao.global.SystemService;
-import org.vosao.utils.DateUtil;
 
-import com.google.appengine.repackaged.com.google.common.base.StringUtil;
-
-public class StructurePageRenderDecorator implements PageRenderDecorator {
+public class StructurePageRenderDecorator extends AbstractPageRenderDecorator 
+		implements PageRenderDecorator {
 
 	private Log logger = LogFactory.getLog(SimplePageRenderDecorator.class);
 	
-	private PageEntity page;
-	private String languageCode;
-	private String content;
-	private Dao dao;
-	private PageBusiness pageBusiness;
-	private SystemService systemService;
 	private StructureEntity structure;
 	private StructureTemplateEntity structureTemplate;
 	
@@ -72,56 +63,20 @@ public class StructurePageRenderDecorator implements PageRenderDecorator {
 			PageBusiness pageBusiness, 
 			SystemService systemService) {
 		super();
-		this.page = page;
-		this.languageCode = languageCode;
-		this.dao = dao;
-		this.pageBusiness = pageBusiness;
-		this.systemService = systemService;
+		setPage(page);
+		setLanguageCode(languageCode);
+		setDao(dao);
+		setPageBusiness(pageBusiness);
+		setSystemService(systemService);
 		initStructure();
 		prepareContent();
 	}
 
 	private void initStructure() {
-		structure = dao.getStructureDao().getById(page.getStructureId());
-		structureTemplate = dao.getStructureTemplateDao().getById(
-				page.getStructureTemplateId());
-	}
-	
-	@Override
-	public PageEntity getPage() {
-		return page;
-	}
-	
-	@Override
-	public void setPage(PageEntity page) {
-		this.page = page;
-	}
-	
-	@Override
-	public String getId() {
-		return page.getId();
-	}
-
-	@Override
-	public String getContent() {
-		return content;
-	}
-	
-	@Override
-	public String getComments() {
-		if (isCommentsEnabled()) {
-			String commentsTemplate = getDao().getConfigDao().getConfig()
-				.getCommentsTemplate();
-			if (StringUtil.isEmpty(commentsTemplate)) {
-				logger.error("comments template is empty");
-				return "comments template is empty";
-			}
-			VelocityContext context = getPageBusiness().createContext(
-					languageCode);
-			context.put("page", page);
-			return getSystemService().render(commentsTemplate, context);
-		}
-		return "";
+		structure = getDao().getStructureDao().getById(getPage()
+				.getStructureId());
+		structureTemplate = getDao().getStructureTemplateDao().getById(
+				getPage().getStructureTemplateId());
 	}
 	
 	private void prepareContent() {
@@ -131,15 +86,16 @@ public class StructurePageRenderDecorator implements PageRenderDecorator {
 		}
 		catch (DocumentException e) {
 			logger.error(e.getMessage());
-			content = e.getMessage();
+			setContent(e.getMessage());
 			return;
 		}
 		prepareVelocityContent(contentMap);
 		if (structureTemplate.isVelocity()) {
-			VelocityContext context = getPageBusiness().createContext(languageCode); 
+			VelocityContext context = getPageBusiness().createContext(
+					getLanguageCode()); 
 			context.put("content", contentMap);
-			content = getSystemService().render(structureTemplate.getContent(), 
-					context);
+			setContent(getSystemService().render(structureTemplate.getContent(), 
+					context));
 		}
 		if (structureTemplate.isXSLT()) {
 			String xml = createContentXML(contentMap);
@@ -151,24 +107,24 @@ public class StructurePageRenderDecorator implements PageRenderDecorator {
 				if (transformer != null) {
 					transformer.transform(new StreamSource(input), 
 							new StreamResult(output));
-					content = output.toString();				
-					content = content.replaceAll("\\<\\?.*?\\?>", "");
+					setContent(output.toString().replaceAll("\\<\\?.*?\\?>", ""));
 				}
 				else {
-					content = "There is a problem during creating XSLT transfomer.";
+					setContent("There is a problem during creating XSLT transfomer.");
 				}					
 			} catch (TransformerException e) {
 				logger.error(e.getMessage());
-				content = e.getMessage();
+				setContent(e.getMessage());
 			} catch (UnsupportedEncodingException e) {
 				logger.error(e.getMessage());
-				content = e.getMessage();
+				setContent(e.getMessage());
 			}
 		}
 	}
 	
 	private void prepareVelocityContent(Map<String, String>contentMap) {
-		VelocityContext context = getPageBusiness().createContext(languageCode); 
+		VelocityContext context = getPageBusiness().createContext(
+				getLanguageCode()); 
 		for (String key : contentMap.keySet()) {
 			contentMap.put(key, getSystemService().render(contentMap.get(key), 
 					context));
@@ -178,8 +134,8 @@ public class StructurePageRenderDecorator implements PageRenderDecorator {
 	private Map<String, String> getContentMap() throws DocumentException {
 		Map<String, String> result = new HashMap<String, String>();
 		List<StructureFieldVO> fields = structure.getFields();
-		String xml = getPageBusiness().getPageContent(page, languageCode)
-				.getContent();
+		String xml = getPageBusiness().getPageContent(getPage(), 
+				getLanguageCode()).getContent();
 		Document doc = DocumentHelper.parseText(xml);
 		for (StructureFieldVO field : fields) {
 				String fieldContent = StringEscapeUtils.unescapeHtml(
@@ -199,98 +155,6 @@ public class StructurePageRenderDecorator implements PageRenderDecorator {
 					.append("</").append(field.getName()).append(">");
 		}
 		return xml + "</content>";
-	}
-	
-	@Override
-	public String getTitle() {
-		return page.getTitle();
-	}
-
-	@Override
-	public String getFriendlyURL() {
-		return page.getFriendlyURL();
-	}
-
-	@Override
-	public String getParentUrl() {
-		return page.getParentUrl();
-	}
-	
-	@Override
-	public String getTemplate() {
-		return page.getTemplate();
-	}
-	
-	@Override
-	public Date getPublishDate() {
-		return page.getPublishDate();
-	}
-	
-	@Override
-	public String getPublishDateString() {
-		return DateUtil.toString(page.getPublishDate());
-	}
-
-	@Override
-	public boolean isCommentsEnabled() {
-		return page.isCommentsEnabled();
-	}
-
-	private Dao getDao() {
-		return dao;
-	}
-
-	private PageBusiness getPageBusiness() {
-		return pageBusiness;
-	}
-
-	private SystemService getSystemService() {
-		return systemService;
-	}
-	
-	@Override
-	public Integer getVersion() {
-		return page.getVersion();
-	}
-
-	@Override
-	public String getVersionTitle() {
-		return page.getVersionTitle();
-	}
-
-	@Override
-	public String getState() {
-		return page.getState().name();
-	}
-
-	@Override
-	public String getCreateUserEmail() {
-		return page.getCreateUserEmail();
-	}
-	
-	@Override
-	public String getCreateDate() {
-		return DateUtil.dateTimeToString(page.getCreateDate());
-	}
-
-	@Override
-	public String getModUserEmail() {
-		return page.getModUserEmail();
-	}
-	
-	@Override
-	public String getModDate() {
-		return DateUtil.dateTimeToString(page.getModDate());
-	}
-
-	@Override
-	public String getDescription() {
-		return page.getDescription();
-	}
-
-	@Override
-	public String getKeywords() {
-		return page.getKeywords();
 	}
 	
 }

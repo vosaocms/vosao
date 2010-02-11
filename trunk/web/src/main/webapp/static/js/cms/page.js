@@ -30,6 +30,7 @@ var page = null;
 var pages = {};
 var versions = [];
 var contents = null;
+var titles = null;
 var currentLanguage = '';
 var languages = null;
 var children = {list:[]};
@@ -122,6 +123,7 @@ function loadPage() {
 		loadComments();
 		loadPermissions();
 		loadGroups();
+		loadTitles();
 	} else {
 		pages['1'] = page;
 	}
@@ -211,6 +213,7 @@ function initPageForm() {
 	var urlEnd = pageParentUrl == '/' ? '' : '/';
 	if (page != null) {
 		$('#title').val(page.title);
+		$('#titleDiv').hide();
 		if (page.parentUrl == '' || page.parentUrl == null) {
 			$('#friendlyUrl').hide();
 			$('#friendlyUrl').val('');
@@ -242,6 +245,8 @@ function initPageForm() {
 		showContentEditor();
 	} else {
 		$('#title').val('');
+		$('#titleDiv').show();
+		$('#titleLocal').val('');
 		$('#friendlyUrl').show();
 		$('#friendlyUrl').val('');
 		$('#parentFriendlyUrl').html(pageParentUrl + urlEnd);
@@ -270,7 +275,7 @@ function initPageForm() {
 function onPageUpdate() {
 	var pageVO = Vosao.javaMap( {
 		id : pageId,
-		title : $('#title').val(),
+		titles : getTitles(),
 		friendlyUrl : $('#parentFriendlyUrl').text() + $('#friendlyUrl').val(),
 		publishDate : $('#publishDate').val(),
 		commentsEnabled : String($('#commentsEnabled:checked').size() > 0),
@@ -400,6 +405,7 @@ function saveContent() {
 	var approve = $('#approveOnContentSave:checked').size() > 0;
 	contents[currentLanguage] = content;
 	Vosao.jsonrpc.pageService.updateContent(function(r) {
+		titles[currentLanguage] = $('#titleLocal').val();
 		if (r.result == 'success') {
 			var now = new Date();
 			Vosao.info(r.message + " " + now);
@@ -407,7 +413,7 @@ function saveContent() {
 		} else {
 			Vosao.error(r.message);
 		}
-	}, pageId, content, currentLanguage, approve);
+	}, pageId, content, $('#titleLocal').val(), currentLanguage, approve);
 }
 
 function onAutosave() {
@@ -544,6 +550,7 @@ function onLanguageChange() {
 			contents[currentLanguage] = '';
 		}
 		setEditorContent(contents[currentLanguage]);
+		$('#titleLocal').val(getTitle());
 	} else {
 		$('#language').val(currentLanguage);
 	}
@@ -574,6 +581,7 @@ function loadContents() {
 			currentLanguage = r.list[0].languageCode;
 		}
 		setEditorContent(contents[currentLanguage]);
+		$('#titleLocal').val(getTitle());
 	} else {
 		setEditorContent('');
 	}
@@ -916,4 +924,29 @@ function browseResources(id) {
 
 function setResource(path) {
 	$('#' + browseId).val(path);
+}
+
+function loadTitles() {
+	titles = page.titles.map;
+}
+
+function getTitle() {
+	if (titles[currentLanguage] == undefined) {
+		return '';
+	}
+	return titles[currentLanguage];
+}
+
+function getTitles() {
+	if (!editMode) {
+		return 'en' + $('#title').val();
+	}
+	titles[currentLanguage] = $('#titleLocal').val();
+	var result = '';
+	var count = 0;
+	$.each(titles, function(lang, value) {
+		var coma = count++ == 0 ? '' : ',';
+		result += coma + lang + value;
+	});
+	return result;
 }

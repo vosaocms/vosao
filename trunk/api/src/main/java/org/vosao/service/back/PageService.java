@@ -50,7 +50,7 @@ public interface PageService extends AbstractService {
 	void setGroupService(GroupService bean);
 
 	ServiceResponse updateContent(final String pageId, final String content,
-			String languageCode, boolean approve);
+			String titles, String languageCode, boolean approve);
 	
 	List<ContentEntity> getContents(final String pageId);
 	

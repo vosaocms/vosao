@@ -22,6 +22,7 @@
 package org.vosao.service.back.impl;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -100,8 +101,8 @@ public class PageServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public TreeItemDecorator<PageVO> getTree() {
-		List<PageVO> pages = PageVO.create(getBusiness().getPageBusiness()
-				.select());
+		List<PageVO> pages = selectLastVersionPages(
+				getBusiness().getPageBusiness().select());
 		Map<String, TreeItemDecorator<PageVO>> buf = 
 				new HashMap<String, TreeItemDecorator<PageVO>>();
 		for (PageVO page : pages) {
@@ -125,6 +126,36 @@ public class PageServiceImpl extends AbstractServiceImpl
 		}
 		return root;
 	}
+	
+	private List<PageVO> selectLastVersionPages(List<PageEntity> pages) {
+		Map<String, PageEntity> pageMap = new HashMap<String, PageEntity>();
+		Map<String, Boolean> published = new HashMap<String, Boolean>();
+		for (PageEntity page : pages) {
+			if (pageMap.containsKey(page.getFriendlyURL())) {
+				if (pageMap.get(page.getFriendlyURL()).getVersion() 
+						< page.getVersion()) {
+					pageMap.put(page.getFriendlyURL(), page);
+				}
+				if (page.isApproved()) {
+					published.put(page.getFriendlyURL(), true);
+				}
+			}
+			else {
+				pageMap.put(page.getFriendlyURL(), page);
+				published.put(page.getFriendlyURL(), page.isApproved());
+			}
+		}
+		List<PageVO> result = PageVO.create(pageMap.values());
+		for (PageVO page : result) {
+			boolean isPublished = false;
+			if (published.containsKey(page.getFriendlyURL())) {
+				isPublished = published.get(page.getFriendlyURL());
+			}
+			page.setHasPublishedVersion(isPublished);
+		}
+		return result;
+	}
+	
 
 	@Override
 	public PageEntity getPage(String id) {

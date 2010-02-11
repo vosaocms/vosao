@@ -252,6 +252,17 @@ public class BaseDaoImpl<K,T extends BaseEntity> extends AbstractDaoImpl
 		}
 		return null;
 	}
+
+	@Override
+	public void clearCache() {
+		try {
+			getEntityCache().removeEntities(clazz);
+			getQueryCache().removeQueries(clazz);
+		}
+		catch (Exception e) {
+			logger.error("clearCache " + clazz.getName() + " " + e.getMessage());
+		}
+	}
 	
 	
 }

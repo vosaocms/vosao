@@ -21,6 +21,7 @@
 
 package org.vosao.dao.cache.impl;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -32,10 +33,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.dao.cache.CacheStat;
 import org.vosao.dao.cache.QueryCache;
-import org.vosao.dao.impl.AbstractDaoImpl;
 import org.vosao.global.SystemService;
 
-public class QueryCacheImpl implements QueryCache {
+public class QueryCacheImpl implements QueryCache, Serializable {
 
 	protected static final Log logger = LogFactory.getLog(
 			QueryCacheImpl.class);

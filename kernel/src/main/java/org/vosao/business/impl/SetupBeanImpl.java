@@ -258,6 +258,8 @@ public class SetupBeanImpl implements SetupBean {
 		getDao().getTemplateDao().removeAll();
 		getDao().getUserDao().removeAll();
 		getDao().getUserGroupDao().removeAll();
+		getDao().getPluginDao().removeAll();
+		getDao().getPluginResourceDao().removeAll();
 		clearCache();
 	}
 	

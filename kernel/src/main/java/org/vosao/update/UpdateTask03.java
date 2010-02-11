@@ -66,6 +66,7 @@ public class UpdateTask03 implements UpdateTask {
 	@Override
 	public void update() throws UpdateException {
 		datastore = DatastoreServiceFactory.getDatastoreService();
+		dao.clearCache();
 		updatePages();
 		updateUsers();
 	}

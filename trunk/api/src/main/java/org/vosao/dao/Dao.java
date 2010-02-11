@@ -32,6 +32,8 @@ public interface Dao {
 	QueryCache getQueryCache();
 	void setQueryCache(QueryCache queryCache);
 
+	void clearCache();
+	
 	PageDao getPageDao();
 	void setPageDao(final PageDao pageDao);
 	

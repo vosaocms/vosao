@@ -48,7 +48,7 @@ import com.google.appengine.api.datastore.Text;
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class PageEntity implements BaseEntity {
 
-	private static final long serialVersionUID = 7L;
+	private static final long serialVersionUID = 8L;
 	
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)

@@ -74,6 +74,30 @@ public class DaoImpl implements Dao, Serializable {
 	private StructureTemplateDao structureTemplateDao;
 	private PluginDao pluginDao;
 	private PluginResourceDao pluginResourceDao;
+
+	public void clearCache() {
+		pageDao.clearCache();
+		fileDao.clearCache();
+		folderDao.clearCache();
+		userDao.clearCache();
+		templateDao.clearCache();
+		configDao.clearCache();
+		formDao.clearCache();
+		commentDao.clearCache();
+		fieldDao.clearCache();
+		seoUrlDao.clearCache();
+		languageDao.clearCache();
+		contentDao.clearCache();
+		messageDao.clearCache();
+		groupDao.clearCache();
+		userGroupDao.clearCache();
+		contentPermissionDao.clearCache();
+		folderPermissionDao.clearCache();
+		structureDao.clearCache();
+		structureTemplateDao.clearCache();
+		pluginDao.clearCache();
+		pluginResourceDao.clearCache();
+	}
 	
 	public PageDao getPageDao() {
 		return pageDao;

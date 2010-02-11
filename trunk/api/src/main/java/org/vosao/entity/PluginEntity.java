@@ -35,7 +35,7 @@ import com.google.appengine.api.datastore.Text;
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class PluginEntity implements BaseEntity {
 	
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)

@@ -21,6 +21,7 @@
 
 package org.vosao.dao.cache.impl;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,7 +33,7 @@ import org.vosao.dao.cache.CacheStat;
 import org.vosao.dao.cache.EntityCache;
 import org.vosao.global.SystemService;
 
-public class EntityCacheImpl implements EntityCache {
+public class EntityCacheImpl implements EntityCache, Serializable {
 
 	protected static final Log logger = LogFactory.getLog(
 			EntityCacheImpl.class);

@@ -68,6 +68,8 @@ public interface PageService extends AbstractService {
 	
 	ServiceResponse deletePages(final List<String> ids);
 
+	ServiceResponse deletePageVersion(String id);
+
 	List<PageVO> getPageVersions(final String url);
 	
 	/**

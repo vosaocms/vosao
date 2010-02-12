@@ -65,6 +65,11 @@ public interface PageBusiness {
 	/**
 	 * Security filtered dao version.
 	 */
+	void removeVersion(String id);
+
+	/**
+	 * Security filtered dao version.
+	 */
 	List<ContentEntity> getContents(final String pageId);
 
 	/**

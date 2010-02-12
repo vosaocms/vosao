@@ -75,4 +75,6 @@ public interface PageDao extends BaseDao<String, PageEntity> {
 
 	List<PageEntity> selectByStructureTemplate(String structureTemplateId);
 	
+	void removeVersion(String id);
+	
 }

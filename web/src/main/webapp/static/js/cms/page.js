@@ -576,7 +576,7 @@ function loadContents() {
 function onVersionDelete(version) {
 	if (confirm('Are you sure?')) {
 		var delPage = pages[version];
-		Vosao.jsonrpc.pageService.deletePages(function(r) {
+		Vosao.jsonrpc.pageService.deletePageVersion(function(r) {
 			if (version == String(page.version)) {
 				if (versions.length == 1) {
 					location.href = '/cms/pages.jsp';
@@ -594,7 +594,7 @@ function onVersionDelete(version) {
 			} else {
 				callLoadVersions();
 			}
-		}, Vosao.javaList( [ delPage.id ]));
+		}, delPage.id);
 	}
 }
 

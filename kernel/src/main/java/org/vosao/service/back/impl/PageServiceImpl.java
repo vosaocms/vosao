@@ -202,6 +202,13 @@ public class PageServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
+	public ServiceResponse deletePageVersion(String id) {
+		getBusiness().getPageBusiness().removeVersion(id);
+		return ServiceResponse.createSuccessResponse(
+				"Page was successfully deleted");
+	}
+	
+	@Override
 	public List<ContentEntity> getContents(String pageId) {
 		return getBusiness().getPageBusiness().getContents(pageId);
 	}

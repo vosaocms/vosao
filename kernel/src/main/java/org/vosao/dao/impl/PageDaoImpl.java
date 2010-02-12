@@ -53,16 +53,27 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 	public void remove(String id) {
 		PageEntity page = getById(id);
 		if (page != null) {
+			List<PageEntity> versions = selectByUrl(page.getFriendlyURL());
+			for (PageEntity version : versions) {
+				removeVersion(version.getId());
+			}
 			List<PageEntity> children = selectAllChildren(page.getFriendlyURL());
 			for (PageEntity child : children) {
 				remove(child.getId());
 			}
-			getContentDao().removeById(PAGE_CLASS_NAME, id);
 			getCommentDao().removeByPage(page.getFriendlyURL());
 		}
-		super.remove(id);
 	}
 	
+	@Override
+	public void removeVersion(String id) {
+		PageEntity page = getById(id);
+		if (page != null) {
+			getContentDao().removeById(PAGE_CLASS_NAME, id);
+			super.remove(id);
+		}
+	}
+
 	private List<PageEntity> selectAllChildren(final String parentUrl) {
 		String query = "select from " + PageEntity.class.getName()
 			+ " where parentUrl == pParentUrl" 

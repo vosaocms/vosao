@@ -342,6 +342,16 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	}
 
 	@Override
+	public void removeVersion(String id) {
+		PageEntity page = getDao().getPageDao().getById(id);
+		if (page != null) {
+			if (canWritePage(page.getFriendlyURL())) {
+				getDao().getPageDao().removeVersion(id);
+			}
+		}
+	}
+
+	@Override
 	public List<ContentEntity> getContents(String pageId) {
 		PageEntity page = getById(pageId);
 		if (page != null) {

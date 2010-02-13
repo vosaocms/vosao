@@ -92,7 +92,7 @@
 <div class="clear"> </div>
 
 <div class="version">
-  <span>Vosao CMS Version <%= SetupBeanImpl.VERSION %></span>
+  <span>Vosao CMS Version <%= SetupBeanImpl.FULLVERSION %></span>
 </div>
 
 </div>

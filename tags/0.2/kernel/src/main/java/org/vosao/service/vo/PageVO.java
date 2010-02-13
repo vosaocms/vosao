@@ -22,6 +22,7 @@
 package org.vosao.service.vo;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.vosao.entity.PageEntity;
@@ -39,7 +40,7 @@ public class PageVO {
 		page = entity;
 	}
 
-	public static List<PageVO> create(List<PageEntity> list) {
+	public static List<PageVO> create(Collection<PageEntity> list) {
 		List<PageVO> result = new ArrayList<PageVO>();
 		for (PageEntity entity : list) {
 			result.add(new PageVO(entity));

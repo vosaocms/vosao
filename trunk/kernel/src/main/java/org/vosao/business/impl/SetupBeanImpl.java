@@ -24,8 +24,6 @@ package org.vosao.business.impl;
 import java.io.IOException;
 import java.util.List;
 
-import javax.cache.CacheException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
@@ -57,6 +55,7 @@ public class SetupBeanImpl implements SetupBean {
 	private static Log log = LogFactory.getLog(SetupBeanImpl.class);
 
 	public static final String VERSION = "0.3";
+	public static final String FULLVERSION = "0.3";
 
 	private Dao dao;
 	private Business business;

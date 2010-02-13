@@ -7,7 +7,7 @@
 		<artifactId>cms</artifactId>
 		<version>0.3</version>
 	</parent>
-	<artifactId>web</artifactId>
+	<artifactId>vosao-web</artifactId>
 	<packaging>war</packaging>
 	<name>Vosao CMS web module</name> 
 

@@ -118,7 +118,7 @@ public class SiteFilter extends AbstractFilter implements Filter {
     		throws IOException {
     	renderMessage(httpResponse, "<h3>Sorry, but there is no approved content" +
     			" available for this page.</h3><p>Vosao CMS "+ 
-    			SetupBeanImpl.VERSION +"</p>");
+    			SetupBeanImpl.FULLVERSION +"</p>");
     }
 
 	public static boolean isSkipUrl(final String url) {

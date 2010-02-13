@@ -99,8 +99,8 @@ public class PageServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public TreeItemDecorator<PageVO> getTree() {
-		List<PageVO> pages = PageVO.create(getBusiness().getPageBusiness()
-				.select());
+		List<PageVO> pages = selectLastVersionPages(
+					getBusiness().getPageBusiness().select());
 		Map<String, TreeItemDecorator<PageVO>> buf = 
 				new HashMap<String, TreeItemDecorator<PageVO>>();
 		for (PageVO page : pages) {
@@ -125,6 +125,23 @@ public class PageServiceImpl extends AbstractServiceImpl
 		return root;
 	}
 
+	private List<PageVO> selectLastVersionPages(List<PageEntity> pages) {
+		Map<String, PageEntity> pageMap = new HashMap<String, PageEntity>();
+		for (PageEntity page : pages) {
+			if (pageMap.containsKey(page.getFriendlyURL())) {
+				if (pageMap.get(page.getFriendlyURL()).getVersion() 
+						< page.getVersion()) {
+					pageMap.put(page.getFriendlyURL(), page);
+				}
+			}
+			else {
+				pageMap.put(page.getFriendlyURL(), page);
+			}
+		}
+		List<PageVO> result = PageVO.create(pageMap.values());
+		return result;
+	}
+	
 	@Override
 	public PageEntity getPage(String id) {
 		if (StringUtils.isEmpty(id)) {

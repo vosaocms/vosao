@@ -46,9 +46,9 @@ function renderPage(vo) {
 	var p = vo.entity.hasPublishedVersion ? 'published' : 'unpublished';
 	var html = '<li> <img src="/static/images/'+ p +'.png" title="' + p 
 			+ '" width="16px" />' 
-			+ ' <a href="page.jsp?tab=1&id=' + vo.entity.id + '">'
+			+ ' <a href="page/content.jsp?id=' + vo.entity.id + '">'
 			+ vo.entity.title
-			+ '</a> <a title="Add child" href="page.jsp?parent=' + pageUrl
+			+ '</a> <a title="Add child" href="page/index.jsp?parent=' + pageUrl
 			+ '">+</a>';
 	if (vo.children.list.length > 0) {
 		html += '<ul>';

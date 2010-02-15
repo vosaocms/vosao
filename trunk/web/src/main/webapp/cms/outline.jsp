@@ -43,7 +43,7 @@
     </ul>
     <div id="tab-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
         <div class="outline-link">
-            <a href="outline.jsp">Outline editor</a>
+            <a href="pages.jsp">Classic editor</a>
         </div>
         <ul id="pages-tree"><img src="/static/images/ajax-loader.gif" /></ul>
     </div>

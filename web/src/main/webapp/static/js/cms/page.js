@@ -358,17 +358,17 @@ function getEditorContent() {
 		return contentEditor.getData();
 	}
 	if (page.structured) {
-		var xml = '<content>';
+		var xml = '<?xml version="1.0" encoding="utf-8"?>\n<content>\n';
 		$.each(pageRequest.structureFields.list, function(i, field) {
 			if (field.type == 'TEXT' || field.type == 'DATE' 
 				|| field.type == 'RESOURCE') {
 				xml += '<' + field.name + '>' + $('#field' + field.name).val()
-					+ '</' + field.name + '>';
+					+ '</' + field.name + '>\n';
 			}
 			if (field.type == 'TEXTAREA') {
 				xml += '<' + field.name + '>'
 					+ Vosao.escapeHtml(contentEditors[field.name].getData())  
-					+ '</' + field.name + '>';
+					+ '</' + field.name + '>\n';
 			}
 		});
 		return xml + '</content>';

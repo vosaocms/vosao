@@ -40,6 +40,8 @@
 
 <div id="tab-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
 
+<form id="pageForm">
+
 <div id="titleDiv" class="form-row">
     <label>Title</label>
     <input id="title" type="text" class="form-title" size="40" />
@@ -95,10 +97,12 @@
     <div id="approveOnPageSaveDiv" class="checkboxes">
         <input id="approveOnPageSave" type="checkbox"> Approve on Save
     </div> 
-    <input id="pageSaveButton" type="button" value="Save" />
+    <input id="pageSaveButton" type="submit" value="Save" />
     <input id="pagePreview" type="button" value="Preview" />
     <input id="pageCancelButton" type="button" value="Cancel" />
 </div>    
+
+</form>
 
 </div>
 

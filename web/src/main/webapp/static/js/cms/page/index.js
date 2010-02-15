@@ -29,6 +29,7 @@
 var page = null;
 var editMode = pageId != '';
 var pageRequest = null;
+var currentLanguage = '';
 var structureTemplates = null;
     
 $(function(){
@@ -47,6 +48,7 @@ $(function(){
     $('#pageType').change(onPageTypeChange);
     $('#structure').change(onStructureChange);
     $('#pageSaveButton').click(onPageUpdate);
+    $('#pageForm').submit(function() {onPageUpdate(); return false;});
     $('#pagePreview').click(onPagePreview);
     $('#pageCancelButton').click(onPageCancel);
     $('#addVersionLink').click(onAddVersion);
@@ -82,6 +84,8 @@ function loadPage() {
 		pageId = page.id;
 		pageParentUrl = page.parentUrl;
 		loadVersions();
+		loadLanguages();
+		loadContents();
 	} else {
 		pages['1'] = page;
 	}
@@ -293,5 +297,36 @@ function onStructureChange() {
 function getTitles() {
 	if (!editMode) {
 		return 'en' + $('#title').val();
+	}
+}
+
+function loadLanguages() {
+	var r = pageRequest.languages;
+	languages = {};
+	var h = '';
+	$.each(r.list, function(i, value) {
+		languages[value.code] = value;
+	});
+}
+
+function loadContents() {
+	if (editMode) {
+		var r = pageRequest.contents;
+		var allowedLangs = {};
+		if (pageRequest.pagePermission.allLanguages) {
+			allowedLangs = languages;
+		}
+		else {
+			$.each(pageRequest.pagePermission.languagesList.list, 
+					function(i, value) {
+				allowedLangs[value] = languages[value];
+			});
+		}
+		if (allowedLangs[Vosao.ENGLISH_CODE] != undefined) {
+			currentLanguage = Vosao.ENGLISH_CODE;
+		}
+		else {
+			currentLanguage = r.list[0].languageCode;
+		}
 	}
 }

@@ -40,6 +40,8 @@
 
 <div id="tab-1" class="contentTab ui-tabs-panel ui-widget-content ui-corner-bottom">
 
+<form id="pageForm">
+
 <div style="padding-right:10px">
     <div style="float:right">
         <input id="autosave" type="checkbox"> Autosave</input>
@@ -60,11 +62,13 @@
     </div> 
     <input id="saveContinueContentButton" type="button" 
         value="Save and continue" />
-    <input id="saveContentButton" type="button" value="Save" />
+    <input id="saveContentButton" type="submit" value="Save" />
     <input id="contentPreviewButton" type="button" value="Preview" />
     <input id="approveButton" type="button" value="Approve" />
     <input id="contentCancelButton" type="button" value="Cancel" />
 </div>    
+
+</form>
 
 </div>
 

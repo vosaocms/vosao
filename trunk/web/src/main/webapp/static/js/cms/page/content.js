@@ -55,6 +55,7 @@ $(function(){
     $('#language').change(onLanguageChange);
     $('#saveContinueContentButton').click(saveContent);
     $('#saveContentButton').click(onPageUpdate);
+    $('#pageForm').submit(function() {onPageUpdate(); return false;});
     $('#contentPreviewButton').click(onPagePreview);
     $('#approveButton').click(onPageApprove);
     $('#contentCancelButton').click(onPageCancel);

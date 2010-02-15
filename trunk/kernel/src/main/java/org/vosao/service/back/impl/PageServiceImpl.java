@@ -210,7 +210,9 @@ public class PageServiceImpl extends AbstractServiceImpl
 		if (vo.get("template") != null) {
 			page.setTemplate(vo.get("template"));
 		}
-		page.setTitleValue(vo.get("titles"));
+		if (vo.get("titles") != null) {
+			page.setTitleValue(vo.get("titles"));
+		}
 		if (vo.get("pageType") != null) {
 			page.setPageType(PageType.valueOf(vo.get("pageType")));
 		}

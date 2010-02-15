@@ -24,30 +24,32 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>Pages</title>
-    <script src="/static/js/jquery.treeview.pack.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="/static/css/jquery.treeview.css" type="text/css" />
-    <script src="/static/js/cms/pages.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="/static/css/pages.css" type="text/css" />
+
+  <%@ include file="head.jsp" %>
+
+  <script type="text/javascript" src="/static/js/cms/page/comments.js"></script>
+    
 </head>
 <body>
 
+<%@ include file="versionsBox.jsp" %>
+
 <div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
-    <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-        <li class="ui-corner-top ui-tabs-selected ui-state-active">
-            <a href="#tab-1">Pages</a>
-        </li>
-        <li id="structuresTab" class="ui-corner-top ui-state-default">
-            <a href="structures.jsp">Structures</a>
-        </li>
-    </ul>
-    <div id="tab-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
-        <div class="outline-link">
-            <a href="outline.jsp">Outline editor</a>
-        </div>
-        <ul id="pages-tree"><img src="/static/images/ajax-loader.gif" /></ul>
-    </div>
+
+<%@ include file="tab.jsp" %>
+
+<div id="tab-1" class="commentsTab ui-tabs-panel ui-widget-content ui-corner-bottom">
+    <div id="comments"> </div>
+    <div class="buttons">
+        <input id="enableCommentsButton" type="button" value="Enable comments" />
+        <input id="disableCommentsButton" type="button" value="Disable comments" />
+        <input id="deleteCommentsButton" type="button" value="Delete comments" />
+    </div>    
 </div>
+
+</div>
+
+<%@ include file="versionDialog.jsp" %>
 
 </body>
 </html>

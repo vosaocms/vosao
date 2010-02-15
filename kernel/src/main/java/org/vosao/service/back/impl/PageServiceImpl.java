@@ -180,8 +180,12 @@ public class PageServiceImpl extends AbstractServiceImpl
 		}
 		page.setModDate(new Date());
 		page.setModUserEmail(user.getEmail());
-		page.setCommentsEnabled(Boolean.valueOf(vo.get("commentsEnabled")));
-		page.setFriendlyURL(vo.get("friendlyUrl"));
+		if (vo.get("commentsEnabled") != null) {
+			page.setCommentsEnabled(Boolean.valueOf(vo.get("commentsEnabled")));
+		}
+		if (vo.get("friendlyUrl") != null) {
+			page.setFriendlyURL(vo.get("friendlyUrl"));
+		}
 		ContentPermissionEntity perm = getBusiness()
 			.getContentPermissionBusiness().getPermission(
 				page.getFriendlyURL(), CurrentUser.getInstance());
@@ -195,25 +199,41 @@ public class PageServiceImpl extends AbstractServiceImpl
 		if (!perm.isChangeGranted()) {
 			return ServiceResponse.createErrorResponse("Access denied");
 		}
-		try {
-			page.setPublishDate(DateUtil.toDate(vo.get("publishDate")));
+		if (vo.get("publishDate") != null) {
+			try {
+				page.setPublishDate(DateUtil.toDate(vo.get("publishDate")));
+			}
+			catch (ParseException e) {
+				return ServiceResponse.createErrorResponse("Date is in wrong format");
+			}
 		}
-		catch (ParseException e) {
-			return ServiceResponse.createErrorResponse("Date is in wrong format");
+		if (vo.get("template") != null) {
+			page.setTemplate(vo.get("template"));
 		}
-		page.setTemplate(vo.get("template"));
 		page.setTitleValue(vo.get("titles"));
-		page.setPageType(PageType.valueOf(vo.get("pageType")));
-		page.setStructureId(vo.get("structureId"));
-		page.setStructureTemplateId(vo.get("structureTemplateId"));
-		page.setKeywords(vo.get("keywords"));
-		page.setDescription(vo.get("description"));
+		if (vo.get("pageType") != null) {
+			page.setPageType(PageType.valueOf(vo.get("pageType")));
+		}
+		if (vo.get("structureId") != null) {
+			page.setStructureId(vo.get("structureId"));
+		}
+		if (vo.get("structureTemplateId") != null) {
+			page.setStructureTemplateId(vo.get("structureTemplateId"));
+		}
+		if (vo.get("keywords") != null) {
+			page.setKeywords(vo.get("keywords"));
+		}
+		if (vo.get("description") != null) {
+			page.setDescription(vo.get("description"));
+		}
 		List<String> errors = getBusiness().getPageBusiness()
 			.validateBeforeUpdate(page);
 		if (errors.isEmpty()) {
 			getDao().getPageDao().save(page);
-			getDao().getPageDao().setContent(page.getId(), 
-					vo.get("languageCode"), vo.get("content"));
+			if (vo.containsKey("content")) {
+				getDao().getPageDao().setContent(page.getId(), 
+						vo.get("languageCode"), vo.get("content"));
+			}
 			return ServiceResponse.createSuccessResponse(page.getId());
 		}
 		else {

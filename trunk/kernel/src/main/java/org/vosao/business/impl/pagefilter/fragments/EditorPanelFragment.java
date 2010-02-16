@@ -33,20 +33,23 @@ public class EditorPanelFragment implements ContentFragment {
 		if (CurrentUser.getInstance() != null 
 			&& CurrentUser.getInstance().isEditor()) {
 			StringBuffer code = new StringBuffer( 
-				"<div style=\"border-bottom: 1px solid #a5c4d5;"
+				"<div id=\"editor-panel\"" 
+				+	"style=\"border-bottom: 1px solid #a5c4d5;"
 				+ "padding: 4px; position: fixed; left: 0; top: 0; width: 100%;"
 				+ "background-color: white; z-index: 1;\">"
 				+ "<div style=\"float:left\">"
 				+ "<a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms\">Vosao</a> CMS"
-				+ "<a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms/page.jsp?id=");
+				+ "<a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms/page/content.jsp?id=");
 			code.append(page.getId()).append(
 				"&tab=1\">Edit page</a>"
 				+ "<a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms/pages.jsp\">Content</a>"
 				+ "<a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms/folders.jsp\">Resources</a>"
 				+ "</div>"
-				+ "<div style=\"float:right\">"
-				+ "| <a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms/profile.jsp\">Profile</a>" 
-				+ "| <a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"http://code.google.com/p/vosao/issues/list\">Support</a>"    
+				+ "<div style=\"float:right;margin-right:10px;\">"
+				+ CurrentUser.getInstance().getEmail()
+				+ " | <a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms/profile.jsp\">Profile</a>" 
+				+ " | <a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"http://code.google.com/p/vosao/issues/list\">Support</a>"
+				+ " | <a href=\"#\" onclick=\"$('#editor-panel').hide()\">Hide</a> "
 				+ "</div>"
 				+ "<span style=\"clear:both\">&#160;</span>"
 				+ "</div>");

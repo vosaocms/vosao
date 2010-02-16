@@ -51,16 +51,36 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 	@Override
 	public ServiceResponse saveConfig(Map<String, String> vo) {
 		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
-		config.setCommentsEmail(vo.get("commentsEmail"));
-		config.setCommentsTemplate(vo.get("commentsTemplate"));
-		config.setEditExt(vo.get("editExt"));
-		config.setGoogleAnalyticsId(vo.get("googleAnalyticsId"));
-		config.setEnableRecaptcha(Boolean.valueOf(vo.get("enableRecaptcha")));
-		config.setRecaptchaPrivateKey(vo.get("recaptchaPrivateKey"));
-		config.setRecaptchaPublicKey(vo.get("recaptchaPublicKey"));
-		config.setSiteDomain(vo.get("siteDomain"));
-		config.setSiteEmail(vo.get("siteEmail"));
-		config.setSiteUserLoginUrl(vo.get("siteUserLoginUrl"));
+		if (vo.get("commentsEmail") != null) {
+			config.setCommentsEmail(vo.get("commentsEmail"));
+		}
+		if (vo.get("commentsTemplate") != null) {
+			config.setCommentsTemplate(vo.get("commentsTemplate"));
+		}
+		if (vo.get("editExt") != null) {
+			config.setEditExt(vo.get("editExt"));
+		}
+		if (vo.get("googleAnalyticsId") != null) {
+			config.setGoogleAnalyticsId(vo.get("googleAnalyticsId"));
+		}
+		if (vo.get("enableRecaptcha") != null) {
+			config.setEnableRecaptcha(Boolean.valueOf(vo.get("enableRecaptcha")));
+		}
+		if (vo.get("recaptchaPrivateKey") != null) {
+			config.setRecaptchaPrivateKey(vo.get("recaptchaPrivateKey"));
+		}
+		if (vo.get("recaptchaPublicKey") != null) {
+			config.setRecaptchaPublicKey(vo.get("recaptchaPublicKey"));
+		}
+		if (vo.get("siteDomain") != null) {
+			config.setSiteDomain(vo.get("siteDomain"));
+		}
+		if (vo.get("siteEmail") != null) {
+			config.setSiteEmail(vo.get("siteEmail"));
+		}
+		if (vo.get("siteUserLoginUrl") != null) {
+			config.setSiteUserLoginUrl(vo.get("siteUserLoginUrl"));
+		}
 		List<String> errors = getBusiness().getConfigBusiness()
 				.validateBeforeUpdate(config);
 		if (errors.isEmpty()) {

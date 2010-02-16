@@ -39,6 +39,7 @@
 </ul>
 
 <div id="tab-1">
+<form id="templateForm">
     <div class="form-row">
         <label>Title</label>
         <input id="title" type="text" />
@@ -60,9 +61,10 @@
     </div>
     <div class="buttons">
         <input id="saveContinueButton" type="button" value="Save and continue" />
-        <input id="saveButton" type="button" value="Save" />
+        <input id="saveButton" type="submit" value="Save" />
         <input id="cancelButton" type="button" value="Cancel" />
     </div>
+</form>
 </div>
 
 </div>

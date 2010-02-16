@@ -42,8 +42,8 @@ $(function(){
        	function() { $(this).removeClass('ui-state-hover'); }
     ); 
 
-    $("#version-dialog").dialog({ width: 400, autoOpen: false });
-
+    initVersionDialog();
+    
     $('#title').change(onTitleChange);
     $('#pageType').change(onPageTypeChange);
     $('#structure').change(onStructureChange);
@@ -51,10 +51,7 @@ $(function(){
     $('#pageForm').submit(function() {onPageUpdate(); return false;});
     $('#pagePreview').click(onPagePreview);
     $('#pageCancelButton').click(onPageCancel);
-    $('#addVersionLink').click(onAddVersion);
     $('#approveButton').click(onPageApprove);
-    $('#versionSaveButton').click(onVersionTitleSave);
-    $('#versionCancelButton').click(onVersionTitleCancel);
 
     $('ul.ui-tabs-nav li:nth-child(1)').addClass('ui-state-active')
     		.removeClass('ui-state-default');

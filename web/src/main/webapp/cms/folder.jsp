@@ -43,7 +43,7 @@
 </ul>
 
 <div id="tab-1">
-
+<form id="folderForm">
 <div class="form-row">
     <label>Title</label>
     <input id="title" type="text" class="form-title" />
@@ -53,11 +53,11 @@
     <input id="name" type="text" class="form-url"/>
 </div>
 <div class="buttons">
-    <input id="saveButton" type="button" value="Save" />
+    <input id="saveButton" type="submit" value="Save" />
     <input id="cancelButton" type="button" value="Cancel" />
     <input id="exportButton" type="button" value="Export" />
 </div>    
-
+</form>
 </div>
 
 <div id="tab-2" class="filesTab">
@@ -103,6 +103,7 @@
 </div>
 
 <div id="permission-dialog" style="display:none" title="Permission details">
+<form id="permissionForm">
     <div class="form-row">
         <label>Group</label>
         <select id="groupSelect"></select>
@@ -117,9 +118,10 @@
         </fieldset>        
     </div>
     <div class="buttons-dlg">
-        <input id="permissionSaveButton" type="button" value="Save" />
+        <input id="permissionSaveButton" type="submit" value="Save" />
         <input id="permissionCancelButton" type="button" value="Cancel" />
     </div>
+</form>
 </div>
 
 

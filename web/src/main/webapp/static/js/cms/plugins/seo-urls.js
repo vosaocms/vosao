@@ -28,7 +28,7 @@ $(function() {
     $('#addButton').click(onAdd);
     $('#removeButton').click(onRemove);
     $('#saveAndAddButton').click(onSaveAndAdd);
-    $('#saveDlgButton').click(function(){ onSave(true); });
+    $('#seoForm').submit(function(){onSave(true); return false;});
     $('#cancelDlgButton').click(onCancel);
 });
 

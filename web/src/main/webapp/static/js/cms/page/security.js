@@ -42,15 +42,13 @@ $(function(){
        	function() { $(this).removeClass('ui-state-hover'); }
     ); 
 
-    $("#version-dialog").dialog({ width: 400, autoOpen: false });
+    initVersionDialog();
     $("#permission-dialog").dialog({ width: 400, autoOpen: false });
     
-    $('#addVersionLink').click(onAddVersion);
-    $('#versionSaveButton').click(onVersionTitleSave);
-    $('#versionCancelButton').click(onVersionTitleCancel);
     $('#addPermissionButton').click(onAddPermission);
     $('#deletePermissionButton').click(onDeletePermission);
     $('#permissionSaveButton').click(onPermissionSave);
+    $('#permissionForm').submit(function() {onPermissionSave(); return false;});
     $('#permissionCancelButton').click(onPermissionCancel);
     $('#allLanguages').change(onAllLanguagesChange);
     

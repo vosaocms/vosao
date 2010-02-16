@@ -68,6 +68,7 @@ input[type=button]:focus, input[type=submit]:focus,
 input[type=button]:hover, input[type=submit]:hover {
     background: url('../images/button2.png') repeat-x 0 0;
     color: white;
+    border-color: #f9bd01;
 }
 
 input[type=text], input[type=password], select {

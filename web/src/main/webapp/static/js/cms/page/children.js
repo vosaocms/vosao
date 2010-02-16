@@ -40,13 +40,10 @@ $(function(){
        	function() { $(this).removeClass('ui-state-hover'); }
     ); 
 
-    $("#version-dialog").dialog({ width: 400, autoOpen: false });
+    initVersionDialog();
 
-    $('#addVersionLink').click(onAddVersion);
     $('#addChildButton').click(onAddChild);
     $('#deleteChildButton').click(onDelete);
-    $('#versionSaveButton').click(onVersionTitleSave);
-    $('#versionCancelButton').click(onVersionTitleCancel);
     
     $('ul.ui-tabs-nav li:nth-child(3)').addClass('ui-state-active')
     		.removeClass('ui-state-default');

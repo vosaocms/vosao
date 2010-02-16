@@ -31,6 +31,7 @@ $(function(){
     $('#wrapLink').click(onWrap);
     $('#saveContinueButton').click(onSaveContinue);
     $('#saveButton').click(onSave);
+    $('#templateForm').submit(function() {onSave(); return false;});
     $('#cancelButton').click(onCancel);
 });
 

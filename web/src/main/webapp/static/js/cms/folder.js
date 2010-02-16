@@ -40,6 +40,7 @@ $(function() {
     Vosao.initJSONRpc(loadData);
     $('#title').change(onTitleChange);
     $('#saveButton').click(onUpdate);
+    $('#folderForm').submit(function() {onUpdate(); return false;});
     $('#cancelButton').click(onCancel);
     $('#exportButton').click(onExport);
     $('#createFileButton').click(onCreateFile);
@@ -53,6 +54,7 @@ $(function() {
     $('#addPermissionButton').click(onAddPermission);
     $('#deletePermissionButton').click(onDeletePermission);
     $('#permissionSaveButton').click(onPermissionSave);
+    $('#permissionForm').submit(function() {onPermissionSave(); return false;});
     $('#permissionCancelButton').click(onPermissionCancel);
 });
 

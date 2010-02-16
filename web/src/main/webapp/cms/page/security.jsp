@@ -51,6 +51,7 @@
 <%@ include file="versionDialog.jsp" %>
 
 <div id="permission-dialog" style="display:none" title="Permission details">
+  <form id="permissionForm">
     <div class="form-row">
         <label>Group</label>
         <select id="groupSelect"></select>
@@ -72,9 +73,10 @@
     </div>    
     <div id ="permLanguages" class="form-row" style="display:none"> </div>
     <div class="buttons-dlg">
-        <input id="permissionSaveButton" type="button" value="Save" />
+        <input id="permissionSaveButton" type="submit" value="Save" />
         <input id="permissionCancelButton" type="button" value="Cancel" />
     </div>
+  </form>
 </div>
 
 </body>

@@ -48,9 +48,8 @@ $(function(){
        	function() { $(this).removeClass('ui-state-hover'); }
     ); 
 
-    $("#version-dialog").dialog({ width: 400, autoOpen: false });
+    initVersionDialog();
 
-    $('#addVersionLink').click(onAddVersion);
     $('#autosave').change(onAutosave);
     $('#language').change(onLanguageChange);
     $('#saveContinueContentButton').click(saveContent);
@@ -59,8 +58,6 @@ $(function(){
     $('#contentPreviewButton').click(onPagePreview);
     $('#approveButton').click(onPageApprove);
     $('#contentCancelButton').click(onPageCancel);
-    $('#versionSaveButton').click(onVersionTitleSave);
-    $('#versionCancelButton').click(onVersionTitleCancel);
     
     $('ul.ui-tabs-nav li:nth-child(2)').addClass('ui-state-active')
     		.removeClass('ui-state-default');

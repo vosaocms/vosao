@@ -41,6 +41,7 @@
 </ul>
 
 <div id="tab-1">
+<form id="fileForm">
 
 <div style="float:left">
  <div class="form-row">
@@ -72,17 +73,20 @@
  </div>
   
  <div class="buttons">
-    <input id="saveButton" type="button" value="Save" />
+    <input id="saveButton" type="submit" value="Save" />
     <input id="cancelButton" type="button" value="Cancel" />
- </div>    
+ </div>
+     
 </div>
 
 <div id="imageContent" style="float:left;margin-left: 20px;"> </div>
 <div style="clear:both"> </div>
 
+</form>
 </div>
 
 <div id="tab-2" class="contentTab">
+  <form id="contentForm">
     <div>
         <input id="autosave" type="checkbox" checked="checked"> Autosave</input>
     </div>
@@ -90,9 +94,10 @@
         <textarea id="content" rows="20" cols="80"></textarea>
     </div>
     <div class="buttons">
-        <input id="saveContentButton" type="button" value="Save and continue" />
+        <input id="saveContentButton" type="submit" value="Save and continue" />
         <input id="contentCancelButton" type="button" value="Cancel" />
     </div>    
+  </form>
 </div>
 
 </div>

@@ -22,12 +22,14 @@
 %>
 
 <div id="version-dialog" style="display:none" title="Version title">
+  <form id="versionForm">
     <div class="form-row">
         <label>Version title</label>
         <input id="version-title" type="text" />        
     </div>
     <div class="buttons-dlg">
-        <input id="versionSaveButton" type="button" value="Add" />
+        <input id="versionSaveButton" type="submit" value="Add" />
         <input id="versionCancelButton" type="button" value="Cancel" />
     </div>
+  </form>
 </div>

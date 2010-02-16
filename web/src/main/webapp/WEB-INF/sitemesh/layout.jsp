@@ -83,7 +83,7 @@
 <% } %>        
         <a href="/cms/folders.jsp">Resources</a>
 <% if (user.isAdmin()) { %>
-        <a href="/cms/config.jsp">Configuration</a>
+        <a href="/cms/config">Configuration</a>
         <a href="/cms/plugins">Plugins</a>
 <% } %>        
     </div>

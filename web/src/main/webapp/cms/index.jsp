@@ -59,7 +59,7 @@
 <% if (user.isAdmin()) { %>
     <div>
         <img src="/static/images/computer.png" />
-        <a href="/cms/config.jsp">Site configuration</a>
+        <a href="/cms/config">Site configuration</a>
         <p>Here you can change site configuration. Site domain, email,
            Google Analytics Id, comments template, comments email.</p>
     </div>

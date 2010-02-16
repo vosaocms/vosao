@@ -210,15 +210,18 @@ function setEditorContent(data) {
 	    contentEditor.setData(data);
 	}
 	if (page.structured) {
+		var domData = $.xmlDOM(data, function(error) {
+			Vosao.error('Content parsing error. ' + error);
+		});
 		$.each(pageRequest.structureFields.list, function(i, field) {
 			if (field.type == 'TEXT' || field.type == 'DATE' 
 				|| field.type == 'RESOURCE') {
-				$(data).find(field.name).each(function() {
+				$(domData).find(field.name).each(function() {
 					$('#field' + field.name).val($(this).text())					
 				});
 			}
 			if (field.type == 'TEXTAREA') {
-				$(data).find(field.name).each(function() {
+				$(domData).find(field.name).each(function() {
 					contentEditors[field.name].setData($(this).text());					
 				});
 			}

@@ -35,7 +35,7 @@
 
 <div id="main-panel">
     <div>
-        <img src="/static/images/document_edit.png" />
+        <img src="/static/images/pages.png" />
         <a href="/cms/pages.jsp">Content pages</a>
         <p>Here you can edit site content. All content viewed as a tree of pages.
            You can change various page properties including design template 
@@ -44,27 +44,27 @@
     </div>
 <% if (user.isAdmin()) { %>
     <div>
-        <img src="/static/images/file_edit.png" />
+        <img src="/static/images/templates.png" />
         <a href="/cms/templates.jsp">Design templates</a>
         <p>Here you can edit design templates. Site can have several design 
            templates. For every page you can select separate template.</p>
     </div>
 <% } %>    
     <div>
-        <img src="/static/images/diskette.png" />
+        <img src="/static/images/folders.png" />
         <a href="/cms/folders.jsp">File resources storage</a>
         <p>Here you can edit site resources. Resource could be any file
            including those used in design templates or referenced from pages</p>
     </div>
 <% if (user.isAdmin()) { %>
     <div>
-        <img src="/static/images/computer.png" />
+        <img src="/static/images/config.png" />
         <a href="/cms/config">Site configuration</a>
         <p>Here you can change site configuration. Site domain, email,
            Google Analytics Id, comments template, comments email.</p>
     </div>
     <div>
-        <img src="/static/images/shoppingcart.png" />
+        <img src="/static/images/plugins.png" />
         <a href="/cms/plugins">Plugins</a>
         <p>Various plugins configuration. Forms. SEO Urls</p>
     </div>

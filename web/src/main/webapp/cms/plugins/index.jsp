@@ -30,7 +30,7 @@
 
 <div id="main-panel">
     <div>
-        <img src="/static/images/form.png" />
+        <img src="/static/images/config.png" />
         <a href="/cms/plugins/config.jsp">Plugins Configuration</a>
         <p>You can install and configure existing plugins.
         </p>

@@ -40,7 +40,7 @@
 </ul>
 
 <div id="tab-1">
-
+<form id="form">
 <div class="form-row">
     <label>Title</label>
     <input id="title" type="text" />
@@ -75,10 +75,10 @@
 </div>
 
 <div class="buttons">
-    <input id="saveButton" type="button" value="Save" />
+    <input id="saveButton" type="submit" value="Save" />
     <input id="cancelButton" type="button" value="Cancel" />
 </div>
-
+</form>
 </div>
 
 <div id="tab-2" class="fieldsTab">
@@ -92,6 +92,7 @@
 </div>
 
 <div id="field-dialog" style="display:none" title="Field details">
+<form id="fieldForm">
     <div id="field-messages" class="messages"> </div>
     <div class="form-row">
         <label>Title</label>
@@ -133,10 +134,11 @@
         <input type="text" name="field.defaultValue"/>
     </div>
     <div class="buttons-dlg">
-        <input id="saveAndAddButton" type="button" value="Save and Add" />
+        <input id="saveAndAddButton" type="submit" value="Save and Add" />
         <input id="fieldSaveButton" type="button" value="Save" />
         <input id="fieldCancelButton" type="button" value="Cancel" />
     </div>
+</form>
 </div>
 
 </body>

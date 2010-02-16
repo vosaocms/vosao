@@ -39,14 +39,11 @@ $(function(){
        	function() { $(this).removeClass('ui-state-hover'); }
     ); 
 
-    $("#version-dialog").dialog({ width: 400, autoOpen: false });
+    initVersionDialog();
 
     $('#enableCommentsButton').click(onEnableComments);
     $('#disableCommentsButton').click(onDisableComments);
     $('#deleteCommentsButton').click(onDeleteComments);
-    $('#versionSaveButton').click(onVersionTitleSave);
-    $('#versionCancelButton').click(onVersionTitleCancel);
-    $('#addVersionLink').click(onAddVersion);
     
     $('ul.ui-tabs-nav li:nth-child(4)').addClass('ui-state-active')
     		.removeClass('ui-state-default');

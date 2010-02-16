@@ -45,6 +45,7 @@
 </div>
 
 <div id="url-dialog" style="display:none" title="SEO Url details">
+  <form id="seoForm">
     <div id="url-messages" class="messages"> </div>
     <div class="form-row">
         <label>From Link URL</label>
@@ -56,9 +57,10 @@
     </div>
     <div class="buttons-dlg">
         <input id="saveAndAddButton" type="button" value="Save and Add" />
-        <input id="saveDlgButton" type="button" value="Save" />
+        <input id="saveDlgButton" type="submit" value="Save" />
         <input id="cancelDlgButton" type="button" value="Cancel" />
     </div>
+  </form>
 </div>
 
 </div>

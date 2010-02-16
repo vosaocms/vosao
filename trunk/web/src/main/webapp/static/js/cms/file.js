@@ -27,10 +27,10 @@ $(function() {
 	$("#tabs").tabs();
 	$("#tabs").bind('tabsselect', tabSelected);
 	Vosao.initJSONRpc(loadFile);
-	$('#saveButton').click(onUpdate);
+	$('#fileForm').submt(function() {onUpdate(); return false});
 	$('#cancelButton').click(onCancel);
 	$('#autosave').change(onAutosave);
-	$('#saveContentButton').click(saveContent);
+	$('#contentForm').submit(function() {saveContent(); return false;});
 	$('#contentCancelButton').click(onCancel);
 });
 

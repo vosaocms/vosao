@@ -29,12 +29,12 @@ $( function() {
 	$("#field-dialog").dialog({ width :500, autoOpen :false });
 	Vosao.initJSONRpc(loadData);
 	$('#title').change(onTitleChange);
-	$('#saveButton').click(onUpdate);
+	$('#form').submit(function() {onUpdate(); return false;});
 	$('#cancelButton').click(onCancel);
 	$('#addFieldButton').click(onAddField);
 	$('#deleteFieldButton').click(onDeleteFields);
 	$('#fieldType').change(onFieldTypeChange);
-	$('#saveAndAddButton').click(onSaveAndAdd);
+	$('#fieldForm').submit(function() {onSaveAndAdd(); return false;});
 	$('#fieldSaveButton').click(function() { onFieldSave(true); });
 	$('#fieldCancelButton').click(onFieldCancel);
 	$('input[name=field.title]').change(onFieldTitleChange);
@@ -178,6 +178,7 @@ function fieldDialogInit() {
 		$('input[name=field.mandatory]')[0].checked = field.optional;
 	}
 	fieldDialogShowInputs();
+	clearFieldMessage();
 }
 
 function createFieldVO() {

@@ -65,6 +65,10 @@
 <div id="memo">
     <img src="/static/images/login-logo.jpg" />
     <p>Sign in to change site content.</p>
+    <p>Visit <a href="http://www.vosao.org">www.vosao.org</a> to 
+    get more information about Vosao CMS. </p>
+    <p>If you found a bug please open an issue on project   
+    <a href="http://code.google.com/p/vosao/issues">Issue Tracker</a> </p>
 </div>
 
 <div id="login-form">

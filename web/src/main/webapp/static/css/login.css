@@ -6,6 +6,10 @@
 
 #memo {
 	float: left;
+	width: 330px;
+}
+#memo p {
+    margin-bottom: 10px;
 }
 
 #login-form {
@@ -22,8 +26,8 @@
 
 .version {
 	position: fixed;
-	bottom: 0;
-	font-size: 10px;
+	bottom: 5px;
+	font-size: 12px;
 	width: 700px;
 	text-align: center;
 }

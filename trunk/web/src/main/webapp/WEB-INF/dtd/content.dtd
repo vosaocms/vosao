@@ -22,7 +22,8 @@
 -->
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE site [
-<!ELEMENT site (users,groups,config,structures,pages,forms,folders,messages)>
+<!ELEMENT site (users,groups,config,structures,pages,forms,folders,messages,
+plugins)>
 
 <!ELEMENT config (google-analytics,email,domain,edit-ext,recaptchaPrivateKey,
 recaptchaPublicKey,commentsEmail,commentsTemplate,enableRecaptcha,languages,
@@ -111,6 +112,10 @@ createDate,modDate,content*)>
 <!ELEMENT template (title, type, content)>
 <!ELEMENT type (#PCDATA)>
 
+<!ELEMENT plugins (plugin*)>
+<!ELEMENT plugin (name, configData)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT configData (#PCDATA)>
 
 <!ATTLIST language code CDATA #REQUIERED>
 <!ATTLIST language title CDATA #REQUIERED>

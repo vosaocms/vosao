@@ -36,6 +36,7 @@ import org.vosao.entity.GroupEntity;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.MessageEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.PluginEntity;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.StructureTemplateEntity;
 import org.vosao.entity.TemplateEntity;
@@ -354,6 +355,24 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 		}
 		else {
 			getDao().getUserDao().save(entity);
+		}
+	}
+
+	@Override
+	public void pluginSave(PluginEntity entity) throws DaoTaskException {
+		if (isSkip()) {
+			if (entity.getId() == null) {
+				PluginEntity found = getDao().getPluginDao().getByName(
+						entity.getName());
+				if (found == null) {
+					throw new DaoTaskException("Plugin not found while " 
+						+ "skipping save operation. " + entity.getName());
+				}
+				entity.setId(found.getId());
+			}
+		}
+		else {
+			getDao().getPluginDao().save(entity);
 		}
 	}
 	

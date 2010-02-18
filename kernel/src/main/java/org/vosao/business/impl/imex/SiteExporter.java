@@ -47,7 +47,8 @@ public class SiteExporter extends AbstractExporter {
 	private FolderExporter folderExporter;
 	private MessagesExporter messagesExporter;
 	private StructureExporter structureExporter;
-
+	private PluginExporter pluginExporter;
+	
 	public SiteExporter(Dao aDao, Business aBusiness,
 			DaoTaskAdapter daoTaskAdapter) {
 		super(aDao, aBusiness, daoTaskAdapter);
@@ -59,6 +60,7 @@ public class SiteExporter extends AbstractExporter {
 		folderExporter = new FolderExporter(aDao, aBusiness, daoTaskAdapter);
 		messagesExporter = new MessagesExporter(aDao, aBusiness, daoTaskAdapter);
 		structureExporter = new StructureExporter(aDao, aBusiness, daoTaskAdapter);
+		pluginExporter = new PluginExporter(aDao, aBusiness, daoTaskAdapter);
 	}
 
 	public boolean isSiteContent(final ZipEntry entry)
@@ -89,6 +91,7 @@ public class SiteExporter extends AbstractExporter {
 		formExporter.createFormsXML(siteElement);
 		folderExporter.createFoldersXML(siteElement);
 		messagesExporter.createMessagesXML(siteElement);
+		pluginExporter.createPluginsXML(siteElement);
 		return doc.asXML();
 	}
 	
@@ -122,6 +125,9 @@ public class SiteExporter extends AbstractExporter {
 			}
 			if (element.getName().equals("structures")) {
 				structureExporter.readStructures(element);
+			}
+			if (element.getName().equals("plugins")) {
+				pluginExporter.readPlugins(element);
 			}
 		}
 	}

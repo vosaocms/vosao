@@ -33,6 +33,7 @@ import org.vosao.entity.GroupEntity;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.MessageEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.PluginEntity;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.StructureTemplateEntity;
 import org.vosao.entity.TemplateEntity;
@@ -86,4 +87,5 @@ public interface DaoTaskAdapter {
 
 	void userSave(UserEntity entity) throws DaoTaskException;
 
+	void pluginSave(PluginEntity entity) throws DaoTaskException;
 }

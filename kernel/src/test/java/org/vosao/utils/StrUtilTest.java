@@ -19,28 +19,16 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service.back;
+package org.vosao.utils;
 
-import java.io.IOException;
-import java.util.Map;
+import junit.framework.TestCase;
 
-import org.vosao.entity.ConfigEntity;
-import org.vosao.service.AbstractService;
-import org.vosao.service.ServiceResponse;
+public class StrUtilTest extends TestCase {
 
-/**
- * @author Alexander Oleynik
- */
-public interface ConfigService extends AbstractService {
-	
-	ConfigEntity getConfig();
-	
-	ServiceResponse saveConfig(final Map<String, String> vo);
-	
-	ServiceResponse restoreCommentsTemplate() throws IOException;
-	
-	ServiceResponse reset();
-	
-	ServiceResponse reindex();
+	public void testExtrtactTextFromHTML() {
+		String html = "<b>\nb\n</b>re <script type=\"text/javascript\">test \n\nvar x = 0; \nfunction f() {};\n</script>d";
+		String text = StrUtil.extractTextFromHTML(html);
+		assertEquals("\nb\nre d", text);
+	}
 	
 }

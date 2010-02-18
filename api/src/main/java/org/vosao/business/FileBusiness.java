@@ -29,4 +29,9 @@ public interface FileBusiness {
 
 	List<String> validateBeforeUpdate(final FileEntity entity);
 	
+	FileEntity saveFile(String filename, byte[] data);
+	
+	byte[] readFile(String filename);
+	
+	FileEntity findFile(String filename);
 }

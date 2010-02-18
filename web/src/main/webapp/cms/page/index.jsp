@@ -64,6 +64,10 @@
     <label>Enable comments</label>
     <input id="commentsEnabled" type="checkbox" />
 </div>
+<div class="form-row">
+    <label>Include in search results</label>
+    <input id="searchable" type="checkbox" />
+</div>
 
 <div class="form-row">
     <label>Page type</label>

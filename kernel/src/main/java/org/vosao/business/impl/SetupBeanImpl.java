@@ -74,6 +74,7 @@ public class SetupBeanImpl implements SetupBean {
 		initConfigs();
 		initForms();
 		initLanguages();
+		getBusiness().getSearchEngine().reindexInRequest();
 	}
 	
 	private void initLanguages() {
@@ -124,31 +125,31 @@ public class SetupBeanImpl implements SetupBean {
 	private void initPages() {
 		List<PageEntity> roots = getDao().getPageDao().getByParent("");
 		if (roots.size() == 0) {
-			String content = loadResource("org/vosao/resources/html/root.html");
 			TemplateEntity template = getDao().getTemplateDao().getByUrl("simple");
-			PageEntity root = new PageEntity("root", "/", template.getId());
-			root.setCreateUserEmail("admin@test.com");
-			root.setModUserEmail("admin@test.com");
-			root.setState(PageState.APPROVED);
-			getDao().getPageDao().save(root);
-			getDao().getPageDao().setContent(root.getId(), 
-					LanguageEntity.ENGLISH_CODE, content);
+			addPage("Home page", "/", "org/vosao/resources/html/root.html",
+					template.getId());
 			getBusiness().getContentPermissionBusiness().setPermission(
 					"/", guests, ContentPermissionType.READ);
-	        log.info("Adding root page.");
-			content = loadResource("org/vosao/resources/html/login.html");
-			PageEntity login = new PageEntity("Site user Login", "/login", 
-					template.getId());
-			login.setCreateUserEmail("admin@test.com");
-			login.setModUserEmail("admin@test.com");
-			login.setState(PageState.APPROVED);
-			getDao().getPageDao().save(login);
-			getDao().getPageDao().setContent(login.getId(), 
-					LanguageEntity.ENGLISH_CODE, content);
-	        log.info("Adding login page.");
+	        addPage("Site user Login", "/login",
+	        		"org/vosao/resources/html/login.html", template.getId());
+	        addPage("Search", "/search",
+	        		"org/vosao/resources/html/search.html", template.getId());
 		}
 	}
 
+	private void addPage(String title, String url, String resource, 
+				String templateId) {
+        String content = loadResource(resource);
+		PageEntity login = new PageEntity(title, url,	templateId);
+		login.setCreateUserEmail("admin@test.com");
+		login.setModUserEmail("admin@test.com");
+		login.setState(PageState.APPROVED);
+		getDao().getPageDao().save(login);
+		getDao().getPageDao().setContent(login.getId(), 
+				LanguageEntity.ENGLISH_CODE, content);
+        log.info("Added " + title);
+	}
+	
 	private void initTemplates() {
 		List<TemplateEntity> list = getDao().getTemplateDao().select();
 		if (list.size() == 0) {
@@ -173,6 +174,10 @@ public class SetupBeanImpl implements SetupBean {
 			getDao().getFolderDao().save(simple);
 			getBusiness().getFolderPermissionBusiness().setPermission(
 					root, guests, FolderPermissionType.READ);
+			FolderEntity tmp = new FolderEntity("tmp", "tmp", root.getId());
+			getDao().getFolderDao().save(tmp);
+			getBusiness().getFolderPermissionBusiness().setPermission(
+					tmp, guests, FolderPermissionType.WRITE);
 		}
 	}
 	

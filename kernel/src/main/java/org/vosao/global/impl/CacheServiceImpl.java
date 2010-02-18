@@ -208,4 +208,9 @@ public class CacheServiceImpl implements CacheService {
 		return cacheHits;
 	}
 
+	@Override
+	public Cache getMemcache() {
+		return cache;
+	}
+
 }

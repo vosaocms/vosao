@@ -33,6 +33,7 @@ import org.vosao.service.FrontService;
 import org.vosao.service.front.CommentService;
 import org.vosao.service.front.FormService;
 import org.vosao.service.front.LoginService;
+import org.vosao.service.front.SearchService;
 import org.vosao.service.plugin.PluginServiceManager;
 
 public class FrontServiceImpl implements FrontService, Serializable {
@@ -45,12 +46,14 @@ public class FrontServiceImpl implements FrontService, Serializable {
 	private LoginService loginService;
 	private FormService formService;
 	private CommentService commentService;
+	private SearchService searchService;
 	
 	@Override
 	public void register(JSONRPCBridge bridge) {
 		bridge.registerObject("loginFrontService", loginService);
 		bridge.registerObject("formFrontService", formService);
 		bridge.registerObject("commentFrontService", commentService);
+		bridge.registerObject("searchFrontService", searchService);
 		registerPluginServices(bridge);
 	}
 	
@@ -59,6 +62,7 @@ public class FrontServiceImpl implements FrontService, Serializable {
 		bridge.unregisterObject("loginFrontService");
 		bridge.unregisterObject("formFrontService");
 		bridge.unregisterObject("commentFrontService");
+		bridge.unregisterObject("searchFrontService");
 		unregisterPluginServices(bridge);
 	}
 
@@ -146,5 +150,14 @@ public class FrontServiceImpl implements FrontService, Serializable {
 		}
 	}
 
+	@Override
+	public SearchService getSearchService() {
+		return searchService;
+	}
+
+	@Override
+	public void setSearchService(SearchService bean) {
+		searchService = bean;
+	}
 	
 }

@@ -19,18 +19,19 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.utils;
+package org.vosao.service.front;
 
-import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
 
-import junit.framework.TestCase;
+import org.vosao.search.SearchResult;
+import org.vosao.service.AbstractService;
 
-public class DateUtilTest extends TestCase {
 
-	public void testToString() {
-		/*String s = DateUtil.toString(null);
-		assertEquals("", s);
-		Date d = new Date();*/
-	}
+public interface SearchService extends AbstractService {
 	
+	SearchResult search(final String query, int start, int count, int textSize,
+			HttpServletRequest request);
+
+	SearchResult search(final String query, HttpServletRequest request);
+
 }

@@ -1,0 +1,86 @@
+
+<h2>Search</h2>
+
+<form id="searchForm">
+    <input type="text" id="query"/>
+    <select id="pageSize">
+        <option selected="selected" value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+    </select>
+    <input type="submit" value="Search"/>
+</form>
+<div id="searchCount"></div>
+<div class="searchPaginator"></div>
+<div id="searchResults"></div>
+<div class="searchPaginator"></div>
+
+<script type="text/javascript">
+
+var searchPage = 0;
+var searchResult = null;
+
+$(function() {
+    try { 
+        searchPage = Number(Vosao.getQueryParam('page'));
+        if (searchPage > 0) {
+            searchPage--;
+        } 
+    } catch (e) {}
+	$('#searchForm').submit(function() {
+		searchPage = 0;
+		onSearch(); 
+		return false;
+	});
+    Vosao.initJSONRpc(checkQuery);
+});
+
+function checkQuery() {
+    var query = Vosao.getQueryParam('query');
+    if (query) {
+        $('#query').val(query);
+        onSearch();
+    }
+}
+
+function onSearch() {
+	var query = $('#query').val();
+    var pageSize = Number($('#pageSize').val());
+    var start = searchPage * pageSize;
+	Vosao.jsonrpc.searchFrontService.search(function(r) {
+		searchResult = r;
+		var h = '';
+		if (r.count == 0) {
+			$('#searchCount').html('Nothing found.');
+            $('#searchResults, .searchPaginator').html('');
+			return;
+		}
+		jQuery.each(r.hits.list, function(i, hit) {
+		    h += '<div class="searchItem"><div class="searchTitle">' + hit.page.title
+		        + '</div><a href="' + hit.page.friendlyURL + '">' 
+		        + hit.content + '</a>'
+		        +'</div>';
+		});
+		$('#searchResults').html(h);
+		$('#searchCount').html('Found ' + r.count + ' results.');
+		showPaginator();
+	}, query, start, pageSize, 256);
+}
+
+function showPaginator() {
+    var pageSize = Number($('#pageSize').val());
+    var query = $('#query').val();
+	var pagesCount = searchResult.count / pageSize;
+	var h = '';
+    for (var i = 0; i < pagesCount; i++) {
+        var href = 'href="/search?query=' + query + '&page=' + (i+1) + '"';
+        if (searchPage == i) {
+            href = 'class="current"';
+        }
+        h += '<a ' + href + ' >' + (i + 1) + '</a>';
+    }
+	$('.searchPaginator').html(h);
+}
+
+</script>

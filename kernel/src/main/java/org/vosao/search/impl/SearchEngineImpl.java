@@ -24,6 +24,7 @@ package org.vosao.search.impl;
 import static com.google.appengine.api.labs.taskqueue.TaskOptions.Builder.url;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -105,17 +106,47 @@ public class SearchEngineImpl implements SearchEngine {
 	}
 
 	private List<String> getContentIds(String query) {
-		List<String> ids = new ArrayList<String>();
-		if (getIndex().containsKey(query)) {
-			for (Long key : getIndex().get(query)) {
-				String id = KeyFactory.createKeyString("ContentEntity", key);
-				ContentEntity contentEntity = getBusiness().getDao().getContentDao()
-						.getById(id);
-				if (contentEntity == null) {
-					continue;
-				}
-				ids.add(contentEntity.getParentKey());
+		String[] words = query.split("\\W+");
+		if (words.length == 0) {
+			return Collections.EMPTY_LIST;
+		}
+		List<Long> keys = getContentKeys(words[0]);
+		int i = 0;
+		for (String word : words) {
+			if (i++ > 0) {
+				keys = keysLogicalAnd(keys, getContentKeys(word));
 			}
+		}
+		return getContentIds(keys);		
+	}	
+		
+	private List<Long> keysLogicalAnd(List<Long> l1, List<Long> l2) {
+		List<Long> result = new ArrayList<Long>();
+		for (Long i : l1) {
+			if (l2.contains(i) && !result.contains(i)) {
+				result.add(i);
+			}
+		}
+		return result;
+	}	
+	
+	private List<Long> getContentKeys(String word) {
+		if (getIndex().containsKey(word)) {
+			return getIndex().get(word);
+		}
+		return Collections.EMPTY_LIST;
+	}
+	
+	private List<String> getContentIds(List<Long> keys) {	
+		List<String> ids = new ArrayList<String>();
+		for (Long key : keys) {
+			String id = KeyFactory.createKeyString("ContentEntity", key);
+			ContentEntity contentEntity = getBusiness().getDao().getContentDao()
+					.getById(id);
+			if (contentEntity == null) {
+				continue;
+			}
+			ids.add(contentEntity.getParentKey());
 		}
 		return ids;
 	}

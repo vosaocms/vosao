@@ -53,7 +53,7 @@ public interface PageDao extends BaseDao<String, PageEntity> {
 
 	String getContent(final String pageId, final String languageCode);
 
-	void setContent(final String pageId, final String languageCode, 
+	ContentEntity setContent(final String pageId, final String languageCode, 
 			final String content);
 	
 	ContentDao getContentDao();

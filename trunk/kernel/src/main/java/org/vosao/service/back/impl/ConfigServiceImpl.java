@@ -118,5 +118,11 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 	public void setSetupBean(SetupBean setupBean) {
 		this.setupBean = setupBean;
 	}
+
+	@Override
+	public ServiceResponse reindex() {
+		getBusiness().getSearchEngine().reindex();
+		return ServiceResponse.createSuccessResponse("Index recreation started.");
+	}
 	
 }

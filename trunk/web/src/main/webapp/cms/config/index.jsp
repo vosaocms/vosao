@@ -75,6 +75,7 @@
         <input id="saveButton" type="submit" value="Save" />
         <input id="exportButton" type="button" value="Export" />
         <input id="importButton" type="button" value="Import" />
+        <input id="reindexButton" type="button" value="Create search index" />
         <input id="resetButton" type="button" value="Reset" />
     </div>
   </form>

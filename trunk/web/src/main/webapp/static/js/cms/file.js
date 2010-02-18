@@ -27,7 +27,7 @@ $(function() {
 	$("#tabs").tabs();
 	$("#tabs").bind('tabsselect', tabSelected);
 	Vosao.initJSONRpc(loadFile);
-	$('#fileForm').submt(function() {onUpdate(); return false});
+	$('#fileForm').submit(function() {onUpdate(); return false});
 	$('#cancelButton').click(onCancel);
 	$('#autosave').change(onAutosave);
 	$('#contentForm').submit(function() {saveContent(); return false;});

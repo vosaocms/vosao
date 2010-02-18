@@ -89,7 +89,9 @@ public class PageServiceImpl extends AbstractServiceImpl
 			page.setModUserEmail(user.getEmail());
 			page.setLocalTitle(title, languageCode);
 			getDao().getPageDao().save(page);
-			getDao().getPageDao().setContent(pageId, languageCode, content);
+			ContentEntity contentEntity = getDao().getPageDao().setContent(
+					pageId, languageCode, content);
+			getBusiness().getSearchEngine().updateIndex(contentEntity);
 			return ServiceResponse.createSuccessResponse(
 					"Page content was successfully updated");
 		}
@@ -183,6 +185,9 @@ public class PageServiceImpl extends AbstractServiceImpl
 		if (vo.get("commentsEnabled") != null) {
 			page.setCommentsEnabled(Boolean.valueOf(vo.get("commentsEnabled")));
 		}
+		if (vo.get("searchable") != null) {
+			page.setSearchable(Boolean.valueOf(vo.get("searchable")));
+		}
 		if (vo.get("friendlyUrl") != null) {
 			page.setFriendlyURL(vo.get("friendlyUrl"));
 		}
@@ -233,8 +238,9 @@ public class PageServiceImpl extends AbstractServiceImpl
 		if (errors.isEmpty()) {
 			getDao().getPageDao().save(page);
 			if (vo.containsKey("content")) {
-				getDao().getPageDao().setContent(page.getId(), 
-						vo.get("languageCode"), vo.get("content"));
+				ContentEntity contentEntity = getDao().getPageDao().setContent(
+						page.getId(), vo.get("languageCode"), vo.get("content"));
+				getBusiness().getSearchEngine().updateIndex(contentEntity);
 			}
 			return ServiceResponse.createSuccessResponse(page.getId());
 		}

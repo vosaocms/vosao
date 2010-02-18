@@ -19,28 +19,31 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service.back;
+package org.vosao.search;
 
-import java.io.IOException;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 
-import org.vosao.entity.ConfigEntity;
-import org.vosao.service.AbstractService;
-import org.vosao.service.ServiceResponse;
+import org.vosao.entity.ContentEntity;
+import org.vosao.entity.PageEntity;
 
-/**
- * @author Alexander Oleynik
- */
-public interface ConfigService extends AbstractService {
+public interface SearchEngine {
+
+	void updateIndex(final PageEntity page);
+
+	void updateIndex(final ContentEntity content);
+
+	SearchResult search(final String query, int start, int count,
+			String language, int textSize);
 	
-	ConfigEntity getConfig();
+	void saveIndex();
 	
-	ServiceResponse saveConfig(final Map<String, String> vo);
-	
-	ServiceResponse restoreCommentsTemplate() throws IOException;
-	
-	ServiceResponse reset();
-	
-	ServiceResponse reindex();
-	
+	/**
+	 * Start index creation procedure. Create index generator task.
+	 */
+	void reindex();
+
+	/**
+	 * Start index creation procedure. Without task.
+	 */
+	void reindexInRequest();
 }

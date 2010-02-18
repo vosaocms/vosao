@@ -171,4 +171,13 @@
         <url-pattern>/_ah/queue/import</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+        <servlet-name>IndexTask</servlet-name>
+        <servlet-class>org.vosao.servlet.IndexTaskServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>IndexTask</servlet-name>
+        <url-pattern>/_ah/queue/reindex</url-pattern>
+    </servlet-mapping>
+
 </web-app>

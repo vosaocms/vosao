@@ -51,6 +51,7 @@ import org.vosao.business.UserPreferences;
 import org.vosao.dao.Dao;
 import org.vosao.entity.UserEntity;
 import org.vosao.global.SystemService;
+import org.vosao.search.SearchEngine;
 
 public class BusinessImpl implements Business, Serializable {
 
@@ -58,6 +59,7 @@ public class BusinessImpl implements Business, Serializable {
 
 	private SystemService systemService;
 	private Dao dao;
+	private SearchEngine searchEngine;
 	
 	private PageBusiness pageBusiness;
 	private FolderBusiness folderBusiness;
@@ -303,6 +305,14 @@ public class BusinessImpl implements Business, Serializable {
 	@Override
 	public void setDao(Dao bean) {
 		this.dao = bean;
+	}
+
+	public SearchEngine getSearchEngine() {
+		return searchEngine;
+	}
+
+	public void setSearchEngine(SearchEngine searchEngine) {
+		this.searchEngine = searchEngine;
 	}
 	
 }

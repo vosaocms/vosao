@@ -178,7 +178,9 @@
         parent="abstractBusiness" />  
 
     <bean id="fileBusiness" class="org.vosao.business.impl.FileBusinessImpl"
-        parent="abstractBusiness" />  
+        parent="abstractBusiness" >
+        <property name="folderBusiness" ref="folderBusiness"/>  
+    </bean>      
        
     <bean id="fieldBusiness" class="org.vosao.business.impl.FieldBusinessImpl"
         parent="abstractBusiness" />  
@@ -254,7 +256,13 @@
         <property name="structureBusiness" ref="structureBusiness"/>  
         <property name="structureTemplateBusiness" ref="structureTemplateBusiness"/>  
         <property name="pluginBusiness" ref="pluginBusiness"/>  
-        <property name="pluginResourceBusiness" ref="pluginResourceBusiness"/>  
+        <property name="pluginResourceBusiness" ref="pluginResourceBusiness"/>
+        
+        <property name="searchEngine" ref="searchEngine"/>
+    </bean>
+
+    <bean id="searchEngine" class="org.vosao.search.impl.SearchEngineImpl">  
+        <property name="business" ref="business"/>
     </bean>
 
     <!--======================= Setup bean ===========================-->
@@ -389,6 +397,9 @@
     <bean id="commentFrontService" class="org.vosao.service.front.impl.CommentServiceImpl"
         parent="abstractService" />  
 
+    <bean id="searchFrontService" class="org.vosao.service.front.impl.SearchServiceImpl"
+        parent="abstractService" />  
+
     <bean id="frontService" class="org.vosao.service.impl.FrontServiceImpl">  
         <property name="dao" ref="dao"/>  
         <property name="business" ref="business"/>  
@@ -396,6 +407,7 @@
         <property name="loginService" ref="loginFrontService"/>  
         <property name="formService" ref="formFrontService"/>  
         <property name="commentService" ref="commentFrontService"/>  
+        <property name="searchService" ref="searchFrontService"/>  
     </bean>
 
 </beans>

@@ -115,7 +115,8 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 	}
 
 	@Override
-	public void setContent(String pageId, String languageCode, String content) {
+	public ContentEntity setContent(String pageId, String languageCode, 
+				String content) {
 		ContentEntity contentEntity = getContentDao().getByLanguage(
 				PAGE_CLASS_NAME, pageId, languageCode);
 		if (contentEntity == null) {
@@ -125,7 +126,7 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 		else {
 			contentEntity.setContent(content);
 		}
-		getContentDao().save(contentEntity);
+		return getContentDao().save(contentEntity);
 	}
 
 	@Override

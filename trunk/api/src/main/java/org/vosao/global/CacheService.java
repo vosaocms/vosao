@@ -9,5 +9,7 @@ public interface CacheService extends Cache {
 	int getLocalHits();
 
 	int getCacheHits();
+	
+	Cache getMemcache(); 
 
 }

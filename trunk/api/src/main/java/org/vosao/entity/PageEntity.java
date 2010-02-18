@@ -116,6 +116,9 @@ public class PageEntity implements BaseEntity {
 	@Persistent(defaultFetchGroup = "true")
 	private Text description;
 
+	@Persistent
+	private boolean searchable;
+
 	public PageEntity() {
 		publishDate = new Date();
 		state = PageState.EDIT.name();
@@ -129,6 +132,7 @@ public class PageEntity implements BaseEntity {
 		setKeywords("");
 		setDescription("");
 		setTitle("");
+		searchable = true;
 	}
 	
 	public PageEntity(String title, String friendlyURL, 
@@ -172,6 +176,7 @@ public class PageEntity implements BaseEntity {
 		setStructureTemplateId(entity.getStructureTemplateId());
 		setKeywords(entity.getKeywords());
 		setDescription(entity.getDescription());
+		setSearchable(entity.isSearchable());
 	}
 	
 	public String getId() {
@@ -465,6 +470,14 @@ public class PageEntity implements BaseEntity {
 	public void setTitles(Map<String, String> titles) {
 		this.titles = titles;
 		packTitle();
+	}
+
+	public boolean isSearchable() {
+		return searchable;
+	}
+
+	public void setSearchable(boolean searchable) {
+		this.searchable = searchable;
 	}
 	
 }

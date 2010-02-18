@@ -1,6 +1,13 @@
 <queue-entries>
+
   <queue>
     <name>import</name>
     <rate>1/s</rate>
   </queue>
+
+  <queue>
+    <name>reindex</name>
+    <rate>1/s</rate>
+  </queue>
+
 </queue-entries>

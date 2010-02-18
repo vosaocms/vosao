@@ -134,5 +134,7 @@ public class PageVO {
 		this.hasPublishedVersion = value;
 	}
 	
-	
+	public boolean isSearchable() {
+		return page.isSearchable();
+	}
 }

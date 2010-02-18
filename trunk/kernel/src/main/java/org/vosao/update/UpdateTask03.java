@@ -78,6 +78,7 @@ public class UpdateTask03 implements UpdateTask {
 			e.setProperty("description", new Text(""));
 			String title = "en" + (String)e.getProperty("title");
 			e.setProperty("title", new Text(title));
+			e.setProperty("searchable", true);
 			datastore.put(e);
 		}
 	}

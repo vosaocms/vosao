@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.vosao.dao.Dao;
 import org.vosao.entity.UserEntity;
 import org.vosao.global.SystemService;
+import org.vosao.search.SearchEngine;
 
 
 public interface Business {
@@ -36,6 +37,9 @@ public interface Business {
 	Dao getDao();
 	void setDao(Dao bean);
 	
+	SearchEngine getSearchEngine();
+	void setSearchEngine(SearchEngine bean);
+
 	UserPreferences getUserPreferences(final HttpServletRequest request);
 	void setUserPreferences(UserPreferences bean, final HttpServletRequest request);
 

@@ -128,7 +128,10 @@ function initPageForm() {
 		$('#pageType').val(page.pageTypeString);
 		$('#publishDate').val(page.publishDateString);
 		$('#commentsEnabled').each(function() {
-			this.checked = page.commentsEnabled
+			this.checked = page.commentsEnabled;
+		});
+		$('#searchable').each(function() {
+			this.checked = page.searchable;
 		});
 		$('#templates').val(page.template);
 		$('#pageState').html(page.stateString == 'EDIT' ? 'Edit' : 'Approved');
@@ -153,8 +156,8 @@ function initPageForm() {
 		$('#parentFriendlyUrl').html(pageParentUrl + urlEnd);
 		$('#pageType').val('SIMPLE');
 		$('#publishDate').val(Vosao.formatDate(new Date()));
-		$('#commentsEnabled').each(function() {
-			this.checked = false
+		$('#commentsEnabled, #searchable').each(function() {
+			this.checked = false;
 		});
 		$('#pageState').html('Edit');
 		$('#pageCreateUser').html('');
@@ -180,6 +183,7 @@ function onPageUpdate() {
 		friendlyUrl : $('#parentFriendlyUrl').text() + $('#friendlyUrl').val(),
 		publishDate : $('#publishDate').val(),
 		commentsEnabled : String($('#commentsEnabled:checked').size() > 0),
+		searchable : String($('#searchable:checked').size() > 0),
 		template : $('#templates option:selected').val(),
 		approve : String($('#approveOnPageSave:checked, #approveOnContentSave:checked').size() > 0),
 		pageType: $('#pageType').val(),

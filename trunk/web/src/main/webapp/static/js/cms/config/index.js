@@ -31,6 +31,7 @@ $(function(){
     $('#importButton').click(onImport);
     $('#importCancelButton').click(onImportCancel);
     $('#resetButton').click(onReset);
+    $('#reindexButton').click(onReindex);
     $('#okForm').submit(function() {onAfterUploadOk(); return false;});
     $('ul.ui-tabs-nav li:nth-child(1)').addClass('ui-state-active')
 			.removeClass('ui-state-default');
@@ -126,5 +127,13 @@ function onReset() {
 				}
 			});
 		}
+	}
+}
+
+function onReindex() {
+	if (confirm('Are you shure?')) {
+		Vosao.jsonrpc.configService.reindex(function(r) {
+			Vosao.showServiceMessages(r);
+		});
 	}
 }

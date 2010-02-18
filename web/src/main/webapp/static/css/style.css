@@ -224,7 +224,6 @@ a.button span.ui-icon {
 .browser-files {
 	margin-left: 310px;
 	overflow: auto;
-	position: fixed;
 	top: 0;
 	bottom: 0;
 }

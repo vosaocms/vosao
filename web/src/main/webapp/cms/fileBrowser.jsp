@@ -31,16 +31,33 @@
 </head>
 <body>
 
-<div class="browser-folders">
-    <ul id="folders-tree">
-    <img src="/static/images/ajax-loader.gif" />
+<div id="tabs">
+<ul>
+    <li><a href="#tab-1">File</a></li>
+    <li class="pagesTab"><a href="#tab-2">Pages</a></li>
+</ul>
+
+<div id="tab-1">
+    <div class="browser-folders">
+        <ul id="folders-tree">
+            <img src="/static/images/ajax-loader.gif" />
+        </ul>
+    </div>
+    <div class="browser-files">
+        <ul id="files">
+            <img src="/static/images/ajax-loader.gif" />
+        </ul>
+        <div class="clear"> </div>
+    </div>
+    <div class="clear"> </div>
+</div>
+
+<div id="tab-2">
+    <ul id="pages-tree">
+        <img src="/static/images/ajax-loader.gif" />
     </ul>
 </div>
-<div class="browser-files">
-    <ul id="files">
-    <img src="/static/images/ajax-loader.gif" />
-    </ul>
-    <div class="clear"> </div>
+
 </div>
 
 </body>

@@ -22,18 +22,26 @@
 var rootFolder;
 var browserMode = 'ckeditor';
 
-$(document).ready(function(){
-	Vosao.initJSONRpc(loadFolderTree);
+$(function(){
+    $("#tabs").tabs();
+	Vosao.initJSONRpc(loadData);
     if (Vosao.getQueryParam('mode')) {
     	browserMode = Vosao.getQueryParam('mode');
     }
+    window.scrollbars.visible = true;
 });
+
+function loadData() {
+	loadFolderTree();
+	loadTree();
+}
 
 function loadFolderTree() {
 	Vosao.jsonrpc.folderService.getTree(function(rootItem) {
         rootFolder = rootItem;
         $("#folders-tree").html(renderFolderList(rootItem));        
        	$("#folders-tree").treeview();
+       	onFolderSelected(rootItem.entity.id);
     });
 }
 
@@ -95,3 +103,41 @@ function onFileSelected(fileId) {
     }, fileId);
 } 
 
+function onPageSelected(path) {
+   	if (browserMode == 'ckeditor') {
+   		window.opener.CKEDITOR.tools.callFunction(1, path);
+   		window.close();
+   	}
+   	if (browserMode == 'page') {
+   		window.opener.setResource(path);
+   		window.close();
+   	}
+} 
+
+function loadTree() {
+	Vosao.jsonrpc.pageService.getTree(function(r) {
+		$('#pages-tree').html(renderPage(r));
+		$("#pages-tree").treeview({
+			animated: "fast",
+			collapsed: true
+		});
+	});
+}
+
+function renderPage(vo) {
+	var pageUrl = vo.entity.friendlyURL;
+	var p = vo.entity.hasPublishedVersion ? 'published' : 'unpublished';
+	var html = '<li> <img src="/static/images/'+ p +'.png" title="' + p 
+			+ '" width="16px" />' 
+			+ ' <a href="#" onclick="onPageSelected(\'' + pageUrl + '\')">'
+			+ vo.entity.title
+			+ '</a>';
+	if (vo.children.list.length > 0) {
+		html += '<ul>';
+		$.each(vo.children.list, function(n, value) {
+			html += renderPage(value);
+		});
+		html += '</ul>';
+	}
+	return html + '</li>';
+}

@@ -51,7 +51,7 @@
 
 <body>
 
-<div id="wrapper">
+<div id="wrapper" style="margin-top: 10px;">
     <div class="messages"> </div>
 
     <decorator:body />

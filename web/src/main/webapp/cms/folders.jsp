@@ -38,6 +38,7 @@
 </ul>
 
 <div id="tab-1">
+    <p id="folder-location"></p>
     <ul id="folders-tree"><img src="/static/images/ajax-loader.gif" /></ul>
 </div>
 

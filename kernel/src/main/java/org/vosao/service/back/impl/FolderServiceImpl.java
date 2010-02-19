@@ -21,6 +21,7 @@
 
 package org.vosao.service.back.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
@@ -150,6 +151,19 @@ public class FolderServiceImpl extends AbstractServiceImpl
 	@Override
 	public void setFileService(FileService bean) {
 		fileService = bean;
+	}
+
+	@Override
+	public TreeItemDecorator<FolderEntity> getFolderByPath(
+			String path) {
+		return getBusiness().getFolderBusiness().findFolderByPath(
+				getBusiness().getFolderBusiness().getTree(), path);
+	}
+
+	@Override
+	public FolderEntity createFolderByPath(String path) 
+			throws UnsupportedEncodingException {
+		return getBusiness().getFolderBusiness().createFolder(path);
 	}
 
 

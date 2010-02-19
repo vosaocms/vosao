@@ -72,6 +72,7 @@ function loadData() {
 		loadPage();
 		if (editMode) {
 			loadContents();
+			$.cookie('fileBrowserPath', '/page' + page.friendlyURL, {path:'/', expires: 10});
 		}
 	}, pageId, pageParentUrl);
 }

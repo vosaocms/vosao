@@ -251,7 +251,12 @@ a.button span.ui-icon {
     width: 160px;
     height: 120px;
 }
-
+#currentFolder {
+	margin-bottom: 10px;
+	font-weight: bold;
+}
+	
+	
 .ui-widget {
 	font-size: 1em;
 }

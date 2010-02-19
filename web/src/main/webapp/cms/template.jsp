@@ -28,17 +28,24 @@
     <script type="text/javascript">
         var templateId = '<c:out value="${param.id}"/>';
     </script>
+    <script src="/static/js/jquery.treeview.pack.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/static/css/jquery.treeview.css" type="text/css" />
     <script src="/static/js/cms/template.js" type="text/javascript"></script>
 </head>
 <body>
 
-<div id="tabs">
+<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 
-<ul>
-    <li><a href="#tab-1">Template</a></li>
+<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+    <li class="ui-corner-top ui-state-active">
+        <a href="#">Template</a>
+    </li>
+    <li class="ui-corner-top ui-state-default">
+        <a id="resources" href="#">Resources</a>
+    </li>
 </ul>
 
-<div id="tab-1">
+<div id="tab-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
 <form id="templateForm">
     <div class="form-row">
         <label>Title</label>

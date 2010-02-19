@@ -59,10 +59,11 @@ public class ResourceExporter extends AbstractExporter {
 	 */
 	public void addResourcesFromFolder(final ZipOutputStream out, 
 			final TreeItemDecorator<FolderEntity> folder, final String zipPath) 
-		throws IOException {
-		
-		out.putNextEntry(new ZipEntry(zipPath));
-		out.closeEntry();
+			throws IOException {
+		if (zipPath.length() != 0) {
+			out.putNextEntry(new ZipEntry(zipPath));
+			out.closeEntry();
+		}
 		for (TreeItemDecorator<FolderEntity> child : folder.getChildren()) {
 			addResourcesFromFolder(out, child, 
 					zipPath + child.getEntity().getName() + "/");

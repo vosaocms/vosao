@@ -23,6 +23,7 @@ var config = '';
 
 $(function(){
     $("#import-dialog").dialog({ width: 400, autoOpen: false });
+    $("#export-dialog").dialog({ width: 400, autoOpen: false });
     $('#upload').ajaxForm(afterUpload);
     Vosao.initJSONRpc(loadData);
     $('#enableRecaptcha').click(toggleRecaptcha);
@@ -33,6 +34,8 @@ $(function(){
     $('#resetButton').click(onReset);
     $('#reindexButton').click(onReindex);
     $('#okForm').submit(function() {onAfterUploadOk(); return false;});
+    $('#exportForm').submit(function() {onStartExport(); return false;});
+    $('#exportCancelButton').click(onExportCancel);
     $('ul.ui-tabs-nav li:nth-child(1)').addClass('ui-state-active')
 			.removeClass('ui-state-default');
 });
@@ -114,7 +117,18 @@ function onSave() {
 }
 
 function onExport() {
-    location.href = '/cms/export?type=site';
+    $("#export-dialog").dialog("open");
+}
+
+function onExportCancel() {
+    $("#export-dialog").dialog("close");
+}
+
+function onStartExport() {
+    var exportType = $('input[name=exportType]:checked').val();
+	location.href = '/cms/export?type=' + exportType;
+    $("#export-dialog").dialog("close");
+    Vosao.info('Creating export file...');
 }
 
 function onReset() {

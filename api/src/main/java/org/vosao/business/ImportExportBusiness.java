@@ -42,11 +42,18 @@ public interface ImportExportBusiness {
 	byte[] createExportFile(final List<TemplateEntity> list) throws IOException;
 
 	/**
-	 * Create export file for whole site.
+	 * Create export file for whole site. Excluding unconnected resources.
 	 * @return zip file as byte array
 	 * @throws IOException
 	 */
-	byte[] createExportFile() throws IOException;
+	byte[] createSiteExportFile() throws IOException;
+
+	/**
+	 * Create export file for whole site. Including unconnected resources.
+	 * @return zip file as byte array
+	 * @throws IOException
+	 */
+	byte[] createFullExportFile() throws IOException;
 
 	/**
 	 * Import site data from zip file.
@@ -63,5 +70,7 @@ public interface ImportExportBusiness {
 	 * @throws IOException
 	 */
 	byte[] createExportFile(final FolderEntity folder) throws IOException;
+
+	byte[] createResourcesExportFile() throws IOException;
 	
 }

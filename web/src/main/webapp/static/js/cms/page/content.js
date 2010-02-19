@@ -350,7 +350,10 @@ function loadPagePermission() {
 }
 
 function showContentEditor() {
-	if (page.simple && contentEditor == null) {
+	$.each(CKEDITOR.instances, function(i,value) {
+		CKEDITOR.remove(value);
+	});
+	if (page.simple) {
 		$('#page-content').html('<textarea id="content" rows="20" cols="80"></textarea>');
 	    contentEditor = CKEDITOR.replace('content', {
 	        height: 350, width: 'auto',
@@ -358,7 +361,7 @@ function showContentEditor() {
 	        filebrowserBrowseUrl : '/cms/fileBrowser.jsp'
 	    });
 	}
-	if (page.structured && contentEditors == null) {
+	if (page.structured) {
 		var h = '';
 		$.each(pageRequest.structureFields.list, function(i, field) {
 			h += '<div><div class="label">' + field.title + ':</div>';
@@ -385,12 +388,12 @@ function showContentEditor() {
 		$.each(pageRequest.structureFields.list, function(i, field) {
 			if (field.type == 'TEXTAREA') {
 				if (contentEditors[field.name] == undefined) {
-					var ceditor = CKEDITOR.replace('field' + field.name, {
+					var ckeditor = CKEDITOR.replace('field' + field.name, {
 				        height: 150, width: 'auto',
 				        filebrowserUploadUrl : '/cms/upload',
 				        filebrowserBrowseUrl : '/cms/fileBrowser.jsp'
 				    });
-					contentEditors[field.name] = ceditor;
+					contentEditors[field.name] = ckeditor;
 				}
 			}
 		});

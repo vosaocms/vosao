@@ -21,6 +21,7 @@
 
 package org.vosao.service.back;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +45,11 @@ public interface FolderService extends AbstractService {
 
 	TreeItemDecorator<FolderEntity> getTree();
 	
+	TreeItemDecorator<FolderEntity> getFolderByPath(String path);
+
+	FolderEntity createFolderByPath(String path) 
+			throws UnsupportedEncodingException;
+
 	String getFolderPath(final String folderId);
 	
 	FolderEntity getFolder(final String id);

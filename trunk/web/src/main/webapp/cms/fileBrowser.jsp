@@ -44,6 +44,7 @@
         </ul>
     </div>
     <div class="browser-files">
+        <div id="currentFolder"></div>
         <ul id="files">
             <img src="/static/images/ajax-loader.gif" />
         </ul>

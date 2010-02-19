@@ -24,8 +24,7 @@ var editMode = templateId != '';
 var autosaveTimer = '';
     
 $(function(){
-	Vosao.initJSONRpc(loadTemplate);
-    $("#tabs").tabs();
+	Vosao.initJSONRpc(loadData);
     $('#autosave').change(onAutosave);
     $('#sizeLink').click(onSize);
     $('#wrapLink').click(onWrap);
@@ -33,7 +32,12 @@ $(function(){
     $('#saveButton').click(onSave);
     $('#templateForm').submit(function() {onSave(); return false;});
     $('#cancelButton').click(onCancel);
+    $('#resources').click(onResources);
 });
+
+function loadData() {
+	loadTemplate();
+}
 
 function onSaveContinue() {
 	onUpdate(true);
@@ -166,3 +170,14 @@ function onWrap() {
 		$('#wrapLink').text(' Wrap');
 	}
 }
+
+// Resources
+
+function onResources() {
+	$.cookie('folderReturnPath', '/cms/template.jsp?id=' + template.id, 
+			{path:'/', expires: 10});
+	Vosao.jsonrpc.folderService.createFolderByPath(function(r) {
+		location.href = '/cms/folder.jsp?tab=1&id=' + r.id;
+    }, '/theme/' + template.url);
+}
+

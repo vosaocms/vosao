@@ -22,6 +22,7 @@
 $(function(){
 	Vosao.initJSONRpc(loadTree);
     $("#tabs").tabs();
+	$.cookie("folderReturnPath", null, {path:'/', expires: 10});
 });
 
 function loadTree() {

@@ -33,7 +33,8 @@ var editMode = folderId != '';
 var folderRequest = null;
 
 $(function() {
-    $("#tabs").tabs();
+    var tab = $("#tabs").tabs();
+    Vosao.selectTabFromQueryParam(tab);
     $("#file-upload").dialog({ width: 400, autoOpen: false });
     $("#permission-dialog").dialog({ width: 400, autoOpen: false });
     $('#upload').ajaxForm(afterUpload);
@@ -228,7 +229,12 @@ function onUpdate() {
 }
 
 function onCancel() {
-    location.href = '/cms/folders.jsp';
+    if ($.cookie("folderReturnPath")) {
+    	location.href = $.cookie("folderReturnPath");
+    }
+    else {
+    	location.href = '/cms/folders.jsp';
+    }
 }
 
 function onExport() {

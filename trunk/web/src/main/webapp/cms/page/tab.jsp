@@ -42,4 +42,23 @@
     <li class="securityTab ui-corner-top ui-state-default">
         <a href="security.jsp<%= query %>">Security</a>
     </li>
+    <li class="securityTab ui-corner-top ui-state-default">
+        <a id="resources" href="#">Resources</a>
+    </li>
 </ul>
+
+<script type="text/javascript">
+
+$(function() {
+	$('#resources').click(onResources);
+});
+
+function onResources() {
+	Vosao.jsonrpc.folderService.createFolderByPath(function(r) {
+		$.cookie('folderReturnPath', '/cms/page/content.jsp?id=' + pageId, 
+		    {path:'/', expires: 10});
+		location.href = '/cms/folder.jsp?tab=1&id=' + r.id;
+	}, '/page' + page.friendlyURL);
+}
+
+</script>

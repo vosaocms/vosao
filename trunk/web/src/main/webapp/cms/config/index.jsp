@@ -104,6 +104,20 @@
   </form>
 </div>
 
+<div id="export-dialog" style="display:none" title="Export window">
+  <form id="exportForm">
+    <input type="radio" name="exportType" value="full" />
+        Full export <br/>
+    <input type="radio" name="exportType" value="site" checked="checked"/>
+        Site, pages & resources <br/>
+    <input type="radio" name="exportType" value="resources"/>
+        Resources <br/>
+    <div class="buttons-dlg">
+        <input type="submit" value="Export" />
+        <input id="exportCancelButton" type="button" value="Cancel" />
+    </div>
+  </form>
+</div>
 
 </body>
 </html>

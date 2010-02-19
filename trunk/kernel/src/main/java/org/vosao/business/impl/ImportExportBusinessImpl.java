@@ -31,6 +31,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.aspectj.weaver.Iterators.Getter;
 import org.dom4j.DocumentException;
 import org.vosao.business.Business;
 import org.vosao.business.ImportExportBusiness;
@@ -141,7 +142,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 	}
 	
 	@Override
-	public byte[] createExportFile() throws IOException {
+	public byte[] createSiteExportFile() throws IOException {
 		ThemeExporter themeExporter = createThemeExporter();
 		SiteExporter siteExporter = createSiteExporter();
 		ByteArrayOutputStream outData = new ByteArrayOutputStream();
@@ -180,7 +181,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 	}
 	
 	private String removeRootSlash(final String path) {
-		if (path.charAt(0) == '/') {
+		if (path.length() > 0 && path.charAt(0) == '/') {
 			return path.substring(1);
 		}
 		return path;
@@ -209,5 +210,65 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 	public void setDaoTaskAdapter(DaoTaskAdapter daoTaskAdapter) {
 		this.daoTaskAdapter = daoTaskAdapter;
 	}
+
+	@Override
+	public byte[] createFullExportFile() throws IOException {
+		ThemeExporter themeExporter = createThemeExporter();
+		SiteExporter siteExporter = createSiteExporter();
+		ByteArrayOutputStream outData = new ByteArrayOutputStream();
+		ZipOutputStream out = new ZipOutputStream(outData);
+		out.putNextEntry(new ZipEntry(ThemeExporter.THEME_FOLDER));
+		out.closeEntry();
+		List<TemplateEntity> list = getDao().getTemplateDao().select();
+		for (TemplateEntity theme : list) {
+			themeExporter.exportTheme(out, theme);
+		}
+		siteExporter.exportSite(out);
+		exportResources(out);
+		out.close();
+		return outData.toByteArray();
+	}
+
+	private void exportResources(ZipOutputStream out) throws IOException {
+		TreeItemDecorator<FolderEntity> root = getBusiness()
+			.getFolderBusiness().getTree();
+		for (TreeItemDecorator<FolderEntity> child : root.getChildren()) {
+			if (!isSkipFolder(child.getEntity().getName())) {
+				getResourceExporter().addResourcesFromFolder(out, child, 
+						child.getEntity().getName() + "/");
+			}			
+		}
+	}
+	
+	private static String[] skipFolder = {"page", "theme", "tmp"};
+	
+	private boolean isSkipFolder(String path) {
+		for (String s : skipFolder) {
+			if (path.startsWith(s)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private ResourceExporter resourceExporter;
+	
+	private ResourceExporter getResourceExporter() {
+		if (resourceExporter == null) {
+			resourceExporter = new ResourceExporter(getDao(), getBusiness(),
+					getDaoTaskAdapter());
+		}
+		return resourceExporter;
+	}
+
+	@Override
+	public byte[] createResourcesExportFile() throws IOException {
+		ByteArrayOutputStream outData = new ByteArrayOutputStream();
+		ZipOutputStream out = new ZipOutputStream(outData);
+		exportResources(out);
+		out.close();
+		return outData.toByteArray();
+	}
+	
 	
 }

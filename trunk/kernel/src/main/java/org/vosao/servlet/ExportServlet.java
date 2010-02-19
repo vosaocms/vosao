@@ -49,7 +49,9 @@ public class ExportServlet extends BaseSpringServlet {
 	public final static String TYPE_PARAM = "type";
 	public final static String TYPE_PARAM_THEME = "theme";
 	public final static String TYPE_PARAM_FOLDER = "folder";
+	public final static String TYPE_PARAM_FULL = "full";
 	public final static String TYPE_PARAM_SITE = "site";
+	public final static String TYPE_PARAM_RESOURCES = "resources";
 	public final static String IDS_PARAM = "ids";
 	public final static String ID_PARAM = "id";
 	
@@ -65,6 +67,12 @@ public class ExportServlet extends BaseSpringServlet {
         }
         if (type.equals(TYPE_PARAM_SITE)) {
         	exportSite(request, response);
+        }
+        if (type.equals(TYPE_PARAM_FULL)) {
+        	exportFull(request, response);
+        }
+        if (type.equals(TYPE_PARAM_RESOURCES)) {
+        	exportResources(request, response);
         }
 	}
 
@@ -87,13 +95,8 @@ public class ExportServlet extends BaseSpringServlet {
 		String downloadFile = "exportTheme.zip";
 		response.addHeader("Content-Disposition", "attachment; filename=\"" 
 				+ downloadFile + "\"");
-		ServletOutputStream out = response.getOutputStream();
-		byte[] file = getImportExportBusiness().createExportFile(
-				selectedTemplates);
-		response.setContentLength(file.length);
-		out.write(file);
-		out.flush();
-		out.close();
+		send(response, getImportExportBusiness().createExportFile(
+				selectedTemplates));
 	}
 
 	private void exportFolder(HttpServletRequest request,
@@ -114,12 +117,7 @@ public class ExportServlet extends BaseSpringServlet {
 		String downloadFile = "exportFolder.zip";
 		response.addHeader("Content-Disposition", "attachment; filename=\"" 
 				+ downloadFile + "\"");
-		ServletOutputStream out = response.getOutputStream();
-		byte[] file = getImportExportBusiness().createExportFile(folder);
-		response.setContentLength(file.length);
-		out.write(file);
-		out.flush();
-		out.close();
+		send(response, getImportExportBusiness().createExportFile(folder));
 	}
 	
 	private void exportSite(HttpServletRequest request,
@@ -129,16 +127,40 @@ public class ExportServlet extends BaseSpringServlet {
 		String downloadFile = "exportSite.zip";
 		response.addHeader("Content-Disposition", "attachment; filename=\"" 
 				+ downloadFile + "\"");
+		send(response, getImportExportBusiness().createSiteExportFile());
+	}
+	
+	private void send(HttpServletResponse response, byte[] data) 
+			throws IOException {
 		ServletOutputStream out = response.getOutputStream();
-		byte[] file = getImportExportBusiness().createExportFile();
-		response.setContentLength(file.length);
-		out.write(file);
+		response.setContentLength(data.length);
+		out.write(data);
 		out.flush();
 		out.close();
 	}
 	
 	private ImportExportBusiness getImportExportBusiness() {
 		return (ImportExportBusiness) getSpringBean("importExportBusiness");
+	}
+
+	private void exportFull(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		logger.debug("Exporting full site.");
+		response.setContentType(MimeType.getContentTypeByExt("zip"));
+		String downloadFile = "exportFullSite.zip";
+		response.addHeader("Content-Disposition", "attachment; filename=\"" 
+				+ downloadFile + "\"");
+		send(response, getImportExportBusiness().createFullExportFile());
+	}
+	
+	private void exportResources(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		logger.debug("Exporting resources.");
+		response.setContentType(MimeType.getContentTypeByExt("zip"));
+		String downloadFile = "exportResources.zip";
+		response.addHeader("Content-Disposition", "attachment; filename=\"" 
+				+ downloadFile + "\"");
+		send(response, getImportExportBusiness().createResourcesExportFile());
 	}
 	
 }

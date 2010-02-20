@@ -21,28 +21,26 @@
 
 package org.vosao.test;
 
-import java.io.File;
-
 import junit.framework.TestCase;
 
-import com.google.appengine.tools.development.ApiProxyLocalImpl;
-import com.google.apphosting.api.ApiProxy;
+import com.google.appengine.tools.development.testing.LocalMemcacheServiceTestConfig;
+import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 
 public abstract class LocalServiceTestCase extends TestCase {
 
+    private final LocalServiceTestHelper helper =
+        new LocalServiceTestHelper(new LocalMemcacheServiceTestConfig());
+	
 	@Override
     public void setUp() throws Exception {
         super.setUp();
-        ApiProxy.setEnvironmentForCurrentThread(new TestEnvironment());
-        ApiProxy.setDelegate(new ApiProxyLocalImpl(new File(".")){});
+        helper.setUp();
     }
 
     @Override
     public void tearDown() throws Exception {
-    	// not strictly necessary to null these out but there's no harm either
-        ApiProxy.setDelegate(null);
-        ApiProxy.setEnvironmentForCurrentThread(null);
-        super.tearDown();
+    	helper.tearDown();
+    	super.tearDown();
     }
 
 }

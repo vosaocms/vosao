@@ -54,7 +54,7 @@ public class SetupBeanImpl implements SetupBean {
 	private static Log log = LogFactory.getLog(SetupBeanImpl.class);
 
 	public static final String VERSION = "0.2";
-	public static final String FULLVERSION = "0.2.3";
+	public static final String FULLVERSION = "0.2.4";
 
 	private Dao dao;
 	private Business business;

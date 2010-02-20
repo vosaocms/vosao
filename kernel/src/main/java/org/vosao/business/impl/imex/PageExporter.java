@@ -271,13 +271,13 @@ public class PageExporter extends AbstractExporter {
 				newPage.setPageType(PageType.valueOf(element.getText()));
 			}
 			if (element.getName().equals("structure")) {
-				StructureEntity structure = getDao().getStructureDao().getById(
+				StructureEntity structure = getDao().getStructureDao().getByTitle(
 						element.getText());
 				newPage.setStructureId(structure == null ? "" : structure.getId());
 			}
 			if (element.getName().equals("structureTemplate")) {
 				StructureTemplateEntity structureTemplate = getDao()
-						.getStructureTemplateDao().getById(element.getText());
+						.getStructureTemplateDao().getByTitle(element.getText());
 				newPage.setStructureTemplateId(structureTemplate == null ? "" : 
 						structureTemplate.getId());
 			}

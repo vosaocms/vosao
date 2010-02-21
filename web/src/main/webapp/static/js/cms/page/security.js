@@ -207,7 +207,7 @@ function onPermissionSave() {
 		groupId: permission == null ? $('#groupSelect').val() : 
 			String(permission.group.id),
 		permission: $('#permissionList input:checked')[0].value,
-		languages: $('#allLanguages')[0].checked ? '' : langs,
+		languages: $('#allLanguages')[0].checked ? '' : langs
 	};
 	Vosao.jsonrpc.contentPermissionService.save(function(r) {
 		Vosao.showServiceMessages(r);

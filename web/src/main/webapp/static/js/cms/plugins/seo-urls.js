@@ -109,7 +109,7 @@ function onSave(closeFlag, addFlag) {
     var vo = {
         id : seoUrl != null ? seoUrl.id : '',
         fromLink : $('#fromLink').val(),
-        toLink : $('#toLink').val(),
+        toLink : $('#toLink').val()
     };
     var errors = validateSeoUrl(vo);
     if (errors.length == 0) {

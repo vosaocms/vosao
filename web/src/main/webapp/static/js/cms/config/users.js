@@ -128,7 +128,7 @@ function onUserSave() {
         role : $('#userRole').val(),
         password : $('#userPassword1').val(),
         password1 : $('#userPassword1').val(),
-        password2 : $('#userPassword2').val(),
+        password2 : $('#userPassword2').val()
     };
     var errors = validateUser(vo);
     if (errors.length == 0) {

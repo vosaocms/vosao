@@ -98,7 +98,7 @@ function onLanguageSave() {
     var vo = {
     	id : language != null ? language.id : '',
        	code : $('#languageCode').val(),
-        title : $('#languageTitle').val(),
+        title : $('#languageTitle').val()
     };
     var errors = languageValidate(vo);
     if (errors.length == 0) {

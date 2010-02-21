@@ -123,7 +123,7 @@ function validateGroup(vo) {
 function onGroupSave() {
     var vo = {
     	id : group != null ? String(group.id) : '',
-        name : $('#groupName').val(),
+        name : $('#groupName').val()
     };
     var errors = validateGroup(vo);
     if (errors.length == 0) {

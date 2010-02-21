@@ -119,7 +119,7 @@ function onUpdate(cont) {
 	    id : templateId,
 	    title : $('#title').val(),
         url : $('#url').val(),
-        content : $('#content').val(),
+        content : $('#content').val()
 	});
 	Vosao.jsonrpc.templateService.saveTemplate(function (r) {
 		if (r.result == 'success') {

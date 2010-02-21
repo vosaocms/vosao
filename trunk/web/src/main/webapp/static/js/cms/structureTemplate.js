@@ -109,7 +109,7 @@ function onUpdate(cont) {
 	    title : Vosao.strip($('#title').val()),
 	    type: $('#type').val(),
 	    structureId: structureId,
-        content : $('#content').val(),
+        content : $('#content').val()
 	});
 	Vosao.jsonrpc.structureTemplateService.save(function (r) {
 		if (r.result == 'success') {

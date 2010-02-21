@@ -210,7 +210,7 @@ function onUpdate() {
         id : folderId,
         parent : folderParentId,
         name : $('#name').val(),
-        title : $('#title').val(),
+        title : $('#title').val()
     });
     Vosao.jsonrpc.folderService.saveFolder(function (r) {
         if (r.result == 'success') {
@@ -350,7 +350,7 @@ function onPermissionSave() {
 		folderId: folderId,
 		groupId: permission == null ? $('#groupSelect').val() : 
 			String(permission.group.id),
-		permission: $('#permissionList input:checked')[0].value,
+		permission: $('#permissionList input:checked')[0].value
 	};
 	Vosao.jsonrpc.folderPermissionService.save(function(r) {
 		Vosao.showServiceMessages(r);

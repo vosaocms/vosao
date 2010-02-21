@@ -61,7 +61,7 @@ function onSave() {
     var vo = {
      	id : String(user.id),
         name : $('#name').val(),   
-        password : pass,   
+        password : pass   
     };
     Vosao.jsonrpc.userService.save(function (r) {
     	Vosao.showServiceMessages(r);

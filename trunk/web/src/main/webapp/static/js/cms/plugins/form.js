@@ -186,16 +186,16 @@ function createFieldVO() {
 		(fields == null ? 0 : fields.length);
 	return Vosao.javaMap( {
 		id :field != null ? field.id : null,
-				formId :formId,
-				name :$('input[name=field.name]').val(),
-				title :$('input[name=field.title]').val(),
-				fieldType :$('select[name=field.fieldType]').val(),
-				values :$('textarea[name=field.values]').val(),
-				defaultValue :$('input[name=field.defaultValue]').val(),
-				height :$('input[name=field.height]').val(),
-				width :$('input[name=field.width]').val(),
-				index : String(fieldIndex),
-				mandatory :String($('input[name=field.mandatory]:checked').size() > 0)
+		formId :formId,
+		name :$('input[name=field.name]').val(),
+		title :$('input[name=field.title]').val(),
+		fieldType :$('select[name=field.fieldType]').val(),
+		values :$('textarea[name=field.values]').val(),
+		defaultValue :$('input[name=field.defaultValue]').val(),
+		height :$('input[name=field.height]').val(),
+		width :$('input[name=field.width]').val(),
+		index : String(fieldIndex),
+		mandatory :String($('input[name=field.mandatory]:checked').size() > 0)
 	});
 }
 
@@ -310,7 +310,7 @@ function onUpdate() {
 		sendButtonTitle : $('#sendButtonTitle').val(),
 		resetButtonTitle : $('#resetButtonTitle').val(),
 		showResetButton : String($('#showResetButton:checked').size() > 0),
-		enableCaptcha : String($('#enableCaptcha:checked').size() > 0),
+		enableCaptcha : String($('#enableCaptcha:checked').size() > 0)
 	});
 	Vosao.jsonrpc.formService.saveForm(function (r) {
 		if (r.result = 'success') {

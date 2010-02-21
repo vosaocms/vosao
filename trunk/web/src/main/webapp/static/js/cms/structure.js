@@ -117,7 +117,7 @@ function onUpdate(cont) {
 	var vo = Vosao.javaMap({
 	    id : structureId,
 	    title : $('#title').val(),
-        content : $('#content').val(),
+        content : $('#content').val()
 	});
 	Vosao.jsonrpc.structureService.save(function (r) {
 		if (r.result == 'success') {

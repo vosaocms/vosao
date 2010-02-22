@@ -11,46 +11,50 @@
 
 [http://code.google.com/p/vosao/issues/list?can=2&q=status:Accepted%20milestone=Release-0.2&colspec=ID%20Type%20Status%20Priority%20Milestone%20Owner%20Summary Accepted for RC2 but not implemented.]
 
-== 01.10.2010 RC1 ==
+== 15.10.2010 RC1 ==
 
 Version 1.0 Release candidate.
 
-== 01.09.2010 Beta version ==
+== 15.09.2010 Beta version ==
 
 Version 0.9 Beta version.
  * Intensive testing.
  * Develop unit tests for coverage 75%.
 
-== 01.08.2010 Alpha version ==
+== 15.08.2010 Alpha version ==
 
 Version 0.8 Alpha version.
  * Develop various plugins.
 
-== 01.07.2010 Alpha version ==
+== 15.07.2010 Alpha version ==
 
 Version 0.7 Alpha version.
  * Develop various plugins.
 
-== 01.06.2010 Alpha version ==
+== 15.06.2010 Alpha version ==
 
 Version 0.6 Alpha version.
  * Develop various plugins.
 
-== 01.05.2010 Alpha version ==
+== 15.05.2010 Alpha version ==
 
 Version 0.5 Alpha version.
  * Develop various plugins.
+ * Admin interface localization
 
-== 01.04.2010 Alpha version ==
+== 15.04.2010 Alpha version ==
 
 Version 0.4 Alpha version.
  * Develop various plugins.
 
-== 01.03.2010 Alpha version ==
+== 15.03.2010 Alpha version ==
 
 Version 0.3 Alpha version.
  * Plugins system.
- * Develop various plugins.
+ * Search
+ * Sitemap plugin
+ * Disqus plugin
+ * Main menu plugin (based on Superfish jQuery plugin)
 
 == 01.02.2010 Alpha version ==
 

@@ -10,4 +10,9 @@
     <rate>1/s</rate>
   </queue>
 
+  <queue>
+    <name>session-clean</name>
+    <rate>1/s</rate>
+  </queue>
+
 </queue-entries>

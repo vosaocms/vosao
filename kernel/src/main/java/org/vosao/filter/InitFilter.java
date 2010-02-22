@@ -21,6 +21,8 @@
 
 package org.vosao.filter;
 
+import static com.google.appengine.api.labs.taskqueue.TaskOptions.Builder.url;
+
 import java.io.IOException;
 
 import javax.servlet.Filter;
@@ -37,6 +39,9 @@ import org.vosao.business.SetupBean;
 import org.vosao.dao.cache.CacheStat;
 import org.vosao.dao.cache.EntityCache;
 import org.vosao.dao.cache.QueryCache;
+import org.vosao.servlet.SessionCleanTaskServlet;
+
+import com.google.appengine.api.labs.taskqueue.Queue;
 
 
 public class InitFilter extends AbstractFilter implements Filter {
@@ -44,7 +49,8 @@ public class InitFilter extends AbstractFilter implements Filter {
     private static final Log logger = LogFactory.getLog(SiteFilter.class);
 
     private static final String SETUP_URL = "/setup";
-    private static final String HOT_CRON_URL = "/hotCron";
+    private static final String HOT_CRON_URL = "/cron/hot";
+    private static final String SESSION_CLEAN_CRON_URL = "/cron/session_clean";
     
     private int localHits;
     private int cacheHits;
@@ -68,7 +74,16 @@ public class InitFilter extends AbstractFilter implements Filter {
         	return;
         }
         if (url.equals(HOT_CRON_URL)) {
-        	writeContent(httpResponse, "<h4>OK</h4>" + logCacheStat());
+        	logger.info(logCacheStat());
+        	writeContent(httpResponse, "<h4>OK</h4>");
+        	return;
+        }
+        if (url.equals(SESSION_CLEAN_CRON_URL)) {
+    		Queue queue = getBusiness().getSystemService().getQueue(
+    				"session-clean");
+    		queue.add(url(SessionCleanTaskServlet.SESSION_CLEAN_TASK_URL));
+    		logger.info("Added new session clean task");
+        	writeContent(httpResponse, "<h4>OK</h4>");
         	return;
         }
         //startProfile();

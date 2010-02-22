@@ -180,4 +180,13 @@
         <url-pattern>/_ah/queue/reindex</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>SessionCleanTask</servlet-name>
+        <servlet-class>org.vosao.servlet.SessionCleanTaskServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SessionCleanTask</servlet-name>
+        <url-pattern>/_ah/queue/session_clean</url-pattern>
+    </servlet-mapping>
+
 </web-app>

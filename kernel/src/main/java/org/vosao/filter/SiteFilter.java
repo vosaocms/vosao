@@ -59,7 +59,7 @@ public class SiteFilter extends AbstractFilter implements Filter {
 		"/file",
 		"/setup",
 		"/update",
-		"/hotCron",
+		"/cron",
 		"/JSON-RPC"};
     
     public SiteFilter() {

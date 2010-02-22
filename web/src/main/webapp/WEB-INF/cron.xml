@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
   <cron>
-    <url>/hotCron</url>
+    <url>/cron/hot</url>
     <description>Keep jetty hot</description>
     <schedule>every 1 minutes</schedule>
+  </cron>
+  <cron>
+    <url>/cron/session_clean</url>
+    <description>Session clean</description>
+    <schedule>every monday 01:00</schedule>
   </cron>
 </cronentries>

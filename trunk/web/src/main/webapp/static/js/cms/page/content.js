@@ -40,28 +40,26 @@ var contentEditors = null;
 var browseId = '';
     
 $(function(){
+    $("#restore-dialog").dialog({ width: 400, autoOpen: false });
     Vosao.initJSONRpc(loadData);
-
     // hover states on the link buttons
     $('a.button').hover(
      	function() { $(this).addClass('ui-state-hover'); },
        	function() { $(this).removeClass('ui-state-hover'); }
     ); 
-
     initVersionDialog();
-
     $('#autosave').change(onAutosave);
     $('#language').change(onLanguageChange);
-    $('#saveContinueContentButton').click(saveContent);
-    $('#saveContentButton').click(onPageUpdate);
-    $('#pageForm').submit(function() {onPageUpdate(); return false;});
+    $('#saveContinueContentButton').click(function(){onPageUpdate(true)});
+    $('#pageForm').submit(function() {onPageUpdate(false); return false;});
     $('#contentPreviewButton').click(onPagePreview);
     $('#approveButton').click(onPageApprove);
+    $('#restoreButton').click(onRestore);
     $('#contentCancelButton').click(onPageCancel);
-    
     $('ul.ui-tabs-nav li:nth-child(2)').addClass('ui-state-active')
     		.removeClass('ui-state-default');
-
+    $('#restoreForm').submit(function() {onRestoreSave(); return false;});
+    $('#restoreCancelButton').click(onRestoreCancel);
 });
 
 function loadData() {
@@ -150,7 +148,7 @@ function initPageForm() {
 	}
 }
 
-function onPageUpdate() {
+function onPageUpdate(continueFlag) {
 	var pageVO = Vosao.javaMap( {
 		id : pageId,
 		titles : getTitles(),
@@ -161,7 +159,12 @@ function onPageUpdate() {
 	Vosao.jsonrpc.pageService.savePage(function(r) {
 		if (r.result == 'success') {
 			Vosao.info("Page was successfully saved.");
-			location.href = '/cms/pages.jsp';
+			if (!continueFlag) {
+				location.href = '/cms/pages.jsp';
+			}
+			else {
+				loadData();
+			}
 		} else {
 			Vosao.showServiceMessages(r);
 		}
@@ -171,10 +174,14 @@ function onPageUpdate() {
 function startAutosave() {
 	if (editMode) {
 		if (autosaveTimer == '') {
-			autosaveTimer = setInterval(saveContent, 
+			autosaveTimer = setInterval(saveContentByTimer, 
 					Vosao.AUTOSAVE_TIMEOUT * 1000);
 		}
 	}
+}
+
+function saveContentByTimer() {
+	onPageUpdate(true);
 }
 
 function stopAutosave() {
@@ -233,22 +240,6 @@ function setEditorContent(data) {
 
 function isContentChanged() {
 	return contents[currentLanguage] != getEditorContent();
-}
-
-function saveContent() {
-	var content = getEditorContent();
-	var approve = $('#approveOnContentSave:checked').size() > 0;
-	contents[currentLanguage] = content;
-	Vosao.jsonrpc.pageService.updateContent(function(r) {
-		titles[currentLanguage] = $('#titleLocal').val();
-		if (r.result == 'success') {
-			var now = new Date();
-			Vosao.info(r.message + " " + now);
-			callLoadPage();
-		} else {
-			Vosao.error(r.message);
-		}
-	}, pageId, content, $('#titleLocal').val(), currentLanguage, approve);
 }
 
 function onAutosave() {
@@ -317,7 +308,7 @@ function loadContents() {
 function onPageApprove() {
 	Vosao.jsonrpc.pageService.approve(function(r) {
 		Vosao.showServiceMessages(r);
-		callLoadPage();
+		loadData();
 	}, pageId);
 }
 
@@ -434,4 +425,22 @@ function getTitles() {
 		result += coma + lang + value;
 	});
 	return result;
+}
+
+function onRestore() {
+	$("#restore-dialog").dialog('open');
+}
+
+function onRestoreCancel() {
+	$("#restore-dialog").dialog('close');
+}
+
+function onRestoreSave() {
+	var pageType = $('input[name=page]:checked').val();
+	Vosao.jsonrpc.pageService.restore(function(r) {
+		Vosao.showServiceMessages(r);
+		if (r.result == 'success') {
+			location.reload();
+		}
+	}, pageId, pageType, currentLanguage);
 }

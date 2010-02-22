@@ -122,18 +122,25 @@ public class SetupBeanImpl implements SetupBean {
 		}
 	}
 
+	public static final String HOME_PAGE_FILE = 
+		"org/vosao/resources/html/root.html";
+
+	public static final String LOGIN_PAGE_FILE = 
+		"org/vosao/resources/html/login.html";
+	
+	public static final String SEARCH_PAGE_FILE = 
+		"org/vosao/resources/html/search.html";
+	
 	private void initPages() {
 		List<PageEntity> roots = getDao().getPageDao().getByParent("");
 		if (roots.size() == 0) {
 			TemplateEntity template = getDao().getTemplateDao().getByUrl("simple");
-			addPage("Home page", "/", "org/vosao/resources/html/root.html",
-					template.getId());
+			addPage("Home page", "/", HOME_PAGE_FILE, template.getId());
 			getBusiness().getContentPermissionBusiness().setPermission(
 					"/", guests, ContentPermissionType.READ);
-	        addPage("Site user Login", "/login",
-	        		"org/vosao/resources/html/login.html", template.getId());
-	        addPage("Search", "/search",
-	        		"org/vosao/resources/html/search.html", template.getId());
+	        addPage("Site user Login", "/login", LOGIN_PAGE_FILE, 
+	        		template.getId());
+	        addPage("Search", "/search", SEARCH_PAGE_FILE, template.getId());
 		}
 	}
 
@@ -150,11 +157,13 @@ public class SetupBeanImpl implements SetupBean {
         log.info("Added " + title);
 	}
 	
+	public static final String SIMPLE_TEMPLATE_FILE = 
+			"org/vosao/resources/html/simple.html";
+	
 	private void initTemplates() {
 		List<TemplateEntity> list = getDao().getTemplateDao().select();
 		if (list.size() == 0) {
-			String content = loadResource(
-					"org/vosao/resources/html/simple.html");
+			String content = loadResource(SIMPLE_TEMPLATE_FILE);
 			TemplateEntity template = new TemplateEntity("Simple", content, 
 					"simple");
 			getDao().getTemplateDao().save(template);

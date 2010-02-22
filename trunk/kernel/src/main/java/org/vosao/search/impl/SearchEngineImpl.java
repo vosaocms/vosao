@@ -68,6 +68,7 @@ public class SearchEngineImpl implements SearchEngine {
 		checkIndex();
 		SearchResult result = new SearchResult();
 		List<String> urls = getContentUrls(getContentIds(query));
+		logger.info("found urls " + urls.toString());
 		int startIndex = start < urls.size() ? start : urls.size();
 		int endIndex = startIndex + count;
 		if (count == -1) {
@@ -105,7 +106,7 @@ public class SearchEngineImpl implements SearchEngine {
 		}
 	}
 
-	private List<String> getContentIds(String query) {
+	private List<ContentEntity> getContentIds(String query) {
 		String[] words = query.split("\\W+");
 		if (words.length == 0) {
 			return Collections.EMPTY_LIST;
@@ -117,7 +118,8 @@ public class SearchEngineImpl implements SearchEngine {
 				keys = keysLogicalAnd(keys, getContentKeys(word));
 			}
 		}
-		return getContentIds(keys);		
+		logger.info("found keys " + keys.toString());
+		return getContents(keys);		
 	}	
 		
 	private List<Long> keysLogicalAnd(List<Long> l1, List<Long> l2) {
@@ -137,25 +139,34 @@ public class SearchEngineImpl implements SearchEngine {
 		return Collections.EMPTY_LIST;
 	}
 	
-	private List<String> getContentIds(List<Long> keys) {	
-		List<String> ids = new ArrayList<String>();
+	private List<ContentEntity> getContents(List<Long> keys) {	
+		List<ContentEntity> result = new ArrayList<ContentEntity>();
 		for (Long key : keys) {
-			String id = KeyFactory.createKeyString("ContentEntity", key);
+			String id = getContentId(key);
 			ContentEntity contentEntity = getBusiness().getDao().getContentDao()
 					.getById(id);
 			if (contentEntity == null) {
+				logger.error("ContentEntity not found " + key + " " + id);
 				continue;
 			}
-			ids.add(contentEntity.getParentKey());
+			result.add(contentEntity);
 		}
-		return ids;
+		return result;
 	}
 
-	private List<String> getContentUrls(List<String> contentIds) {
+	private Long getContentKey(String id) {
+		return KeyFactory.stringToKey(id).getId();		
+	}
+	
+	private String getContentId(Long key) {
+		return KeyFactory.createKeyString("ContentEntity", key);
+	}
+	
+	private List<String> getContentUrls(List<ContentEntity> contents) {
 		List<String> urls = new ArrayList<String>();
-		for (String id : contentIds) {
+		for (ContentEntity content : contents) {
 			PageEntity page = getBusiness().getDao().getPageDao()
-				.getById(id);
+				.getById(content.getParentKey());
 			if (page != null) {
 				if (!page.isSearchable()) {
 					continue;
@@ -169,6 +180,10 @@ public class SearchEngineImpl implements SearchEngine {
 				if (approvedPage != null && !urls.contains(page.getFriendlyURL())) {
 					urls.add(page.getFriendlyURL());
 				}
+			}
+			else {
+				logger.error("PageEntity not found for content " 
+						+ content.getParentKey());
 			}
 		}
 		return urls;
@@ -202,11 +217,12 @@ public class SearchEngineImpl implements SearchEngine {
 
 	@Override
 	public void updateIndex(ContentEntity content) {
-		String data = "";
-		data = StrUtil.extractTextFromHTML(content.getContent().toLowerCase());
+		String data = StrUtil.extractTextFromHTML(content.getContent()
+				.toLowerCase());
 		logger.info(data);
 		String[] words = data.split("\\W+");
-		Long key = KeyFactory.stringToKey(content.getId()).getId();
+		Long key = getContentKey(content.getId());
+		clearIndex(key);
 		for (String word : words) {
 			if (word.length() < 3) {
 				continue;
@@ -220,11 +236,17 @@ public class SearchEngineImpl implements SearchEngine {
 		}
 	}
 
+	private void clearIndex(Long key) {
+		for (String word : getIndex().keySet()) {
+			getIndex().get(word).remove(key);
+		}
+	}
+	
 	public void saveIndex() {
 		try {
 			byte[] indexContent = StrUtil.zipStringToBytes(indexToString());
-			FileEntity file = getBusiness().getFileBusiness().saveFile("/tmp/index.bin", 
-					indexContent);
+			FileEntity file = getBusiness().getFileBusiness()
+					.saveFile("/tmp/index.bin",	indexContent);
 			indexModDate = file.getLastModifiedTime();
 			getBusiness().getSystemService().getCache().getMemcache().put(
 					INDEX_MOD_DATE, file.getLastModifiedTime());
@@ -238,6 +260,9 @@ public class SearchEngineImpl implements SearchEngine {
 		StringBuffer buf = new StringBuffer();
 		int i = 0;
 		for (String word : getIndex().keySet()) {
+			if (getIndex().get(word).isEmpty()) {
+				continue;
+			}
 			buf.append(i++ == 0 ? "" : ":").append(word).append("=");
 			int j = 0;
 			for (Long id : getIndex().get(word)) {
@@ -248,8 +273,13 @@ public class SearchEngineImpl implements SearchEngine {
 	}
 	
 	private void indexFromString(String data) {
-		for (String wordBuf : data.split(":")) {
-			String[] wordStruc = wordBuf.split("=");
+		for (String wordBuf : data.split("\\:")) {
+			logger.info(wordBuf);
+			String[] wordStruc = wordBuf.split("\\=");
+			if (wordStruc.length != 2 ) {
+				logger.error("Problem with index " + wordBuf);
+				continue;
+			}
 			index.put(wordStruc[0], new ArrayList<Long>());
 			for (String key : wordStruc[1].split(",")) {
 				index.get(wordStruc[0]).add(Long.valueOf(key));
@@ -275,11 +305,13 @@ public class SearchEngineImpl implements SearchEngine {
 	private void loadIndex() {
 		try {
 			index = new HashMap<String, ArrayList<Long>>();
-			FileEntity file = getBusiness().getFileBusiness().findFile("/tmp/index.bin");
+			FileEntity file = getBusiness().getFileBusiness()
+					.findFile("/tmp/index.bin");
 			if (file == null) {
 				return;
 			}
-			byte[] data = getBusiness().getDao().getFileDao().getFileContent(file);
+			byte[] data = getBusiness().getDao().getFileDao()
+					.getFileContent(file);
 			if (data != null) {
 				String strIndex = StrUtil.unzipStringFromBytes(data);
 				indexFromString(strIndex);
@@ -305,11 +337,24 @@ public class SearchEngineImpl implements SearchEngine {
 	@Override
 	public void reindexInRequest() {
 		List<PageEntity> pages = getBusiness().getDao().getPageDao().select();
-		Queue queue = getBusiness().getSystemService().getQueue("reindex");
 		for (PageEntity page : pages) {
 			getBusiness().getSearchEngine().updateIndex(page);
 		}
 		getBusiness().getSearchEngine().saveIndex();
+	}
+
+	@Override
+	public void removeFromIndex(ContentEntity content) {
+		clearIndex(getContentKey(content.getId()));
+	}
+
+	@Override
+	public void removeFromIndex(PageEntity page) {
+		List<ContentEntity> contents = getBusiness().getDao().getPageDao()
+				.getContents(page.getId());
+		for (ContentEntity content : contents) {
+			removeFromIndex(content);
+		}
 	}
 	
 }

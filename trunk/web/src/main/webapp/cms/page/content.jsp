@@ -65,6 +65,7 @@
     <input id="saveContentButton" type="submit" value="Save" />
     <input id="contentPreviewButton" type="button" value="Preview" />
     <input id="approveButton" type="button" value="Approve" />
+    <input id="restoreButton" type="button" value="Restore" />
     <input id="contentCancelButton" type="button" value="Cancel" />
 </div>    
 
@@ -75,6 +76,24 @@
 </div>
 
 <%@ include file="versionDialog.jsp" %>
+
+<div id="restore-dialog" style="display:none" title="Restore content">
+  <form id="restoreForm">
+    <div class="form-row">
+        <input name="page" type="radio" value="home" checked="checked"/> 
+            Home page <br/>        
+        <input name="page" type="radio" value="login" /> 
+            Login page <br/>        
+        <input name="page" type="radio" value="search" /> 
+            Search page         
+    </div>
+    <div class="buttons-dlg">
+        <input id="restoreSaveButton" type="submit" value="OK" />
+        <input id="restoreCancelButton" type="button" value="Cancel" />
+    </div>
+  </form>
+</div>
+
 
 </body>
 </html>

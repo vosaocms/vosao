@@ -49,9 +49,6 @@ public interface PageService extends AbstractService {
 	GroupService getGroupService();
 	void setGroupService(GroupService bean);
 
-	ServiceResponse updateContent(final String pageId, final String content,
-			String titles, String languageCode, boolean approve);
-	
 	List<ContentEntity> getContents(final String pageId);
 	
 	TreeItemDecorator<PageVO> getTree();
@@ -81,4 +78,13 @@ public interface PageService extends AbstractService {
 	
 	ServiceResponse approve(final String pageId);
 	
+	/**
+	 * Restore content of predefined page.
+	 * @param pageId - page to restore content
+	 * @param pageType - page content to restore (home,login,search)
+	 * @param language - content language
+	 * @return - service response
+	 */
+	ServiceResponse restore(final String pageId, final String pageType,
+			final String language);
 }

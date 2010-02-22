@@ -21,6 +21,7 @@
 
 package org.vosao.service.back.impl;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,6 +34,7 @@ import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
 import org.vosao.business.CurrentUser;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.PageEntity;
@@ -51,6 +53,7 @@ import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.PageRequestVO;
 import org.vosao.service.vo.PageVO;
 import org.vosao.utils.DateUtil;
+import org.vosao.utils.StreamUtil;
 
 /**
  * @author Alexander Oleynik
@@ -65,41 +68,6 @@ public class PageServiceImpl extends AbstractServiceImpl
 	private LanguageService languageService;
 	private ContentPermissionService contentPermissionService;
 	private GroupService groupService;
-	
-	@Override
-	public ServiceResponse updateContent(String pageId, String content,
-			String title, String languageCode, boolean approve) {
-		PageEntity page = getBusiness().getPageBusiness().getById(pageId);
-		if (page != null) {
-			if (!getBusiness().getPageBusiness().canChangeContent(
-					page.getFriendlyURL(), languageCode)) {
-				return ServiceResponse.createErrorResponse("Access denied");
-			}
-			UserEntity user = CurrentUser.getInstance();
-			ContentPermissionEntity perm = getBusiness()
-					.getContentPermissionBusiness().getPermission(
-							page.getFriendlyURL(), user);
-			if (approve && perm.isPublishGranted()) {
-				page.setState(PageState.APPROVED);
-			}
-			else {
-				page.setState(PageState.EDIT);
-			}
-			page.setModDate(new Date());
-			page.setModUserEmail(user.getEmail());
-			page.setLocalTitle(title, languageCode);
-			getDao().getPageDao().save(page);
-			ContentEntity contentEntity = getDao().getPageDao().setContent(
-					pageId, languageCode, content);
-			getBusiness().getSearchEngine().updateIndex(contentEntity);
-			return ServiceResponse.createSuccessResponse(
-					"Page content was successfully updated");
-		}
-		else {
-			return ServiceResponse.createErrorResponse("Page not found " 
-					+ pageId);
-		}
-	}
 
 	@Override
 	public TreeItemDecorator<PageVO> getTree() {
@@ -185,6 +153,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 		if (vo.get("commentsEnabled") != null) {
 			page.setCommentsEnabled(Boolean.valueOf(vo.get("commentsEnabled")));
 		}
+		boolean oldSearchable = page.isSearchable();
 		if (vo.get("searchable") != null) {
 			page.setSearchable(Boolean.valueOf(vo.get("searchable")));
 		}
@@ -238,9 +207,9 @@ public class PageServiceImpl extends AbstractServiceImpl
 		if (errors.isEmpty()) {
 			getDao().getPageDao().save(page);
 			if (vo.containsKey("content")) {
-				ContentEntity contentEntity = getDao().getPageDao().setContent(
-						page.getId(), vo.get("languageCode"), vo.get("content"));
-				getBusiness().getSearchEngine().updateIndex(contentEntity);
+				getBusiness().getPageBusiness().saveContent(page, 
+					vo.get("languageCode"), vo.get("content"), 
+					oldSearchable, page.isSearchable());
 			}
 			return ServiceResponse.createSuccessResponse(page.getId());
 		}
@@ -405,4 +374,58 @@ public class PageServiceImpl extends AbstractServiceImpl
 		groupService = bean;
 	}
 
+	private String loadResource(final String url) {
+		try {
+			return StreamUtil.getTextResource(url);
+		}
+		catch(IOException e) {
+			logger.error("Can't read comments template." + e);
+			return "Error during load resources " + url;
+		}
+	}
+
+	@Override
+	public ServiceResponse restore(String pageId, String pageType, 
+			String language) {
+		PageEntity page = getPage(pageId);
+		if (page == null) {
+			return ServiceResponse.createErrorResponse("Page not found");
+		}
+		String content = getPredefinedContent(pageType);
+		if (content == null) {
+			return ServiceResponse.createErrorResponse("Wrong page type");
+		}
+		if (page.isStructured()) {
+			page.setPageType(PageType.SIMPLE);
+		}
+		page.setModDate(new Date());
+		page.setModUserEmail(CurrentUser.getInstance().getEmail());
+		ContentPermissionEntity perm = getBusiness()
+				.getContentPermissionBusiness().getPermission(
+					page.getFriendlyURL(), CurrentUser.getInstance());
+		page.setState(PageState.EDIT);
+		if (!perm.isChangeGranted()) {
+			return ServiceResponse.createErrorResponse("Access denied");
+		}
+		getDao().getPageDao().save(page);
+		getBusiness().getPageBusiness().saveContent(page, language, content,
+				page.isSearchable(), page.isSearchable());
+		return ServiceResponse.createSuccessResponse(
+				"Page successfully restored.");
+	}
+
+	private String getPredefinedContent(String pageType) {
+		String result = null;
+		if (pageType.equals("home")) {
+			result = loadResource(SetupBeanImpl.HOME_PAGE_FILE);
+		}
+		else if (pageType.equals("login")) {
+			result = loadResource(SetupBeanImpl.LOGIN_PAGE_FILE);
+		}
+		else if (pageType.equals("search")) {
+			result = loadResource(SetupBeanImpl.SEARCH_PAGE_FILE);
+		}
+		return result;
+	}
+	
 }

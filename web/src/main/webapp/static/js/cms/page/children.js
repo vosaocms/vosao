@@ -33,21 +33,16 @@ var editMode = pageId != '';
     
 $(function(){
     Vosao.initJSONRpc(loadData);
-
     // hover states on the link buttons
     $('a.button').hover(
      	function() { $(this).addClass('ui-state-hover'); },
        	function() { $(this).removeClass('ui-state-hover'); }
     ); 
-
     initVersionDialog();
-
     $('#addChildButton').click(onAddChild);
     $('#deleteChildButton').click(onDelete);
-    
     $('ul.ui-tabs-nav li:nth-child(3)').addClass('ui-state-active')
     		.removeClass('ui-state-default');
-
 });
 
 function loadData() {

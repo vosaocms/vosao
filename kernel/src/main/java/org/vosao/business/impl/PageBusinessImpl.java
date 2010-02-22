@@ -404,5 +404,29 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	public void setBusiness(Business bean) {
 		this.business = bean;
 	}
+
+	@Override
+	public void saveContent(PageEntity page, String language, String content,
+			boolean oldSearchable, boolean searchable) {
+		ContentEntity contentEntity = getDao().getPageDao().setContent(
+				page.getId(), language, content);
+		if (searchable) {
+			if (oldSearchable) {
+				getBusiness().getSearchEngine().updateIndex(contentEntity);
+			}
+			else {
+				getBusiness().getSearchEngine().updateIndex(page);
+			}
+		}
+		else {
+			if (oldSearchable) {
+				getBusiness().getSearchEngine().removeFromIndex(contentEntity);
+			}
+			else {
+				getBusiness().getSearchEngine().removeFromIndex(page);
+			}
+		}
+		getBusiness().getSearchEngine().saveIndex();
+	}
 }
 

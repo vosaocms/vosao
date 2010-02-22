@@ -110,4 +110,13 @@ public interface PageBusiness {
 
 	boolean canChangeContent(String url, String languageCode);
 	
+	/**
+	 * Save page content and update search index.
+	 * @param page
+	 * @param content
+	 * @param language
+	 */
+	void saveContent(PageEntity page, String language, String content, 
+			boolean oldSearchable, boolean searchable);
+	
 }

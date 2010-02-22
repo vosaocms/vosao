@@ -35,24 +35,19 @@ var structureTemplates = null;
 $(function(){
     $(".datepicker").datepicker({dateFormat:'dd.mm.yy'});
     Vosao.initJSONRpc(loadData);
-
     // hover states on the link buttons
     $('a.button').hover(
      	function() { $(this).addClass('ui-state-hover'); },
        	function() { $(this).removeClass('ui-state-hover'); }
     ); 
-
     initVersionDialog();
-    
     $('#title').change(onTitleChange);
     $('#pageType').change(onPageTypeChange);
     $('#structure').change(onStructureChange);
-    $('#pageSaveButton').click(onPageUpdate);
     $('#pageForm').submit(function() {onPageUpdate(); return false;});
     $('#pagePreview').click(onPagePreview);
     $('#pageCancelButton').click(onPageCancel);
     $('#approveButton').click(onPageApprove);
-
     $('ul.ui-tabs-nav li:nth-child(1)').addClass('ui-state-active')
     		.removeClass('ui-state-default');
 });

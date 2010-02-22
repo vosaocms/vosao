@@ -25,7 +25,6 @@ var pages = {};
 function initVersionDialog() {
     $("#version-dialog").dialog({ width: 400, autoOpen: false });
     $('#addVersionLink').click(onAddVersion);
-    $('#versionSaveButton').click(onVersionTitleSave);
     $('#versionCancelButton').click(onVersionTitleCancel);
     $('#versionForm').submit(function() {onVersionTitleSave(); return false;});
 }

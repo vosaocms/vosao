@@ -47,7 +47,6 @@ $(function(){
     
     $('#addPermissionButton').click(onAddPermission);
     $('#deletePermissionButton').click(onDeletePermission);
-    $('#permissionSaveButton').click(onPermissionSave);
     $('#permissionForm').submit(function() {onPermissionSave(); return false;});
     $('#permissionCancelButton').click(onPermissionCancel);
     $('#allLanguages').change(onAllLanguagesChange);

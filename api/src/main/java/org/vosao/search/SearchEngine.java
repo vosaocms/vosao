@@ -21,8 +21,6 @@
 
 package org.vosao.search;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 
@@ -31,6 +29,10 @@ public interface SearchEngine {
 	void updateIndex(final PageEntity page);
 
 	void updateIndex(final ContentEntity content);
+
+	void removeFromIndex(final PageEntity page);
+
+	void removeFromIndex(final ContentEntity content);
 
 	SearchResult search(final String query, int start, int count,
 			String language, int textSize);

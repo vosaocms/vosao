@@ -120,6 +120,9 @@ public class PageEntity implements BaseEntity {
 	@Persistent
 	private boolean searchable;
 
+	@Persistent
+	private Integer sortIndex;
+
 	public PageEntity() {
 		publishDate = new Date();
 		state = PageState.EDIT.name();
@@ -134,6 +137,7 @@ public class PageEntity implements BaseEntity {
 		setDescription("");
 		setTitle("");
 		searchable = true;
+		sortIndex = 0;
 	}
 	
 	public PageEntity(String title, String friendlyURL, 
@@ -178,6 +182,7 @@ public class PageEntity implements BaseEntity {
 		setKeywords(entity.getKeywords());
 		setDescription(entity.getDescription());
 		setSearchable(entity.isSearchable());
+		setSortIndex(entity.getSortIndex());
 	}
 	
 	public String getId() {
@@ -219,7 +224,7 @@ public class PageEntity implements BaseEntity {
 	}
 
 	public String getPageFriendlyURL() {
-		return UrlUtil.getPageFriendlyURL(getFriendlyURL());
+		return UrlUtil.getNameFromFriendlyURL(getFriendlyURL());
 	}
 
 	public void setPageFriendlyURL(final String url) {
@@ -479,6 +484,14 @@ public class PageEntity implements BaseEntity {
 
 	public void setSearchable(boolean searchable) {
 		this.searchable = searchable;
+	}
+
+	public Integer getSortIndex() {
+		return sortIndex;
+	}
+
+	public void setSortIndex(Integer sortIndex) {
+		this.sortIndex = sortIndex;
 	}
 	
 }

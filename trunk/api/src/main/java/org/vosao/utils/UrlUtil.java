@@ -26,6 +26,12 @@ package org.vosao.utils;
  */
 public class UrlUtil {
 
+	/**
+	 * Extract parent page friendly URL.
+	 * For page /my/test/hope parent url is /my/test
+	 * @param friendlyUrl - page friendlyURL
+	 * @return parent friendlyURL.
+	 */
 	static public String getParentFriendlyURL(final String friendlyUrl) {
 		if (friendlyUrl == null || friendlyUrl.equals("/")) {
 			return "";
@@ -37,7 +43,13 @@ public class UrlUtil {
 		return friendlyUrl.substring(0, lastSlash);
 	}
 
-	static public String getPageFriendlyURL(final String friendlyUrl) {
+	/**
+	 * Extract last name in friendlyURL.
+	 * For page url /my/test/hope last name will be "hope"
+	 * @param friendlyUrl
+	 * @return
+	 */
+	static public String getNameFromFriendlyURL(final String friendlyUrl) {
 		if (friendlyUrl == null || friendlyUrl.equals("/")) {
 			return "";
 		}

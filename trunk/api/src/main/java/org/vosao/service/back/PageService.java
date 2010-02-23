@@ -87,4 +87,18 @@ public interface PageService extends AbstractService {
 	 */
 	ServiceResponse restore(final String pageId, final String pageType,
 			final String language);
+	
+	/**
+	 * Move page up in sort order.
+	 * @param pageId
+	 * @return
+	 */
+	ServiceResponse moveUp(final String pageId);
+
+	/**
+	 * Move page down in sort order.
+	 * @param pageId
+	 * @return
+	 */
+	ServiceResponse moveDown(final String pageId);
 }

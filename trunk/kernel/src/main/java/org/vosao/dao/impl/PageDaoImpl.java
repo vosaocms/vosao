@@ -74,7 +74,7 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 		}
 	}
 
-	private List<PageEntity> selectAllChildren(final String parentUrl) {
+	public List<PageEntity> selectAllChildren(final String parentUrl) {
 		String query = "select from " + PageEntity.class.getName()
 			+ " where parentUrl == pParentUrl" 
 			+ " parameters String pParentUrl";
@@ -91,7 +91,7 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 	@Override
 	public List<PageEntity> getByParent(final String url) {
 		List<PageEntity> result = filterLatestVersion(selectAllChildren(url));
-		Collections.sort(result, new PageHelper.PublishDateDesc());
+		Collections.sort(result, PageHelper.PUBLISH_DATE_ASC);
 		return result;
 	}
 
@@ -181,7 +181,7 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 			    + " where friendlyURL == pUrl"
 			    + " parameters String pUrl";
 		List<PageEntity> result = select(query, params(url));
-		Collections.sort(result, new PageHelper.VersionAsc());
+		Collections.sort(result, PageHelper.VERSION_ASC);
 		return result;
 	}
 	
@@ -196,7 +196,7 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 	@Override
 	public List<PageEntity> getByParentApproved(final String url) {
 		List<PageEntity> result = filterApproved(selectAllChildren(url));
-		Collections.sort(result, new PageHelper.PublishDateDesc());
+		Collections.sort(result, PageHelper.PUBLISH_DATE_ASC);
 		return result;
 	}
 

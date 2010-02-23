@@ -23,6 +23,7 @@ package org.vosao.business.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -56,8 +57,10 @@ import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.entity.UserEntity;
+import org.vosao.entity.helper.PageHelper;
 import org.vosao.enums.PageState;
 import org.vosao.filter.SiteFilter;
+import org.vosao.utils.UrlUtil;
 import org.vosao.velocity.VelocityPluginService;
 import org.vosao.velocity.VelocityService;
 import org.vosao.velocity.impl.VelocityPluginServiceImpl;
@@ -113,8 +116,26 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 				}
 			}
 		}
+		sortTree(root);
 		return root;
 	}	
+	
+	private void sortTree(TreeItemDecorator<PageEntity> page) {
+		if (page.isHasChildren()) {
+			Collections.sort(page.getChildren(), 
+				new Comparator<TreeItemDecorator<PageEntity>>() {
+					@Override
+					public int compare(TreeItemDecorator<PageEntity> o1,
+							TreeItemDecorator<PageEntity> o2) {
+						return PageHelper.SORT_INDEX_ASC.compare(
+								o1.getEntity(), o2.getEntity());
+					}
+			});
+			for (TreeItemDecorator<PageEntity> child : page.getChildren()) {
+				sortTree(child);
+			}
+		}
+	}
 	
 	@Override
 	public String render(PageEntity page, String languageCode) {
@@ -427,6 +448,105 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			}
 		}
 		getBusiness().getSearchEngine().saveIndex();
+	}
+
+	@Override
+	public Integer getNextSortIndex(String friendlyURL) {
+		String parentURL = UrlUtil.getParentFriendlyURL(friendlyURL);
+		if (StringUtils.isEmpty(parentURL)) {
+			return 0;
+		}
+		return reorderPages(parentURL);
+	}
+	
+	private Integer reorderPages(String url) {
+		List<PageEntity> pages = getDao().getPageDao().selectAllChildren(url);
+		Collections.sort(pages, PageHelper.SORT_INDEX_ASC);
+		Map<String, Integer> indexes = new HashMap<String, Integer>();
+		int currentIndex = 0;
+		for (PageEntity page : pages) {
+			String key = page.getFriendlyURL();
+			if (indexes.containsKey(key)){
+				if (page.getSortIndex() != indexes.get(key)) {
+					page.setSortIndex(indexes.get(key));
+					getDao().getPageDao().save(page);
+				}
+			}
+			else {
+				if (page.getSortIndex() != currentIndex) {
+					page.setSortIndex(currentIndex);
+					getDao().getPageDao().save(page);
+				}
+				indexes.put(key, page.getSortIndex());
+				currentIndex++;
+			}
+		}
+		return currentIndex;
+	}
+
+	@Override
+	public void moveDown(PageEntity page) {
+		String parentURL = UrlUtil.getParentFriendlyURL(page.getFriendlyURL());
+		if (StringUtils.isEmpty(parentURL)) {
+			return;
+		}
+		reorderPages(parentURL);
+		List<PageEntity> pages = getByParent(parentURL);
+		Collections.sort(pages, PageHelper.SORT_INDEX_ASC);
+		PageEntity currentPage = findByFriendlyURL(pages, page.getFriendlyURL());
+		if (currentPage == null) {
+			logger.error("page not found in moveDown");
+		}
+		int currentPos = pages.indexOf(currentPage);
+		if (currentPos < pages.size() - 1 ) {
+			swapSortIndexes(currentPage.getFriendlyURL(), 
+					pages.get(currentPos + 1).getFriendlyURL());
+		}
+	}
+
+	private PageEntity findByFriendlyURL(List<PageEntity> pages, 
+			String friendlyURL) {
+		for (PageEntity page : pages) {
+			if (page.getFriendlyURL().equals(friendlyURL)) {
+				return page;
+			}
+		}
+		return null;
+	}
+	
+	private void swapSortIndexes(String url1, String url2) {
+		List<PageEntity> pages1 = getDao().getPageDao().selectByUrl(url1);
+		int index1 = pages1.get(0).getSortIndex();
+		List<PageEntity> pages2 = getDao().getPageDao().selectByUrl(url2);
+		int index2 = pages2.get(0).getSortIndex();
+		for (PageEntity page : pages1) {
+			page.setSortIndex(index2);
+			getDao().getPageDao().save(page);			
+		}
+		for (PageEntity page : pages2) {
+			page.setSortIndex(index1);
+			getDao().getPageDao().save(page);			
+		}
+	}
+	
+	@Override
+	public void moveUp(PageEntity page) {
+		String parentURL = UrlUtil.getParentFriendlyURL(page.getFriendlyURL());
+		if (StringUtils.isEmpty(parentURL)) {
+			return;
+		}
+		reorderPages(parentURL);
+		List<PageEntity> pages = getByParent(parentURL);
+		Collections.sort(pages, PageHelper.SORT_INDEX_ASC);
+		PageEntity currentPage = findByFriendlyURL(pages, page.getFriendlyURL());
+		if (currentPage == null) {
+			logger.error("page not found in moveUp");
+		}
+		int currentPos = pages.indexOf(currentPage);
+		if (currentPos > 0) {
+			swapSortIndexes(currentPage.getFriendlyURL(), 
+					pages.get(currentPos - 1).getFriendlyURL());
+		}
 	}
 }
 

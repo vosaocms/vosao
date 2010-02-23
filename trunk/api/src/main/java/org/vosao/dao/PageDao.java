@@ -29,6 +29,13 @@ import org.vosao.entity.PageEntity;
 public interface PageDao extends BaseDao<String, PageEntity> {
 
 	/**
+	 * Select all children versions for parent page.
+	 * @param parentUrl - parent page url.
+	 * @return pages list.
+	 */
+	List<PageEntity> selectAllChildren(final String parentUrl);
+	
+	/**
 	 * Select pages latest versions by parent page.
 	 * @param url
 	 * @return

@@ -31,6 +31,7 @@ import org.vosao.business.impl.SimplePageRenderDecorator;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.UserEntity;
+import org.vosao.entity.helper.PageHelper;
 import org.vosao.enums.UserRole;
 import org.vosao.service.vo.CommentVO;
 import org.vosao.service.vo.UserVO;
@@ -143,6 +144,20 @@ public class VelocityServiceImpl implements VelocityService {
 			return findPageChildren(path).subList(0, count);
 		}
 		return list;
+	}
+
+	@Override
+	public List<PageEntity> findPageChildrenOrdered(String path) {
+		List<PageEntity> result = findPageChildren(path);
+		Collections.sort(result, PageHelper.SORT_INDEX_ASC);
+		return result;
+	}
+
+	@Override
+	public List<PageEntity> findPageChildrenOrdered(String path, int count) {
+		List<PageEntity> result = findPageChildren(path, count);
+		Collections.sort(result, PageHelper.SORT_INDEX_ASC);
+		return result;
 	}
 	
 }

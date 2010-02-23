@@ -23,7 +23,8 @@ package org.vosao.service.back.impl;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +41,7 @@ import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.UserEntity;
+import org.vosao.entity.helper.PageHelper;
 import org.vosao.enums.PageState;
 import org.vosao.enums.PageType;
 import org.vosao.service.ServiceResponse;
@@ -94,7 +96,32 @@ public class PageServiceImpl extends AbstractServiceImpl
 				}
 			}
 		}
+		sortTree(root);
 		return root;
+	}
+	
+	private void sortTree(TreeItemDecorator<PageVO> page) {
+		if (page.isHasChildren()) {
+			Collections.sort(page.getChildren(), 
+				new Comparator<TreeItemDecorator<PageVO>>() {
+					@Override
+					public int compare(TreeItemDecorator<PageVO> o1,
+							TreeItemDecorator<PageVO> o2) {
+						if (o1.getEntity().getSortIndex() > 
+							o2.getEntity().getSortIndex()) {
+							return 1;
+						}
+						if (o1.getEntity().getSortIndex().equals(
+								o2.getEntity().getSortIndex())) {
+							return 0;
+						}
+						return -1;
+					}
+			});
+			for (TreeItemDecorator<PageVO> child : page.getChildren()) {
+				sortTree(child);
+			}
+		}
 	}
 	
 	private List<PageVO> selectLastVersionPages(List<PageEntity> pages) {
@@ -147,6 +174,8 @@ public class PageServiceImpl extends AbstractServiceImpl
 		if (page == null) {
 			page = new PageEntity();
 			page.setCreateUserEmail(user.getEmail());
+			page.setSortIndex(getBusiness().getPageBusiness().getNextSortIndex(
+					vo.get("friendlyUrl")));
 		}
 		page.setModDate(new Date());
 		page.setModUserEmail(user.getEmail());
@@ -222,7 +251,10 @@ public class PageServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public List<PageVO> getChildren(String url) {
-		return PageVO.create(getBusiness().getPageBusiness().getByParent(url));
+		List<PageEntity> pages = getBusiness().getPageBusiness()
+				.getByParent(url);
+		Collections.sort(pages, PageHelper.SORT_INDEX_ASC);
+		return PageVO.create(pages);
 	}
 
 	@Override
@@ -426,6 +458,26 @@ public class PageServiceImpl extends AbstractServiceImpl
 			result = loadResource(SetupBeanImpl.SEARCH_PAGE_FILE);
 		}
 		return result;
+	}
+
+	@Override
+	public ServiceResponse moveDown(String pageId) {
+		PageEntity page = getDao().getPageDao().getById(pageId);
+		if (page == null) {
+			return ServiceResponse.createErrorResponse("Page not found");
+		}
+		getBusiness().getPageBusiness().moveDown(page);
+		return ServiceResponse.createSuccessResponse("Success");
+	}
+
+	@Override
+	public ServiceResponse moveUp(String pageId) {
+		PageEntity page = getDao().getPageDao().getById(pageId);
+		if (page == null) {
+			return ServiceResponse.createErrorResponse("Page not found");
+		}
+		getBusiness().getPageBusiness().moveUp(page);
+		return ServiceResponse.createSuccessResponse("Success");
 	}
 	
 }

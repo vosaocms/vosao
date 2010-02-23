@@ -137,4 +137,8 @@ public class PageVO {
 	public boolean isSearchable() {
 		return page.isSearchable();
 	}
+	
+	public Integer getSortIndex() {
+		return page.getSortIndex();
+	}
 }

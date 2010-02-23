@@ -119,4 +119,22 @@ public interface PageBusiness {
 	void saveContent(PageEntity page, String language, String content, 
 			boolean oldSearchable, boolean searchable);
 	
+	/**
+	 * Get next sort index for new page.
+	 * @param friendlyURL - new page url.
+	 */
+	Integer getNextSortIndex(final String friendlyURL);
+	
+	/**
+	 * Move page down in sort order.
+	 * @param page
+	 */
+	void moveDown(PageEntity page);
+
+	/**
+	 * Move page up in sort order.
+	 * @param page
+	 */
+	void moveUp(PageEntity page);
+	
 }

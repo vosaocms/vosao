@@ -1,22 +1,16 @@
 package org.vosao.entity.helper;
 
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
 import org.vosao.entity.PageEntity;
 
 public class PageHelper {
 
 	private static final Log logger = LogFactory.getLog(PageHelper.class);
 	
-	public static class PublishDateDesc implements Comparator<PageEntity> {
+	private static class PublishDateDesc implements Comparator<PageEntity> {
 		@Override
 		public int compare(PageEntity o1, PageEntity o2) {
 			if (o1.getPublishDate().after(o2.getPublishDate())) {
@@ -29,7 +23,9 @@ public class PageHelper {
 		}
 	}
 	
-	public static class VersionAsc implements Comparator<PageEntity> {
+	public static Comparator<PageEntity> PUBLISH_DATE_ASC = new PublishDateDesc();
+	
+	private static class VersionAsc implements Comparator<PageEntity> {
 		@Override
 		public int compare(PageEntity o1, PageEntity o2) {
 			if (o1.getVersion() > o2.getVersion()) {
@@ -41,5 +37,22 @@ public class PageHelper {
 			return -1;
 		}
 	}
+
+	public static Comparator<PageEntity> VERSION_ASC = new VersionAsc();
+	
+	private static class SortIndexAsc implements Comparator<PageEntity> {
+		@Override
+		public int compare(PageEntity o1, PageEntity o2) {
+			if (o1.getSortIndex() > o2.getSortIndex()) {
+				return 1;
+			}
+			if (o1.getSortIndex().equals(o2.getSortIndex())) {
+				return 0;
+			}
+			return -1;
+		}
+	}
+	
+	public static Comparator<PageEntity> SORT_INDEX_ASC = new SortIndexAsc();
 	
 }

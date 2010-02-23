@@ -135,22 +135,23 @@ public class SetupBeanImpl implements SetupBean {
 		List<PageEntity> roots = getDao().getPageDao().getByParent("");
 		if (roots.size() == 0) {
 			TemplateEntity template = getDao().getTemplateDao().getByUrl("simple");
-			addPage("Home page", "/", HOME_PAGE_FILE, template.getId());
+			addPage("Home page", "/", HOME_PAGE_FILE, template.getId(), 0);
 			getBusiness().getContentPermissionBusiness().setPermission(
 					"/", guests, ContentPermissionType.READ);
 	        addPage("Site user Login", "/login", LOGIN_PAGE_FILE, 
-	        		template.getId());
-	        addPage("Search", "/search", SEARCH_PAGE_FILE, template.getId());
+	        		template.getId(), 0);
+	        addPage("Search", "/search", SEARCH_PAGE_FILE, template.getId(), 1);
 		}
 	}
 
 	private void addPage(String title, String url, String resource, 
-				String templateId) {
+				String templateId, Integer sortIndex) {
         String content = loadResource(resource);
 		PageEntity login = new PageEntity(title, url,	templateId);
 		login.setCreateUserEmail("admin@test.com");
 		login.setModUserEmail("admin@test.com");
 		login.setState(PageState.APPROVED);
+		login.setSortIndex(sortIndex);
 		getDao().getPageDao().save(login);
 		getDao().getPageDao().setContent(login.getId(), 
 				LanguageEntity.ENGLISH_CODE, content);

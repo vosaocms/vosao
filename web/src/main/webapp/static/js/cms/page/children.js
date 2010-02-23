@@ -28,7 +28,7 @@
 
 var page = null;
 var pageRequest = null;
-var children = {list:[]};
+var children = null;
 var editMode = pageId != '';
     
 $(function(){
@@ -82,14 +82,16 @@ function callLoadChildren() {
 }
 
 function loadChildren() {
-	var r = pageRequest.children;
+	children = pageRequest.children.list;
     var html = '<table class="form-table"><tr><th></th><th>Title</th>\
-        <th>Friendly URL</th></tr>';
-    $.each(r.list, function (n, value) {
+        <th>Friendly URL</th><th></th></tr>';
+    $.each(children, function (n, value) {
         html += '<tr><td><input type="checkbox" value="' + value.id 
         + '"/></td><td><a href="/cms/page/content.jsp?id=' + value.id 
-        +'">' + value.title + '</a></td><td>' + value.friendlyURL
-        + '</td></tr>';
+        +'">' + value.title + '</a></td><td>' + value.friendlyURL + '</td>\
+		<td><a href="#" onclick="onPageUp(' + n + ')"><img src="/static/images/02_up.png"/></a>\
+        <a href="#" onclick="onPageDown(' + n + ')"><img src="/static/images/02_down.png"/></a>\
+        </td></tr>';
     });
     $('#children').html(html + '</table>');
     $('#children tr:even').addClass('even');
@@ -132,4 +134,30 @@ function loadPagePermission() {
    	else {
    		$('.securityTab').hide();
    	}
+}
+
+function onPageUp(i) {
+	if (i - 1 >= 0) {
+		Vosao.jsonrpc.pageService.moveUp(function(r) {}, children[i].id);
+        children[i].sortIndex--;
+        children[i - 1].sortIndex++;
+		swapPages(i, i - 1);
+		callLoadChildren();
+	}
+}
+
+function onPageDown(i) {
+	if (i + 1 < children.length) {
+		Vosao.jsonrpc.pageService.moveDown(function(r) {}, children[i].id);
+        children[i + 1].sortIndex--;
+        children[i].sortIndex++;
+		swapPages(i, i + 1);
+		callLoadChildren();
+	}
+}
+
+function swapPages(i, j) {
+	var tmp = children[j];
+	children[j] = children[i];
+	children[i] = tmp;
 }

@@ -42,7 +42,7 @@ public interface VelocityService {
 	
 	/**
 	 * Find approved last versions of children pages entity by parent page
-	 * friendlyURL.
+	 * friendlyURL. Ordered by publishDate.
 	 * @param path - friendly url.
 	 * @return list of found pages.
 	 */
@@ -50,7 +50,7 @@ public interface VelocityService {
 
 	/**
 	 * Find approved last versions of children pages entity by parent page
-	 * friendlyURL.
+	 * friendlyURL. Ordered by publishDate.
 	 * @param path - friendly url.
 	 * @param count - maximum list size.
 	 * @return list of found pages.
@@ -66,6 +66,23 @@ public interface VelocityService {
 	 */
 	List<PageEntity> findPageChildren(final String path, 
 			final Date publishDate);
+
+	/**
+	 * Find approved last versions of children pages entity by parent page
+	 * friendlyURL. Ordered by sortIndex.
+	 * @param path - friendly url.
+	 * @return list of found pages.
+	 */
+	List<PageEntity> findPageChildrenOrdered(final String path);
+
+	/**
+	 * Find approved last versions of children pages entity by parent page
+	 * friendlyURL. Ordered by sortIndex.
+	 * @param path - friendly url.
+	 * @param count - maximum list size.
+	 * @return list of found pages.
+	 */
+	List<PageEntity> findPageChildrenOrdered(final String path, final int count);
 
 	List<CommentVO> getCommentsByPage(final String pageUrl);
 	

@@ -2,54 +2,30 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.vosao.plugins</groupId>
-	<artifactId>disqus</artifactId>
-	<version>0.3</version>
-	<packaging>war</packaging>
-	<name>Disqus comments for Vosao CMS.</name> 
+	<parent>
+		<groupId>org.vosao.plugins</groupId>
+		<artifactId>register</artifactId>
+		<version>0.3</version>
+	</parent>
+	<artifactId>register-kernel</artifactId>
+	<packaging>jar</packaging>
+	<name>Vosao CMS register kernel module.</name> 
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>datanucleus</id>
-            <url>http://www.datanucleus.org/downloads/maven2</url>
-        </pluginRepository>
-    </pluginRepositories>
-    
-    <repositories>
-        <repository>
-            <id>vosao-maven-repo</id>
-            <url>http://vosao.googlecode.com/svn/repository</url>
-        </repository>
-        <repository>
-            <id>mvnsearch</id>
-            <url>http://www.mvnsearch.org/maven2</url>
-        </repository>
-        <repository>
-            <id>datanucleus</id>
-            <url>http://www.datanucleus.org/downloads/maven2</url>
-        </repository>
-        <repository>
-            <id>ocpsoft.com</id>
-            <url>http://ocpsoft.com/repository/</url>
-        </repository>
-    </repositories>
-
-    <dependencies>
+	<dependencies>
 
         <dependency>
             <groupId>org.vosao</groupId>
             <artifactId>vosao-api</artifactId>
             <version>0.3</version>
-            <scope>provided</scope>
         </dependency>
 
-    </dependencies>
+	</dependencies>
 
-    <properties>
-        <project_charset>UTF-8</project_charset>
-    </properties>
+	<properties>
+		<project_charset>UTF-8</project_charset>
+	</properties>
 
-    <!-- Build Settings -->
+	<!-- Build Settings -->
     <build>
         <plugins>
             <plugin>
@@ -66,7 +42,7 @@
                 <version>1.1.4</version>
                 <configuration>
                     <fork>false</fork>
-                    <mappingIncludes>*/**.class</mappingIncludes>
+                    <mappingIncludes>org/vosao/plugins/register/entity/*.class</mappingIncludes>
                     <verbose>false</verbose>
                     <enhancerName>ASM</enhancerName>
                     <api>JDO</api>

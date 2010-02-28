@@ -29,7 +29,7 @@ import org.vosao.enums.UserRole;
 /**
  * @author Alexander Oleynik
  */
-public interface UserDao extends BaseDao<Long, UserEntity> {
+public interface UserDao extends BaseNativeDao<UserEntity> {
 
 	UserEntity getByEmail(final String email);
 

@@ -31,33 +31,42 @@ import javax.jdo.annotations.PrimaryKey;
 
 import org.vosao.enums.UserRole;
 
+import com.google.appengine.api.datastore.Entity;
+
 /**
  * @author Alexander Oleynik
  */
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class UserEntity implements BaseEntity {
+public class UserEntity extends BaseNativeEntityImpl {
 
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Long id;
-	
-	@Persistent
 	private String name;
-	
-	@Persistent
 	private String password;
-
-	@Persistent
 	private String email;
-
-	@Persistent
 	private UserRole role;
 	
 	public UserEntity() {
+		role = UserRole.USER;
 	}
 	
+	@Override
+	public void load(Entity entity) {
+		super.load(entity);
+		name = getStringProperty(entity, "name");
+		password = getStringProperty(entity, "password");
+		email = getStringProperty(entity, "email");
+		role = UserRole.valueOf(getStringProperty(entity, "role"));
+	}
+	
+	@Override
+	public void save(Entity entity) {
+		super.save(entity);
+		entity.setProperty("name", name);
+		entity.setProperty("password", password);
+		entity.setProperty("email", email);
+		entity.setProperty("role", role.name());
+	}
+
 	public UserEntity(String aName, String aPassword,
 			String anEmail, UserRole aRole) {
 		this();
@@ -65,26 +74,6 @@ public class UserEntity implements BaseEntity {
 		password = aPassword;
 		email = anEmail;
 		role = aRole;
-	}
-	
-	@Override
-	public Object getEntityId() {
-		return id;
-	}
-
-	public void copy(final UserEntity entity) {
-		setName(entity.getName());
-		setPassword(entity.getPassword());
-		setEmail(entity.getEmail());
-		setRole(entity.getRole());		
-	}
-	
-	public Long getId() {
-		return id;
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
 	}
 	
 	public String getPassword() {
@@ -119,19 +108,6 @@ public class UserEntity implements BaseEntity {
 		this.role = role;
 	}
 
-	public boolean equals(Object object) {
-		if (object instanceof UserEntity) {
-			UserEntity entity = (UserEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	public String getRoleString() {
 		if (role == null) {
 			return "";

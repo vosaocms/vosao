@@ -30,8 +30,11 @@ import org.vosao.entity.UserEntity;
 import org.vosao.entity.UserGroupEntity;
 import org.vosao.enums.UserRole;
 
-public class UserDaoImpl extends BaseDaoImpl<Long, UserEntity> implements
-		UserDao {
+import com.google.appengine.api.datastore.Query;
+import static com.google.appengine.api.datastore.Query.FilterOperator.*;
+
+public class UserDaoImpl extends BaseNativeDaoImpl<UserEntity> 
+		implements UserDao {
 
 	private UserGroupDao userGroupDao;
 	
@@ -40,16 +43,15 @@ public class UserDaoImpl extends BaseDaoImpl<Long, UserEntity> implements
 	}
 
 	public UserEntity getByEmail(final String email) {
-		String query = "select from " + UserEntity.class.getName()
-				+ " where email == pEmail parameters String pEmail";
-		return selectOne(query, params(email));
+		Query q = newQuery();
+		q.addFilter("email", EQUAL, email);
+		return selectOne(q, "getByEmail", params(email));
 	}
 
 	public List<UserEntity> getByRole(final UserRole role) {
-		String query = "select from " + UserEntity.class.getName()
-				+ " where role == pRole"
-				+ " parameters org.vosao.enums.UserRole pRole";
-		return select(query, params(role));
+		Query q = newQuery();
+		q.addFilter("role", EQUAL, role.name());
+		return select(q, "getByRole", params(role));
 	}
 
 	@Override

@@ -33,6 +33,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.orm.jdo.PersistenceManagerFactoryUtils;
 import org.vosao.dao.AbstractDao;
 import org.vosao.dao.cache.EntityCache;
+import org.vosao.dao.cache.QueryCache;
 import org.vosao.global.SystemService;
 
 public class AbstractDaoImpl implements AbstractDao, Serializable {
@@ -40,6 +41,9 @@ public class AbstractDaoImpl implements AbstractDao, Serializable {
 	protected static final Log logger = LogFactory.getLog(AbstractDaoImpl.class);
 
 	private PersistenceManagerFactory pmf;
+	private EntityCache entityCache;
+	private QueryCache queryCache;
+	private SystemService systemService;
 
 	public PersistenceManagerFactory getPersistenceManagerFactory() {
 		return pmf;
@@ -58,6 +62,30 @@ public class AbstractDaoImpl implements AbstractDao, Serializable {
 		List<T> result = new ArrayList<T>();
 		result.addAll(list);
 		return result;
+	}
+
+	public EntityCache getEntityCache() {
+		return entityCache;
+	}
+
+	public void setEntityCache(EntityCache entityCache) {
+		this.entityCache = entityCache;
+	}
+
+	public QueryCache getQueryCache() {
+		return queryCache;
+	}
+
+	public void setQueryCache(QueryCache queryCache) {
+		this.queryCache = queryCache;
+	}
+
+	public SystemService getSystemService() {
+		return systemService;
+	}
+
+	public void setSystemService(SystemService systemService) {
+		this.systemService = systemService;
 	}
 
 }

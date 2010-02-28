@@ -63,6 +63,7 @@
         <property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>
         <property name="entityCache" ref="entityCache"/>
         <property name="queryCache" ref="queryCache"/>
+        <property name="systemService" ref="systemService"/>
     </bean>
       
     <bean id="fileDao" class="org.vosao.dao.impl.FileDaoImpl"

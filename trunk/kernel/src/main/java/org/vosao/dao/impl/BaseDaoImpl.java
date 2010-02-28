@@ -29,8 +29,6 @@ import javax.jdo.PersistenceManager;
 
 import org.vosao.dao.BaseDao;
 import org.vosao.dao.DaoFilter;
-import org.vosao.dao.cache.EntityCache;
-import org.vosao.dao.cache.QueryCache;
 import org.vosao.entity.BaseEntity;
 
 /**
@@ -40,8 +38,6 @@ public class BaseDaoImpl<K,T extends BaseEntity> extends AbstractDaoImpl
 		implements BaseDao<K,T> {
 
 	private Class clazz;
-	private EntityCache entityCache;
-	private QueryCache queryCache;
 	
 	public BaseDaoImpl(Class aClass) {
 		clazz = aClass;
@@ -181,22 +177,6 @@ public class BaseDaoImpl<K,T extends BaseEntity> extends AbstractDaoImpl
 		
 	protected Object[] params(Object...objects) {
 		return objects;
-	}
-
-	public EntityCache getEntityCache() {
-		return entityCache;
-	}
-
-	public void setEntityCache(EntityCache bean) {
-		this.entityCache = bean;
-	}
-
-	public QueryCache getQueryCache() {
-		return queryCache;
-	}
-
-	public void setQueryCache(QueryCache queryCache) {
-		this.queryCache = queryCache;
 	}
 
 	@Override

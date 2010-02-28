@@ -88,6 +88,7 @@ public class UserDaoTest extends AbstractDaoTest {
 		userTool.addUser("name2","password2","test2@test.com", UserRole.USER);
 		userTool.addUser("name3","password3","test3@test.com", UserRole.ADMIN);
 		UserEntity user1 = getDao().getUserDao().getByEmail("test2@test.com");
+		assertNotNull(user1);
 		assertEquals("name2", user1.getName());
 		assertEquals("password2", user1.getPassword());
 		assertEquals(UserRole.USER, user1.getRole());

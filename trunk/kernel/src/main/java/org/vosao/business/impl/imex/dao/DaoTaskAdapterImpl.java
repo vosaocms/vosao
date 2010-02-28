@@ -350,7 +350,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 					throw new DaoTaskException("User not found while " 
 						+ "skipping save operation. " + entity.getEmail());
 				}
-				entity.setId(found.getId());
+				entity.setKey(found.getKey());
 			}
 		}
 		else {

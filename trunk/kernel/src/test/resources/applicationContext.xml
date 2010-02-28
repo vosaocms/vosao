@@ -63,6 +63,7 @@
         <property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>
         <property name="entityCache" ref="entityCache"/>
         <property name="queryCache" ref="queryCache"/>
+        <property name="systemService" ref="systemService"/>
     </bean>
       
     <bean id="fileDao" class="org.vosao.dao.impl.FileDaoImpl"
@@ -72,7 +73,9 @@
         parent="abstractDao" />  
 
     <bean id="userDao" class="org.vosao.dao.impl.UserDaoImpl"
-        parent="abstractDao" />  
+        parent="abstractDao" >
+        <property name="userGroupDao" ref="userGroupDao" />
+    </bean>      
 
     <bean id="templateDao" class="org.vosao.dao.impl.TemplateDaoImpl"
         parent="abstractDao" />  

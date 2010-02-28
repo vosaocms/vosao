@@ -32,6 +32,7 @@ import org.vosao.dao.FieldDao;
 import org.vosao.dao.FileDao;
 import org.vosao.dao.FolderDao;
 import org.vosao.dao.FolderPermissionDao;
+import org.vosao.dao.FormConfigDao;
 import org.vosao.dao.FormDao;
 import org.vosao.dao.GroupDao;
 import org.vosao.dao.LanguageDao;
@@ -60,6 +61,7 @@ public class DaoImpl implements Dao, Serializable {
 	private TemplateDao templateDao;
 	private ConfigDao configDao;
 	private FormDao formDao;
+	private FormConfigDao formConfigDao;
 	private CommentDao commentDao;
 	private FieldDao fieldDao;
 	private SeoUrlDao seoUrlDao;
@@ -83,6 +85,7 @@ public class DaoImpl implements Dao, Serializable {
 		templateDao.clearCache();
 		configDao.clearCache();
 		formDao.clearCache();
+		formConfigDao.clearCache();
 		commentDao.clearCache();
 		fieldDao.clearCache();
 		seoUrlDao.clearCache();
@@ -150,6 +153,14 @@ public class DaoImpl implements Dao, Serializable {
 
 	public void setFormDao(FormDao formDao) {
 		this.formDao = formDao;
+	}
+
+	public FormConfigDao getFormConfigDao() {
+		return formConfigDao;
+	}
+
+	public void setFormConfigDao(FormConfigDao formConfigDao) {
+		this.formConfigDao = formConfigDao;
 	}
 
 	public CommentDao getCommentDao() {

@@ -62,7 +62,7 @@ function showFields() {
 		h += 
 			'<tr>\
 			<td><input type="checkbox" name="item' + i + '" value="' + field.id + '"/></td>\
-			<td><a href="#" onclick="onFieldEdit(\'' + field.id + '\')">'   + field.title + '</a></td>\
+			<td><a href="#" onclick="onFieldEdit(' + field.id + ')">'   + field.title + '</a></td>\
 			<td>' + field.name + '</td>\
 			<td>'   + fieldTypeString(field.fieldType) + '</td>\
 			<td><a href="#" onclick="onFieldUp(' + i+ ')"><img src="/static/images/02_up.png"/></a>\
@@ -185,7 +185,7 @@ function createFieldVO() {
 	var fieldIndex = field != null ? field.index : 
 		(fields == null ? 0 : fields.length);
 	return Vosao.javaMap( {
-		id :field != null ? field.id : null,
+		id :field != null ? String(field.id) : null,
 		formId :formId,
 		name :$('input[name=field.name]').val(),
 		title :$('input[name=field.title]').val(),

@@ -21,43 +21,24 @@
 
 package org.vosao.entity;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
 import org.vosao.enums.ContentPermissionType;
+
+import com.google.appengine.api.datastore.Entity;
 
 /**
  * @author Alexander Oleynik
  */
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class ContentPermissionEntity implements BaseEntity {
+public class ContentPermissionEntity extends BaseNativeEntityImpl {
 
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Long id;
-	
-	@Persistent
 	private String url;
-	
-	@Persistent
 	private boolean allLanguages;
-
-	@Persistent
 	private String languages;
-
-	@Persistent
 	private ContentPermissionType permission;
-	
-	@Persistent
     private Long groupId;
 	
 	public ContentPermissionEntity() {
@@ -81,45 +62,32 @@ public class ContentPermissionEntity implements BaseEntity {
 	}
 
 	@Override
-	public Object getEntityId() {
-		return id;
+	public void load(Entity entity) {
+		super.load(entity);
+		url = getStringProperty(entity, "url");
+		allLanguages = getBooleanProperty(entity, "allLanguages", true);
+		languages = getStringProperty(entity, "languages");
+		permission = ContentPermissionType.valueOf(getStringProperty(entity, 
+				"permission"));
+		groupId = getLongProperty(entity, "groupId", 0);
+	}
+	
+	@Override
+	public void save(Entity entity) {
+		super.save(entity);
+		entity.setProperty("url", url);
+		entity.setProperty("allLanguages", allLanguages);
+		entity.setProperty("languages", languages);
+		entity.setProperty("permission", permission.name());
+		entity.setProperty("groupId", groupId);
 	}
 
-	public void copy(final ContentPermissionEntity entity) {
-		setUrl(entity.getUrl());
-		setPermission(entity.getPermission());
-		setGroupId(entity.getGroupId());
-		setAllLanguages(entity.isAllLanguages());
-		setLanguages(entity.getLanguages());
-	}
-	
-	public Long getId() {
-		return id;
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
 	public String getUrl() {
 		return url;
 	}
 
 	public void setUrl(String url) {
 		this.url = url;
-	}
-
-	public boolean equals(Object object) {
-		if (object instanceof ContentPermissionEntity) {
-			ContentPermissionEntity entity = (ContentPermissionEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	public ContentPermissionType getPermission() {

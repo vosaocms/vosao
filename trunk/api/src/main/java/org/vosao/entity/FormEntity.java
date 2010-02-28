@@ -21,48 +21,20 @@
 
 package org.vosao.entity;
 
-import java.io.Serializable;
-
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
+import com.google.appengine.api.datastore.Entity;
 
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class FormEntity implements BaseEntity {
+public class FormEntity extends BaseNativeEntityImpl {
 
 	private static final long serialVersionUID = 1L;
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
-	
-	@Persistent
 	private String name;
-	
-	@Persistent
 	private String title;
-
-	@Persistent
 	private String email;
-
-	@Persistent
 	private String letterSubject;
-
-	@Persistent
 	private String sendButtonTitle;
-
-	@Persistent
 	private boolean showResetButton;
-
-	@Persistent
 	private String resetButtonTitle;
-
-	@Persistent
 	private boolean enableCaptcha;
 
 	public FormEntity() {
@@ -78,29 +50,31 @@ public class FormEntity implements BaseEntity {
 	}
 	
 	@Override
-	public Object getEntityId() {
-		return id;
+	public void load(Entity entity) {
+		super.load(entity);
+		name = getStringProperty(entity, "name");
+		email = getStringProperty(entity, "email");
+		title = getStringProperty(entity, "title");
+		letterSubject = getStringProperty(entity, "letterSubject");
+		sendButtonTitle = getStringProperty(entity, "sendButtonTitle");
+		resetButtonTitle = getStringProperty(entity, "resetButtonTitle");
+		showResetButton = getBooleanProperty(entity, "showResetButton", false);
+		enableCaptcha = getBooleanProperty(entity, "enableCaptcha", false);
+	}
+	
+	@Override
+	public void save(Entity entity) {
+		super.save(entity);
+		entity.setProperty("name", name);
+		entity.setProperty("email", email);
+		entity.setProperty("title", title);
+		entity.setProperty("letterSubject", letterSubject);
+		entity.setProperty("sendButtonTitle", sendButtonTitle);
+		entity.setProperty("resetButtonTitle", resetButtonTitle);
+		entity.setProperty("showResetButton", showResetButton);
+		entity.setProperty("enableCaptcha", enableCaptcha);
 	}
 
-	public void copy(final FormEntity entity) {
-		setTitle(entity.getTitle());
-		setName(entity.getName());
-		setEmail(entity.getEmail());
-		setLetterSubject(entity.getLetterSubject());
-		setSendButtonTitle(entity.getSendButtonTitle());
-		setShowResetButton(entity.isShowResetButton());
-		setResetButtonTitle(entity.getResetButtonTitle());
-		setEnableCaptcha(entity.isEnableCaptcha());
-	}
-	
-	public String getId() {
-		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
-	}
-	
 	public String getName() {
 		return name;
 	}
@@ -131,19 +105,6 @@ public class FormEntity implements BaseEntity {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public boolean equals(Object object) {
-		if (object instanceof FormEntity) {
-			FormEntity entity = (FormEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	public String getSendButtonTitle() {

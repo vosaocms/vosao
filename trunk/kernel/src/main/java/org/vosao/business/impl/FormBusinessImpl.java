@@ -68,7 +68,7 @@ public class FormBusinessImpl extends AbstractBusinessImpl
 	public void submit(FormEntity form, Map<String, String> parameters,
 			List<FileItem> files) throws UploadException {
 		ConfigEntity config = getDao().getConfigDao().getConfig();
-		FormConfigEntity formConfig = getDao().getFormDao().getConfig();
+		FormConfigEntity formConfig = getDao().getFormConfigDao().getConfig();
 		VelocityContext context = new VelocityContext();
 		List<FieldEntity> fields = getDao().getFieldDao().getByForm(form);
 		context.put("form", form);

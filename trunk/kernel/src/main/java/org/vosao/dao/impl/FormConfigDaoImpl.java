@@ -19,12 +19,28 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.dao.impl;
 
-import org.vosao.entity.FormEntity;
+import java.util.List;
 
-public interface FormDao extends BaseNativeDao<FormEntity> {
+import org.vosao.dao.FormConfigDao;
+import org.vosao.entity.FormConfigEntity;
 
-	FormEntity getByName(final String name);
+public class FormConfigDaoImpl extends BaseNativeDaoImpl<FormConfigEntity> 
+		implements FormConfigDao {
+
+	public FormConfigDaoImpl() {
+		super(FormConfigEntity.class);
+	}
+
+	@Override
+	public FormConfigEntity getConfig() {
+		List<FormConfigEntity> list = select();
+		if (list.size() > 0) {
+			return list.get(0);
+		}
+		logger.error("Form config for site was not found!");
+		return new FormConfigEntity();
+	}
 
 }

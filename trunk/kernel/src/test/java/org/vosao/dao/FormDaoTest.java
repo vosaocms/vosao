@@ -46,15 +46,15 @@ public class FormDaoTest extends AbstractDaoTest {
 	}
 
 	public void testGetConfig() {
-		FormConfigEntity c = getDao().getFormDao().getConfig();
+		FormConfigEntity c = getDao().getFormConfigDao().getConfig();
 		assertNotNull(c);
 		c.setFormTemplate("template");
-		getDao().getFormDao().save(c);
-		c = getDao().getFormDao().getConfig();
+		getDao().getFormConfigDao().save(c);
+		c = getDao().getFormConfigDao().getConfig();
 		assertEquals("template", c.getFormTemplate());
 		c.setFormTemplate("template2");
-		getDao().getFormDao().save(c);
-		c = getDao().getFormDao().getConfig();
+		getDao().getFormConfigDao().save(c);
+		c = getDao().getFormConfigDao().getConfig();
 		assertEquals("template2", c.getFormTemplate());
 	}
 	

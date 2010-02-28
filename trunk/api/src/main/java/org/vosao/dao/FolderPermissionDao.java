@@ -29,7 +29,7 @@ import org.vosao.entity.FolderPermissionEntity;
  * @author Alexander Oleynik
  */
 public interface FolderPermissionDao 
-		extends BaseDao<Long, FolderPermissionEntity> {
+		extends BaseNativeDao<FolderPermissionEntity> {
 
 	FolderPermissionEntity getByFolderGroup(final String folderId, 
 			final Long groupId);

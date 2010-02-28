@@ -36,5 +36,14 @@ public class ParamUtil {
 		}
 	}
 	
+	static public Long getLong(final String s, 
+			final Long defaultValue) {
+		try {
+			return Long.valueOf(s);
+		}
+		catch (NumberFormatException e) {
+			return defaultValue;
+		}
+	}
 	
 }

@@ -30,6 +30,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.dao.BaseNativeDao;
 import org.vosao.entity.BaseNativeEntity;
+import org.vosao.utils.EntityUtil;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
@@ -237,7 +238,6 @@ public class BaseNativeDaoImpl<T extends BaseNativeEntity>
 	}
 
 	private String createKind() {
-		String name = clazz.getName();
-		return name.substring(name.lastIndexOf('.') + 1);
+		return EntityUtil.getKind(clazz);
 	}
 }

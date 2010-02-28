@@ -21,10 +21,10 @@
 
 package org.vosao.dao;
 
-import org.vosao.entity.FormEntity;
+import org.vosao.entity.FormConfigEntity;
 
-public interface FormDao extends BaseNativeDao<FormEntity> {
+public interface FormConfigDao extends BaseNativeDao<FormConfigEntity> {
 
-	FormEntity getByName(final String name);
+	FormConfigEntity getConfig();
 
 }

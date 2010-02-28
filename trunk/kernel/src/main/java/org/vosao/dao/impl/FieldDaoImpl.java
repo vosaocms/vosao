@@ -29,7 +29,10 @@ import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormEntity;
 import org.vosao.entity.helper.FieldHelper;
 
-public class FieldDaoImpl extends BaseDaoImpl<String, FieldEntity> 
+import com.google.appengine.api.datastore.Query;
+import static com.google.appengine.api.datastore.Query.FilterOperator.*;
+
+public class FieldDaoImpl extends BaseNativeDaoImpl<FieldEntity> 
 		implements FieldDao {
 
 	public FieldDaoImpl() {
@@ -38,19 +41,19 @@ public class FieldDaoImpl extends BaseDaoImpl<String, FieldEntity>
 
 	@Override
 	public List<FieldEntity> getByForm(final FormEntity form) {
-		String query = "select from " + FieldEntity.class.getName()
-				+ " where formId == pFormId parameters String pFormId";
-		List<FieldEntity> result = select(query, params(form.getId()));
+		Query q = newQuery();
+		q.addFilter("formId", EQUAL, form.getId());
+		List<FieldEntity> result = select(q, "getByForm", params(form.getId()));
 		Collections.sort(result, new FieldHelper.IndexAsc());
 		return result;
 	}
 	
 	@Override
 	public FieldEntity getByName(final FormEntity form, final String name) {
-		String query = "select from " + FieldEntity.class.getName()
-				+ " where formId == pFormId && name == pName"
-				+ " parameters String pFormId, String pName";
-		return selectOne(query, params(form.getId(), name));
+		Query q = newQuery();
+		q.addFilter("formId", EQUAL, form.getId());
+		q.addFilter("name", EQUAL, name);
+		return selectOne(q, "getByName", params(form.getId(), name));
 	}
 	
 }

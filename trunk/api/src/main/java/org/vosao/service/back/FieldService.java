@@ -33,13 +33,13 @@ public interface FieldService extends AbstractService {
 	
 	ServiceResponse updateField(Map<String, String> field);
 	
-	List<FieldVO> getByForm(final String formId);
+	List<FieldVO> getByForm(final Long formId);
 	
-	FieldVO getById(final String fieldId);
+	FieldVO getById(final Long fieldId);
 	
-	void remove(final List<String> ids);
+	void remove(final List<Long> ids);
 	
-	void moveUp(final String formId, final String fieldId);
+	void moveUp(final Long formId, final Long fieldId);
 
-	void moveDown(final String formId, final String fieldId);
+	void moveDown(final Long formId, final Long fieldId);
 }

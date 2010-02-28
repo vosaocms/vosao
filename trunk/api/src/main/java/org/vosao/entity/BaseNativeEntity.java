@@ -12,9 +12,9 @@ public interface BaseNativeEntity extends Serializable {
 	void setKey(Key key);
 	
 	Long getId();
-	
-	String getIdString();
 
+	void setId(Long id);
+	
 	void save(Entity entity);
 	
 	void load(Entity entity);

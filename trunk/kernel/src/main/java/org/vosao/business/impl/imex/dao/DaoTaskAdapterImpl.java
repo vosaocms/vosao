@@ -224,7 +224,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 						+ "skipping save operation. group=" + entity.getGroupId()
 						+ " user=" + entity.getUserId());
 				}
-				entity.setId(found.getId());
+				entity.setKey(found.getKey());
 			}
 		}
 		else {

@@ -21,30 +21,16 @@
 
 package org.vosao.entity;
 
-import java.io.Serializable;
-
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
+import com.google.appengine.api.datastore.Entity;
 
 /**
  * @author Alexander Oleynik
  */
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class UserGroupEntity implements BaseEntity {
+public class UserGroupEntity extends BaseNativeEntityImpl {
 
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Long id;
-	
-	@Persistent
 	private Long groupId;
-	
-	@Persistent
 	private Long userId;
 
 	public UserGroupEntity() {
@@ -55,25 +41,21 @@ public class UserGroupEntity implements BaseEntity {
 		groupId = aGroupId;
 		userId = aUserId;
 	}
+
+	@Override
+	public void load(Entity entity) {
+		super.load(entity);
+		groupId = getLongProperty(entity, "groupId", 0);
+		userId = getLongProperty(entity, "userId", 0);
+	}
 	
 	@Override
-	public Object getEntityId() {
-		return id;
+	public void save(Entity entity) {
+		super.save(entity);
+		entity.setProperty("groupId", groupId);
+		entity.setProperty("userId", userId);
 	}
 
-	public void copy(final UserGroupEntity entity) {
-		setUserId(entity.getUserId());
-		setGroupId(entity.getGroupId());
-	}
-	
-	public Long getId() {
-		return id;
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
 	public Long getUserId() {
 		return userId;
 	}
@@ -90,17 +72,4 @@ public class UserGroupEntity implements BaseEntity {
 		this.groupId = groupId;
 	}
 
-	public boolean equals(Object object) {
-		if (object instanceof UserGroupEntity) {
-			UserGroupEntity entity = (UserGroupEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
 }

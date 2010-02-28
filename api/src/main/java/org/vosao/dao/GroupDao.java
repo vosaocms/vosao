@@ -26,7 +26,7 @@ import org.vosao.entity.GroupEntity;
 /**
  * @author Alexander Oleynik
  */
-public interface GroupDao extends BaseDao<Long, GroupEntity> {
+public interface GroupDao extends BaseNativeDao<GroupEntity> {
 
 	GroupEntity getByName(final String name);
 

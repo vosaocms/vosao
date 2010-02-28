@@ -205,7 +205,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 					throw new DaoTaskException("Group not found while " 
 						+ "skipping save operation. " + entity.getName());
 				}
-				entity.setId(found.getId());
+				entity.setKey(found.getKey());
 			}
 		}
 		else {

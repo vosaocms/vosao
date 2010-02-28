@@ -21,20 +21,26 @@
 
 package org.vosao.dao;
 
+import org.vosao.global.SystemService;
 import org.vosao.test.AbstractSpringTest;
 
 public abstract class AbstractDaoTest extends AbstractSpringTest {
 	
     private Dao dao;
+    private SystemService systemService;
 
 	@Override
     public void setUp() throws Exception {
         super.setUp();
         dao = (Dao)getContext().getBean("dao");
+        systemService = (SystemService)getContext().getBean("systemService");
 	}    
     
 	public Dao getDao() {
 		return dao;
 	}
 	
+	public SystemService getSystemService() {
+		return systemService;
+	}
 }

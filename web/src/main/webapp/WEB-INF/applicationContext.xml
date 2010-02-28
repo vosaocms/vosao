@@ -72,7 +72,9 @@
         parent="abstractDao" />  
 
     <bean id="userDao" class="org.vosao.dao.impl.UserDaoImpl"
-        parent="abstractDao" />  
+        parent="abstractDao" >
+        <property name="userGroupDao" ref="userGroupDao" />
+    </bean>      
 
     <bean id="templateDao" class="org.vosao.dao.impl.TemplateDaoImpl"
         parent="abstractDao" />  

@@ -21,6 +21,8 @@
 
 package org.vosao.dao;
 
+import java.io.ByteArrayInputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -31,6 +33,12 @@ import org.vosao.dao.tool.FolderTool;
 import org.vosao.entity.FileChunkEntity;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
+import org.vosao.utils.StreamUtil;
+
+import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 
 public class FileDaoTest extends AbstractDaoTest {
 
@@ -199,5 +207,27 @@ public class FileDaoTest extends AbstractDaoTest {
 		list = getDao().getFileDao().select();
 		assertEquals(0, list.size());
 	}	
+
+	public void testBlob() {
+		FolderEntity folder = folderTool.addFolder("test");
+		FileEntity file = fileTool.addFile("title", "test.bat", "text/plain", 
+				"file content".getBytes(), folder);
+		Query q = new Query("FileChunkEntity");
+		q.addFilter("fileId", FilterOperator.EQUAL, file.getId());
+		Entity e = getSystemService().getDatastore().prepare(q).asSingleEntity();
+		assertNotNull(e);
+		byte[] data = ((Blob)e.getProperty("data")).getBytes();
+		data = ((Blob)StreamUtil.toObject(data)).getBytes();
+		try {
+			String text = new String(data, "UTF-8");
+			assertEquals("file content", text);
+		}
+		catch (UnsupportedEncodingException ex) {
+			ex.printStackTrace();
+		}
+		
+	}
+	
+
 	
 }

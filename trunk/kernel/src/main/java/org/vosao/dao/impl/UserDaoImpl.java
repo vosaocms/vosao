@@ -24,10 +24,8 @@ package org.vosao.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jdo.PersistenceManager;
-
-import org.vosao.dao.DaoAction;
 import org.vosao.dao.UserDao;
+import org.vosao.dao.UserGroupDao;
 import org.vosao.entity.UserEntity;
 import org.vosao.entity.UserGroupEntity;
 import org.vosao.enums.UserRole;
@@ -35,6 +33,8 @@ import org.vosao.enums.UserRole;
 public class UserDaoImpl extends BaseDaoImpl<Long, UserEntity> implements
 		UserDao {
 
+	private UserGroupDao userGroupDao;
+	
 	public UserDaoImpl() {
 		super(UserEntity.class);
 	}
@@ -54,25 +54,23 @@ public class UserDaoImpl extends BaseDaoImpl<Long, UserEntity> implements
 
 	@Override
 	public List<UserEntity> selectByGroup(final Long groupId) {
-		return select(new DaoAction<UserEntity>() {
-
-			@Override
-			public List<UserEntity> execute(PersistenceManager pm) {
-				String query = "select from " + UserGroupEntity.class.getName()
-						+ " where groupId == pGroupId"
-						+ " parameters Long pGroupId";
-				List<UserGroupEntity> userGroups = (List<UserGroupEntity>) pm
-						.newQuery(query).execute(groupId);
-				List<UserEntity> result = new ArrayList<UserEntity>();
-				for (UserGroupEntity userGroup : userGroups) {
-					result.add(pm.getObjectById(UserEntity.class, userGroup
-							.getUserId()));
-				}
-				return result;
+		List<UserGroupEntity> users = getUserGroupDao().selectByGroup(groupId);
+		List<UserEntity> result = new ArrayList<UserEntity>();
+		for (UserGroupEntity userGroup : users) {
+			UserEntity user = getById(userGroup.getUserId());
+			if (user != null) {
+				result.add(user);
 			}
+		}
+		return result;
+	}
 
-		});
+	public UserGroupDao getUserGroupDao() {
+		return userGroupDao;
+	}
 
+	public void setUserGroupDao(UserGroupDao userGroupDao) {
+		this.userGroupDao = userGroupDao;
 	}
 
 }

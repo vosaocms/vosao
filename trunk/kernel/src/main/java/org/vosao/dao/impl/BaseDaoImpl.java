@@ -28,8 +28,6 @@ import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 
 import org.vosao.dao.BaseDao;
-import org.vosao.dao.DaoAction;
-import org.vosao.dao.DaoActionOne;
 import org.vosao.dao.DaoFilter;
 import org.vosao.dao.cache.EntityCache;
 import org.vosao.dao.cache.QueryCache;
@@ -183,30 +181,6 @@ public class BaseDaoImpl<K,T extends BaseEntity> extends AbstractDaoImpl
 		
 	protected Object[] params(Object...objects) {
 		return objects;
-	}
-
-	protected List<T> select(DaoAction<T> action) {
-		getQueryCache().removeQueries(clazz);
-		PersistenceManager pm = getPersistenceManager();
-		pm.setDetachAllOnCommit(true);
-		try {
-			return copy(action.execute(pm));
-		}
-		finally {
-			pm.close();
-		}
-	}
-
-	protected T selectOne(DaoActionOne<T> action) {
-		getQueryCache().removeQueries(clazz);
-		PersistenceManager pm = getPersistenceManager();
-		pm.setDetachAllOnCommit(true);
-		try {
-			return action.execute(pm);
-		}
-		finally {
-			pm.close();
-		}
 	}
 
 	public EntityCache getEntityCache() {

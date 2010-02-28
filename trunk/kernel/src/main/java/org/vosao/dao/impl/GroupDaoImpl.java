@@ -21,13 +21,17 @@
 
 package org.vosao.dao.impl;
 
+import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
+
 import org.vosao.dao.GroupDao;
 import org.vosao.entity.GroupEntity;
+
+import com.google.appengine.api.datastore.Query;
 
 /**
  * @author Alexander Oleynik
  */
-public class GroupDaoImpl extends BaseDaoImpl<Long, GroupEntity> 
+public class GroupDaoImpl extends BaseNativeDaoImpl<GroupEntity> 
 		implements GroupDao {
 
 	public GroupDaoImpl() {
@@ -36,10 +40,9 @@ public class GroupDaoImpl extends BaseDaoImpl<Long, GroupEntity>
 
 	@Override
 	public GroupEntity getByName(String name) {
-		String query = "select from " + GroupEntity.class.getName()
-				+ " where name == pName"
-				+ " parameters String pName";
-		return selectOne(query, params(name));
+		Query q = newQuery();
+		q.addFilter("name", EQUAL, name);
+		return selectOne(q, "getByName", params(name));
 	}
 
 	@Override

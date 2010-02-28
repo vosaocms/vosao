@@ -21,30 +21,15 @@
 
 package org.vosao.entity;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
+import com.google.appengine.api.datastore.Entity;
 
 /**
  * @author Alexander Oleynik
  */
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class GroupEntity implements BaseEntity {
+public class GroupEntity extends BaseNativeEntityImpl {
 
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Long id;
-	
-	@Persistent
 	private String name;
 	
 	public GroupEntity() {
@@ -56,41 +41,23 @@ public class GroupEntity implements BaseEntity {
 	}
 	
 	@Override
-	public Object getEntityId() {
-		return id;
+	public void load(Entity entity) {
+		super.load(entity);
+		name = getStringProperty(entity, "name");
+	}
+	
+	@Override
+	public void save(Entity entity) {
+		super.save(entity);
+		entity.setProperty("name", name);
 	}
 
-	public void copy(final GroupEntity entity) {
-		setName(entity.getName());
-	}
-	
-	public Long getId() {
-		return id;
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public boolean equals(Object object) {
-		if (object instanceof GroupEntity) {
-			GroupEntity entity = (GroupEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
 	}
 	
 }

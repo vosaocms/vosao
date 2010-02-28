@@ -43,10 +43,7 @@ public class FormServiceImpl extends AbstractServiceImpl
 	private static final Log logger = LogFactory.getLog(FormServiceImpl.class);
 
 	@Override
-	public FormEntity getForm(String formId) {
-		if (StringUtils.isEmpty(formId)) {
-			return null;
-		}
+	public FormEntity getForm(Long formId) {
 		return getDao().getFormDao().getById(formId);
 	}
 
@@ -54,7 +51,7 @@ public class FormServiceImpl extends AbstractServiceImpl
 	public ServiceResponse saveForm(Map<String, String> vo) {
 		FormEntity form = null;
 		if (!StringUtils.isEmpty(vo.get("id"))) {
-			form = getDao().getFormDao().getById(vo.get("id"));
+			form = getDao().getFormDao().getById(Long.valueOf(vo.get("id")));
 		}
 		if (form == null) {
 			form = new FormEntity();
@@ -71,7 +68,7 @@ public class FormServiceImpl extends AbstractServiceImpl
 			.validateBeforeUpdate(form);
 		if (errors.isEmpty()) {
 			getDao().getFormDao().save(form);
-			return ServiceResponse.createSuccessResponse(form.getId());
+			return ServiceResponse.createSuccessResponse(form.getId().toString());
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
@@ -85,7 +82,7 @@ public class FormServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public ServiceResponse deleteForm(List<String> ids) {
+	public ServiceResponse deleteForm(List<Long> ids) {
 		getDao().getFormDao().remove(ids);
 		return ServiceResponse.createSuccessResponse(
 				"Forms were successfully deleted.");
@@ -93,35 +90,35 @@ public class FormServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public FormConfigEntity getFormConfig() {
-		return getDao().getFormDao().getConfig();
+		return getDao().getFormConfigDao().getConfig();
 	}
 
 	@Override
 	public ServiceResponse saveFormConfig(Map<String, String> vo) {
-		FormConfigEntity config = getDao().getFormDao().getConfig();
+		FormConfigEntity config = getDao().getFormConfigDao().getConfig();
 		config.setFormTemplate(vo.get("formTemplate"));
 		config.setLetterTemplate(vo.get("letterTemplate"));
-		getDao().getFormDao().save(config);
+		getDao().getFormConfigDao().save(config);
 		return ServiceResponse.createSuccessResponse(
 				"Form configuration was successfully saved.");
 	}
 
 	@Override
 	public ServiceResponse restoreFormLetter() throws IOException {
-		FormConfigEntity config = getDao().getFormDao().getConfig();
+		FormConfigEntity config = getDao().getFormConfigDao().getConfig();
 		config.setLetterTemplate(StreamUtil.getTextResource(
 			SetupBeanImpl.FORM_LETTER_FILE));
-		getDao().getFormDao().save(config);			
+		getDao().getFormConfigDao().save(config);			
 		return ServiceResponse.createSuccessResponse(
 				"Form letter was successfully restored.");
 	}
 
 	@Override
 	public ServiceResponse restoreFormTemplate() throws IOException {
-		FormConfigEntity config = getDao().getFormDao().getConfig();
+		FormConfigEntity config = getDao().getFormConfigDao().getConfig();
 		config.setFormTemplate(StreamUtil.getTextResource(
 			SetupBeanImpl.FORM_TEMPLATE_FILE));
-		getDao().getFormDao().save(config);			
+		getDao().getFormConfigDao().save(config);			
 		return ServiceResponse.createSuccessResponse(
 				"Form template was successfully restored.");
 	}

@@ -27,7 +27,6 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.datanucleus.util.StringUtils;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormEntity;
 import org.vosao.service.ServiceResponse;
@@ -49,7 +48,7 @@ public class FieldServiceImpl extends AbstractServiceImpl
 			List<String> validateErrors = getBusiness().getFieldBusiness()
 					.validateBeforeUpdate(field);
 			if (validateErrors.isEmpty()) {
-				boolean newField = StringUtils.isEmpty(field.getId());
+				boolean newField = field.getId() == null;
 				getDao().getFieldDao().save(field);
 				if (newField) {
 					FormEntity form = getDao().getFormDao().getById(field.getFormId());
@@ -74,7 +73,7 @@ public class FieldServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public List<FieldVO> getByForm(String formId) {
+	public List<FieldVO> getByForm(Long formId) {
 		List<FieldEntity> result = new ArrayList<FieldEntity>();
 		FormEntity form = getDao().getFormDao().getById(formId);
 		if (form != null) {
@@ -84,7 +83,7 @@ public class FieldServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public FieldVO getById(String fieldId) {
+	public FieldVO getById(Long fieldId) {
 		FieldEntity field = getDao().getFieldDao().getById(fieldId);
 		if (field != null) {
 			return new FieldVO(field);
@@ -93,11 +92,11 @@ public class FieldServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public void remove(List<String> ids) {
+	public void remove(List<Long> ids) {
 		if (ids.size() > 0) {
 			FieldEntity field = null;
 			FormEntity form = null;
-			for (String id : ids) {
+			for (Long id : ids) {
 				field = getDao().getFieldDao().getById(id);
 				if (field != null) {
 					form = getDao().getFormDao().getById(field.getFormId());
@@ -113,7 +112,7 @@ public class FieldServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public void moveDown(String formId, String fieldId) {
+	public void moveDown(Long formId, Long fieldId) {
 		FormEntity form = getDao().getFormDao().getById(formId);
 		if (form == null) {
 			return;
@@ -131,7 +130,7 @@ public class FieldServiceImpl extends AbstractServiceImpl
 		}		
 	}
 	
-	private int indexOf(List<FieldEntity> fields, final String fieldId) {
+	private int indexOf(List<FieldEntity> fields, final Long fieldId) {
 		for (int i = 0; i < fields.size(); i++) {
 			FieldEntity field = fields.get(i);
 			if (field.getId().equals(fieldId)) {
@@ -142,7 +141,7 @@ public class FieldServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public void moveUp(String formId, String fieldId) {
+	public void moveUp(Long formId, Long fieldId) {
 		FormEntity form = getDao().getFormDao().getById(formId);
 		if (form == null) {
 			return;

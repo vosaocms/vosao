@@ -52,7 +52,7 @@ public class FormExporter extends AbstractExporter {
 	}
 
 	private void createFormConfigXML(Element formsElement) {
-		FormConfigEntity config = getDao().getFormDao().getConfig();
+		FormConfigEntity config = getDao().getFormConfigDao().getConfig();
 		Element configElement = formsElement.addElement("form-config");
 		Element formTemplateElement = configElement.addElement("formTemplate");
 		formTemplateElement.setText(config.getFormTemplate());
@@ -146,7 +146,7 @@ public class FormExporter extends AbstractExporter {
 	}
 
 	public void readFormConfig(Element configElement) throws DaoTaskException {
-		FormConfigEntity config = getDao().getFormDao().getConfig();
+		FormConfigEntity config = getDao().getFormConfigDao().getConfig();
 		for (Iterator<Element> i = configElement.elementIterator(); 
 				i.hasNext(); ) {
             Element element = i.next();

@@ -35,11 +35,11 @@ public interface FormService extends AbstractService {
 	
 	ServiceResponse saveForm(Map<String, String> vo);
 	
-	FormEntity getForm(final String formId);
+	FormEntity getForm(final Long formId);
 	
 	List<FormEntity> select();
 	
-	ServiceResponse deleteForm(final List<String> ids);
+	ServiceResponse deleteForm(final List<Long> ids);
 	
 	FormConfigEntity getFormConfig();
 	

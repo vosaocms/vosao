@@ -52,9 +52,12 @@ public interface Dao {
 	ConfigDao getConfigDao();
 	void setConfigDao(final ConfigDao configDao);
 
+	FormConfigDao getFormConfigDao();
+	void setFormConfigDao(final FormConfigDao formConfigDao);
+	
 	FormDao getFormDao();
 	void setFormDao(final FormDao formDao);
-	
+
 	FieldDao getFieldDao();
 	void setFieldDao(final FieldDao bean);
 

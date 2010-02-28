@@ -21,18 +21,21 @@
 
 package org.vosao.dao.impl;
 
+import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.vosao.dao.DaoFilter;
 import org.vosao.dao.FolderPermissionDao;
 import org.vosao.entity.FolderPermissionEntity;
+
+import com.google.appengine.api.datastore.Query;
 
 /**
  * @author Alexander Oleynik
  */
 public class FolderPermissionDaoImpl 
-		extends BaseDaoImpl<Long, FolderPermissionEntity> 
+		extends BaseNativeDaoImpl<FolderPermissionEntity> 
 		implements FolderPermissionDao {
 
 	public FolderPermissionDaoImpl() {
@@ -41,46 +44,24 @@ public class FolderPermissionDaoImpl
 
 	@Override
 	public List<FolderPermissionEntity> selectByFolder(final String folderId) {
-		String query = "select from " 
-				+ FolderPermissionEntity.class.getName()
-				+ " where folderId == pFolderId"
-				+ " parameters String pFolderId";
-		return select(query, params(folderId));
-		/*return select(new DaoFilter<FolderPermissionEntity>() {
-			@Override
-			public boolean inResult(FolderPermissionEntity entity) {
-				return entity.getFolderId().equals(folderId);
-			}
-		});*/
+		Query q = newQuery();
+		q.addFilter("folderId", EQUAL, folderId);
+		return select(q, "selectByFolder", params(folderId));
 	}
 
 	@Override
 	public FolderPermissionEntity getByFolderGroup(final String folderId, 
 			final Long groupId) {
-		String query = "select from " + FolderPermissionEntity.class.getName()
-				+ " where folderId == pFolderId && groupId == pGroupId"
-				+ " parameters String pFolderId, Long pGroupId";
-		return selectOne(query, params(folderId, groupId));
-		/*return selectOne(new DaoFilter<FolderPermissionEntity>() {
-			@Override
-			public boolean inResult(FolderPermissionEntity entity) {
-				return entity.getFolderId().equals(folderId)
-					&& entity.getGroupId().equals(groupId);
-			}
-		});*/
+		Query q = newQuery();
+		q.addFilter("folderId", EQUAL, folderId);
+		q.addFilter("groupId", EQUAL, groupId);
+		return selectOne(q, "getByFolderGroup", params(folderId, groupId));
 	}
 
 	private List<FolderPermissionEntity> selectByGroup(final Long groupId) {
-		String query = "select from " + FolderPermissionEntity.class.getName()
-				+ " where groupId == pGroupId"
-				+ " parameters Long pGroupId";
-		return select(query, params(groupId));
-		/*return select(new DaoFilter<FolderPermissionEntity>() {
-			@Override
-			public boolean inResult(FolderPermissionEntity entity) {
-				return entity.getGroupId().equals(groupId);
-			}
-		});*/
+		Query q = newQuery();
+		q.addFilter("groupId", EQUAL, groupId);
+		return select(q, "selectByGroup", params(groupId));
 	}
 
 	@Override

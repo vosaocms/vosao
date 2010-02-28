@@ -21,35 +21,19 @@
 
 package org.vosao.entity;
 
-import java.io.Serializable;
-
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
 import org.vosao.enums.FolderPermissionType;
+
+import com.google.appengine.api.datastore.Entity;
 
 /**
  * @author Alexander Oleynik
  */
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class FolderPermissionEntity implements BaseEntity {
+public class FolderPermissionEntity extends BaseNativeEntityImpl {
 
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Long id;
-	
-	@Persistent
 	private String folderId;
-	
-	@Persistent
 	private FolderPermissionType permission;
-	
-	@Persistent
     private Long groupId;
 	
 	public FolderPermissionEntity() {
@@ -72,43 +56,28 @@ public class FolderPermissionEntity implements BaseEntity {
 	}
 
 	@Override
-	public Object getEntityId() {
-		return id;
+	public void load(Entity entity) {
+		super.load(entity);
+		folderId = getStringProperty(entity, "folderId");
+		permission = FolderPermissionType.valueOf(getStringProperty(entity, 
+				"permission"));
+		groupId = getLongProperty(entity, "groupId", 0);
+	}
+	
+	@Override
+	public void save(Entity entity) {
+		super.save(entity);
+		entity.setProperty("folderId", folderId);
+		entity.setProperty("permission", permission.name());
+		entity.setProperty("groupId", groupId);
 	}
 
-	public void copy(final FolderPermissionEntity entity) {
-		setFolderId(entity.getFolderId());
-		setPermission(entity.getPermission());
-		setGroupId(entity.getGroupId());
-	}
-	
-	public Long getId() {
-		return id;
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
 	public String getFolderId() {
 		return folderId;
 	}
 
 	public void setFolderId(String aFolderId) {
 		this.folderId = aFolderId;
-	}
-
-	public boolean equals(Object object) {
-		if (object instanceof FolderPermissionEntity) {
-			FolderPermissionEntity entity = (FolderPermissionEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	public FolderPermissionType getPermission() {

@@ -66,7 +66,7 @@ public class FieldVO {
 		return field.getTitle();
 	}
 
-	public String getId() {
+	public Long getId() {
 		return field.getId();
 	}
 	
@@ -74,7 +74,7 @@ public class FieldVO {
 		return field.getName();
 	}
 
-	public String getFormId() {
+	public Long getFormId() {
 		return field.getFormId();
 	}
 

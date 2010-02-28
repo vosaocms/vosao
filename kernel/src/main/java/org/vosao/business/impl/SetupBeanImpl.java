@@ -241,13 +241,13 @@ public class SetupBeanImpl implements SetupBean {
 		"org/vosao/resources/html/form-letter.html";
 	
 	private void initForms() {
-		FormConfigEntity config = getDao().getFormDao().getConfig();
+		FormConfigEntity config = getDao().getFormConfigDao().getConfig();
 		if (config.getId() == null) {
 			config.setFormTemplate(loadResource(
 					FORM_TEMPLATE_FILE));
 			config.setLetterTemplate(loadResource(
 					FORM_LETTER_FILE));
-			getDao().getFormDao().save(config);			
+			getDao().getFormConfigDao().save(config);			
 		}
 	}
 

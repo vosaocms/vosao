@@ -22,7 +22,6 @@
 package org.vosao.business.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -31,8 +30,8 @@ import org.apache.commons.logging.LogFactory;
 import org.vosao.business.FieldBusiness;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormEntity;
-import org.vosao.entity.helper.FieldHelper;
 import org.vosao.enums.FieldType;
+import org.vosao.utils.ParamUtil;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 
@@ -71,8 +70,8 @@ public class FieldBusinessImpl extends AbstractBusinessImpl
 			Map<String, String> vo) {
 		List<String> errors = new ArrayList<String>();
 		try {
-			field.setId(vo.get("id"));
-			field.setFormId(vo.get("formId"));
+			field.setId(ParamUtil.getLong(vo.get("id"), null));
+			field.setFormId(Long.valueOf(vo.get("formId")));
 			field.setName(vo.get("name"));
 			field.setTitle(vo.get("title"));
 			field.setFieldType(FieldType.valueOf(vo.get("fieldType")));

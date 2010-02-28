@@ -19,12 +19,12 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.utils;
 
-import org.vosao.entity.FormEntity;
+public class EntityUtil {
 
-public interface FormDao extends BaseNativeDao<FormEntity> {
-
-	FormEntity getByName(final String name);
-
+	public static String getKind(Class clazz) {
+		String name = clazz.getName();
+		return name.substring(name.lastIndexOf('.') + 1);
+	}
 }

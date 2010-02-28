@@ -33,9 +33,9 @@ import javax.jdo.annotations.PrimaryKey;
 
 import org.vosao.enums.FieldType;
 
+import com.google.appengine.api.datastore.Entity;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class FieldEntity implements BaseEntity {
+public class FieldEntity extends BaseNativeEntityImpl {
 
 	public static class Option {
 		private String value;
@@ -57,41 +57,17 @@ public class FieldEntity implements BaseEntity {
 	}
 
 	
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
-	
-	@Persistent
-	private String formId;
-
-	@Persistent
+	private Long formId;
 	private String name;
-	
-	@Persistent
 	private String title;
-
-	@Persistent
 	private FieldType fieldType;
-
-	@Persistent
 	private boolean mandatory;
-
-	@Persistent
 	private String values;
-
-	@Persistent
 	private String defaultValue;
-
-	@Persistent
 	private int height;
-
-	@Persistent
 	private int width;
-
-	@Persistent
 	private int index;
 
 	public FieldEntity() {
@@ -99,25 +75,7 @@ public class FieldEntity implements BaseEntity {
 		width = 20;
 	}
 	
-	@Override
-	public Object getEntityId() {
-		return id;
-	}
-
-	public void copy(final FieldEntity entity) {
-		setFormId(entity.getFormId());
-		setName(entity.getName());
-		setTitle(entity.getTitle());
-		setFieldType(entity.getFieldType());
-		setMandatory(entity.isMandatory());
-		setValues(entity.getValues());
-		setDefaultValue(entity.getDefaultValue());
-		setHeight(entity.getHeight());
-		setWidth(entity.getWidth());
-		setIndex(entity.getIndex());
-	}
-	
-	public FieldEntity(String formId, String name, String title,
+	public FieldEntity(Long formId, String name, String title,
 			FieldType fieldType, boolean optional, String defaultValue) {
 		this();
 		this.formId = formId;
@@ -126,6 +84,36 @@ public class FieldEntity implements BaseEntity {
 		this.fieldType = fieldType;
 		this.mandatory = optional;
 		this.defaultValue = defaultValue;
+	}
+
+	@Override
+	public void load(Entity entity) {
+		super.load(entity);
+		formId = getLongProperty(entity, "formId", 0);
+		name = getStringProperty(entity, "name");
+		title = getStringProperty(entity, "title");
+		fieldType = FieldType.valueOf(getStringProperty(entity, "fieldType"));
+		mandatory = getBooleanProperty(entity, "mandatory", false);
+		values = getStringProperty(entity, "values");
+		defaultValue = getStringProperty(entity, "defaultValue");
+		height = getIntegerProperty(entity, "height", 1);
+		width = getIntegerProperty(entity, "width", 20);
+		index = getIntegerProperty(entity, "index", 0);
+	}
+	
+	@Override
+	public void save(Entity entity) {
+		super.save(entity);
+		entity.setProperty("formId", formId);
+		entity.setProperty("name", name);
+		entity.setProperty("title", title);
+		entity.setProperty("fieldType", fieldType.name());
+		entity.setProperty("mandatory", mandatory);
+		entity.setProperty("values", values);
+		entity.setProperty("defaultValue", defaultValue);
+		entity.setProperty("height", height);
+		entity.setProperty("width", width);
+		entity.setProperty("index", index);
 	}
 
 	public FieldType getFieldType() {
@@ -164,14 +152,6 @@ public class FieldEntity implements BaseEntity {
 		return title;
 	}
 
-	public String getId() {
-		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
-	}
-	
 	public String getName() {
 		return name;
 	}
@@ -184,24 +164,11 @@ public class FieldEntity implements BaseEntity {
 		this.title = title;
 	}
 
-	public boolean equals(Object object) {
-		if (object instanceof FieldEntity) {
-			FieldEntity entity = (FieldEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public String getFormId() {
+	public Long getFormId() {
 		return formId;
 	}
 
-	public void setFormId(String formId) {
+	public void setFormId(Long formId) {
 		this.formId = formId;
 	}
 

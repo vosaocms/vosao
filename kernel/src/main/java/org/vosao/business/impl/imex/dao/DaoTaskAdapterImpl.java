@@ -150,7 +150,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 					throw new DaoTaskException("Form not found while " 
 						+ "skipping save operation. " + entity.getName());
 				}
-				entity.setId(found.getId());
+				entity.setKey(found.getKey());
 			}
 		}
 		else {
@@ -170,7 +170,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 					throw new DaoTaskException("Field not found while " 
 						+ "skipping save operation. " + entity.getName());
 				}
-				entity.setId(found.getId());
+				entity.setKey(found.getKey());
 			}
 		}
 		else {
@@ -182,16 +182,16 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 	public void formConfigSave(FormConfigEntity entity) throws DaoTaskException {
 		if (isSkip()) {
 			if (entity.getId() == null) {
-				FormConfigEntity found = getDao().getFormDao().getConfig();
+				FormConfigEntity found = getDao().getFormConfigDao().getConfig();
 				if (found == null) {
 					throw new DaoTaskException("Form config not found while " 
 						+ "skipping save operation. ");
 				}
-				entity.setId(found.getId());
+				entity.setKey(found.getKey());
 			}
 		}
 		else {
-			getDao().getFormDao().save(entity);
+			getDao().getFormConfigDao().save(entity);
 		}
 	}
 

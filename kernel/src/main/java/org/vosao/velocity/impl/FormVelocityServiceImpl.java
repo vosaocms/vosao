@@ -62,7 +62,7 @@ public class FormVelocityServiceImpl implements FormVelocityService {
 			return "Error! Form " + formName + " was not found.";
 		}
 		List<FieldEntity> fields = getDao().getFieldDao().getByForm(form);
-		FormConfigEntity formConfig = getDao().getFormDao().getConfig();
+		FormConfigEntity formConfig = getDao().getFormConfigDao().getConfig();
 		VelocityContext context = new VelocityContext();
 		context.put("config", getDao().getConfigDao().getConfig());
 		context.put("formConfig", formConfig);

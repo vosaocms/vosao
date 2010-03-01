@@ -28,7 +28,7 @@ import org.vosao.entity.MessageEntity;
 /**
  * @author Alexander Oleynik
  */
-public interface MessageDao extends BaseDao<String, MessageEntity> {
+public interface MessageDao extends BaseNativeDao<MessageEntity> {
 
 	List<MessageEntity> selectByCode(final String code);
 	

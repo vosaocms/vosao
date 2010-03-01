@@ -21,32 +21,25 @@
 
 package org.vosao.search.impl;
 
-import static com.google.appengine.api.labs.taskqueue.TaskOptions.Builder.url;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.business.CurrentUser;
-import org.vosao.common.AccessDeniedException;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.search.Hit;
 import org.vosao.search.SearchEngine;
 import org.vosao.search.SearchResult;
-import org.vosao.servlet.IndexTaskServlet;
 import org.vosao.utils.StrUtil;
 
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.labs.taskqueue.Queue;
 
 public class SearchEngineImpl implements SearchEngine {
 
@@ -141,12 +134,11 @@ public class SearchEngineImpl implements SearchEngine {
 	
 	private List<ContentEntity> getContents(List<Long> keys) {	
 		List<ContentEntity> result = new ArrayList<ContentEntity>();
-		for (Long key : keys) {
-			String id = getContentId(key);
+		for (Long id : keys) {
 			ContentEntity contentEntity = getBusiness().getDao().getContentDao()
 					.getById(id);
 			if (contentEntity == null) {
-				logger.error("ContentEntity not found " + key + " " + id);
+				logger.error("ContentEntity not found " + id);
 				continue;
 			}
 			result.add(contentEntity);
@@ -156,10 +148,6 @@ public class SearchEngineImpl implements SearchEngine {
 
 	private Long getContentKey(String id) {
 		return KeyFactory.stringToKey(id).getId();		
-	}
-	
-	private String getContentId(Long key) {
-		return KeyFactory.createKeyString("ContentEntity", key);
 	}
 	
 	private List<String> getContentUrls(List<ContentEntity> contents) {
@@ -221,7 +209,7 @@ public class SearchEngineImpl implements SearchEngine {
 				.toLowerCase());
 		logger.info(data);
 		String[] words = data.split("\\W+");
-		Long key = getContentKey(content.getId());
+		Long key = content.getId();
 		clearIndex(key);
 		for (String word : words) {
 			if (word.length() < 3) {
@@ -236,9 +224,9 @@ public class SearchEngineImpl implements SearchEngine {
 		}
 	}
 
-	private void clearIndex(Long key) {
+	private void clearIndex(Long id) {
 		for (String word : getIndex().keySet()) {
-			getIndex().get(word).remove(key);
+			getIndex().get(word).remove(id);
 		}
 	}
 	
@@ -345,7 +333,7 @@ public class SearchEngineImpl implements SearchEngine {
 
 	@Override
 	public void removeFromIndex(ContentEntity content) {
-		clearIndex(getContentKey(content.getId()));
+		clearIndex(content.getId());
 	}
 
 	@Override

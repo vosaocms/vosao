@@ -265,6 +265,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			final String versionTitle, final UserEntity user) {
 		PageEntity page = new PageEntity();
 		page.copy(oldPage);
+		page.setKey(null);
 		page.setState(PageState.EDIT);
 		page.setVersion(version);
 		page.setVersionTitle(versionTitle);
@@ -299,7 +300,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	}
 
 	@Override
-	public PageEntity getById(String id) {
+	public PageEntity getById(Long id) {
 		return securityFilter(getDao().getPageDao().getById(id));
 	}
 
@@ -337,9 +338,9 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	}
 
 	@Override
-	public void remove(List<String> ids) {
-		List<String> removeIds = new ArrayList<String>();
-		for (String id : ids) {
+	public void remove(List<Long> ids) {
+		List<Long> removeIds = new ArrayList<Long>();
+		for (Long id : ids) {
 			PageEntity page = getDao().getPageDao().getById(id);
 			if (page != null) {
 				if (canWritePage(page.getFriendlyURL())) {
@@ -350,7 +351,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		TreeItemDecorator<FolderEntity> root = business.getFolderBusiness()
 				.getTree();
 		List<Long> folderIds = new ArrayList<Long>();
-		for (String id : removeIds) {
+		for (Long id : removeIds) {
 			PageEntity page = getDao().getPageDao().getById(id);
 			TreeItemDecorator<FolderEntity> folder = business.getFolderBusiness()
 					.findFolderByPath(root, "/page" + page.getFriendlyURL()); 
@@ -363,7 +364,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	}
 
 	@Override
-	public void removeVersion(String id) {
+	public void removeVersion(Long id) {
 		PageEntity page = getDao().getPageDao().getById(id);
 		if (page != null) {
 			if (canWritePage(page.getFriendlyURL())) {
@@ -373,7 +374,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	}
 
 	@Override
-	public List<ContentEntity> getContents(String pageId) {
+	public List<ContentEntity> getContents(Long pageId) {
 		PageEntity page = getById(pageId);
 		if (page != null) {
 			return securityFilter(page.getFriendlyURL(), 

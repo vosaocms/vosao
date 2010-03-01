@@ -7,9 +7,9 @@ import org.vosao.entity.ContentEntity;
 
 public class ContentHelper {
 
-	public static List<String> createIdList(
+	public static List<Long> createIdList(
 			final List<ContentEntity> list) {
-		List<String> result = new ArrayList<String>();
+		List<Long> result = new ArrayList<Long>();
 		for (ContentEntity entity : list) {
 			result.add(entity.getId());
 		}

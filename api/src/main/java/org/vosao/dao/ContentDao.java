@@ -25,13 +25,13 @@ import java.util.List;
 
 import org.vosao.entity.ContentEntity;
 
-public interface ContentDao extends BaseDao<String, ContentEntity> {
+public interface ContentDao extends BaseNativeDao<ContentEntity> {
 
 	List<ContentEntity> select(final String parentClass, 
-			final String parentKey);
+			final Long parentKey);
 
 	ContentEntity getByLanguage(final String parentClass, 
-			final String parentKey, final String language);
+			final Long parentKey, final String language);
 	
-	void removeById(final String className, final String id);
+	void removeById(final String className, final Long id);
 }

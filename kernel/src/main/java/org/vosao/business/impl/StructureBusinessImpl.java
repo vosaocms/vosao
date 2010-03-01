@@ -73,9 +73,9 @@ public class StructureBusinessImpl extends AbstractBusinessImpl
 	}
 
 	@Override
-	public List<String> remove(List<String> ids) {
+	public List<String> remove(List<Long> ids) {
 		List<String> result = new ArrayList<String>();
-		for (String id : ids) {
+		for (Long id : ids) {
 			StructureEntity structure = getDao().getStructureDao().getById(id);
 			if (structure == null) {
 				continue;

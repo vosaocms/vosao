@@ -21,40 +21,37 @@
 
 package org.vosao.entity;
 
-import java.io.Serializable;
-
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
 
+public class TemplateEntity extends BaseNativeEntityImpl {
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class TemplateEntity implements BaseEntity {
+	private static final long serialVersionUID = 2L;
 
-	private static final long serialVersionUID = 1L;
-
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
-	
-	@Persistent
 	private String title;
-	
-	@Persistent
 	private String url;
-
-	@Persistent(defaultFetchGroup = "true")
-	private Text content;
+	private String content;
 	
 	public TemplateEntity() {
+		content = "";
 	}
 	
+	@Override
+	public void load(Entity entity) {
+		super.load(entity);
+		title = getStringProperty(entity, "title");
+		url = getStringProperty(entity, "url");
+		content = getTextProperty(entity, "content");
+	}
+	
+	@Override
+	public void save(Entity entity) {
+		super.save(entity);
+		entity.setProperty("title", title);
+		entity.setProperty("url", url);
+		entity.setProperty("content", new Text(content));
+	}
+
 	public TemplateEntity(String title, String content, String url) {
 		this(title, content);
 		this.url = url;
@@ -63,26 +60,7 @@ public class TemplateEntity implements BaseEntity {
 	public TemplateEntity(String title, String content) {
 		this();
 		this.title = title;
-		this.content = new Text(content);
-	}
-	
-	@Override
-	public Object getEntityId() {
-		return id;
-	}
-
-	public void copy(final TemplateEntity entity) {
-		setTitle(entity.getTitle());
-		setContent(entity.getContent());
-		setUrl(entity.getUrl());
-	}
-	
-	public String getId() {
-		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
+		this.content = content;
 	}
 	
 	public String getTitle() {
@@ -94,14 +72,11 @@ public class TemplateEntity implements BaseEntity {
 	}
 	
 	public String getContent() {
-		if (content == null) {
-			return null;
-		}
-		return content.getValue();
+		return content;
 	}
 	
 	public void setContent(String content) {
-		this.content = new Text(content);
+		this.content = content;
 	}
 
 	public String getUrl() {
@@ -110,19 +85,6 @@ public class TemplateEntity implements BaseEntity {
 
 	public void setUrl(String url) {
 		this.url = url;
-	}
-
-	public boolean equals(Object object) {
-		if (object instanceof TemplateEntity) {
-			TemplateEntity entity = (TemplateEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 }

@@ -37,7 +37,7 @@ public interface PageBusiness {
 	 * Security filtered dao version.
 	 * @return found page.
 	 */
-	PageEntity getById(final String id);
+	PageEntity getById(final Long id);
 	
 	/**
 	 * Security filtered dao version.
@@ -60,17 +60,17 @@ public interface PageBusiness {
 	/**
 	 * Security filtered dao version.
 	 */
-	void remove(final List<String> ids);
+	void remove(final List<Long> ids);
 
 	/**
 	 * Security filtered dao version.
 	 */
-	void removeVersion(String id);
+	void removeVersion(Long id);
 
 	/**
 	 * Security filtered dao version.
 	 */
-	List<ContentEntity> getContents(final String pageId);
+	List<ContentEntity> getContents(final Long pageId);
 
 	/**
 	 * Security filtered dao version.

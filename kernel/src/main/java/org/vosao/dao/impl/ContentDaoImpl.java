@@ -26,7 +26,10 @@ import java.util.List;
 import org.vosao.dao.ContentDao;
 import org.vosao.entity.ContentEntity;
 
-public class ContentDaoImpl extends BaseDaoImpl<String, ContentEntity> 
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+
+public class ContentDaoImpl extends BaseNativeDaoImpl<ContentEntity> 
 		implements ContentDao {
 
 	public ContentDaoImpl() {
@@ -35,33 +38,30 @@ public class ContentDaoImpl extends BaseDaoImpl<String, ContentEntity>
 
 	@Override
 	public List<ContentEntity> select(final String parentClass, 
-			final String parentKey) {
-		String query = "select from " + ContentEntity.class.getName() 
-					+ " where parentClass == pParentClass" 
-					+ "   && parentKey == pParentKey" 
-					+ " parameters String pParentClass, String pParentKey";
-		return select(query, params(parentClass, parentKey));
+			final Long parentKey) {
+		Query q = newQuery();
+		q.addFilter("parentClass", FilterOperator.EQUAL, parentClass);
+		q.addFilter("parentKey", FilterOperator.EQUAL, parentKey);
+		return select(q, "select", params(parentClass, parentKey));
 	}
 	
 	@Override
 	public ContentEntity getByLanguage(final String parentClass, 
-			final String parentKey, final String language) {
-		String query = "select from " + ContentEntity.class.getName() 
-					+ " where parentClass == pParentClass" 
-					+ "   && parentKey == pParentKey"
-					+ "   && languageCode == pLanguage"
-					+ " parameters String pParentClass, String pParentKey," 
-					+ "   String pLanguage";
-		return selectOne(query, params(parentClass, parentKey, language));
+			final Long parentKey, final String language) {
+		Query q = newQuery();
+		q.addFilter("parentClass", FilterOperator.EQUAL, parentClass);
+		q.addFilter("parentKey", FilterOperator.EQUAL, parentKey);
+		q.addFilter("languageCode", FilterOperator.EQUAL, language);
+		return selectOne(q, "getByLanguage", params(parentClass, parentKey, 
+				language));
 	}
 
 	@Override
-	public void removeById(String className, String id) {
-		String query = "select from " + ContentEntity.class.getName() 
-			+ " where parentClass == pParentClass" 
-			+ "   && parentKey == pParentKey" 
-			+ " parameters String pParentClass, String pParentKey";
-		removeSelected(query, params(className, id));
+	public void removeById(String className, Long id) {
+		Query q = newQuery();
+		q.addFilter("parentClass", FilterOperator.EQUAL, className);
+		q.addFilter("parentKey", FilterOperator.EQUAL, id);
+		removeSelected(q);
 	}
 	
 }

@@ -37,9 +37,5 @@ public interface BaseDao<K, T> extends AbstractDao {
 
 	void removeAll();
 	
-	List<T> select(DaoFilter<T> filter);
-	
-	T selectOne(DaoFilter<T> filter);
-
 	void clearCache();
 }

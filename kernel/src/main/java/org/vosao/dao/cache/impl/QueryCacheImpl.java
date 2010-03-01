@@ -78,8 +78,9 @@ public class QueryCacheImpl implements QueryCache, Serializable {
 		getCache().put(getQueryMapKey(clazz), map);
 	}
 
-	private String getQueryKey(String query, Object[] params) {
-		StringBuffer result = new StringBuffer(String.valueOf(query.hashCode()));
+	private String getQueryKey(Class clazz, String query, Object[] params) {
+		StringBuffer result = new StringBuffer(clazz.getName());
+		result.append(query);
 		if (params != null) {
 			for (Object param : params) {
 				result.append(param != null ? param.toString() : "null"); 
@@ -93,7 +94,7 @@ public class QueryCacheImpl implements QueryCache, Serializable {
 		calls++;
 		Map<String, Set<String>> map = getQueryMap(clazz);
 		Set<String> set = map.get(query);
-		String key = getQueryKey(query, params);
+		String key = getQueryKey(clazz, query, params);
 		if (set != null && set.contains(key) && getCache().containsKey(key)) {
 			Object result = getCache().get(key);
 			if (result != null) {
@@ -109,7 +110,7 @@ public class QueryCacheImpl implements QueryCache, Serializable {
 			Object value) {
 		Map<String, Set<String>> map = getQueryMap(clazz);
 		Set<String> set = map.get(query);
-		String key = getQueryKey(query, params);
+		String key = getQueryKey(clazz, query, params);
 		if (set == null) {
 			set = new HashSet<String>();
 			map.put(query, set);

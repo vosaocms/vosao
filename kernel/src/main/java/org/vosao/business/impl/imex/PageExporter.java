@@ -239,7 +239,7 @@ public class PageExporter extends AbstractExporter {
 			}
 		}
 		TemplateEntity template = getDao().getTemplateDao().getByUrl(themeUrl);
-		String templateId = null;
+		Long templateId = null;
 		if (template != null) {
 			templateId = template.getId();
 		}
@@ -278,12 +278,12 @@ public class PageExporter extends AbstractExporter {
 			if (element.getName().equals("structure")) {
 				StructureEntity structure = getDao().getStructureDao().getByTitle(
 						element.getText());
-				newPage.setStructureId(structure == null ? "" : structure.getId());
+				newPage.setStructureId(structure == null ? null : structure.getId());
 			}
 			if (element.getName().equals("structureTemplate")) {
 				StructureTemplateEntity structureTemplate = getDao()
 						.getStructureTemplateDao().getByTitle(element.getText());
-				newPage.setStructureTemplateId(structureTemplate == null ? "" : 
+				newPage.setStructureTemplateId(structureTemplate == null ? null : 
 						structureTemplate.getId());
 			}
 			if (element.getName().equals("createDate")) {
@@ -352,7 +352,7 @@ public class PageExporter extends AbstractExporter {
 						.attributeValue("disabled"));
 				String content = element.getText();
 				CommentEntity comment = new CommentEntity(name, content,
-						publishDate, page.getId(), disabled);
+						publishDate, page.getFriendlyURL(), disabled);
 				getDaoTaskAdapter().commentSave(comment);
 			}
 		}

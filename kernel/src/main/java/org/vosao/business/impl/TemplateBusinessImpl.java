@@ -60,9 +60,9 @@ public class TemplateBusinessImpl extends AbstractBusinessImpl
 	}
 
 	@Override
-	public List<String> remove(List<String> ids) {
+	public List<String> remove(List<Long> ids) {
 		List<String> result = new ArrayList<String>();
-		for (String id : ids) {
+		for (Long id : ids) {
 			TemplateEntity template = getDao().getTemplateDao().getById(id);
 			if (template == null) {
 				continue;

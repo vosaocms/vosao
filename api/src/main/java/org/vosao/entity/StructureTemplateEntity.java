@@ -21,70 +21,50 @@
 
 package org.vosao.entity;
 
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
 import org.vosao.enums.StructureTemplateType;
 
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
 
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class StructureTemplateEntity implements BaseEntity {
+public class StructureTemplateEntity extends BaseNativeEntityImpl {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
-	
-	@Persistent
-	String title;
-	
-	@Persistent
-	String structureId;
-	
-	@Persistent
-	StructureTemplateType type;
-	
-	@Persistent(defaultFetchGroup = "true")
-	private Text content;
+	private String title;
+	private Long structureId;
+	private StructureTemplateType type;
+	private String content;
 	
 	public StructureTemplateEntity() {
+		type = StructureTemplateType.VELOCITY;
 	}
 	
-	public StructureTemplateEntity(String title, String structureId, 
+	@Override
+	public void load(Entity entity) {
+		super.load(entity);
+		title = getStringProperty(entity, "title");
+		structureId = getLongProperty(entity, "structureId");
+		type = StructureTemplateType.valueOf(getStringProperty(entity, "type"));
+		content = getTextProperty(entity, "content");
+	}
+	
+	@Override
+	public void save(Entity entity) {
+		super.save(entity);
+		entity.setProperty("title", title);
+		entity.setProperty("structureId", structureId);
+		entity.setProperty("type", type.name());
+		entity.setProperty("content", new Text(content));
+	}
+
+	public StructureTemplateEntity(String title, Long structureId, 
 			StructureTemplateType type, String content) {
 		this();
 		this.title = title;
 		this.structureId = structureId;
 		this.type = type;
-		this.content = new Text(content);
-	}
-	
-	@Override
-	public Object getEntityId() {
-		return id;
-	}
-
-	public void copy(final StructureTemplateEntity entity) {
-		setTitle(entity.getTitle());
-		setStructureId(entity.getStructureId());
-		setType(entity.getType());
-		setContent(entity.getContent());
-	}
-	
-	public String getId() {
-		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
+		this.content = content;
 	}
 	
 	public String getTitle() {
@@ -96,34 +76,18 @@ public class StructureTemplateEntity implements BaseEntity {
 	}
 	
 	public String getContent() {
-		if (content == null) {
-			return null;
-		}
-		return content.getValue();
+		return content;
 	}
 	
 	public void setContent(String content) {
-		this.content = new Text(content);
+		this.content = content;
 	}
 
-	public boolean equals(Object object) {
-		if (object instanceof StructureEntity) {
-			StructureEntity entity = (StructureEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public String getStructureId() {
+	public Long getStructureId() {
 		return structureId;
 	}
 
-	public void setStructureId(String structureId) {
+	public void setStructureId(Long structureId) {
 		this.structureId = structureId;
 	}
 

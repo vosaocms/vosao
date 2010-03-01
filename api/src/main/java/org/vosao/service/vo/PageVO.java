@@ -50,7 +50,7 @@ public class PageVO {
 		return result;
 	}
 
-	public String getId() {
+	public Long getId() {
 		return page.getId();
 	}
 
@@ -74,7 +74,7 @@ public class PageVO {
 		return page.getParentUrl();
 	}
 
-	public String getTemplate() {
+	public Long getTemplate() {
 		return page.getTemplate();
 	}
 

@@ -21,118 +21,63 @@
 
 package org.vosao.entity;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.NotPersistent;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
-import org.apache.commons.lang.StringUtils;
 import org.vosao.enums.PageState;
 import org.vosao.enums.PageType;
 import org.vosao.utils.DateUtil;
 import org.vosao.utils.UrlUtil;
 
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
 
 /**
  * @author Alexander Oleynik
  */
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class PageEntity implements BaseEntity {
+public class PageEntity extends BaseNativeEntityImpl {
 
-	private static final long serialVersionUID = 8L;
-	
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
+	private static final long serialVersionUID = 9L;
 	
 	/**
 	 * Titles are stored in string list. Content language stored in first two 
 	 * chars. 
 	 */
-	@Persistent(defaultFetchGroup = "true")
-	private Text title;
-
-	@NotPersistent
-	private Map<String, String> titles;
-
-	@Persistent
+	private String title;
 	private String friendlyURL;
-	
-	@Persistent
 	private String parentUrl;
-
-	@Persistent
-	private String template;
-	
-	@Persistent
+	private Long template;
 	private Date publishDate;
-	
-	@Persistent
 	private boolean commentsEnabled;
-
-	@Persistent
 	private Integer version;
-	
-	@Persistent
 	private String versionTitle;
-
-	@Persistent
-	private String state;
-	
-	@Persistent
+	private PageState state;
 	private String createUserEmail;
-	
-	@Persistent
 	private Date createDate;
-	
-	@Persistent
 	private String modUserEmail;
-	
-	@Persistent
 	private Date modDate;
-	
-	@Persistent
-	private String pageType;
-	
-	@Persistent
-	private String structureId;
-	
-	@Persistent
-	private String structureTemplateId;
-	
-	@Persistent(defaultFetchGroup = "true")
-	private Text keywords;
-	
-	@Persistent(defaultFetchGroup = "true")
-	private Text description;
-
-	@Persistent
+	private PageType pageType;
+	private Long structureId;
+	private Long structureTemplateId;
+	private String keywords;
+	private String description;
 	private boolean searchable;
-
-	@Persistent
 	private Integer sortIndex;
 
+	// not persisted
+	private Map<String, String> titles;
+	
 	public PageEntity() {
 		publishDate = new Date();
-		state = PageState.EDIT.name();
+		state = PageState.EDIT;
 		version = 1;
 		versionTitle = "New page";
 		createDate = new Date();
 		modDate = createDate;
 		createUserEmail = "";
 		modUserEmail = "";
-		pageType = PageType.SIMPLE.name();
+		pageType = PageType.SIMPLE;
 		setKeywords("");
 		setDescription("");
 		setTitle("");
@@ -140,14 +85,64 @@ public class PageEntity implements BaseEntity {
 		sortIndex = 0;
 	}
 	
+	@Override
+	public void load(Entity entity) {
+		super.load(entity);
+		title = getTextProperty(entity, "title");
+		friendlyURL = getStringProperty(entity, "friendlyURL");
+		parentUrl = getStringProperty(entity, "parentUrl");
+		template = getLongProperty(entity, "template");
+		publishDate = getDateProperty(entity, "publishDate");
+		commentsEnabled = getBooleanProperty(entity, "commentsEnabled", false);
+		version = getIntegerProperty(entity, "version", 1);
+		versionTitle = getStringProperty(entity, "versionTitle");
+		state = PageState.valueOf(getStringProperty(entity, "state"));
+		createUserEmail = getStringProperty(entity, "createUserEmail");
+		createDate = getDateProperty(entity, "createDate");
+		modUserEmail = getStringProperty(entity, "modUserEmail");
+		modDate = getDateProperty(entity, "modDate");
+		pageType = PageType.valueOf(getStringProperty(entity, "pageType"));
+		structureId = getLongProperty(entity, "structureId");
+		structureTemplateId = getLongProperty(entity, "structureTemplateId");
+		keywords = getTextProperty(entity, "keywords");
+		description = getTextProperty(entity, "description");
+		searchable = getBooleanProperty(entity, "searchable", true);
+		sortIndex = getIntegerProperty(entity, "sortIndex", 0);
+	}
+	
+	@Override
+	public void save(Entity entity) {
+		super.save(entity);
+		entity.setProperty("title", new Text(title));
+		entity.setProperty("friendlyURL", friendlyURL);
+		entity.setProperty("parentUrl", parentUrl);
+		entity.setProperty("template", template);
+		entity.setProperty("publishDate", publishDate);
+		entity.setProperty("commentsEnabled", commentsEnabled);
+		entity.setProperty("version", version);
+		entity.setProperty("versionTitle", versionTitle);
+		entity.setProperty("state", state.name());
+		entity.setProperty("createUserEmail", createUserEmail);
+		entity.setProperty("createDate", createDate);
+		entity.setProperty("modUserEmail", modUserEmail);
+		entity.setProperty("modDate", modDate);
+		entity.setProperty("pageType", pageType.name());
+		entity.setProperty("structureId", structureId);
+		entity.setProperty("structureTemplateId", structureTemplateId);
+		entity.setProperty("keywords", new Text(keywords));
+		entity.setProperty("description", new Text(description));
+		entity.setProperty("searchable", searchable);
+		entity.setProperty("sortIndex", sortIndex);
+	}
+
 	public PageEntity(String title, String friendlyURL, 
-			String aTemplate, Date publish) {
+			Long aTemplate, Date publish) {
 		this(title, friendlyURL, aTemplate);
 		publishDate = publish;
 	}
 
 	public PageEntity(String title, String friendlyURL,  
-			String aTemplate) {
+			Long aTemplate) {
 		this(title, friendlyURL);
 		template = aTemplate;
 	}
@@ -156,41 +151,6 @@ public class PageEntity implements BaseEntity {
 		this();
 		setTitle(aTitle);
 		setFriendlyURL(aFriendlyURL);
-	}
-	
-	@Override
-	public Object getEntityId() {
-		return id;
-	}
-
-	public void copy(final PageEntity entity) {
-		setTitleValue(entity.getTitleValue());
-		setFriendlyURL(entity.getFriendlyURL());
-		setTemplate(entity.getTemplate());
-		setPublishDate(entity.getPublishDate());
-		setCommentsEnabled(entity.isCommentsEnabled());
-		setVersion(entity.getVersion());
-		setVersionTitle(entity.getVersionTitle());
-		setState(entity.getState());
-		setCreateDate(entity.getCreateDate());
-		setCreateUserEmail(entity.getCreateUserEmail());
-		setModDate(entity.getModDate());
-		setModUserEmail(entity.getModUserEmail());
-		setPageType(entity.getPageType());
-		setStructureId(entity.getStructureId());
-		setStructureTemplateId(entity.getStructureTemplateId());
-		setKeywords(entity.getKeywords());
-		setDescription(entity.getDescription());
-		setSearchable(entity.isSearchable());
-		setSortIndex(entity.getSortIndex());
-	}
-	
-	public String getId() {
-		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
 	}
 	
 	public String getFriendlyURL() {
@@ -202,11 +162,11 @@ public class PageEntity implements BaseEntity {
 		parentUrl = getParentFriendlyURL();
 	}
 
-	public String getTemplate() {
+	public Long getTemplate() {
 		return template;
 	}
 
-	public void setTemplate(String template) {
+	public void setTemplate(Long template) {
 		this.template = template;
 	}
 	
@@ -265,19 +225,6 @@ public class PageEntity implements BaseEntity {
 		return friendlyURL.equals("/");
 	}
 	
-	public boolean equals(Object object) {
-		if (object instanceof PageEntity) {
-			PageEntity entity = (PageEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public Integer getVersion() {
 		return version;
 	}
@@ -295,15 +242,15 @@ public class PageEntity implements BaseEntity {
 	}
 
 	public PageState getState() {
-		return PageState.valueOf(state);
-	}
-
-	public String getStateString() {
 		return state;
 	}
 
+	public String getStateString() {
+		return state.name();
+	}
+
 	public void setState(PageState aState) {
-		this.state = aState.name();
+		this.state = aState;
 	}
 
 	public String getCreateUserEmail() {
@@ -347,7 +294,7 @@ public class PageEntity implements BaseEntity {
 	}
 	
 	public boolean isApproved() {
-		return state.equals(PageState.APPROVED.name());
+		return state.equals(PageState.APPROVED);
 	}
 
 	public String getParentUrl() {
@@ -359,30 +306,30 @@ public class PageEntity implements BaseEntity {
 	}
 
 	public PageType getPageType() {
-		return pageType == null ? null : PageType.valueOf(pageType);
+		return pageType;
 	}
 
 	public String getPageTypeString() {
-		return pageType;
+		return pageType.name();
 	}
 	
 	public void setPageType(PageType pageType) {
-		this.pageType = pageType.name();
+		this.pageType = pageType;
 	}
 
-	public String getStructureId() {
+	public Long getStructureId() {
 		return structureId;
 	}
 
-	public void setStructureId(String structureId) {
+	public void setStructureId(Long structureId) {
 		this.structureId = structureId;
 	}
 
-	public String getStructureTemplateId() {
+	public Long getStructureTemplateId() {
 		return structureTemplateId;
 	}
 
-	public void setStructureTemplateId(String structureTemplateId) {
+	public void setStructureTemplateId(Long structureTemplateId) {
 		this.structureTemplateId = structureTemplateId;
 	}
 	
@@ -401,27 +348,27 @@ public class PageEntity implements BaseEntity {
 	}
 
 	public String getKeywords() {
-		return keywords == null ? null : keywords.getValue();
+		return keywords;
 	}
 
 	public void setKeywords(String keywords) {
-		this.keywords = new Text(keywords);
+		this.keywords = keywords;
 	}
 
 	public String getDescription() {
-		return description == null ? null : description.getValue();
+		return description;
 	}
 
 	public void setDescription(String description) {
-		this.description = new Text(description);
+		this.description = description;
 	}
 
 	public String getTitleValue() {
-		return title == null ? null : title.getValue();
+		return title;
 	}
 
 	public void setTitleValue(String t) {
-		title = new Text(t);
+		title = t;
 		parseTitle();
 	}
 

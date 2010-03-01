@@ -66,8 +66,7 @@ public class VelocityServiceImpl implements VelocityService {
 	public PageEntity findPage(String path) {
 		PageEntity page = getDao().getPageDao().getByUrl(path);
 		if (page == null) {
-			return new PageEntity("Page not found", "Page not found", 
-					"Page not found", null);
+			return new PageEntity("Page not found", "Page not found", null);
 		}
 		return page;
 	}

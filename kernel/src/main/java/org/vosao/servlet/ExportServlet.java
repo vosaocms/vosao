@@ -86,7 +86,8 @@ public class ExportServlet extends BaseSpringServlet {
 		}
 		List<TemplateEntity> selectedTemplates = new ArrayList<TemplateEntity>();
 		for (String id : ids) {
-			TemplateEntity t = getDao().getTemplateDao().getById(id);
+			TemplateEntity t = getDao().getTemplateDao().getById(
+					Long.valueOf(id));
 			if (t != null) {
 				selectedTemplates.add(t);
 			}

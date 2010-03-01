@@ -147,7 +147,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 			}
 			else {
 				return processResourceFileCKeditor(fileItem, data, 
-						parameters.get(IMAGE_UPLOAD_PAGE_ID));
+						Long.valueOf(parameters.get(IMAGE_UPLOAD_PAGE_ID)));
 			}
 		}
 		String fileType = parameters.get(FILE_TYPE_PARAM);
@@ -254,7 +254,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 	 * @return Status string.
 	 */
 	private String processResourceFileCKeditor(FileItemStream imageItem, 
-			byte[] data, String pageId) {
+			byte[] data, Long pageId) {
 		try {
 			PageEntity page = getDao().getPageDao().getById(pageId);
 			if (page == null) {

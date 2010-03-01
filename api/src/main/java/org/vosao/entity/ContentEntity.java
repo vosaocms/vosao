@@ -21,46 +21,44 @@
 
 package org.vosao.entity;
 
-import java.io.Serializable;
-
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
 
 /**
  * @author Alexander Oleynik
  */
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class ContentEntity implements BaseEntity {
+public class ContentEntity extends BaseNativeEntityImpl {
 
-	private static final long serialVersionUID = 7L;
+	private static final long serialVersionUID = 8L;
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
-	
-	@Persistent
 	private String parentClass;
-	
-	@Persistent
-	private String parentKey;
-
-	@Persistent
+	private Long parentKey;
 	private String languageCode;
-
-	@Persistent(defaultFetchGroup = "true")
-	private Text content;
+	private String content;
 	
 	public ContentEntity() {
+		content = "";
 	}
 	
-	public ContentEntity(String parentClass, String parentKey, 
+	@Override
+	public void load(Entity entity) {
+		super.load(entity);
+		parentClass = getStringProperty(entity, "parentClass");
+		parentKey = getLongProperty(entity, "parentKey");
+		languageCode = getStringProperty(entity, "languageCode");
+		content = getTextProperty(entity, "content");
+	}
+	
+	@Override
+	public void save(Entity entity) {
+		super.save(entity);
+		entity.setProperty("parentClass", parentClass);
+		entity.setProperty("parentKey", parentKey);
+		entity.setProperty("languageCode", languageCode);
+		entity.setProperty("content", new Text(content));
+	}
+
+	public ContentEntity(String parentClass, Long parentKey, 
 			String languageCode, String content) {
 		this();
 		this.parentClass = parentClass;
@@ -69,50 +67,14 @@ public class ContentEntity implements BaseEntity {
 		setContent(content);
 	}
 	
-	@Override
-	public Object getEntityId() {
-		return id;
-	}
-
-	public void copy(final ContentEntity entity) {
-		setParentClass(entity.getParentClass());
-		setParentKey(entity.getParentKey());
-		setLanguageCode(entity.getLanguageCode());
-		setContent(entity.getContent());
-	}
-	
-	public String getId() {
-		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
-	}
-	
 	public String getContent() {
-		if (content == null) {
-			return null;
-		}
-		return content.getValue();
+		return content;
 	}
 	
 	public void setContent(String content) {
-		this.content = new Text(content);
+		this.content = content;
 	}
 	
-	public boolean equals(Object object) {
-		if (object instanceof ContentEntity) {
-			ContentEntity entity = (ContentEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public String getParentClass() {
 		return parentClass;
 	}
@@ -121,11 +83,11 @@ public class ContentEntity implements BaseEntity {
 		this.parentClass = parentClass;
 	}
 
-	public String getParentKey() {
+	public Long getParentKey() {
 		return parentKey;
 	}
 
-	public void setParentKey(String parentKey) {
+	public void setParentKey(Long parentKey) {
 		this.parentKey = parentKey;
 	}
 

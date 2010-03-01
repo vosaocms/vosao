@@ -21,14 +21,12 @@
 
 package org.vosao.dao.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 
 import org.vosao.dao.BaseDao;
-import org.vosao.dao.DaoFilter;
 import org.vosao.entity.BaseEntity;
 
 /**
@@ -182,29 +180,6 @@ public class BaseDaoImpl<K,T extends BaseEntity> extends AbstractDaoImpl
 	@Override
 	public void removeAll() {
 		removeSelected("select from " + clazz.getName(), params());
-	}
-
-	@Override
-	public List<T> select(DaoFilter<T> filter) {
-		List<T> list = select();
-		List<T> result = new ArrayList<T>();
-		for (T entity : list) {
-			if (filter.inResult(entity)) {
-				result.add(entity);
-			}
-		}
-		return result;
-	}
-
-	@Override
-	public T selectOne(DaoFilter<T> filter) {
-		List<T> list = select();
-		for (T entity : list) {
-			if (filter.inResult(entity)) {
-				return entity;
-			}
-		}
-		return null;
 	}
 
 	@Override

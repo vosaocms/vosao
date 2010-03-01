@@ -38,9 +38,9 @@ public interface StructureService extends AbstractService {
 
 	ServiceResponse remove(final List<String> ids);
 
-	StructureEntity getById(final String id);
+	StructureEntity getById(final Long id);
 	
 	ServiceResponse save(final Map<String, String> vo); 
 	
-	List<StructureFieldVO> getFields(final String structureId);
+	List<StructureFieldVO> getFields(final Long structureId);
 }

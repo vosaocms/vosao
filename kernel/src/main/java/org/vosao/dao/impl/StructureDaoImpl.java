@@ -21,7 +21,6 @@
 
 package org.vosao.dao.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.vosao.dao.StructureDao;
@@ -29,10 +28,13 @@ import org.vosao.dao.StructureTemplateDao;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.helper.StructureTemplateHelper;
 
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+
 /**
  * @author Alexander Oleynik
  */
-public class StructureDaoImpl extends BaseDaoImpl<String, StructureEntity> 
+public class StructureDaoImpl extends BaseNativeDaoImpl<StructureEntity> 
 		implements StructureDao {
 
 	private StructureTemplateDao structreTemplateDao;
@@ -51,23 +53,22 @@ public class StructureDaoImpl extends BaseDaoImpl<String, StructureEntity>
 		
 	@Override
 	public StructureEntity getByTitle(String title) {
-		String query = "select from " + StructureEntity.class.getName()
-				+ " where title == pTitle"
-				+ " parameters String pTitle";
-		return selectOne(query, params(title));
+		Query q = newQuery();
+		q.addFilter("title", FilterOperator.EQUAL, title);
+		return selectOne(q, "getByTitle", params(title));
 	}
 	
 	@Override
-	public void remove(String id) {
-		List<String> structureTemplateIds = StructureTemplateHelper.createIdList(
+	public void remove(Long id) {
+		List<Long> structureTemplateIds = StructureTemplateHelper.createIdList(
 				getStructureTemplateDao().selectByStructure(id));
 		getStructureTemplateDao().remove(structureTemplateIds);
 		super.remove(id);
 	}
 
 	@Override
-	public void remove(List<String> ids) {
-		for (String id : ids) {
+	public void remove(List<Long> ids) {
+		for (Long id : ids) {
 			remove(id);
 		}
 	}

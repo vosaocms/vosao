@@ -76,7 +76,7 @@ public class BaseNativeDaoImpl<T extends BaseNativeEntity>
 
 	@Override
 	public T getById(Long id) {
-		if (id == null) {
+		if (id == null || id <= 0) {
 			return null;
 		}
 		T model = (T) getEntityCache().getEntity(clazz, id);
@@ -120,6 +120,7 @@ public class BaseNativeDaoImpl<T extends BaseNativeEntity>
 		for (Long id : ids) {
 			getEntityCache().removeEntity(clazz, id);
 		}
+		getQueryCache().removeQueries(clazz);
 		getDatastore().delete(getKeys(ids));
 	}
 

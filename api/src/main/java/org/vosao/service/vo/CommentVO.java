@@ -47,7 +47,7 @@ public class CommentVO {
 		return result;
 	}
 
-	public String getId() {
+	public Long getId() {
 		return comment.getId();
 	}
 

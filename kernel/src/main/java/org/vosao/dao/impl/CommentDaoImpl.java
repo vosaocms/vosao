@@ -21,20 +21,21 @@
 
 package org.vosao.dao.impl;
 
+import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
+
 import java.util.Collections;
 import java.util.List;
 
-import javax.jdo.PersistenceManager;
-
-import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.vosao.dao.CommentDao;
 import org.vosao.entity.CommentEntity;
 import org.vosao.entity.helper.CommentHelper;
 
+import com.google.appengine.api.datastore.Query;
+
 /**
  * @author Alexander Oleynik
  */
-public class CommentDaoImpl extends BaseDaoImpl<String, CommentEntity> 
+public class CommentDaoImpl extends BaseNativeDaoImpl<CommentEntity> 
 		implements CommentDao {
 
 	public CommentDaoImpl() {
@@ -43,77 +44,55 @@ public class CommentDaoImpl extends BaseDaoImpl<String, CommentEntity>
 
 	@Override
 	public List<CommentEntity> getByPage(final String pageUrl) {
-		String query = "select from " + CommentEntity.class.getName()
-			    + " where pageUrl == pPageUrl parameters String pPageUrl";
-		List<CommentEntity> result = select(query, params(pageUrl));
+		Query q = newQuery();
+		q.addFilter("pageUrl", EQUAL, pageUrl);
+		List<CommentEntity> result = select(q, "getByPage", params(pageUrl));
 		Collections.sort(result, new CommentHelper.PublishDateDesc());
 		return result;
 	}
 	
-	private CommentEntity getById(final String id, PersistenceManager pm) {
-		if (id == null) {
-			return null;
-		}
-		try {
-			return pm.getObjectById(CommentEntity.class, id);
-		}
-		catch (NucleusObjectNotFoundException e) {
-			return null;
-		}
-	}	
-	
 	@Override
-	public void disable(List<String> ids) {
+	public void disable(List<Long> ids) {
 		getQueryCache().removeQueries(CommentEntity.class);
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			for (String id : ids) {
-				CommentEntity comment = getById(id, pm);
-				if (comment != null) {
-					comment.setDisabled(true);
-					getEntityCache().removeEntity(CommentEntity.class, id);
-				}
+		for (Long id : ids) {
+			CommentEntity comment = getById(id);
+			if (comment != null) {
+				comment.setDisabled(true);
+				save(comment);
+				getEntityCache().removeEntity(CommentEntity.class, id);
 			}
-		}
-		finally {
-			pm.close();
 		}
 	}
 
 	@Override
-	public void enable(List<String> ids) {
+	public void enable(List<Long> ids) {
 		getQueryCache().removeQueries(CommentEntity.class);
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			for (String id : ids) {
-				CommentEntity comment = getById(id, pm);
-				if (comment != null) {
-					comment.setDisabled(false);
-					getEntityCache().removeEntity(CommentEntity.class, id);
-				}
+		for (Long id : ids) {
+			CommentEntity comment = getById(id);
+			if (comment != null) {
+				comment.setDisabled(false);
+				save(comment);
+				getEntityCache().removeEntity(CommentEntity.class, id);
 			}
-		}
-		finally {
-			pm.close();
 		}
 	}
 
 	@Override
 	public List<CommentEntity> getByPage(String pageUrl, boolean disabled) {
-		String query = "select from " + CommentEntity.class.getName()
-			    + " where pageUrl == pPageUrl && disabled == pDisabled"
-			    + " parameters String pPageUrl, boolean pDisabled";
-		List<CommentEntity> result = select(query, params(pageUrl, disabled));
+		Query q = newQuery();
+		q.addFilter("pageUrl", EQUAL, pageUrl);
+		q.addFilter("disabled", EQUAL, disabled);
+		List<CommentEntity> result = select(q, "getByPage", params(pageUrl, 
+				disabled));
 		Collections.sort(result, new CommentHelper.PublishDateDesc());
 		return result;
 	}
 
 	@Override
 	public void removeByPage(String url) {
-		String query = "select from " + CommentEntity.class.getName()
-	    	+ " where pageUrl == pPageUrl"
-	    	+ " parameters String pPageUrl";
-		removeSelected(query, params(url));
+		Query q = newQuery();
+		q.addFilter("pageUrl", EQUAL, url);
+		removeSelected(q);
 	}
 	
 }

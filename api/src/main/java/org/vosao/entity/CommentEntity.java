@@ -21,45 +21,22 @@
 
 package org.vosao.entity;
 
-import java.io.Serializable;
-import java.util.Comparator;
 import java.util.Date;
 
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
 
 /**
  * @author Alexander Oleynik
  */
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class CommentEntity implements BaseEntity {
+public class CommentEntity extends BaseNativeEntityImpl {
 
-	private static final long serialVersionUID = 7L;
+	private static final long serialVersionUID = 8L;
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
-
-	@Persistent
 	private String pageUrl;
-	
-	@Persistent
 	private String name;
-	
-	@Persistent(defaultFetchGroup = "true")
-	private Text content;
-	
-	@Persistent
+	private String content;
 	private Date publishDate;
-	
-	@Persistent
 	private boolean disabled;
 
 	public CommentEntity() {
@@ -67,10 +44,25 @@ public class CommentEntity implements BaseEntity {
 	}
 	
 	@Override
-	public Object getEntityId() {
-		return id;
+	public void load(Entity entity) {
+		super.load(entity);
+		pageUrl = getStringProperty(entity, "pageUrl");
+		name = getStringProperty(entity, "name");
+		content = getTextProperty(entity, "content");
+		publishDate = getDateProperty(entity, "publishDate");
+		disabled = getBooleanProperty(entity, "disabled", false);
 	}
 	
+	@Override
+	public void save(Entity entity) {
+		super.save(entity);
+		entity.setProperty("pageUrl", pageUrl);
+		entity.setProperty("name", name);
+		entity.setProperty("content", new Text(content));
+		entity.setProperty("publishDate", publishDate);
+		entity.setProperty("disabled", disabled);
+	}
+
 	public CommentEntity(final String aName, final String aContent, 
 			final Date aPublishDate, final String aPageUrl) {
 		setName(aName);
@@ -87,22 +79,6 @@ public class CommentEntity implements BaseEntity {
 		setDisabled(aDisabled);
 	}
 	
-	public void copy(final CommentEntity entity) {
-		setName(entity.getName());
-		setContent(entity.getContent());
-		setPublishDate(entity.getPublishDate());
-		setPageUrl(entity.getPageUrl());
-		setDisabled(entity.isDisabled());
-	}
-	
-	public String getId() {
-		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
-	}
-	
 	public String getName() {
 		return name;
 	}
@@ -112,14 +88,11 @@ public class CommentEntity implements BaseEntity {
 	}
 	
 	public String getContent() {
-		if (content == null) {
-			return null;
-		}
-		return content.getValue();
+		return content;
 	}
 	
 	public void setContent(String content) {
-		this.content = new Text(content);
+		this.content = content;
 	}
 	
 	public Date getPublishDate() {
@@ -144,19 +117,6 @@ public class CommentEntity implements BaseEntity {
 
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
-	}
-	
-	public boolean equals(Object object) {
-		if (object instanceof CommentEntity) {
-			CommentEntity entity = (CommentEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
 	}
 	
 }

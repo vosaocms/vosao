@@ -32,6 +32,7 @@ import org.vosao.business.ContentPermissionBusiness;
 import org.vosao.business.CurrentUser;
 import org.vosao.entity.CommentEntity;
 import org.vosao.entity.ConfigEntity;
+import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.utils.EmailUtil;
 
@@ -78,32 +79,34 @@ public class CommentBusinessImpl extends AbstractBusinessImpl
 		return b.toString();
 	}
 
-	private boolean isChangeGranted(List<String> ids) {
+	private boolean isChangeGranted(List<Long> ids) {
 		if (ids.size() > 0) {
 			CommentEntity comment = getDao().getCommentDao().getById(ids.get(0));
-			return getContentPermissionBusiness().getPermission(
-					comment.getPageUrl(), CurrentUser.getInstance())
-						.isChangeGranted();
+			ContentPermissionEntity permission = getContentPermissionBusiness()
+					.getPermission(	comment.getPageUrl(), CurrentUser.getInstance());
+			if (permission != null) {
+				return permission.isChangeGranted();
+			}
 		}		
 		return false;
 	}
 	
 	@Override
-	public void disable(List<String> ids) {
+	public void disable(List<Long> ids) {
 		if (isChangeGranted(ids)) {
 			getDao().getCommentDao().disable(ids);
 		}		
 	}
 
 	@Override
-	public void enable(List<String> ids) {
+	public void enable(List<Long> ids) {
 		if (isChangeGranted(ids)) {
 			getDao().getCommentDao().enable(ids);
 		}		
 	}
 
 	@Override
-	public void remove(List<String> ids) {
+	public void remove(List<Long> ids) {
 		if (isChangeGranted(ids)) {
 			getDao().getCommentDao().remove(ids);
 		}		

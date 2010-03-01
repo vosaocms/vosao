@@ -30,11 +30,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public class StrUtil {
+
+	private static Log logger = LogFactory.getLog(StrUtil.class);
 
 	private static String _toCSV(Collection<String> list) {
 		StringBuffer result = new StringBuffer();
@@ -119,6 +123,19 @@ public class StrUtil {
 	
 	public static String extractTextFromHTML(String html) {
 		return removeJavascript(html).replaceAll("<.*?>", "");
+	}
+
+	public static List<Long> toLong(List<String> list) {
+		List<Long> result = new ArrayList<Long>();
+		for (String s : list) {
+			try {
+				result.add(Long.valueOf(s));
+			}
+			catch (NumberFormatException e) {
+				logger.error("Wrong number format " + s);
+			}
+		}
+		return result;
 	}
 	
 }

@@ -29,6 +29,7 @@ import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.CommentService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.CommentVO;
+import org.vosao.utils.StrUtil;
 
 /**
  * @author Alexander Oleynik
@@ -45,21 +46,21 @@ public class CommentServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse deleteComments(List<String> ids) {
-		getBusiness().getCommentBusiness().remove(ids);
+		getBusiness().getCommentBusiness().remove(StrUtil.toLong(ids));
 		return ServiceResponse.createSuccessResponse(
 				"Comments were successfuly deleted");
 	}
 
 	@Override
 	public ServiceResponse disableComments(List<String> ids) {
-		getBusiness().getCommentBusiness().disable(ids);
+		getBusiness().getCommentBusiness().disable(StrUtil.toLong(ids));
 		return ServiceResponse.createSuccessResponse(
 				"Comments were successfuly disabled");
 	}
 
 	@Override
 	public ServiceResponse enableComments(List<String> ids) {
-		getBusiness().getCommentBusiness().enable(ids);
+		getBusiness().getCommentBusiness().enable(StrUtil.toLong(ids));
 		return ServiceResponse.createSuccessResponse(
 				"Comments were successfuly enabled");
 	}

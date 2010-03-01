@@ -99,7 +99,7 @@ function onEnableComments() {
 	}
 	Vosao.jsonrpc.commentService.enableComments(function(r) {
 		Vosao.showServiceMessages(r);
-		loadComments();
+		loadData();
 	}, Vosao.javaList(ids));
 }
 
@@ -114,7 +114,7 @@ function onDisableComments() {
 	}
 	Vosao.jsonrpc.commentService.disableComments(function(r) {
 		Vosao.showServiceMessages(r);
-		loadComments();
+		loadData();
 	}, Vosao.javaList(ids));
 }
 
@@ -130,7 +130,7 @@ function onDeleteComments() {
 	if (confirm('Are you sure?')) {
 		Vosao.jsonrpc.commentService.deleteComments(function(r) {
 			Vosao.showServiceMessages(r);
-			loadComments();
+			loadData();
 		}, Vosao.javaList(ids));
 	}
 }

@@ -34,17 +34,17 @@ public interface CommentBusiness {
 	/**
 	 * Security filtered dao version.
 	 */
-	void remove(List<String> ids);
+	void remove(List<Long> ids);
 	
 	/**
 	 * Security filtered dao version.
 	 */
-	void enable(List<String> ids);
+	void enable(List<Long> ids);
 	
 	/**
 	 * Security filtered dao version.
 	 */
-	void disable(List<String> ids);
+	void disable(List<Long> ids);
 
 	CommentEntity addComment(final String name, final String content, 
 			final PageEntity page);

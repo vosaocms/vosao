@@ -1,5 +1,7 @@
 package org.vosao.entity;
 
+import java.util.Date;
+
 import org.vosao.utils.EntityUtil;
 
 import com.google.appengine.api.datastore.Blob;
@@ -99,6 +101,17 @@ public abstract class BaseNativeEntityImpl implements BaseNativeEntity {
 		}
 		if (p instanceof Text) {
 			return ((Text) p).getValue();
+		}
+		return null;
+	}
+
+	public static Date getDateProperty(Entity entity, String name) {
+		Object p = entity.getProperty(name);
+		if (p == null) {
+			return null;
+		}
+		if (p instanceof Date) {
+			return (Date) p;
 		}
 		return null;
 	}

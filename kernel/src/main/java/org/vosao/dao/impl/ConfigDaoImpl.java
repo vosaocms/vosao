@@ -26,7 +26,7 @@ import java.util.List;
 import org.vosao.dao.ConfigDao;
 import org.vosao.entity.ConfigEntity;
 
-public class ConfigDaoImpl extends BaseDaoImpl<Long, ConfigEntity> 
+public class ConfigDaoImpl extends BaseNativeDaoImpl<ConfigEntity> 
 		implements ConfigDao {
 
 	public ConfigDaoImpl() {

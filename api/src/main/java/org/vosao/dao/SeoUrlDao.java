@@ -21,14 +21,12 @@
 
 package org.vosao.dao;
 
-import java.util.List;
-
 import org.vosao.entity.SeoUrlEntity;
 
 /**
  * @author Alexander Oleynik
  */
-public interface SeoUrlDao extends BaseDao<String, SeoUrlEntity> {
+public interface SeoUrlDao extends BaseNativeDao<SeoUrlEntity> {
 
 	SeoUrlEntity getByFrom(final String from);
 

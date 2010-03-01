@@ -37,8 +37,8 @@ function loadUrls() {
         var html = '<table class="form-table"><tr><th></th><th>From</th><th>To</th></tr>';
         $.each(r.list, function (i, url) {
             html += '<tr><td><input type="checkbox" value="' 
-                + url.id + '"/></td><td><a href="#" onclick="onEdit(\''
-                + url.id +'\')">' + url.fromLink + '</a></td><td>' 
+                + url.id + '"/></td><td><a href="#" onclick="onEdit('
+                + url.id +')">' + url.fromLink + '</a></td><td>' 
                 + url.toLink + '</td></tr>';
         });
         $('#urls').html(html + '</table>');
@@ -107,7 +107,7 @@ function validateSeoUrl(vo) {
 
 function onSave(closeFlag, addFlag) {
     var vo = {
-        id : seoUrl != null ? seoUrl.id : '',
+        id : seoUrl != null ? String(seoUrl.id) : '',
         fromLink : $('#fromLink').val(),
         toLink : $('#toLink').val()
     };

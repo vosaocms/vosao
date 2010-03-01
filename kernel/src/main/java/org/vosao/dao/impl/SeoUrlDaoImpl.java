@@ -24,7 +24,10 @@ package org.vosao.dao.impl;
 import org.vosao.dao.SeoUrlDao;
 import org.vosao.entity.SeoUrlEntity;
 
-public class SeoUrlDaoImpl extends BaseDaoImpl<String, SeoUrlEntity> 
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+
+public class SeoUrlDaoImpl extends BaseNativeDaoImpl<SeoUrlEntity> 
 		implements SeoUrlDao {
 
 	public SeoUrlDaoImpl() {
@@ -32,9 +35,9 @@ public class SeoUrlDaoImpl extends BaseDaoImpl<String, SeoUrlEntity>
 	}
 
 	public SeoUrlEntity getByFrom(final String from) {
-		String query = "select from " + SeoUrlEntity.class.getName() 
-					+ " where fromLink == pFrom parameters String pFrom";
-		return selectOne(query, params(from));
+		Query q = newQuery();
+		q.addFilter("fromLink", FilterOperator.EQUAL, from);
+		return selectOne(q, "getByFrom", params(from));
 	}
 
 }

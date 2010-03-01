@@ -37,7 +37,7 @@ public interface SeoUrlService extends AbstractService {
 
 	ServiceResponse remove(final List<String> ids);
 
-	SeoUrlEntity getById(final String id);
+	SeoUrlEntity getById(final Long id);
 	
 	ServiceResponse save(final Map<String, String> vo); 
 	

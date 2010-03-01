@@ -26,68 +26,46 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.vo.StructureFieldVO;
 
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
 
+public class StructureEntity extends BaseNativeEntityImpl {
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class StructureEntity implements BaseEntity {
+	private static final long serialVersionUID = 2L;
 
-	private static final long serialVersionUID = 1L;
-	private static final Log logger = LogFactory.getLog(StructureEntity.class);
-
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
-	
-	@Persistent
-	String title;
-	
-	@Persistent(defaultFetchGroup = "true")
-	private Text content;
+	private String title;
+	private String content;
 	
 	public StructureEntity() {
-	}
-	
-	public StructureEntity(String title, String content) {
-		this();
-		this.title = title;
-		this.content = new Text(content);
+		content = "";
 	}
 	
 	@Override
-	public Object getEntityId() {
-		return id;
+	public void load(Entity entity) {
+		super.load(entity);
+		title = getStringProperty(entity, "title");
+		content = getTextProperty(entity, "content");
+	}
+	
+	@Override
+	public void save(Entity entity) {
+		super.save(entity);
+		entity.setProperty("title", title);
+		entity.setProperty("content", new Text(content));
 	}
 
-	public void copy(final StructureEntity entity) {
-		setTitle(entity.getTitle());
-		setContent(entity.getContent());
+	public StructureEntity(String title, String content) {
+		this();
+		this.title = title;
+		this.content = content;
 	}
-	
-	public String getId() {
-		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
-	}
-	
+
 	public String getTitle() {
 		return title;
 	}
@@ -97,27 +75,11 @@ public class StructureEntity implements BaseEntity {
 	}
 	
 	public String getContent() {
-		if (content == null) {
-			return null;
-		}
-		return content.getValue();
+		return content;
 	}
 	
 	public void setContent(String content) {
-		this.content = new Text(content);
-	}
-
-	public boolean equals(Object object) {
-		if (object instanceof StructureEntity) {
-			StructureEntity entity = (StructureEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
+		this.content = content;
 	}
 
 	public List<StructureFieldVO> getFields() {

@@ -35,7 +35,7 @@ public interface PageRenderDecorator {
 	 * Get page id.
 	 * @return page id.
 	 */
-	String getId();
+	Long getId();
 
 	/**
 	 * Get page content processed by velocity. 
@@ -75,7 +75,7 @@ public interface PageRenderDecorator {
 	 * Get template id for page.
 	 * @return template id.
 	 */
-	String getTemplate();
+	Long getTemplate();
 
 	/**
 	 * Get page publish date.

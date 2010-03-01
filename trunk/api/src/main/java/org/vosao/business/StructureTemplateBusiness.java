@@ -37,5 +37,5 @@ public interface StructureTemplateBusiness {
 	 * @param ids
 	 * @return list of reference integrity check messages.
 	 */
-	List<String> remove(List<String> ids);
+	List<String> remove(List<Long> ids);
 }

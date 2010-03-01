@@ -55,6 +55,13 @@ public abstract class BaseNativeEntityImpl implements BaseNativeEntity {
 		return key == null;
 	}
 	
+	@Override
+	public void copy(BaseNativeEntity entity) {
+		Entity buf = new Entity("tmp");
+		entity.save(buf);
+		load(buf);
+	}
+	
 	public boolean equals(Object object) {
 		if (object instanceof BaseNativeEntity
 				&& object.getClass().equals(this.getClass())) {

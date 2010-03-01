@@ -49,23 +49,23 @@ public interface PageService extends AbstractService {
 	GroupService getGroupService();
 	void setGroupService(GroupService bean);
 
-	List<ContentEntity> getContents(final String pageId);
+	List<ContentEntity> getContents(final Long pageId);
 	
 	TreeItemDecorator<PageVO> getTree();
 	
-	PageEntity getPage(final String id);
+	PageEntity getPage(final Long id);
 	
-	PageRequestVO getPageRequest(final String id, final String parentUrl);
+	PageRequestVO getPageRequest(final Long id, final String parentUrl);
 
 	PageEntity getPageByUrl(final String url);
 
 	ServiceResponse savePage(final Map<String, String> page);
 	
-	List<PageVO> getChildren(final String id);
+	List<PageVO> getChildren(final String url);
 	
 	ServiceResponse deletePages(final List<String> ids);
 
-	ServiceResponse deletePageVersion(String id);
+	ServiceResponse deletePageVersion(Long id);
 
 	List<PageVO> getPageVersions(final String url);
 	
@@ -76,7 +76,7 @@ public interface PageService extends AbstractService {
 	 */
 	ServiceResponse addVersion(final String url, final String versionTitle);
 	
-	ServiceResponse approve(final String pageId);
+	ServiceResponse approve(final Long pageId);
 	
 	/**
 	 * Restore content of predefined page.
@@ -85,7 +85,7 @@ public interface PageService extends AbstractService {
 	 * @param language - content language
 	 * @return - service response
 	 */
-	ServiceResponse restore(final String pageId, final String pageType,
+	ServiceResponse restore(final Long pageId, final String pageType,
 			final String language);
 	
 	/**
@@ -93,12 +93,12 @@ public interface PageService extends AbstractService {
 	 * @param pageId
 	 * @return
 	 */
-	ServiceResponse moveUp(final String pageId);
+	ServiceResponse moveUp(final Long pageId);
 
 	/**
 	 * Move page down in sort order.
 	 * @param pageId
 	 * @return
 	 */
-	ServiceResponse moveDown(final String pageId);
+	ServiceResponse moveDown(final Long pageId);
 }

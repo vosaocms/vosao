@@ -282,7 +282,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 	}
 
 	@Override
-	public void setPageContent(String pageId, String languageCode,
+	public void setPageContent(Long pageId, String languageCode,
 			String content) throws DaoTaskException {
 		if (!isSkip()) {
 			getDao().getPageDao().setContent(pageId, languageCode, content);

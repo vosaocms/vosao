@@ -55,7 +55,7 @@ public class IndexTaskServlet extends BaseSpringServlet {
 		String id = request.getParameter("pageId");
 		try {
 			CurrentUser.setInstance(UserHelper.ADMIN);
-			PageEntity page = getDao().getPageDao().getById(id);
+			PageEntity page = getDao().getPageDao().getById(Long.valueOf(id));
 			if (page != null) {
 				getBusiness().getSearchEngine().updateIndex(page);
 				getBusiness().getSearchEngine().saveIndex();

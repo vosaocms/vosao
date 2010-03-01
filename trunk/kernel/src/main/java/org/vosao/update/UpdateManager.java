@@ -44,11 +44,6 @@ public class UpdateManager {
 		dao = aDao;
 		datastore = DatastoreServiceFactory.getDatastoreService(); 
 		tasks = new ArrayList<UpdateTask>();
-		tasks.add(new UpdateTask003());
-		tasks.add(new UpdateTask004(dao));
-		tasks.add(new UpdateTask01(dao));
-		tasks.add(new UpdateTask02(dao));
-		tasks.add(new UpdateTask03(dao));
 	}
 	
 	public void update() throws UpdateException {

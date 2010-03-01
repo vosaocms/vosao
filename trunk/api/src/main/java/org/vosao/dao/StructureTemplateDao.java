@@ -29,9 +29,9 @@ import org.vosao.entity.StructureTemplateEntity;
  * @author Alexander Oleynik
  */
 public interface StructureTemplateDao extends 
-		BaseDao<String, StructureTemplateEntity> {
+		BaseNativeDao<StructureTemplateEntity> {
 
-	List<StructureTemplateEntity> selectByStructure(final String structureId);
+	List<StructureTemplateEntity> selectByStructure(final Long structureId);
 
 	StructureTemplateEntity getByTitle(final String title);
 	

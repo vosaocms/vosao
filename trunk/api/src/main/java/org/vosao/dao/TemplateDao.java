@@ -21,11 +21,9 @@
 
 package org.vosao.dao;
 
-import java.util.List;
-
 import org.vosao.entity.TemplateEntity;
 
-public interface TemplateDao extends BaseDao<String, TemplateEntity> {
+public interface TemplateDao extends BaseNativeDao<TemplateEntity> {
 
 	TemplateEntity getByUrl(final String url);
 

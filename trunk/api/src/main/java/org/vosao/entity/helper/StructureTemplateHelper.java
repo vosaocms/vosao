@@ -9,19 +9,19 @@ import org.vosao.entity.StructureTemplateEntity;
 
 public class StructureTemplateHelper {
 
-	public static Map<String, StructureTemplateEntity> createIdMap(
+	public static Map<Long, StructureTemplateEntity> createIdMap(
 			final List<StructureTemplateEntity> list) {
-		Map<String, StructureTemplateEntity> result = 
-				new HashMap<String, StructureTemplateEntity>();
+		Map<Long, StructureTemplateEntity> result = 
+				new HashMap<Long, StructureTemplateEntity>();
 		for (StructureTemplateEntity entity : list) {
 			result.put(entity.getId(), entity);
 		}
 		return result;
 	}
 	
-	public static List<String> createIdList(
+	public static List<Long> createIdList(
 			final List<StructureTemplateEntity> list) {
-		List<String> result = new ArrayList<String>();
+		List<Long> result = new ArrayList<Long>();
 		for (StructureTemplateEntity entity : list) {
 			result.add(entity.getId());
 		}

@@ -33,11 +33,11 @@ import org.vosao.service.ServiceResponse;
  */
 public interface StructureTemplateService extends AbstractService {
 	
-	List<StructureTemplateEntity> selectByStructure(final String structureId);
+	List<StructureTemplateEntity> selectByStructure(final Long structureId);
 	
 	ServiceResponse remove(final List<String> ids);
 
-	StructureTemplateEntity getById(final String id);
+	StructureTemplateEntity getById(final Long id);
 	
 	ServiceResponse save(final Map<String, String> vo); 
 	

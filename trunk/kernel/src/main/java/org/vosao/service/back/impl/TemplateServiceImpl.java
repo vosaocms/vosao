@@ -29,12 +29,13 @@ import org.vosao.entity.TemplateEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.TemplateService;
 import org.vosao.service.impl.AbstractServiceImpl;
+import org.vosao.utils.StrUtil;
 
 public class TemplateServiceImpl extends AbstractServiceImpl 
 		implements TemplateService {
 
 	@Override
-	public ServiceResponse updateContent(String templateId, String content) {
+	public ServiceResponse updateContent(Long templateId, String content) {
 		TemplateEntity template = getDao().getTemplateDao().getById(templateId);
 		if (template != null) {
 			template.setContent(content);
@@ -55,7 +56,8 @@ public class TemplateServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse deleteTemplates(List<String> ids) {
-		List<String> errors = getBusiness().getTemplateBusiness().remove(ids);
+		List<String> errors = getBusiness().getTemplateBusiness().remove(
+				StrUtil.toLong(ids));
 		if (errors.isEmpty()) {
 			return ServiceResponse.createSuccessResponse(
 				"Templates were successfully deleted");
@@ -68,10 +70,7 @@ public class TemplateServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public TemplateEntity getTemplate(String id) {
-		if (StringUtils.isEmpty(id)) {
-			return null;
-		}
+	public TemplateEntity getTemplate(Long id) {
 		return getDao().getTemplateDao().getById(id);
 	}
 
@@ -79,7 +78,8 @@ public class TemplateServiceImpl extends AbstractServiceImpl
 	public ServiceResponse saveTemplate(Map<String, String> vo) {
 		TemplateEntity template = null;
 		if (!StringUtils.isEmpty(vo.get("id"))) {
-			template = getDao().getTemplateDao().getById(vo.get("id"));
+			template = getDao().getTemplateDao().getById(Long.valueOf(
+					vo.get("id")));
 		}
 		if (template == null) {
 			template = new TemplateEntity();
@@ -91,7 +91,8 @@ public class TemplateServiceImpl extends AbstractServiceImpl
 			.validateBeforeUpdate(template);
 		if (errors.isEmpty()) {
 			getDao().getTemplateDao().save(template);
-			return ServiceResponse.createSuccessResponse(template.getId());
+			return ServiceResponse.createSuccessResponse(template.getId()
+					.toString());
 		}
 		else {
 			return ServiceResponse.createErrorResponse(

@@ -55,6 +55,7 @@ import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.PageRequestVO;
 import org.vosao.service.vo.PageVO;
 import org.vosao.utils.DateUtil;
+import org.vosao.utils.StrUtil;
 import org.vosao.utils.StreamUtil;
 
 /**
@@ -155,10 +156,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 	
 
 	@Override
-	public PageEntity getPage(String id) {
-		if (StringUtils.isEmpty(id)) {
-			return null;
-		}
+	public PageEntity getPage(Long id) {
 		return getBusiness().getPageBusiness().getById(id);
 	}
 
@@ -170,7 +168,10 @@ public class PageServiceImpl extends AbstractServiceImpl
 	@Override
 	public ServiceResponse savePage(Map<String, String> vo) {
 		UserEntity user = CurrentUser.getInstance();
-		PageEntity page = getPage(vo.get("id"));
+		PageEntity page = null;
+		if (!StringUtils.isEmpty(vo.get("id"))) {
+			page = getPage(Long.valueOf(vo.get("id")));
+		}
 		if (page == null) {
 			page = new PageEntity();
 			page.setCreateUserEmail(user.getEmail());
@@ -211,7 +212,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 			}
 		}
 		if (vo.get("template") != null) {
-			page.setTemplate(vo.get("template"));
+			page.setTemplate(Long.valueOf(vo.get("template")));
 		}
 		if (vo.get("titles") != null) {
 			page.setTitleValue(vo.get("titles"));
@@ -220,10 +221,11 @@ public class PageServiceImpl extends AbstractServiceImpl
 			page.setPageType(PageType.valueOf(vo.get("pageType")));
 		}
 		if (vo.get("structureId") != null) {
-			page.setStructureId(vo.get("structureId"));
+			page.setStructureId(Long.valueOf(vo.get("structureId")));
 		}
 		if (vo.get("structureTemplateId") != null) {
-			page.setStructureTemplateId(vo.get("structureTemplateId"));
+			page.setStructureTemplateId(Long.valueOf(
+					vo.get("structureTemplateId")));
 		}
 		if (vo.get("keywords") != null) {
 			page.setKeywords(vo.get("keywords"));
@@ -240,7 +242,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 					vo.get("languageCode"), vo.get("content"), 
 					oldSearchable, page.isSearchable());
 			}
-			return ServiceResponse.createSuccessResponse(page.getId());
+			return ServiceResponse.createSuccessResponse(page.getId().toString());
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
@@ -259,20 +261,20 @@ public class PageServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse deletePages(List<String> ids) {
-		getBusiness().getPageBusiness().remove(ids);
+		getBusiness().getPageBusiness().remove(StrUtil.toLong(ids));
 		return ServiceResponse.createSuccessResponse(
 				"Pages were successfully deleted");
 	}
 
 	@Override
-	public ServiceResponse deletePageVersion(String id) {
+	public ServiceResponse deletePageVersion(Long id) {
 		getBusiness().getPageBusiness().removeVersion(id);
 		return ServiceResponse.createSuccessResponse(
 				"Page was successfully deleted");
 	}
 
 	@Override
-	public List<ContentEntity> getContents(String pageId) {
+	public List<ContentEntity> getContents(Long pageId) {
 		return getBusiness().getPageBusiness().getContents(pageId);
 	}
 
@@ -293,13 +295,13 @@ public class PageServiceImpl extends AbstractServiceImpl
 			return ServiceResponse.createSuccessResponse(
 				getBusiness().getPageBusiness().addVersion(
 					lastPage, lastPage.getVersion() + 1, versionTitle, 
-						CurrentUser.getInstance()).getId());
+						CurrentUser.getInstance()).getId().toString());
 		}
 		return ServiceResponse.createErrorResponse("Page not found");
 	}
 
 	@Override
-	public ServiceResponse approve(String pageId) {
+	public ServiceResponse approve(Long pageId) {
 		if (pageId == null) {
 			return ServiceResponse.createErrorResponse("Page not found");
 		}
@@ -319,7 +321,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public PageRequestVO getPageRequest(final String id, 
+	public PageRequestVO getPageRequest(final Long id, 
 			final String parentUrl) {
 		try {
 		PageRequestVO result = new PageRequestVO();
@@ -417,7 +419,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public ServiceResponse restore(String pageId, String pageType, 
+	public ServiceResponse restore(Long pageId, String pageType, 
 			String language) {
 		PageEntity page = getPage(pageId);
 		if (page == null) {
@@ -461,7 +463,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public ServiceResponse moveDown(String pageId) {
+	public ServiceResponse moveDown(Long pageId) {
 		PageEntity page = getDao().getPageDao().getById(pageId);
 		if (page == null) {
 			return ServiceResponse.createErrorResponse("Page not found");
@@ -471,7 +473,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public ServiceResponse moveUp(String pageId) {
+	public ServiceResponse moveUp(Long pageId) {
 		PageEntity page = getDao().getPageDao().getById(pageId);
 		if (page == null) {
 			return ServiceResponse.createErrorResponse("Page not found");

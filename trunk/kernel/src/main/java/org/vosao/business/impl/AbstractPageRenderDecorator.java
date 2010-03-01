@@ -52,7 +52,7 @@ public abstract class AbstractPageRenderDecorator {
 		this.page = page;
 	}
 	
-	public String getId() {
+	public Long getId() {
 		return page.getId();
 	}
 	
@@ -108,7 +108,7 @@ public abstract class AbstractPageRenderDecorator {
 		return page.getParentUrl();
 	}
 	
-	public String getTemplate() {
+	public Long getTemplate() {
 		return page.getTemplate();
 	}
 	

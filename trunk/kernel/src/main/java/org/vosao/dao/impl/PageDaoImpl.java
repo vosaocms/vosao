@@ -34,10 +34,13 @@ import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.helper.PageHelper;
 
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+
 /**
  * @author Alexander Oleynik
  */
-public class PageDaoImpl extends BaseDaoImpl<String, PageEntity> 
+public class PageDaoImpl extends BaseNativeDaoImpl<PageEntity> 
 		implements PageDao {
 
 	private static final String PAGE_CLASS_NAME = PageEntity.class.getName();
@@ -50,7 +53,7 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 	}
 
 	@Override
-	public void remove(String id) {
+	public void remove(Long id) {
 		PageEntity page = getById(id);
 		if (page != null) {
 			List<PageEntity> versions = selectByUrl(page.getFriendlyURL());
@@ -66,7 +69,7 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 	}
 	
 	@Override
-	public void removeVersion(String id) {
+	public void removeVersion(Long id) {
 		PageEntity page = getById(id);
 		if (page != null) {
 			getContentDao().removeById(PAGE_CLASS_NAME, id);
@@ -75,15 +78,14 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 	}
 
 	public List<PageEntity> selectAllChildren(final String parentUrl) {
-		String query = "select from " + PageEntity.class.getName()
-			+ " where parentUrl == pParentUrl" 
-			+ " parameters String pParentUrl";
-		return copy(select(query, params(parentUrl)));
+		Query q = newQuery();
+		q.addFilter("parentUrl", FilterOperator.EQUAL, parentUrl);
+		return select(q, "selectAllChildren", params(parentUrl));
 	}
 	
 	@Override
-	public void remove(List<String> ids) {
-		for (String id : ids) {
+	public void remove(List<Long> ids) {
+		for (Long id : ids) {
 			remove(id);
 		}
 	}
@@ -105,7 +107,7 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 	}
 
 	@Override
-	public String getContent(String pageId, String languageCode) {
+	public String getContent(Long pageId, String languageCode) {
 		ContentEntity content = getContentDao().getByLanguage(
 				PAGE_CLASS_NAME, pageId, languageCode);
 		if (content != null) {
@@ -115,7 +117,7 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 	}
 
 	@Override
-	public ContentEntity setContent(String pageId, String languageCode, 
+	public ContentEntity setContent(Long pageId, String languageCode, 
 				String content) {
 		ContentEntity contentEntity = getContentDao().getByLanguage(
 				PAGE_CLASS_NAME, pageId, languageCode);
@@ -140,7 +142,7 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 	}
 
 	@Override
-	public List<ContentEntity> getContents(String pageId) {
+	public List<ContentEntity> getContents(Long pageId) {
 		return getContentDao().select(PAGE_CLASS_NAME, pageId);
 	}
 	
@@ -158,8 +160,7 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 		return result;
 	}
 	
-	private List<PageEntity> filterApproved(
-			List<PageEntity> list) {
+	private List<PageEntity> filterApproved(List<PageEntity> list) {
 		Map<String, PageEntity> pages = new HashMap<String, PageEntity>();
 		for (PageEntity page : list) {
 			if (page.isApproved()) {
@@ -177,20 +178,19 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 	
 	@Override
 	public List<PageEntity> selectByUrl(final String url) {
-		String query = "select from " + PageEntity.class.getName()
-			    + " where friendlyURL == pUrl"
-			    + " parameters String pUrl";
-		List<PageEntity> result = select(query, params(url));
+		Query q = newQuery();
+		q.addFilter("friendlyURL", FilterOperator.EQUAL, url);
+		List<PageEntity> result = select(q, "selectByUrl", params(url));
 		Collections.sort(result, PageHelper.VERSION_ASC);
 		return result;
 	}
 	
 	@Override
 	public PageEntity getByUrlVersion(final String url, final Integer version) {
-		String query = "select from " + PageEntity.class.getName()
-			    + " where friendlyURL == pUrl && version == pVersion"
-			    + " parameters String pUrl, Integer pVersion";
-		return selectOne(query, params(url, version));
+		Query q = newQuery();
+		q.addFilter("friendlyURL", FilterOperator.EQUAL, url);
+		q.addFilter("version", FilterOperator.EQUAL, version);
+		return selectOne(q, "getByUrlVersion", params(url, version));
 	}
 	
 	@Override
@@ -201,28 +201,27 @@ public class PageDaoImpl extends BaseDaoImpl<String, PageEntity>
 	}
 
 	@Override
-	public List<PageEntity> selectByTemplate(String templateId) {
-		String query = "select from " + PageEntity.class.getName()
-				+ " where template == pTemplate"
-				+ " parameters String pTemplate";
-		return select(query, params(templateId));
+	public List<PageEntity> selectByTemplate(Long templateId) {
+		Query q = newQuery();
+		q.addFilter("template", FilterOperator.EQUAL, templateId);
+		return select(q, "selectByTemplate", params(templateId));
 	}
 
 	@Override
-	public List<PageEntity> selectByStructure(String structureId) {
-		String query = "select from " + PageEntity.class.getName()
-				+ " where structureId == pStructureId"
-				+ " parameters String pStructureId";
-		return select(query, params(structureId));
+	public List<PageEntity> selectByStructure(Long structureId) {
+		Query q = newQuery();
+		q.addFilter("structureId", FilterOperator.EQUAL, structureId);
+		return select(q, "selectByStructure", params(structureId));
 	}
 
 	@Override
 	public List<PageEntity> selectByStructureTemplate(
-			String structureTemplateId) {
-		String query = "select from " + PageEntity.class.getName()
-				+ " where structureTemplateId == pStructureTemplateId"
-				+ " parameters String pStructureTemplateId";
-		return select(query, params(structureTemplateId));
+			Long structureTemplateId) {
+		Query q = newQuery();
+		q.addFilter("structureTemplateId", FilterOperator.EQUAL, 
+				structureTemplateId);
+		return select(q, "selectByStructureTemplate", 
+				params(structureTemplateId));
 	}
 
 	public CommentDao getCommentDao() {

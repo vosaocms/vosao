@@ -266,26 +266,6 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.datanucleus</groupId>
-                <artifactId>maven-datanucleus-plugin</artifactId>
-                <version>1.1.4</version>
-                <configuration>
-                    <fork>false</fork>
-                    <mappingIncludes>org/vosao/entity/*.class</mappingIncludes>
-                    <verbose>false</verbose>
-                    <enhancerName>ASM</enhancerName>
-                    <api>JDO</api>
-                </configuration>
-                <executions>
-                    <execution>
-                    <phase>compile</phase>
-                    <goals>
-                        <goal>enhance</goal>
-                    </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
     

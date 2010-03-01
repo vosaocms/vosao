@@ -76,7 +76,7 @@ function callLoadPage() {
 
 function loadPage() {
 	if (editMode) {
-		pageId = page.id;
+		pageId = String(page.id);
 		pageParentUrl = page.parentUrl;
 		loadVersions();
 		loadPermissions();
@@ -131,8 +131,8 @@ function loadPermissions() {
 		var editLink = value.group.name;
 		if (!value.inherited) {
 			checkbox = '<input type="checkbox" value="' + value.id + '">';
-			editLink = '<a href="#" onclick="onPermissionEdit(\'' + value.id 
-				+ '\')"> ' + value.group.name + '</a>';
+			editLink = '<a href="#" onclick="onPermissionEdit(' + value.id 
+				+ ')"> ' + value.group.name + '</a>';
 		}
 		var l = value.allLanguages ? 'all languages' : value.languages;
 		h += '<tr><td>' + checkbox + '</td><td>' + editLink + '</td><td>'

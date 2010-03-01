@@ -26,7 +26,7 @@ import java.util.List;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 
-public interface PageDao extends BaseDao<String, PageEntity> {
+public interface PageDao extends BaseNativeDao<PageEntity> {
 
 	/**
 	 * Select all children versions for parent page.
@@ -58,16 +58,16 @@ public interface PageDao extends BaseDao<String, PageEntity> {
 
 	PageEntity getByUrlVersion(final String url, final Integer version);
 
-	String getContent(final String pageId, final String languageCode);
+	String getContent(final Long pageId, final String languageCode);
 
-	ContentEntity setContent(final String pageId, final String languageCode, 
+	ContentEntity setContent(final Long pageId, final String languageCode, 
 			final String content);
 	
 	ContentDao getContentDao();
 
 	void setContentDao(ContentDao bean);
 	
-	List<ContentEntity> getContents(final String pageId);
+	List<ContentEntity> getContents(final Long pageId);
 	
 	/**
 	 * Selects all page's versions ordered by version.
@@ -76,12 +76,12 @@ public interface PageDao extends BaseDao<String, PageEntity> {
 	 */
 	List<PageEntity> selectByUrl(final String url);
 	
-	List<PageEntity> selectByTemplate(String templateId);
+	List<PageEntity> selectByTemplate(Long templateId);
 	
-	List<PageEntity> selectByStructure(String structureId);
+	List<PageEntity> selectByStructure(Long structureId);
 
-	List<PageEntity> selectByStructureTemplate(String structureTemplateId);
+	List<PageEntity> selectByStructureTemplate(Long structureTemplateId);
 	
-	void removeVersion(String id);
+	void removeVersion(Long id);
 	
 }

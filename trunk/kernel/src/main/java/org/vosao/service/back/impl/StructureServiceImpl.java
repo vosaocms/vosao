@@ -33,6 +33,7 @@ import org.vosao.entity.StructureEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.StructureService;
 import org.vosao.service.impl.AbstractServiceImpl;
+import org.vosao.utils.StrUtil;
 
 /**
  * @author Alexander Oleynik
@@ -49,7 +50,8 @@ public class StructureServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse remove(List<String> ids) {
-		List<String> errors = getBusiness().getStructureBusiness().remove(ids);
+		List<String> errors = getBusiness().getStructureBusiness().remove(
+				StrUtil.toLong(ids));
 		if (errors.isEmpty()) {
 			return ServiceResponse.createSuccessResponse(
 				"Structures were successfully deleted");
@@ -61,10 +63,7 @@ public class StructureServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public StructureEntity getById(String id) {
-		if (StringUtils.isEmpty(id)) {
-			return null;
-		}
+	public StructureEntity getById(Long id) {
 		return getDao().getStructureDao().getById(id);
 	}
 
@@ -72,7 +71,8 @@ public class StructureServiceImpl extends AbstractServiceImpl
 	public ServiceResponse save(Map<String, String> vo) {
 		StructureEntity entity = null;
 		if (!StringUtils.isEmpty(vo.get("id"))) {
-			entity = getDao().getStructureDao().getById(vo.get("id"));
+			entity = getDao().getStructureDao().getById(Long.valueOf(
+					vo.get("id")));
 		}
 		if (entity == null) {
 			entity = new StructureEntity();
@@ -83,7 +83,8 @@ public class StructureServiceImpl extends AbstractServiceImpl
 				.validateBeforeUpdate(entity);
 		if (errors.isEmpty()) {
 			getDao().getStructureDao().save(entity);
-			return ServiceResponse.createSuccessResponse(entity.getId());
+			return ServiceResponse.createSuccessResponse(entity.getId()
+					.toString());
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
@@ -92,7 +93,7 @@ public class StructureServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public List<StructureFieldVO> getFields(String structureId) {
+	public List<StructureFieldVO> getFields(Long structureId) {
 		StructureEntity entity = getById(structureId);
 		if (entity == null) {
 			return Collections.EMPTY_LIST;

@@ -71,7 +71,7 @@ public interface DaoTaskAdapter {
 	
 	void pageSave(PageEntity entity) throws DaoTaskException;
 
-	void setPageContent(String pageId, String languageCode, String content) 
+	void setPageContent(Long pageId, String languageCode, String content) 
 			throws DaoTaskException;
 
 	void commentSave(CommentEntity entity) throws DaoTaskException;

@@ -87,7 +87,7 @@ function callLoadPage() {
 
 function loadPage() {
 	if (editMode) {
-		pageId = page.id;
+		pageId = String(page.id);
 		pageParentUrl = page.parentUrl;
 		loadVersions();
 		loadTitles();

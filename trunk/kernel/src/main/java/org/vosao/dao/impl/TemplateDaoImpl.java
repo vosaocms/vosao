@@ -24,7 +24,10 @@ package org.vosao.dao.impl;
 import org.vosao.dao.TemplateDao;
 import org.vosao.entity.TemplateEntity;
 
-public class TemplateDaoImpl extends BaseDaoImpl<String, TemplateEntity> 
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+
+public class TemplateDaoImpl extends BaseNativeDaoImpl<TemplateEntity> 
 		implements TemplateDao {
 
 	public TemplateDaoImpl() {
@@ -32,9 +35,9 @@ public class TemplateDaoImpl extends BaseDaoImpl<String, TemplateEntity>
 	}
 
 	public TemplateEntity getByUrl(final String url) {
-		String query = "select from " + TemplateEntity.class.getName()
-			    + " where url == pUrl parameters String pUrl";
-		return selectOne(query, params(url));
+		Query q = newQuery();
+		q.addFilter("url", FilterOperator.EQUAL, url);
+		return selectOne(q, "getByUrl", params(url));
 	}
 	
 }

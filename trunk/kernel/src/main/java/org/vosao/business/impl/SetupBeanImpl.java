@@ -145,7 +145,7 @@ public class SetupBeanImpl implements SetupBean {
 	}
 
 	private void addPage(String title, String url, String resource, 
-				String templateId, Integer sortIndex) {
+				Long templateId, Integer sortIndex) {
         String content = loadResource(resource);
 		PageEntity login = new PageEntity(title, url,	templateId);
 		login.setCreateUserEmail("admin@test.com");

@@ -26,11 +26,14 @@ import java.util.List;
 import org.vosao.dao.StructureTemplateDao;
 import org.vosao.entity.StructureTemplateEntity;
 
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+
 /**
  * @author Alexander Oleynik
  */
 public class StructureTemplateDaoImpl 
-		extends BaseDaoImpl<String, StructureTemplateEntity> 
+		extends BaseNativeDaoImpl<StructureTemplateEntity> 
 		implements StructureTemplateDao {
 
 	public StructureTemplateDaoImpl() {
@@ -38,18 +41,16 @@ public class StructureTemplateDaoImpl
 	}
 
 	@Override
-	public List<StructureTemplateEntity> selectByStructure(String structureId) {
-		String query = "select from " + StructureTemplateEntity.class.getName()
-				+ " where structureId == pStructureId"
-				+ " parameters String pStructureId";
-		return select(query, params(structureId));
+	public List<StructureTemplateEntity> selectByStructure(Long structureId) {
+		Query q = newQuery();
+		q.addFilter("structureId", FilterOperator.EQUAL, structureId);
+		return select(q, "selectByStructure", params(structureId));
 	}
 
 	@Override
 	public StructureTemplateEntity getByTitle(String title) {
-		String query = "select from " + StructureTemplateEntity.class.getName()
-				+ " where title == pTitle"
-				+ " parameters String pTitle";
-		return selectOne(query, params(title));
+		Query q = newQuery();
+		q.addFilter("title", FilterOperator.EQUAL, title);
+		return selectOne(q, "getByTitle", params(title));
 	}
 }

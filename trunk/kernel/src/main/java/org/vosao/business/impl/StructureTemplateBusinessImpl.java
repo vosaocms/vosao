@@ -65,9 +65,9 @@ public class StructureTemplateBusinessImpl extends AbstractBusinessImpl
 	}
 	
 	@Override
-	public List<String> remove(List<String> ids) {
+	public List<String> remove(List<Long> ids) {
 		List<String> result = new ArrayList<String>();
-		for (String id : ids) {
+		for (Long id : ids) {
 			StructureTemplateEntity entity = getDao().getStructureTemplateDao()
 					.getById(id);
 			if (entity == null) {

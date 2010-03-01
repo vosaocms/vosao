@@ -32,6 +32,7 @@ import org.vosao.enums.StructureTemplateType;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.StructureTemplateService;
 import org.vosao.service.impl.AbstractServiceImpl;
+import org.vosao.utils.StrUtil;
 
 /**
  * @author Alexander Oleynik
@@ -45,7 +46,7 @@ public class StructureTemplateServiceImpl extends AbstractServiceImpl
 	@Override
 	public ServiceResponse remove(List<String> ids) {
 		List<String> errors = getBusiness().getStructureTemplateBusiness()
-				.remove(ids);
+				.remove(StrUtil.toLong(ids));
 		if (errors.isEmpty()) {
 			return ServiceResponse.createSuccessResponse(
 				"Structure templates were successfully deleted");
@@ -57,10 +58,7 @@ public class StructureTemplateServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public StructureTemplateEntity getById(String id) {
-		if (StringUtils.isEmpty(id)) {
-			return null;
-		}
+	public StructureTemplateEntity getById(Long id) {
 		return getDao().getStructureTemplateDao().getById(id);
 	}
 
@@ -68,20 +66,22 @@ public class StructureTemplateServiceImpl extends AbstractServiceImpl
 	public ServiceResponse save(Map<String, String> vo) {
 		StructureTemplateEntity entity = null;
 		if (!StringUtils.isEmpty(vo.get("id"))) {
-			entity = getDao().getStructureTemplateDao().getById(vo.get("id"));
+			entity = getDao().getStructureTemplateDao().getById(
+					Long.valueOf(vo.get("id")));
 		}
 		if (entity == null) {
 			entity = new StructureTemplateEntity();
 		}
 		entity.setTitle(vo.get("title"));
 		entity.setContent(vo.get("content"));
-		entity.setStructureId(vo.get("structureId"));
+		entity.setStructureId(Long.valueOf(vo.get("structureId")));
 		entity.setType(StructureTemplateType.valueOf(vo.get("type")));
 		List<String> errors = getBusiness().getStructureTemplateBusiness()
 				.validateBeforeUpdate(entity);
 		if (errors.isEmpty()) {
 			getDao().getStructureTemplateDao().save(entity);
-			return ServiceResponse.createSuccessResponse(entity.getId());
+			return ServiceResponse.createSuccessResponse(entity.getId()
+					.toString());
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
@@ -90,7 +90,7 @@ public class StructureTemplateServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public List<StructureTemplateEntity> selectByStructure(String structureId) {
+	public List<StructureTemplateEntity> selectByStructure(Long structureId) {
 		return getDao().getStructureTemplateDao().selectByStructure(structureId);
 	}
 

@@ -35,13 +35,13 @@ public interface PluginService extends AbstractService {
 	
 	List<PluginEntity> select();
 
-	ServiceResponse remove(String id);
+	ServiceResponse remove(Long id);
 	
-	List<PluginPropertyVO> getProperties(String pluginId);
+	List<PluginPropertyVO> getProperties(Long pluginId);
 	
-	PluginEntity getById(String pluginId);
+	PluginEntity getById(Long pluginId);
 	
-	ServiceResponse savePluginConfig(String pluginId, String xml);
+	ServiceResponse savePluginConfig(Long pluginId, String xml);
 
 	PluginEntity getByName(String pluginName);
 }

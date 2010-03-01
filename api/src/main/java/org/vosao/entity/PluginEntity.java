@@ -21,110 +21,80 @@
 
 package org.vosao.entity;
 
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
 import org.datanucleus.util.StringUtils;
 
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class PluginEntity implements BaseEntity {
+public class PluginEntity extends BaseNativeEntityImpl {
 	
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
-
-	@Persistent
 	private String name;
-	
-	@Persistent
 	private String title;
-	
-	@Persistent
 	private String description;
-	
-	@Persistent
 	private String website;
-
-	@Persistent(defaultFetchGroup = "true")
-	private Text configStructure;
-
-	@Persistent(defaultFetchGroup = "true")
-	private Text configData;
-
-	@Persistent
+	private String configStructure;
+	private String configData;
 	private String velocityPluginClass;
-
-	@Persistent
 	private String frontServiceClass;
-
-	@Persistent
 	private String backServiceClass;
-
-	@Persistent
 	private String configURL;
-
-	@Persistent(defaultFetchGroup = "true")
-	private Text pageHeader;
+	private String pageHeader;
 
 	public PluginEntity() {
+		name = "";
+		title = "";
+		description = "";
+		website = "";
+		configStructure = "";
+		configData = "";
+		velocityPluginClass = "";
+		frontServiceClass = "";
+		backServiceClass = "";
+		configURL = "";
+		pageHeader = "";
     }
     
-    public PluginEntity(String name, String title, String configStructure,
+	@Override
+	public void load(Entity entity) {
+		super.load(entity);
+		name = getStringProperty(entity, "name");
+		title = getStringProperty(entity, "title");
+		description = getStringProperty(entity, "description");
+		website = getStringProperty(entity, "website");
+		configStructure = getTextProperty(entity, "configStructure");
+		configData = getTextProperty(entity, "configData");
+		velocityPluginClass = getStringProperty(entity, "velocityPluginClass");
+		frontServiceClass = getStringProperty(entity, "frontServiceClass");
+		backServiceClass = getStringProperty(entity, "backServiceClass");
+		configURL = getStringProperty(entity, "configURL");
+		pageHeader = getTextProperty(entity, "pageHeader");
+	}
+	
+	@Override
+	public void save(Entity entity) {
+		super.save(entity);
+		entity.setProperty("name", name);
+		entity.setProperty("title", title);
+		entity.setProperty("description", description);
+		entity.setProperty("website", website);
+		entity.setProperty("configStructure", new Text(configStructure));
+		entity.setProperty("configData", new Text(configData));
+		entity.setProperty("velocityPluginClass", velocityPluginClass);
+		entity.setProperty("frontServiceClass", frontServiceClass);
+		entity.setProperty("backServiceClass", backServiceClass);
+		entity.setProperty("configURL", configURL);
+		entity.setProperty("pageHeader", new Text(pageHeader));
+	}
+
+	public PluginEntity(String name, String title, String configStructure,
     		String configData) {
 		this();
 		this.name = name;
 		this.title = title;
 		setConfigStructure(configStructure);
 		setConfigData(configData);
-	}
-
-    @Override
-	public Object getEntityId() {
-		return id;
-	}
-    
-    public void copy(PluginEntity entity) {
-    	setConfigData(entity.getConfigData());
-    	setConfigStructure(entity.getConfigStructure());
-    	setDescription(entity.getDescription());
-    	setName(entity.getName());
-    	setTitle(entity.getTitle());
-    	setWebsite(entity.getWebsite());
-    	setVelocityPluginClass(entity.getVelocityPluginClass());
-    	setFrontServiceClass(entity.getFrontServiceClass());
-    	setBackServiceClass(entity.getBackServiceClass());
-    	setConfigURL(entity.getConfigURL());
-    	setPageHeader(entity.getPageHeader());
-    }
-    
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public boolean equals(Object object) {
-		if (object instanceof PluginEntity) {
-			PluginEntity entity = (PluginEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	public String getName() {
@@ -144,19 +114,19 @@ public class PluginEntity implements BaseEntity {
 	}
 
 	public String getConfigStructure() {
-		return configStructure == null ? null : configStructure.getValue();
+		return configStructure;
 	}
 
 	public void setConfigStructure(String configStructure) {
-		this.configStructure = new Text(configStructure);
+		this.configStructure = configStructure;
 	}
 
 	public String getConfigData() {
-		return configData == null ? null : configData.getValue();
+		return configData;
 	}
 
 	public void setConfigData(String configData) {
-		this.configData = new Text(configData);
+		this.configData = configData;
 	}
 
 	public String getDescription() {
@@ -220,11 +190,11 @@ public class PluginEntity implements BaseEntity {
 	}
 
 	public String getPageHeader() {
-		return pageHeader == null ? null : pageHeader.getValue();
+		return pageHeader;
 	}
 
 	public void setPageHeader(String pageHeader) {
-		this.pageHeader = new Text(pageHeader);
+		this.pageHeader = pageHeader;
 	}
 	
 }

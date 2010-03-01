@@ -22,12 +22,13 @@
 package org.vosao.dao.impl;
 
 import org.vosao.dao.PluginResourceDao;
-import org.vosao.entity.PageEntity;
 import org.vosao.entity.PluginResourceEntity;
 
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+
 public class PluginResourceDaoImpl extends 
-		BaseDaoImpl<String, PluginResourceEntity> 
-		implements PluginResourceDao {
+		BaseNativeDaoImpl<PluginResourceEntity> implements PluginResourceDao {
 
 	public PluginResourceDaoImpl() {
 		super(PluginResourceEntity.class);
@@ -35,10 +36,9 @@ public class PluginResourceDaoImpl extends
 
 	@Override
 	public PluginResourceEntity getByUrl(String url) {
-		String query = "select from " + PluginResourceEntity.class.getName()
-			+ " where url == pUrl" 
-			+ " parameters String pUrl";
-		return selectOne(query, params(url));
+		Query q = newQuery();
+		q.addFilter("url", FilterOperator.EQUAL, url);
+		return selectOne(q, "getByUrl", params(url));
 	}
 
 }

@@ -52,7 +52,7 @@ public class PluginServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public ServiceResponse remove(String id) {
+	public ServiceResponse remove(Long id) {
 		try {
 			PluginEntity plugin = getDao().getPluginDao().getById(id);
 			if (plugin != null) {
@@ -71,7 +71,7 @@ public class PluginServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public List<PluginPropertyVO> getProperties(String pluginId) {
+	public List<PluginPropertyVO> getProperties(Long pluginId) {
 		PluginEntity plugin = getDao().getPluginDao().getById(pluginId);
 		if (plugin == null) {
 			return Collections.EMPTY_LIST;
@@ -80,7 +80,7 @@ public class PluginServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public PluginEntity getById(String pluginId) {
+	public PluginEntity getById(Long pluginId) {
 		return getDao().getPluginDao().getById(pluginId);
 	}
 
@@ -90,7 +90,7 @@ public class PluginServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public ServiceResponse savePluginConfig(String pluginId, String xml) {
+	public ServiceResponse savePluginConfig(Long pluginId, String xml) {
 		PluginEntity plugin = getById(pluginId);
 		if (plugin != null) {
 			plugin.setConfigData(xml);

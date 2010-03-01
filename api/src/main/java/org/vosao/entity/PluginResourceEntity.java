@@ -21,65 +21,45 @@
 
 package org.vosao.entity;
 
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
 import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.datastore.Entity;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class PluginResourceEntity implements BaseEntity {
+public class PluginResourceEntity extends BaseNativeEntityImpl {
 	
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
-
-	@Persistent(serialized = "true", defaultFetchGroup = "true")
-	private Blob data;
-
-	@Persistent
+	private byte[] data;
 	private String url;
-	
 	
     public PluginResourceEntity() {
     }
+
+    @Override
+    public void load(Entity entity) {
+    	super.load(entity);
+    	data = getBlobProperty(entity, "data");
+    	url = getStringProperty(entity, "url");
+    }
     
+    @Override
+    public void save(Entity entity) {
+    	super.save(entity);
+    	entity.setProperty("data", new Blob(data));
+    	entity.setProperty("url", url);
+    }
+
     public PluginResourceEntity(String fileId, byte[] content) {
 		this();
 		this.url = fileId;
-		this.data = new Blob(content);
+		this.data = content;
 	}
 
-    @Override
-	public Object getEntityId() {
-		return id;
-	}
-    
-    public void copy(PluginResourceEntity entity) {
-    	setContent(entity.getContent());
-    	setUrl(entity.getUrl());
-    }
-    
 	public byte[] getContent() {
-		return data.getBytes();
+		return data;
 	}
 	
 	public void setContent(byte[] content) {
-		this.data = new Blob(content);
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
+		this.data = content;
 	}
 
 	public String getUrl() {
@@ -88,19 +68,6 @@ public class PluginResourceEntity implements BaseEntity {
 
 	public void setUrl(String fileId) {
 		this.url = fileId;
-	}
-	
-	public boolean equals(Object object) {
-		if (object instanceof PluginResourceEntity) {
-			PluginResourceEntity entity = (PluginResourceEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
 	}
 	
 }

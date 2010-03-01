@@ -21,11 +21,13 @@
 
 package org.vosao.dao.impl;
 
-import org.vosao.dao.DaoFilter;
 import org.vosao.dao.PluginDao;
 import org.vosao.entity.PluginEntity;
 
-public class PluginDaoImpl extends BaseDaoImpl<String, PluginEntity> 
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+
+public class PluginDaoImpl extends BaseNativeDaoImpl<PluginEntity> 
 		implements PluginDao {
 
 	public PluginDaoImpl() {
@@ -34,12 +36,9 @@ public class PluginDaoImpl extends BaseDaoImpl<String, PluginEntity>
 
 	@Override
 	public PluginEntity getByName(final String name) {
-		return selectOne(new DaoFilter<PluginEntity>() {
-			@Override
-			public boolean inResult(PluginEntity entity) {
-				return entity.getName().equals(name);
-			}		
-		});
+		Query q = newQuery();
+		q.addFilter("name", FilterOperator.EQUAL, name);
+		return selectOne(q, "getByName", params(name));
 	}
 	
 }

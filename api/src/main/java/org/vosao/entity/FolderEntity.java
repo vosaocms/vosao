@@ -30,64 +30,51 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.google.appengine.api.datastore.Entity;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class FolderEntity implements BaseEntity {
+public class FolderEntity extends BaseNativeEntityImpl {
 
-	private static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 4L;
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
-	
-	@Persistent
 	private String title;
-
-	@Persistent
 	private String name;
-
-	@Persistent
-	private String parent;
+	private Long parentId;
 	
 	public FolderEntity() {
 	}
 	
+	@Override
+	public void load(Entity entity) {
+		super.load(entity);
+		title = getStringProperty(entity, "title");
+		name = getStringProperty(entity, "name");
+		parentId = getLongProperty(entity, "parentId");
+	}
+	
+	@Override
+	public void save(Entity entity) {
+		super.save(entity);
+		entity.setProperty("title", title);
+		entity.setProperty("name", name);
+		entity.setProperty("parentId", parentId);
+	}
+
 	public FolderEntity(String aName) {
 		this();
 		name = aName;
 		title = aName;
 	}
 	
-	public FolderEntity(String aName, String aParent) {
+	public FolderEntity(String aName, Long aParent) {
 		this(aName);
-		parent = aParent;
+		parentId = aParent;
 	}
 
-	public FolderEntity(String aTitle, String aName, String aParent) {
+	public FolderEntity(String aTitle, String aName, Long aParent) {
 		this(aName, aParent);
 		title = aTitle;
 	}
 
-	@Override
-	public Object getEntityId() {
-		return id;
-	}
-	
-	public void copy(final FolderEntity entity) {
-		setName(entity.getName());
-		setTitle(entity.getTitle());
-		setParent(entity.getParent());
-	}
-	
-	public String getId() {
-		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
-	}
-	
 	public String getName() {
 		return name;
 	}
@@ -96,12 +83,12 @@ public class FolderEntity implements BaseEntity {
 		this.name = name;
 	}
 
-	public String getParent() {
-		return parent;
+	public Long getParent() {
+		return parentId;
 	}
 
-	public void setParent(String parent) {
-		this.parent = parent;
+	public void setParent(Long parent) {
+		this.parentId = parent;
 	}
 
 	public String getTitle() {
@@ -112,21 +99,8 @@ public class FolderEntity implements BaseEntity {
 		this.title = title;
 	}
 
-	public boolean equals(Object object) {
-		if (object instanceof FolderEntity) {
-			FolderEntity entity = (FolderEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	public boolean isRoot() {
-		return parent == null;
+		return parentId == null;
 	}
 	
 }

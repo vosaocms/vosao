@@ -349,7 +349,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		}
 		TreeItemDecorator<FolderEntity> root = business.getFolderBusiness()
 				.getTree();
-		List<String> folderIds = new ArrayList<String>();
+		List<Long> folderIds = new ArrayList<Long>();
 		for (String id : removeIds) {
 			PageEntity page = getDao().getPageDao().getById(id);
 			TreeItemDecorator<FolderEntity> folder = business.getFolderBusiness()

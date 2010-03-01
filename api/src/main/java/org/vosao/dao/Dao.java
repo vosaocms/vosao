@@ -40,6 +40,9 @@ public interface Dao {
 	FileDao getFileDao();
 	void setFileDao(final FileDao fileDao);
 
+	FileChunkDao getFileChunkDao();
+	void setFileChunkDao(final FileChunkDao fileChunkDao);
+
 	FolderDao getFolderDao();
 	void setFolderDao(final FolderDao folderDao);
 

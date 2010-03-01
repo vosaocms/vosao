@@ -156,7 +156,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 				throw new UploadException("Folder parameter was not specified");
 			}
 			return processResourceFileJSON(fileItem, data, 
-					getFolder(parameters.get(FOLDER_PARAM)));
+					getFolder(Long.valueOf(parameters.get(FOLDER_PARAM))));
 		}
 		if (fileType.equals(FILE_TYPE_IMPORT)) {
 			return processImportFile(fileItem, data);
@@ -171,7 +171,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 	private String processResourceFileJSON(FileItemStream imageItem, byte[] data, 
 			FolderEntity folder) throws UploadException {
 		FileEntity file = processResourceFile(imageItem, data, folder);
-		String message = createMessage("success", file.getId());
+		String message = createMessage("success", file.getId().toString());
 		return message;
 	}
 	
@@ -208,7 +208,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 		return file;
 	}
 
-	private FolderEntity getFolder(final String folderId)
+	private FolderEntity getFolder(final Long folderId)
 			throws UploadException {
 		
 		log.debug("getFolder " + folderId);

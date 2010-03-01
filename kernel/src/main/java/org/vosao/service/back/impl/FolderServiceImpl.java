@@ -35,6 +35,7 @@ import org.vosao.service.back.FolderService;
 import org.vosao.service.back.GroupService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.FolderRequestVO;
+import org.vosao.utils.StrUtil;
 
 /**
  * @author Alexander Oleynik
@@ -52,7 +53,7 @@ public class FolderServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public String getFolderPath(final String folderId) {
+	public String getFolderPath(final Long folderId) {
 		FolderEntity folder = getDao().getFolderDao().getById(folderId);
 		if (folder != null) {
 			return getBusiness().getFolderBusiness().getFolderPath(folder);
@@ -61,15 +62,12 @@ public class FolderServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public FolderEntity getFolder(String id) {
-		if (StringUtils.isEmpty(id)) {
-			return null;
-		}
+	public FolderEntity getFolder(Long id) {
 		return getBusiness().getFolderBusiness().getById(id);
 	}
 
 	@Override
-	public List<FolderEntity> getByParent(String id) {
+	public List<FolderEntity> getByParent(Long id) {
 		return getBusiness().getFolderBusiness().getByParent(id);
 	}
 
@@ -77,19 +75,19 @@ public class FolderServiceImpl extends AbstractServiceImpl
 	public ServiceResponse saveFolder(Map<String, String> vo) {
 		FolderEntity folder = null;
 		if (!StringUtils.isEmpty(vo.get("id"))) {
-			folder = getDao().getFolderDao().getById(vo.get("id"));
+			folder = getDao().getFolderDao().getById(Long.valueOf(vo.get("id")));
 		}
 		if (folder == null) {
 			folder = new FolderEntity();
 		}
 		folder.setName(vo.get("name"));
 		folder.setTitle(vo.get("title"));
-		folder.setParent(vo.get("parent"));
+		folder.setParent(Long.valueOf(vo.get("parent")));
 		List<String> errors = getBusiness().getFolderBusiness()
 			.validateBeforeUpdate(folder);
 		if (errors.isEmpty()) {
 			getDao().getFolderDao().save(folder);
-			return ServiceResponse.createSuccessResponse(folder.getId());
+			return ServiceResponse.createSuccessResponse(folder.getId().toString());
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
@@ -99,17 +97,16 @@ public class FolderServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse deleteFolder(List<String> ids) {
-		getBusiness().getFolderBusiness().recursiveRemove(ids);
+		getBusiness().getFolderBusiness().recursiveRemove(StrUtil.toLong(ids));
 		return ServiceResponse.createSuccessResponse(
 				"Folders were successsfully deleted.");
 	}
 
 	@Override
-	public FolderRequestVO getFolderRequest(String folderId, 
-			String folderParentId) {
+	public FolderRequestVO getFolderRequest(Long folderId, Long folderParentId) {
 		FolderRequestVO result = new FolderRequestVO();
 		result.setFolder(getFolder(folderId));
-		String permFolderId = folderParentId;
+		Long permFolderId = folderParentId;
 		if (result.getFolder() != null) {
 			result.setChildren(getByParent(folderId));
 			result.setFiles(getFileService().getByFolder(folderId));

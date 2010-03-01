@@ -32,15 +32,15 @@ import org.vosao.service.vo.FileVO;
 
 public interface FileService extends AbstractService {
 	
-	List<FileEntity> getByFolder(final String folderId);
+	List<FileEntity> getByFolder(final Long folderId);
 
 	ServiceResponse deleteFiles(final List<String> fileIds);
 	
-	String getFilePath(final String fileId);
+	String getFilePath(final Long fileId);
 
-	ServiceResponse updateContent(final String fileId, final String content);
+	ServiceResponse updateContent(final Long fileId, final String content);
 
-	FileVO getFile(final String id);
+	FileVO getFile(final Long id);
 	
 	ServiceResponse saveFile(final Map<String, String> vo);
 }

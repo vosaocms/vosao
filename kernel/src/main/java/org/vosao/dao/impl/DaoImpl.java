@@ -29,6 +29,7 @@ import org.vosao.dao.ContentDao;
 import org.vosao.dao.ContentPermissionDao;
 import org.vosao.dao.Dao;
 import org.vosao.dao.FieldDao;
+import org.vosao.dao.FileChunkDao;
 import org.vosao.dao.FileDao;
 import org.vosao.dao.FolderDao;
 import org.vosao.dao.FolderPermissionDao;
@@ -56,6 +57,7 @@ public class DaoImpl implements Dao, Serializable {
 	
 	private PageDao pageDao;
 	private FileDao fileDao;
+	private FileChunkDao fileChunkDao;
 	private FolderDao folderDao;
 	private UserDao userDao;
 	private TemplateDao templateDao;
@@ -289,5 +291,15 @@ public class DaoImpl implements Dao, Serializable {
 	
 	public void setPluginResourceDao(PluginResourceDao value) {
 		this.pluginResourceDao = value;
+	}
+
+	@Override
+	public FileChunkDao getFileChunkDao() {
+		return fileChunkDao;
+	}
+
+	@Override
+	public void setFileChunkDao(FileChunkDao bean) {
+		fileChunkDao = bean;
 	}
 }

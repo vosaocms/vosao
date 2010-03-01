@@ -32,7 +32,7 @@ public class FolderTool {
 		dao = aDao;
 	}
 	
-	public FolderEntity addFolder(final String name, final String parent) {
+	public FolderEntity addFolder(final String name, final Long parent) {
 		return dao.getFolderDao().save(new FolderEntity(name, parent));
 	}
 

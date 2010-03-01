@@ -32,24 +32,24 @@ public class FolderPermissionEntity extends BaseNativeEntityImpl {
 
 	private static final long serialVersionUID = 3L;
 
-	private String folderId;
+	private Long folderId;
 	private FolderPermissionType permission;
     private Long groupId;
 	
 	public FolderPermissionEntity() {
 	}
 	
-	public FolderPermissionEntity(String aFolderId) {
+	public FolderPermissionEntity(Long aFolderId) {
 		this();
 		folderId = aFolderId;
 	}
 	
-	public FolderPermissionEntity(String aFolderId, FolderPermissionType perm) {
+	public FolderPermissionEntity(Long aFolderId, FolderPermissionType perm) {
 		this(aFolderId);
 		permission = perm;
 	}
 
-	public FolderPermissionEntity(String aFolderId, FolderPermissionType perm,
+	public FolderPermissionEntity(Long aFolderId, FolderPermissionType perm,
 			Long aGroupId) {
 		this(aFolderId, perm);
 		groupId = aGroupId;
@@ -58,10 +58,10 @@ public class FolderPermissionEntity extends BaseNativeEntityImpl {
 	@Override
 	public void load(Entity entity) {
 		super.load(entity);
-		folderId = getStringProperty(entity, "folderId");
+		folderId = getLongProperty(entity, "folderId");
 		permission = FolderPermissionType.valueOf(getStringProperty(entity, 
 				"permission"));
-		groupId = getLongProperty(entity, "groupId", 0);
+		groupId = getLongProperty(entity, "groupId");
 	}
 	
 	@Override
@@ -72,11 +72,11 @@ public class FolderPermissionEntity extends BaseNativeEntityImpl {
 		entity.setProperty("groupId", groupId);
 	}
 
-	public String getFolderId() {
+	public Long getFolderId() {
 		return folderId;
 	}
 
-	public void setFolderId(String aFolderId) {
+	public void setFolderId(Long aFolderId) {
 		this.folderId = aFolderId;
 	}
 

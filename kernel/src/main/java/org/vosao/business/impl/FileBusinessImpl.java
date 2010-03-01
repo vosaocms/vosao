@@ -53,10 +53,9 @@ public class FileBusinessImpl extends AbstractBusinessImpl
 		else {
 			FileEntity file = getDao().getFileDao().getByName(
 					entity.getFolderId(), entity.getFilename());
-			if ((StringUtils.isEmpty(entity.getId()) && file != null)
+			if ((entity.isNew() && file != null)
 				||
-				(!StringUtils.isEmpty(entity.getId()) 
-				 && !file.getId().equals(entity.getId())) ) {
+				(!entity.isNew()) && !file.getId().equals(entity.getId()) ) {
 				errors.add("File with such name already exists in this folder");
 			}
 		}

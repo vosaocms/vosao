@@ -40,8 +40,8 @@ public interface FolderPermissionService extends AbstractService {
 	
 	ServiceResponse save(final Map<String, String> vo); 
 	
-	List<FolderPermissionVO> selectByFolder(final String folderId);
+	List<FolderPermissionVO> selectByFolder(final Long folderId);
 
-	FolderPermissionEntity getPermission(final String folderId);
+	FolderPermissionEntity getPermission(final Long folderId);
 	
 }

@@ -23,19 +23,17 @@ package org.vosao.dao;
 
 import java.util.List;
 
-import org.vosao.entity.FolderEntity;
+import org.vosao.entity.FileChunkEntity;
+import org.vosao.entity.FileEntity;
 
-/**
- * @author Alexander Oleynik
- */
-public interface FolderDao extends BaseNativeDao<FolderEntity> {
+public interface FileChunkDao extends BaseNativeDao<FileChunkEntity> {
 
-	FolderEntity getByPath(final String path);
-
-	String getFolderPath(final Long folderId);
-
-	List<FolderEntity> getByParent(final Long id);
-
-	FolderEntity getByParentName(final Long parentid, final String name);
+	void save(final FileEntity file, byte[] content);
 	
+	byte[] getFileContent(final FileEntity file);
+	
+	void removeByFile(final Long fileId);
+	
+	List<FileChunkEntity> createChunks(FileEntity file, byte[] content);
+
 }

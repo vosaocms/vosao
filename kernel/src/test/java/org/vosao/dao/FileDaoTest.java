@@ -61,6 +61,9 @@ public class FileDaoTest extends AbstractDaoTest {
 		assertEquals(1, files.size());
 		FileEntity file1 = files.get(0);
 		assertEquals("title", file1.getTitle());
+		assertEquals(12, file1.getSize());
+		assertEquals("file content", 
+				new String(getDao().getFileDao().getFileContent(file1)));
 	}	
 	
 	public void testGetById() {
@@ -127,7 +130,7 @@ public class FileDaoTest extends AbstractDaoTest {
 		folder = getDao().getFolderDao().getById(folder.getId());
 		List<FileEntity> list = getDao().getFileDao().getByFolder(folder.getId());
 		assertEquals(2, list.size());
-		String id = null;
+		Long id = null;
 		getDao().getFileDao().remove(id);
 
 	}
@@ -163,13 +166,13 @@ public class FileDaoTest extends AbstractDaoTest {
 		Arrays.fill(content, (byte)123);
 		FileEntity file = new FileEntity("title1", "test.bat1", folder.getId(),
 				"text/plain", new Date(), content.length);
-		List<FileChunkEntity> list = getDao().getFileDao().createChunks(file, 
+		List<FileChunkEntity> list = getDao().getFileChunkDao().createChunks(file, 
 				content);
 		assertNotNull(list);
 		assertEquals(1, list.size());
 		content = new byte[1200000];
 		Arrays.fill(content, (byte)100);
-		list = getDao().getFileDao().createChunks(file, content);
+		list = getDao().getFileChunkDao().createChunks(file, content);
 		assertNotNull(list);
 		assertEquals(2, list.size());
 		getDao().getFileDao().save(file, content);
@@ -185,7 +188,7 @@ public class FileDaoTest extends AbstractDaoTest {
 				"file content2".getBytes(),	folder);
 		FileEntity t3 = fileTool.addFile("title3", "test.bat3", "text/plain", 
 				"file content3".getBytes(),	folder);
-		List<String> ids = new ArrayList<String>();
+		List<Long> ids = new ArrayList<Long>();
 		ids.add(t1.getId());
 		ids.add(t2.getId());
 		getDao().getFileDao().remove(ids);
@@ -207,27 +210,6 @@ public class FileDaoTest extends AbstractDaoTest {
 		list = getDao().getFileDao().select();
 		assertEquals(0, list.size());
 	}	
-
-	public void testBlob() {
-		FolderEntity folder = folderTool.addFolder("test");
-		FileEntity file = fileTool.addFile("title", "test.bat", "text/plain", 
-				"file content".getBytes(), folder);
-		Query q = new Query("FileChunkEntity");
-		q.addFilter("fileId", FilterOperator.EQUAL, file.getId());
-		Entity e = getSystemService().getDatastore().prepare(q).asSingleEntity();
-		assertNotNull(e);
-		byte[] data = ((Blob)e.getProperty("data")).getBytes();
-		data = ((Blob)StreamUtil.toObject(data)).getBytes();
-		try {
-			String text = new String(data, "UTF-8");
-			assertEquals("file content", text);
-		}
-		catch (UnsupportedEncodingException ex) {
-			ex.printStackTrace();
-		}
-		
-	}
-	
 
 	
 }

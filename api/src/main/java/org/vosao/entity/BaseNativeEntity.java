@@ -19,4 +19,5 @@ public interface BaseNativeEntity extends Serializable {
 	
 	void load(Entity entity);
 	
+	boolean isNew();
 }

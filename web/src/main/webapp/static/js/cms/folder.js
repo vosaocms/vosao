@@ -295,8 +295,8 @@ function loadPermissions(r) {
 		var editLink = value.group.name;
 		if (!value.inherited) {
 			checkbox = '<input type="checkbox" value="' + value.id + '">';
-			editLink = '<a href="#" onclick="onPermissionEdit(\'' + value.id 
-				+ '\')"> ' + value.group.name + '</a>';
+			editLink = '<a href="#" onclick="onPermissionEdit(' + value.id 
+				+ ')"> ' + value.group.name + '</a>';
 		}
 		h += '<tr><td>' + checkbox + '</td><td>' + editLink + '</td><td>'
 			+ getPermissionName(value.permission) + '</td></tr>';

@@ -43,14 +43,14 @@ public class FolderPermissionDaoImpl
 	}
 
 	@Override
-	public List<FolderPermissionEntity> selectByFolder(final String folderId) {
+	public List<FolderPermissionEntity> selectByFolder(final Long folderId) {
 		Query q = newQuery();
 		q.addFilter("folderId", EQUAL, folderId);
 		return select(q, "selectByFolder", params(folderId));
 	}
 
 	@Override
-	public FolderPermissionEntity getByFolderGroup(final String folderId, 
+	public FolderPermissionEntity getByFolderGroup(final Long folderId, 
 			final Long groupId) {
 		Query q = newQuery();
 		q.addFilter("folderId", EQUAL, folderId);

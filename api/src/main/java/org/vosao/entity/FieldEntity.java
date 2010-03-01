@@ -89,7 +89,7 @@ public class FieldEntity extends BaseNativeEntityImpl {
 	@Override
 	public void load(Entity entity) {
 		super.load(entity);
-		formId = getLongProperty(entity, "formId", 0);
+		formId = getLongProperty(entity, "formId");
 		name = getStringProperty(entity, "name");
 		title = getStringProperty(entity, "title");
 		fieldType = FieldType.valueOf(getStringProperty(entity, "fieldType"));

@@ -34,7 +34,7 @@ import org.vosao.enums.UserRole;
 
 public class FolderBusinessTest extends AbstractBusinessTest {
 
-	private FolderEntity addFolder(final String name, final String parent) {
+	private FolderEntity addFolder(final String name, final Long parent) {
 		FolderEntity Folder = new FolderEntity(name, parent);
 		getDao().getFolderDao().save(Folder);
 		return Folder;

@@ -33,42 +33,48 @@ import javax.jdo.annotations.PrimaryKey;
 
 import org.vosao.utils.FolderUtil;
 
+import com.google.appengine.api.datastore.Entity;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class FileEntity implements BaseEntity {
+public class FileEntity extends BaseNativeEntityImpl {
 
-	private static final long serialVersionUID = 4L;
+	private static final long serialVersionUID = 5L;
 
 	private static final String[] IMAGE_EXTENSIONS = {"jpg","jpeg","png","ico",
 	"gif"};
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
-	
-	@Persistent
 	private String title;
-	
-	@Persistent
 	private String filename;	
-
-	@Persistent
-	private String folderId;	
-
-	@Persistent
+	private Long folderId;	
 	private String mimeType;
-    
-	@Persistent
 	private Date lastModifiedTime;
-	
-	@Persistent
-	private int size;
+	private Integer size;
 
 	public FileEntity() {
 	}
 	
-	public FileEntity(String aTitle, String aName, String aFolderId,
+	@Override
+	public void load(Entity entity) {
+		super.load(entity);
+		title = getStringProperty(entity, "title");
+		filename = getStringProperty(entity, "filename");
+		folderId = getLongProperty(entity, "folderId");
+		mimeType = getStringProperty(entity, "mimeType");
+		lastModifiedTime = getDateProperty(entity, "lastModifiedTime");
+		size = getIntegerProperty(entity, "size", 0);
+	}
+	
+	@Override
+	public void save(Entity entity) {
+		super.save(entity);
+		entity.setProperty("title", title);
+		entity.setProperty("filename", filename);
+		entity.setProperty("folderId", folderId);
+		entity.setProperty("mimeType", mimeType);
+		entity.setProperty("lastModifiedTime", lastModifiedTime);
+		entity.setProperty("size", size);
+	}
+
+	public FileEntity(String aTitle, String aName, Long aFolderId,
 			String aMimeType, Date aMdttime, int aSize) {
 		this();
 		title = aTitle;
@@ -79,28 +85,6 @@ public class FileEntity implements BaseEntity {
 		size = aSize;
 	}
 	
-	@Override
-	public Object getEntityId() {
-		return id;
-	}
-
-	public void copy(final FileEntity entity) {
-		setTitle(entity.getTitle());
-		setFilename(entity.getFilename());
-		setFolderId(entity.getFolderId());
-		setLastModifiedTime(entity.getLastModifiedTime());
-		setMimeType(entity.getMimeType());
-		setSize(entity.getSize());
-	}
-	
-	public String getId() {
-		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
-	}
-	
 	public String getTitle() {
 		return title;
 	}
@@ -109,11 +93,11 @@ public class FileEntity implements BaseEntity {
 		this.title = title;
 	}
 
-	public String getFolderId() {
+	public Long getFolderId() {
 		return folderId;
 	}
 
-	public void setFolderId(String folderId) {
+	public void setFolderId(Long folderId) {
 		this.folderId = folderId;
 	}
 
@@ -152,19 +136,6 @@ public class FileEntity implements BaseEntity {
 	public boolean isImage() {
 		for (String ext : IMAGE_EXTENSIONS) {
 			if (FolderUtil.getFileExt(getFilename()).equals(ext)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public boolean equals(Object object) {
-		if (object instanceof FileEntity) {
-			FileEntity entity = (FileEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
 				return true;
 			}
 		}

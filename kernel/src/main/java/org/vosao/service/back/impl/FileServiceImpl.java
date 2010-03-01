@@ -31,13 +31,13 @@ import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
-import org.vosao.entity.PageEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.FileService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.FileVO;
 import org.vosao.utils.FolderUtil;
 import org.vosao.utils.MimeType;
+import org.vosao.utils.StrUtil;
 
 public class FileServiceImpl extends AbstractServiceImpl 
 		implements FileService {
@@ -45,18 +45,18 @@ public class FileServiceImpl extends AbstractServiceImpl
 	private static Log logger = LogFactory.getLog(FileServiceImpl.class);
 
 	@Override
-	public List<FileEntity> getByFolder(String folderId) {
+	public List<FileEntity> getByFolder(Long folderId) {
 		return getDao().getFileDao().getByFolder(folderId);
 	}
 
 	@Override
 	public ServiceResponse deleteFiles(List<String> fileIds) {
-		getDao().getFileDao().remove(fileIds);
+		getDao().getFileDao().remove(StrUtil.toLong(fileIds));
 		return new ServiceResponse("success", "Files was successfully deleted.");
 	}
 
 	@Override
-	public String getFilePath(String fileId) {
+	public String getFilePath(Long fileId) {
 		FileEntity file = getDao().getFileDao().getById(fileId);
 		if (file != null) {
 			FolderEntity folder = getDao().getFolderDao().getById(
@@ -68,7 +68,7 @@ public class FileServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public ServiceResponse updateContent(String fileId, String content) {
+	public ServiceResponse updateContent(Long fileId, String content) {
 		FileEntity file = getDao().getFileDao().getById(fileId);
 		if (file != null) {
 			try {
@@ -92,11 +92,8 @@ public class FileServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public FileVO getFile(String id) {
+	public FileVO getFile(Long id) {
 		try {
-			if (StringUtils.isEmpty(id)) {
-				return null;
-			}
 			FileEntity file = getDao().getFileDao().getById(id);
 			FileVO vo = new FileVO(file);
 			FolderEntity folder = getDao().getFolderDao().getById(file
@@ -121,14 +118,14 @@ public class FileServiceImpl extends AbstractServiceImpl
 	public ServiceResponse saveFile(Map<String, String> vo) {
 		FileEntity file = null;
 		if (!StringUtils.isEmpty(vo.get("id"))) {
-			file = getDao().getFileDao().getById(vo.get("id"));
+			file = getDao().getFileDao().getById(Long.valueOf(vo.get("id")));
 		}
 		if (file == null) {
 			file = new FileEntity();
 		}
 		file.setFilename(vo.get("name"));
 		file.setTitle(vo.get("title"));
-		file.setFolderId(vo.get("folderId"));
+		file.setFolderId(Long.valueOf(vo.get("folderId")));
 		file.setLastModifiedTime(new Date());
 		List<String> errors = getBusiness().getFileBusiness()
 			.validateBeforeUpdate(file);

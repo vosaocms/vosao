@@ -55,7 +55,7 @@ public class FileVO {
 		return file.getMimeType();
 	}
 
-	public String getFolderId() {
+	public Long getFolderId() {
 		return file.getFolderId();
 	}
 	

@@ -45,8 +45,8 @@ public class UserGroupEntity extends BaseNativeEntityImpl {
 	@Override
 	public void load(Entity entity) {
 		super.load(entity);
-		groupId = getLongProperty(entity, "groupId", 0);
-		userId = getLongProperty(entity, "userId", 0);
+		groupId = getLongProperty(entity, "groupId");
+		userId = getLongProperty(entity, "userId");
 	}
 	
 	@Override

@@ -21,72 +21,40 @@
 
 package org.vosao.entity;
 
-import java.io.Serializable;
+import com.google.appengine.api.datastore.Entity;
 
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
+public class LanguageEntity extends BaseNativeEntityImpl {
 
-
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class LanguageEntity implements BaseEntity {
-
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
 	public static final String ENGLISH_CODE = "en";
 	public static final String ENGLISH_TITLE = "English";
 	
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
-	
-	@Persistent
 	private String code;
-
-	@Persistent
 	private String title;
 
 	public LanguageEntity() {
-	}
-	
-	public LanguageEntity(final String code, final String title) {
-		this.code = code;
-		this.title = title;
+		code = "";
+		title = "";
 	}
 
 	@Override
-	public Object getEntityId() {
-		return id;
-	}
-
-	public void copy(final LanguageEntity entity) {
-		setCode(entity.getCode());
-		setTitle(entity.getTitle());
+	public void load(Entity entity) {
+		super.load(entity);
+		code = getStringProperty(entity, "code");
+		title = getStringProperty(entity, "title");
 	}
 	
-	public String getId() {
-		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
+	@Override
+	public void save(Entity entity) {
+		super.save(entity);
+		entity.setProperty("code", code);
+		entity.setProperty("title", title);
 	}
 
-	public boolean equals(Object object) {
-		if (object instanceof LanguageEntity) {
-			LanguageEntity entity = (LanguageEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
+	public LanguageEntity(final String code, final String title) {
+		this.code = code;
+		this.title = title;
 	}
 
 	public String getCode() {

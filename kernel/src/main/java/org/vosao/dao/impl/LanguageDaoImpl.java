@@ -24,7 +24,10 @@ package org.vosao.dao.impl;
 import org.vosao.dao.LanguageDao;
 import org.vosao.entity.LanguageEntity;
 
-public class LanguageDaoImpl extends BaseDaoImpl<String, LanguageEntity> 
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+
+public class LanguageDaoImpl extends BaseNativeDaoImpl<LanguageEntity> 
 		implements LanguageDao {
 
 	public LanguageDaoImpl() {
@@ -32,9 +35,9 @@ public class LanguageDaoImpl extends BaseDaoImpl<String, LanguageEntity>
 	}
 
 	public LanguageEntity getByCode(final String code) {
-		String query = "select from " + LanguageEntity.class.getName() 
-					+ " where code == pCode parameters String pCode";
-		return selectOne(query, params(code));
+		Query q = newQuery();
+		q.addFilter("code", FilterOperator.EQUAL, code);
+		return selectOne(q, "getByCode", params(code));
 	}
 
 }

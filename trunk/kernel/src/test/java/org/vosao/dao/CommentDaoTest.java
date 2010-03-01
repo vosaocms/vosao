@@ -47,7 +47,7 @@ public class CommentDaoTest extends AbstractDaoTest {
 		CommentEntity comment = commentTool.addComment("alex", "content", page);
 		CommentEntity comment2 = getDao().getCommentDao().getById(null);
 		assertNull(comment2);
-		comment2 = getDao().getCommentDao().getById("wrong id");
+		comment2 = getDao().getCommentDao().getById(0L);
 		assertNull(comment2);
 		comment2 = getDao().getCommentDao().getById(
 				comment.getId());
@@ -132,7 +132,7 @@ public class CommentDaoTest extends AbstractDaoTest {
 		CommentEntity roma = commentTool.addComment("roma", "content3", page);
 		CommentEntity roma1 = commentTool.addComment("roma1", "content4", page);
 		CommentEntity roma3 = commentTool.addComment("roma3", "content6", page);
-		List<String> ids = new ArrayList<String>();
+		List<Long> ids = new ArrayList<Long>();
 		ids.add(null);
 		ids.add(alex.getId());
 		ids.add(roma.getId());

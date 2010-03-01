@@ -125,7 +125,7 @@ public class PluginLoader {
 					getDao().getPluginResourceDao().save(res);
 					getBusiness().getPluginResourceBusiness()
 						.updateResourceCache(res);
-					resourceList.add(res.getId());
+					resourceList.add(res.getId().toString());
 				}
 				if (!url.startsWith("WEB-INF")) {
 					fileCacheList.add(filePrefix + item.path);
@@ -249,13 +249,13 @@ public class PluginLoader {
 		if (listResource == null) {
 			return;
 		}
-		List<String> ids = new ArrayList<String>();
+		List<Long> ids = new ArrayList<Long>();
 		ids.add(listResource.getId());
 		try {
 			String list = new String(listResource.getContent(), "UTF-8");
 			String[] resources = list.split(",");
 			for (String id : resources) {
-				ids.add(id);
+				ids.add(Long.valueOf(id));
 			}
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();

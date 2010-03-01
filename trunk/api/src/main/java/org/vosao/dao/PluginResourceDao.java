@@ -26,7 +26,7 @@ import org.vosao.entity.PluginResourceEntity;
 /**
  * @author Alexander Oleynik
  */
-public interface PluginResourceDao extends BaseDao<String, PluginResourceEntity> {
+public interface PluginResourceDao extends BaseNativeDao<PluginResourceEntity> {
 
 	PluginResourceEntity getByUrl(String name);
 	

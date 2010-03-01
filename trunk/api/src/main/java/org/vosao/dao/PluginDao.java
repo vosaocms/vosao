@@ -26,7 +26,7 @@ import org.vosao.entity.PluginEntity;
 /**
  * @author Alexander Oleynik
  */
-public interface PluginDao extends BaseDao<String, PluginEntity> {
+public interface PluginDao extends BaseNativeDao<PluginEntity> {
 
 	PluginEntity getByName(String name);
 	

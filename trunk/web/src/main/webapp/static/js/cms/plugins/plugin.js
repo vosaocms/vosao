@@ -111,7 +111,10 @@ function showPlugin() {
 function getConfigData() {
 	var result = {};
 	if (plugin.configData != '') {
-		$(plugin.configData, 'plugin-config').children().each(function() {
+		var domData = $.xmlDOM(plugin.configData, function(error) {
+			Vosao.error('Content parsing error. ' + error);
+		});
+		$(domData).find('plugin-config').children().each(function() {
 			result[this.tagName.toLowerCase()] = $(this).text();
 		});
 	}
@@ -152,6 +155,6 @@ function onSave() {
 	else {
 		Vosao.jsonrpc.pluginService.savePluginConfig(function(r) {
 			Vosao.showServiceMessages(r);
-		}, pluginId, xml);
+		}, Number(pluginId), xml);
 	}	
 }

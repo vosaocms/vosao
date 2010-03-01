@@ -96,7 +96,7 @@ function languageValidate(vo) {
 
 function onLanguageSave() {
     var vo = {
-    	id : language != null ? language.id : '',
+    	id : language != null ? String(language.id) : '',
        	code : $('#languageCode').val(),
         title : $('#languageTitle').val()
     };
@@ -128,8 +128,8 @@ function loadLanguages() {
         $.each(r.list, function (i, lang) {
             h += '<tr><td><input type="checkbox" value="' + lang.id 
                 + '"/></td><td>' + lang.code + '</td><td>\
-                <a href="#" onclick="onLanguageEdit(\'' + lang.id 
-                + '\')">' + lang.title + '</a></td></tr>';
+                <a href="#" onclick="onLanguageEdit(' + lang.id 
+                + ')">' + lang.title + '</a></td></tr>';
         });
         $('#languages').html(h + '</table>');
         $('#languages tr:even').addClass('even');

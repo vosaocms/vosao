@@ -37,7 +37,7 @@ public interface LanguageService extends AbstractService {
 
 	ServiceResponse remove(final List<String> ids);
 
-	LanguageEntity getById(final String id);
+	LanguageEntity getById(final Long id);
 	
 	ServiceResponse save(final Map<String, String> vo); 
 	

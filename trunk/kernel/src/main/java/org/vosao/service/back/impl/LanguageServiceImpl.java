@@ -32,6 +32,7 @@ import org.vosao.entity.LanguageEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.LanguageService;
 import org.vosao.service.impl.AbstractServiceImpl;
+import org.vosao.utils.StrUtil;
 
 public class LanguageServiceImpl extends AbstractServiceImpl 
 		implements LanguageService {
@@ -46,13 +47,13 @@ public class LanguageServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse remove(List<String> ids) {
-		getDao().getLanguageDao().remove(ids);
+		getDao().getLanguageDao().remove(StrUtil.toLong(ids));
 		return ServiceResponse.createSuccessResponse(
 				"Languages were successfully deleted");
 	}
 
 	@Override
-	public LanguageEntity getById(String id) {
+	public LanguageEntity getById(Long id) {
 		return getDao().getLanguageDao().getById(id);
 	}
 
@@ -70,7 +71,8 @@ public class LanguageServiceImpl extends AbstractServiceImpl
 	public ServiceResponse save(Map<String, String> vo) {
 		LanguageEntity language = null;
 		if (!StringUtils.isEmpty(vo.get("id"))) {
-			language = getDao().getLanguageDao().getById(vo.get("id"));
+			language = getDao().getLanguageDao().getById(Long.valueOf(
+					vo.get("id")));
 		}
 		if (language == null) {
 			language = new LanguageEntity();

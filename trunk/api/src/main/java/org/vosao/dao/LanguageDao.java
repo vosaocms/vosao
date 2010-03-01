@@ -23,7 +23,7 @@ package org.vosao.dao;
 
 import org.vosao.entity.LanguageEntity;
 
-public interface LanguageDao extends BaseDao<String, LanguageEntity> {
+public interface LanguageDao extends BaseNativeDao<LanguageEntity> {
 
 	LanguageEntity getByCode(final String code);
 

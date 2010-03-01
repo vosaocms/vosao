@@ -71,7 +71,7 @@ public class MessageServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse remove(List<String> codes) {
-		List<String> ids = new ArrayList<String>();
+		List<Long> ids = new ArrayList<Long>();
 		for (String code : codes) {
 			List<MessageEntity> messages = getDao().getMessageDao()
 					.selectByCode(code);
@@ -85,7 +85,7 @@ public class MessageServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public MessageEntity getById(String id) {
+	public MessageEntity getById(Long id) {
 		return getDao().getMessageDao().getById(id);
 	}
 

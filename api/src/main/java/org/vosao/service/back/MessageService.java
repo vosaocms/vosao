@@ -40,7 +40,7 @@ public interface MessageService extends AbstractService {
 
 	ServiceResponse remove(final List<String> codes);
 
-	MessageEntity getById(final String id);
+	MessageEntity getById(final Long id);
 	
 	ServiceResponse save(final Map<String, String> vo); 
 	

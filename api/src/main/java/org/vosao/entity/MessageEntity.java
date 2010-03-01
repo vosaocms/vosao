@@ -21,77 +21,43 @@
 
 package org.vosao.entity;
 
-import java.io.Serializable;
-
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
+import com.google.appengine.api.datastore.Entity;
 
 /**
  * @author Alexander Oleynik
  */
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class MessageEntity implements BaseEntity {
+public class MessageEntity extends BaseNativeEntityImpl {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
-	
-	@Persistent
 	private String code;
-
-	@Persistent
 	private String languageCode;
-	
-	@Persistent
 	private String value;
 
 	public MessageEntity() {
 	}
+
+	@Override
+	public void load(Entity entity) {
+		super.load(entity);
+		code = getStringProperty(entity, "code");
+		languageCode = getStringProperty(entity, "languageCode");
+		value = getStringProperty(entity, "value");
+	}
 	
+	@Override
+	public void save(Entity entity) {
+		super.save(entity);
+		entity.setProperty("code", code);
+		entity.setProperty("languageCode", languageCode);
+		entity.setProperty("value", value);
+	}
+
 	public MessageEntity(final String code, final String languageCode, 
 			final String value) {
 		this.code = code;
 		this.languageCode = languageCode;
 		this.value = value;
-	}
-
-	@Override
-	public Object getEntityId() {
-		return id;
-	}
-
-	public void copy(final MessageEntity entity) {
-		setCode(entity.getCode());
-		setLanguageCode(entity.getLanguageCode());
-		setValue(entity.getValue());
-	}
-	
-	public String getId() {
-		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public boolean equals(Object object) {
-		if (object instanceof MessageEntity) {
-			MessageEntity entity = (MessageEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	public String getCode() {

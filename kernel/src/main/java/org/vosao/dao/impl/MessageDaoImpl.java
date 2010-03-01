@@ -26,7 +26,10 @@ import java.util.List;
 import org.vosao.dao.MessageDao;
 import org.vosao.entity.MessageEntity;
 
-public class MessageDaoImpl extends BaseDaoImpl<String, MessageEntity> 
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+
+public class MessageDaoImpl extends BaseNativeDaoImpl<MessageEntity> 
 		implements MessageDao {
 
 	public MessageDaoImpl() {
@@ -35,27 +38,25 @@ public class MessageDaoImpl extends BaseDaoImpl<String, MessageEntity>
 
 	@Override
 	public List<MessageEntity> selectByCode(final String code) {
-		String query = "select from " + MessageEntity.class.getName()
-				+ " where code == pCode"
-				+ " parameters String pCode";
-		return select(query, params(code));
+		Query q = newQuery();
+		q.addFilter("code", FilterOperator.EQUAL, code);
+		return select(q, "selectByCode", params(code));
 	}
 	
 	@Override
 	public MessageEntity getByCode(final String code, 
 			final String languageCode) {
-		String query = "select from " + MessageEntity.class.getName() 
-					+ " where code == pCode && languageCode == pLanguageCode" 
-					+ " parameters String pCode, String pLanguageCode";
-		return selectOne(query, params(code, languageCode));
+		Query q = newQuery();
+		q.addFilter("code", FilterOperator.EQUAL, code);
+		q.addFilter("languageCode", FilterOperator.EQUAL, languageCode);
+		return selectOne(q, "getByCode", params(code, languageCode));
 	}
 
 	@Override
 	public List<MessageEntity> select(final String languageCode) {
-		String query = "select from " + MessageEntity.class.getName()
-				+ " where languageCode == pLanguageCode"
-				+ " parameters String pLanguageCode";
-		return select(query, params(languageCode));
+		Query q = newQuery();
+		q.addFilter("languageCode", FilterOperator.EQUAL, languageCode);
+		return select(q, "select", params(languageCode));
 	}
 
 }

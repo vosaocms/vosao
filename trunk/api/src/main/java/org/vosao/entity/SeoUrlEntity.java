@@ -21,60 +21,40 @@
 
 package org.vosao.entity;
 
-import java.io.Serializable;
-
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
+import com.google.appengine.api.datastore.Entity;
 
 /**
  * SEO Urls plugin link data.
  * @author Alexander Oleynik
  */
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class SeoUrlEntity implements BaseEntity {
+public class SeoUrlEntity extends BaseNativeEntityImpl {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
-	
-	@Persistent
 	private String fromLink;
-	
-	@Persistent
 	private String toLink;
 
 	public SeoUrlEntity() {
 	}
 	
+	@Override
+	public void load(Entity entity) {
+		super.load(entity);
+		fromLink = getStringProperty(entity, "fromLink");
+		toLink = getStringProperty(entity, "toLink");
+	}
+	
+	@Override
+	public void save(Entity entity) {
+		super.save(entity);
+		entity.setProperty("fromLink", fromLink);
+		entity.setProperty("toLink", toLink);
+	}
+
 	public SeoUrlEntity(String aFrom, String aTo) {
 		this();
 		fromLink = aFrom;
 		toLink = aTo;
-	}
-	
-	@Override
-	public Object getEntityId() {
-		return id;
-	}
-
-	public void copy(final SeoUrlEntity entity) {
-		setFromLink(entity.getFromLink());
-		setToLink(entity.getToLink());
-	}
-	
-	public String getId() {
-		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
 	}
 	
 	public String getFromLink() {
@@ -93,17 +73,4 @@ public class SeoUrlEntity implements BaseEntity {
 		this.toLink = to;
 	}
 
-	public boolean equals(Object object) {
-		if (object instanceof SeoUrlEntity) {
-			SeoUrlEntity entity = (SeoUrlEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
 }

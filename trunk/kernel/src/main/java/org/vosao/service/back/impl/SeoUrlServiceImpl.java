@@ -32,6 +32,7 @@ import org.vosao.entity.SeoUrlEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.SeoUrlService;
 import org.vosao.service.impl.AbstractServiceImpl;
+import org.vosao.utils.StrUtil;
 
 public class SeoUrlServiceImpl extends AbstractServiceImpl 
 		implements SeoUrlService {
@@ -45,16 +46,13 @@ public class SeoUrlServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse remove(List<String> ids) {
-		getDao().getSeoUrlDao().remove(ids);
+		getDao().getSeoUrlDao().remove(StrUtil.toLong(ids));
 		return ServiceResponse.createSuccessResponse(
 				"Seo urls were successfully deleted");
 	}
 
 	@Override
-	public SeoUrlEntity getById(String id) {
-		if (StringUtils.isEmpty(id)) {
-			return null;
-		}
+	public SeoUrlEntity getById(Long id) {
 		return getDao().getSeoUrlDao().getById(id);
 	}
 
@@ -72,7 +70,7 @@ public class SeoUrlServiceImpl extends AbstractServiceImpl
 	public ServiceResponse save(Map<String, String> vo) {
 		SeoUrlEntity seoUrl = null;
 		if (!StringUtils.isEmpty(vo.get("id"))) {
-			seoUrl = getDao().getSeoUrlDao().getById(vo.get("id"));
+			seoUrl = getDao().getSeoUrlDao().getById(Long.valueOf(vo.get("id")));
 		}
 		if (seoUrl == null) {
 			seoUrl = new SeoUrlEntity();

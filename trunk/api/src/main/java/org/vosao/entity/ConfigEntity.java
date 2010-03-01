@@ -21,94 +21,58 @@
 
 package org.vosao.entity;
 
-import java.io.Serializable;
-
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
 
+public class ConfigEntity extends BaseNativeEntityImpl {
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class ConfigEntity implements BaseEntity {
+	private static final long serialVersionUID = 2L;
 
-	private static final long serialVersionUID = 1L;
-
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Long id;
-	
-	@Persistent
 	private String googleAnalyticsId;
-
-	@Persistent
 	private String siteEmail;
-
-	@Persistent
 	private String siteDomain;
-	
-	@Persistent
 	private String editExt;
-
-	@Persistent
 	private boolean enableRecaptcha;
-
-	@Persistent
 	private String recaptchaPrivateKey;
-
-	@Persistent
 	private String recaptchaPublicKey;
-
-	@Persistent
 	private String commentsEmail;
-
-	@Persistent(defaultFetchGroup = "true")
-	private Text commentsTemplate;
-	
-	@Persistent
+	private String commentsTemplate;
 	private String version;
-
-	@Persistent
 	private String siteUserLoginUrl;
 
 	public ConfigEntity() {
 	}
+
+	@Override
+	public void load(Entity entity) {
+		super.load(entity);
+		googleAnalyticsId = getStringProperty(entity, "googleAnalyticsId");
+		siteEmail = getStringProperty(entity, "siteEmail");
+		siteDomain = getStringProperty(entity, "siteDomain");
+		editExt = getStringProperty(entity, "editExt");
+		enableRecaptcha = getBooleanProperty(entity, "enableRecaptcha", false);
+		recaptchaPrivateKey = getStringProperty(entity, "recaptchaPrivateKey");
+		recaptchaPublicKey = getStringProperty(entity, "recaptchaPublicKey");
+		commentsEmail = getStringProperty(entity, "commentsEmail");
+		commentsTemplate = getTextProperty(entity, "commentsTemplate");
+		version = getStringProperty(entity, "version");
+		siteUserLoginUrl = getStringProperty(entity, "siteUserLoginUrl");
+	}
 	
 	@Override
-	public Object getEntityId() {
-		return id;
-	}
-
-	public void copy(final ConfigEntity entity) {
-		setCommentsEmail(entity.getCommentsEmail());
-		setCommentsTemplate(entity.getCommentsTemplate());
-		setEditExt(entity.getEditExt());
-		setGoogleAnalyticsId(entity.getGoogleAnalyticsId());
-		setRecaptchaPrivateKey(entity.getRecaptchaPrivateKey());
-		setRecaptchaPublicKey(entity.getRecaptchaPublicKey());
-		setSiteDomain(entity.getSiteDomain());
-		setSiteEmail(entity.getSiteEmail());
-		setEnableRecaptcha(entity.isEnableRecaptcha());
-		setVersion(entity.getVersion());
-		setSiteUserLoginUrl(entity.getSiteUserLoginUrl());
-	}
-	
-	private String getNotNull(String value) {
-		if (value != null) {
-			return value;
-		}
-		return "";
-	}
-	
-	public Long getId() {
-		return id;
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
+	public void save(Entity entity) {
+		super.save(entity);
+		entity.setProperty("googleAnalyticsId", googleAnalyticsId);
+		entity.setProperty("siteEmail", siteEmail);
+		entity.setProperty("siteDomain", siteDomain);
+		entity.setProperty("editExt", editExt);
+		entity.setProperty("enableRecaptcha", enableRecaptcha);
+		entity.setProperty("recaptchaPrivateKey", recaptchaPrivateKey);
+		entity.setProperty("recaptchaPublicKey", recaptchaPublicKey);
+		entity.setProperty("commentsEmail", commentsEmail);
+		entity.setProperty("commentsTemplate", new Text(commentsTemplate));
+		entity.setProperty("version", version);
+		entity.setProperty("siteUserLoginUrl", siteUserLoginUrl);
 	}
 
 	public String getGoogleAnalyticsId() {
@@ -168,27 +132,11 @@ public class ConfigEntity implements BaseEntity {
 	}
 
 	public String getCommentsTemplate() {
-		if (commentsTemplate == null) {
-			return null;
-		}
-		return commentsTemplate.getValue();
+		return commentsTemplate;
 	}
 
 	public void setCommentsTemplate(String commentsTemplate) {
-		this.commentsTemplate = new Text(commentsTemplate);
-	}
-
-	public boolean equals(Object object) {
-		if (object instanceof ConfigEntity) {
-			ConfigEntity entity = (ConfigEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
+		this.commentsTemplate = commentsTemplate;
 	}
 
 	public boolean isEnableRecaptcha() {

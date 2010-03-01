@@ -135,7 +135,8 @@ public class BaseNativeDaoImpl<T extends BaseNativeEntity>
 		getQueryCache().removeQueries(clazz);
 		PreparedQuery p = getDatastore().prepare(q);
 		List<Key> keys = new ArrayList<Key>();
-		List<Entity> list = p.asList(withLimit(p.countEntities()));
+		int limit = p.countEntities() > 0 ? p.countEntities() : 1;
+		List<Entity> list = p.asList(withLimit(limit));
 		for (Entity entity : list) {
 			keys.add(entity.getKey());
 		}
@@ -211,6 +212,13 @@ public class BaseNativeDaoImpl<T extends BaseNativeEntity>
 			getQueryCache().putQuery(clazz, queryId, params, result);			
 		}
 		return result;
+	}
+
+	protected List<T> selectNotCache(Query query, String queryId, 
+			Object[] params) {
+		PreparedQuery p = getDatastore().prepare(query);
+		int limit = p.countEntities() > 0 ? p.countEntities() : 1;
+		return createModels(p.asList(withLimit(limit)));
 	}
 
 	protected T selectOne(Query query, String queryId, Object[] params) {

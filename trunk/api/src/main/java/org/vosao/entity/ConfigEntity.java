@@ -41,6 +41,7 @@ public class ConfigEntity extends BaseNativeEntityImpl {
 	private String siteUserLoginUrl;
 
 	public ConfigEntity() {
+		commentsTemplate = "";
 	}
 
 	@Override

@@ -67,8 +67,8 @@ function selectFolder() {
  * @param item - java class TreeItemDecorator<FolderEntity>
  */
 function renderFolderList(item) {
-   	var titleLink = "<a href=\"#\" onclick=\"onFolderSelected('" 
-        	+ item.entity.id + "')\">" + item.entity.title
+   	var titleLink = "<a href=\"#\" onclick=\"onFolderSelected(" 
+        	+ item.entity.id + ")\">" + item.entity.title
        	    + "</a>";
     var s = "<li>" + titleLink;
     if (item.children.list.length > 0) {
@@ -91,7 +91,7 @@ function onFolderSelected(folderId) {
             for (i = 0; i < files.list.length; i++) {
                 var file = files.list[i];
                 var title = " title=\"" + file.title + "\"";
-                var onClick = " onclick=\"onFileSelected('" + file.id + "')\"";
+                var onClick = " onclick=\"onFileSelected(" + file.id + ")\"";
                 var thumbnail = '';
                 if (Vosao.isImage(file.filename)) {
                     thumbnail = '<img width="160" height="120" src="/file' 

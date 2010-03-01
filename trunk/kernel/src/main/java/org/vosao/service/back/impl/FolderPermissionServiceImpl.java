@@ -38,6 +38,7 @@ import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.FolderPermissionService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.FolderPermissionVO;
+import org.vosao.utils.StrUtil;
 
 import com.google.appengine.repackaged.com.google.protobuf.ServiceException;
 
@@ -51,11 +52,7 @@ public class FolderPermissionServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse remove(List<String> ids) {
-		List<Long> idList = new ArrayList<Long>();
-		for (String id : ids) {
-			idList.add(Long.valueOf(id));
-		}
-		getDao().getFolderPermissionDao().remove(idList);
+		getDao().getFolderPermissionDao().remove(StrUtil.toLong(ids));
 		return ServiceResponse.createSuccessResponse(
 				"Folder permissions were successfully deleted");
 	}
@@ -74,7 +71,7 @@ public class FolderPermissionServiceImpl extends AbstractServiceImpl
 				throw new ServiceException("Group not found");
 			}
 			FolderEntity folder = getDao().getFolderDao().getById(
-					vo.get("folderId"));
+					Long.valueOf(vo.get("folderId")));
 			if (folder == null) {
 				throw new ServiceException("Folder not found");
 			}
@@ -92,7 +89,7 @@ public class FolderPermissionServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public List<FolderPermissionVO> selectByFolder(String folderId) {
+	public List<FolderPermissionVO> selectByFolder(Long folderId) {
 		FolderEntity folder = getDao().getFolderDao().getById(folderId);
 		if (folder == null) {
 			return Collections.EMPTY_LIST;
@@ -145,7 +142,7 @@ public class FolderPermissionServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public FolderPermissionEntity getPermission(String folderId) {
+	public FolderPermissionEntity getPermission(Long folderId) {
 		FolderEntity folder = getDao().getFolderDao().getById(folderId);
 		if (folder != null) {
 			return getBusiness().getFolderPermissionBusiness().getPermission(

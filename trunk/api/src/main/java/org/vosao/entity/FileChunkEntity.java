@@ -21,64 +21,49 @@
 
 package org.vosao.entity;
 
-import java.io.Serializable;
-
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
 import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.datastore.Entity;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class FileChunkEntity implements BaseEntity {
+public class FileChunkEntity extends BaseNativeEntityImpl {
 	
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
-
-	@Persistent(serialized = "true", defaultFetchGroup = "true")
-	private Blob data;
-
-	@Persistent
+	private byte[] content;
 	private int index;
-	
-	@Persistent
-	private String fileId;
-	
+	private Long fileId;
 	
     public FileChunkEntity() {
     }
     
-    public FileChunkEntity(String fileId, byte[] content, int index) {
+    public FileChunkEntity(Long fileId, byte[] content, int index) {
 		this();
 		this.fileId = fileId;
-		this.data = new Blob(content);
+		this.content = content;
 		this.index = index;
 	}
 
     @Override
-	public Object getEntityId() {
-		return id;
-	}
-    
-    public void copy(FileChunkEntity entity) {
-    	setContent(entity.getContent());
-    	setFileId(entity.getFileId());
-    	setIndex(entity.getIndex());
+    public void load(Entity entity) {
+    	super.load(entity);
+    	content = getBlobProperty(entity, "content");
+    	index = getIntegerProperty(entity, "index", 0);
+    	fileId = getLongProperty(entity, "fileId");
     }
     
-	public byte[] getContent() {
-		return data.getBytes();
+    @Override
+    public void save(Entity entity) {
+    	super.save(entity);
+    	entity.setProperty("content", new Blob(content));
+    	entity.setProperty("index", index);
+    	entity.setProperty("fileId", fileId);
+    }
+
+    public byte[] getContent() {
+		return content;
 	}
 	
 	public void setContent(byte[] content) {
-		this.data = new Blob(content);
+		this.content = content;
 	}
 
 	public int getIndex() {
@@ -89,33 +74,12 @@ public class FileChunkEntity implements BaseEntity {
 		this.index = index;
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getFileId() {
+	public Long getFileId() {
 		return fileId;
 	}
 
-	public void setFileId(String fileId) {
+	public void setFileId(Long fileId) {
 		this.fileId = fileId;
-	}
-	
-	public boolean equals(Object object) {
-		if (object instanceof FileChunkEntity) {
-			FileChunkEntity entity = (FileChunkEntity)object;
-			if (getId() == null && entity.getId() == null) {
-				return true;
-			}
-			if (getId() != null && getId().equals(entity.getId())) {
-				return true;
-			}
-		}
-		return false;
 	}
 	
 }

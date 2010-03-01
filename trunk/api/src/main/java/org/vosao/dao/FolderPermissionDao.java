@@ -31,10 +31,10 @@ import org.vosao.entity.FolderPermissionEntity;
 public interface FolderPermissionDao 
 		extends BaseNativeDao<FolderPermissionEntity> {
 
-	FolderPermissionEntity getByFolderGroup(final String folderId, 
+	FolderPermissionEntity getByFolderGroup(final Long folderId, 
 			final Long groupId);
 
-	List<FolderPermissionEntity> selectByFolder(final String folderId);
+	List<FolderPermissionEntity> selectByFolder(final Long folderId);
 	
 	void removeByGroup(final List<Long> groupIds);
 

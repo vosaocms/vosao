@@ -52,14 +52,14 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 	@Override
 	public TreeItemDecorator<FolderEntity> getTree(
 			final List<FolderEntity> folders) {
-		Map<String, TreeItemDecorator<FolderEntity>> buf = 
-			new HashMap<String, TreeItemDecorator<FolderEntity>>();
+		Map<Long, TreeItemDecorator<FolderEntity>> buf = 
+			new HashMap<Long, TreeItemDecorator<FolderEntity>>();
 		for (FolderEntity folder : folders) {
 			buf.put(folder.getId(), new TreeItemDecorator<FolderEntity>(folder, 
 					null));
 		}
 		TreeItemDecorator<FolderEntity> root = null;
-		for (String id : buf.keySet()) {
+		for (Long id : buf.keySet()) {
 			TreeItemDecorator<FolderEntity> folder = buf.get(id);
 			if (folder.getEntity().getParent() == null) {
 				root = folder;
@@ -181,8 +181,8 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 	public String getFolderPath(FolderEntity folder,
 			TreeItemDecorator<FolderEntity> root) {
 		
-		Map<String, TreeItemDecorator<FolderEntity>> buf = 
-			new HashMap<String, TreeItemDecorator<FolderEntity>>();
+		Map<Long, TreeItemDecorator<FolderEntity>> buf = 
+			new HashMap<Long, TreeItemDecorator<FolderEntity>>();
 		addItemToMap(buf, root);
 		TreeItemDecorator<FolderEntity> folderItem = buf.get(folder.getId());
 		String result = "";
@@ -193,7 +193,7 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 		return result;
 	}
 	
-	private void addItemToMap(Map<String, TreeItemDecorator<FolderEntity>> map,
+	private void addItemToMap(Map<Long, TreeItemDecorator<FolderEntity>> map,
 			TreeItemDecorator<FolderEntity> item) {
 		map.put(item.getEntity().getId(), item);
 		for (TreeItemDecorator<FolderEntity> child : item.getChildren()) {
@@ -202,8 +202,8 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 	}
 
 	@Override
-	public void recursiveRemove(List<String> folderIds) {
-		for (String id : folderIds) {
+	public void recursiveRemove(List<Long> folderIds) {
+		for (Long id : folderIds) {
 			FolderEntity folder = getDao().getFolderDao().getById(id);
 			if (id != null) {
 				recursiveRemove(folder);
@@ -264,7 +264,7 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 	}
 
 	@Override
-	public FolderEntity getById(String id) {
+	public FolderEntity getById(Long id) {
 		FolderEntity folder = getDao().getFolderDao().getById(id);
 		if (folder != null && haveReadAccess(folder)) {
 			return folder;
@@ -273,7 +273,7 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 	}
 
 	@Override
-	public List<FolderEntity> getByParent(String id) {
+	public List<FolderEntity> getByParent(Long id) {
 		return securityReadFilter(getDao().getFolderDao().getByParent(id));
 	}
 

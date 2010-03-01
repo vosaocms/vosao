@@ -39,13 +39,13 @@ public interface FolderBusiness {
 	 * Security filtered dao version.
 	 * @return found folder.
 	 */
-	FolderEntity getById(final String id);
+	FolderEntity getById(final Long id);
 	
 	/**
 	 * Security filtered dao version.
 	 * @return found folders.
 	 */
-	List<FolderEntity> getByParent(final String id);
+	List<FolderEntity> getByParent(final Long id);
 
 	
 	TreeItemDecorator<FolderEntity> getTree(final List<FolderEntity> list);
@@ -69,7 +69,7 @@ public interface FolderBusiness {
 	String getFolderPath(final FolderEntity folder, 
 			TreeItemDecorator<FolderEntity> root);
 	
-	void recursiveRemove(final List<String> folderIds);
+	void recursiveRemove(final List<Long> folderIds);
 
 	void recursiveRemove(final String path);
 }

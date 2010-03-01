@@ -50,14 +50,14 @@ public interface FolderService extends AbstractService {
 	FolderEntity createFolderByPath(String path) 
 			throws UnsupportedEncodingException;
 
-	String getFolderPath(final String folderId);
+	String getFolderPath(final Long folderId);
 	
-	FolderEntity getFolder(final String id);
+	FolderEntity getFolder(final Long id);
 	
-	FolderRequestVO getFolderRequest(final String folderId,
-			final String folderParentId);
+	FolderRequestVO getFolderRequest(final Long folderId,
+			final Long folderParentId);
 
-	List<FolderEntity> getByParent(final String id);
+	List<FolderEntity> getByParent(final Long id);
 	
 	ServiceResponse saveFolder(final Map<String, String> vo);
 	

@@ -107,7 +107,7 @@ public class ExportServlet extends BaseSpringServlet {
 			logger.error("Folder id not specified");
 			return;
 		}
-		FolderEntity folder = getDao().getFolderDao().getById(id);
+		FolderEntity folder = getDao().getFolderDao().getById(Long.valueOf(id));
 		if (folder == null) {
 			logger.error("Folder not found with id " + id);
 			return;

@@ -2,6 +2,8 @@ package org.vosao.entity;
 
 import java.util.Date;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vosao.utils.EntityUtil;
 
 import com.google.appengine.api.datastore.Blob;
@@ -12,6 +14,9 @@ import com.google.appengine.api.datastore.Text;
 
 public abstract class BaseNativeEntityImpl implements BaseNativeEntity {
 
+	protected static final Log logger = LogFactory.getLog(
+			BaseNativeEntityImpl.class);
+
 	private Key key;
 
 	@Override
@@ -21,7 +26,7 @@ public abstract class BaseNativeEntityImpl implements BaseNativeEntity {
 
 	@Override
 	public void setId(Long id) {
-		if (id != null) {
+		if (id != null && id > 0) {
 			key = KeyFactory.createKey(EntityUtil.getKind(getClass()), id);
 		}
 	}
@@ -45,6 +50,11 @@ public abstract class BaseNativeEntityImpl implements BaseNativeEntity {
 	public void save(Entity entity) {
 	}
 
+	@Override
+	public boolean isNew() {
+		return key == null;
+	}
+	
 	public boolean equals(Object object) {
 		if (object instanceof BaseNativeEntity
 				&& object.getClass().equals(this.getClass())) {
@@ -68,11 +78,14 @@ public abstract class BaseNativeEntityImpl implements BaseNativeEntity {
 		if (p instanceof Integer) {
 			return (Integer) p;
 		}
+		if (p instanceof Long) {
+			return ((Long) p).intValue();
+		}
 		return defaultValue;
 	}
 
 	public static Long getLongProperty(Entity entity, String name,
-			long defaultValue) {
+			Long defaultValue) {
 		Object p = entity.getProperty(name);
 		if (p == null) {
 			return defaultValue;
@@ -81,6 +94,10 @@ public abstract class BaseNativeEntityImpl implements BaseNativeEntity {
 			return (Long) p;
 		}
 		return defaultValue;
+	}
+
+	public static Long getLongProperty(Entity entity, String name) {
+		return getLongProperty(entity, name, null);
 	}
 
 	public static String getStringProperty(Entity entity, String name) {

@@ -65,10 +65,15 @@
         <property name="queryCache" ref="queryCache"/>
         <property name="systemService" ref="systemService"/>
     </bean>
-      
-    <bean id="fileDao" class="org.vosao.dao.impl.FileDaoImpl"
+         
+    <bean id="fileChunkDao" class="org.vosao.dao.impl.FileChunkDaoImpl"
         parent="abstractDao"/>
-    
+
+    <bean id="fileDao" class="org.vosao.dao.impl.FileDaoImpl"
+        parent="abstractDao">
+        <property name="fileChunkDao" ref="fileChunkDao" />
+    </bean>    
+
     <bean id="folderDao" class="org.vosao.dao.impl.FolderDaoImpl"
         parent="abstractDao" />  
 
@@ -145,6 +150,7 @@
           
         <property name="pageDao" ref="pageDao"/>  
         <property name="fileDao" ref="fileDao"/>  
+        <property name="fileChunkDao" ref="fileChunkDao"/>  
         <property name="folderDao" ref="folderDao"/>  
         <property name="userDao" ref="userDao"/>  
         <property name="templateDao" ref="templateDao"/>  

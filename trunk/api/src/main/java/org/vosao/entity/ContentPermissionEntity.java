@@ -69,7 +69,7 @@ public class ContentPermissionEntity extends BaseNativeEntityImpl {
 		languages = getStringProperty(entity, "languages");
 		permission = ContentPermissionType.valueOf(getStringProperty(entity, 
 				"permission"));
-		groupId = getLongProperty(entity, "groupId", 0);
+		groupId = getLongProperty(entity, "groupId");
 	}
 	
 	@Override

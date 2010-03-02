@@ -30,7 +30,5 @@ public interface MessageBusiness {
 	
 	Map<String, String> getBundle(final String languageCode);
 	
-	void resetBundleCache(final String languageCode);
-	
 	List<String> validateBeforeUpdate(final MessageEntity entity);
 }

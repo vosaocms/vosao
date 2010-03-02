@@ -21,6 +21,7 @@
 
 package org.vosao.dao.impl;
 
+import org.vosao.dao.BaseDaoImpl;
 import org.vosao.dao.LanguageDao;
 import org.vosao.entity.LanguageEntity;
 

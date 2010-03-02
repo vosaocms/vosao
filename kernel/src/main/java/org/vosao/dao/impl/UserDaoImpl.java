@@ -24,6 +24,7 @@ package org.vosao.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.vosao.dao.BaseDaoImpl;
 import org.vosao.dao.UserDao;
 import org.vosao.dao.UserGroupDao;
 import org.vosao.entity.UserEntity;

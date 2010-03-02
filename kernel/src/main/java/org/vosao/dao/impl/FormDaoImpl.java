@@ -23,6 +23,7 @@ package org.vosao.dao.impl;
 
 import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
 
+import org.vosao.dao.BaseDaoImpl;
 import org.vosao.dao.FormDao;
 import org.vosao.entity.FormEntity;
 

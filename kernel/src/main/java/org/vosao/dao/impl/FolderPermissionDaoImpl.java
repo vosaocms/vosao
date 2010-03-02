@@ -26,6 +26,7 @@ import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.vosao.dao.BaseDaoImpl;
 import org.vosao.dao.FolderPermissionDao;
 import org.vosao.entity.FolderPermissionEntity;
 

@@ -19,13 +19,12 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao.impl;
+package org.vosao.dao;
 
 import java.io.Serializable;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vosao.dao.AbstractDao;
 import org.vosao.dao.cache.EntityCache;
 import org.vosao.dao.cache.QueryCache;
 import org.vosao.global.SystemService;

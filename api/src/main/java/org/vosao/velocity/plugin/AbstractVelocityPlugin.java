@@ -21,10 +21,15 @@
 
 package org.vosao.velocity.plugin;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.dao.Dao;
 
 public class AbstractVelocityPlugin implements VelocityPlugin {
+
+	protected static final Log logger = LogFactory.getLog(
+			AbstractVelocityPlugin.class);
 
 	private Business business;
 	

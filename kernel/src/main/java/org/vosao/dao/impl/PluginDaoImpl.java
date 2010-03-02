@@ -21,6 +21,7 @@
 
 package org.vosao.dao.impl;
 
+import org.vosao.dao.BaseDaoImpl;
 import org.vosao.dao.PluginDao;
 import org.vosao.entity.PluginEntity;
 

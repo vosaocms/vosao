@@ -26,6 +26,7 @@ import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
 import java.util.Collections;
 import java.util.List;
 
+import org.vosao.dao.BaseDaoImpl;
 import org.vosao.dao.CommentDao;
 import org.vosao.entity.CommentEntity;
 import org.vosao.entity.helper.CommentHelper;

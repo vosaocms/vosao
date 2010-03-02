@@ -19,7 +19,7 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao.impl;
+package org.vosao.dao;
 
 import static com.google.appengine.api.datastore.FetchOptions.Builder.withLimit;
 
@@ -28,7 +28,6 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vosao.dao.BaseDao;
 import org.vosao.entity.BaseEntity;
 import org.vosao.utils.EntityUtil;
 

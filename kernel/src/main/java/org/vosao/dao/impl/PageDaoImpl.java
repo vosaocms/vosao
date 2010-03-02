@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.vosao.dao.BaseDaoImpl;
 import org.vosao.dao.CommentDao;
 import org.vosao.dao.ContentDao;
 import org.vosao.dao.PageDao;

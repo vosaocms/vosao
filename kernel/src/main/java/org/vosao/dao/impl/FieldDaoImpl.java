@@ -24,6 +24,7 @@ package org.vosao.dao.impl;
 import java.util.Collections;
 import java.util.List;
 
+import org.vosao.dao.BaseDaoImpl;
 import org.vosao.dao.FieldDao;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormEntity;

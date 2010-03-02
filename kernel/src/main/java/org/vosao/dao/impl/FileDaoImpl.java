@@ -26,6 +26,7 @@ import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
 import java.util.Date;
 import java.util.List;
 
+import org.vosao.dao.BaseDaoImpl;
 import org.vosao.dao.FileChunkDao;
 import org.vosao.dao.FileDao;
 import org.vosao.entity.FileEntity;

@@ -14,6 +14,21 @@ public class AbstractPluginEntryPoint implements PluginEntryPoint {
 	private BackService backService;
 	
 	@Override
+	public PluginServiceManager getPluginBackService() {
+		return null;
+	}
+
+	@Override
+	public PluginServiceManager getPluginFrontService() {
+		return null;
+	}
+
+	@Override
+	public Object getPluginVelocityService() {
+		return null;
+	}
+
+	@Override
 	public BackService getBackService() {
 		return backService;
 	}
@@ -31,21 +46,6 @@ public class AbstractPluginEntryPoint implements PluginEntryPoint {
 	@Override
 	public FrontService getFrontService() {
 		return frontService;
-	}
-
-	@Override
-	public PluginServiceManager getPluginBackService() {
-		return null;
-	}
-
-	@Override
-	public PluginServiceManager getPluginFrontService() {
-		return null;
-	}
-
-	@Override
-	public Object getPluginVelocityService() {
-		return null;
 	}
 
 	@Override

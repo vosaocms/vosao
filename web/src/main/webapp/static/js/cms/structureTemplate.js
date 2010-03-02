@@ -108,7 +108,7 @@ function onUpdate(cont) {
 	    id : structureTemplateId,
 	    title : Vosao.strip($('#title').val()),
 	    type: $('#type').val(),
-	    structureId: structureId,
+	    structureId: String(structureId),
         content : $('#content').val()
 	});
 	Vosao.jsonrpc.structureTemplateService.save(function (r) {

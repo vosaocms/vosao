@@ -27,6 +27,7 @@ import java.util.Map;
 
 import org.dom4j.DocumentException;
 import org.jabsorb.JSONRPCBridge;
+import org.vosao.business.plugin.PluginEntryPoint;
 import org.vosao.business.vo.PluginPropertyVO;
 import org.vosao.common.PluginException;
 import org.vosao.entity.PluginEntity;
@@ -56,6 +57,18 @@ public interface PluginBusiness {
 	void uninstall(PluginEntity plugin);
 	
 	/**
+	 * Get plugin entry point.
+	 * @param plugin - plugin.
+	 * @return - Plugin entry point service.
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
+	PluginEntryPoint getEntryPoint(PluginEntity plugin) 
+			throws ClassNotFoundException, InstantiationException, 
+			IllegalAccessException;
+
+	/**
 	 * Get plugin Velocity service for page rendering.
 	 * @param plugin - plugin.
 	 * @return - Velocity service.
@@ -63,7 +76,7 @@ public interface PluginBusiness {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	VelocityPlugin getVelocityPlugin(PluginEntity plugin) 
+	Object getVelocityPlugin(PluginEntity plugin) 
 			throws ClassNotFoundException, InstantiationException, 
 			IllegalAccessException;
 	

@@ -52,17 +52,15 @@ public class VelocityPluginServiceImpl implements VelocityPluginService {
 		Map<String, Object> services = new HashMap<String, Object>();
 		services.put("form", form);
 		for (PluginEntity plugin : dao.getPluginDao().select()) {
-			if (plugin.isVelocityPlugin()) {
-				try {
-					VelocityPlugin velocityPlugin = business.getPluginBusiness()
-						.getVelocityPlugin(plugin);
-					velocityPlugin.setDao(dao);
-					velocityPlugin.setBusiness(business);
+			try {
+				Object velocityPlugin = business.getPluginBusiness()
+					.getVelocityPlugin(plugin);
+				if (velocityPlugin != null) {
 					services.put(plugin.getName(), velocityPlugin);
 				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
+			}
+			catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		return services;

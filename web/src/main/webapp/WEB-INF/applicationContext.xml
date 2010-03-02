@@ -212,6 +212,8 @@
     <bean id="pluginBusiness" class="org.vosao.business.impl.PluginBusinessImpl"
         parent="abstractBusiness" init-method="init">
         <property name="business" ref="business"/>  
+        <property name="frontService" ref="frontService"/>  
+        <property name="backService" ref="backService"/>  
         <property name="pluginClassLoaderFactory" ref="pluginClassLoaderFactory"/>  
         <property name="cache" ref="pluginResourceCache"/>  
     </bean>      

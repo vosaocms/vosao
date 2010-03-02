@@ -29,7 +29,6 @@ import org.vosao.service.FrontService;
 public interface ServicePlugin {
 
 	Dao getDao();
-	void setDao(Dao bean);
 	
 	Business getBusiness();
 	void setBusiness(Business bean);

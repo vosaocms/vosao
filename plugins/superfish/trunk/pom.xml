@@ -8,6 +8,32 @@
 	<packaging>war</packaging>
 	<name>Vosao CMS superfish menu plugin.</name> 
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>datanucleus</id>
+            <url>http://www.datanucleus.org/downloads/maven2</url>
+        </pluginRepository>
+    </pluginRepositories>
+    
+    <repositories>
+        <repository>
+            <id>vosao-maven-repo</id>
+            <url>http://vosao.googlecode.com/svn/repository</url>
+        </repository>
+        <repository>
+            <id>mvnsearch</id>
+            <url>http://www.mvnsearch.org/maven2</url>
+        </repository>
+        <repository>
+            <id>datanucleus</id>
+            <url>http://www.datanucleus.org/downloads/maven2</url>
+        </repository>
+        <repository>
+            <id>ocpsoft.com</id>
+            <url>http://ocpsoft.com/repository/</url>
+        </repository>
+    </repositories>
+
 	<dependencies>
 
         <dependency>

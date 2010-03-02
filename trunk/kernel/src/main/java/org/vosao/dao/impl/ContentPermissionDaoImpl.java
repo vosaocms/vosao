@@ -35,7 +35,7 @@ import com.google.appengine.api.datastore.Query;
  * @author Alexander Oleynik
  */
 public class ContentPermissionDaoImpl extends 
-		BaseNativeDaoImpl<ContentPermissionEntity> 
+		BaseDaoImpl<ContentPermissionEntity> 
 		implements ContentPermissionDao {
 
 	public ContentPermissionDaoImpl() {

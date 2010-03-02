@@ -29,7 +29,7 @@ import com.google.appengine.api.datastore.Text;
 /**
  * @author Alexander Oleynik
  */
-public class CommentEntity extends BaseNativeEntityImpl {
+public class CommentEntity extends BaseEntityImpl {
 
 	private static final long serialVersionUID = 8L;
 

@@ -26,7 +26,7 @@ import com.google.appengine.api.datastore.Entity;
 /**
  * @author Alexander Oleynik
  */
-public class GroupEntity extends BaseNativeEntityImpl {
+public class GroupEntity extends BaseEntityImpl {
 
 	private static final long serialVersionUID = 3L;
 

@@ -27,7 +27,7 @@ import org.vosao.entity.PluginEntity;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 
-public class PluginDaoImpl extends BaseNativeDaoImpl<PluginEntity> 
+public class PluginDaoImpl extends BaseDaoImpl<PluginEntity> 
 		implements PluginDao {
 
 	public PluginDaoImpl() {

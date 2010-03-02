@@ -28,7 +28,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 
 public class PluginResourceDaoImpl extends 
-		BaseNativeDaoImpl<PluginResourceEntity> implements PluginResourceDao {
+		BaseDaoImpl<PluginResourceEntity> implements PluginResourceDao {
 
 	public PluginResourceDaoImpl() {
 		super(PluginResourceEntity.class);

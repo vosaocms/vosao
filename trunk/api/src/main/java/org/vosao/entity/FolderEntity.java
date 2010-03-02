@@ -23,7 +23,7 @@ package org.vosao.entity;
 
 import com.google.appengine.api.datastore.Entity;
 
-public class FolderEntity extends BaseNativeEntityImpl {
+public class FolderEntity extends BaseEntityImpl {
 
 	private static final long serialVersionUID = 4L;
 

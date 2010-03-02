@@ -35,7 +35,7 @@ import org.vosao.entity.FileEntity;
 
 import com.google.appengine.api.datastore.Query;
 
-public class FileChunkDaoImpl extends BaseNativeDaoImpl<FileChunkEntity> 
+public class FileChunkDaoImpl extends BaseDaoImpl<FileChunkEntity> 
 		implements FileChunkDao {
 
 	public FileChunkDaoImpl() {

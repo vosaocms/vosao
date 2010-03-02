@@ -35,7 +35,7 @@ import org.vosao.business.vo.StructureFieldVO;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
 
-public class StructureEntity extends BaseNativeEntityImpl {
+public class StructureEntity extends BaseEntityImpl {
 
 	private static final long serialVersionUID = 2L;
 

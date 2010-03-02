@@ -27,7 +27,7 @@ import org.vosao.entity.LanguageEntity;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 
-public class LanguageDaoImpl extends BaseNativeDaoImpl<LanguageEntity> 
+public class LanguageDaoImpl extends BaseDaoImpl<LanguageEntity> 
 		implements LanguageDao {
 
 	public LanguageDaoImpl() {

@@ -36,7 +36,7 @@ import com.google.appengine.api.datastore.Text;
 /**
  * @author Alexander Oleynik
  */
-public class PageEntity extends BaseNativeEntityImpl {
+public class PageEntity extends BaseEntityImpl {
 
 	private static final long serialVersionUID = 9L;
 	

@@ -32,7 +32,7 @@ import org.vosao.entity.FolderEntity;
 
 import com.google.appengine.api.datastore.Query;
 
-public class FolderDaoImpl extends BaseNativeDaoImpl<FolderEntity> 
+public class FolderDaoImpl extends BaseDaoImpl<FolderEntity> 
 		implements FolderDao {
 
 	public FolderDaoImpl() {

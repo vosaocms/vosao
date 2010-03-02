@@ -29,7 +29,7 @@ import org.vosao.entity.ContentPermissionEntity;
  * @author Alexander Oleynik
  */
 public interface ContentPermissionDao extends 
-		BaseNativeDao<ContentPermissionEntity> {
+		BaseDao<ContentPermissionEntity> {
 
 	ContentPermissionEntity getByUrlGroup(final String url, final Long groupId);
 

@@ -34,7 +34,7 @@ import com.google.appengine.api.datastore.Query;
 /**
  * @author Alexander Oleynik
  */
-public class UserGroupDaoImpl extends BaseNativeDaoImpl<UserGroupEntity> 
+public class UserGroupDaoImpl extends BaseDaoImpl<UserGroupEntity> 
 		implements UserGroupDao {
 
 	public UserGroupDaoImpl() {

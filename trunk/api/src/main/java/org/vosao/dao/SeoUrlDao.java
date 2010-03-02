@@ -26,7 +26,7 @@ import org.vosao.entity.SeoUrlEntity;
 /**
  * @author Alexander Oleynik
  */
-public interface SeoUrlDao extends BaseNativeDao<SeoUrlEntity> {
+public interface SeoUrlDao extends BaseDao<SeoUrlEntity> {
 
 	SeoUrlEntity getByFrom(final String from);
 

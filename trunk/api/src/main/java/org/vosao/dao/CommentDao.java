@@ -28,7 +28,7 @@ import org.vosao.entity.CommentEntity;
 /**
  * @author Alexander Oleynik
  */
-public interface CommentDao extends BaseNativeDao<CommentEntity> {
+public interface CommentDao extends BaseDao<CommentEntity> {
 
 	/**
 	 * Get comments by page's friendlyURL.

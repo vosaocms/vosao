@@ -36,9 +36,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.SetupBean;
+import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.dao.cache.CacheStat;
 import org.vosao.dao.cache.EntityCache;
 import org.vosao.dao.cache.QueryCache;
+import org.vosao.entity.ConfigEntity;
 import org.vosao.servlet.SessionCleanTaskServlet;
 
 import com.google.appengine.api.labs.taskqueue.Queue;
@@ -67,9 +69,14 @@ public class InitFilter extends AbstractFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse)response;
         String url = httpRequest.getServletPath();
         if (url.equals(SETUP_URL)) {
-            SetupBean setupBean = (SetupBean)getSpringBean("setupBean");
-        	setupBean.setup();
-        	logger.info("Setup was successfully completed.");
+            ConfigEntity config = getDao().getConfigDao().getConfig();
+            if (config == null || !config.getVersion().equals(
+            		SetupBeanImpl.VERSION)) {
+            	SetupBean setupBean = (SetupBean)getSpringBean("setupBean");
+            	setupBean.clear();
+            	setupBean.setup();
+            	logger.info("Setup was successfully completed.");
+            }
         	httpResponse.sendRedirect("/");
         	return;
         }

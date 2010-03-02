@@ -23,19 +23,31 @@ package org.vosao.dao;
 
 import java.util.List;
 
-public interface BaseDao<K, T> extends AbstractDao {
+import org.vosao.entity.BaseEntity;
 
-	T save(final T entity);
+import com.google.appengine.api.datastore.Key;
+
+public interface BaseDao<T extends BaseEntity> 
+		extends AbstractDao {
+
+	String getKind();
 	
-	T getById(final K id);
+	Key getKey(Long id);
+
+	List<Key> getKeys(List<Long> ids);
 	
-	void remove(final K id);
+	T save(final T model);
 	
-	void remove(final List<K> ids);
+	T getById(final Long id);
+	
+	void remove(final Long id);
+	
+	void remove(final List<Long> ids);
 
 	List<T> select();
 
 	void removeAll();
 	
 	void clearCache();
+
 }

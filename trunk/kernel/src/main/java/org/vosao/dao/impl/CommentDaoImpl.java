@@ -35,7 +35,7 @@ import com.google.appengine.api.datastore.Query;
 /**
  * @author Alexander Oleynik
  */
-public class CommentDaoImpl extends BaseNativeDaoImpl<CommentEntity> 
+public class CommentDaoImpl extends BaseDaoImpl<CommentEntity> 
 		implements CommentDao {
 
 	public CommentDaoImpl() {

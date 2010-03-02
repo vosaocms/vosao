@@ -40,7 +40,7 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 /**
  * @author Alexander Oleynik
  */
-public class PageDaoImpl extends BaseNativeDaoImpl<PageEntity> 
+public class PageDaoImpl extends BaseDaoImpl<PageEntity> 
 		implements PageDao {
 
 	private static final String PAGE_CLASS_NAME = PageEntity.class.getName();

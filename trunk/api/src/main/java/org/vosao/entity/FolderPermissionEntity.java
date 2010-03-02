@@ -28,7 +28,7 @@ import com.google.appengine.api.datastore.Entity;
 /**
  * @author Alexander Oleynik
  */
-public class FolderPermissionEntity extends BaseNativeEntityImpl {
+public class FolderPermissionEntity extends BaseEntityImpl {
 
 	private static final long serialVersionUID = 3L;
 

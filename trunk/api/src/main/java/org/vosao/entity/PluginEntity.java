@@ -26,7 +26,7 @@ import org.datanucleus.util.StringUtils;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
 
-public class PluginEntity extends BaseNativeEntityImpl {
+public class PluginEntity extends BaseEntityImpl {
 	
 	private static final long serialVersionUID = 3L;
 

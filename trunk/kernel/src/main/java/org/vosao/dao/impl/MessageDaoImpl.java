@@ -29,7 +29,7 @@ import org.vosao.entity.MessageEntity;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 
-public class MessageDaoImpl extends BaseNativeDaoImpl<MessageEntity> 
+public class MessageDaoImpl extends BaseDaoImpl<MessageEntity> 
 		implements MessageDao {
 
 	public MessageDaoImpl() {

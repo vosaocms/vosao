@@ -12,10 +12,10 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Text;
 
-public abstract class BaseNativeEntityImpl implements BaseNativeEntity {
+public abstract class BaseEntityImpl implements BaseEntity {
 
 	protected static final Log logger = LogFactory.getLog(
-			BaseNativeEntityImpl.class);
+			BaseEntityImpl.class);
 
 	private Key key;
 
@@ -56,16 +56,16 @@ public abstract class BaseNativeEntityImpl implements BaseNativeEntity {
 	}
 	
 	@Override
-	public void copy(BaseNativeEntity entity) {
+	public void copy(BaseEntity entity) {
 		Entity buf = new Entity("tmp");
 		entity.save(buf);
 		load(buf);
 	}
 	
 	public boolean equals(Object object) {
-		if (object instanceof BaseNativeEntity
+		if (object instanceof BaseEntity
 				&& object.getClass().equals(this.getClass())) {
-			BaseNativeEntity entity = (BaseNativeEntity) object;
+			BaseEntity entity = (BaseEntity) object;
 			if (getId() == null && entity.getId() == null) {
 				return true;
 			}

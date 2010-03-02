@@ -21,165 +21,46 @@
 
 package org.vosao.dao.impl;
 
+import static com.google.appengine.api.datastore.FetchOptions.Builder.withLimit;
+
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.jdo.JDOObjectNotFoundException;
-import javax.jdo.PersistenceManager;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vosao.dao.BaseDao;
 import org.vosao.entity.BaseEntity;
+import org.vosao.utils.EntityUtil;
 
-/**
- * @author Alexander Oleynik
- */
-public class BaseDaoImpl<K,T extends BaseEntity> extends AbstractDaoImpl 
-		implements BaseDao<K,T> {
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+
+public class BaseDaoImpl<T extends BaseEntity> 
+		extends AbstractDaoImpl implements BaseDao<T>{
+	
+	protected static final Log logger = LogFactory.getLog(
+			BaseDaoImpl.class);
 
 	private Class clazz;
-	
+	private String kind;
+
 	public BaseDaoImpl(Class aClass) {
 		clazz = aClass;
-	}
-
-	@Override
-	public T save(final T entity) {
-		getQueryCache().removeQueries(clazz);
-		if (entity.getEntityId() != null) {
-			getEntityCache().removeEntity(clazz, entity.getEntityId());
-		}
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			return pm.makePersistent(entity);
-		}
-		finally {
-			pm.close();
-		}
+		kind = createKind();
 	}
 	
-	@Override
-	public T getById(final K id) {
-		if (id == null) {
-			return null;
-		}
-		T entity = (T) getEntityCache().getEntity(clazz, id);
-		if (entity == null) {
-			PersistenceManager pm = getPersistenceManager();
-			pm.setDetachAllOnCommit(true);
-			try {
-				entity = (T)pm.getObjectById(clazz, id);
-				getEntityCache().putEntity(clazz, id, entity);
-			}
-			catch (JDOObjectNotFoundException e) {
-				entity = null;
-			}
-			catch (IllegalArgumentException e) {
-				entity = null;
-			}
-			finally {
-				pm.close();
-			}
-		}
-		return entity;
-	}
-	
-	@Override
-	public void remove(final K id) {
-		if (id == null) {
-			return;
-		}
-		getEntityCache().removeEntity(clazz, id);
-		getQueryCache().removeQueries(clazz);
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			pm.deletePersistent(pm.getObjectById(clazz, id));
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	@Override
-	public void remove(final List<K> ids) {
-		getQueryCache().removeQueries(clazz);
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			for (K id : ids) {
-				if (id != null) {
-					getEntityCache().removeEntity(clazz, id);
-					pm.deletePersistent(pm.getObjectById(clazz, id));
-				}
-			}
-		}
-		finally {
-			pm.close();
-		}
+	public BaseDaoImpl(Class aClass, String aKind) {
+		clazz = aClass;
+		kind = aKind;
 	}
 
-	protected void removeSelected(String query, Object[] params) {
-		getEntityCache().removeEntities(clazz);
-		getQueryCache().removeQueries(clazz);
-		PersistenceManager pm = getPersistenceManager();
-		try {
-			List<T> result =  (List<T>) pm.newQuery(query).executeWithArray(
-					params);
-			pm.deletePersistentAll(result);
-		}
-		finally {
-			pm.close();
-		}
-	}
-	
-	protected List<T> select(String query, Object[] params) {
-		List<T> result = (List<T>) getQueryCache().getQuery(clazz, query, params);
-		if (result == null) {
-			PersistenceManager pm = getPersistenceManager();
-			pm.setDetachAllOnCommit(true);
-			try {
-				result =  copy((List<T>) pm.newQuery(query)
-						.executeWithArray(params));
-				getQueryCache().putQuery(clazz, query, params, result);
-			}
-			finally {
-				pm.close();
-			}
-		}
-		return result;
-	}
-
-	@Override
-	public List<T> select() {
-		List<T> result = (List<T>) getQueryCache().getQuery(clazz, 
-				clazz.getName(), null);
-		if (result == null) {
-			PersistenceManager pm = getPersistenceManager();
-			pm.setDetachAllOnCommit(true);
-			try {
-				result = copy((List<T>)pm.newQuery("select from " + clazz.getName())
-						.execute());
-				getQueryCache().putQuery(clazz, clazz.getName(), null, result);
-			}
-			finally {
-				pm.close();
-			}
-		}
-		return result;
-	}
-
-	protected T selectOne(String query, Object[] params) {
-		List<T> list = select(query, params);
-		if (list.isEmpty()) {
-			return null;
-		}
-		return list.get(0);
-	}
-		
-	protected Object[] params(Object...objects) {
-		return objects;
-	}
-
-	@Override
-	public void removeAll() {
-		removeSelected("select from " + clazz.getName(), params());
+	private DatastoreService getDatastore() {
+		return getSystemService().getDatastore();
 	}
 
 	@Override
@@ -192,6 +73,180 @@ public class BaseDaoImpl<K,T extends BaseEntity> extends AbstractDaoImpl
 			logger.error("clearCache " + clazz.getName() + " " + e.getMessage());
 		}
 	}
+
+	@Override
+	public T getById(Long id) {
+		if (id == null || id <= 0) {
+			return null;
+		}
+		T model = (T) getEntityCache().getEntity(clazz, id);
+		if (model != null) {
+			return model;
+		}
+		try {
+			model = createModel(getDatastore().get(getKey(id)));
+			getEntityCache().putEntity(clazz, id, model);
+			return model;
+		}
+		catch (EntityNotFoundException e) {
+			return null;
+		}
+	}
+
+	private T createModel(Entity entity) {
+		try {
+			T model = (T)clazz.newInstance();
+			model.load(entity);
+			return model;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
+	@Override
+	public void remove(Long id) {
+		if (id == null) {
+			return;
+		}
+		getEntityCache().removeEntity(clazz, id);
+		getQueryCache().removeQueries(clazz);
+		getDatastore().delete(getKey(id));
+	}
+
+	@Override
+	public void remove(List<Long> ids) {
+		for (Long id : ids) {
+			getEntityCache().removeEntity(clazz, id);
+		}
+		getQueryCache().removeQueries(clazz);
+		getDatastore().delete(getKeys(ids));
+	}
+
+	@Override
+	public void removeAll() {
+		Query q = newQuery();
+		removeSelected(q);
+	}
+
+	protected void removeSelected(Query q) {
+		getEntityCache().removeEntities(clazz);
+		getQueryCache().removeQueries(clazz);
+		PreparedQuery p = getDatastore().prepare(q);
+		List<Key> keys = new ArrayList<Key>();
+		int limit = p.countEntities() > 0 ? p.countEntities() : 1;
+		List<Entity> list = p.asList(withLimit(limit));
+		for (Entity entity : list) {
+			keys.add(entity.getKey());
+		}
+		getDatastore().delete(keys);
+	}
 	
+	@Override
+	public T save(T model) {
+		getQueryCache().removeQueries(clazz);
+		Entity entity = null;
+		if (model.getId() != null) {
+			try {
+				entity = getDatastore().get(getKey(model.getId()));
+				getEntityCache().removeEntity(clazz, model.getId());
+			}
+			catch (EntityNotFoundException e) {
+				logger.error("Entity not found " + clazz.getName() + " " 
+						+ model.getId());
+			}
+		}
+		if (entity == null) {
+			entity = new Entity(getKind());
+		}
+		model.save(entity);
+		getDatastore().put(entity);
+		model.setKey(entity.getKey());
+		return model;
+	}
+
+	@Override
+	public List<T> select() {
+		List<T> result = (List<T>) getQueryCache().getQuery(clazz, 
+				clazz.getName(), null);
+		if (result == null) {
+			Query q = newQuery();
+			PreparedQuery p = getDatastore().prepare(q);
+			int limit = p.countEntities() > 0 ? p.countEntities() : 1;
+			result = createModels(p.asList(withLimit(limit)));
+			getQueryCache().putQuery(clazz, clazz.getName(), null, result);
+		}
+		return result;
+	}
+
+	private List<T> createModels(List<Entity> list) {
+		List<T> result = new ArrayList<T>();
+		for (Entity entity : list) {
+			result.add(createModel(entity));
+		}
+		return result;
+	}
+	
+	@Override
+	public Key getKey(Long id) {
+		return KeyFactory.createKey(getKind(), (Long)id);
+	}
+
+	@Override
+	public List<Key> getKeys(List<Long> ids) {
+		List<Key> result = new ArrayList<Key>();
+		for (Long id : ids) {
+			result.add(getKey(id));
+		}
+		return result;
+	}
+	
+	protected List<T> select(Query query, String queryId, Object[] params) {
+		List<T> result = (List<T>) getQueryCache().getQuery(clazz, queryId, 
+				params);
+		if (result == null) {
+			PreparedQuery p = getDatastore().prepare(query);
+			int limit = p.countEntities() > 0 ? p.countEntities() : 1;
+			result = createModels(p.asList(withLimit(limit)));
+			getQueryCache().putQuery(clazz, queryId, params, result);			
+		}
+		return result;
+	}
+
+	protected List<T> selectNotCache(Query query, String queryId, 
+			Object[] params) {
+		PreparedQuery p = getDatastore().prepare(query);
+		int limit = p.countEntities() > 0 ? p.countEntities() : 1;
+		return createModels(p.asList(withLimit(limit)));
+	}
+
+	protected T selectOne(Query query, String queryId, Object[] params) {
+		List<T> list = select(query, queryId, params);
+		if (list.isEmpty()) {
+			return null;
+		}
+		if (list.size() > 1) {
+			logger.error("May be consistency error. Multiple result for select one query " 
+					+ clazz.getName() + " " + queryId + params.toString());
+		}
+		return list.get(0);
+	}
+		
+	protected Object[] params(Object...objects) {
+		return objects;
+	}
+
+	protected Query newQuery() {
+		return new Query(getKind());
+	}
+	
+	@Override
+	public String getKind() {
+		return kind;
+	}
+
+	private String createKind() {
+		return EntityUtil.getKind(clazz);
+	}
 }

@@ -28,7 +28,7 @@ import org.vosao.entity.UserGroupEntity;
 /**
  * @author Alexander Oleynik
  */
-public interface UserGroupDao extends BaseNativeDao<UserGroupEntity> {
+public interface UserGroupDao extends BaseDao<UserGroupEntity> {
 
 	List<UserGroupEntity> selectByUser(Long userId);
 

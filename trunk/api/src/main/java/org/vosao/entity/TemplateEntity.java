@@ -24,7 +24,7 @@ package org.vosao.entity;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
 
-public class TemplateEntity extends BaseNativeEntityImpl {
+public class TemplateEntity extends BaseEntityImpl {
 
 	private static final long serialVersionUID = 2L;
 

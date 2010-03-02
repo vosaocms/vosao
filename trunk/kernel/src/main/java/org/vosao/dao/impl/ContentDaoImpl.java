@@ -29,7 +29,7 @@ import org.vosao.entity.ContentEntity;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 
-public class ContentDaoImpl extends BaseNativeDaoImpl<ContentEntity> 
+public class ContentDaoImpl extends BaseDaoImpl<ContentEntity> 
 		implements ContentDao {
 
 	public ContentDaoImpl() {

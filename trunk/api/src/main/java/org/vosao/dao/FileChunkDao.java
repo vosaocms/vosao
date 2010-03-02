@@ -26,7 +26,7 @@ import java.util.List;
 import org.vosao.entity.FileChunkEntity;
 import org.vosao.entity.FileEntity;
 
-public interface FileChunkDao extends BaseNativeDao<FileChunkEntity> {
+public interface FileChunkDao extends BaseDao<FileChunkEntity> {
 
 	void save(final FileEntity file, byte[] content);
 	

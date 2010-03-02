@@ -22,15 +22,9 @@
 package org.vosao.dao.impl;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.orm.jdo.PersistenceManagerFactoryUtils;
 import org.vosao.dao.AbstractDao;
 import org.vosao.dao.cache.EntityCache;
 import org.vosao.dao.cache.QueryCache;
@@ -40,29 +34,9 @@ public class AbstractDaoImpl implements AbstractDao, Serializable {
 
 	protected static final Log logger = LogFactory.getLog(AbstractDaoImpl.class);
 
-	private PersistenceManagerFactory pmf;
 	private EntityCache entityCache;
 	private QueryCache queryCache;
 	private SystemService systemService;
-
-	public PersistenceManagerFactory getPersistenceManagerFactory() {
-		return pmf;
-	}
-
-	public void setPersistenceManagerFactory(PersistenceManagerFactory factory) {
-		pmf = factory;		
-	}
-	
-	protected PersistenceManager getPersistenceManager() {  
-		return PersistenceManagerFactoryUtils  
-	    		.getPersistenceManager(pmf, true);
-	} 
-
-	protected <T> List<T> copy(final List<T> list) {
-		List<T> result = new ArrayList<T>();
-		result.addAll(list);
-		return result;
-	}
 
 	public EntityCache getEntityCache() {
 		return entityCache;

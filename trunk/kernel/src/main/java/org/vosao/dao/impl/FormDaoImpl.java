@@ -28,7 +28,7 @@ import org.vosao.entity.FormEntity;
 
 import com.google.appengine.api.datastore.Query;
 
-public class FormDaoImpl extends BaseNativeDaoImpl<FormEntity> 
+public class FormDaoImpl extends BaseDaoImpl<FormEntity> 
 		implements FormDao {
 
 	public FormDaoImpl() {

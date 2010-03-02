@@ -23,6 +23,7 @@ package org.vosao.dao.impl;
 
 import java.util.List;
 
+import org.vosao.dao.BaseDaoImpl;
 import org.vosao.dao.StructureTemplateDao;
 import org.vosao.entity.StructureTemplateEntity;
 

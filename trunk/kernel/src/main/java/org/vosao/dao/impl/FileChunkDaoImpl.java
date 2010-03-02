@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.vosao.dao.BaseDaoImpl;
 import org.vosao.dao.FileChunkDao;
 import org.vosao.entity.FileChunkEntity;
 import org.vosao.entity.FileEntity;

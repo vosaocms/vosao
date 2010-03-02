@@ -78,6 +78,9 @@ function loadData() {
 
 function loadFolder() {
 	folder = folderRequest.folder;
+	if (editMode) {
+		folderParentId = String(folder.parent);
+	}
 	initFormFields();
 	loadFolderPermission();
 }

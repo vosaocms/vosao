@@ -140,6 +140,14 @@ public class ContentPermissionEntity extends BaseEntityImpl {
 		return permission.equals(ContentPermissionType.WRITE);
 	}
 	
+	public boolean isWrite(String language) {
+		boolean write = permission.equals(ContentPermissionType.WRITE);
+		if (isAllLanguages()) {
+			return write;
+		}
+		return write && getLanguagesList().contains(language);
+	}
+
 	public boolean isPublish() {
 		return permission.equals(ContentPermissionType.PUBLISH);
 	}
@@ -156,6 +164,10 @@ public class ContentPermissionEntity extends BaseEntityImpl {
 		return isWrite() || isPublish() || isAdmin();
 	}
 	
+	public boolean isChangeGranted(String language) {
+		return isWrite(language) || isPublish() || isAdmin();
+	}
+
 	public boolean isPublishGranted() {
 		return isPublish() || isAdmin();
 	}

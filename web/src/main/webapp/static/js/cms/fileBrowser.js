@@ -52,13 +52,13 @@ function selectFolder() {
    		   		onFolderSelected(r.entity.id);
    			}
    			else {
-   		   		onFolderSelected(rootItem.entity.id);
+   		   		onFolderSelected(rootFolder.entity.id);
    			}
    		}, $.cookie('fileBrowserPath'));
 		$.cookie('fileBrowserPath', null, {path:'/', expires: 10});
    	}
    	else {
-   		onFolderSelected(rootItem.entity.id);
+   		onFolderSelected(rootFolder.entity.id);
    	}	
 }
 
@@ -85,7 +85,12 @@ function renderFolderList(item) {
 
 function onFolderSelected(folderId) {
 	Vosao.jsonrpc.folderService.getFolderPath(function(folderPath) {
-		$('#currentFolder').html(folderPath);
+		if (folderPath) {
+			$('#currentFolder').html(folderPath);
+		}
+		else {
+			$('#currentFolder').html('/');
+		}	
 		Vosao.jsonrpc.fileService.getByFolder(function(files) {
             var result = "";
             for (i = 0; i < files.list.length; i++) {

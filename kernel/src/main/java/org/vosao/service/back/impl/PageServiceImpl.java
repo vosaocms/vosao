@@ -190,6 +190,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 		if (vo.get("friendlyUrl") != null) {
 			page.setFriendlyURL(vo.get("friendlyUrl"));
 		}
+		String languageCode = vo.get("languageCode");
 		ContentPermissionEntity perm = getBusiness()
 			.getContentPermissionBusiness().getPermission(
 				page.getFriendlyURL(), CurrentUser.getInstance());
@@ -200,7 +201,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 		else {
 			page.setState(PageState.EDIT);
 		}
-		if (!perm.isChangeGranted()) {
+		if (!perm.isChangeGranted(languageCode)) {
 			return ServiceResponse.createErrorResponse("Access denied");
 		}
 		if (vo.get("publishDate") != null) {
@@ -239,7 +240,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 			getDao().getPageDao().save(page);
 			if (vo.containsKey("content")) {
 				getBusiness().getPageBusiness().saveContent(page, 
-					vo.get("languageCode"), vo.get("content"), 
+					languageCode, vo.get("content"), 
 					oldSearchable, page.isSearchable());
 			}
 			return ServiceResponse.createSuccessResponse(page.getId().toString());
@@ -273,9 +274,8 @@ public class PageServiceImpl extends AbstractServiceImpl
 				"Page was successfully deleted");
 	}
 
-	@Override
-	public List<ContentEntity> getContents(Long pageId) {
-		return getBusiness().getPageBusiness().getContents(pageId);
+	private List<ContentEntity> getContents(Long pageId) {
+		return getDao().getPageDao().getContents(pageId);
 	}
 
 	@Override
@@ -430,7 +430,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 			return ServiceResponse.createErrorResponse("Wrong page type");
 		}
 		if (page.isStructured()) {
-			page.setPageType(PageType.SIMPLE);
+			return ServiceResponse.createErrorResponse("Change page type to Simle from Structured first");
 		}
 		page.setModDate(new Date());
 		page.setModUserEmail(CurrentUser.getInstance().getEmail());

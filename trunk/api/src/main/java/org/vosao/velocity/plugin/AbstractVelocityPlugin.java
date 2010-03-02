@@ -26,7 +26,6 @@ import org.vosao.dao.Dao;
 
 public class AbstractVelocityPlugin implements VelocityPlugin {
 
-	private Dao dao;
 	private Business business;
 	
 	@Override
@@ -36,17 +35,12 @@ public class AbstractVelocityPlugin implements VelocityPlugin {
 
 	@Override
 	public Dao getDao() {
-		return dao;
+		return business.getDao();
 	}
 
 	@Override
 	public void setBusiness(Business bean) {
 		business = bean;		
-	}
-
-	@Override
-	public void setDao(Dao bean) {
-		dao = bean;
 	}
 
 }

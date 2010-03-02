@@ -115,12 +115,11 @@ public class FrontServiceImpl implements FrontService, Serializable {
 	private void registerPluginServices(JSONRPCBridge bridge) {
 		for (PluginEntity plugin : getDao().getPluginDao().select()) {
 			try {
-				if (plugin.isFrontServicePlugin()) {
-					PluginServiceManager manager = getBusiness()
-						.getPluginBusiness().getFrontServices(plugin);
-					manager.setFrontService(this);
+				PluginServiceManager manager = getBusiness()
+					.getPluginBusiness().getFrontServices(plugin);
+				if (manager != null) {
 					manager.register(bridge);
-				}				
+				}
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			} catch (InstantiationException e) {
@@ -134,10 +133,9 @@ public class FrontServiceImpl implements FrontService, Serializable {
 	public void unregisterPluginServices(JSONRPCBridge bridge) {
 		for (PluginEntity plugin : getDao().getPluginDao().select()) {
 			try {
-				if (plugin.isFrontServicePlugin()) {
-					PluginServiceManager manager = getBusiness()
-						.getPluginBusiness().getFrontServices(plugin);
-					manager.setFrontService(this);
+				PluginServiceManager manager = getBusiness()
+					.getPluginBusiness().getFrontServices(plugin);
+				if (manager != null) {
 					manager.unregister(bridge);
 				}				
 			} catch (ClassNotFoundException e) {

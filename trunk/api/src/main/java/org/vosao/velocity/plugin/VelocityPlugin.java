@@ -27,9 +27,9 @@ import org.vosao.dao.Dao;
 public interface VelocityPlugin {
 
 	Dao getDao();
-	void setDao(Dao bean);
 	
 	Business getBusiness();
+
 	void setBusiness(Business bean);
 
 }

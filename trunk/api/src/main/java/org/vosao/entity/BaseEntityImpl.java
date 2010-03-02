@@ -57,9 +57,11 @@ public abstract class BaseEntityImpl implements BaseEntity {
 	
 	@Override
 	public void copy(BaseEntity entity) {
+		Key myKey = getKey(); 
 		Entity buf = new Entity("tmp");
 		entity.save(buf);
 		load(buf);
+		setKey(myKey);
 	}
 	
 	public boolean equals(Object object) {

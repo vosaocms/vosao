@@ -34,17 +34,18 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.jabsorb.JSONRPCBridge;
 import org.vosao.business.Business;
 import org.vosao.business.PluginBusiness;
 import org.vosao.business.impl.plugin.PluginLoader;
 import org.vosao.business.plugin.PluginClassLoaderFactory;
+import org.vosao.business.plugin.PluginEntryPoint;
 import org.vosao.business.plugin.PluginResourceCache;
 import org.vosao.business.vo.PluginPropertyVO;
 import org.vosao.common.PluginException;
 import org.vosao.entity.PluginEntity;
+import org.vosao.service.BackService;
+import org.vosao.service.FrontService;
 import org.vosao.service.plugin.PluginServiceManager;
-import org.vosao.velocity.plugin.VelocityPlugin;
 
 public class PluginBusinessImpl extends AbstractBusinessImpl 
 	implements PluginBusiness {
@@ -52,17 +53,16 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 	private static final Log logger = LogFactory.getLog(PluginBusinessImpl.class);
 
 	private Business business;
+	private FrontService frontService;
+	private BackService backService;
+	
 	private PluginLoader pluginLoader;
 	private PluginClassLoaderFactory pluginClassLoaderFactory;
-	private Map<String, VelocityPlugin> velocityPlugins;
-	private Map<String, PluginServiceManager> frontServices;
-	private Map<String, PluginServiceManager> backServices;
+	private Map<String, PluginEntryPoint> plugins;
 	private PluginResourceCache cache;
 	
 	public void init() {
-		velocityPlugins = new HashMap<String, VelocityPlugin>();
-		frontServices = new HashMap<String, PluginServiceManager>();
-		backServices = new HashMap<String, PluginServiceManager>();
+		plugins = new HashMap<String, PluginEntryPoint>();
 	}
 	
 	/**
@@ -78,25 +78,16 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 	}
 	
 	@Override
-	public VelocityPlugin getVelocityPlugin(PluginEntity plugin) 
+	public Object getVelocityPlugin(PluginEntity plugin) 
 			throws ClassNotFoundException, InstantiationException, 
 			IllegalAccessException {
-		if (!velocityPlugins.containsKey(plugin.getName())) {
-			ClassLoader pluginClassLoader = getPluginClassLoaderFactory()
-				.getClassLoader(plugin.getName());
-			Class velocityPluginClass = pluginClassLoader
-				.loadClass(plugin.getVelocityPluginClass());
-			velocityPlugins.put(plugin.getName(), 
-					(VelocityPlugin)velocityPluginClass.newInstance());
-		}
-		return velocityPlugins.get(plugin.getName());
+		PluginEntryPoint entryPoint = getEntryPoint(plugin);
+		return entryPoint.getPluginVelocityService();
 	}
 
 	@Override
 	public void resetPlugin(PluginEntity plugin) {
-		velocityPlugins.remove(plugin.getName());
-		frontServices.remove(plugin.getName());
-		backServices.remove(plugin.getName());
+		plugins.remove(plugin.getName());
 		getPluginClassLoaderFactory().resetPlugin(plugin.getName());
 		cache.reset(plugin.getName());
 	}
@@ -189,36 +180,51 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 	public PluginServiceManager getBackServices(PluginEntity plugin)
 			throws ClassNotFoundException, InstantiationException,
 			IllegalAccessException {
-		if (!backServices.containsKey(plugin.getName())) {
-			ClassLoader pluginClassLoader = getPluginClassLoaderFactory()
-				.getClassLoader(plugin.getName());
-			Class backServicesClass = pluginClassLoader
-				.loadClass(plugin.getBackServiceClass());
-			PluginServiceManager manager = (PluginServiceManager)
-					backServicesClass.newInstance();
-			manager.setDao(getDao());
-			manager.setBusiness(getBusiness());
-			backServices.put(plugin.getName(), manager);
-		}
-		return backServices.get(plugin.getName());
+		PluginEntryPoint entryPoint = getEntryPoint(plugin);
+		return entryPoint.getPluginBackService();
 	}
 
 	@Override
 	public PluginServiceManager getFrontServices(PluginEntity plugin)
 			throws ClassNotFoundException, InstantiationException,
 			IllegalAccessException {
-		if (!backServices.containsKey(plugin.getName())) {
+		PluginEntryPoint entryPoint = getEntryPoint(plugin);
+		return entryPoint.getPluginFrontService();
+	}
+
+	@Override
+	public PluginEntryPoint getEntryPoint(PluginEntity plugin)
+			throws ClassNotFoundException, InstantiationException,
+			IllegalAccessException {
+		if (!plugins.containsKey(plugin.getName())) {
 			ClassLoader pluginClassLoader = getPluginClassLoaderFactory()
 				.getClassLoader(plugin.getName());
-			Class frontServicesClass = pluginClassLoader
-				.loadClass(plugin.getBackServiceClass());
-			PluginServiceManager manager = (PluginServiceManager)
-					frontServicesClass.newInstance();
-			manager.setDao(getDao());
-			manager.setBusiness(getBusiness());
-			frontServices.put(plugin.getName(), manager);
+			Class entryPointClass = pluginClassLoader
+				.loadClass(plugin.getEntryPointClass());
+			PluginEntryPoint entryPoint = (PluginEntryPoint)entryPointClass
+				.newInstance();
+			entryPoint.setBusiness(getBusiness());
+			entryPoint.setFrontService(getFrontService());
+			entryPoint.setBackService(getBackService());
+			plugins.put(plugin.getName(), entryPoint);
 		}
-		return frontServices.get(plugin.getName());
+		return plugins.get(plugin.getName());
+	}
+
+	public FrontService getFrontService() {
+		return frontService;
+	}
+
+	public void setFrontService(FrontService frontService) {
+		this.frontService = frontService;
+	}
+
+	public BackService getBackService() {
+		return backService;
+	}
+
+	public void setBackService(BackService backService) {
+		this.backService = backService;
 	}
 
 }

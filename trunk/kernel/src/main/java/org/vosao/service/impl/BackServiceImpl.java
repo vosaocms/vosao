@@ -314,12 +314,11 @@ public class BackServiceImpl implements BackService, Serializable {
 	private void registerPluginServices(JSONRPCBridge bridge) {
 		for (PluginEntity plugin : getDao().getPluginDao().select()) {
 			try {
-				if (plugin.isBackServicePlugin()) {
-					PluginServiceManager manager = getBusiness()
+				PluginServiceManager manager = getBusiness()
 						.getPluginBusiness().getBackServices(plugin);
-					manager.setBackService(this);
+				if (manager != null) {
 					manager.register(bridge);
-				}				
+				}
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			} catch (InstantiationException e) {
@@ -333,10 +332,9 @@ public class BackServiceImpl implements BackService, Serializable {
 	private void unregisterPluginServices(JSONRPCBridge bridge) {
 		for (PluginEntity plugin : getDao().getPluginDao().select()) {
 			try {
-				if (plugin.isBackServicePlugin()) {
-					PluginServiceManager manager = getBusiness()
-						.getPluginBusiness().getBackServices(plugin);
-					manager.setBackService(this);
+				PluginServiceManager manager = getBusiness()
+					.getPluginBusiness().getBackServices(plugin);
+				if (manager != null) {
 					manager.unregister(bridge);
 				}				
 			} catch (ClassNotFoundException e) {

@@ -21,8 +21,6 @@
 
 package org.vosao.entity;
 
-import org.datanucleus.util.StringUtils;
-
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
 
@@ -36,23 +34,13 @@ public class PluginEntity extends BaseEntityImpl {
 	private String website;
 	private String configStructure;
 	private String configData;
-	private String velocityPluginClass;
-	private String frontServiceClass;
-	private String backServiceClass;
+	private String entryPointClass;
 	private String configURL;
 	private String pageHeader;
 
 	public PluginEntity() {
-		name = "";
-		title = "";
-		description = "";
-		website = "";
 		configStructure = "";
 		configData = "";
-		velocityPluginClass = "";
-		frontServiceClass = "";
-		backServiceClass = "";
-		configURL = "";
 		pageHeader = "";
     }
     
@@ -65,9 +53,7 @@ public class PluginEntity extends BaseEntityImpl {
 		website = getStringProperty(entity, "website");
 		configStructure = getTextProperty(entity, "configStructure");
 		configData = getTextProperty(entity, "configData");
-		velocityPluginClass = getStringProperty(entity, "velocityPluginClass");
-		frontServiceClass = getStringProperty(entity, "frontServiceClass");
-		backServiceClass = getStringProperty(entity, "backServiceClass");
+		entryPointClass = getStringProperty(entity, "entryPointClass");
 		configURL = getStringProperty(entity, "configURL");
 		pageHeader = getTextProperty(entity, "pageHeader");
 	}
@@ -81,9 +67,7 @@ public class PluginEntity extends BaseEntityImpl {
 		entity.setProperty("website", website);
 		entity.setProperty("configStructure", new Text(configStructure));
 		entity.setProperty("configData", new Text(configData));
-		entity.setProperty("velocityPluginClass", velocityPluginClass);
-		entity.setProperty("frontServiceClass", frontServiceClass);
-		entity.setProperty("backServiceClass", backServiceClass);
+		entity.setProperty("entryPointClass", entryPointClass);
 		entity.setProperty("configURL", configURL);
 		entity.setProperty("pageHeader", new Text(pageHeader));
 	}
@@ -145,42 +129,14 @@ public class PluginEntity extends BaseEntityImpl {
 		this.website = website;
 	}
 
-	public String getVelocityPluginClass() {
-		return velocityPluginClass;
+	public String getEntryPointClass() {
+		return entryPointClass;
 	}
 
-	public void setVelocityPluginClass(String velocityPluginClass) {
-		this.velocityPluginClass = velocityPluginClass;
+	public void setEntryPointClass(String entryPointClass) {
+		this.entryPointClass = entryPointClass;
 	}
 	
-	public boolean isVelocityPlugin() {
-		return !StringUtils.isEmpty(velocityPluginClass);
-	}
-
-	public boolean isFrontServicePlugin() {
-		return !StringUtils.isEmpty(frontServiceClass);
-	}
-
-	public boolean isBackServicePlugin() {
-		return !StringUtils.isEmpty(backServiceClass);
-	}
-	
-	public String getFrontServiceClass() {
-		return frontServiceClass;
-	}
-
-	public void setFrontServiceClass(String frontServiceClass) {
-		this.frontServiceClass = frontServiceClass;
-	}
-
-	public String getBackServiceClass() {
-		return backServiceClass;
-	}
-
-	public void setBackServiceClass(String backServiceClass) {
-		this.backServiceClass = backServiceClass;
-	}
-
 	public String getConfigURL() {
 		return configURL;
 	}

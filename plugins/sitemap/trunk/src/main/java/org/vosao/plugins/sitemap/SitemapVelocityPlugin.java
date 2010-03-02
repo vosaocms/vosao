@@ -32,6 +32,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.business.vo.PluginPropertyVO;
 import org.vosao.entity.PageEntity;
@@ -45,6 +46,10 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 	private static final Log logger = LogFactory.getLog(
 			SitemapVelocityPlugin.class);
 
+	public SitemapVelocityPlugin(Business business) {
+		setBusiness(business);
+	}
+	
 	public String render() {
 		try {
 			PluginEntity plugin = getDao().getPluginDao().getByName("sitemap");

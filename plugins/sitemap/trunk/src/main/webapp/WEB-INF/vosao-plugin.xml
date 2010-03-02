@@ -9,7 +9,7 @@
     <config>
         <param name="level" title="Sitemap level" type="Integer" value="2" />
     </config>
-    <velocity-plugin-class>
-        org.vosao.plugins.sitemap.SitemapVelocityPlugin
-    </velocity-plugin-class>
+    <entry-point-class>
+        org.vosao.plugins.sitemap.SitemapEntryPoint
+    </entry-point-class>
 </vosao-plugin>

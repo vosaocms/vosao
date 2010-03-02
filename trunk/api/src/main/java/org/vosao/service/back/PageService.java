@@ -49,8 +49,6 @@ public interface PageService extends AbstractService {
 	GroupService getGroupService();
 	void setGroupService(GroupService bean);
 
-	List<ContentEntity> getContents(final Long pageId);
-	
 	TreeItemDecorator<PageVO> getTree();
 	
 	PageEntity getPage(final Long id);

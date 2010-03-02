@@ -68,11 +68,6 @@ function loadData() {
 		page = pageRequest.page;
 		loadLanguages();
 		loadPage();
-		if (editMode) {
-			loadContents();
-			$.cookie('fileBrowserPath', '/page' + page.friendlyURL, 
-					{path:'/', expires: 10});
-		}
 	}, pageId, pageParentUrl);
 }
 
@@ -86,16 +81,15 @@ function callLoadPage() {
 }
 
 function loadPage() {
-	if (editMode) {
-		pageId = String(page.id);
-		pageParentUrl = page.parentUrl;
-		loadVersions();
-		loadTitles();
-	} else {
-		pages['1'] = page;
-	}
+	pageId = String(page.id);
+	pageParentUrl = page.parentUrl;
+	loadVersions();
+	loadTitles();
 	initPageForm();
 	loadPagePermission();
+	loadContents();
+	$.cookie('fileBrowserPath', '/page' + page.friendlyURL, 
+			{path:'/', expires: 10});
 }
 
 function loadLanguages() {
@@ -104,15 +98,8 @@ function loadLanguages() {
 	var h = '';
 	$.each(r.list, function(i, value) {
 		languages[value.code] = value;
-	});
-	fillLanguagesList(languages);
-}
- 
-function fillLanguagesList(langsMap) {
-	var h = '';
-	$.each(langsMap, function(code, lang) {
-		h += '<option value="' + code + '" ' + '>'
-				+ lang.title + '</option>';
+		h += '<option value="' + value.code + '" ' + '>' 
+			+ value.title + '</option>';
 	});
 	$('#language').html(h);
 }
@@ -163,7 +150,7 @@ function onPageUpdate(continueFlag) {
 				location.href = '/cms/pages.jsp';
 			}
 			else {
-				loadData();
+				callLoadPage();
 			}
 		} else {
 			Vosao.showServiceMessages(r);
@@ -281,23 +268,15 @@ function loadContents() {
 		$.each(r.list, function(i, value) {
 			contents[value.languageCode] = value.content;
 		});
-		var allowedLangs = {};
-		if (pageRequest.pagePermission.allLanguages) {
-			allowedLangs = languages;
+		if (!currentLanguage) {
+			if (languages[Vosao.ENGLISH_CODE] != undefined) {
+				currentLanguage = Vosao.ENGLISH_CODE;
+			}
+			else {
+				currentLanguage = r.list[0].languageCode;
+			}
 		}
-		else {
-			$.each(pageRequest.pagePermission.languagesList.list, 
-					function(i, value) {
-				allowedLangs[value] = languages[value];
-			});
-		}
-		fillLanguagesList(allowedLangs);
-		if (allowedLangs[Vosao.ENGLISH_CODE] != undefined) {
-			currentLanguage = Vosao.ENGLISH_CODE;
-		}
-		else {
-			currentLanguage = r.list[0].languageCode;
-		}
+		$('#language').val(currentLanguage);
 		setEditorContent(contents[currentLanguage]);
 		$('#titleLocal').val(getTitle());
 	} else {

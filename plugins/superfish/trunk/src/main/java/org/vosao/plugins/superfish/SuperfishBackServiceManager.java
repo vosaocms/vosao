@@ -22,6 +22,7 @@
 package org.vosao.plugins.superfish;
 
 import org.jabsorb.JSONRPCBridge;
+import org.vosao.business.Business;
 import org.vosao.service.plugin.AbstractServicePlugin;
 import org.vosao.service.plugin.PluginServiceManager;
 
@@ -29,6 +30,10 @@ public class SuperfishBackServiceManager extends AbstractServicePlugin
 		implements PluginServiceManager {
 
 	private SuperfishBackService backService;
+	
+	public SuperfishBackServiceManager(Business aBusiness) {
+		setBusiness(aBusiness);
+	}
 	
 	@Override
 	public void register(JSONRPCBridge bridge) {
@@ -42,7 +47,7 @@ public class SuperfishBackServiceManager extends AbstractServicePlugin
 
 	public SuperfishBackService getSuperfishBackService() {
 		if (backService == null) {
-			backService = new SuperfishBackService(getDao(), getBusiness());
+			backService = new SuperfishBackService(getBusiness());
 		}
 		return backService;
 	}

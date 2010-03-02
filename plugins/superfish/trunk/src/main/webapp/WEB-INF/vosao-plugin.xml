@@ -10,15 +10,11 @@
     
     <website>www.vosao.org</website>
 
-    <velocity-plugin-class>
-        org.vosao.plugins.superfish.SuperfishVelocityPlugin
-    </velocity-plugin-class>
+    <entry-point-class>
+        org.vosao.plugins.superfish.SuperfishEntryPoint
+    </entry-point-class>
 
     <plugin-config-url>config.html</plugin-config-url>
-
-    <back-service-manager-class>
-        org.vosao.plugins.superfish.SuperfishBackServiceManager
-    </back-service-manager-class>
 
     <header-javascript>js/hoverIntent.js</header-javascript>
     <header-javascript>js/superfish.js</header-javascript>

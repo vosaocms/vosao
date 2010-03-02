@@ -23,13 +23,11 @@ package org.vosao.plugins.superfish;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
+import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PluginEntity;
@@ -38,9 +36,10 @@ import org.vosao.velocity.plugin.AbstractVelocityPlugin;
 
 public class SuperfishVelocityPlugin extends AbstractVelocityPlugin {
 
-	private static final Log logger = LogFactory.getLog(
-			SuperfishVelocityPlugin.class);
-
+	public SuperfishVelocityPlugin(Business aBusiness) {
+		setBusiness(aBusiness);
+	}
+	
 	public String render() {
 		try {
 			PluginEntity plugin = getDao().getPluginDao().getByName("superfish");

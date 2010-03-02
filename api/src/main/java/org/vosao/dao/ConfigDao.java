@@ -23,7 +23,7 @@ package org.vosao.dao;
 
 import org.vosao.entity.ConfigEntity;
 
-public interface ConfigDao extends BaseNativeDao<ConfigEntity> {
+public interface ConfigDao extends BaseDao<ConfigEntity> {
 
 	ConfigEntity getConfig();
 	

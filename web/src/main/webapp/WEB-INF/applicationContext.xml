@@ -12,22 +12,6 @@
            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
-    <!--======================== Persistence ================================-->
-
-    <bean id="persistenceManagerFactory"  
-        class="org.springframework.orm.jdo.LocalPersistenceManagerFactoryBean">  
-        <property name="jdoProperties">
-            <props>
-                <prop key="javax.jdo.PersistenceManagerFactoryClass">org.datanucleus.store.appengine.jdo.DatastoreJDOPersistenceManagerFactory</prop>
-                <prop key="javax.jdo.option.ConnectionURL">appengine</prop>
-                <prop key="javax.jdo.option.NontransactionalRead">true</prop>
-                <prop key="javax.jdo.option.NontransactionalWrite">true</prop>
-                <prop key="javax.jdo.option.RetainValues">true</prop>
-                <prop key="datanucleus.appengine.autoCreateDatastoreTxns">true</prop>
-            </props>
-        </property>
-    </bean>  
-    
     <!--========================== System service ===========================-->
     
     <bean id="systemService" class="org.vosao.global.impl.SystemServiceImpl"
@@ -60,7 +44,6 @@
 
     <bean id="abstractDao" abstract="true"
         class="org.vosao.dao.impl.AbstractDaoImpl">
-        <property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>
         <property name="entityCache" ref="entityCache"/>
         <property name="queryCache" ref="queryCache"/>
         <property name="systemService" ref="systemService"/>

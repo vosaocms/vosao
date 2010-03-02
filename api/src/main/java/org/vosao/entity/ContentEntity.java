@@ -27,7 +27,7 @@ import com.google.appengine.api.datastore.Text;
 /**
  * @author Alexander Oleynik
  */
-public class ContentEntity extends BaseNativeEntityImpl {
+public class ContentEntity extends BaseEntityImpl {
 
 	private static final long serialVersionUID = 8L;
 

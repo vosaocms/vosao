@@ -23,7 +23,7 @@ package org.vosao.entity;
 
 import com.google.appengine.api.datastore.Entity;
 
-public class LanguageEntity extends BaseNativeEntityImpl {
+public class LanguageEntity extends BaseEntityImpl {
 
 	private static final long serialVersionUID = 2L;
 

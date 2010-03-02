@@ -27,7 +27,7 @@ import com.google.appengine.api.datastore.Entity;
  * SEO Urls plugin link data.
  * @author Alexander Oleynik
  */
-public class SeoUrlEntity extends BaseNativeEntityImpl {
+public class SeoUrlEntity extends BaseEntityImpl {
 
 	private static final long serialVersionUID = 2L;
 

@@ -31,7 +31,7 @@ import com.google.appengine.api.datastore.Query;
 /**
  * @author Alexander Oleynik
  */
-public class GroupDaoImpl extends BaseNativeDaoImpl<GroupEntity> 
+public class GroupDaoImpl extends BaseDaoImpl<GroupEntity> 
 		implements GroupDao {
 
 	public GroupDaoImpl() {

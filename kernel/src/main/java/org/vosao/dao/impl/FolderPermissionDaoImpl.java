@@ -35,7 +35,7 @@ import com.google.appengine.api.datastore.Query;
  * @author Alexander Oleynik
  */
 public class FolderPermissionDaoImpl 
-		extends BaseNativeDaoImpl<FolderPermissionEntity> 
+		extends BaseDaoImpl<FolderPermissionEntity> 
 		implements FolderPermissionDao {
 
 	public FolderPermissionDaoImpl() {

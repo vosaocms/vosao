@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.vosao.entity.ContentEntity;
 
-public interface ContentDao extends BaseNativeDao<ContentEntity> {
+public interface ContentDao extends BaseDao<ContentEntity> {
 
 	List<ContentEntity> select(final String parentClass, 
 			final Long parentKey);

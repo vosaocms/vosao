@@ -27,7 +27,7 @@ import org.vosao.entity.TemplateEntity;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 
-public class TemplateDaoImpl extends BaseNativeDaoImpl<TemplateEntity> 
+public class TemplateDaoImpl extends BaseDaoImpl<TemplateEntity> 
 		implements TemplateDao {
 
 	public TemplateDaoImpl() {

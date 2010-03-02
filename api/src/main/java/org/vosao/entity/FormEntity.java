@@ -24,7 +24,7 @@ package org.vosao.entity;
 import com.google.appengine.api.datastore.Entity;
 
 
-public class FormEntity extends BaseNativeEntityImpl {
+public class FormEntity extends BaseEntityImpl {
 
 	private static final long serialVersionUID = 1L;
 

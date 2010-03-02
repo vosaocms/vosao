@@ -27,7 +27,7 @@ import org.vosao.entity.SeoUrlEntity;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 
-public class SeoUrlDaoImpl extends BaseNativeDaoImpl<SeoUrlEntity> 
+public class SeoUrlDaoImpl extends BaseDaoImpl<SeoUrlEntity> 
 		implements SeoUrlDao {
 
 	public SeoUrlDaoImpl() {

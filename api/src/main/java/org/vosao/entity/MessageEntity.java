@@ -26,7 +26,7 @@ import com.google.appengine.api.datastore.Entity;
 /**
  * @author Alexander Oleynik
  */
-public class MessageEntity extends BaseNativeEntityImpl {
+public class MessageEntity extends BaseEntityImpl {
 
 	private static final long serialVersionUID = 2L;
 

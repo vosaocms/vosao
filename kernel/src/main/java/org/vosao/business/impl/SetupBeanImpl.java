@@ -21,6 +21,8 @@
 
 package org.vosao.business.impl;
 
+import static com.google.appengine.api.labs.taskqueue.TaskOptions.Builder.url;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -42,13 +44,10 @@ import org.vosao.enums.ContentPermissionType;
 import org.vosao.enums.FolderPermissionType;
 import org.vosao.enums.PageState;
 import org.vosao.enums.UserRole;
+import org.vosao.servlet.SessionCleanTaskServlet;
 import org.vosao.utils.StreamUtil;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.labs.taskqueue.Queue;
 
 public class SetupBeanImpl implements SetupBean {
 
@@ -88,14 +87,8 @@ public class SetupBeanImpl implements SetupBean {
 	}
 
 	private void clearSessions() {
-        DatastoreService datastore = DatastoreServiceFactory
-        		.getDatastoreService();
-        Query query = new Query("_ah_SESSION");
-        PreparedQuery results = datastore.prepare(query);
-        log.info("Deleting " + results.countEntities() + " sessions from data store");
-        for (Entity session : results.asIterable()) {
-            datastore.delete(session.getKey());
-        }
+		Queue queue = getBusiness().getSystemService().getQueue("session-clean");
+		queue.add(url(SessionCleanTaskServlet.SESSION_CLEAN_TASK_URL));
 	} 
 	
 	private void clearCache() {

@@ -26,7 +26,7 @@ import java.util.List;
 import org.vosao.dao.FormConfigDao;
 import org.vosao.entity.FormConfigEntity;
 
-public class FormConfigDaoImpl extends BaseNativeDaoImpl<FormConfigEntity> 
+public class FormConfigDaoImpl extends BaseDaoImpl<FormConfigEntity> 
 		implements FormConfigDao {
 
 	public FormConfigDaoImpl() {

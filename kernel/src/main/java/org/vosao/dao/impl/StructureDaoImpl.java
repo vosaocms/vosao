@@ -34,7 +34,7 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 /**
  * @author Alexander Oleynik
  */
-public class StructureDaoImpl extends BaseNativeDaoImpl<StructureEntity> 
+public class StructureDaoImpl extends BaseDaoImpl<StructureEntity> 
 		implements StructureDao {
 
 	private StructureTemplateDao structreTemplateDao;

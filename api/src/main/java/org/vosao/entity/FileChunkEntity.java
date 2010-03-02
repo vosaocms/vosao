@@ -24,7 +24,7 @@ package org.vosao.entity;
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Entity;
 
-public class FileChunkEntity extends BaseNativeEntityImpl {
+public class FileChunkEntity extends BaseEntityImpl {
 	
 	private static final long serialVersionUID = 2L;
 

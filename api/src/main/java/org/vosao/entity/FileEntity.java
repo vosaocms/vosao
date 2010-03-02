@@ -27,7 +27,7 @@ import org.vosao.utils.FolderUtil;
 
 import com.google.appengine.api.datastore.Entity;
 
-public class FileEntity extends BaseNativeEntityImpl {
+public class FileEntity extends BaseEntityImpl {
 
 	private static final long serialVersionUID = 5L;
 

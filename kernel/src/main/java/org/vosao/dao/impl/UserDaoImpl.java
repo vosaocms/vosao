@@ -33,7 +33,7 @@ import org.vosao.enums.UserRole;
 import com.google.appengine.api.datastore.Query;
 import static com.google.appengine.api.datastore.Query.FilterOperator.*;
 
-public class UserDaoImpl extends BaseNativeDaoImpl<UserEntity> 
+public class UserDaoImpl extends BaseDaoImpl<UserEntity> 
 		implements UserDao {
 
 	private UserGroupDao userGroupDao;

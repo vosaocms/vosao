@@ -32,7 +32,7 @@ import org.vosao.entity.helper.FieldHelper;
 import com.google.appengine.api.datastore.Query;
 import static com.google.appengine.api.datastore.Query.FilterOperator.*;
 
-public class FieldDaoImpl extends BaseNativeDaoImpl<FieldEntity> 
+public class FieldDaoImpl extends BaseDaoImpl<FieldEntity> 
 		implements FieldDao {
 
 	public FieldDaoImpl() {

@@ -28,7 +28,7 @@ import org.vosao.enums.FieldType;
 
 import com.google.appengine.api.datastore.Entity;
 
-public class FieldEntity extends BaseNativeEntityImpl {
+public class FieldEntity extends BaseEntityImpl {
 
 	public static class Option {
 		private String value;

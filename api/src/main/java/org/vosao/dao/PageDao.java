@@ -26,7 +26,7 @@ import java.util.List;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 
-public interface PageDao extends BaseNativeDao<PageEntity> {
+public interface PageDao extends BaseDao<PageEntity> {
 
 	/**
 	 * Select all children versions for parent page.

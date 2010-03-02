@@ -21,6 +21,8 @@
 
 package org.vosao.service.plugin;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.dao.Dao;
 import org.vosao.service.BackService;
@@ -28,7 +30,9 @@ import org.vosao.service.FrontService;
 
 abstract public class AbstractServicePlugin implements ServicePlugin {
 
-	private Dao dao;
+	protected static final Log logger = LogFactory.getLog(
+			AbstractServicePlugin.class);
+
 	private Business business;
 	private FrontService frontService;
 	private BackService backService;
@@ -40,17 +44,12 @@ abstract public class AbstractServicePlugin implements ServicePlugin {
 
 	@Override
 	public Dao getDao() {
-		return dao;
+		return business.getDao();
 	}
 
 	@Override
 	public void setBusiness(Business bean) {
 		business = bean;		
-	}
-
-	@Override
-	public void setDao(Dao bean) {
-		dao = bean;
 	}
 
 	@Override

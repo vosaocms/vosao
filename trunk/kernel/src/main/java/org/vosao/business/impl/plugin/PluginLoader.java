@@ -97,6 +97,9 @@ public class PluginLoader {
 		if (p != null) {
 			throw new PluginException("Plugin " + plugin.getTitle() + " already installed.");
 		}
+		if (StringUtils.isEmpty(plugin.getEntryPointClass())) {
+			throw new PluginException("Entry point class not defined.");
+		}
 		getDao().getPluginDao().save(plugin);
 		String pluginBase = "/plugins/" + plugin.getName();
 		getBusiness().getFolderBusiness().createFolder(pluginBase);

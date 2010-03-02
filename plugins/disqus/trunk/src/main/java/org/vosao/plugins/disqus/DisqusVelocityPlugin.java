@@ -31,14 +31,16 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.vosao.business.Business;
 import org.vosao.entity.PluginEntity;
 import org.vosao.velocity.plugin.AbstractVelocityPlugin;
 
 public class DisqusVelocityPlugin extends AbstractVelocityPlugin {
 
-	private static final Log logger = LogFactory.getLog(
-			DisqusVelocityPlugin.class);
-
+	public DisqusVelocityPlugin(Business aBusiness) {
+		setBusiness(aBusiness);
+	}
+	
 	public String render() {
 		try {
 			PluginEntity plugin = getDao().getPluginDao().getByName("disqus");

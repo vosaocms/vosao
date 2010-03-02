@@ -10,7 +10,7 @@
         <param name="embedCode" title="Embed code" type="String" />
         <param name="countCode" title="Comment count code" type="Text" />
     </config>
-    <velocity-plugin-class>
-        org.vosao.plugins.disqus.DisqusVelocityPlugin
-    </velocity-plugin-class>
+    <entry-point-class>
+        org.vosao.plugins.disqus.DisqusEntryPoint
+    </entry-point-class>
 </vosao-plugin>

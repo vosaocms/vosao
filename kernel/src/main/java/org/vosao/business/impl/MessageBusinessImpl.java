@@ -26,9 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.datanucleus.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.vosao.business.MessageBusiness;
 import org.vosao.entity.MessageEntity;
 
@@ -38,32 +36,26 @@ import org.vosao.entity.MessageEntity;
 public class MessageBusinessImpl extends AbstractBusinessImpl 
 	implements MessageBusiness {
 
-	private static final Log logger = LogFactory.getLog(MessageBusinessImpl.class);
-
-	private String getBundleKey(final String languageCode) {
-		return "messages_" + languageCode;	
-	}
+	private static final String DEFAULT_BUNDLE_LANGUAGE = "en";
 	
 	@Override
 	public Map<String, String> getBundle(String languageCode) {
-		Map<String, String> result = (Map<String, String>) getSystemService()
-				.getCache().get(getBundleKey(languageCode));
-		if (result == null) {
-			List<MessageEntity> messages = getDao().getMessageDao().select(
-					languageCode);
-			result = new HashMap<String, String>();
-			for (MessageEntity message : messages) {
-				result.put(message.getCode(), message.getValue());
-			}
-		}
+		Map<String, String> result = new HashMap<String, String>();
+		addMessages(result, DEFAULT_BUNDLE_LANGUAGE);
+		addMessages(result, languageCode);
 		return result;
 	}
 
-	@Override
-	public void resetBundleCache(String languageCode) {
-		getSystemService().getCache().remove(getBundleKey(languageCode));
+	private void addMessages(Map<String, String> bundle, String language) {
+		List<MessageEntity> messages = getDao().getMessageDao().select(
+				language);
+		for (MessageEntity message : messages) {
+			if (!StringUtils.isEmpty(message.getValue())) {
+				bundle.put(message.getCode(), message.getValue());
+			}
+		}
 	}
-
+	
 	@Override
 	public List<String> validateBeforeUpdate(MessageEntity entity) {
 		List<String> errors = new ArrayList<String>();

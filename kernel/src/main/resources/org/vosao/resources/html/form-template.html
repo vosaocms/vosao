@@ -121,37 +121,65 @@ function formError(msg) {
 function formValidate(values, jQuerySet, options) {
 	var valid = true;
 #foreach($field in $fields)
-#if ($field.fieldType == 'TEXT' && $field.mandatory)
+
+#if ($field.fieldType == 'TEXT')
+#if ($field.mandatory)
     var value = $('input[name="$field.name"], textarea[name="$field.name"]').val(); 
     if (value == '') {
         formError('$field.title is empty. Please provide the value.');
         valid = false;
     }
-#elseif ($field.fieldType == 'PASSWORD' && $field.mandatory)
+#end
+#if ($field.regex && $field.regex != "")
+    var value = $('input[name="$field.name"], textarea[name="$field.name"]').val(); 
+    var filter = /$field.regex/; 
+    if (!filter.test(value)) {
+        formError('$field.getRegexMessage($language.code)');
+        valid = false;
+    }
+#end
+#end
+
+#if ($field.fieldType == 'PASSWORD')
+#if ($field.mandatory)
     var value = $('input[name="$field.name"]').val(); 
     if (value == '') {
         formError('$field.title is empty. Please provide the value.');
         valid = false;
     }
-#elseif ($field.fieldType == 'FILE' && $field.mandatory)
+#end
+#end
+
+#if ($field.fieldType == 'FILE')
+#if ($field.mandatory)
     var value = $('input[name="$field.name"]').val(); 
     if (value == '') {
         formError('$field.title is empty. Please provide the value.');
         valid = false;
     }
-#elseif ($field.fieldType == 'CHECKBOX' && $field.mandatory)
+#end
+#end
+
+#if ($field.fieldType == 'CHECKBOX')
+#if ($field.mandatory)
     var checkedItems = $('input[name="$field.name"]:checked') > 0; 
     if (checkedItems) {
         formError('$field.title not selected. Please select.');
         valid = false;
     }
-#elseif ($field.fieldType == 'LISTBOX' && $field.mandatory)
+#end    
+#end    
+
+#if ($field.fieldType == 'LISTBOX')
+#if ($field.mandatory)
     var value = $('select[name="$field.name"]').val(); 
     if (value == '') {
         formError('$field.title is not selected. Please select.');
         valid = false;
     }
 #end
+#end
+
 #end	
 	return valid;
 }

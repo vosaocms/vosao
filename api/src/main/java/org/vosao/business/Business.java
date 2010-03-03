@@ -46,6 +46,7 @@ public interface Business {
 	UserEntity getUser();
 	
 	String getLanguage(final HttpServletRequest request);
+	String getLanguage();
 	void setLanguage(String language, final HttpServletRequest request);
 
 	PageBusiness getPageBusiness();

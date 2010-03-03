@@ -21,15 +21,15 @@
 
 package org.vosao.velocity.impl;
 
-import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.exception.MethodInvocationException;
-import org.apache.velocity.exception.ParseErrorException;
-import org.apache.velocity.exception.ResourceNotFoundException;
+import org.vosao.business.Business;
+import org.vosao.business.PageBusiness;
 import org.vosao.dao.Dao;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormConfigEntity;
@@ -39,61 +39,57 @@ import org.vosao.velocity.FormVelocityService;
 
 public class FormVelocityServiceImpl implements FormVelocityService {
 
-	private Dao dao;
-	private SystemService systemService;
+	private static final Log logger = LogFactory.getLog(FormVelocityServiceImpl.class);
 	
-	public FormVelocityServiceImpl(Dao aDao, SystemService aSystemService) {
-		setDao(aDao);
-		setSystemService(aSystemService);
+	private Business business;
+	
+	public FormVelocityServiceImpl(Business aBusiness) {
+		business = aBusiness;
 	}
 	
-	private Dao getDao() {
-		return dao;
-	}
-	
-	private void setDao(Dao aDao) {
-		dao = aDao;
-	}
-
 	@Override
 	public String render(String formName) {
-		FormEntity form = getDao().getFormDao().getByName(formName);
-		if (form == null) {
-			return "Error! Form " + formName + " was not found.";
-		}
-		List<FieldEntity> fields = getDao().getFieldDao().getByForm(form);
-		FormConfigEntity formConfig = getDao().getFormConfigDao().getConfig();
-		VelocityContext context = new VelocityContext();
-		context.put("config", getDao().getConfigDao().getConfig());
-		context.put("formConfig", formConfig);
-		context.put("form", form);
-		context.put("fields", fields);
-		if (StringUtils.isEmpty(formConfig.getFormTemplate())) {
-			return "Error! Form template is empty.";
-		}
-		StringWriter wr = new StringWriter();
-		String log = null;
 		try {
+			FormEntity form = getDao().getFormDao().getByName(formName);
+			if (form == null) {
+				return "Error! Form " + formName + " was not found.";
+			}
+			List<FieldEntity> fields = getDao().getFieldDao().getByForm(form);
+			FormConfigEntity formConfig = getDao().getFormConfigDao().getConfig();
+			VelocityContext context = getPageBusiness().createContext(
+				getBusiness().getLanguage());
+			context.put("formConfig", formConfig);
+			context.put("form", form);
+			context.put("fields", fields);
+			if (StringUtils.isEmpty(formConfig.getFormTemplate())) {
+				return "Error! Form template is empty.";
+			}
+			StringWriter wr = new StringWriter();
+			String log = null;
 			getSystemService().getVelocityEngine().evaluate(
 					context, wr, log, formConfig.getFormTemplate());
 			return wr.toString();
-		} catch (ParseErrorException e) {
-			return e.toString();
-		} catch (MethodInvocationException e) {
-			return e.toString();
-		} catch (ResourceNotFoundException e) {
-			return e.toString();
-		} catch (IOException e) {
-			return e.toString();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return e.getMessage();
 		}
 	}
 
-	public SystemService getSystemService() {
-		return systemService;
+	private Business getBusiness() {
+		return business;
+	}
+	
+	private PageBusiness getPageBusiness() {
+		return getBusiness().getPageBusiness();
 	}
 
-	public void setSystemService(SystemService systemService) {
-		this.systemService = systemService;
+	private Dao getDao() {
+		return getBusiness().getDao();
 	}
-
+	
+	private SystemService getSystemService() {
+		return getBusiness().getSystemService();
+	}
+	
 }

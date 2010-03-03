@@ -34,26 +34,21 @@ import org.vosao.velocity.plugin.VelocityPlugin;
 
 public class VelocityPluginServiceImpl implements VelocityPluginService {
 
-	private Dao dao;
-	private SystemService systemService;
 	private FormVelocityService form;
 	private Business business;
 	
-	public VelocityPluginServiceImpl(Dao aDao, SystemService aSystemService,
-			Business aBusiness) {
-		dao = aDao;
-		systemService= aSystemService;
-		form = new FormVelocityServiceImpl(dao, systemService);
+	public VelocityPluginServiceImpl(Business aBusiness) {
 		business = aBusiness;
+		form = new FormVelocityServiceImpl(getBusiness());
 	}
 	
 	@Override
 	public Map<String, Object> getPlugins() {
 		Map<String, Object> services = new HashMap<String, Object>();
 		services.put("form", form);
-		for (PluginEntity plugin : dao.getPluginDao().select()) {
+		for (PluginEntity plugin : getDao().getPluginDao().select()) {
 			try {
-				Object velocityPlugin = business.getPluginBusiness()
+				Object velocityPlugin = getBusiness().getPluginBusiness()
 					.getVelocityPlugin(plugin);
 				if (velocityPlugin != null) {
 					services.put(plugin.getName(), velocityPlugin);
@@ -65,4 +60,17 @@ public class VelocityPluginServiceImpl implements VelocityPluginService {
 		}
 		return services;
 	}
+
+	public Business getBusiness() {
+		return business;
+	}
+
+	public Dao getDao() {
+		return getBusiness().getDao();
+	}
+	
+	public SystemService getSystemService() {
+		return getBusiness().getSystemService();
+	}
+	
 }

@@ -196,14 +196,23 @@ public class BusinessImpl implements Business, Serializable {
 
 	private static final String LANGUAGE_PARAM = "language";
 	
+	private String language;
+	
 	@Override
 	public String getLanguage(HttpServletRequest request) {
-		return (String)request.getSession(true).getAttribute(LANGUAGE_PARAM);
+		language = (String)request.getSession(true).getAttribute(LANGUAGE_PARAM);
+		return language;
+	}
+
+	@Override
+	public String getLanguage() {
+		return language;
 	}
 
 	@Override
 	public void setLanguage(String language, HttpServletRequest request) {
 		request.getSession(true).setAttribute(LANGUAGE_PARAM, language);
+		this.language = language;
 	}
 
 	@Override

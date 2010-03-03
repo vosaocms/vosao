@@ -133,6 +133,17 @@
         <label>Default value</label>
         <input type="text" name="field.defaultValue"/>
     </div>
+    <div id="regexDiv">
+    <div class="form-row" id="field-defaultValue">
+        <label>Regex validation code</label>
+        <input type="text" name="field.regex"/>
+    </div>
+    <div class="form-row" id="field-defaultValue">
+        <label>Regex error message</label>
+        <select id="language"></select> 
+        <input type="text" name="field.regexMessage"/>
+    </div>
+    </div>
     <div class="buttons-dlg">
         <input id="saveAndAddButton" type="submit" value="Save and Add" />
         <input id="fieldSaveButton" type="button" value="Save" />

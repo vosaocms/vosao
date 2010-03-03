@@ -89,4 +89,13 @@ public class FieldVO {
 	public int getIndex() {
 		return field.getIndex();
 	}
+	
+	public String getRegex() {
+		return field.getRegex();
+	}
+
+	public String getRegexMessage() {
+		return field.getRegexMessage();
+	}
+	
 }

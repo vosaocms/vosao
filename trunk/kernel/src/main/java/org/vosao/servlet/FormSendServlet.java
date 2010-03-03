@@ -106,7 +106,6 @@ public class FormSendServlet extends BaseSpringServlet {
 			logger.error(message);
 		}
 		response.setContentType("text/html");
-		//response.setContentType("text/plain");
 		response.setStatus(200);
 		response.getWriter().write(message);
 	}

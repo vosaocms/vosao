@@ -22,8 +22,11 @@
 package org.vosao.entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.vosao.enums.FieldType;
 
 import com.google.appengine.api.datastore.Entity;
@@ -62,6 +65,8 @@ public class FieldEntity extends BaseEntityImpl {
 	private int height;
 	private int width;
 	private int index;
+	private String regex;
+	private String regexMessage;
 
 	public FieldEntity() {
 		height = 1;
@@ -92,6 +97,8 @@ public class FieldEntity extends BaseEntityImpl {
 		height = getIntegerProperty(entity, "height", 1);
 		width = getIntegerProperty(entity, "width", 20);
 		index = getIntegerProperty(entity, "index", 0);
+		regex = getStringProperty(entity, "regex");
+		regexMessage = getStringProperty(entity, "regexMessage");
 	}
 	
 	@Override
@@ -107,6 +114,8 @@ public class FieldEntity extends BaseEntityImpl {
 		entity.setProperty("height", height);
 		entity.setProperty("width", width);
 		entity.setProperty("index", index);
+		entity.setProperty("regex", regex);
+		entity.setProperty("regexMessage", regexMessage);
 	}
 
 	public FieldType getFieldType() {
@@ -198,6 +207,44 @@ public class FieldEntity extends BaseEntityImpl {
 
 	public void setIndex(int index) {
 		this.index = index;
+	}
+
+	public String getRegex() {
+		return regex;
+	}
+
+	public void setRegex(String regex) {
+		this.regex = regex;
+	}
+
+	public String getRegexMessage() {
+		return regexMessage;
+	}
+
+	public void setRegexMessage(String regexMessage) {
+		this.regexMessage = regexMessage;
+		parseRegexMessage();
+	}
+
+	private Map<String, String> messages;
+	
+	private void parseRegexMessage() {
+		messages = new HashMap<String, String>();
+		if (!StringUtils.isEmpty(getRegexMessage())) {
+			String[] tokens = getRegexMessage().split("::");
+			for (String token : tokens) {
+				String code = token.substring(0, 2); 
+				String msg = token.substring(2);
+				messages.put(code, msg);
+			}
+		}
+	}
+	
+	public String getRegexMessage(String language) {
+		if (messages == null) {
+			parseRegexMessage();
+		}
+		return messages.get(language);
 	}
 	
 }

@@ -78,6 +78,8 @@ public class FieldBusinessImpl extends AbstractBusinessImpl
 			field.setMandatory(Boolean.valueOf(vo.get("mandatory")));
 			field.setDefaultValue(vo.get("defaultValue"));
 			field.setValues(vo.get("values"));
+			field.setRegex(vo.get("regex"));
+			field.setRegexMessage(vo.get("regexMessage"));
 			field.setHeight(Integer.valueOf(vo.get("height")));
 			field.setWidth(Integer.valueOf(vo.get("width")));
 			field.setIndex(Integer.valueOf(vo.get("index")));

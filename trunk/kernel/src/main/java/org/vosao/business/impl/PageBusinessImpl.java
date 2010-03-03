@@ -79,8 +79,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	private List<PageFilter> pageFilters;
 
 	public void init() throws Exception {
-		velocityPluginService = new VelocityPluginServiceImpl(getDao(), 
-				getSystemService(), getBusiness());
+		velocityPluginService = new VelocityPluginServiceImpl(getBusiness());
 	}
 	
 	private List<PageFilter> getPageFilters() {

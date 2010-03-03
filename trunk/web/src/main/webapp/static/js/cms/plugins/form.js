@@ -19,16 +19,20 @@
  * email: vosao.dev@gmail.com
  */
 
+var languages = {};
 var editMode = formId != '';
 var field = null;
 var fields = null;
 var test = null;
+var messages = {};
 
-$( function() {
+$(function() {
 	$("#tabs").tabs();
 	$("#field-dialog").dialog({ width :500, autoOpen :false });
 	Vosao.initJSONRpc(loadData);
 	$('#title').change(onTitleChange);
+	$('#language').change(onLanguageChange);
+	$('input[name=field.regexMessage]').change(onRegexMessageChange);
 	$('#form').submit(function() {onUpdate(); return false;});
 	$('#cancelButton').click(onCancel);
 	$('#addFieldButton').click(onAddField);
@@ -43,6 +47,18 @@ $( function() {
 function loadData() {
 	loadForm();
 	loadFields();
+	loadLanguages();
+}
+
+function loadLanguages() {
+	Vosao.jsonrpc.languageService.select(function(r) {
+		var h = '';
+		$.each(r.list, function(i, value) {
+			languages[value.code] = value;
+			h += '<option value="' + value.code + '">' + value.title + '</option>';
+		});
+		$('#language').html(h);
+	});
 }
 
 function loadFields() {
@@ -124,41 +140,48 @@ function fieldDialogShowInputs() {
 		$('#field-height').show();
 		$('#field-width').show();
 		$('#field-defaultValue').show();
+		$('#regexDiv').show();
 	}
 	if (fieldType == 'LISTBOX') {
 		$('#field-values').show();
 		$('#field-height').hide();
 		$('#field-width').hide();
 		$('#field-defaultValue').hide();
+		$('#regexDiv').hide();
 	}
 	if (fieldType == 'CHECKBOX') {
 		$('#field-values').show();
 		$('#field-height').hide();
 		$('#field-width').hide();
 		$('#field-defaultValue').hide();
+		$('#regexDiv').hide();
 	}
 	if (fieldType == 'RADIO') {
 		$('#field-values').show();
 		$('#field-height').hide();
 		$('#field-width').hide();
 		$('#field-defaultValue').hide();
+		$('#regexDiv').hide();
 	}
 	if (fieldType == 'PASSWORD') {
 		$('#field-values').hide();
 		$('#field-height').hide();
 		$('#field-width').show();
 		$('#field-defaultValue').hide();
+		$('#regexDiv').hide();
 	}
 	if (fieldType == 'FILE') {
 		$('#field-values').hide();
 		$('#field-height').hide();
 		$('#field-width').hide();
 		$('#field-defaultValue').hide();
+		$('#regexDiv').hide();
 	}
 }
 
 function fieldDialogInit() {
 	if (field == null) {
+		messages = {};
 		$('input[name=field.name]').val('');
 		$('input[name=field.title]').val('');
 		$('select[name=field.fieldType]').val('TEXT');
@@ -167,6 +190,8 @@ function fieldDialogInit() {
 		$('input[name=field.height]').val('1');
 		$('input[name=field.width]').val('20');
 		$('input[name=field.mandatory]')[0].checked = false;
+		$('input[name=field.regex]').val('');
+		$('input[name=field.regexMessage]').val('');
 	} else {
 		$('input[name=field.name]').val(field.name);
 		$('input[name=field.title]').val(field.title);
@@ -176,6 +201,8 @@ function fieldDialogInit() {
 		$('input[name=field.height]').val(field.height);
 		$('input[name=field.width]').val(field.width);
 		$('input[name=field.mandatory]')[0].checked = field.optional;
+		$('input[name=field.regex]').val(field.regex);
+		$('input[name=field.regexMessage]').val(getRegexMessage());
 	}
 	fieldDialogShowInputs();
 	clearFieldMessage();
@@ -195,6 +222,8 @@ function createFieldVO() {
 		height :$('input[name=field.height]').val(),
 		width :$('input[name=field.width]').val(),
 		index : String(fieldIndex),
+		regex : $('input[name=field.regex]').val(),
+		regexMessage : saveRegexMessage(),
 		mandatory :String($('input[name=field.mandatory]:checked').size() > 0)
 	});
 }
@@ -238,6 +267,7 @@ function onFieldEdit(fieldId) {
 	clearFieldMessage();
 	Vosao.jsonrpc.fieldService.getById( function(r) {
 		field = r;
+		loadRegexMessage();
 		fieldDialogInit();
 		$("#field-dialog").dialog("open");
 	}, fieldId);
@@ -380,4 +410,41 @@ function swapFields(i, j) {
 	var tmp = fields[j];
 	fields[j] = fields[i];
 	fields[i] = tmp;
+}
+
+function getRegexMessage() {
+	if (messages[$('#language').val()]) {
+		return messages[$('#language').val()];
+	}
+	return '';
+}
+
+function onRegexMessageChange() {
+	messages[$('#language').val()] = $('input[name=field.regexMessage]').val();
+}
+
+function onLanguageChange() {
+	$('input[name=field.regexMessage]').val(messages[$('#language').val()]);
+}
+
+function saveRegexMessage() {
+	var r = '';
+	var i = 0;
+	$.each(messages, function(code, value) {
+		r += (i++ == 0 ? '' : '::') + code + value;
+	});
+	return r;
+}
+
+function loadRegexMessage() {
+	if (field.regexMessage) {
+		$.each(field.regexMessage.split('::'), function(i, value) {
+			var code = value.substr(0,2);
+			var message = value.substr(2);
+			messages[code] = message;
+		});
+	}
+	else {
+		messages = {};
+	}
 }

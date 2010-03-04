@@ -28,6 +28,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
@@ -206,6 +209,7 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 			entryPoint.setBusiness(getBusiness());
 			entryPoint.setFrontService(getFrontService());
 			entryPoint.setBackService(getBackService());
+			entryPoint.init();
 			plugins.put(plugin.getName(), entryPoint);
 		}
 		return plugins.get(plugin.getName());
@@ -225,6 +229,31 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 
 	public void setBackService(BackService backService) {
 		this.backService = backService;
+	}
+
+	@Override
+	public HttpServlet getPluginServlet(HttpServletRequest request) {
+		String url = request.getServletPath();
+		if (!url.startsWith("/plugin")) {
+			return null;
+		}
+		String[] tokens = request.getRequestURI().toString().split("/");
+		logger.info(tokens.toString());
+		if (tokens.length < 3) {
+			return null;
+		}
+		String pluginName = tokens[2];
+		String servlet = tokens[3];
+		PluginEntity plugin = getDao().getPluginDao().getByName(pluginName);
+		if (plugin == null) {
+			return null;
+		}
+		try {
+			return getEntryPoint(plugin).getServlets().get(servlet);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

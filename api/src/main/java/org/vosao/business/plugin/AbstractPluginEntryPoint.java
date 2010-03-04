@@ -1,17 +1,26 @@
 package org.vosao.business.plugin;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServlet;
+
 import org.vosao.business.Business;
 import org.vosao.dao.Dao;
 import org.vosao.service.BackService;
 import org.vosao.service.FrontService;
 import org.vosao.service.plugin.PluginServiceManager;
 
-public class AbstractPluginEntryPoint implements PluginEntryPoint {
+public abstract class AbstractPluginEntryPoint implements PluginEntryPoint {
 
-	private Dao dao;
 	private Business business;
 	private FrontService frontService;
 	private BackService backService;
+	private Map<String, HttpServlet> servlets;
+	
+	public AbstractPluginEntryPoint() {
+		servlets = new HashMap<String, HttpServlet>();
+	}
 	
 	@Override
 	public PluginServiceManager getPluginBackService() {
@@ -38,9 +47,8 @@ public class AbstractPluginEntryPoint implements PluginEntryPoint {
 		return business;
 	}
 
-	@Override
-	public Dao getDao() {
-		return dao;
+	protected Dao getDao() {
+		return getBusiness().getDao();
 	}
 
 	@Override
@@ -59,13 +67,15 @@ public class AbstractPluginEntryPoint implements PluginEntryPoint {
 	}
 
 	@Override
-	public void setDao(Dao bean) {
-		dao = bean;
-	}
-
-	@Override
 	public void setFrontService(FrontService bean) {
 		frontService = bean;
 	}
 
+	@Override
+	public Map<String, HttpServlet> getServlets() {
+		return servlets;
+	}
+
+	
+	
 }

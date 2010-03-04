@@ -1,15 +1,20 @@
 package org.vosao.business.plugin;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServlet;
+
 import org.vosao.business.Business;
-import org.vosao.dao.Dao;
 import org.vosao.service.BackService;
 import org.vosao.service.FrontService;
 import org.vosao.service.plugin.PluginServiceManager;
 
 public interface PluginEntryPoint {
 
-	Dao getDao();
-	void setDao(Dao bean);
+	/**
+	 * Plugin initialization. Called after setting dao, business and services.
+	 */
+	public void init();
 	
 	Business getBusiness();
 	void setBusiness(Business bean);
@@ -25,4 +30,12 @@ public interface PluginEntryPoint {
 	PluginServiceManager getPluginFrontService();
 	
 	Object getPluginVelocityService();
+	
+	/**
+	 * Get plugin servlets map. 
+	 * All plugin servlets mapped to url /plugin/PLUGIN_NAME/PATH
+	 * Map key is PATH element.
+	 * @return
+	 */
+	Map<String, HttpServlet> getServlets();
 }

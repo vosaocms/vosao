@@ -10,6 +10,11 @@ public class RegisterEntryPoint extends AbstractPluginEntryPoint {
 	private RegisterBackServiceManager registerBackSerivice;
 	
 	@Override
+	public void init() {
+		getServlets().put("test", new ConfirmServlet());
+	}
+	
+	@Override
 	public PluginServiceManager getPluginBackService() {
 		if (registerBackSerivice == null) {
 			registerBackSerivice = new RegisterBackServiceManager(getBusiness(),
@@ -24,5 +29,8 @@ public class RegisterEntryPoint extends AbstractPluginEntryPoint {
 		}
 		return registerDao;
 	}
+	
+	
+	
 	
 }

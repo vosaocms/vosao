@@ -24,6 +24,7 @@ package org.vosao.plugins.register.entity;
 import java.util.Date;
 
 import org.vosao.entity.BaseEntityImpl;
+import org.vosao.utils.HashUtil;
 
 import com.google.appengine.api.datastore.Entity;
 
@@ -33,8 +34,10 @@ public class RegistrationEntity extends BaseEntityImpl {
 	private String email;
 	private String password;
 	private Date createdDate;
+	private String sessionKey;
 
 	public RegistrationEntity() {
+		createdDate = new Date();
 	}
 	
 	@Override
@@ -44,6 +47,7 @@ public class RegistrationEntity extends BaseEntityImpl {
 		email = getStringProperty(entity, "email");
 		password = getStringProperty(entity, "password");
 		createdDate = getDateProperty(entity, "createdDate");
+		sessionKey = getStringProperty(entity, "sessionKey");
 	}
 	
 	@Override
@@ -53,6 +57,7 @@ public class RegistrationEntity extends BaseEntityImpl {
 		entity.setProperty("email", email);
 		entity.setProperty("password", password);
 		entity.setProperty("createdDate", createdDate);
+		entity.setProperty("sessionKey", sessionKey);
 	}
 
 	public String getName() {
@@ -87,4 +92,17 @@ public class RegistrationEntity extends BaseEntityImpl {
 		this.password = password;
 	}
 
+	public String getSessionKey() {
+		return sessionKey;
+	}
+
+	public void setSessionKey(String sessionKey) {
+		this.sessionKey = sessionKey;
+	}
+
+	public void createSessionKey() {
+		StringBuffer buf = new StringBuffer();
+		buf.append(getName()).append(getEmail()).append(getCreatedDate());
+		setSessionKey(HashUtil.getMD5(buf.toString()));
+	}
 }

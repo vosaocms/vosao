@@ -21,14 +21,25 @@
 
 package org.vosao.plugins.register.dao;
 
+import java.util.List;
+
 import org.vosao.dao.BaseDaoImpl;
-import org.vosao.plugins.register.entity.RegistrationEntity;
+import org.vosao.plugins.register.entity.RegisterConfigEntity;
 
-public class RegistrationDaoImpl extends BaseDaoImpl<RegistrationEntity> 
-		implements RegistrationDao {
+public class RegisterConfigDaoImpl extends BaseDaoImpl<RegisterConfigEntity> 
+		implements RegisterConfigDao {
 
-	public RegistrationDaoImpl() {
-		super(RegistrationEntity.class, "register_RegistrationEntity");
+	public RegisterConfigDaoImpl() {
+		super(RegisterConfigEntity.class, "register_RegisterConfigEntity");
+	}
+
+	@Override
+	public RegisterConfigEntity getConfig() {
+		List<RegisterConfigEntity> list = select();
+		if (list.size() > 0) {
+			return list.get(0);
+		}
+		return new RegisterConfigEntity();
 	}
 	
 }

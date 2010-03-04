@@ -1,30 +1,72 @@
+/**
+ * Vosao CMS. Simple CMS for Google App Engine.
+ * Copyright (C) 2009 Vosao development team
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * email: vosao.dev@gmail.com
+ */
+
 package org.vosao.plugins.register.dao;
 
+import org.vosao.business.Business;
+import org.vosao.dao.AbstractDao;
 import org.vosao.dao.Dao;
 
 public class RegisterDao {
 
 	private RegistrationDao registrationDao;
-	private Dao dao;
+	private RegisterConfigDao registerConfigDao;
+	private Business business;
 
-	public RegisterDao(Dao aDao) {
-		setDao(aDao);
-	}
-	
-	public void setDao(Dao aDao) {
-		dao = aDao;
+	public RegisterDao(Business aBusiness) {
+		setBusiness(aBusiness);
 	}
 	
 	public Dao getDao() {
-		return dao;
+		return getBusiness().getDao();
 	}
 
+	private void injectDependencies(AbstractDao bean) {
+		bean.setEntityCache(getDao().getEntityCache());
+		bean.setQueryCache(getDao().getQueryCache());
+		bean.setSystemService(getBusiness().getSystemService());
+	}
+	
 	public RegistrationDao getRegistrationDao() {
 		if (registrationDao == null) {
-			registrationDao = new RegistrationDaoImpl(getDao().getEntityCache(), 
-					getDao().getQueryCache());
+			registrationDao = new RegistrationDaoImpl();
+			injectDependencies(registrationDao);
 		}
 		return registrationDao;
 	}
 	
+	public RegisterConfigDao getRegisterConfigDao() {
+		if (registerConfigDao == null) {
+			registerConfigDao = new RegisterConfigDaoImpl();
+			injectDependencies(registerConfigDao);
+		}
+		return registerConfigDao;
+	}
+
+	public Business getBusiness() {
+		return business;
+	}
+
+	public void setBusiness(Business business) {
+		this.business = business;
+	}
+
 }

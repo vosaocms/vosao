@@ -19,7 +19,7 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.plugins.register;
+package org.vosao.plugins.register.cronjob;
 
 import java.util.Date;
 

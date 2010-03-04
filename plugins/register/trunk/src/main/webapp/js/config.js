@@ -20,18 +20,73 @@
  */
 
 var registrations = null;
+var config = null;
 
 $(function(){
     $("#tabs").tabs();
     Vosao.initJSONRpc(loadData);
+    $('#configForm').submit(function() {onSave(); return false;});
 });
 
-function test() {
-    Vosao.jsonrpc.registerBackService.test(function(r) {});
+function loadData() {
+	loadConfig();
+	loadRegistrations();
 }
 
-function loadData() {
-	loadRegistrations();
+function loadConfig() {
+	Vosao.jsonrpc.registerBackService.getConfig(function(r) {
+		config = r;
+		showConfig();
+	});
+}
+
+function showConfig() {
+	$('#adminEmail').val(config.adminEmail);
+	$('#sendConfirmAdmin').each(function() {this.checked = config.sendConfirmAdmin});
+	$('#sendConfirmUser').each(function() {this.checked = config.sendConfirmUser});
+	$('#clearDays').val(config.clearDays);
+	$('#registerFormTemplate').val(config.registerFormTemplate);
+	$('#confirmUserTemplate').val(config.confirmUserTemplate);
+	$('#confirmAdminTemplate').val(config.confirmAdminTemplate);
+}
+
+function validate(vo) {
+	if (!vo.adminEmail) {
+		return 'Admin email is empty';
+	}
+	if (isNaN(parseInt(vo.clearDays))) {
+		return 'Clear days is not a number';
+	}
+	if (!vo.registerFormTemplate) {
+		return 'Register Form Template is empty';
+	}
+	if (!vo.confirmUserTemplate) {
+		return 'Confirm User Template is empty';
+	}
+	if (!vo.confirmAdminTemplate) {
+		return 'Confirm Admin Template is empty';
+	}
+}
+
+function onSave() {
+	var vo = {
+		adminEmail : $('#adminEmail').val(),
+		sendConfirmAdmin : String($('#sendConfirmAdmin:checked').size() > 0),
+		sendConfirmUser : String($('#sendConfirmUser:checked').size() > 0),
+		clearDays : $('#clearDays').val(),
+		registerFormTemplate : $('#registerFormTemplate').val(),
+		confirmUserTemplate : $('#confirmUserTemplate').val(),
+		confirmAdminTemplate : $('#confirmAdminTemplate').val()		
+	};
+	var error = validate(vo);
+	if (error) {
+		Vosao.error(error);
+	}
+	else {
+		Vosao.jsonrpc.registerBackService.saveConfig(function(r) {
+			Vosao.showServiceMessages(r);
+		}, Vosao.javaMap(vo));
+	}
 }
 
 function loadRegistrations() {

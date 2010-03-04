@@ -19,25 +19,13 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.plugins.register;
+package org.vosao.plugins.register.dao;
 
-import java.io.IOException;
+import org.vosao.dao.BaseDao;
+import org.vosao.plugins.register.entity.RegisterConfigEntity;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+public interface RegisterConfigDao extends BaseDao<RegisterConfigEntity> {
 
-public class ConfirmServlet extends HttpServlet {
-
-	public ConfirmServlet() {
-	}
-	
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
-		throws ServletException, IOException {
-		
-		response.getWriter().write("Hello World!");
-		
-	}
+	RegisterConfigEntity getConfig();
 	
 }

@@ -19,29 +19,43 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.plugins.register;
+package org.vosao.plugins.register.service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
+import org.vosao.entity.PluginEntity;
 import org.vosao.plugins.register.dao.RegisterDao;
+import org.vosao.plugins.register.entity.RegisterConfigEntity;
 import org.vosao.plugins.register.entity.RegistrationEntity;
+import org.vosao.service.ServiceResponse;
 import org.vosao.service.plugin.AbstractServicePlugin;
 
-public class RegisterBackService extends AbstractServicePlugin {
+public class RegisterBackServiceImpl extends AbstractServicePlugin 
+		implements RegisterBackService {
 
-	private static final Log logger = LogFactory.getLog(RegisterBackService.class);
+	private static final Log logger = LogFactory.getLog(RegisterBackServiceImpl.class);
 	
 	private RegisterDao registerDao;
 	
-	public RegisterBackService(Business business, RegisterDao aRegisterDao) {
+	public RegisterBackServiceImpl(Business business, RegisterDao aRegisterDao) {
 		setBusiness(business);
 		setRegisterDao(aRegisterDao);
 	}
 
+	private RegisterDao getRegisterDao() {
+		return registerDao;
+	}
+
+	private void setRegisterDao(RegisterDao registerDao) {
+		this.registerDao = registerDao;
+	}
+	
+	@Override
 	public List<RegistrationEntity> getRegistrations() {
 		try {
 			return getRegisterDao().getRegistrationDao().select();
@@ -52,12 +66,25 @@ public class RegisterBackService extends AbstractServicePlugin {
 		}
 	}
 
-	public RegisterDao getRegisterDao() {
-		return registerDao;
+	@Override
+	public RegisterConfigEntity getConfig() {
+		return getRegisterDao().getRegisterConfigDao().getConfig();
 	}
 
-	public void setRegisterDao(RegisterDao registerDao) {
-		this.registerDao = registerDao;
+	@Override
+	public ServiceResponse saveConfig(Map<String, String> vo) {
+		RegisterConfigEntity config = getRegisterDao().getRegisterConfigDao()
+				.getConfig();
+		config.setAdminEmail(vo.get("adminEmail"));
+		config.setSendConfirmAdmin(Boolean.valueOf(vo.get("sendConfirmAdmin")));
+		config.setSendConfirmUser(Boolean.valueOf(vo.get("sendConfirmUser")));
+		config.setClearDays(Integer.valueOf(vo.get("clearDays")));
+		config.setRegisterFormTemplate(vo.get("registerFormTemplate"));
+		config.setConfirmUserTemplate(vo.get("confirmUserTemplate"));
+		config.setConfirmAdminTemplate(vo.get("confirmAdminTemplate"));
+		getRegisterDao().getRegisterConfigDao().save(config);
+		return ServiceResponse.createSuccessResponse("Saved.");
 	}
+	
 	
 }

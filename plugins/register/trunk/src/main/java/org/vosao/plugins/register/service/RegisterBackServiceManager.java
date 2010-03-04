@@ -19,7 +19,7 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.plugins.register;
+package org.vosao.plugins.register.service;
 
 import org.jabsorb.JSONRPCBridge;
 import org.vosao.business.Business;
@@ -51,7 +51,7 @@ public class RegisterBackServiceManager extends AbstractServicePlugin
 
 	public RegisterBackService getRegisterBackService() {
 		if (backService == null) {
-			backService = new RegisterBackService(getBusiness(), registerDao);
+			backService = new RegisterBackServiceImpl(getBusiness(), registerDao);
 		}
 		return backService;
 	}

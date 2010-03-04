@@ -19,16 +19,20 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.plugins.register.dao;
+package org.vosao.plugins.register.service;
 
-import org.vosao.dao.BaseDaoImpl;
+import java.util.List;
+import java.util.Map;
+
+import org.vosao.plugins.register.entity.RegisterConfigEntity;
 import org.vosao.plugins.register.entity.RegistrationEntity;
+import org.vosao.service.ServiceResponse;
 
-public class RegistrationDaoImpl extends BaseDaoImpl<RegistrationEntity> 
-		implements RegistrationDao {
+public interface RegisterBackService {
 
-	public RegistrationDaoImpl() {
-		super(RegistrationEntity.class, "register_RegistrationEntity");
-	}
+	List<RegistrationEntity> getRegistrations();
 	
+	RegisterConfigEntity getConfig();
+	
+	ServiceResponse saveConfig(Map<String, String> vo);
 }

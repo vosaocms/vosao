@@ -24,6 +24,7 @@ package org.vosao.business.impl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,7 @@ import org.vosao.business.Business;
 import org.vosao.business.PluginBusiness;
 import org.vosao.business.impl.plugin.PluginLoader;
 import org.vosao.business.plugin.PluginClassLoaderFactory;
+import org.vosao.business.plugin.PluginCronJob;
 import org.vosao.business.plugin.PluginEntryPoint;
 import org.vosao.business.plugin.PluginResourceCache;
 import org.vosao.business.vo.PluginPropertyVO;
@@ -196,21 +198,24 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 	}
 
 	@Override
-	public PluginEntryPoint getEntryPoint(PluginEntity plugin)
-			throws ClassNotFoundException, InstantiationException,
-			IllegalAccessException {
+	public PluginEntryPoint getEntryPoint(PluginEntity plugin) {
 		if (!plugins.containsKey(plugin.getName())) {
-			ClassLoader pluginClassLoader = getPluginClassLoaderFactory()
-				.getClassLoader(plugin.getName());
-			Class entryPointClass = pluginClassLoader
-				.loadClass(plugin.getEntryPointClass());
-			PluginEntryPoint entryPoint = (PluginEntryPoint)entryPointClass
-				.newInstance();
-			entryPoint.setBusiness(getBusiness());
-			entryPoint.setFrontService(getFrontService());
-			entryPoint.setBackService(getBackService());
-			entryPoint.init();
-			plugins.put(plugin.getName(), entryPoint);
+			try {
+				ClassLoader pluginClassLoader = getPluginClassLoaderFactory()
+					.getClassLoader(plugin.getName());
+				Class entryPointClass = pluginClassLoader
+					.loadClass(plugin.getEntryPointClass());
+				PluginEntryPoint entryPoint = (PluginEntryPoint)entryPointClass
+					.newInstance();
+				entryPoint.setBusiness(getBusiness());
+				entryPoint.setFrontService(getFrontService());
+				entryPoint.setBackService(getBackService());
+				entryPoint.init();
+				plugins.put(plugin.getName(), entryPoint);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return plugins.get(plugin.getName());
 	}
@@ -254,6 +259,24 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public void cronSchedule(Date date) {
+		for (PluginEntity plugin : getDao().getPluginDao().select()) {
+			PluginEntryPoint entry = getBusiness().getPluginBusiness()
+					.getEntryPoint(plugin);
+			for (PluginCronJob job : entry.getJobs()) {
+				try {
+					if (job.isShowTime(date)) {
+						job.run();
+					}
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 }

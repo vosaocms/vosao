@@ -23,6 +23,8 @@ package org.vosao.servlet;
 
 import javax.servlet.http.HttpServlet;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.vosao.business.Business;
@@ -35,6 +37,9 @@ import org.vosao.global.SystemService;
  * @author Aleksandr Oleynik
  */
 public class BaseSpringServlet extends HttpServlet {
+
+	protected static final Log logger = LogFactory
+			.getLog(BaseSpringServlet.class);
 
 	/**
 	 * Default constructor.

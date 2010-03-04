@@ -47,7 +47,6 @@ public class FileDownloadServlet extends BaseSpringServlet {
 	private static final long CACHE_LIMIT = 1048576;
 	
 	private static final long serialVersionUID = 6098745782027999297L;
-	private static final Log log = LogFactory.getLog(FileDownloadServlet.class);
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -59,7 +58,7 @@ public class FileDownloadServlet extends BaseSpringServlet {
 			return;
 		}
 		if (isInPublicCache(request.getPathInfo())) {
-			log.info("from public cache " + request.getPathInfo());
+			logger.info("from public cache " + request.getPathInfo());
 			sendFromCache(request, response);
 			return;
 		}	
@@ -80,7 +79,7 @@ public class FileDownloadServlet extends BaseSpringServlet {
 			return;
 		}
 		if (isInCache(request.getPathInfo())) {
-			log.info("from cache " + request.getPathInfo());
+			logger.info("from cache " + request.getPathInfo());
 			if (CurrentUser.getInstance() == null) {
 				getBusiness().getSystemService().getFileCache()
 					.makePublic(request.getPathInfo());
@@ -104,7 +103,7 @@ public class FileDownloadServlet extends BaseSpringServlet {
 		}
 		else {
 			response.sendError(response.SC_NOT_FOUND, "File was not found");
-	        log.debug("not found file " + request.getPathInfo());
+	        logger.debug("not found file " + request.getPathInfo());
 		}
 	}
 	

@@ -35,9 +35,6 @@ import org.vosao.entity.helper.UserHelper;
 
 public class IndexTaskServlet extends BaseSpringServlet {
 
-	private static final Log logger = LogFactory
-			.getLog(IndexTaskServlet.class);
-
 	public static final String TASK_URL = "/_ah/queue/reindex";
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response)

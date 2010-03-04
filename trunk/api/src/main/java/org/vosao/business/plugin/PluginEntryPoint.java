@@ -1,5 +1,6 @@
 package org.vosao.business.plugin;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServlet;
@@ -38,4 +39,6 @@ public interface PluginEntryPoint {
 	 * @return
 	 */
 	Map<String, HttpServlet> getServlets();
+	
+	List<PluginCronJob> getJobs();
 }

@@ -47,9 +47,6 @@ import com.google.appengine.api.labs.taskqueue.Queue;
 
 public class ImportTaskServlet extends BaseSpringServlet {
 
-	private static final Log logger = LogFactory
-			.getLog(ImportTaskServlet.class);
-
 	public static final String IMPORT_TASK_URL = "/_ah/queue/import";
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response)

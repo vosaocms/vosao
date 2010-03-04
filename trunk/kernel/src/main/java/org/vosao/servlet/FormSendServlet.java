@@ -56,7 +56,6 @@ import org.vosao.utils.StreamUtil;
 public class FormSendServlet extends BaseSpringServlet {
 	
 	private static final long serialVersionUID = 1L;
-	private static final Log logger = LogFactory.getLog(FormSendServlet.class);
 
 	private static final long MAX_SIZE = 10000000;
 	private static final String TEXT_MESSAGE = "{result:'%s', message:'%s'}";

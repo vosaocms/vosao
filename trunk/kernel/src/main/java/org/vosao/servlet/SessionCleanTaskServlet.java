@@ -40,9 +40,6 @@ import com.google.appengine.api.labs.taskqueue.Queue;
 
 public class SessionCleanTaskServlet extends BaseSpringServlet {
 
-	private static final Log logger = LogFactory
-			.getLog(SessionCleanTaskServlet.class);
-
 	public static final String SESSION_CLEAN_TASK_URL = "/_ah/queue/session_clean";
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response)

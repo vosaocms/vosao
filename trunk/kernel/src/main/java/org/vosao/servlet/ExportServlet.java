@@ -44,8 +44,6 @@ import org.vosao.utils.MimeType;
  */
 public class ExportServlet extends BaseSpringServlet {
 	
-	private static final Log logger = LogFactory.getLog(ExportServlet.class);
-
 	public final static String TYPE_PARAM = "type";
 	public final static String TYPE_PARAM_THEME = "theme";
 	public final static String TYPE_PARAM_FOLDER = "folder";

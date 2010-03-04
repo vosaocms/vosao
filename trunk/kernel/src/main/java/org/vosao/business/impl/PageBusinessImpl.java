@@ -548,5 +548,6 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 					pages.get(currentPos - 1).getFriendlyURL());
 		}
 	}
+
 }
 

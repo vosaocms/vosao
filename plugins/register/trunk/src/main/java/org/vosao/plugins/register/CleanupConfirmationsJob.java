@@ -21,23 +21,25 @@
 
 package org.vosao.plugins.register;
 
-import java.io.IOException;
+import java.util.Date;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.vosao.business.plugin.PluginCronJob;
 
-public class ConfirmServlet extends HttpServlet {
+public class CleanupConfirmationsJob implements PluginCronJob {
 
-	public ConfirmServlet() {
+	private static final Log logger = LogFactory.getLog(
+			CleanupConfirmationsJob.class);
+
+	@Override
+	public boolean isShowTime(Date date) {
+		return true;
 	}
-	
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
-		throws ServletException, IOException {
-		
-		response.getWriter().write("Hello World!");
-		
+
+	@Override
+	public void run() {
+		logger.info("run...");
 	}
-	
+
 }

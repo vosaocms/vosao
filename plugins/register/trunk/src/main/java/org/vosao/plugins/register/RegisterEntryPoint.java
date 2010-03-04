@@ -12,6 +12,7 @@ public class RegisterEntryPoint extends AbstractPluginEntryPoint {
 	@Override
 	public void init() {
 		getServlets().put("test", new ConfirmServlet());
+		getJobs().add(new CleanupConfirmationsJob());
 	}
 	
 	@Override

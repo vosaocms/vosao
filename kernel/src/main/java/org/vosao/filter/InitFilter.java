@@ -24,6 +24,7 @@ package org.vosao.filter;
 import static com.google.appengine.api.labs.taskqueue.TaskOptions.Builder.url;
 
 import java.io.IOException;
+import java.util.Date;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -51,7 +52,7 @@ public class InitFilter extends AbstractFilter implements Filter {
     private static final Log logger = LogFactory.getLog(SiteFilter.class);
 
     private static final String SETUP_URL = "/setup";
-    private static final String HOT_CRON_URL = "/cron/hot";
+    private static final String PLUGIN_CRON_URL = "/cron/plugin";
     private static final String SESSION_CLEAN_CRON_URL = "/cron/session_clean";
     
     private int localHits;
@@ -65,6 +66,7 @@ public class InitFilter extends AbstractFilter implements Filter {
   
     public void doFilter(ServletRequest request, ServletResponse response, 
     		FilterChain chain) throws IOException, ServletException {
+    	Date now = new Date();
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
         HttpServletResponse httpResponse = (HttpServletResponse)response;
         String url = httpRequest.getServletPath();
@@ -80,7 +82,8 @@ public class InitFilter extends AbstractFilter implements Filter {
         	httpResponse.sendRedirect("/");
         	return;
         }
-        if (url.equals(HOT_CRON_URL)) {
+        if (url.equals(PLUGIN_CRON_URL)) {
+        	getBusiness().getPluginBusiness().cronSchedule(now);
         	logger.info(logCacheStat());
         	writeContent(httpResponse, "<h4>OK</h4>");
         	return;

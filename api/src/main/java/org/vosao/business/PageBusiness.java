@@ -21,6 +21,7 @@
 
 package org.vosao.business;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.velocity.VelocityContext;

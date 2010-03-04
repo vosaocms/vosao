@@ -22,6 +22,7 @@
 package org.vosao.business;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -67,9 +68,7 @@ public interface PluginBusiness {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	PluginEntryPoint getEntryPoint(PluginEntity plugin) 
-			throws ClassNotFoundException, InstantiationException, 
-			IllegalAccessException;
+	PluginEntryPoint getEntryPoint(PluginEntity plugin);
 
 	/**
 	 * Get plugin Velocity service for page rendering.
@@ -115,4 +114,10 @@ public interface PluginBusiness {
 	
 	HttpServlet getPluginServlet(HttpServletRequest request);
 	
+	/**
+	 * Schedule and run if necessary plugins cron jobs. 
+	 * @param date - run datetime.
+	 */
+	void cronSchedule(Date date);
+
 }

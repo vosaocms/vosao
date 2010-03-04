@@ -1,6 +1,8 @@
 package org.vosao.business.plugin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServlet;
@@ -17,9 +19,11 @@ public abstract class AbstractPluginEntryPoint implements PluginEntryPoint {
 	private FrontService frontService;
 	private BackService backService;
 	private Map<String, HttpServlet> servlets;
+	private List<PluginCronJob> jobs;
 	
 	public AbstractPluginEntryPoint() {
 		servlets = new HashMap<String, HttpServlet>();
+		jobs = new ArrayList<PluginCronJob>();
 	}
 	
 	@Override
@@ -76,6 +80,9 @@ public abstract class AbstractPluginEntryPoint implements PluginEntryPoint {
 		return servlets;
 	}
 
-	
+	@Override
+	public List<PluginCronJob> getJobs() {
+		return jobs;
+	}
 	
 }

@@ -63,8 +63,6 @@ import static com.google.appengine.api.labs.taskqueue.TaskOptions.Builder.*;
  */
 public class FileUploadServlet extends BaseSpringServlet {
 	private static final long serialVersionUID = 6098745782027999297L;
-	private static final Log log = LogFactory
-			.getLog(FileUploadServlet.class);
 
 	private static final long MAX_SIZE = 10000000;
 
@@ -117,12 +115,12 @@ public class FileUploadServlet extends BaseSpringServlet {
 				}
 				message = processFile(imageFileItem, fileData, parameters);
 			} catch (FileUploadException e) {
-				log.error(PARSE_REQUEST_ERROR);
+				logger.error(PARSE_REQUEST_ERROR);
 				throw new UploadException(PARSE_REQUEST_ERROR);
 			}
 		} catch (UploadException e) {
 			message = createMessage("error", e.getMessage()); 
-			log.error(message);
+			logger.error(message);
 		}
 		if (isCKeditorUpload(parameters)) {
 			response.setContentType("text/html");
@@ -193,16 +191,16 @@ public class FileUploadServlet extends BaseSpringServlet {
 		String cacheUrl = getBusiness().getFolderBusiness()
 				.getFolderPath(folder) + "/" + filename;
 		getBusiness().getSystemService().getCache().remove(cacheUrl);
-		log.debug("Clear cache " + cacheUrl);
+		logger.debug("Clear cache " + cacheUrl);
 		String ext = FilenameUtils.getExtension(path);
-		log.debug("path " + path + " filename " + filename + " ext " + ext);
+		logger.debug("path " + path + " filename " + filename + " ext " + ext);
 		String message = null;
 		FileEntity file = getDao().getFileDao().getByName(folder.getId(), 
 				filename);
 		if (file == null) {
 			file = new FileEntity(filename, filename, folder.getId(),
 				MimeType.getContentTypeByExt(ext), new Date(), data.length);
-			log.debug("created file " + file.getFilename());
+			logger.debug("created file " + file.getFilename());
 		}
 		getDao().getFileDao().save(file, data);
 		return file;
@@ -211,7 +209,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 	private FolderEntity getFolder(final Long folderId)
 			throws UploadException {
 		
-		log.debug("getFolder " + folderId);
+		logger.debug("getFolder " + folderId);
 
 		if (folderId == null) {
 			throw new UploadException(FOLDER_ID_IS_NULL);

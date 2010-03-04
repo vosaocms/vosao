@@ -25,6 +25,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+
 import org.dom4j.DocumentException;
 import org.jabsorb.JSONRPCBridge;
 import org.vosao.business.plugin.PluginEntryPoint;
@@ -109,5 +112,7 @@ public interface PluginBusiness {
 	PluginServiceManager getFrontServices(PluginEntity plugin)
 			throws ClassNotFoundException, InstantiationException,
 			IllegalAccessException;
+	
+	HttpServlet getPluginServlet(HttpServletRequest request);
 	
 }

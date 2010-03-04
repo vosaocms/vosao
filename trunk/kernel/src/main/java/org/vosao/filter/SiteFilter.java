@@ -29,6 +29,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -71,6 +72,9 @@ public class SiteFilter extends AbstractFilter implements Filter {
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
         HttpServletResponse httpResponse = (HttpServletResponse)response;
         String url = httpRequest.getServletPath();
+        if (processPluginServlet(request, response)) {
+        	return;
+        }
         if (isSkipUrl(url)) {
             chain.doFilter(request, response);
             return;
@@ -114,7 +118,7 @@ public class SiteFilter extends AbstractFilter implements Filter {
     	}
     }
 
-    private void showNoApprovedContent(HttpServletResponse httpResponse) 
+	private void showNoApprovedContent(HttpServletResponse httpResponse) 
     		throws IOException {
     	renderMessage(httpResponse, "<h3>Sorry, but there is no approved content" +
     			" available for this page.</h3><p>Vosao CMS "+ 
@@ -174,5 +178,16 @@ public class SiteFilter extends AbstractFilter implements Filter {
     	Writer out = response.getWriter();
     	out.write(msg);
     }
+
+    private boolean processPluginServlet(ServletRequest request,
+			ServletResponse response) throws ServletException, IOException {
+		HttpServlet servlet = getBusiness().getPluginBusiness().getPluginServlet(
+				(HttpServletRequest)request);
+		if (servlet != null) {
+			servlet.service(request, response);
+			return true;
+		}
+		return false;
+	}
     
 }

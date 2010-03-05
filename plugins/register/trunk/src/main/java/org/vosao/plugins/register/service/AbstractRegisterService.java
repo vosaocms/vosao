@@ -19,15 +19,31 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.plugins.register.dao;
+package org.vosao.plugins.register.service;
 
-import org.vosao.dao.BaseDao;
-import org.vosao.plugins.register.entity.RegistrationEntity;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.vosao.business.Business;
+import org.vosao.plugins.register.dao.RegisterDao;
+import org.vosao.service.plugin.AbstractServicePlugin;
 
-public interface RegistrationDao extends BaseDao<RegistrationEntity> {
+public class AbstractRegisterService extends AbstractServicePlugin {
 
-	RegistrationEntity getByEmail(String email);
+	protected static final Log logger = LogFactory.getLog(AbstractRegisterService.class);
+	
+	private RegisterDao registerDao;
+	
+	public AbstractRegisterService(Business business, RegisterDao aRegisterDao) {
+		setBusiness(business);
+		setRegisterDao(aRegisterDao);
+	}
 
-	RegistrationEntity getBySessionKey(String key);
+	protected RegisterDao getRegisterDao() {
+		return registerDao;
+	}
 
+	protected void setRegisterDao(RegisterDao registerDao) {
+		this.registerDao = registerDao;
+	}
+	
 }

@@ -80,6 +80,10 @@ public class RegistrationEntity extends BaseEntityImpl {
 		return createdDate;
 	}
 
+	public String getCreatedDateString() {
+		return createdDate.toString();
+	}
+
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}

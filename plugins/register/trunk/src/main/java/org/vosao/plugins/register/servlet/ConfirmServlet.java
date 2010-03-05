@@ -28,16 +28,46 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.vosao.plugins.register.dao.RegisterDao;
+import org.vosao.plugins.register.entity.RegistrationEntity;
+import org.vosao.plugins.register.service.RegisterBackService;
+
 public class ConfirmServlet extends HttpServlet {
 
-	public ConfirmServlet() {
+	private RegisterDao registerDao;
+	private RegisterBackService registerBackService;
+	
+	public ConfirmServlet(RegisterDao aRegisterDao,
+			RegisterBackService aRegisterBackService) {
+		setRegisterDao(aRegisterDao);
+		setRegisterBackService(aRegisterBackService);
 	}
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
-		throws ServletException, IOException {
-		
-		response.getWriter().write("Hello World!");
-		
+			throws ServletException, IOException {
+		String sessionKey = request.getParameter("id");
+		RegistrationEntity reg = getRegisterDao().getRegistrationDao()
+				.getBySessionKey(sessionKey);
+		if (reg != null) {
+			getRegisterBackService().confirmRegistration(reg.getId());
+		}
+		response.sendRedirect("/");		
+	}
+
+	public RegisterDao getRegisterDao() {
+		return registerDao;
+	}
+
+	public void setRegisterDao(RegisterDao registerDao) {
+		this.registerDao = registerDao;
+	}
+
+	public RegisterBackService getRegisterBackService() {
+		return registerBackService;
+	}
+
+	public void setRegisterBackService(RegisterBackService registerBackService) {
+		this.registerBackService = registerBackService;
 	}
 	
 }

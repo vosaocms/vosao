@@ -35,4 +35,14 @@ public interface RegisterBackService {
 	RegisterConfigEntity getConfig();
 	
 	ServiceResponse saveConfig(Map<String, String> vo);
+	
+	ServiceResponse restoreRegisterFormTemplate();
+
+	ServiceResponse restoreAdminConfirmLetter();
+	
+	ServiceResponse restoreUserConfirmLetter();
+	
+	ServiceResponse removeRegistration(Long id);
+
+	ServiceResponse confirmRegistration(Long id);
 }

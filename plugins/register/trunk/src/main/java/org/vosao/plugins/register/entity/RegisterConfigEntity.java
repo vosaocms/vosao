@@ -35,11 +35,13 @@ public class RegisterConfigEntity extends BaseEntityImpl {
 	private String registerFormTemplate;
 	private String confirmUserTemplate;
 	private String confirmAdminTemplate;
+	private boolean captcha;
 
 	public RegisterConfigEntity() {
 		registerFormTemplate = "";
 		confirmUserTemplate = "";
 		confirmAdminTemplate = "";
+		captcha = false;
 	}
 	
 	@Override
@@ -52,6 +54,7 @@ public class RegisterConfigEntity extends BaseEntityImpl {
 		registerFormTemplate = getTextProperty(entity, "registerFormTemplate");
 		confirmUserTemplate = getTextProperty(entity, "confirmUserTemplate");
 		confirmAdminTemplate = getTextProperty(entity, "confirmAdminTemplate");
+		captcha = getBooleanProperty(entity, "captcha", false);
 	}
 	
 	@Override
@@ -64,6 +67,7 @@ public class RegisterConfigEntity extends BaseEntityImpl {
 		entity.setProperty("registerFormTemplate", new Text(registerFormTemplate));
 		entity.setProperty("confirmUserTemplate", new Text(confirmUserTemplate));
 		entity.setProperty("confirmAdminTemplate", new Text(confirmAdminTemplate));
+		entity.setProperty("captcha", captcha);
 	}
 
 	public String getAdminEmail() {
@@ -120,6 +124,14 @@ public class RegisterConfigEntity extends BaseEntityImpl {
 
 	public void setConfirmAdminTemplate(String confirmAdminTemplate) {
 		this.confirmAdminTemplate = confirmAdminTemplate;
+	}
+
+	public boolean isCaptcha() {
+		return captcha;
+	}
+
+	public void setCaptcha(boolean captcha) {
+		this.captcha = captcha;
 	}
 
 }

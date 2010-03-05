@@ -1,0 +1,121 @@
+/**
+ * Vosao CMS. Simple CMS for Google App Engine.
+ * Copyright (C) 2009 Vosao development team
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * email: vosao.dev@gmail.com
+ */
+
+package org.vosao.plugins.register.service;
+
+import java.util.Date;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import net.tanesha.recaptcha.ReCaptchaResponse;
+
+import org.apache.velocity.VelocityContext;
+import org.vosao.business.Business;
+import org.vosao.common.PluginException;
+import org.vosao.entity.ConfigEntity;
+import org.vosao.entity.UserEntity;
+import org.vosao.plugins.register.dao.RegisterDao;
+import org.vosao.plugins.register.entity.RegisterConfigEntity;
+import org.vosao.plugins.register.entity.RegistrationEntity;
+import org.vosao.service.ServiceResponse;
+import org.vosao.utils.EmailUtil;
+import org.vosao.utils.RecaptchaUtil;
+
+public class RegisterFrontServiceImpl extends AbstractRegisterService 
+		implements RegisterFrontService {
+
+	public RegisterFrontServiceImpl(Business business, RegisterDao aRegisterDao) {
+		super(business, aRegisterDao);
+	}
+
+	@Override
+	public ServiceResponse register(Map<String, String> vo, 
+			String challenge, String response, HttpServletRequest request) {
+		RegisterConfigEntity registerConfig = getRegisterDao().getRegisterConfigDao()
+				.getConfig();
+		if (registerConfig.isCaptcha()) {
+			ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
+			ReCaptchaResponse recaptchaResponse = RecaptchaUtil.check(
+				config.getRecaptchaPublicKey(), 
+				config.getRecaptchaPrivateKey(), 
+				challenge, response, request); 
+			if (!recaptchaResponse.isValid()) {
+				return ServiceResponse.createErrorResponse(
+						"Captcha is not valid");
+			}
+		}
+		RegistrationEntity reg = getRegisterDao().getRegistrationDao()
+				.getByEmail(vo.get("email")); 
+		if (reg == null) {	
+			reg = new RegistrationEntity();
+		}
+		reg.setCreatedDate(new Date());
+		reg.setEmail(vo.get("email"));
+		reg.setName(vo.get("name"));
+		reg.setPassword(vo.get("password1"));
+		reg.createSessionKey();
+		UserEntity user = getDao().getUserDao().getByEmail(reg.getEmail());
+		if (user != null) {
+			return ServiceResponse.createErrorResponse("User with email " + 
+					reg.getEmail() + " already exists.");
+		}
+		getRegisterDao().getRegistrationDao().save(reg);
+		try {
+			sendConfirmLetter(reg);
+			return ServiceResponse.createSuccessResponse("Saved.");
+		}
+		catch (PluginException e) {
+			e.printStackTrace();
+			return ServiceResponse.createErrorResponse(e.getMessage());
+		}
+	}
+
+	private void sendConfirmLetter(RegistrationEntity reg) 
+			throws PluginException {
+		RegisterConfigEntity registerConfig = getRegisterDao().getRegisterConfigDao()
+				.getConfig();
+		ConfigEntity config = getDao().getConfigDao().getConfig();
+		VelocityContext context = new VelocityContext();
+		context.put("config", config);
+		context.put("registerConfig", registerConfig);
+		if (registerConfig.isSendConfirmAdmin()) {
+			sendConfirmEmail(registerConfig.getConfirmAdminTemplate(), 
+					context, config.getSiteEmail(), registerConfig.getAdminEmail());
+		}
+		if (registerConfig.isSendConfirmUser()) {
+			sendConfirmEmail(registerConfig.getConfirmUserTemplate(), 
+					context, config.getSiteEmail(), reg.getEmail());
+		}
+	}
+	
+	private void sendConfirmEmail(String template, VelocityContext context,
+			String fromAddress, String toAddress) throws PluginException {
+		String letter = getBusiness().getSystemService().render(template, context);
+		String error = EmailUtil.sendEmail(letter, "Confirm registration", 
+				fromAddress, "", toAddress);
+		if (error != null) {
+			throw new PluginException(error);
+		}
+	}
+	
+	
+}

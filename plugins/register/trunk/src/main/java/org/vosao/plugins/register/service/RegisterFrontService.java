@@ -19,15 +19,17 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.plugins.register.dao;
+package org.vosao.plugins.register.service;
 
-import org.vosao.dao.BaseDao;
-import org.vosao.plugins.register.entity.RegistrationEntity;
+import java.util.Map;
 
-public interface RegistrationDao extends BaseDao<RegistrationEntity> {
+import javax.servlet.http.HttpServletRequest;
 
-	RegistrationEntity getByEmail(String email);
+import org.vosao.service.ServiceResponse;
 
-	RegistrationEntity getBySessionKey(String key);
+public interface RegisterFrontService {
 
+	ServiceResponse register(Map<String, String> vo, String challenge,
+			String response, HttpServletRequest request);
+	
 }

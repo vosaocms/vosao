@@ -24,11 +24,28 @@ package org.vosao.plugins.register.dao;
 import org.vosao.dao.BaseDaoImpl;
 import org.vosao.plugins.register.entity.RegistrationEntity;
 
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+
 public class RegistrationDaoImpl extends BaseDaoImpl<RegistrationEntity> 
 		implements RegistrationDao {
 
 	public RegistrationDaoImpl() {
 		super(RegistrationEntity.class, "register_RegistrationEntity");
+	}
+
+	@Override
+	public RegistrationEntity getByEmail(String email) {
+		Query q = newQuery();
+		q.addFilter("email", FilterOperator.EQUAL, email);
+		return selectOne(q, "getByEmail", params(email));
+	}
+
+	@Override
+	public RegistrationEntity getBySessionKey(String key) {
+		Query q = newQuery();
+		q.addFilter("sessionKey", FilterOperator.EQUAL, key);
+		return selectOne(q, "getByEmail", params(key));
 	}
 	
 }

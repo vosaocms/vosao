@@ -48,6 +48,7 @@ function showConfig() {
 	$('#registerFormTemplate').val(config.registerFormTemplate);
 	$('#confirmUserTemplate').val(config.confirmUserTemplate);
 	$('#confirmAdminTemplate').val(config.confirmAdminTemplate);
+	$('#captcha').each(function() {this.checked = config.captcha});
 }
 
 function validate(vo) {
@@ -76,6 +77,7 @@ function onSave() {
 		clearDays : $('#clearDays').val(),
 		registerFormTemplate : $('#registerFormTemplate').val(),
 		confirmUserTemplate : $('#confirmUserTemplate').val(),
+		captcha : String($('#captcha:checked').size() > 0),
 		confirmAdminTemplate : $('#confirmAdminTemplate').val()		
 	};
 	var error = validate(vo);
@@ -97,21 +99,73 @@ function loadRegistrations() {
 }
 
 function showRegistrations() {
-	var h = '<table class="form-table"><tr><th>Email</th><th>Name</th><th></th>';
+	var h = '<table class="form-table"><tr><th>Registration date</th>\
+		<th>Email</th><th>Name</th><th></th></tr>';
 	$.each(registrations, function(i,value) {
-		h += '<tr><td>' + value.email + '</td><td>' + value.name + '</td>\
-			<td><a href="#" onclick="onConfirm(' + i + ')">\
+		h += '<tr><td>' + value.createdDateString + '</td>\
+			<td>' + value.email + '</td><td>' + value.name + '</td>\
+			<td><a href="#" onclick="onConfirm(' + i + ')" title="Confirm">\
 			<img src="/static/images/02_plus.png" /></a>\
-			<a href="#" onclick="onRemove(' + i + ')">\
+			<a href="#" onclick="onRemove(' + i + ')" title="Remove">\
 			<img src="/static/images/02_x.png" /></a></td></tr>';
 	});
 	$('#registrations').html(h + '</table>');
 }
 
 function onConfirm(i) {
-	alert('TODO');
+	if (confirm('Are you shure?')) {
+		Vosao.jsonrpc.registerBackService.confirmRegistration(function(r) {
+			Vosao.showServiceMessages(r);
+			if (r.result == 'success') {
+				loadData();
+			}
+		}, registrations[i].id);
+	}
 }
 
 function onRemove(i) {
-	alert('TODO');
+	if (confirm('Are you shure?')) {
+		Vosao.jsonrpc.registerBackService.removeRegistration(function(r) {
+			Vosao.showServiceMessages(r);
+			if (r.result == 'success') {
+				loadData();
+			}
+		}, registrations[i].id);
+	}
+}
+
+function onFormTemplateRestore() {
+	Vosao.jsonrpc.registerBackService.restoreRegisterFormTemplate(function(r) {
+		if (r.result == 'success') {
+			$('#registerFormTemplate').val(r.message);
+			Vosao.info('Successfully restored.');
+		}
+		else {
+			Vosao.showServiceMessages(r);
+		}
+	});
+}
+
+function onConfirmUserLetterRestore() {
+	Vosao.jsonrpc.registerBackService.restoreUserConfirmLetter(function(r) {
+		if (r.result == 'success') {
+			$('#confirmUserTemplate').val(r.message);
+			Vosao.info('Successfully restored.');
+		}
+		else {
+			Vosao.showServiceMessages(r);
+		}
+	});
+}
+
+function onConfirmAdminLetterRestore() {
+	Vosao.jsonrpc.registerBackService.restoreAdminConfirmLetter(function(r) {
+		if (r.result == 'success') {
+			$('#confirmAdminTemplate').val(r.message);
+			Vosao.info('Successfully restored.');
+		}
+		else {
+			Vosao.showServiceMessages(r);
+		}
+	});
 }

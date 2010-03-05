@@ -25,21 +25,52 @@ import java.util.Date;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.joda.time.DateTime;
 import org.vosao.business.plugin.PluginCronJob;
+import org.vosao.plugins.register.dao.RegisterDao;
+import org.vosao.plugins.register.entity.RegisterConfigEntity;
+import org.vosao.plugins.register.entity.RegistrationEntity;
 
 public class CleanupConfirmationsJob implements PluginCronJob {
 
 	private static final Log logger = LogFactory.getLog(
 			CleanupConfirmationsJob.class);
 
+	private RegisterDao registerDao;
+	private int days;
+	
+	public CleanupConfirmationsJob(RegisterDao aRegisterDao) {
+		setRegisterDao(aRegisterDao);
+		RegisterConfigEntity config = getRegisterDao().getRegisterConfigDao()
+				.getConfig();
+		days = config.getClearDays();
+	}
+	
 	@Override
 	public boolean isShowTime(Date date) {
-		return true;
+		DateTime dt = new DateTime(date);
+		// start at 01:00
+		return dt.hourOfDay().get() == 1 && dt.minuteOfHour().get() == 0;
 	}
 
 	@Override
 	public void run() {
-		logger.info("run...");
+		logger.info("Cleanup confirmations.");
+		DateTime dt = new DateTime();
+		dt = dt.minusDays(days);
+		for (RegistrationEntity reg : getRegisterDao().getRegistrationDao().select()) {
+			if (dt.isAfter(reg.getCreatedDate().getTime())) {
+				getRegisterDao().getRegistrationDao().remove(reg.getId());
+			}
+		}
+	}
+
+	public RegisterDao getRegisterDao() {
+		return registerDao;
+	}
+
+	public void setRegisterDao(RegisterDao registerDao) {
+		this.registerDao = registerDao;
 	}
 
 }

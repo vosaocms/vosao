@@ -68,6 +68,10 @@
         <label>Clear unconfirmed registration period (days)</label>
         <input id="clearDays" type="text" />
     </div>
+    <div class="form-row">
+        <label>Enable captcha on registration form</label>
+        <input id="captcha" type="checkbox" />
+    </div>
     <div class="buttons">
         <input id="saveButton" type="submit" value="Save" />
         <input id="cancelButton" type="button" value="Cancel" />
@@ -76,15 +80,21 @@
 
 <div id="tab-2">
     <div class="form-row">
-        <label>Registration form</label>
+        <div>Registration form 
+            <a href="#" onclick="onFormTemplateRestore()">Restore</a>
+        </div>
         <textarea id="registerFormTemplate" rows="5" cols="80"></textarea>
     </div>
     <div class="form-row">
-        <label>Confirmation letter to user</label>
+        <div>Confirmation letter to user
+            <a href="#" onclick="onConfirmUserLetterRestore()">Restore</a>
+        </div>
         <textarea id="confirmUserTemplate" rows="5" cols="80"></textarea>
     </div>
     <div class="form-row">
-        <label>Confirmation letter to admin</label>
+        <div>Confirmation letter to admin
+            <a href="#" onclick="onConfirmAdminLetterRestore()">Restore</a>
+        </div>
         <textarea id="confirmAdminTemplate" rows="5" cols="80"></textarea>
     </div>
     <div class="buttons">

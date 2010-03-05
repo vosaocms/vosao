@@ -25,36 +25,32 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
-import org.vosao.entity.PluginEntity;
+import org.vosao.common.BCrypt;
+import org.vosao.entity.UserEntity;
+import org.vosao.enums.UserRole;
 import org.vosao.plugins.register.dao.RegisterDao;
 import org.vosao.plugins.register.entity.RegisterConfigEntity;
 import org.vosao.plugins.register.entity.RegistrationEntity;
 import org.vosao.service.ServiceResponse;
-import org.vosao.service.plugin.AbstractServicePlugin;
+import org.vosao.utils.StreamUtil;
 
-public class RegisterBackServiceImpl extends AbstractServicePlugin 
+public class RegisterBackServiceImpl extends AbstractRegisterService 
 		implements RegisterBackService {
 
-	private static final Log logger = LogFactory.getLog(RegisterBackServiceImpl.class);
+	private static final String REGISTER_FORM_TEMPLATE = 
+		"org/vosao/plugins/register/resources/registerForm.html";
 	
-	private RegisterDao registerDao;
+	private static final String CONFIRM_ADMIN_TEMPLATE = 
+		"org/vosao/plugins/register/resources/adminConfirmLetter.html";
 	
+	private static final String CONFIRM_USER_TEMPLATE = 
+		"org/vosao/plugins/register/resources/userConfirmLetter.html";
+
 	public RegisterBackServiceImpl(Business business, RegisterDao aRegisterDao) {
-		setBusiness(business);
-		setRegisterDao(aRegisterDao);
+		super(business, aRegisterDao);
 	}
 
-	private RegisterDao getRegisterDao() {
-		return registerDao;
-	}
-
-	private void setRegisterDao(RegisterDao registerDao) {
-		this.registerDao = registerDao;
-	}
-	
 	@Override
 	public List<RegistrationEntity> getRegistrations() {
 		try {
@@ -68,9 +64,28 @@ public class RegisterBackServiceImpl extends AbstractServicePlugin
 
 	@Override
 	public RegisterConfigEntity getConfig() {
-		return getRegisterDao().getRegisterConfigDao().getConfig();
+		RegisterConfigEntity config = getRegisterDao().getRegisterConfigDao()
+				.getConfig();
+		if (config.isNew()) {
+			config.setClearDays(10);
+			config.setRegisterFormTemplate(getTextResource(REGISTER_FORM_TEMPLATE));
+			config.setConfirmAdminTemplate(getTextResource(CONFIRM_ADMIN_TEMPLATE));
+			config.setConfirmUserTemplate(getTextResource(CONFIRM_USER_TEMPLATE));
+		}
+		return config;
 	}
 
+	private String getTextResource(String path) {
+		try {
+			return StreamUtil.getTextResource(this.getClass().getClassLoader(), 
+					path);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
+	}
+	
 	@Override
 	public ServiceResponse saveConfig(Map<String, String> vo) {
 		RegisterConfigEntity config = getRegisterDao().getRegisterConfigDao()
@@ -82,9 +97,61 @@ public class RegisterBackServiceImpl extends AbstractServicePlugin
 		config.setRegisterFormTemplate(vo.get("registerFormTemplate"));
 		config.setConfirmUserTemplate(vo.get("confirmUserTemplate"));
 		config.setConfirmAdminTemplate(vo.get("confirmAdminTemplate"));
+		config.setCaptcha(Boolean.valueOf(vo.get("captcha")));
 		getRegisterDao().getRegisterConfigDao().save(config);
 		return ServiceResponse.createSuccessResponse("Saved.");
 	}
-	
+
+	@Override
+	public ServiceResponse restoreAdminConfirmLetter() {
+		RegisterConfigEntity config = getConfig();
+		config.setConfirmAdminTemplate(getTextResource(
+				CONFIRM_ADMIN_TEMPLATE));
+		getRegisterDao().getRegisterConfigDao().save(config);
+		return ServiceResponse.createSuccessResponse(
+				config.getConfirmAdminTemplate());
+	}
+
+	@Override
+	public ServiceResponse restoreRegisterFormTemplate() {
+		RegisterConfigEntity config = getConfig();
+		config.setRegisterFormTemplate(getTextResource(
+				REGISTER_FORM_TEMPLATE));
+		getRegisterDao().getRegisterConfigDao().save(config);
+		return ServiceResponse.createSuccessResponse(
+				config.getRegisterFormTemplate());
+	}
+
+	@Override
+	public ServiceResponse restoreUserConfirmLetter() {
+		RegisterConfigEntity config = getConfig();
+		config.setConfirmUserTemplate(getTextResource(
+				CONFIRM_USER_TEMPLATE));
+		getRegisterDao().getRegisterConfigDao().save(config);
+		return ServiceResponse.createSuccessResponse(
+				config.getConfirmUserTemplate());
+	}
+
+	@Override
+	public ServiceResponse removeRegistration(Long id) {
+		RegistrationEntity reg = getRegisterDao().getRegistrationDao().getById(id);
+		if (reg != null) {
+			getRegisterDao().getRegistrationDao().remove(id);
+		}
+		return ServiceResponse.createSuccessResponse("Successfully removed.");
+	}
+
+	@Override
+	public ServiceResponse confirmRegistration(Long id) {
+		RegistrationEntity reg = getRegisterDao().getRegistrationDao().getById(id);
+		if (reg != null) {
+			UserEntity user = new UserEntity(reg.getName(), 
+					BCrypt.hashpw(reg.getPassword(), BCrypt.gensalt()), 
+					reg.getEmail(), UserRole.SITE_USER);
+			getDao().getUserDao().save(user);
+			getRegisterDao().getRegistrationDao().remove(id);
+		}
+		return ServiceResponse.createSuccessResponse("Successfully confirmed.");
+	}
 	
 }

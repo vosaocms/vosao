@@ -25,27 +25,50 @@ import org.vosao.business.plugin.AbstractPluginEntryPoint;
 import org.vosao.plugins.register.cronjob.CleanupConfirmationsJob;
 import org.vosao.plugins.register.dao.RegisterDao;
 import org.vosao.plugins.register.service.RegisterBackServiceManager;
+import org.vosao.plugins.register.service.RegisterFrontServiceManager;
 import org.vosao.plugins.register.servlet.ConfirmServlet;
 import org.vosao.service.plugin.PluginServiceManager;
 
 public class RegisterEntryPoint extends AbstractPluginEntryPoint {
 
 	private RegisterDao registerDao;
-	private RegisterBackServiceManager registerBackSerivice;
+	private RegisterBackServiceManager registerBackSeriviceManager;
+	private RegisterFrontServiceManager registerFrontSeriviceManager;
+	private RegisterVelocityPlugin velocityPlugin;
 	
 	@Override
 	public void init() {
-		getServlets().put("test", new ConfirmServlet());
-		getJobs().add(new CleanupConfirmationsJob());
+		getServlets().put("confirm", new ConfirmServlet(
+				getRegisterDao(),
+				getRegisterBackServiceManager().getRegisterBackService()));
+		getJobs().add(new CleanupConfirmationsJob(
+				getRegisterDao()));
 	}
 	
 	@Override
 	public PluginServiceManager getPluginBackService() {
-		if (registerBackSerivice == null) {
-			registerBackSerivice = new RegisterBackServiceManager(getBusiness(),
+		return getRegisterBackServiceManager();
+	}
+
+	private RegisterBackServiceManager getRegisterBackServiceManager() {
+		if (registerBackSeriviceManager == null) {
+			registerBackSeriviceManager = new RegisterBackServiceManager(getBusiness(),
 					getRegisterDao());
 		}
-		return registerBackSerivice;
+		return registerBackSeriviceManager;
+	}
+
+	@Override
+	public PluginServiceManager getPluginFrontService() {
+		return getRegisterFrontServiceManager();
+	}
+
+	private RegisterFrontServiceManager getRegisterFrontServiceManager() {
+		if (registerFrontSeriviceManager == null) {
+			registerFrontSeriviceManager = new RegisterFrontServiceManager(getBusiness(),
+					getRegisterDao());
+		}
+		return registerFrontSeriviceManager;
 	}
 
 	private RegisterDao getRegisterDao() {
@@ -53,6 +76,15 @@ public class RegisterEntryPoint extends AbstractPluginEntryPoint {
 			registerDao = new RegisterDao(getBusiness());
 		}
 		return registerDao;
+	}
+	
+	@Override
+	public Object getPluginVelocityService() {
+		if (velocityPlugin == null) {
+			velocityPlugin = new RegisterVelocityPlugin(getBusiness(), 
+					getRegisterDao());
+		}
+		return velocityPlugin;
 	}
 	
 }

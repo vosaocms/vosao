@@ -27,6 +27,10 @@ public abstract class AbstractPluginEntryPoint implements PluginEntryPoint {
 	}
 	
 	@Override
+	public void init() {
+	}
+	
+	@Override
 	public PluginServiceManager getPluginBackService() {
 		return null;
 	}

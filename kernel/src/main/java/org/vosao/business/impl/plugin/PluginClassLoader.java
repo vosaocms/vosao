@@ -98,20 +98,9 @@ public class PluginClassLoader extends ClassLoader {
 		return getCache().get(pluginName, name);
 	}
 
-	private byte[] loadPluginResourceNative(String name) {
-		Query query = new Query("PluginResourceEntity");
-		query.addFilter("url", Query.FilterOperator.EQUAL, name);
-		Entity e = getSystemService().getDatastore().prepare(query)
-			.asSingleEntity();
-		if (e != null) {
-			return ((Blob)e.getProperty("data")).getBytes();
-		}
-		return null;
-	}
-	
 	private byte[] loadPluginResource(String name) {
 		PluginResourceEntity resource = getDao().getPluginResourceDao()
-				.getByUrl(name);
+				.getByUrl(pluginName, name);
 		if (resource != null) {
 			return resource.getContent(); 
 		}

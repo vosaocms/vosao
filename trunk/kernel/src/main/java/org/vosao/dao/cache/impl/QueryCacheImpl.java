@@ -122,22 +122,7 @@ public class QueryCacheImpl implements QueryCache, Serializable {
 
 	@Override
 	public void removeQueries(Class clazz) {
-		Map<String, Set<String>> map = getQueryMap(clazz);
 		updateQueryMap(clazz, new HashMap<String, Set<String>>());
-		for (String query : map.keySet()) {
-			Set<String> set = map.get(query);
-			if (set != null) {
-				removeQueries(set);
-			}
-		}
-	}
-
-	private void removeQueries(Set<String> set) {
-		for (String key : set) {
-			if (getCache().containsKey(key)) {
-				getCache().remove(key);
-			}
-		}
 	}
 
 	@Override

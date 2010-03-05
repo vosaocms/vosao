@@ -111,24 +111,7 @@ public class PluginLoader {
 				WarItem item = war.get(url);
 				byte[] fileData = item.data.toByteArray();
 				if (url.startsWith("WEB-INF/classes")) {
-					String ext = FolderUtil.getFileExt(item.path);
-					String resourceName = url.replace("WEB-INF/classes/", "");
-					if (ext.equals("class")) {
-						resourceName = resourceName.replace('/', '.')
-							.replace(".class", "");
-					}
-					PluginResourceEntity res = getDao().getPluginResourceDao()
-							.getByUrl(resourceName);
-					if (res == null) {
-						res = new PluginResourceEntity(resourceName, fileData);
-					}
-					else {
-						res.setContent(fileData);
-					}
-					getDao().getPluginResourceDao().save(res);
-					getBusiness().getPluginResourceBusiness()
-						.updateResourceCache(res);
-					resourceList.add(res.getId().toString());
+					resourceList.add(loadClasspathResource(item, plugin));
 				}
 				if (!url.startsWith("WEB-INF")) {
 					fileCacheList.add(filePrefix + item.path);
@@ -143,9 +126,45 @@ public class PluginLoader {
 							new Date(), fileData.length);
 					getDao().getFileDao().save(file, fileData);
 				}
+				if (url.startsWith("WEB-INF/lib") && url.endsWith(".jar")) {
+					resourceList.addAll(loadJarFile(item, plugin));
+				}
 			}
 		}
 		saveResourceList(plugin, resourceList, fileCacheList);
+	}
+	
+	private String loadClasspathResource(WarItem item, PluginEntity plugin) {
+		String ext = FolderUtil.getFileExt(item.path);
+		byte[] fileData = item.data.toByteArray();
+		String resourceName = item.path.replace("WEB-INF/classes/", "");
+		if (ext.equals("class")) {
+			resourceName = resourceName.replace('/', '.')
+				.replace(".class", "");
+		}
+		PluginResourceEntity res = getDao().getPluginResourceDao()
+				.getByUrl(plugin.getName(), resourceName);
+		if (res == null) {
+			res = new PluginResourceEntity(plugin.getName(),
+					resourceName, fileData);
+		}
+		else {
+			res.setContent(fileData);
+		}
+		getDao().getPluginResourceDao().save(res);
+		getBusiness().getPluginResourceBusiness()
+			.updateResourceCache(res);
+		return res.getId().toString();
+	}
+
+	private List<String> loadJarFile(WarItem file, PluginEntity plugin) 
+			throws IOException {
+		List<String> result = new ArrayList<String>();
+		Map<String, WarItem> war = readWar(file.data.toByteArray());
+		for (String path : war.keySet()) {
+			result.add(loadClasspathResource(war.get(path), plugin));
+		}
+		return result;
 	}
 	
 	private void saveResourceList(PluginEntity plugin, 
@@ -154,10 +173,12 @@ public class PluginLoader {
 		String fileListStr = StrUtil.toCSV(fileList);
 		try {
 			getDao().getPluginResourceDao().save(
-					new PluginResourceEntity(plugin.getName() + RESOURCE_LIST, 
+					new PluginResourceEntity(plugin.getName(),
+							plugin.getName() + RESOURCE_LIST, 
 							resourceListStr.getBytes("UTF-8")));
 			getDao().getPluginResourceDao().save(
-					new PluginResourceEntity(plugin.getName() + FILE_LIST, 
+					new PluginResourceEntity(plugin.getName(),
+							plugin.getName() + FILE_LIST, 
 							fileListStr.getBytes("UTF-8")));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -171,12 +192,7 @@ public class PluginLoader {
 		ZipEntry entry;
 		byte[] buffer = new byte[4096];
 		while((entry = in.getNextEntry()) != null) {
-			if (entry.getName().startsWith("META-INF")) {
-				continue;
-			}
-			if (entry.isDirectory()) {
-			}
-			else {
+			if (!entry.isDirectory()) {
 				ByteArrayOutputStream itemData = new ByteArrayOutputStream();
 				int len = 0;
 				while ((len = in.read(buffer)) > 0) {
@@ -184,7 +200,6 @@ public class PluginLoader {
 				}
 				WarItem item = new WarItem(entry.getName(), itemData);
 				map.put(entry.getName(), item);
-				logger.info(entry.getName());
 			}
 		}
 		in.close();
@@ -240,7 +255,7 @@ public class PluginLoader {
 	
 	private void removePluginResources(PluginEntity plugin) {
 		PluginResourceEntity listResource = getDao().getPluginResourceDao()
-				.getByUrl(plugin.getName() + RESOURCE_LIST);
+				.getByUrl(plugin.getName(), plugin.getName() + RESOURCE_LIST);
 		if (listResource == null) {
 			return;
 		}
@@ -260,7 +275,7 @@ public class PluginLoader {
 
 	private void removePluginFileCache(PluginEntity plugin) {
 		PluginResourceEntity listResource = getDao().getPluginResourceDao()
-			.getByUrl(plugin.getName() + FILE_LIST);
+			.getByUrl(plugin.getName(), plugin.getName() + FILE_LIST);
 		if (listResource == null) {
 			return;
 		}

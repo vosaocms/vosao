@@ -36,9 +36,10 @@ public class PluginResourceDaoImpl extends
 	}
 
 	@Override
-	public PluginResourceEntity getByUrl(String url) {
+	public PluginResourceEntity getByUrl(String plugin, String url) {
 		Query q = newQuery();
 		q.addFilter("url", FilterOperator.EQUAL, url);
+		q.addFilter("pluginName", FilterOperator.EQUAL, plugin);
 		return selectOne(q, "getByUrl", params(url));
 	}
 

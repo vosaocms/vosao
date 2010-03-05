@@ -28,6 +28,7 @@ public class PluginResourceEntity extends BaseEntityImpl {
 	
 	private static final long serialVersionUID = 2L;
 
+	private String pluginName;
 	private byte[] data;
 	private String url;
 	
@@ -39,6 +40,7 @@ public class PluginResourceEntity extends BaseEntityImpl {
     	super.load(entity);
     	data = getBlobProperty(entity, "data");
     	url = getStringProperty(entity, "url");
+    	pluginName = getStringProperty(entity, "pluginName");
     }
     
     @Override
@@ -46,10 +48,12 @@ public class PluginResourceEntity extends BaseEntityImpl {
     	super.save(entity);
     	entity.setProperty("data", new Blob(data));
     	entity.setProperty("url", url);
+    	entity.setProperty("pluginName", pluginName);
     }
 
-    public PluginResourceEntity(String fileId, byte[] content) {
+    public PluginResourceEntity(String plugin, String fileId, byte[] content) {
 		this();
+		pluginName = plugin;
 		this.url = fileId;
 		this.data = content;
 	}
@@ -68,6 +72,14 @@ public class PluginResourceEntity extends BaseEntityImpl {
 
 	public void setUrl(String fileId) {
 		this.url = fileId;
+	}
+
+	public String getPluginName() {
+		return pluginName;
+	}
+
+	public void setPluginName(String pluginName) {
+		this.pluginName = pluginName;
 	}
 	
 }

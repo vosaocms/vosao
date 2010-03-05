@@ -28,6 +28,6 @@ import org.vosao.entity.PluginResourceEntity;
  */
 public interface PluginResourceDao extends BaseDao<PluginResourceEntity> {
 
-	PluginResourceEntity getByUrl(String name);
+	PluginResourceEntity getByUrl(String plugin, String name);
 	
 }

@@ -54,6 +54,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 	private int current;
 	private int start;
 	private long startTime = 0;
+	private String currentFile;
 	
 	public Dao getDao() {
 		return dao;
@@ -75,6 +76,11 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 
 	public int getEnd() {
 		return current;
+	}
+	
+	public void reset() {
+		current = 0;
+		start = 0;
 	}
 	
 	private boolean isSkip() throws DaoTaskException {
@@ -374,6 +380,14 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 		else {
 			getDao().getPluginDao().save(entity);
 		}
+	}
+
+	public String getCurrentFile() {
+		return currentFile;
+	}
+
+	public void setCurrentFile(String currentFile) {
+		this.currentFile = currentFile;
 	}
 	
 }

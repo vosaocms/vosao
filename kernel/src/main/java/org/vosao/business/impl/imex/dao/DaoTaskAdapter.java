@@ -50,6 +50,12 @@ public interface DaoTaskAdapter {
 	void setStart(int value);
 
 	int getEnd();
+	
+	void reset();
+
+	String getCurrentFile();
+
+	void setCurrentFile(String file);
 
 	void configSave(ConfigEntity entity) throws DaoTaskException;
 	

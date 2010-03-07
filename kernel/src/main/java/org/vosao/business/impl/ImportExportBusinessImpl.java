@@ -102,7 +102,17 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		List<String> result = new ArrayList<String>();
 		ZipEntry entry;
 		byte[] buffer = new byte[4096];
+		boolean skipping = getDaoTaskAdapter().getCurrentFile() != null;
 		while((entry = in.getNextEntry()) != null) {
+			if (skipping) {
+				if (entry.getName().equals(getDaoTaskAdapter().getCurrentFile())) {
+					skipping = false;
+				}
+				else {
+					continue;
+				}
+			}
+			getDaoTaskAdapter().setCurrentFile(entry.getName());
 			if (entry.isDirectory()) {
 				getBusiness().getFolderBusiness().createFolder(
 						"/" + entry.getName());
@@ -129,6 +139,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 							entry, data.toByteArray()));
 				}
 			}
+			getDaoTaskAdapter().reset();
 		}
 		clearResourcesCache(result);
 	}

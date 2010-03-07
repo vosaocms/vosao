@@ -30,6 +30,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.FileBusiness;
 import org.vosao.business.FolderBusiness;
+import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.servlet.MimeType;
@@ -121,12 +122,13 @@ public class FileBusinessImpl extends AbstractBusinessImpl
 		try {
 			String path = FolderUtil.getFilePath(filename);
 			String name = FolderUtil.getFileName(filename);
-			FolderEntity folder = getFolderBusiness().findFolderByPath(
-					getFolderBusiness().getTree(), path).getEntity();
+			TreeItemDecorator<FolderEntity> folder = getFolderBusiness()
+					.findFolderByPath(getFolderBusiness().getTree(), path);
 			if (folder == null) {
 				return null;
 			}
-			return getDao().getFileDao().getByName(folder.getId(), name);
+			return getDao().getFileDao().getByName(folder.getEntity().getId(), 
+					name);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

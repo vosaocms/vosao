@@ -65,8 +65,10 @@ public class ImportTaskServlet extends BaseSpringServlet {
 		try {
 			CurrentUser.setInstance(UserHelper.ADMIN);
 			int start = Integer.valueOf(request.getParameter("start"));
+			String currentFile = request.getParameter("currentFile");
 			getDaoTaskAdapter().setStart(start);
-			logger.info("Import " + filename + " " + start);
+			getDaoTaskAdapter().setCurrentFile(currentFile);
+			logger.info("Import " + filename + " " + start + " " + currentFile);
 			FolderEntity folder = getBusiness().getFolderBusiness()
 				.findFolderByPath(getBusiness().getFolderBusiness().getTree(), 
 						"/tmp").getEntity();
@@ -95,8 +97,10 @@ public class ImportTaskServlet extends BaseSpringServlet {
 			Queue queue = getSystemService().getQueue("import");
 			queue.add(url(IMPORT_TASK_URL).param("start", 
 					String.valueOf(getDaoTaskAdapter().getEnd()))
-					.param("filename", filename));
-			logger.info("Added new import task " + getDaoTaskAdapter().getEnd());
+					.param("filename", filename)
+					.param("currentFile", getDaoTaskAdapter().getCurrentFile()));
+			logger.info("Added new import task " + getDaoTaskAdapter().getEnd() 
+					+ " " + getDaoTaskAdapter().getCurrentFile());
 		}
 		catch(UploadException e) {
 			logger.error(e.getMessage());

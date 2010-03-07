@@ -162,6 +162,17 @@
         <url-pattern>/plugin/form/send</url-pattern>
     </servlet-mapping>
 
+    <!-- WebDAV servlet -->
+
+    <servlet>
+        <servlet-name>WebdavServlet</servlet-name>
+        <servlet-class>org.vosao.servlet.WebdavServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WebdavServlet</servlet-name>
+        <url-pattern>/_ah/webdav/*</url-pattern>
+    </servlet-mapping>
+
     <!-- Tasks -->
 
     <servlet>

@@ -54,13 +54,11 @@ public class SiteFilter extends AbstractFilter implements Filter {
     public static final String[] SKIP_URLS = {
 		"/_ah",
 		"/cms",
-		"/plugin",
 		"/static",
 		"/login.jsp",
 		"/file",
 		"/setup",
 		"/update",
-		"/cron",
 		"/JSON-RPC"};
     
     public SiteFilter() {

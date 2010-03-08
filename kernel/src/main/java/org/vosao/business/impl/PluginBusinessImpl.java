@@ -239,7 +239,7 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 	@Override
 	public HttpServlet getPluginServlet(HttpServletRequest request) {
 		String url = request.getServletPath();
-		if (!url.startsWith("/plugin")) {
+		if (!url.startsWith("/_ah/plugin")) {
 			return null;
 		}
 		String[] tokens = request.getRequestURI().toString().split("/");

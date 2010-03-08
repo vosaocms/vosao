@@ -113,4 +113,12 @@ public class FolderUtil {
 		return path.substring(s + 1, path.length()).toLowerCase();
 	}
 	
+	public static String getParentPath(String path) {
+		int i = path.lastIndexOf('/');
+		if (i > 0) {
+			return path.substring(0, i);
+		}
+		return null;
+	}
+
 }

@@ -31,7 +31,9 @@ import java.util.Map;
 import org.vosao.business.Business;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
-import org.vosao.servlet.FolderUtil;
+import org.vosao.utils.FolderUtil;
+import org.vosao.webdav.sysfile.FileFactory;
+import org.vosao.webdav.sysfile.SystemFileFactory;
 
 import com.bradmcevoy.http.Auth;
 import com.bradmcevoy.http.CollectionResource;
@@ -46,21 +48,27 @@ public class FolderResource extends AbstractResource implements
 
 	private FolderEntity folder;
 	private String path;
+	private SystemFileFactory systemFileFactory;
 	
-	public FolderResource(Business aBusiness, FolderEntity aFolder, 
-			String aPath) {
+	public FolderResource(Business aBusiness, 
+			SystemFileFactory aSystemFileFactory,
+			FolderEntity aFolder, String aPath) {
 		super(aBusiness, aFolder.getName(), new Date());
+		systemFileFactory = aSystemFileFactory;
 		folder = aFolder;
 		path = aPath;
 	}
 
 	@Override
 	public Resource child(String childName) {
+		if (systemFileFactory.isSystemFile(path + "/" + childName)) {
+			return systemFileFactory.getSystemFile(path + "/" + childName);
+		}
 		List<FolderEntity> children = getDao().getFolderDao().getByParent(
 				folder.getId());
 		for (FolderEntity child : children) {
 			if (child.getName().equals(childName)) {
-				return new FolderResource(getBusiness(), child, 
+				return new FolderResource(getBusiness(), systemFileFactory, child, 
 						path + "/" + childName);
 			}
 		}
@@ -76,10 +84,11 @@ public class FolderResource extends AbstractResource implements
 	@Override
 	public List<? extends Resource> getChildren() {
 		List<Resource> result = new ArrayList<Resource>();
+		systemFileFactory.addSystemFiles(result, path);
 		List<FolderEntity> children = getDao().getFolderDao().getByParent(
 				folder.getId());
 		for (FolderEntity child : children) {
-			result.add(new FolderResource(getBusiness(), child, 
+			result.add(new FolderResource(getBusiness(), systemFileFactory, child, 
 					path + "/" + child.getName()));
 		}
 		List<FileEntity> files = getDao().getFileDao().getByFolder(folder.getId());
@@ -129,6 +138,18 @@ public class FolderResource extends AbstractResource implements
 				.append(basePath + child.getName()).append("\">").append(child.getName())
 				.append("</a></td></tr>");
 		}
+		String factoryPath = relPath.length() < 1 ? "/" : relPath;
+		for (FileFactory factory : systemFileFactory.getFactories()) {
+			if (factory.existsIn(factoryPath)) {
+				s.append("<tr ").append(i++ % 2 == 1 ? "class=\"even\"" : "")
+					.append("><td><img src=\"/static/images/page.png\" /><a href=\"")
+					.append(basePath + factory.getName())
+					.append("\">").append(factory.getName())
+					.append("</a></td><td>")
+					.append(0).append("</td<td>").append(new Date())
+					.append("</td></tr>");
+			}
+		}		
 		List<FileEntity> files = getDao().getFileDao().getByFolder(folder.getId());
 		for (FileEntity file : files) {
 			s.append("<tr ").append(i++ % 2 == 1 ? "class=\"even\"" : "")

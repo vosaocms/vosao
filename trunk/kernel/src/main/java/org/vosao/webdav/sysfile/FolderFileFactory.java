@@ -21,19 +21,45 @@
 
 package org.vosao.webdav.sysfile;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
-import org.vosao.common.AbstractServiceBean;
+import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.entity.FolderEntity;
+import org.vosao.utils.FolderUtil;
 
-public abstract class AbstractFileFactory extends AbstractServiceBean 
-		implements FileFactory {
+import com.bradmcevoy.http.Resource;
 
-	protected static final Log logger = LogFactory.getLog(
-			AbstractFileFactory.class);
-	
-	public AbstractFileFactory(Business business) {
+public class FolderFileFactory extends AbstractFileFactory {
+
+	public FolderFileFactory(Business business) {
 		super(business);
 	}
+
+	@Override
+	public String getName() {
+		return "_folder.xml";
+	}
 	
+	@Override
+	public Resource getFile(String path) {
+		String folderPath = FolderUtil.getFilePath(path);
+		TreeItemDecorator<FolderEntity> folder = getBusiness()
+				.getFolderBusiness().findFolderByPath(
+						getBusiness().getFolderBusiness().getTree(), folderPath);
+		if (folder != null) {
+			return new FolderFileResource(getBusiness(), folder.getEntity());
+		}
+		return null;
+	}
+
+	@Override
+	public boolean isCorrectPath(String path) {
+		String filename = FolderUtil.getFolderName(path);
+		return getName().equals(filename);
+	}
+
+	@Override
+	public boolean existsIn(String folderPath) {
+		return true;
+	}
+
 }

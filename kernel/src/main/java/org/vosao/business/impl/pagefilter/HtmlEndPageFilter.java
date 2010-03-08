@@ -22,7 +22,6 @@
 package org.vosao.business.impl.pagefilter;
 
 import org.vosao.business.Business;
-import org.vosao.business.impl.pagefilter.fragments.GoogleAnalyticsFragment;
 import org.vosao.entity.PageEntity;
 
 public class HtmlEndPageFilter extends AbstractPageFilter 
@@ -30,7 +29,6 @@ public class HtmlEndPageFilter extends AbstractPageFilter
 
 	public HtmlEndPageFilter(Business business) {
 		super(business);
-		getFragments().add(new GoogleAnalyticsFragment());
 	}
 	
 	@Override

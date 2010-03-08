@@ -23,6 +23,7 @@ public class SystemFileFactory extends AbstractServiceBean {
 			factories.add(new ConfigFileFactory(getBusiness()));
 			factories.add(new FolderFileFactory(getBusiness()));
 			factories.add(new LanguagesFileFactory(getBusiness()));
+			factories.add(new MessagesFileFactory(getBusiness()));
 			// TODO add more for every system file
 		}
 		return factories;

@@ -23,25 +23,32 @@ package org.vosao.webdav.sysfile;
 
 import org.vosao.business.Business;
 
+import com.bradmcevoy.http.Resource;
+
 public class ConfigFileFactory extends AbstractFileFactory {
 
 	public ConfigFileFactory(Business business) {
 		super(business);
 	}
+
+	@Override
+	public String getName() {
+		return "_config.xml";
+	}
 	
 	@Override
-	public String getFile(String path) {
-		return "config xml content";
+	public Resource getFile(String path) {
+		return new ConfigFileResource(getBusiness());
 	}
 
 	@Override
 	public boolean isCorrectPath(String path) {
-		return "/_config.xml".equals(path);
+		return ("/" + getName()).equals(path);
 	}
 
 	@Override
-	public void setFile(String path, String xml) {
-		// TODO Auto-generated method stub
+	public boolean existsIn(String folderPath) {
+		return folderPath.equals("/");
 	}
 
 }

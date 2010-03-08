@@ -21,12 +21,16 @@
 
 package org.vosao.webdav.sysfile;
 
+import com.bradmcevoy.http.Resource;
+
 public interface FileFactory {
 
+	String getName();
+	
 	boolean isCorrectPath(String path);
 	
-	String getFile(String path);
+	Resource getFile(String path);
 	
-	void setFile(String path, String xml);
+	boolean existsIn(String folderPath);
 	
 }

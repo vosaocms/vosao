@@ -47,7 +47,7 @@ public class AbstractFileResource extends AbstractResource
 
 	@Override
 	public Long getContentLength() {
-		return new Long(data.length);
+		return data == null ? 0L : new Long(data.length);
 	}
 
 	@Override

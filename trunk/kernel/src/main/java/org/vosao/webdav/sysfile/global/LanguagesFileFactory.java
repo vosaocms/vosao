@@ -19,36 +19,21 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.webdav.sysfile;
+package org.vosao.webdav.sysfile.global;
 
 import org.vosao.business.Business;
 
 import com.bradmcevoy.http.Resource;
 
-public class LanguagesFileFactory extends AbstractFileFactory {
+public class LanguagesFileFactory extends AbstractGlobalFileFactory {
 
 	public LanguagesFileFactory(Business business) {
-		super(business);
+		super(business, "_languages.xml");
 	}
 
-	@Override
-	public String getName() {
-		return "_languages.xml";
-	}
-	
 	@Override
 	public Resource getFile(String path) {
-		return new LanguagesFileResource(getBusiness());
-	}
-
-	@Override
-	public boolean isCorrectPath(String path) {
-		return ("/" + getName()).equals(path);
-	}
-
-	@Override
-	public boolean existsIn(String folderPath) {
-		return folderPath.equals("/");
+		return new LanguagesFileResource(getBusiness(), getName());
 	}
 
 }

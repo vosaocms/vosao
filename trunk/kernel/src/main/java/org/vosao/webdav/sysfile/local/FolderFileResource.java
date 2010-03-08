@@ -1,4 +1,4 @@
-package org.vosao.webdav.sysfile;
+package org.vosao.webdav.sysfile.local;
 
 import static org.vosao.utils.XmlUtil.notNull;
 

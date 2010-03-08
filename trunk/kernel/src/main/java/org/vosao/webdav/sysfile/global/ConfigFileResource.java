@@ -1,4 +1,4 @@
-package org.vosao.webdav.sysfile;
+package org.vosao.webdav.sysfile.global;
 
 import static org.vosao.utils.XmlUtil.notNull;
 
@@ -21,8 +21,8 @@ import com.bradmcevoy.http.exceptions.NotAuthorizedException;
 
 public class ConfigFileResource extends AbstractFileResource {
 
-	public ConfigFileResource(Business aBusiness) {
-		super(aBusiness, "_config.xml", new Date());
+	public ConfigFileResource(Business aBusiness, String name) {
+		super(aBusiness, name, new Date());
 		setContentType("text/xml");
 		setData(new byte[0]);
 	}

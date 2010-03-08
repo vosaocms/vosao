@@ -19,36 +19,21 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.webdav.sysfile;
+package org.vosao.webdav.sysfile.global;
 
 import org.vosao.business.Business;
 
 import com.bradmcevoy.http.Resource;
 
-public class ConfigFileFactory extends AbstractFileFactory {
+public class UsersFileFactory extends AbstractGlobalFileFactory {
 
-	public ConfigFileFactory(Business business) {
-		super(business);
+	public UsersFileFactory(Business business) {
+		super(business, "_users.xml");
 	}
 
-	@Override
-	public String getName() {
-		return "_config.xml";
-	}
-	
 	@Override
 	public Resource getFile(String path) {
-		return new ConfigFileResource(getBusiness());
-	}
-
-	@Override
-	public boolean isCorrectPath(String path) {
-		return ("/" + getName()).equals(path);
-	}
-
-	@Override
-	public boolean existsIn(String folderPath) {
-		return folderPath.equals("/");
+		return new UsersFileResource(getBusiness(), getName());
 	}
 
 }

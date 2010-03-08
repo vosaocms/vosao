@@ -1,4 +1,4 @@
-package org.vosao.webdav.sysfile;
+package org.vosao.webdav.sysfile.global;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -11,17 +11,17 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.Business;
-import org.vosao.entity.MessageEntity;
+import org.vosao.entity.PluginEntity;
 import org.vosao.webdav.AbstractFileResource;
 
 import com.bradmcevoy.http.Range;
 import com.bradmcevoy.http.exceptions.BadRequestException;
 import com.bradmcevoy.http.exceptions.NotAuthorizedException;
 
-public class MessagesFileResource extends AbstractFileResource {
+public class PluginsFileResource extends AbstractFileResource {
 
-	public MessagesFileResource(Business aBusiness) {
-		super(aBusiness, "_messages.xml", new Date());
+	public PluginsFileResource(Business aBusiness, String name) {
+		super(aBusiness, name, new Date());
 		setContentType("text/xml");
 		setData(new byte[0]);
 	}
@@ -36,21 +36,19 @@ public class MessagesFileResource extends AbstractFileResource {
 
 	private void createXML() throws UnsupportedEncodingException {
 		Document doc = DocumentHelper.createDocument();
-		Element e = doc.addElement("messages");
-		List<MessageEntity> list = getDao().getMessageDao().select();
-		for (MessageEntity message : list) {
-			createMessageXML(e, message);
+		Element e = doc.addElement("plugins");
+		List<PluginEntity> list = getDao().getPluginDao().select();
+		for (PluginEntity plugin : list) {
+			createPluginXML(e, plugin);
 		}
 		setData(doc.asXML().getBytes("UTF-8"));
 	}
-
-	private void createMessageXML(Element messagesElement, 
-			final MessageEntity message) {
-		Element messageElement = messagesElement.addElement("message");
-		messageElement.addElement("language").setText(
-				message.getLanguageCode());
-		messageElement.addElement("code").setText(message.getCode());
-		messageElement.addElement("value").setText(message.getValue());
-	}
 	
+	private void createPluginXML(Element pluginsElement, 
+			final PluginEntity plugin) {
+		Element pluginElement = pluginsElement.addElement("plugin");
+		pluginElement.addElement("name").setText(plugin.getName());
+		pluginElement.addElement("configData").setText(plugin.getConfigData());
+	}
+
 }

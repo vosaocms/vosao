@@ -19,12 +19,13 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.webdav.sysfile;
+package org.vosao.webdav.sysfile.local;
 
 import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FolderEntity;
 import org.vosao.utils.FolderUtil;
+import org.vosao.webdav.sysfile.AbstractFileFactory;
 
 import com.bradmcevoy.http.Resource;
 

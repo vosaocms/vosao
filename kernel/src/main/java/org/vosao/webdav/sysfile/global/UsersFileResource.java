@@ -1,4 +1,6 @@
-package org.vosao.webdav.sysfile;
+package org.vosao.webdav.sysfile.global;
+
+import static org.vosao.utils.XmlUtil.notNull;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -11,17 +13,17 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.Business;
-import org.vosao.entity.LanguageEntity;
+import org.vosao.entity.UserEntity;
 import org.vosao.webdav.AbstractFileResource;
 
 import com.bradmcevoy.http.Range;
 import com.bradmcevoy.http.exceptions.BadRequestException;
 import com.bradmcevoy.http.exceptions.NotAuthorizedException;
 
-public class LanguagesFileResource extends AbstractFileResource {
+public class UsersFileResource extends AbstractFileResource {
 
-	public LanguagesFileResource(Business aBusiness) {
-		super(aBusiness, "_languages.xml", new Date());
+	public UsersFileResource(Business aBusiness, String name) {
+		super(aBusiness, name, new Date());
 		setContentType("text/xml");
 		setData(new byte[0]);
 	}
@@ -36,14 +38,20 @@ public class LanguagesFileResource extends AbstractFileResource {
 
 	private void createXML() throws UnsupportedEncodingException {
 		Document doc = DocumentHelper.createDocument();
-		Element e = doc.addElement("languages");
-		List<LanguageEntity> langs = getDao().getLanguageDao().select();
-		for (LanguageEntity lang : langs) {
-			Element langElem = e.addElement("language");
-			langElem.addAttribute("code", lang.getCode());
-			langElem.addAttribute("title", lang.getTitle());
+		Element e = doc.addElement("users");
+		List<UserEntity> list = getDao().getUserDao().select();
+		for (UserEntity user : list) {
+			createUserXML(e, user);
 		}
 		setData(doc.asXML().getBytes("UTF-8"));
 	}
 	
+	private void createUserXML(Element usersElement, final UserEntity user) {
+		Element userElement = usersElement.addElement("user");
+		userElement.addElement("name").setText(user.getName());
+		userElement.addElement("email").setText(user.getEmail());
+		userElement.addElement("password").setText(notNull(user.getPassword()));
+		userElement.addElement("role").setText(user.getRole().name());
+	}
+
 }

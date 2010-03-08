@@ -415,7 +415,17 @@
         <property name="business" ref="business"/>  
     </bean>
 
-    <bean id="auth.service" class="com.bradmcevoy.http.AuthenticationService"/>
+    <bean id="basic.auth.handler" class="com.bradmcevoy.http.http11.auth.BasicAuthHandler" />
+    <bean id="gae.digest.auth.handler" class="com.ettrema.gae.AppEngineDigestAuthenticationHandler" />
+
+    <bean id="auth.service" class="com.bradmcevoy.http.AuthenticationService">
+        <constructor-arg>
+            <list>
+                <ref bean="basic.auth.handler"/>
+                <ref bean="gae.digest.auth.handler"/>
+            </list>
+        </constructor-arg>
+    </bean>
     
     <bean id="milton.response.handler" class="com.bradmcevoy.http.webdav.DefaultWebDavResponseHandler">
         <constructor-arg ref="auth.service"/>

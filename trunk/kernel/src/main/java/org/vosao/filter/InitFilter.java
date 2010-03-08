@@ -52,8 +52,8 @@ public class InitFilter extends AbstractFilter implements Filter {
     private static final Log logger = LogFactory.getLog(SiteFilter.class);
 
     private static final String SETUP_URL = "/setup";
-    private static final String PLUGIN_CRON_URL = "/cron/plugin";
-    private static final String SESSION_CLEAN_CRON_URL = "/cron/session_clean";
+    private static final String PLUGIN_CRON_URL = "/_ah/cron/plugin";
+    private static final String SESSION_CLEAN_CRON_URL = "/_ah/cron/session_clean";
     
     private int localHits;
     private int cacheHits;

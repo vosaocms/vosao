@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
   <cron>
-    <url>/cron/plugin</url>
+    <url>/_ah/cron/plugin</url>
     <description>Plugin cron job scheduler</description>
     <schedule>every 1 minutes</schedule>
   </cron>
   <cron>
-    <url>/cron/session_clean</url>
+    <url>/_ah/cron/session_clean</url>
     <description>Session clean from datastore</description>
     <schedule>every monday 01:00</schedule>
   </cron>

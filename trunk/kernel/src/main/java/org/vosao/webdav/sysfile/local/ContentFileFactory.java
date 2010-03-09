@@ -21,33 +21,32 @@
 
 package org.vosao.webdav.sysfile.local;
 
+import java.util.List;
+
 import org.vosao.business.Business;
-import org.vosao.business.decorators.TreeItemDecorator;
-import org.vosao.entity.FolderEntity;
+import org.vosao.entity.PageEntity;
 import org.vosao.utils.FolderUtil;
 import org.vosao.webdav.sysfile.AbstractFileFactory;
 
 import com.bradmcevoy.http.Resource;
 
-public class FolderFileFactory extends AbstractFileFactory {
+public class ContentFileFactory extends AbstractFileFactory {
 
-	public FolderFileFactory(Business business) {
+	public ContentFileFactory(Business business) {
 		super(business);
 	}
 
 	@Override
 	public String getName() {
-		return "_folder.xml";
+		return "_content.xml";
 	}
 	
 	@Override
 	public Resource getFile(String path) {
-		String folderPath = FolderUtil.getFilePath(path);
-		TreeItemDecorator<FolderEntity> folder = getBusiness()
-				.getFolderBusiness().findFolderByPath(
-						getBusiness().getFolderBusiness().getTree(), folderPath);
-		if (folder != null) {
-			return new FolderFileResource(getBusiness(), folder.getEntity());
+		String pageURL = FolderUtil.getFilePath(path).replace("/page", "");
+		List<PageEntity> pages = getDao().getPageDao().selectByUrl(pageURL);
+		if (pages.size() > 0) {
+			return new ContentFileResource(getBusiness(), pages);
 		}
 		return null;
 	}
@@ -55,15 +54,18 @@ public class FolderFileFactory extends AbstractFileFactory {
 	@Override
 	public boolean isCorrectPath(String path) {
 		String filename = FolderUtil.getFolderName(path);
-		return getName().equals(filename);
+		String filePath = FolderUtil.getFilePath(path);
+		return existsIn(filePath) && getName().equals(filename);
 	}
 
 	@Override
 	public boolean existsIn(String folderPath) {
-		TreeItemDecorator<FolderEntity> folder = getBusiness()
-			.getFolderBusiness().findFolderByPath(
-				getBusiness().getFolderBusiness().getTree(), folderPath);
-		return folder != null;
+		String pageURL = FolderUtil.getPageURLFromFolderPath(folderPath);
+		if (pageURL != null) {
+			List<PageEntity> pages = getDao().getPageDao().selectByUrl(pageURL);
+			return pages.size() > 0;
+		}
+		return false;
 	}
-
+	
 }

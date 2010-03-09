@@ -31,6 +31,7 @@ import java.util.Map;
 import org.vosao.business.Business;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
+import org.vosao.entity.PageEntity;
 import org.vosao.utils.FolderUtil;
 import org.vosao.webdav.sysfile.FileFactory;
 import org.vosao.webdav.sysfile.SystemFileFactory;
@@ -56,21 +57,28 @@ public class FolderResource extends AbstractResource implements
 		super(aBusiness, aFolder.getName(), new Date());
 		systemFileFactory = aSystemFileFactory;
 		folder = aFolder;
-		path = aPath;
+		path = FolderUtil.removeTrailingSlash(aPath);
 	}
 
 	@Override
 	public Resource child(String childName) {
-		if (systemFileFactory.isSystemFile(path + "/" + childName)) {
-			return systemFileFactory.getSystemFile(path + "/" + childName);
+		String childPath = path + "/" + childName;
+		if (systemFileFactory.isSystemFile(childPath)) {
+			return systemFileFactory.getSystemFile(childPath);
 		}
 		List<FolderEntity> children = getDao().getFolderDao().getByParent(
 				folder.getId());
 		for (FolderEntity child : children) {
 			if (child.getName().equals(childName)) {
-				return new FolderResource(getBusiness(), systemFileFactory, child, 
-						path + "/" + childName);
+				return new FolderResource(getBusiness(), systemFileFactory, 
+						child, childPath);
 			}
+		}
+		String pageURL = FolderUtil.getPageURLFromFolderPath(childPath);
+		if (pageURL != null) {
+			List<PageEntity> pages = getDao().getPageDao().selectByUrl(pageURL);
+			return new PageFolderResource(getBusiness(), systemFileFactory, 
+					childPath, pages.get(0));
 		}
 		List<FileEntity> files = getDao().getFileDao().getByFolder(folder.getId());
 		for (FileEntity file : files) {
@@ -91,6 +99,18 @@ public class FolderResource extends AbstractResource implements
 			result.add(new FolderResource(getBusiness(), systemFileFactory, child, 
 					path + "/" + child.getName()));
 		}
+		String pageURL = FolderUtil.getPageURLFromFolderPath(path);
+		if (pageURL != null) {
+			List<PageEntity> pages = getDao().getPageDao().getByParent(pageURL);
+			for (PageEntity page : pages) {
+				if (!contains(children, page.getPageFriendlyURL())) {
+					result.add(new PageFolderResource(getBusiness(), 
+							systemFileFactory, 
+							path + "/" + page.getPageFriendlyURL(), 
+							page));
+				}
+			}
+		}
 		List<FileEntity> files = getDao().getFileDao().getByFolder(folder.getId());
 		for (FileEntity file : files) {
 			result.add(new FileResource(getBusiness(), file));
@@ -98,6 +118,15 @@ public class FolderResource extends AbstractResource implements
 		return result;
 	}
 
+	private boolean contains(List<FolderEntity> folders, String name) {
+		for (FolderEntity folder : folders) {
+			if (folder.getName().equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	@Override
 	public Long getContentLength() {
 		return null;
@@ -132,12 +161,26 @@ public class FolderResource extends AbstractResource implements
 				.append(parentPath).append("\">Parent</a></td></tr>");
 		}
 		int i = 1;
+		// children folders
 		for (FolderEntity child : children) {
 			s.append("<tr ").append(i++ % 2 == 1 ? "class=\"even\"" : "")
 				.append("><td colspan=\"3\"><img src=\"/static/images/folder.png\"><a href=\"")
 				.append(basePath + child.getName()).append("\">").append(child.getName())
 				.append("</a></td></tr>");
 		}
+		// page folders
+		String pageURL = FolderUtil.getPageURLFromFolderPath(relPath);
+		if (pageURL != null) {
+			List<PageEntity> pages = getDao().getPageDao().getByParent(pageURL);
+			for (PageEntity child : pages) {
+				s.append("<tr ").append(i++ % 2 == 1 ? "class=\"even\"" : "")
+					.append("><td colspan=\"3\"><img src=\"/static/images/folder.png\"><a href=\"")
+					.append(basePath + child.getPageFriendlyURL()).append("\">")
+					.append(child.getPageFriendlyURL())
+					.append("</a></td></tr>");
+			}
+		}
+		// system files
 		String factoryPath = relPath.length() < 1 ? "/" : relPath;
 		for (FileFactory factory : systemFileFactory.getFactories()) {
 			if (factory.existsIn(factoryPath)) {
@@ -150,6 +193,7 @@ public class FolderResource extends AbstractResource implements
 					.append("</td></tr>");
 			}
 		}		
+		// folders files
 		List<FileEntity> files = getDao().getFileDao().getByFolder(folder.getId());
 		for (FileEntity file : files) {
 			s.append("<tr ").append(i++ % 2 == 1 ? "class=\"even\"" : "")

@@ -181,6 +181,8 @@ public class SetupBeanImpl implements SetupBean {
 			getDao().getFolderDao().save(tmp);
 			getBusiness().getFolderPermissionBusiness().setPermission(
 					tmp, guests, FolderPermissionType.WRITE);
+			FolderEntity page = new FolderEntity("page", "page", root.getId());
+			getDao().getFolderDao().save(page);
 		}
 	}
 	

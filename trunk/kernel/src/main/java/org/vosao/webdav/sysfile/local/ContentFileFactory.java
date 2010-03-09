@@ -43,7 +43,8 @@ public class ContentFileFactory extends AbstractFileFactory {
 	
 	@Override
 	public Resource getFile(String path) {
-		String pageURL = FolderUtil.getFilePath(path).replace("/page", "");
+		String pageURL = FolderUtil.getPageURLFromFolderPath(
+				FolderUtil.getFilePath(path));
 		List<PageEntity> pages = getDao().getPageDao().selectByUrl(pageURL);
 		if (pages.size() > 0) {
 			return new ContentFileResource(getBusiness(), pages);

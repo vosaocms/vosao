@@ -21,11 +21,17 @@
 
 package org.vosao.webdav;
 
+import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.dao.Dao;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
+import org.vosao.entity.PageEntity;
+import org.vosao.utils.FolderUtil;
 import org.vosao.webdav.sysfile.SystemFileFactory;
 
 import com.bradmcevoy.http.Resource;
@@ -33,6 +39,10 @@ import com.bradmcevoy.http.ResourceFactory;
 
 public class WebdavResourceFactory implements ResourceFactory {
 
+	protected static final Log logger = LogFactory.getLog(
+			WebdavResourceFactory.class);
+
+	
 	private Business business;
 	private TreeItemDecorator<FolderEntity> root;
 	private SystemFileFactory systemFileFactory;
@@ -54,15 +64,22 @@ public class WebdavResourceFactory implements ResourceFactory {
 
 	@Override
 	public Resource getResource(String host, String aPath) {
-		String path = removeTrailingSlash(aPath.replace("/_ah/webdav", ""));
+		String path = FolderUtil.removeTrailingSlash(aPath.replace("/_ah/webdav", ""));
 		if (getSystemFileFactory().isSystemFile(path)) {
 			return getSystemFileFactory().getSystemFile(path);
 		}
 		root = getBusiness().getFolderBusiness().getTree();
 		TreeItemDecorator<FolderEntity> folderItem = getBusiness()
-				.getFolderBusiness()	.findFolderByPath(root, path);
+				.getFolderBusiness().findFolderByPath(root, path);
 		if (folderItem != null) {
 			return getFolder(folderItem.getEntity(), aPath);
+		}
+		String pageURL = FolderUtil.getPageURLFromFolderPath(path);
+		if (pageURL != null) {
+			List<PageEntity> pages = getDao().getPageDao().selectByUrl(pageURL);
+			if (pages.size() > 0) {
+				return getPageFolder(aPath, pages.get(0));
+			}
 		}
 		FileEntity file = getBusiness().getFileBusiness().findFile(path);
 		if (file != null) {
@@ -71,16 +88,6 @@ public class WebdavResourceFactory implements ResourceFactory {
 		return null;
 	}
 
-	private String removeTrailingSlash(String path) {
-		if (path.equals("")) {
-			return "/";
-		}
-		if (path.charAt(path.length() - 1) == '/' && !path.equals("/")) {
-			return path.substring(0, path.length() - 1);
-		}
-		return path;
-	}
-	
 	private Resource getFolder(FolderEntity folder, String path) {
 		return new FolderResource(getBusiness(), getSystemFileFactory(), 
 				folder, path);
@@ -95,6 +102,11 @@ public class WebdavResourceFactory implements ResourceFactory {
 			systemFileFactory = new SystemFileFactory(getBusiness());
 		}
 		return systemFileFactory;
+	}
+	
+	public Resource getPageFolder(String path, PageEntity page) {
+		return new PageFolderResource(getBusiness(), getSystemFileFactory(), 
+				path, page);
 	}
 	
 }

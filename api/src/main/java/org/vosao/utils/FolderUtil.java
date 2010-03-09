@@ -121,4 +121,26 @@ public class FolderUtil {
 		return null;
 	}
 
+	public static String getPageURLFromFolderPath(String path) {
+		if (path.startsWith("/page")) {
+			String result = path.replace("/page", "");
+			if (result.length() == 0) {
+				result = "/";
+			}
+			return result;
+		}
+		return null;
+	}
+	
+	public static String removeTrailingSlash(String path) {
+		if (path.equals("")) {
+			return "/";
+		}
+		if (path.charAt(path.length() - 1) == '/' && !path.equals("/")) {
+			return path.substring(0, path.length() - 1);
+		}
+		return path;
+	}
+
+	
 }

@@ -22,32 +22,29 @@
 package org.vosao.webdav.sysfile.local;
 
 import org.vosao.business.Business;
-import org.vosao.business.decorators.TreeItemDecorator;
-import org.vosao.entity.FolderEntity;
+import org.vosao.entity.TemplateEntity;
 import org.vosao.utils.FolderUtil;
 import org.vosao.webdav.sysfile.AbstractFileFactory;
 
 import com.bradmcevoy.http.Resource;
 
-public class FolderFileFactory extends AbstractFileFactory {
+public class TemplateFileFactory extends AbstractFileFactory {
 
-	public FolderFileFactory(Business business) {
+	public TemplateFileFactory(Business business) {
 		super(business);
 	}
 
 	@Override
 	public String getName() {
-		return "_folder.xml";
+		return "_template.xml";
 	}
 	
 	@Override
 	public Resource getFile(String path) {
 		String folderPath = FolderUtil.getFilePath(path);
-		TreeItemDecorator<FolderEntity> folder = getBusiness()
-				.getFolderBusiness().findFolderByPath(
-						getBusiness().getFolderBusiness().getTree(), folderPath);
-		if (folder != null) {
-			return new FolderFileResource(getBusiness(), folder.getEntity());
+		TemplateEntity template = getTemplateByPath(folderPath);
+		if (template != null) {
+			return new TemplateFileResource(getBusiness(), template);
 		}
 		return null;
 	}
@@ -55,15 +52,29 @@ public class FolderFileFactory extends AbstractFileFactory {
 	@Override
 	public boolean isCorrectPath(String path) {
 		String filename = FolderUtil.getFolderName(path);
-		return getName().equals(filename);
+		String filePath = FolderUtil.getFilePath(path);
+		return existsIn(filePath) && getName().equals(filename);
 	}
 
 	@Override
 	public boolean existsIn(String folderPath) {
-		TreeItemDecorator<FolderEntity> folder = getBusiness()
-			.getFolderBusiness().findFolderByPath(
-				getBusiness().getFolderBusiness().getTree(), folderPath);
-		return folder != null;
+		if (folderPath.startsWith("/theme/")) {
+			return getTemplateByPath(folderPath) != null;
+		}
+		return false;
 	}
 
+	private TemplateEntity getTemplateByPath(String folderPath) {
+		try {
+			String[] chain = FolderUtil.getPathChain(folderPath);
+			if (chain.length == 2) {
+				return getDao().getTemplateDao().getByUrl(chain[1]);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 }

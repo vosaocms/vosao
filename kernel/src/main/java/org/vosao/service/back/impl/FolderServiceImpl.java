@@ -35,6 +35,7 @@ import org.vosao.service.back.FolderService;
 import org.vosao.service.back.GroupService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.FolderRequestVO;
+import org.vosao.utils.ParamUtil;
 import org.vosao.utils.StrUtil;
 
 /**
@@ -82,7 +83,7 @@ public class FolderServiceImpl extends AbstractServiceImpl
 		}
 		folder.setName(vo.get("name"));
 		folder.setTitle(vo.get("title"));
-		folder.setParent(Long.valueOf(vo.get("parent")));
+		folder.setParent(ParamUtil.getLong(vo.get("parent"), null));
 		List<String> errors = getBusiness().getFolderBusiness()
 			.validateBeforeUpdate(folder);
 		if (errors.isEmpty()) {

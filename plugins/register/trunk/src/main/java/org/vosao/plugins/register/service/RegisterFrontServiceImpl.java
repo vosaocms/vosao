@@ -38,6 +38,7 @@ import org.vosao.plugins.register.entity.RegisterConfigEntity;
 import org.vosao.plugins.register.entity.RegistrationEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.utils.EmailUtil;
+import org.vosao.utils.ParamUtil;
 import org.vosao.utils.RecaptchaUtil;
 
 public class RegisterFrontServiceImpl extends AbstractRegisterService 
@@ -69,8 +70,8 @@ public class RegisterFrontServiceImpl extends AbstractRegisterService
 			reg = new RegistrationEntity();
 		}
 		reg.setCreatedDate(new Date());
-		reg.setEmail(vo.get("email"));
-		reg.setName(vo.get("name"));
+		reg.setEmail(ParamUtil.filterXSS(vo.get("email")));
+		reg.setName(ParamUtil.filterXSS(vo.get("name")));
 		reg.setPassword(vo.get("password1"));
 		reg.createSessionKey();
 		UserEntity user = getDao().getUserDao().getByEmail(reg.getEmail());

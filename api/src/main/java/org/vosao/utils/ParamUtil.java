@@ -21,6 +21,8 @@
 
 package org.vosao.utils;
 
+import com.josephoconnell.html.HTMLInputFilter;
+
 /**
  * @author Alexander Oleynik
  */
@@ -44,6 +46,12 @@ public class ParamUtil {
 		catch (NumberFormatException e) {
 			return defaultValue;
 		}
+	}
+	
+	private static HTMLInputFilter xssFilter = new HTMLInputFilter();
+	
+	static public String filterXSS(String value) {
+		return xssFilter.filter(value);
 	}
 	
 }

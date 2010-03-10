@@ -33,6 +33,8 @@ import org.vosao.dao.cache.CacheStat;
 import org.vosao.dao.cache.EntityCache;
 import org.vosao.global.SystemService;
 
+import com.google.appengine.api.memcache.InvalidValueException;
+
 public class EntityCacheImpl implements EntityCache, Serializable {
 
 	protected static final Log logger = LogFactory.getLog(
@@ -105,7 +107,12 @@ public class EntityCacheImpl implements EntityCache, Serializable {
 	public void removeEntities(Class clazz) {
 		Set<String> keySet = getEntityKeySet(clazz);
 		for (String key : keySet) {
-			getCache().remove(key);
+			try {
+				getCache().remove(key);
+			}
+			catch (InvalidValueException e) {
+				logger.error(e.getMessage());
+			}
 		}
 		keySet.clear();
 		updateEntityKeySet(clazz, keySet);

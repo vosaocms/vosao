@@ -136,8 +136,15 @@ public class BaseDaoImpl<T extends BaseEntity>
 		List<Key> keys = new ArrayList<Key>();
 		int limit = p.countEntities() > 0 ? p.countEntities() : 1;
 		List<Entity> list = p.asList(withLimit(limit));
+		int count = 0;
 		for (Entity entity : list) {
 			keys.add(entity.getKey());
+			// GAE Datastore one call delete limit
+			if (count++ >= 499) {
+				getDatastore().delete(keys);
+				keys.clear();
+				count = 0;
+			}
 		}
 		getDatastore().delete(keys);
 	}

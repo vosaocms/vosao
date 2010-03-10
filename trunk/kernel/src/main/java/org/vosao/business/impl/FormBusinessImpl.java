@@ -37,6 +37,7 @@ import org.vosao.entity.FormConfigEntity;
 import org.vosao.entity.FormEntity;
 import org.vosao.utils.EmailUtil;
 import org.vosao.utils.FileItem;
+import org.vosao.utils.ParamUtil;
 
 public class FormBusinessImpl extends AbstractBusinessImpl 
 	implements FormBusiness {
@@ -67,6 +68,7 @@ public class FormBusinessImpl extends AbstractBusinessImpl
 	@Override
 	public void submit(FormEntity form, Map<String, String> parameters,
 			List<FileItem> files) throws UploadException {
+		filterXSS(parameters);
 		ConfigEntity config = getDao().getConfigDao().getConfig();
 		FormConfigEntity formConfig = getDao().getFormConfigDao().getConfig();
 		VelocityContext context = new VelocityContext();
@@ -83,6 +85,13 @@ public class FormBusinessImpl extends AbstractBusinessImpl
 			throw new UploadException(error);
 		}
 		logger.info("Form successfully submited and emailed.");
+	}
+	
+	private void filterXSS(Map<String, String> params) {
+		for (String key : params.keySet()) {
+			String value = params.get(key);
+			params.put(key, ParamUtil.filterXSS(value));
+		}
 	}
 	
 }

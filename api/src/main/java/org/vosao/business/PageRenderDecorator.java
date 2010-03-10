@@ -140,5 +140,7 @@ public interface PageRenderDecorator {
 	String getKeywords();
 	
 	String getDescription();
+	
+	boolean isVelocityProcessing();
 
 }

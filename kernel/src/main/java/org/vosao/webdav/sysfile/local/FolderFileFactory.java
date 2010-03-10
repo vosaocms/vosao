@@ -66,4 +66,16 @@ public class FolderFileFactory extends AbstractFileFactory {
 		return folder != null;
 	}
 
+	@Override
+	public Resource createFile(byte[] content) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isCreatable(String folderPath) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

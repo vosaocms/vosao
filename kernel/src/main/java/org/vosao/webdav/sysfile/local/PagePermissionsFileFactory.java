@@ -68,5 +68,17 @@ public class PagePermissionsFileFactory extends AbstractFileFactory {
 		}
 		return false;
 	}
+
+	@Override
+	public Resource createFile(byte[] content) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isCreatable(String folderPath) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 }

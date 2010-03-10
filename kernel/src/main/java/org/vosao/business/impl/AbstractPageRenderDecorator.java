@@ -28,14 +28,16 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.PageBusiness;
+import org.vosao.business.PageRenderDecorator;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
 import org.vosao.global.SystemService;
 import org.vosao.utils.DateUtil;
 
-public abstract class AbstractPageRenderDecorator {
+public abstract class AbstractPageRenderDecorator implements PageRenderDecorator {
 
-	private Log logger = LogFactory.getLog(AbstractPageRenderDecorator.class);
+	protected static final Log logger = LogFactory.getLog(
+			AbstractPageRenderDecorator.class);
 
 	private PageEntity page;
 	private String languageCode;
@@ -184,4 +186,9 @@ public abstract class AbstractPageRenderDecorator {
 		return "";
 	}
 
+	@Override
+	public boolean isVelocityProcessing() {
+		return page.isVelocityProcessing();
+	}
+	
 }

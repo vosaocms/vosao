@@ -22,6 +22,7 @@
 package org.vosao.webdav;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,22 +34,28 @@ import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.utils.FolderUtil;
+import org.vosao.utils.StreamUtil;
 import org.vosao.webdav.sysfile.FileFactory;
 import org.vosao.webdav.sysfile.SystemFileFactory;
 
 import com.bradmcevoy.http.Auth;
 import com.bradmcevoy.http.CollectionResource;
 import com.bradmcevoy.http.GetableResource;
+import com.bradmcevoy.http.PutableResource;
 import com.bradmcevoy.http.Range;
 import com.bradmcevoy.http.Resource;
 import com.bradmcevoy.http.exceptions.BadRequestException;
+import com.bradmcevoy.http.exceptions.ConflictException;
 import com.bradmcevoy.http.exceptions.NotAuthorizedException;
 
 public class FolderResource extends AbstractResource implements 
-		CollectionResource, GetableResource {
+		CollectionResource, GetableResource, PutableResource {
 
 	private FolderEntity folder;
 	private String path;
+	private String relPath;
+	private String basePath;
+	private String factoryPath;
 	private SystemFileFactory systemFileFactory;
 	
 	public FolderResource(Business aBusiness, 
@@ -58,6 +65,10 @@ public class FolderResource extends AbstractResource implements
 		systemFileFactory = aSystemFileFactory;
 		folder = aFolder;
 		path = FolderUtil.removeTrailingSlash(aPath);
+		relPath = path.replace("/_ah/webdav", "");
+		basePath = relPath.length() <= 1 ? "/_ah/webdav/" : path + "/";
+		factoryPath = relPath.length() < 1 ? "/" : relPath;
+
 	}
 
 	@Override
@@ -153,8 +164,6 @@ public class FolderResource extends AbstractResource implements
 		s.append("<table width=\"50%\" class=\"form-table\"><th width=\"40%\">Name</th><th>Size in bytes</th><th>Modified date</th></tr>");
 		List<FolderEntity> children = getDao().getFolderDao().getByParent(
 				folder.getId());
-		String relPath = path.replace("/_ah/webdav", "");
-		String basePath = relPath.length() <= 1 ? "/_ah/webdav/" : path + "/";
 		if (!folder.isRoot()) {
 			String parentPath = FolderUtil.getParentPath(path);
 			s.append("<tr><td colspan=\"3\"><img src=\"/static/images/01_left.png\"/><a href=\"")
@@ -181,7 +190,6 @@ public class FolderResource extends AbstractResource implements
 			}
 		}
 		// system files
-		String factoryPath = relPath.length() < 1 ? "/" : relPath;
 		for (FileFactory factory : systemFileFactory.getFactories()) {
 			if (factory.existsIn(factoryPath)) {
 				s.append("<tr ").append(i++ % 2 == 1 ? "class=\"even\"" : "")
@@ -206,6 +214,27 @@ public class FolderResource extends AbstractResource implements
 		}
 		s.append("</table>");
 		out.write(s.toString().getBytes("UTF-8"));
+	}
+
+	@Override
+	public Resource createNew(String newName, InputStream inputStream, 
+			Long length, String contentType) throws IOException, 
+			ConflictException {
+		byte[] data = StreamUtil.readFileStream(inputStream);
+		for (FileFactory factory : systemFileFactory.getFactories()) {
+			if (factory.isCreatable(factoryPath)) {
+				return factory.createFile(data);
+			}
+		}
+		FileEntity file = new FileEntity();
+		file.setFilename(newName);
+		file.setFolderId(folder.getId());
+		file.setTitle(newName);
+		file.setLastModifiedTime(new Date());
+		file.setSize(length.intValue());
+		file.setMimeType(contentType);
+		getDao().getFileDao().save(file, data);
+		return new FileResource(getBusiness(), file);
 	}
 
 }

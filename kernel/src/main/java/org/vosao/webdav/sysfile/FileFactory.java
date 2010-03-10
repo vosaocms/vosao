@@ -33,4 +33,7 @@ public interface FileFactory {
 	
 	boolean existsIn(String folderPath);
 	
+	boolean isCreatable(String folderPath);
+	
+	Resource createFile(byte[] content);
 }

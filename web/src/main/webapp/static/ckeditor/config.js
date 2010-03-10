@@ -10,5 +10,6 @@ CKEDITOR.editorConfig = function( config )
 	// config.uiColor = '#AADC6E';
 	
 	// Velocity ${xxx.yyy} expressions
-	config.protectedSource.push( /[^\\]\$\{.*?\}/gi );
+	//config.protectedSource.push( /[^\\]\$\{.*?\}/gi );
+	config.entities = false;
 };

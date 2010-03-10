@@ -187,6 +187,9 @@ public class PageServiceImpl extends AbstractServiceImpl
 		if (vo.get("searchable") != null) {
 			page.setSearchable(Boolean.valueOf(vo.get("searchable")));
 		}
+		if (vo.get("velocityProcessing") != null) {
+			page.setVelocityProcessing(Boolean.valueOf(vo.get("velocityProcessing")));
+		}
 		if (vo.get("friendlyUrl") != null) {
 			page.setFriendlyURL(vo.get("friendlyUrl"));
 		}

@@ -64,6 +64,7 @@ public class PageEntity extends BaseEntityImpl {
 	private String description;
 	private boolean searchable;
 	private Integer sortIndex;
+	private boolean velocityProcessing;
 
 	// not persisted
 	private Map<String, String> titles;
@@ -83,6 +84,7 @@ public class PageEntity extends BaseEntityImpl {
 		setTitle("");
 		searchable = true;
 		sortIndex = 0;
+		velocityProcessing = false;
 	}
 	
 	@Override
@@ -108,6 +110,7 @@ public class PageEntity extends BaseEntityImpl {
 		description = getTextProperty(entity, "description");
 		searchable = getBooleanProperty(entity, "searchable", true);
 		sortIndex = getIntegerProperty(entity, "sortIndex", 0);
+		velocityProcessing = getBooleanProperty(entity, "velocityProcessing", false);
 	}
 	
 	@Override
@@ -133,6 +136,7 @@ public class PageEntity extends BaseEntityImpl {
 		entity.setProperty("description", new Text(description));
 		entity.setProperty("searchable", searchable);
 		entity.setProperty("sortIndex", sortIndex);
+		entity.setProperty("velocityProcessing", velocityProcessing);
 	}
 
 	public PageEntity(String title, String friendlyURL, 
@@ -439,6 +443,14 @@ public class PageEntity extends BaseEntityImpl {
 
 	public void setSortIndex(Integer sortIndex) {
 		this.sortIndex = sortIndex;
+	}
+
+	public boolean isVelocityProcessing() {
+		return velocityProcessing;
+	}
+
+	public void setVelocityProcessing(boolean velocityProcessing) {
+		this.velocityProcessing = velocityProcessing;
 	}
 	
 }

@@ -21,20 +21,14 @@
 
 package org.vosao.business.impl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.vosao.business.PageBusiness;
-import org.vosao.business.PageRenderDecorator;
 import org.vosao.dao.Dao;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.global.SystemService;
 
-public class SimplePageRenderDecorator extends AbstractPageRenderDecorator 
-		implements PageRenderDecorator {
+public class SimplePageRenderDecorator extends AbstractPageRenderDecorator {
 
-	private Log logger = LogFactory.getLog(SimplePageRenderDecorator.class);
-	
 	public SimplePageRenderDecorator(PageEntity page,	String languageCode, 
 			Dao dao,
 			PageBusiness pageBusiness, 
@@ -45,14 +39,26 @@ public class SimplePageRenderDecorator extends AbstractPageRenderDecorator
 		setDao(dao);
 		setPageBusiness(pageBusiness);
 		setSystemService(systemService);
-		pluginContentRender();
+		prepareContent();
 	}
 
-	private void pluginContentRender() {
+	private void prepareContent() {
 		ContentEntity contentEntity = getPageBusiness().getPageContent(
 				getPage(), getLanguageCode());
-		setContent(getSystemService().render(contentEntity.getContent(), 
+		if (contentEntity == null) {
+			String msg = "Content not found. " + getFriendlyURL() + " " 
+				+ getLanguageCode();
+			logger.error(msg);
+			setContent(msg);
+			return;
+		}
+		if (isVelocityProcessing()) {
+			setContent(getSystemService().render(contentEntity.getContent(), 
 				getPageBusiness().createContext(getLanguageCode())));
+		}
+		else {
+			setContent(contentEntity.getContent());
+		}
 	}
 
 }

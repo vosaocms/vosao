@@ -68,5 +68,21 @@ public class CommentsFileFactory extends AbstractFileFactory {
 		}
 		return false;
 	}
+
+	@Override
+	public Resource createFile(byte[] content) {
+		
+		
+		
+		
+		
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isCreatable(String folderPath) {
+		return existsIn(folderPath);
+	}
 	
 }

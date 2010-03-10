@@ -141,4 +141,9 @@ public class PageVO {
 	public Integer getSortIndex() {
 		return page.getSortIndex();
 	}
+	
+	public boolean isVelocityProcessing() {
+		return page.isVelocityProcessing();
+	}
+	
 }

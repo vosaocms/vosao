@@ -21,16 +21,10 @@
 
 package org.vosao.webdav.sysfile.global;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Map;
-
 import org.vosao.business.Business;
 import org.vosao.webdav.sysfile.AbstractFileFactory;
 
-import com.bradmcevoy.http.Range;
-import com.bradmcevoy.http.exceptions.BadRequestException;
-import com.bradmcevoy.http.exceptions.NotAuthorizedException;
+import com.bradmcevoy.http.Resource;
 
 public abstract class AbstractGlobalFileFactory extends AbstractFileFactory {
 	
@@ -56,5 +50,13 @@ public abstract class AbstractGlobalFileFactory extends AbstractFileFactory {
 		return folderPath.equals("/");
 	}
 	
+	@Override
+	public boolean isCreatable(String folderPath) {
+		return false;
+	}
 	
+	@Override
+	public Resource createFile(byte[] content) {
+		return null;
+	}
 }

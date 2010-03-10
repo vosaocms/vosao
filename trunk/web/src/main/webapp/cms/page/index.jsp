@@ -68,6 +68,10 @@
     <label>Include in search results</label>
     <input id="searchable" type="checkbox" />
 </div>
+<div class="form-row">
+    <label>Velocity processing</label>
+    <input id="velocityProcessing" type="checkbox" />
+</div>
 
 <div class="form-row">
     <label>Page type</label>
@@ -89,12 +93,17 @@
 </div>
 
 <div class="form-row">
+    <a id="metadata" href="#">Metadata</a>
+</div>
+<div id="meta" style="display:none">
+<div class="form-row">
     <label>META Keywords</label>
     <textarea id="keywords" rows="5" cols="80"></textarea>
 </div>
 <div class="form-row">
     <label>META Description</label>
     <textarea id="description" rows="5" cols="80"></textarea>
+</div>
 </div>
 
 <div class="buttons">

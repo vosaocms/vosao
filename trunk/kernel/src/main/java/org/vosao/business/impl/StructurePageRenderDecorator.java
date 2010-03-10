@@ -35,14 +35,11 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.vosao.business.PageBusiness;
-import org.vosao.business.PageRenderDecorator;
 import org.vosao.business.vo.StructureFieldVO;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
@@ -50,11 +47,8 @@ import org.vosao.entity.StructureEntity;
 import org.vosao.entity.StructureTemplateEntity;
 import org.vosao.global.SystemService;
 
-public class StructurePageRenderDecorator extends AbstractPageRenderDecorator 
-		implements PageRenderDecorator {
+public class StructurePageRenderDecorator extends AbstractPageRenderDecorator {
 
-	private Log logger = LogFactory.getLog(SimplePageRenderDecorator.class);
-	
 	private StructureEntity structure;
 	private StructureTemplateEntity structureTemplate;
 	
@@ -123,12 +117,14 @@ public class StructurePageRenderDecorator extends AbstractPageRenderDecorator
 		}
 	}
 	
-	private void prepareVelocityContent(Map<String, String>contentMap) {
-		VelocityContext context = getPageBusiness().createContext(
+	private void prepareVelocityContent(Map<String, String> contentMap) {
+		if (isVelocityProcessing()) {
+			VelocityContext context = getPageBusiness().createContext(
 				getLanguageCode()); 
-		for (String key : contentMap.keySet()) {
-			contentMap.put(key, getSystemService().render(contentMap.get(key), 
+			for (String key : contentMap.keySet()) {
+				contentMap.put(key, getSystemService().render(contentMap.get(key), 
 					context));
+			}
 		}
 	}
 

@@ -33,11 +33,6 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.Business;
 import org.vosao.entity.CommentEntity;
-import org.vosao.entity.ContentEntity;
-import org.vosao.entity.PageEntity;
-import org.vosao.entity.StructureEntity;
-import org.vosao.entity.StructureTemplateEntity;
-import org.vosao.entity.TemplateEntity;
 import org.vosao.utils.DateUtil;
 import org.vosao.webdav.AbstractFileResource;
 

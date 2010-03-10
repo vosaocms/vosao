@@ -33,7 +33,7 @@
 
 <div id="tabs">
 <ul>
-    <li><a href="#tab-1">File</a></li>
+    <li><a href="#tab-1">Resources</a></li>
     <li class="pagesTab"><a href="#tab-2">Pages</a></li>
 </ul>
 

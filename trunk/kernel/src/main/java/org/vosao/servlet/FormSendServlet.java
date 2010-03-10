@@ -58,7 +58,7 @@ public class FormSendServlet extends BaseSpringServlet {
 	private static final long serialVersionUID = 1L;
 
 	private static final long MAX_SIZE = 10000000;
-	private static final String TEXT_MESSAGE = "{result:'%s', message:'%s'}";
+	private static final String TEXT_MESSAGE = "{\"result\":\"%s\", \"message\":\"%s\"}";
 	private static final String PARSE_REQUEST_ERROR = "Parse request error";
 	private static final String FORM_NAME_PARAM = "form-name";
 
@@ -101,6 +101,10 @@ public class FormSendServlet extends BaseSpringServlet {
 			}
 			message = processForm(parameters, files, request);
 		} catch (UploadException e) {
+			message = createMessage("error", e.getMessage()); 
+			logger.error(message);
+		}
+		catch (Exception e) {
 			message = createMessage("error", e.getMessage()); 
 			logger.error(message);
 		}

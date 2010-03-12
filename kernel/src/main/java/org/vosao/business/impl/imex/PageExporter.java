@@ -31,10 +31,7 @@ import java.util.zip.ZipOutputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Element;
-import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
-import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
-import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.CommentEntity;
 import org.vosao.entity.ContentEntity;
@@ -47,28 +44,14 @@ import org.vosao.entity.TemplateEntity;
 import org.vosao.enums.PageState;
 import org.vosao.enums.PageType;
 import org.vosao.utils.DateUtil;
-import org.vosao.utils.StrUtil;
 import org.vosao.utils.XmlUtil;
 
 public class PageExporter extends AbstractExporter {
 
 	private static final Log logger = LogFactory.getLog(PageExporter.class);
 
-	private ResourceExporter resourceExporter;
-	private ConfigExporter configExporter;
-	private FormExporter formExporter;
-	private UserExporter userExporter;
-	private PagePermissionExporter pagePermissionExporter;
-	
-	public PageExporter(Dao aDao, Business aBusiness, 
-			DaoTaskAdapter daoTaskAdapter) {
-		super(aDao, aBusiness, daoTaskAdapter);
-		resourceExporter = new ResourceExporter(aDao, aBusiness, daoTaskAdapter);
-		configExporter = new ConfigExporter(aDao, aBusiness, daoTaskAdapter);
-		formExporter = new FormExporter(aDao, aBusiness, daoTaskAdapter);
-		userExporter = new UserExporter(aDao, aBusiness, daoTaskAdapter);
-		pagePermissionExporter = new PagePermissionExporter(aDao, aBusiness,
-				daoTaskAdapter);
+	public PageExporter(ExporterFactory factory) {
+		super(factory);
 	}
 	
 	private void createPageXML(TreeItemDecorator<PageEntity> page,
@@ -80,7 +63,7 @@ public class PageExporter extends AbstractExporter {
 		for (TreeItemDecorator<PageEntity> child : page.getChildren()) {
 			createPageXML(child, pageElement);
 		}
-		pagePermissionExporter.createPagePermissionsXML(pageElement, 
+		getPagePermissionExporter().createPagePermissionsXML(pageElement, 
 				page.getEntity().getFriendlyURL());
 	}
 	
@@ -190,7 +173,7 @@ public class PageExporter extends AbstractExporter {
 		if (folder == null) {
 			return;
 		}
-		resourceExporter.addResourcesFromFolder(out, folder, "page/");
+		getResourceExporter().addResourcesFromFolder(out, folder, "page/");
 	}
 
 	public void readPages(Element pages) throws DaoTaskException {
@@ -215,7 +198,7 @@ public class PageExporter extends AbstractExporter {
 				readPageVersion(element);
 			}
 			if (element.getName().equals("permissions")) {
-				pagePermissionExporter.readPagePermissions(element, 
+				getPagePermissionExporter().readPagePermissions(element, 
 						page.getFriendlyURL());
 			}
 		}
@@ -356,6 +339,14 @@ public class PageExporter extends AbstractExporter {
 				getDaoTaskAdapter().commentSave(comment);
 			}
 		}
+	}
+
+	private ResourceExporter getResourceExporter() {
+		return getExporterFactory().getResourceExporter();
+	}
+
+	private PagePermissionExporter getPagePermissionExporter() {
+		return getExporterFactory().getPagePermissionExporter();
 	}
 	
 }

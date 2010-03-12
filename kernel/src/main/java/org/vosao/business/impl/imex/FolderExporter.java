@@ -27,10 +27,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Element;
-import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
-import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
-import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FolderPermissionEntity;
@@ -45,9 +42,8 @@ public class FolderExporter extends AbstractExporter {
 	private static final Log logger = LogFactory.getLog(
 			FolderExporter.class);
 
-	public FolderExporter(Dao aDao, Business aBusiness,
-			DaoTaskAdapter daoTaskAdapter) {
-		super(aDao, aBusiness, daoTaskAdapter);
+	public FolderExporter(ExporterFactory factory) {
+		super(factory);
 	}
 	
 	public void createFoldersXML(final Element siteElement) {

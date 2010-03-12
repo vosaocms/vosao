@@ -21,19 +21,17 @@
 
 package org.vosao.business.impl.imex;
 
+import static org.vosao.utils.XmlUtil.notNull;
+
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Element;
-import org.vosao.business.Business;
-import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
-import org.vosao.dao.Dao;
 import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.GroupEntity;
 import org.vosao.enums.ContentPermissionType;
-import static org.vosao.utils.XmlUtil.notNull;
 
 /**
  * @author Alexander Oleynik
@@ -43,9 +41,8 @@ public class PagePermissionExporter extends AbstractExporter {
 	private static final Log logger = LogFactory.getLog(
 			PagePermissionExporter.class);
 
-	public PagePermissionExporter(Dao aDao, Business aBusiness,
-			DaoTaskAdapter daoTaskAdapter) {
-		super(aDao, aBusiness, daoTaskAdapter);
+	public PagePermissionExporter(ExporterFactory factory) {
+		super(factory);
 	}
 	
 	public void createPagePermissionsXML(final Element pageElement, 

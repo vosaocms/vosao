@@ -25,9 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.dom4j.Element;
-import org.vosao.business.Business;
-import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
-import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.MessageEntity;
 
@@ -36,9 +33,8 @@ import org.vosao.entity.MessageEntity;
  */
 public class MessagesExporter extends AbstractExporter {
 
-	public MessagesExporter(Dao aDao, Business aBusiness,
-			DaoTaskAdapter daoTaskAdapter) {
-		super(aDao, aBusiness, daoTaskAdapter);
+	public MessagesExporter(ExporterFactory factory) {
+		super(factory);
 	}
 	
 	public void createMessagesXML(Element siteElement) {

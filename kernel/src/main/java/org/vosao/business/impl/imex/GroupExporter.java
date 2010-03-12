@@ -26,9 +26,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.dom4j.Element;
-import org.vosao.business.Business;
-import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
-import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.GroupEntity;
 import org.vosao.entity.UserEntity;
@@ -40,9 +37,8 @@ import org.vosao.entity.helper.UserHelper;
  */
 public class GroupExporter extends AbstractExporter {
 
-	public GroupExporter(Dao aDao, Business aBusiness,
-			DaoTaskAdapter daoTaskAdapter) {
-		super(aDao, aBusiness, daoTaskAdapter);
+	public GroupExporter(ExporterFactory factory) {
+		super(factory);
 	}
 	
 	public void createGroupsXML(Element siteElement) {

@@ -31,19 +31,17 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.aspectj.weaver.Iterators.Getter;
 import org.dom4j.DocumentException;
 import org.vosao.business.Business;
 import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
-import org.vosao.business.impl.imex.ConfigExporter;
-import org.vosao.business.impl.imex.PageExporter;
+import org.vosao.business.impl.imex.ExporterFactory;
 import org.vosao.business.impl.imex.ResourceExporter;
 import org.vosao.business.impl.imex.SiteExporter;
 import org.vosao.business.impl.imex.ThemeExporter;
 import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
-import org.vosao.dao.DaoTaskException;
 import org.vosao.dao.Dao;
+import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
 
@@ -55,38 +53,37 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 	private Business business;
 	private Dao dao;
 	private DaoTaskAdapter daoTaskAdapter;
+	private ExporterFactory exporterFactory;
 	
-	private ThemeExporter createThemeExporter() {
-		return new ThemeExporter(getDao(), getBusiness(), getDaoTaskAdapter());
+	private ExporterFactory getExporterFactory() {
+		if (exporterFactory == null) {
+			exporterFactory = new ExporterFactory(getBusiness(), 
+					getDaoTaskAdapter());
+		}
+		return exporterFactory;
 	}
 	
-	private ResourceExporter createResourceExporter() {
-		return new ResourceExporter(getDao(), getBusiness(), getDaoTaskAdapter());
+	private ThemeExporter getThemeExporter() {
+		return getExporterFactory().getThemeExporter();
 	}
-
-	private ConfigExporter createConfigExporter() {
-		return new ConfigExporter(getDao(), getBusiness(), getDaoTaskAdapter());
+	
+	private ResourceExporter getResourceExporter() {
+		return getExporterFactory().getResourceExporter();
 	}
-
-	private SiteExporter createSiteExporter() {
-		return new SiteExporter(getDao(), getBusiness(), getDaoTaskAdapter());
-	}
-
-	private PageExporter createPageExporter() {
-		return new PageExporter(getDao(), getBusiness(), getDaoTaskAdapter());
+	
+	private SiteExporter getSiteExporter() {
+		return getExporterFactory().getSiteExporter();
 	}
 
 	@Override
 	public byte[] createExportFile(final List<TemplateEntity> list) 
 			throws IOException {
 		
-		ThemeExporter themeExporter = createThemeExporter();
-		
 		ByteArrayOutputStream outData = new ByteArrayOutputStream();
 		ZipOutputStream out = new ZipOutputStream(outData);
 		out.putNextEntry(new ZipEntry(ThemeExporter.THEME_FOLDER));
 		for (TemplateEntity theme : list) {
-			themeExporter.exportTheme(out, theme);
+			getThemeExporter().exportTheme(out, theme);
 		}
 		out.close();
 		return outData.toByteArray();
@@ -94,10 +91,6 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 
 	public void importZip(ZipInputStream in) throws IOException, 
 			DocumentException, DaoTaskException {
-		
-		ResourceExporter resourceExporter = createResourceExporter();
-		ThemeExporter themeExporter = createThemeExporter();
-		SiteExporter siteExporter = createSiteExporter();
 		
 		List<String> result = new ArrayList<String>();
 		ZipEntry entry;
@@ -123,19 +116,19 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 				while ((len = in.read(buffer)) > 0) {
 					data.write(buffer, 0, len);
 				}
-				if (siteExporter.isSiteContent(entry)) {
-					siteExporter.readSiteContent(entry, data.toString("UTF-8"));
+				if (getSiteExporter().isSiteContent(entry)) {
+					getSiteExporter().readSiteContent(entry, data.toString("UTF-8"));
 				}
-				else if (themeExporter.isThemeDescription(entry)) {
-					themeExporter.createThemeByDescription(entry, 
+				else if (getThemeExporter().isThemeDescription(entry)) {
+					getThemeExporter().createThemeByDescription(entry, 
 							data.toString("UTF-8"));
 				}
-				else if (themeExporter.isThemeContent(entry)) {
-					themeExporter.createThemeByContent(entry, 
+				else if (getThemeExporter().isThemeContent(entry)) {
+					getThemeExporter().createThemeByContent(entry, 
 							data.toString("UTF-8"));
 				}
 				else {
-					result.add(resourceExporter.importResourceFile(
+					result.add(getResourceExporter().importResourceFile(
 							entry, data.toByteArray()));
 				}
 			}
@@ -154,24 +147,20 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 	
 	@Override
 	public byte[] createSiteExportFile() throws IOException {
-		ThemeExporter themeExporter = createThemeExporter();
-		SiteExporter siteExporter = createSiteExporter();
 		ByteArrayOutputStream outData = new ByteArrayOutputStream();
 		ZipOutputStream out = new ZipOutputStream(outData);
 		out.putNextEntry(new ZipEntry(ThemeExporter.THEME_FOLDER));
 		List<TemplateEntity> list = getDao().getTemplateDao().select();
 		for (TemplateEntity theme : list) {
-			themeExporter.exportTheme(out, theme);
+			getThemeExporter().exportTheme(out, theme);
 		}
-		siteExporter.exportSite(out);
+		getSiteExporter().exportSite(out);
 		out.close();
 		return outData.toByteArray();
 	}
 	
 	@Override
 	public byte[] createExportFile(FolderEntity folder) throws IOException {
-		ResourceExporter resourceExporter = createResourceExporter();
-		
 		ByteArrayOutputStream outData = new ByteArrayOutputStream();
 		ZipOutputStream out = new ZipOutputStream(outData);
 		out.putNextEntry(new ZipEntry(ThemeExporter.THEME_FOLDER));
@@ -181,7 +170,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		if (exportFolder != null) {
 			String zipPath = removeRootSlash(getBusiness().getFolderBusiness()
 					.getFolderPath(folder, root)) + "/";
-			resourceExporter.addResourcesFromFolder(out, exportFolder, zipPath);
+			getResourceExporter().addResourcesFromFolder(out, exportFolder, zipPath);
 			out.close();
 			return outData.toByteArray();
 		}
@@ -224,17 +213,15 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 
 	@Override
 	public byte[] createFullExportFile() throws IOException {
-		ThemeExporter themeExporter = createThemeExporter();
-		SiteExporter siteExporter = createSiteExporter();
 		ByteArrayOutputStream outData = new ByteArrayOutputStream();
 		ZipOutputStream out = new ZipOutputStream(outData);
 		out.putNextEntry(new ZipEntry(ThemeExporter.THEME_FOLDER));
 		out.closeEntry();
 		List<TemplateEntity> list = getDao().getTemplateDao().select();
 		for (TemplateEntity theme : list) {
-			themeExporter.exportTheme(out, theme);
+			getThemeExporter().exportTheme(out, theme);
 		}
-		siteExporter.exportSite(out);
+		getSiteExporter().exportSite(out);
 		exportResources(out);
 		out.close();
 		return outData.toByteArray();
@@ -260,16 +247,6 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 			}
 		}
 		return false;
-	}
-
-	private ResourceExporter resourceExporter;
-	
-	private ResourceExporter getResourceExporter() {
-		if (resourceExporter == null) {
-			resourceExporter = new ResourceExporter(getDao(), getBusiness(),
-					getDaoTaskAdapter());
-		}
-		return resourceExporter;
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.utils.DateUtil;
 import org.vosao.utils.EntityUtil;
 
 import com.google.appengine.api.datastore.Blob;
@@ -18,7 +19,18 @@ public abstract class BaseEntityImpl implements BaseEntity {
 			BaseEntityImpl.class);
 
 	private Key key;
+	private String createUserEmail;
+	private Date createDate;
+	private String modUserEmail;
+	private Date modDate;
 
+	public BaseEntityImpl() {
+		createDate = new Date();
+		modDate = createDate;
+		createUserEmail = "";
+		modUserEmail = "";
+	}
+	
 	@Override
 	public Long getId() {
 		return key == null ? null : key.getId();
@@ -44,10 +56,18 @@ public abstract class BaseEntityImpl implements BaseEntity {
 	@Override
 	public void load(Entity entity) {
 		key = entity.getKey();
+		createUserEmail = getStringProperty(entity, "createUserEmail");
+		createDate = getDateProperty(entity, "createDate");
+		modUserEmail = getStringProperty(entity, "modUserEmail");
+		modDate = getDateProperty(entity, "modDate");
 	}
 
 	@Override
 	public void save(Entity entity) {
+		entity.setProperty("createUserEmail", createUserEmail);
+		entity.setProperty("createDate", createDate);
+		entity.setProperty("modUserEmail", modUserEmail);
+		entity.setProperty("modDate", modDate);
 	}
 
 	@Override
@@ -165,4 +185,54 @@ public abstract class BaseEntityImpl implements BaseEntity {
 		return null;
 	}
 
+	@Override
+	public String getCreateUserEmail() {
+		return createUserEmail;
+	}
+
+	@Override
+	public void setCreateUserEmail(String createUserEmail) {
+		this.createUserEmail = createUserEmail;
+	}
+
+	@Override
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	@Override
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	@Override
+	public String getModUserEmail() {
+		return modUserEmail;
+	}
+
+	@Override
+	public void setModUserEmail(String modUserEmail) {
+		this.modUserEmail = modUserEmail;
+	}
+
+	@Override
+	public Date getModDate() {
+		return modDate;
+	}
+
+	@Override
+	public void setModDate(Date modDate) {
+		this.modDate = modDate;
+	}
+
+	@Override
+	public String getModDateString() {
+		return DateUtil.toString(modDate);
+	}
+
+	@Override
+	public String getCreateDateString() {
+		return DateUtil.toString(createDate);
+	}
+	
 }

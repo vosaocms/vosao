@@ -103,7 +103,7 @@ public class FolderResource extends AbstractResource implements
 	@Override
 	public List<? extends Resource> getChildren() {
 		List<Resource> result = new ArrayList<Resource>();
-		systemFileFactory.addSystemFiles(result, path);
+		systemFileFactory.addSystemFiles(result, factoryPath);
 		List<FolderEntity> children = getDao().getFolderDao().getByParent(
 				folder.getId());
 		for (FolderEntity child : children) {
@@ -150,7 +150,7 @@ public class FolderResource extends AbstractResource implements
 
 	@Override
 	public Long getMaxAgeSeconds(Auth arg0) {
-		return null;
+		return 10L;
 	}
 
 	@Override

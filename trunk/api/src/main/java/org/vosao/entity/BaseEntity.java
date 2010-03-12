@@ -1,6 +1,7 @@
 package org.vosao.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
@@ -22,4 +23,26 @@ public interface BaseEntity extends Serializable {
 	boolean isNew();
 	
 	void copy(BaseEntity entity);
+	
+	// audit fields
+	
+	String getCreateUserEmail();
+
+	void setCreateUserEmail(String createUserEmail);
+
+	Date getCreateDate();
+
+	void setCreateDate(Date createDate);
+
+	String getModUserEmail();
+
+	void setModUserEmail(String modUserEmail);
+
+	Date getModDate();
+
+	void setModDate(Date modDate);
+
+	String getCreateDateString();
+	
+	String getModDateString();
 }

@@ -24,10 +24,12 @@ package org.vosao.dao;
 import static com.google.appengine.api.datastore.FetchOptions.Builder.withLimit;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.business.CurrentUser;
 import org.vosao.entity.BaseEntity;
 import org.vosao.utils.EntityUtil;
 
@@ -165,7 +167,10 @@ public class BaseDaoImpl<T extends BaseEntity>
 		}
 		if (entity == null) {
 			entity = new Entity(getKind());
+			model.setCreateUserEmail(getCurrentUserEmail());
 		}
+		model.setModDate(new Date());
+		model.setModUserEmail(getCurrentUserEmail());
 		model.save(entity);
 		getDatastore().put(entity);
 		model.setKey(entity.getKey());
@@ -254,5 +259,10 @@ public class BaseDaoImpl<T extends BaseEntity>
 
 	private String createKind() {
 		return EntityUtil.getKind(clazz);
+	}
+	
+	private String getCurrentUserEmail() {
+		return CurrentUser.getInstance() == null ? "guest" 
+				: CurrentUser.getInstance().getEmail();
 	}
 }

@@ -96,7 +96,8 @@ public class SystemFileFactory extends AbstractServiceBean {
 	public void addSystemFiles(List<Resource> resources, String path) {
 		for (FileFactory factory : getFactories()) {
 			if (factory.existsIn(path)) {
-				resources.add(factory.getFile(path + "/" + factory.getName()));
+				String p = path.equals("/") ? "" : path;
+				resources.add(factory.getFile(p + "/" + factory.getName()));
 			}
 		}
 	}

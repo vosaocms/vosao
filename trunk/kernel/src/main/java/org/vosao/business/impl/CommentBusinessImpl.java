@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.CommentBusiness;
@@ -66,7 +67,7 @@ public class CommentBusinessImpl extends AbstractBusinessImpl
 				COMMENT_LETTER_SUBJECT, 
 				config.getSiteEmail(), 
 				config.getSiteDomain() + " admin", 
-				email);
+				StringUtils.strip(email));
 			logger.debug("New comment letter was sent to " + email);
 		}
 		return comment;

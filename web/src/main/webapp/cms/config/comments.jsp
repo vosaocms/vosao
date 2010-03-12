@@ -38,7 +38,7 @@
 <div id="tab-2" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
   <form id="commentsForm">
     <div class="form-row">
-        <label>Comments notification email</label>
+        <label>Comments notification email (or coma separated list)</label>
         <input id="commentsEmail" type="text"/>
     </div>
     <div class="form-row">

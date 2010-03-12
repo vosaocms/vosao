@@ -50,7 +50,7 @@
     <input id="name" type="text" />
 </div>
 <div class="form-row">
-    <label>Email address</label>
+    <label>Email address (or coma separated list)</label>
     <input id="email" type="text" />
 </div>
 <div class="form-row">

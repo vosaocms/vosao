@@ -83,7 +83,8 @@ public class FormBusinessImpl extends AbstractBusinessImpl
 		List<String> emails = StrUtil.fromCSV(form.getEmail());
 		for (String email : emails) {
 			String error = EmailUtil.sendEmail(letter, form.getLetterSubject(), 
-				config.getSiteEmail(), "Site admin", email, files);
+				config.getSiteEmail(), "Site admin", StringUtils.strip(email), 
+				files);
 			if (error != null) {
 				throw new UploadException(error);
 			}

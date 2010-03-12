@@ -62,6 +62,10 @@ public class StrUtil {
 	public static List<String> fromCSV(String data) {
 		List<String> result = new ArrayList<String>();
 		if (!StringUtils.isEmpty(data)) {
+			if (data.indexOf(',') == -1) {
+				result.add(data);
+				return result;
+			}
 			for (String s : data.split(",")) {
 				result.add(s);
 			}

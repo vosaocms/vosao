@@ -33,6 +33,7 @@ import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -60,8 +61,10 @@ public class StrUtil {
 
 	public static List<String> fromCSV(String data) {
 		List<String> result = new ArrayList<String>();
-		for (String s : data.split(",")) {
-			result.add(s);
+		if (!StringUtils.isEmpty(data)) {
+			for (String s : data.split(",")) {
+				result.add(s);
+			}
 		}
 		return result;
 	}

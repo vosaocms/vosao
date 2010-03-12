@@ -35,6 +35,7 @@ import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.utils.EmailUtil;
+import org.vosao.utils.StrUtil;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 
@@ -56,16 +57,18 @@ public class CommentBusinessImpl extends AbstractBusinessImpl
 		CommentEntity comment = new CommentEntity(name, encodedContent, 
 				new Date(), page.getFriendlyURL());
 		getDao().getCommentDao().save(comment);
-		String toAddress = config.getCommentsEmail();
-		if (StringUtil.isEmpty(toAddress)) {
-			toAddress = config.getSiteEmail();
+		List<String> toAddresses = StrUtil.fromCSV(config.getCommentsEmail());
+		if (toAddresses.size() == 0) {
+			toAddresses.add(config.getSiteEmail());
 		}
-		EmailUtil.sendEmail(createCommentLetter(comment, page), 
+		for (String email : toAddresses) {
+			EmailUtil.sendEmail(createCommentLetter(comment, page), 
 				COMMENT_LETTER_SUBJECT, 
 				config.getSiteEmail(), 
 				config.getSiteDomain() + " admin", 
-				toAddress);
-		logger.debug("New comment letter was sent to " + toAddress);
+				email);
+			logger.debug("New comment letter was sent to " + email);
+		}
 		return comment;
 	}
 	

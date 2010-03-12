@@ -33,6 +33,7 @@ import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.FieldService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.FieldVO;
+import org.vosao.utils.StrUtil;
 
 public class FieldServiceImpl extends AbstractServiceImpl 
 		implements FieldService {
@@ -92,12 +93,12 @@ public class FieldServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public void remove(List<Long> ids) {
+	public void remove(List<String> ids) {
 		if (ids.size() > 0) {
 			FieldEntity field = null;
 			FormEntity form = null;
-			for (Long id : ids) {
-				field = getDao().getFieldDao().getById(id);
+			for (String id : ids) {
+				field = getDao().getFieldDao().getById(Long.valueOf(id));
 				if (field != null) {
 					form = getDao().getFormDao().getById(field.getFormId());
 					break;
@@ -106,7 +107,7 @@ public class FieldServiceImpl extends AbstractServiceImpl
 			if (form == null) {
 				return;
 			}
-			getDao().getFieldDao().remove(ids);
+			getDao().getFieldDao().remove(StrUtil.toLong(ids));
 			getBusiness().getFieldBusiness().checkOrder(form);
 		}
 	}

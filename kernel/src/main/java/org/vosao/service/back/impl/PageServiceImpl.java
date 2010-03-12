@@ -357,52 +357,42 @@ public class PageServiceImpl extends AbstractServiceImpl
 		}
 	}
 
-	@Override
 	public CommentService getCommentService() {
 		return commentService;
 	}
 
-	@Override
 	public void setCommentService(CommentService bean) {
 		commentService = bean;		
 	}
 
-	@Override
 	public LanguageService getLanguageService() {
 		return languageService;
 	}
 
-	@Override
 	public TemplateService getTemplateService() {
 		return templateService;
 	}
 
-	@Override
 	public void setLanguageService(LanguageService bean) {
 		languageService = bean;	
 	}
 
-	@Override
 	public void setTemplateService(TemplateService bean) {
 		templateService = bean;
 	}
 
-	@Override
 	public ContentPermissionService getContentPermissionService() {
 		return contentPermissionService;
 	}
 
-	@Override
 	public void setContentPermissionService(ContentPermissionService bean) {
 		contentPermissionService = bean;		
 	}
 
-	@Override
 	public GroupService getGroupService() {
 		return groupService;
 	}
 
-	@Override
 	public void setGroupService(GroupService bean) {
 		groupService = bean;
 	}

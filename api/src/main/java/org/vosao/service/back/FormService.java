@@ -39,7 +39,7 @@ public interface FormService extends AbstractService {
 	
 	List<FormEntity> select();
 	
-	ServiceResponse deleteForm(final List<Long> ids);
+	ServiceResponse deleteForm(final List<String> ids);
 	
 	FormConfigEntity getFormConfig();
 	

@@ -121,32 +121,26 @@ public class FolderServiceImpl extends AbstractServiceImpl
 		return result;
 	}
 
-	@Override
 	public FileService getFileService() {
 		return fileService;
 	}
 
-	@Override
 	public void setFolderPermissionService(FolderPermissionService bean) {
 		folderPermissionService = bean;
 	}
 
-	@Override
 	public FolderPermissionService getFolderPermissionService() {
 		return folderPermissionService;
 	}
 
-	@Override
 	public void setGroupService(GroupService bean) {
 		groupService = bean;
 	}
 	
-	@Override
 	public GroupService getGroupService() {
 		return groupService;
 	}
 
-	@Override
 	public void setFileService(FileService bean) {
 		fileService = bean;
 	}

@@ -35,6 +35,7 @@ import org.vosao.entity.FormEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.FormService;
 import org.vosao.service.impl.AbstractServiceImpl;
+import org.vosao.utils.StrUtil;
 import org.vosao.utils.StreamUtil;
 
 public class FormServiceImpl extends AbstractServiceImpl 
@@ -82,8 +83,8 @@ public class FormServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public ServiceResponse deleteForm(List<Long> ids) {
-		getDao().getFormDao().remove(ids);
+	public ServiceResponse deleteForm(List<String> ids) {
+		getDao().getFormDao().remove(StrUtil.toLong(ids));
 		return ServiceResponse.createSuccessResponse(
 				"Forms were successfully deleted.");
 	}

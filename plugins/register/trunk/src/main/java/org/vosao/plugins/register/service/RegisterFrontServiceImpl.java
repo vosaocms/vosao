@@ -22,12 +22,14 @@
 package org.vosao.plugins.register.service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import net.tanesha.recaptcha.ReCaptchaResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.Business;
 import org.vosao.common.PluginException;
@@ -40,6 +42,7 @@ import org.vosao.service.ServiceResponse;
 import org.vosao.utils.EmailUtil;
 import org.vosao.utils.ParamUtil;
 import org.vosao.utils.RecaptchaUtil;
+import org.vosao.utils.StrUtil;
 
 public class RegisterFrontServiceImpl extends AbstractRegisterService 
 		implements RegisterFrontService {
@@ -99,8 +102,11 @@ public class RegisterFrontServiceImpl extends AbstractRegisterService
 		context.put("config", config);
 		context.put("registerConfig", registerConfig);
 		if (registerConfig.isSendConfirmAdmin()) {
-			sendConfirmEmail(registerConfig.getConfirmAdminTemplate(), 
-					context, config.getSiteEmail(), registerConfig.getAdminEmail());
+			List<String> emails = StrUtil.fromCSV(registerConfig.getAdminEmail());
+			for (String email : emails) {
+				sendConfirmEmail(registerConfig.getConfirmAdminTemplate(), 
+					context, config.getSiteEmail(), StringUtils.strip(email));
+			}
 		}
 		if (registerConfig.isSendConfirmUser()) {
 			sendConfirmEmail(registerConfig.getConfirmUserTemplate(), 

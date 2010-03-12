@@ -37,7 +37,7 @@ public interface FieldService extends AbstractService {
 	
 	FieldVO getById(final Long fieldId);
 	
-	void remove(final List<Long> ids);
+	void remove(final List<String> ids);
 	
 	void moveUp(final Long formId, final Long fieldId);
 

@@ -34,15 +34,6 @@ import org.vosao.service.vo.FolderRequestVO;
 
 public interface FolderService extends AbstractService {
 	
-	FileService getFileService();
-	void setFileService(FileService bean);
-	
-	FolderPermissionService getFolderPermissionService();
-	void setFolderPermissionService(FolderPermissionService bean);
-	
-	GroupService getGroupService();
-	void setGroupService(GroupService bean);
-
 	TreeItemDecorator<FolderEntity> getTree();
 	
 	TreeItemDecorator<FolderEntity> getFolderByPath(String path);

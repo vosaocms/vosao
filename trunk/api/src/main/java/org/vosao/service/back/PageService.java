@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.vosao.business.decorators.TreeItemDecorator;
-import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.service.AbstractService;
 import org.vosao.service.ServiceResponse;
@@ -34,21 +33,6 @@ import org.vosao.service.vo.PageVO;
 
 public interface PageService extends AbstractService {
 	
-	CommentService getCommentService();
-	void setCommentService(CommentService bean);
-
-	TemplateService getTemplateService();
-	void setTemplateService(TemplateService bean);
-	
-	LanguageService getLanguageService();
-	void setLanguageService(LanguageService bean);
-	
-	ContentPermissionService getContentPermissionService();
-	void setContentPermissionService(ContentPermissionService bean);
-
-	GroupService getGroupService();
-	void setGroupService(GroupService bean);
-
 	TreeItemDecorator<PageVO> getTree();
 	
 	PageEntity getPage(final Long id);

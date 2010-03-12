@@ -38,6 +38,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.global.CacheService;
 
+import com.google.appengine.api.memcache.InvalidValueException;
+
 public class CacheServiceImpl implements CacheService {
 
 	private static final Log log = LogFactory.getLog(CacheServiceImpl.class);
@@ -146,16 +148,21 @@ public class CacheServiceImpl implements CacheService {
 
 	@Override
 	public Object get(Object arg0) {
-		if (localCache.containsKey(arg0)) {
-			localHits++;
-			return localCache.get(arg0);
+		try {
+			if (localCache.containsKey(arg0)) {
+				localHits++;
+				return localCache.get(arg0);
+			}
+			Object value = cache.get(arg0);
+			if (value != null) {
+				cacheHits++;
+				localCache.put((String)arg0, value);
+			}
+			return value;
 		}
-		Object value = cache.get(arg0);
-		if (value != null) {
-			cacheHits++;
-			localCache.put((String)arg0, value);
+		catch (InvalidValueException e) {
+			return null;
 		}
-		return value;
 	}
 
 	@Override

@@ -97,9 +97,15 @@ $(function() {
       else {
          formError(r.message);
       }
+#if($form.enableCaptcha && $config.enableRecaptcha)
+   	  Recaptcha.reload();
+#end 
     },
     error : function() {
       formError('Error occured during form submition.');
+#if($form.enableCaptcha && $config.enableRecaptcha)
+      Recaptcha.reload();
+#end 
     }
   });
 

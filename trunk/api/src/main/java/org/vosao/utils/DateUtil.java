@@ -50,6 +50,9 @@ public class DateUtil {
 	}
 
 	public static String toHeaderString(final Date date) {
+		if (date == null) {
+			return "";
+		}
 		return headerFormatter.format(date);
 	}
 	

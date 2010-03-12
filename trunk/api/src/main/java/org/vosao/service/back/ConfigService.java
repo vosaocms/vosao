@@ -43,4 +43,6 @@ public interface ConfigService extends AbstractService {
 	
 	ServiceResponse reindex();
 	
+	ServiceResponse cacheReset();
+	
 }

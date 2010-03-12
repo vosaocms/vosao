@@ -84,8 +84,9 @@ public class FileDownloadServlet extends BaseSpringServlet {
 				getBusiness().getSystemService().getFileCache()
 					.makePublic(request.getPathInfo());
 			}
-			sendFromCache(request, response);
-			return;
+			if (sendFromCache(request, response)) {
+				return;
+			}
 		}	
 		FileEntity file = getDao().getFileDao().getByName(
 				folder.getEntity().getId(), filename);
@@ -116,13 +117,20 @@ public class FileDownloadServlet extends BaseSpringServlet {
 				path);
 	}
 
-	private void sendFromCache(HttpServletRequest request, 
+	private boolean sendFromCache(HttpServletRequest request, 
 			HttpServletResponse response) throws IOException {
 		FileEntity file = getBusiness().getSystemService().getFileCache()
 				.getFile(request.getPathInfo());
+		if (file == null) {
+			return false;
+		}
 		byte[] content = getBusiness().getSystemService().getFileCache()
 				.getContent(request.getPathInfo());
+		if (content == null) {
+			return false;
+		}
 		sendFile(file, content, request, response);
+		return true;
 	}
 	
 	private void sendFile(final FileEntity file, byte[] content, 

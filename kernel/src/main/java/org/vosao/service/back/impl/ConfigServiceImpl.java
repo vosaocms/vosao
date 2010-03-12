@@ -124,5 +124,11 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 		getBusiness().getSearchEngine().reindex();
 		return ServiceResponse.createSuccessResponse("Index recreation started.");
 	}
+
+	@Override
+	public ServiceResponse cacheReset() {
+		getDao().clearCache();
+		return ServiceResponse.createSuccessResponse("Cache successfully reseted.");
+	}
 	
 }

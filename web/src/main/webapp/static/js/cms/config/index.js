@@ -32,6 +32,7 @@ $(function(){
     $('#importButton').click(onImport);
     $('#importCancelButton').click(onImportCancel);
     $('#resetButton').click(onReset);
+    $('#cacheResetButton').click(onCacheReset);
     $('#reindexButton').click(onReindex);
     $('#okForm').submit(function() {onAfterUploadOk(); return false;});
     $('#exportForm').submit(function() {onStartExport(); return false;});
@@ -147,6 +148,14 @@ function onReset() {
 function onReindex() {
 	if (confirm('Are you shure?')) {
 		Vosao.jsonrpc.configService.reindex(function(r) {
+			Vosao.showServiceMessages(r);
+		});
+	}
+}
+
+function onCacheReset() {
+	if (confirm('Are you shure?')) {
+		Vosao.jsonrpc.configService.cacheReset(function(r) {
 			Vosao.showServiceMessages(r);
 		});
 	}

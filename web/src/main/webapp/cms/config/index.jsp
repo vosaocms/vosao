@@ -77,6 +77,7 @@
         <input id="importButton" type="button" value="Import" />
         <input id="reindexButton" type="button" value="Create search index" />
         <input id="resetButton" type="button" value="Reset" />
+        <input id="cacheResetButton" type="button" value="Cache reset" />
     </div>
   </form>
 </div>

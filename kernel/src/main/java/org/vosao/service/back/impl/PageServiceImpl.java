@@ -167,19 +167,15 @@ public class PageServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse savePage(Map<String, String> vo) {
-		UserEntity user = CurrentUser.getInstance();
 		PageEntity page = null;
 		if (!StringUtils.isEmpty(vo.get("id"))) {
 			page = getPage(Long.valueOf(vo.get("id")));
 		}
 		if (page == null) {
 			page = new PageEntity();
-			page.setCreateUserEmail(user.getEmail());
 			page.setSortIndex(getBusiness().getPageBusiness().getNextSortIndex(
 					vo.get("friendlyUrl")));
 		}
-		page.setModDate(new Date());
-		page.setModUserEmail(user.getEmail());
 		if (vo.get("commentsEnabled") != null) {
 			page.setCommentsEnabled(Boolean.valueOf(vo.get("commentsEnabled")));
 		}

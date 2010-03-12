@@ -53,10 +53,6 @@ public class PageEntity extends BaseEntityImpl {
 	private Integer version;
 	private String versionTitle;
 	private PageState state;
-	private String createUserEmail;
-	private Date createDate;
-	private String modUserEmail;
-	private Date modDate;
 	private PageType pageType;
 	private Long structureId;
 	private Long structureTemplateId;
@@ -74,10 +70,6 @@ public class PageEntity extends BaseEntityImpl {
 		state = PageState.EDIT;
 		version = 1;
 		versionTitle = "New page";
-		createDate = new Date();
-		modDate = createDate;
-		createUserEmail = "";
-		modUserEmail = "";
 		pageType = PageType.SIMPLE;
 		setKeywords("");
 		setDescription("");
@@ -99,10 +91,6 @@ public class PageEntity extends BaseEntityImpl {
 		version = getIntegerProperty(entity, "version", 1);
 		versionTitle = getStringProperty(entity, "versionTitle");
 		state = PageState.valueOf(getStringProperty(entity, "state"));
-		createUserEmail = getStringProperty(entity, "createUserEmail");
-		createDate = getDateProperty(entity, "createDate");
-		modUserEmail = getStringProperty(entity, "modUserEmail");
-		modDate = getDateProperty(entity, "modDate");
 		pageType = PageType.valueOf(getStringProperty(entity, "pageType"));
 		structureId = getLongProperty(entity, "structureId");
 		structureTemplateId = getLongProperty(entity, "structureTemplateId");
@@ -125,10 +113,6 @@ public class PageEntity extends BaseEntityImpl {
 		entity.setProperty("version", version);
 		entity.setProperty("versionTitle", versionTitle);
 		entity.setProperty("state", state.name());
-		entity.setProperty("createUserEmail", createUserEmail);
-		entity.setProperty("createDate", createDate);
-		entity.setProperty("modUserEmail", modUserEmail);
-		entity.setProperty("modDate", modDate);
 		entity.setProperty("pageType", pageType.name());
 		entity.setProperty("structureId", structureId);
 		entity.setProperty("structureTemplateId", structureTemplateId);
@@ -257,46 +241,6 @@ public class PageEntity extends BaseEntityImpl {
 		this.state = aState;
 	}
 
-	public String getCreateUserEmail() {
-		return createUserEmail;
-	}
-
-	public void setCreateUserEmail(String createUser) {
-		this.createUserEmail = createUser;
-	}
-
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-
-	public String getModUserEmail() {
-		return modUserEmail;
-	}
-
-	public void setModUserEmail(String modUser) {
-		this.modUserEmail = modUser;
-	}
-
-	public Date getModDate() {
-		return modDate;
-	}
-
-	public String getModDateString() {
-		return DateUtil.dateTimeToString(modDate);
-	}
-
-	public String getCreateDateString() {
-		return DateUtil.dateTimeToString(createDate);
-	}
-
-	public void setModDate(Date modDate) {
-		this.modDate = modDate;
-	}
-	
 	public boolean isApproved() {
 		return state.equals(PageState.APPROVED);
 	}

@@ -38,6 +38,7 @@ import org.vosao.entity.FormEntity;
 import org.vosao.utils.EmailUtil;
 import org.vosao.utils.FileItem;
 import org.vosao.utils.ParamUtil;
+import org.vosao.utils.StrUtil;
 
 public class FormBusinessImpl extends AbstractBusinessImpl 
 	implements FormBusiness {
@@ -79,12 +80,15 @@ public class FormBusinessImpl extends AbstractBusinessImpl
 		context.put("config", config);
 		String letter = getSystemService().render(
 				formConfig.getLetterTemplate(), context);
-		String error = EmailUtil.sendEmail(letter, form.getLetterSubject(), 
-				config.getSiteEmail(), "Site admin", form.getEmail(), files);
-		if (error != null) {
-			throw new UploadException(error);
+		List<String> emails = StrUtil.fromCSV(form.getEmail());
+		for (String email : emails) {
+			String error = EmailUtil.sendEmail(letter, form.getLetterSubject(), 
+				config.getSiteEmail(), "Site admin", email, files);
+			if (error != null) {
+				throw new UploadException(error);
+			}
+			logger.info("Form successfully submited and emailed.");
 		}
-		logger.info("Form successfully submited and emailed.");
 	}
 	
 	private void filterXSS(Map<String, String> params) {

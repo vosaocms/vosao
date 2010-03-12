@@ -21,6 +21,8 @@
 
 package org.vosao.service.back.impl;
 
+import static com.google.appengine.api.labs.taskqueue.TaskOptions.Builder.url;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +36,10 @@ import org.vosao.entity.FormConfigEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.ConfigService;
 import org.vosao.service.impl.AbstractServiceImpl;
+import org.vosao.servlet.SessionCleanTaskServlet;
 import org.vosao.utils.StreamUtil;
+
+import com.google.appengine.api.labs.taskqueue.Queue;
 
 public class ConfigServiceImpl extends AbstractServiceImpl 
 		implements ConfigService {
@@ -128,6 +133,8 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 	@Override
 	public ServiceResponse cacheReset() {
 		getDao().clearCache();
+		Queue queue = getBusiness().getSystemService().getQueue("session-clean");
+		queue.add(url(SessionCleanTaskServlet.SESSION_CLEAN_TASK_URL));
 		return ServiceResponse.createSuccessResponse("Cache successfully reseted.");
 	}
 	

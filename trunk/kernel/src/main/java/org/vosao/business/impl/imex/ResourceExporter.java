@@ -30,10 +30,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
-import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
-import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
@@ -44,9 +41,8 @@ public class ResourceExporter extends AbstractExporter {
 
 	private static final Log logger = LogFactory.getLog(ResourceExporter.class);
 
-	public ResourceExporter(Dao aDao, Business aBusiness,
-			DaoTaskAdapter daoTaskAdapter) {
-		super(aDao, aBusiness, daoTaskAdapter);
+	public ResourceExporter(ExporterFactory factory) {
+		super(factory);
 	}
 	
 	/**

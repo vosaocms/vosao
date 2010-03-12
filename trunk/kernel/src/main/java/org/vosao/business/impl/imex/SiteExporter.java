@@ -31,36 +31,13 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.vosao.business.Business;
-import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
-import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.utils.FolderUtil;
 
 public class SiteExporter extends AbstractExporter {
 
-	private ConfigExporter configExporter;
-	private PageExporter pageExporter;
-	private FormExporter formExporter;
-	private UserExporter userExporter;
-	private GroupExporter groupExporter;
-	private FolderExporter folderExporter;
-	private MessagesExporter messagesExporter;
-	private StructureExporter structureExporter;
-	private PluginExporter pluginExporter;
-	
-	public SiteExporter(Dao aDao, Business aBusiness,
-			DaoTaskAdapter daoTaskAdapter) {
-		super(aDao, aBusiness, daoTaskAdapter);
-		configExporter = new ConfigExporter(aDao, aBusiness, daoTaskAdapter);
-		pageExporter = new PageExporter(aDao, aBusiness, daoTaskAdapter);
-		formExporter = new FormExporter(aDao, aBusiness, daoTaskAdapter);
-		userExporter = new UserExporter(aDao, aBusiness, daoTaskAdapter);
-		groupExporter = new GroupExporter(aDao, aBusiness, daoTaskAdapter);
-		folderExporter = new FolderExporter(aDao, aBusiness, daoTaskAdapter);
-		messagesExporter = new MessagesExporter(aDao, aBusiness, daoTaskAdapter);
-		structureExporter = new StructureExporter(aDao, aBusiness, daoTaskAdapter);
-		pluginExporter = new PluginExporter(aDao, aBusiness, daoTaskAdapter);
+	public SiteExporter(ExporterFactory factory) {
+		super(factory);
 	}
 
 	public boolean isSiteContent(final ZipEntry entry)
@@ -77,21 +54,21 @@ public class SiteExporter extends AbstractExporter {
 		out.putNextEntry(new ZipEntry(contentName));
 		out.write(createSiteExportXML().getBytes("UTF-8"));
 		out.closeEntry();
-		pageExporter.addContentResources(out);
+		getPageExporter().addContentResources(out);
 	}
 
 	private String createSiteExportXML() {
 		Document doc = DocumentHelper.createDocument();
 		Element siteElement = doc.addElement("site");
-		userExporter.createUsersXML(siteElement);
-		groupExporter.createGroupsXML(siteElement);
-		configExporter.createConfigXML(siteElement);
-		structureExporter.createStructuresXML(siteElement);
-		pageExporter.createPagesXML(siteElement);
-		formExporter.createFormsXML(siteElement);
-		folderExporter.createFoldersXML(siteElement);
-		messagesExporter.createMessagesXML(siteElement);
-		pluginExporter.createPluginsXML(siteElement);
+		getUserExporter().createUsersXML(siteElement);
+		getGroupExporter().createGroupsXML(siteElement);
+		getConfigExporter().createConfigXML(siteElement);
+		getStructureExporter().createStructuresXML(siteElement);
+		getPageExporter().createPagesXML(siteElement);
+		getFormExporter().createFormsXML(siteElement);
+		getFolderExporter().createFoldersXML(siteElement);
+		getMessagesExporter().createMessagesXML(siteElement);
+		getPluginExporter().createPluginsXML(siteElement);
 		return doc.asXML();
 	}
 	
@@ -103,33 +80,70 @@ public class SiteExporter extends AbstractExporter {
 		for (Iterator<Element> i = root.elementIterator(); i.hasNext();) {
 			Element element = i.next();
 			if (element.getName().equals("config")) {
-				configExporter.readConfigs(element);
+				getConfigExporter().readConfigs(element);
 			}
 			if (element.getName().equals("pages")) {
-				pageExporter.readPages(element);
+				getPageExporter().readPages(element);
 			}
 			if (element.getName().equals("forms")) {
-				formExporter.readForms(element);
+				getFormExporter().readForms(element);
 			}
 			if (element.getName().equals("users")) {
-				userExporter.readUsers(element);
+				getUserExporter().readUsers(element);
 			}
 			if (element.getName().equals("groups")) {
-				groupExporter.readGroups(element);
+				getGroupExporter().readGroups(element);
 			}
 			if (element.getName().equals("folders")) {
-				folderExporter.readFolders(element);
+				getFolderExporter().readFolders(element);
 			}
 			if (element.getName().equals("messages")) {
-				messagesExporter.readMessages(element);
+				getMessagesExporter().readMessages(element);
 			}
 			if (element.getName().equals("structures")) {
-				structureExporter.readStructures(element);
+				getStructureExporter().readStructures(element);
 			}
 			if (element.getName().equals("plugins")) {
-				pluginExporter.readPlugins(element);
+				getPluginExporter().readPlugins(element);
 			}
 		}
 	}
+
+	PluginExporter getPluginExporter() {
+		return getExporterFactory().getPluginExporter();
+	}
+
+	MessagesExporter getMessagesExporter() {
+		return getExporterFactory().getMessagesExporter();
+	}
+
+	StructureExporter getStructureExporter() {
+		return getExporterFactory().getStructureExporter();
+	}
+
+	FolderExporter getFolderExporter() {
+		return getExporterFactory().getFolderExporter();
+	}
+
+	UserExporter getUserExporter() {
+		return getExporterFactory().getUserExporter();
+	}
+
+	GroupExporter getGroupExporter() {
+		return getExporterFactory().getGroupExporter();
+	}
+
+	ConfigExporter getConfigExporter() {
+		return getExporterFactory().getConfigExporter();
+	}
+	
+	PageExporter getPageExporter() {
+		return getExporterFactory().getPageExporter();
+	}
+
+	FormExporter getFormExporter() {
+		return getExporterFactory().getFormExporter();
+	}
+
 
 }

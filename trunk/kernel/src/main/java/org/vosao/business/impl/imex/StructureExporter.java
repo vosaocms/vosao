@@ -25,9 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.dom4j.Element;
-import org.vosao.business.Business;
-import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
-import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.StructureTemplateEntity;
@@ -38,9 +35,8 @@ import org.vosao.enums.StructureTemplateType;
  */
 public class StructureExporter extends AbstractExporter {
 
-	public StructureExporter(Dao aDao, Business aBusiness,
-			DaoTaskAdapter daoTaskAdapter) {
-		super(aDao, aBusiness, daoTaskAdapter);
+	public StructureExporter(ExporterFactory factory) {
+		super(factory);
 	}
 	
 	public void createStructuresXML(Element siteElement) {

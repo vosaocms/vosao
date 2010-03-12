@@ -41,9 +41,8 @@ import org.vosao.entity.helper.UserHelper;
  */
 public class PluginExporter extends AbstractExporter {
 
-	public PluginExporter(Dao aDao, Business aBusiness,
-			DaoTaskAdapter daoTaskAdapter) {
-		super(aDao, aBusiness, daoTaskAdapter);
+	public PluginExporter(ExporterFactory factory) {
+		super(factory);
 	}
 	
 	public void createPluginsXML(Element siteElement) {

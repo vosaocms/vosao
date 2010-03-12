@@ -27,27 +27,26 @@ import org.vosao.dao.Dao;
 
 public abstract class AbstractExporter {
 
-	private Dao dao;
-	private Business business;
-	private DaoTaskAdapter daoTaskAdapter;
+	private ExporterFactory exporterFactory;
 	
-	public AbstractExporter(Dao aDao, Business aBusiness, 
-			DaoTaskAdapter aDaoTaskAdapter) {
-		dao = aDao;
-		business = aBusiness;
-		daoTaskAdapter = aDaoTaskAdapter;
+	public AbstractExporter(ExporterFactory factory) {
+		exporterFactory = factory;
 	}
 
 	public Dao getDao() {
-		return dao;
+		return getBusiness().getDao();
 	}
 
 	public Business getBusiness() {
-		return business;
+		return getExporterFactory().getBusiness(); 
 	}
 	
 	public DaoTaskAdapter getDaoTaskAdapter() {
-		return daoTaskAdapter;
+		return getExporterFactory().getDaoTaskAdapter();
+	}
+	
+	public ExporterFactory getExporterFactory() {
+		return exporterFactory;
 	}
 	
 }

@@ -27,9 +27,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.dom4j.Element;
-import org.vosao.business.Business;
-import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
-import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.LanguageEntity;
@@ -37,9 +34,8 @@ import org.vosao.utils.XmlUtil;
 
 public class ConfigExporter extends AbstractExporter {
 
-	public ConfigExporter(Dao aDao, Business aBusiness, 
-			DaoTaskAdapter daoTaskAdapter) {
-		super(aDao, aBusiness, daoTaskAdapter);
+	public ConfigExporter(ExporterFactory factory) {
+		super(factory);
 	}
 	
 	public void createConfigXML(Element siteElement) {

@@ -27,10 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.dom4j.Element;
-import org.vosao.business.Business;
-import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
 import org.vosao.common.BCrypt;
-import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.UserRole;
@@ -40,9 +37,8 @@ import org.vosao.enums.UserRole;
  */
 public class UserExporter extends AbstractExporter {
 
-	public UserExporter(Dao aDao, Business aBusiness,
-			DaoTaskAdapter daoTaskAdapter) {
-		super(aDao, aBusiness, daoTaskAdapter);
+	public UserExporter(ExporterFactory factory) {
+		super(factory);
 	}
 	
 	public void createUsersXML(Element siteElement) {

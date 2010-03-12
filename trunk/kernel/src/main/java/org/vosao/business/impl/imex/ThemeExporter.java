@@ -31,10 +31,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
-import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
-import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
@@ -44,12 +41,8 @@ public class ThemeExporter extends AbstractExporter {
 
 	public static final String THEME_FOLDER = "theme/";
 
-	private ResourceExporter resourceExporter;
-	
-	public ThemeExporter(Dao aDao, Business aBusiness,
-			DaoTaskAdapter daoTaskAdapter) {
-		super(aDao, aBusiness, daoTaskAdapter);
-		resourceExporter = new ResourceExporter(aDao, aBusiness, daoTaskAdapter);
+	public ThemeExporter(ExporterFactory factory) {
+		super(factory);
 	}
 	
 	public void exportTheme(final ZipOutputStream out, 
@@ -93,7 +86,7 @@ public class ThemeExporter extends AbstractExporter {
 		if (themeFolder == null) {
 			return;
 		}
-		resourceExporter.addResourcesFromFolder(out, themeFolder, 
+		getResourceExporter().addResourcesFromFolder(out, themeFolder, 
 				getThemeZipPath(theme)); 
 	}
 	
@@ -166,6 +159,10 @@ public class ThemeExporter extends AbstractExporter {
 		}
 		theme.setContent(content);
 		getDaoTaskAdapter().templateSave(theme);
+	}
+
+	public ResourceExporter getResourceExporter() {
+		return getExporterFactory().getResourceExporter();
 	}
 	
 }

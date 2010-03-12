@@ -25,9 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.dom4j.Element;
-import org.vosao.business.Business;
-import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
-import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormConfigEntity;
@@ -37,9 +34,8 @@ import org.vosao.utils.XmlUtil;
 
 public class FormExporter extends AbstractExporter {
 
-	public FormExporter(Dao aDao, Business aBusiness,
-			DaoTaskAdapter daoTaskAdapter) {
-		super(aDao, aBusiness, daoTaskAdapter);
+	public FormExporter(ExporterFactory factory) {
+		super(factory);
 	}
 	
 	public void createFormsXML(Element siteElement) {

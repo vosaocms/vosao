@@ -124,3 +124,11 @@ function onVersionSelect(version) {
 	pageId = selPage.id;
 	loadData();
 }
+
+function showAuditInfo() {
+	$('#pageState').html(page.stateString == 'EDIT' ? 'Edit' : 'Approved');
+	$('#pageCreateDate').html(page.createDateString);
+	$('#pageModDate').html(page.modDateString);
+	$('#pageCreateUser').html(page.createUserEmail);
+	$('#pageModUser').html(page.modUserEmail);
+}

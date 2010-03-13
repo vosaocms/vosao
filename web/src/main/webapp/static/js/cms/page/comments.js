@@ -68,6 +68,7 @@ function loadPage() {
 		pageParentUrl = page.parentUrl;
 		loadVersions();
 		loadComments();
+		showAuditInfo();
 	} else {
 		pages['1'] = page;
 	}

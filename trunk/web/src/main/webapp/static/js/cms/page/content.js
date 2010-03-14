@@ -330,7 +330,8 @@ function showContentEditor() {
 	    contentEditor = CKEDITOR.replace('content', {
 	        height: 350, width: 'auto',
 	        filebrowserUploadUrl : '/cms/upload',
-	        filebrowserBrowseUrl : '/cms/fileBrowser.jsp'
+	        filebrowserBrowseUrl : '/cms/fileBrowser.jsp',
+	        toolbar : 'Vosao'
 	    });
 	}
 	if (page.structured) {
@@ -363,7 +364,8 @@ function showContentEditor() {
 					var ckeditor = CKEDITOR.replace('field' + field.name, {
 				        height: 150, width: 'auto',
 				        filebrowserUploadUrl : '/cms/upload',
-				        filebrowserBrowseUrl : '/cms/fileBrowser.jsp'
+				        filebrowserBrowseUrl : '/cms/fileBrowser.jsp',
+				        toolbar : 'Vosao'
 				    });
 					contentEditors[field.name] = ckeditor;
 				}

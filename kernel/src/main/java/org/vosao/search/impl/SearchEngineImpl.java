@@ -61,7 +61,7 @@ public class SearchEngineImpl implements SearchEngine {
 		checkIndex();
 		SearchResult result = new SearchResult();
 		List<String> urls = getContentUrls(getContentIds(query));
-		logger.info("found urls " + urls.toString());
+		//logger.info("found urls " + urls.toString());
 		int startIndex = start < urls.size() ? start : urls.size();
 		int endIndex = startIndex + count;
 		if (count == -1) {
@@ -111,7 +111,7 @@ public class SearchEngineImpl implements SearchEngine {
 				keys = keysLogicalAnd(keys, getContentKeys(word));
 			}
 		}
-		logger.info("found keys " + keys.toString());
+		//logger.info("found keys " + keys.toString());
 		return getContents(keys);		
 	}	
 		
@@ -207,7 +207,7 @@ public class SearchEngineImpl implements SearchEngine {
 	public void updateIndex(ContentEntity content) {
 		String data = StrUtil.extractTextFromHTML(content.getContent()
 				.toLowerCase());
-		logger.info(data);
+		//logger.info(data);
 		String[] words = data.split("\\W+");
 		Long key = content.getId();
 		clearIndex(key);
@@ -262,7 +262,7 @@ public class SearchEngineImpl implements SearchEngine {
 	
 	private void indexFromString(String data) {
 		for (String wordBuf : data.split("\\:")) {
-			logger.info(wordBuf);
+			//logger.info(wordBuf);
 			String[] wordStruc = wordBuf.split("\\=");
 			if (wordStruc.length != 2 ) {
 				logger.error("Problem with index " + wordBuf);

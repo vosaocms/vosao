@@ -157,8 +157,11 @@ function initPageForm() {
 		$('#parentFriendlyUrl').html(pageParentUrl + urlEnd);
 		$('#pageType').val('SIMPLE');
 		$('#publishDate').val(Vosao.formatDate(new Date()));
-		$('#commentsEnabled, #searchable, #velocityProcessing').each(function() {
+		$('#commentsEnabled, #velocityProcessing').each(function() {
 			this.checked = false;
+		});
+		$('#searchable').each(function() {
+			this.checked = true;
 		});
 		$('#pageState').html('Edit');
 		$('#pageCreateUser').html('');

@@ -116,7 +116,8 @@ function onFolderSelected(folderId) {
 function onFileSelected(fileId) {
 	Vosao.jsonrpc.fileService.getFilePath(function(path) {
        	if (browserMode == 'ckeditor') {
-       		window.opener.CKEDITOR.tools.callFunction(1, path);
+       		var funcNum = Vosao.getQueryParam('CKEditorFuncNum');
+       		window.opener.CKEDITOR.tools.callFunction(funcNum, path);
        		window.close();
        	}
        	if (browserMode == 'page') {
@@ -128,7 +129,8 @@ function onFileSelected(fileId) {
 
 function onPageSelected(path) {
    	if (browserMode == 'ckeditor') {
-   		window.opener.CKEDITOR.tools.callFunction(1, path);
+   		var funcNum = Vosao.getQueryParam('CKEditorFuncNum');
+   		window.opener.CKEDITOR.tools.callFunction(funcNum, path);
    		window.close();
    	}
    	if (browserMode == 'page') {

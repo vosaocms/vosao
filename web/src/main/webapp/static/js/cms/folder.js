@@ -31,6 +31,7 @@ var files = '';
 var folder = null;
 var editMode = folderId != '';
 var folderRequest = null;
+var permissions = null;
 
 $(function() {
     var tab = $("#tabs").tabs();

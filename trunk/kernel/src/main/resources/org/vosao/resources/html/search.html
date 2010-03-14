@@ -45,6 +45,8 @@ function checkQuery() {
 }
 
 function onSearch() {
+    $('#searchResults').html('<img src="/static/images/ajax-loader.gif" />');
+    $('#searchCount, .searchPaginator').html('');
 	var query = $('#query').val();
     var pageSize = Number($('#pageSize').val());
     var start = searchPage * pageSize;

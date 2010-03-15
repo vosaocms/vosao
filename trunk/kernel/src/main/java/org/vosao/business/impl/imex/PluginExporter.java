@@ -25,6 +25,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.Business;
 import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
@@ -45,12 +47,14 @@ public class PluginExporter extends AbstractExporter {
 		super(factory);
 	}
 	
-	public void createPluginsXML(Element siteElement) {
-		Element PluginsElement = siteElement.addElement("plugins");
+	public String createPluginsXML() {
+		Document doc = DocumentHelper.createDocument();
+		Element PluginsElement = doc.addElement("plugins");
 		List<PluginEntity> list = getDao().getPluginDao().select();
 		for (PluginEntity plugin : list) {
 			createPluginXML(PluginsElement, plugin);
 		}
+		return doc.asXML();
 	}
 
 	private void createPluginXML(Element pluginsElement, 

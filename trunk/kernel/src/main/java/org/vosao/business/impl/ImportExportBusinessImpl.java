@@ -81,10 +81,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		
 		ByteArrayOutputStream outData = new ByteArrayOutputStream();
 		ZipOutputStream out = new ZipOutputStream(outData);
-		out.putNextEntry(new ZipEntry(ThemeExporter.THEME_FOLDER));
-		for (TemplateEntity theme : list) {
-			getThemeExporter().exportTheme(out, theme);
-		}
+		getThemeExporter().exportThemes(out, list);
 		out.close();
 		return outData.toByteArray();
 	}
@@ -149,27 +146,37 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 	public byte[] createSiteExportFile() throws IOException {
 		ByteArrayOutputStream outData = new ByteArrayOutputStream();
 		ZipOutputStream out = new ZipOutputStream(outData);
-		out.putNextEntry(new ZipEntry(ThemeExporter.THEME_FOLDER));
+		exportRootFolder(out);
 		List<TemplateEntity> list = getDao().getTemplateDao().select();
-		for (TemplateEntity theme : list) {
-			getThemeExporter().exportTheme(out, theme);
-		}
+		getThemeExporter().exportThemes(out, list);
 		getSiteExporter().exportSite(out);
 		out.close();
 		return outData.toByteArray();
+	}
+	
+	private void exportRootFolder(ZipOutputStream out) throws IOException {
+		FolderEntity root = getDao().getFolderDao().getByPath("/");
+		if (root == null) {
+			logger.error("Folder not found: /");
+		}
+		else {
+			getResourceExporter().addFolder(out, root, "");
+		}
 	}
 	
 	@Override
 	public byte[] createExportFile(FolderEntity folder) throws IOException {
 		ByteArrayOutputStream outData = new ByteArrayOutputStream();
 		ZipOutputStream out = new ZipOutputStream(outData);
-		out.putNextEntry(new ZipEntry(ThemeExporter.THEME_FOLDER));
 		TreeItemDecorator<FolderEntity> root = getBusiness()
 				.getFolderBusiness().getTree();
 		TreeItemDecorator<FolderEntity> exportFolder = root.find(folder);
 		if (exportFolder != null) {
 			String zipPath = removeRootSlash(getBusiness().getFolderBusiness()
 					.getFolderPath(folder, root)) + "/";
+			if (zipPath.equals("/")) {
+				zipPath = "";
+			}
 			getResourceExporter().addResourcesFromFolder(out, exportFolder, zipPath);
 			out.close();
 			return outData.toByteArray();
@@ -215,12 +222,9 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 	public byte[] createFullExportFile() throws IOException {
 		ByteArrayOutputStream outData = new ByteArrayOutputStream();
 		ZipOutputStream out = new ZipOutputStream(outData);
-		out.putNextEntry(new ZipEntry(ThemeExporter.THEME_FOLDER));
-		out.closeEntry();
+		exportRootFolder(out);
 		List<TemplateEntity> list = getDao().getTemplateDao().select();
-		for (TemplateEntity theme : list) {
-			getThemeExporter().exportTheme(out, theme);
-		}
+		getThemeExporter().exportThemes(out, list);
 		getSiteExporter().exportSite(out);
 		exportResources(out);
 		out.close();

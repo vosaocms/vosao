@@ -25,6 +25,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.GroupEntity;
@@ -41,12 +43,14 @@ public class GroupExporter extends AbstractExporter {
 		super(factory);
 	}
 	
-	public void createGroupsXML(Element siteElement) {
-		Element groupsElement = siteElement.addElement("groups");
+	public String createGroupsXML() {
+		Document doc = DocumentHelper.createDocument();
+		Element groupsElement = doc.addElement("groups");
 		List<GroupEntity> list = getDao().getGroupDao().select();
 		for (GroupEntity Group : list) {
 			createGroupXML(groupsElement, Group);
 		}
+		return doc.asXML();
 	}
 
 	private void createGroupXML(Element groupsElement, final GroupEntity group) {

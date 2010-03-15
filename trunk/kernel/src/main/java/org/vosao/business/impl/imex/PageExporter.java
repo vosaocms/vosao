@@ -30,6 +30,8 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.dao.DaoTaskException;
@@ -54,19 +56,29 @@ public class PageExporter extends AbstractExporter {
 		super(factory);
 	}
 	
-	private void createPageXML(TreeItemDecorator<PageEntity> page,
-			Element root) {
-		Element pageElement = root.addElement("page"); 
-		createPageDetailsXML(page.getEntity(), pageElement);
-		createPageVersionXML(page.getEntity(), pageElement);
-		createCommentsXML(page, pageElement);
-		for (TreeItemDecorator<PageEntity> child : page.getChildren()) {
-			createPageXML(child, pageElement);
-		}
-		getPagePermissionExporter().createPagePermissionsXML(pageElement, 
-				page.getEntity().getFriendlyURL());
+	public String createPageContentXML(PageEntity page) {
+		Document doc = DocumentHelper.createDocument(); 
+		Element pageElement = doc.addElement("page"); 
+		createPageDetailsXML(page, pageElement);
+		createPageVersionXML(page, pageElement);
+		return doc.asXML();
 	}
 	
+	public String createPageCommentsXML(String pageURL) {
+		Document doc = DocumentHelper.createDocument(); 
+		Element rootElement = doc.addElement("comments"); 
+		createCommentsXML(pageURL, rootElement);
+		return doc.asXML();
+	}
+
+	public String createPagePermissionsXML(String pageURL) {
+		Document doc = DocumentHelper.createDocument(); 
+		Element e = doc.addElement("permissions"); 
+		getPagePermissionExporter().createPagePermissionsXML(e, 
+				pageURL);
+		return doc.asXML();
+	}
+
 	private void createPageVersionXML(PageEntity page, Element pageElement) {
 		List<PageEntity> versions = getDao().getPageDao().selectByUrl(
 				page.getFriendlyURL());
@@ -141,11 +153,9 @@ public class PageExporter extends AbstractExporter {
 		}
 	}
 	
-	private void createCommentsXML(TreeItemDecorator<PageEntity> page, 
-			Element pageElement) {
-		Element commentsElement = pageElement.addElement("comments");
+	private void createCommentsXML(String pageURL, Element commentsElement) {
 		List<CommentEntity> comments = getDao().getCommentDao().getByPage(
-				page.getEntity().getFriendlyURL());
+				pageURL);
 		for (CommentEntity comment : comments) {
 			Element commentElement = commentsElement.addElement("comment");
 			commentElement.addAttribute("name", comment.getName());
@@ -155,25 +165,6 @@ public class PageExporter extends AbstractExporter {
 				DateUtil.dateTimeToString(comment.getPublishDate()));
 			commentElement.setText(comment.getContent());
 		}
-	}
-
-	public void createPagesXML(Element siteElement) {
-		Element pages = siteElement.addElement("pages");
-		TreeItemDecorator<PageEntity> pageRoot = getBusiness()
-				.getPageBusiness().getTree();
-		createPageXML(pageRoot, pages);
-	}
-	
-	public void addContentResources(final ZipOutputStream out)
-			throws IOException {
-		TreeItemDecorator<FolderEntity> root = getBusiness()
-				.getFolderBusiness().getTree();
-		TreeItemDecorator<FolderEntity> folder = getBusiness()
-				.getFolderBusiness().findFolderByPath(root, "/page");
-		if (folder == null) {
-			return;
-		}
-		getResourceExporter().addResourcesFromFolder(out, folder, "page/");
 	}
 
 	public void readPages(Element pages) throws DaoTaskException {

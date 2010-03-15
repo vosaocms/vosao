@@ -31,8 +31,12 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.dao.DaoTaskException;
+import org.vosao.entity.FolderEntity;
 import org.vosao.utils.FolderUtil;
+
+import com.google.apphosting.api.DatastorePb.GetResponse;
 
 public class SiteExporter extends AbstractExporter {
 
@@ -50,28 +54,29 @@ public class SiteExporter extends AbstractExporter {
 	}
 
 	public void exportSite(final ZipOutputStream out) throws IOException {
-		String contentName = "content.xml";
-		out.putNextEntry(new ZipEntry(contentName));
-		out.write(createSiteExportXML().getBytes("UTF-8"));
-		out.closeEntry();
-		getPageExporter().addContentResources(out);
+		saveFile(out, "_users.xml", getUserExporter().createUsersXML());
+		saveFile(out, "_groups.xml", getGroupExporter().createGroupsXML());
+		saveFile(out, "_config.xml", getConfigExporter().createConfigXML());
+		saveFile(out, "_structures.xml", getStructureExporter()
+				.createStructuresXML());
+		saveFile(out, "_forms.xml", getFormExporter().createFormsXML());
+		saveFile(out, "_messages.xml", getMessagesExporter()
+				.createMessagesXML());
+		saveFile(out, "_plugins.xml", getPluginExporter().createPluginsXML());
+		TreeItemDecorator<FolderEntity> page = getBusiness().getFolderBusiness()
+				.findFolderByPath(getBusiness().getFolderBusiness().getTree(), 
+						"/page");
+		if (page != null) {
+			getResourceExporter().addResourcesFromFolder(out, page, "page/");
+		}
 	}
 
-	private String createSiteExportXML() {
-		Document doc = DocumentHelper.createDocument();
-		Element siteElement = doc.addElement("site");
-		getUserExporter().createUsersXML(siteElement);
-		getGroupExporter().createGroupsXML(siteElement);
-		getConfigExporter().createConfigXML(siteElement);
-		getStructureExporter().createStructuresXML(siteElement);
-		getPageExporter().createPagesXML(siteElement);
-		getFormExporter().createFormsXML(siteElement);
-		getFolderExporter().createFoldersXML(siteElement);
-		getMessagesExporter().createMessagesXML(siteElement);
-		getPluginExporter().createPluginsXML(siteElement);
-		return doc.asXML();
+	private void saveFile(final ZipOutputStream out, String name, 
+			String content) throws IOException {
+		out.putNextEntry(new ZipEntry(name));
+		out.write(content.getBytes("UTF-8"));
+		out.closeEntry();
 	}
-	
 	
 	public void readSiteContent(final ZipEntry entry, final String xml)
 			throws DocumentException, DaoTaskException {
@@ -145,5 +150,8 @@ public class SiteExporter extends AbstractExporter {
 		return getExporterFactory().getFormExporter();
 	}
 
+	ResourceExporter getResourceExporter() {
+		return getExporterFactory().getResourceExporter();
+	}
 
 }

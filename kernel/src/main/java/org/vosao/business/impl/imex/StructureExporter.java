@@ -24,6 +24,8 @@ package org.vosao.business.impl.imex;
 import java.util.Iterator;
 import java.util.List;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.StructureEntity;
@@ -39,12 +41,14 @@ public class StructureExporter extends AbstractExporter {
 		super(factory);
 	}
 	
-	public void createStructuresXML(Element siteElement) {
-		Element structuresElement = siteElement.addElement("structures");
+	public String createStructuresXML() {
+		Document doc = DocumentHelper.createDocument();
+		Element structuresElement = doc.addElement("structures");
 		List<StructureEntity> list = getDao().getStructureDao().select();
 		for (StructureEntity structure : list) {
 			createStructureXML(structuresElement, structure);
 		}
+		return doc.asXML();
 	}
 
 	private void createStructureXML(Element structuresElement, 

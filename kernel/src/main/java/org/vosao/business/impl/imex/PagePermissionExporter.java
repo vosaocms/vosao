@@ -45,9 +45,8 @@ public class PagePermissionExporter extends AbstractExporter {
 		super(factory);
 	}
 	
-	public void createPagePermissionsXML(final Element pageElement, 
+	public void createPagePermissionsXML(final Element permissionsElement, 
 			final String friendlyUrl) {
-		Element permissionsElement = pageElement.addElement("permissions");
 		List<ContentPermissionEntity> list = getDao().getContentPermissionDao()
 				.selectByUrl(friendlyUrl);
 		for (ContentPermissionEntity permission : list) {

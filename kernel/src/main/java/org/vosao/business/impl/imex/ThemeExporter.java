@@ -24,6 +24,7 @@ package org.vosao.business.impl.imex;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -45,18 +46,27 @@ public class ThemeExporter extends AbstractExporter {
 		super(factory);
 	}
 	
+	public void exportThemes(final ZipOutputStream out, 
+			final List<TemplateEntity> themes) throws IOException {
+		FolderEntity themeFolder = getDao().getFolderDao().getByPath("/theme");
+		if (themeFolder == null) {
+			logger.error("Folder not found: /theme");
+			return;
+		}
+		getResourceExporter().addFolder(out, themeFolder, "theme/");
+		for (TemplateEntity theme : themes) {
+			exportTheme(out, theme);
+		}
+	}
+	
 	public void exportTheme(final ZipOutputStream out, 
 			final TemplateEntity theme) throws IOException {
 
 		String themeFolder = getThemeZipPath(theme);
 		addThemeResources(out, theme);		
-		String descriptionName = themeFolder + "description.xml";
+		String descriptionName = themeFolder + "_template.xml";
 		out.putNextEntry(new ZipEntry(descriptionName));
 		out.write(createThemeExportXML(theme).getBytes("UTF-8"));
-		out.closeEntry();
-		String contentName = themeFolder + "content.html";
-		out.putNextEntry(new ZipEntry(contentName));
-		out.write(theme.getContent().getBytes("UTF-8"));
 		out.closeEntry();
 	}
 
@@ -70,9 +80,10 @@ public class ThemeExporter extends AbstractExporter {
 
 	private String createThemeExportXML(final TemplateEntity theme) {
 		Document doc = DocumentHelper.createDocument();
-		Element root = doc.addElement("theme");
+		Element root = doc.addElement("template");
 		root.addElement("title").addText(theme.getTitle());
 		root.addElement("url").addText(theme.getUrl());
+		root.addElement("content").addText(theme.getContent());
 		return doc.asXML();
 	}
 	

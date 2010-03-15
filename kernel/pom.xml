@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.vosao</groupId>
         <artifactId>vosaocms</artifactId>
-        <version>0.3</version>
+        <version>0.4</version>
     </parent>    
     <artifactId>vosao-kernel</artifactId>
     <packaging>jar</packaging>
@@ -16,7 +16,7 @@
         <dependency>
             <groupId>org.vosao</groupId>
             <artifactId>vosao-api</artifactId>
-            <version>0.3</version>
+            <version>0.4</version>
         </dependency>
 
         <!--unit test related dependencies-->

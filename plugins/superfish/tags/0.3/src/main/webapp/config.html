@@ -1,0 +1,168 @@
+<html> 
+<head> 
+    <link rel="stylesheet" href="/static/css/jquery-ui/redmond/jquery-ui.css" type="text/css" />
+
+    <script src="/static/js/jquery.js" language="javascript"></script>
+    <script src="/static/js/jquery.cookie.js" language="javascript"></script>
+    <script src="/static/js/jquery-ui.js" language="javascript"></script>
+    <script src="/static/js/jsonrpc.js" language="javascript"></script>
+    <script src="/static/js/vosao.js" language="javascript"></script>
+    <script src="/static/js/cms.js" language="javascript"></script>
+    <script src="/static/js/back-services.js" language="javascript"></script>
+ 
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
+ 
+    <script src="/static/js/jquery.treeview.pack.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/static/css/jquery.treeview.css" type="text/css" />
+ 
+    <title>Superfish Vosao plugin config</title>
+   
+<script language="javascript">
+
+var plugin = null;
+var enabledPages = null;
+
+$(function(){
+    $("#tabs").tabs();
+    Vosao.initJSONRpc(loadPlugin);
+});
+
+function loadTree() {
+    Vosao.jsonrpc.superfishBackService.getTree(function(r) {
+        $('#tree').html(renderPage(r));
+        treeview();
+        $('#tree input').change(function() {
+            var ul = this.parentNode.parentNode;
+            var li = this.parentNode;
+            var index = $.inArray(li, ul.childNodes);
+            enablePage(this.value, index, this.checked);
+        });
+    });
+}
+
+function treeview() {
+    $("#tree .hitarea").remove();
+    $("#tree").treeview({
+        animated: "fast",
+        collapsed: true,
+        unique: true,
+        persist: "cookie",
+        cookieId: "superfishTree"
+    });
+}
+
+function renderPage(vo) {
+    var pageUrl = encodeURIComponent(vo.entity.friendlyURL);
+    var checked = '';
+    if ($.inArray(vo.entity.friendlyURL, enabledPages) != -1) {
+        checked = ' checked="checked"'
+    }
+    var html = '<li> \
+        <a href="#"><img src="/static/images/02_up.png" onclick="moveUp(\''  
+        + vo.entity.friendlyURL + '\')"/></a>' 
+        +'<a href="#"><img src="/static/images/02_down.png" onclick="moveDown(\''  
+        + vo.entity.friendlyURL + '\')"/></a>' 
+        + '<input type="checkbox" value="' + vo.entity.friendlyURL + '"' 
+        + checked + '/> ' + vo.entity.title;
+    if (vo.children.list.length > 0) {
+        html += '<ul>';
+        $.each(vo.children.list, function(n, value) {
+            html += renderPage(value);
+        });
+        html += '</ul>';
+    }
+    return html + '</li>';
+}
+
+function loadPlugin() {
+	Vosao.jsonrpc.pluginService.getByName(function(r) {
+	    plugin = r;
+	    enabledPages = [];
+	    if (plugin.configData) {
+	        $.each(plugin.configData.split(','), function(i,value) {
+		        enabledPages.push(value.split(':')[0]);
+		    });
+	    }
+	    loadTree();		
+	}, 'superfish');
+}
+
+function enablePage(page, index, enabled) {
+	Vosao.jsonrpc.superfishBackService.enablePage(function(r) {
+		Vosao.showServiceMessages(r);
+	}, page, String(enabled), index);
+}
+
+function moveUp(url) {
+    var li = $('input[value="' + url + '"]')[0].parentNode;
+    var ul = li.parentNode;
+    var index = $.inArray(li, ul.childNodes);
+    if (index > 0) {
+        var tmp = ul.childNodes[index - 1];
+        var tmpUrl = $('input', $(tmp))[0].value;
+        ul.insertBefore(li.cloneNode(true), tmp);
+        ul.removeChild(li);
+        treeview();
+        Vosao.jsonrpc.superfishBackService.saveIndex(function(r) {
+            Vosao.showServiceMessages(r);
+        }, url, index - 1, tmpUrl, index);
+    }
+}
+
+function moveDown(url) {
+    var li = $('input[value="' + url + '"]')[0].parentNode;
+    var ul = li.parentNode;
+    var index = $.inArray(li, ul.childNodes);
+    if (index < ul.childNodes.length - 1) {
+        var tmp = ul.childNodes[index + 1];
+        var tmpUrl = $('input', $(tmp))[0].value;
+        ul.insertBefore(tmp.cloneNode(true), li);
+        ul.removeChild(tmp);
+        treeview();
+        Vosao.jsonrpc.superfishBackService.saveIndex(function(r) {
+            Vosao.showServiceMessages(r);
+        }, tmpUrl, index, url, index + 1);
+    }
+}
+
+</script>
+   
+</head>  
+<body> 
+
+<div id="topbar">
+
+    <div id="leftmenu">
+        <a href="/cms">Vosao</a> CMS
+        <a href="/cms/pages.jsp">Content</a>
+        <a href="/cms/templates.jsp">Templates</a>
+        <a href="/cms/folders.jsp">Resources</a>
+        <a href="/cms/config.jsp">Configuration</a>
+        <a href="/cms/plugins">Plugins</a>
+        <a href="/cms/plugins/config.jsp">Plugins config</a>
+    </div>
+    <div id="rightmenu">
+        <a href="/cms/profile.jsp">Profile</a> 
+        | <a href="#" onclick="onLogout()">Logout</a>
+        | <a href="http://code.google.com/p/vosao/issues/list">Support</a>    
+    </div>
+    <span class="clear">&#160;</span>
+</div>
+
+<div id="wrapper">
+
+<div id="tabs">
+    <ul>
+        <li><a href="#tab-1">Superfish plugin configuration</a></li>
+    </ul>
+    <div id="tab-1">
+        <div id="tree"></div>
+    </div>
+</div>    
+<div class="messages"> </div>
+
+</div>
+ 
+</body> 
+ 
+</html> 

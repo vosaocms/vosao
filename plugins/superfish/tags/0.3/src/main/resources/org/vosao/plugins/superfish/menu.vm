@@ -1,0 +1,24 @@
+#macro( superfishMenu $treeItem)
+  <li>
+    <a href="$treeItem.entity.friendlyURL">$treeItem.entity.title</a>
+  #if ($treeItem.hasChildren)
+    <ul>
+      #foreach($child in $treeItem.children)
+        #superfishMenu($child)
+      #end
+    </ul> 
+  #end
+   </li>
+#end
+
+<ul class="sf-menu">
+    #foreach($page in $pages)
+        #superfishMenu($page)
+    #end
+</ul>
+
+<script type="text/javascript">
+  $(function(){
+    $('ul.sf-menu').superfish();
+  });
+</script>

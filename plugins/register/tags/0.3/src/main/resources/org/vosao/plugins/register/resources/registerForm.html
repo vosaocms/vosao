@@ -1,0 +1,94 @@
+<div id="login-form">
+    <form>
+        <h3>Registration form</h3>
+        <div>
+            <label>Name</label>
+            <input type="text" id="name" />
+        </div>
+        <div>
+            <label>Email</label>
+            <input type="text" id="email" />
+        </div>
+        <div>
+            <label>Password</label>
+            <input type="password" id="password1" />
+        </div>
+        <div>
+            <label>Confirm password</label>
+            <input type="password" id="password2" />
+        </div>
+        <div id="recaptcha">&nbsp;</div>
+        <div id="register-messages"> </div>
+        <div>
+            <input type="button" value="Register" onclick="onRegister()" />
+        </div>    
+    </form>
+</div>
+
+<div style="clear:both"> </div>
+
+<script type="text/javascript">
+
+$(function() {
+#if($config.enableRecaptcha)
+    Recaptcha.create('$config.recaptchaPublicKey',
+        'recaptcha', {
+            theme:'red', 
+            callback: Recaptcha.focus_response_field});
+#end
+});
+
+function registerValidate(vo) {
+	if (!vo.name) {
+		return "Name is empty";
+	}
+    if (!vo.email) {
+        return "Email is empty";
+    }
+    if (!vo.password1) {
+        return "Password is empty";
+    }
+    if (vo.password1 != vo.password2) {
+        return "Passwords don't match";
+    }
+}
+
+function onRegister() {
+    var vo = {
+    	email : $('#email').val(),
+        name : $('#name').val(),
+        password1 : $('#password1').val(),
+        password2 : $('#password2').val()
+    };
+    var error = registerValidate(vo);
+    if (error) {
+        registerError(error);
+    }
+    else {
+        Vosao.jsonrpc.registerFrontService.register(function (r, e) {
+            if (Vosao.serviceFailed(e)) return;
+            if (r.result == 'success') {
+                registerInfo('Success. Confirmation letter was sent to your email.');
+            }
+            else {
+                 registerError(r.message);
+            }
+        }, Vosao.javaMap(vo),
+#if($config.enableRecaptcha)
+            Recaptcha.get_challenge(), Recaptcha.get_response());
+        Recaptcha.reload();
+#else
+            '', '');
+#end
+    }                
+}
+
+function registerError(msg) {
+    $('#register-messages').html('<span class="error">' + msg + '</span>');
+}
+
+function registerInfo(msg) {
+    $('#register-messages').html('<span class="info">' + msg + '</span>');
+}
+
+</script>

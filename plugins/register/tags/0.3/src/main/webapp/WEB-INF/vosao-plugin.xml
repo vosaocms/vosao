@@ -1,0 +1,19 @@
+<vosao-plugin>
+    
+    <name>register</name>
+    
+    <title>User self registration plugin</title>
+    
+    <description>
+        Register plugin allows users to self register on the site.
+    </description>
+    
+    <website>www.vosao.org</website>
+
+    <plugin-config-url>config.html</plugin-config-url>
+
+    <entry-point-class>
+        org.vosao.plugins.register.RegisterEntryPoint
+    </entry-point-class>
+    
+</vosao-plugin>

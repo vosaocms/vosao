@@ -1,0 +1,16 @@
+<vosao-plugin>
+    <name>disqus</name>
+    <title>Disqus plugin</title>
+    <description>
+        Disqus plugin allows to use Disqus service for page comments.
+        For details visit www.disqus.com
+    </description>
+    <website>www.vosao.org</website>
+    <config>
+        <param name="embedCode" title="Embed code" type="String" />
+        <param name="countCode" title="Comment count code" type="Text" />
+    </config>
+    <entry-point-class>
+        org.vosao.plugins.disqus.DisqusEntryPoint
+    </entry-point-class>
+</vosao-plugin>

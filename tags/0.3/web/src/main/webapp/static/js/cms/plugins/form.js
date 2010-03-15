@@ -1,0 +1,450 @@
+/**
+ * Vosao CMS. Simple CMS for Google App Engine. Copyright (C) 2009 Vosao
+ * development team
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * 
+ * email: vosao.dev@gmail.com
+ */
+
+var languages = {};
+var editMode = formId != '';
+var field = null;
+var fields = null;
+var test = null;
+var messages = {};
+
+$(function() {
+	$("#tabs").tabs();
+	$("#field-dialog").dialog({ width :500, autoOpen :false });
+	Vosao.initJSONRpc(loadData);
+	$('#title').change(onTitleChange);
+	$('#language').change(onLanguageChange);
+	$('input[name=field.regexMessage]').change(onRegexMessageChange);
+	$('#form').submit(function() {onUpdate(); return false;});
+	$('#cancelButton').click(onCancel);
+	$('#addFieldButton').click(onAddField);
+	$('#deleteFieldButton').click(onDeleteFields);
+	$('#fieldType').change(onFieldTypeChange);
+	$('#fieldForm').submit(function() {onSaveAndAdd(); return false;});
+	$('#fieldSaveButton').click(function() { onFieldSave(true); });
+	$('#fieldCancelButton').click(onFieldCancel);
+	$('input[name=field.title]').change(onFieldTitleChange);
+});
+
+function loadData() {
+	loadForm();
+	loadFields();
+	loadLanguages();
+}
+
+function loadLanguages() {
+	Vosao.jsonrpc.languageService.select(function(r) {
+		var h = '';
+		$.each(r.list, function(i, value) {
+			languages[value.code] = value;
+			h += '<option value="' + value.code + '">' + value.title + '</option>';
+		});
+		$('#language').html(h);
+	});
+}
+
+function loadFields() {
+	if (formId == '') {
+		return;
+	}
+	Vosao.jsonrpc.fieldService.getByForm(function(r, e) {
+		fields = r.list;
+		showFields();
+	}, formId);
+}
+
+function showFields() {
+	var h = '<table class="form-table"><tr><th></th><th>Title</th>\
+		<th>Name</th><th>Type</th><th></th></tr>';
+	$.each(fields, function(i, field) {
+		h += 
+			'<tr>\
+			<td><input type="checkbox" name="item' + i + '" value="' + field.id + '"/></td>\
+			<td><a href="#" onclick="onFieldEdit(' + field.id + ')">'   + field.title + '</a></td>\
+			<td>' + field.name + '</td>\
+			<td>'   + fieldTypeString(field.fieldType) + '</td>\
+			<td><a href="#" onclick="onFieldUp(' + i+ ')"><img src="/static/images/02_up.png"/></a>\
+			        <a href="#" onclick="onFieldDown(' + i + ')"><img src="/static/images/02_down.png"/></a>\
+			</td>\
+			</tr>';
+	});
+	$('#fieldsTable').html(h + '</table>');
+	$('#fieldsTable tr:even').addClass('even');
+}
+
+function fieldTypeString(v) {
+	if (v == 'TEXT') return 'Text';
+	if (v == 'CHECKBOX') return 'Checkbox';
+	if (v == 'RADIO') return 'Radiobox';
+	if (v == 'PASSWORD') return 'Password';
+	if (v == 'LISTBOX') return 'Listbox';
+	if (v == 'FILE') return 'File upload';
+	return 'undefined';
+}
+
+function onAddField() {
+	field = null;
+	fieldDialogInit();
+	$("#field-dialog").dialog("open");
+}
+
+function onFieldCancel() {
+	$("#field-dialog").dialog("close");
+}
+
+function onFieldSave(closeFlag) {
+	var fieldVO = createFieldVO();
+	var errors = validateField(fieldVO);
+	if (errors.length == 0) {
+		Vosao.jsonrpc.fieldService.updateField( function(r, e) {
+			if (r.result == 'success') {
+				if (closeFlag) {
+					$("#field-dialog").dialog("close");
+				}
+				loadFields();
+			} else {
+				fieldErrorMessages(r.messages.list);
+			}
+		}, fieldVO);
+	} else {
+		fieldErrorMessages(errors);
+	}
+}
+
+function onFieldTypeChange() {
+	fieldDialogShowInputs();
+}
+
+function fieldDialogShowInputs() {
+	var fieldType = $('select[name=field.fieldType]').val();
+	if (fieldType == 'TEXT') {
+		$('#field-values').hide();
+		$('#field-height').show();
+		$('#field-width').show();
+		$('#field-defaultValue').show();
+		$('#regexDiv').show();
+	}
+	if (fieldType == 'LISTBOX') {
+		$('#field-values').show();
+		$('#field-height').hide();
+		$('#field-width').hide();
+		$('#field-defaultValue').hide();
+		$('#regexDiv').hide();
+	}
+	if (fieldType == 'CHECKBOX') {
+		$('#field-values').show();
+		$('#field-height').hide();
+		$('#field-width').hide();
+		$('#field-defaultValue').hide();
+		$('#regexDiv').hide();
+	}
+	if (fieldType == 'RADIO') {
+		$('#field-values').show();
+		$('#field-height').hide();
+		$('#field-width').hide();
+		$('#field-defaultValue').hide();
+		$('#regexDiv').hide();
+	}
+	if (fieldType == 'PASSWORD') {
+		$('#field-values').hide();
+		$('#field-height').hide();
+		$('#field-width').show();
+		$('#field-defaultValue').hide();
+		$('#regexDiv').hide();
+	}
+	if (fieldType == 'FILE') {
+		$('#field-values').hide();
+		$('#field-height').hide();
+		$('#field-width').hide();
+		$('#field-defaultValue').hide();
+		$('#regexDiv').hide();
+	}
+}
+
+function fieldDialogInit() {
+	if (field == null) {
+		messages = {};
+		$('input[name=field.name]').val('');
+		$('input[name=field.title]').val('');
+		$('select[name=field.fieldType]').val('TEXT');
+		$('textarea[name=field.values]').val('');
+		$('input[name=field.defaultValue]').val('');
+		$('input[name=field.height]').val('1');
+		$('input[name=field.width]').val('20');
+		$('input[name=field.mandatory]')[0].checked = false;
+		$('input[name=field.regex]').val('');
+		$('input[name=field.regexMessage]').val('');
+	} else {
+		$('input[name=field.name]').val(field.name);
+		$('input[name=field.title]').val(field.title);
+		$('select[name=field.fieldType]').val(field.fieldType);
+		$('textarea[name=field.values]').val(field.values);
+		$('input[name=field.defaultValue]').val(field.defaultValue);
+		$('input[name=field.height]').val(field.height);
+		$('input[name=field.width]').val(field.width);
+		$('input[name=field.mandatory]')[0].checked = field.optional;
+		$('input[name=field.regex]').val(field.regex);
+		$('input[name=field.regexMessage]').val(getRegexMessage());
+	}
+	fieldDialogShowInputs();
+	clearFieldMessage();
+}
+
+function createFieldVO() {
+	var fieldIndex = field != null ? field.index : 
+		(fields == null ? 0 : fields.length);
+	return Vosao.javaMap( {
+		id :field != null ? String(field.id) : null,
+		formId :formId,
+		name :$('input[name=field.name]').val(),
+		title :$('input[name=field.title]').val(),
+		fieldType :$('select[name=field.fieldType]').val(),
+		values :$('textarea[name=field.values]').val(),
+		defaultValue :$('input[name=field.defaultValue]').val(),
+		height :$('input[name=field.height]').val(),
+		width :$('input[name=field.width]').val(),
+		index : String(fieldIndex),
+		regex : $('input[name=field.regex]').val(),
+		regexMessage : saveRegexMessage(),
+		mandatory :String($('input[name=field.mandatory]:checked').size() > 0)
+	});
+}
+
+function validateField(fieldVO) {
+	var errors = new Array();
+	if (fieldVO.map.name == '') {
+		errors.push('Name is empty');
+	}
+	if (fieldVO.map.title == '') {
+		errors.push('Title is empty');
+	}
+	var height = Number(fieldVO.map.height);
+	if (fieldVO.map.fieldType == 'TEXT' && height <= 0) {
+		errors.push('Height can\'t be less or zero');
+	}
+	var width = Number(fieldVO.map.width);
+	if (fieldVO.map.fieldType == 'TEXT' && width <= 0) {
+		errors.push('Width can\'t be less or zero');
+	}
+	return errors;
+}
+
+function fieldInfoMessage(message) {
+	Vosao.infoMessage('#field-messages', message);
+}
+
+function fieldErrorMessages(messages) {
+	Vosao.errorMessages('#field-messages', messages);
+}
+
+function fieldErrorMessage(message) {
+	Vosao.errorMessage('#field-messages', message);
+}
+
+function clearFieldMessage() {
+	$('#field-messages').html('');
+}
+
+function onFieldEdit(fieldId) {
+	clearFieldMessage();
+	Vosao.jsonrpc.fieldService.getById( function(r) {
+		field = r;
+		loadRegexMessage();
+		fieldDialogInit();
+		$("#field-dialog").dialog("open");
+	}, fieldId);
+}
+
+function onDeleteFields() {
+	var ids = new Array();
+	$('input:checked').each(function() {
+		ids.push(this.value);
+	});
+	if (ids.length == 0) {
+		Vosao.info('Nothing selected');
+		return;
+	}
+	if (confirm('Are you sure?')) {
+		Vosao.jsonrpc.fieldService.remove(function() {
+			Vosao.info(ids.length + ' fields was successfully deleted.');
+			loadFields();
+		}, Vosao.javaList(ids));
+	}
+}
+
+function onSaveAndAdd() {
+	onFieldSave(false);
+	onAddField();
+}
+
+function loadForm() {
+	Vosao.jsonrpc.formService.getForm(function (r) {
+		if (r != null) {
+			$('#title').val(r.title);
+			$('#name').val(r.name);
+			$('#email').val(r.email);
+			$('#letterSubject').val(r.letterSubject);
+			$('#sendButtonTitle').val(r.sendButtonTitle);
+			$('#resetButtonTitle').val(r.resetButtonTitle);
+			$('#showResetButton').each(function() {
+				this.checked = r.showResetButton;
+			});
+			$('#enableCaptcha').each(function() {
+				this.checked = r.enableCaptcha;
+			});
+			$('.fieldsTab').show();
+		}
+		else {
+			$('#title').val('');
+			$('#name').val('');
+			$('#email').val('');
+			$('#letterSubject').val('');
+			$('#sendButtonTitle').val('');
+			$('#resetButtonTitle').val('');
+			$('#showResetButton').each(function() {
+				this.checked = false;
+			});
+			$('#enableCaptcha').each(function() {
+				this.checked = false;
+			});
+			$('.fieldsTab').hide();
+		}
+	}, formId);
+}
+
+function onUpdate() {
+	var vo = Vosao.javaMap({
+		id : formId,
+		title : $('#title').val(),
+		name : $('#name').val(),
+		email : $('#email').val(),
+		letterSubject : $('#letterSubject').val(),
+		sendButtonTitle : $('#sendButtonTitle').val(),
+		resetButtonTitle : $('#resetButtonTitle').val(),
+		showResetButton : String($('#showResetButton:checked').size() > 0),
+		enableCaptcha : String($('#enableCaptcha:checked').size() > 0)
+	});
+	Vosao.jsonrpc.formService.saveForm(function (r) {
+		if (r.result = 'success') {
+			if (!editMode) {
+				formId = r.message;
+				editMode = true;
+				loadData();
+				Vosao.info('Form was successfully created.');
+			}
+			else {
+				location.href = '/cms/plugins/forms.jsp';
+			}
+		}
+		else {
+			Vosao.showServiceMessages(r);
+		}
+	}, vo);
+}
+
+function onCancel() {
+	location.href = '/cms/plugins/forms.jsp';
+}
+
+function onTitleChange() {
+	if (editMode) {
+		return;
+	}
+	var name = $("#name").val();
+	var title = $("#title").val();
+	if (name == '') {
+		$("#name").val(Vosao.urlFromTitle(title));
+	}
+}
+
+function onFieldTitleChange() {
+	if (field != null) {
+		return;
+	}
+	var name = $('input[name=field.name]').val();
+	var title = $('input[name=field.title]').val();
+	if (name == '') {
+		$('input[name=field.name]').val(Vosao.urlFromTitle(title));
+	}
+}
+
+function onFieldUp(i) {
+	if (i - 1 >= 0) {
+		Vosao.jsonrpc.fieldService.moveUp(function(r) {}, formId, fields[i].id);
+        fields[i].index--;
+        fields[i - 1].index++;
+		swapFields(i, i - 1);
+		showFields();
+	}
+}
+
+function onFieldDown(i) {
+	if (i + 1 < fields.length) {
+		Vosao.jsonrpc.fieldService.moveDown(function(r) {}, formId, fields[i].id);
+        fields[i + 1].index--;
+        fields[i].index++;
+		swapFields(i, i + 1);
+		showFields();
+	}
+}
+
+function swapFields(i, j) {
+	var tmp = fields[j];
+	fields[j] = fields[i];
+	fields[i] = tmp;
+}
+
+function getRegexMessage() {
+	if (messages[$('#language').val()]) {
+		return messages[$('#language').val()];
+	}
+	return '';
+}
+
+function onRegexMessageChange() {
+	messages[$('#language').val()] = $('input[name=field.regexMessage]').val();
+}
+
+function onLanguageChange() {
+	$('input[name=field.regexMessage]').val(messages[$('#language').val()]);
+}
+
+function saveRegexMessage() {
+	var r = '';
+	var i = 0;
+	$.each(messages, function(code, value) {
+		r += (i++ == 0 ? '' : '::') + code + value;
+	});
+	return r;
+}
+
+function loadRegexMessage() {
+	if (field.regexMessage) {
+		$.each(field.regexMessage.split('::'), function(i, value) {
+			var code = value.substr(0,2);
+			var message = value.substr(2);
+			messages[code] = message;
+		});
+	}
+	else {
+		messages = {};
+	}
+}

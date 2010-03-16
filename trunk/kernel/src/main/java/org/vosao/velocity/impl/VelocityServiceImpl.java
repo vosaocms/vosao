@@ -28,8 +28,11 @@ import java.util.List;
 
 import org.vosao.business.PageBusiness;
 import org.vosao.business.impl.SimplePageRenderDecorator;
+import org.vosao.business.impl.StructurePageRenderDecorator;
+import org.vosao.business.vo.StructureFieldVO;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.StructureEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.entity.helper.PageHelper;
 import org.vosao.enums.UserRole;
@@ -87,9 +90,48 @@ public class VelocityServiceImpl implements VelocityService {
 		PageEntity page = getDao().getPageDao().getByUrl(path);
 		if (page != null) {
 			return getPageBusiness().createPageRenderDecorator(
+				page, aLanguageCode).getContent();
+		}
+		return "Approved content not found";
+	}
+
+	@Override
+	public String findStructureContent(String path, String field) {
+		return findStructureContent(path, field, languageCode);
+	}
+	
+	@Override
+	public String findStructureContent(String path, String field,
+			String aLanguageCode) {
+		PageEntity page = getDao().getPageDao().getByUrl(path);
+		if (page != null) {
+			if (field != null) {
+				if (page.isStructured() 
+					&& isStructureFieldExists(page, field)) {
+					StructurePageRenderDecorator pageDecorator = 
+						(StructurePageRenderDecorator) getPageBusiness()
+							.createPageRenderDecorator(page, aLanguageCode);
+					String content = pageDecorator.getContentMap().get(field);
+					return content != null ? content : "";
+				}
+			}
+			return getPageBusiness().createPageRenderDecorator(
 					page, aLanguageCode).getContent();
 		}
 		return "Approved content not found";
+	}
+
+	
+	private boolean isStructureFieldExists(PageEntity page, String fieldName) {
+		StructureEntity structure = getDao().getStructureDao().getById(
+				page.getStructureId());
+		List<StructureFieldVO> fields = structure.getFields();
+		for (StructureFieldVO field : fields) {
+			if (field.getName().equals(fieldName)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

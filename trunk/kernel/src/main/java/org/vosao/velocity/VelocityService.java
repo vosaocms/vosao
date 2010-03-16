@@ -121,5 +121,24 @@ public interface VelocityService {
 	List<String> findChildrenContent(final String path);
 	
 	UserVO findUser(final String email);
+
+	/**
+	 * Find approved last version structured page field content by friendlyURL 
+	 * and current language.
+	 * @param path - page friendlyURL.
+	 * @param field - structured page field.
+	 * @return found content.
+	 */
+	String findStructureContent(String path, String field);
+
+	/**
+	 * Find approved last version structured page field content by friendlyURL 
+	 * and specified language.
+	 * @param path - page friendlyURL.
+	 * @param field - structured page field.
+	 * @param languageCode - two char language code. For example "ru".
+	 * @return found content.
+	 */
+	String findStructureContent(String path, String field, String languageCode);
 	
 }

@@ -51,7 +51,8 @@ public class StructurePageRenderDecorator extends AbstractPageRenderDecorator {
 
 	private StructureEntity structure;
 	private StructureTemplateEntity structureTemplate;
-	
+	private Map<String, String> contentMap;
+
 	public StructurePageRenderDecorator(PageEntity page,	String languageCode, 
 			Dao dao,
 			PageBusiness pageBusiness, 
@@ -74,9 +75,8 @@ public class StructurePageRenderDecorator extends AbstractPageRenderDecorator {
 	}
 	
 	private void prepareContent() {
-		Map<String, String> contentMap;
 		try {
-			contentMap = getContentMap();
+			contentMap = createContentMap();
 		}
 		catch (DocumentException e) {
 			logger.error(e.getMessage());
@@ -128,7 +128,7 @@ public class StructurePageRenderDecorator extends AbstractPageRenderDecorator {
 		}
 	}
 
-	private Map<String, String> getContentMap() throws DocumentException {
+	private Map<String, String> createContentMap() throws DocumentException {
 		Map<String, String> result = new HashMap<String, String>();
 		List<StructureFieldVO> fields = structure.getFields();
 		String xml = getPageBusiness().getPageContent(getPage(), 
@@ -154,4 +154,7 @@ public class StructurePageRenderDecorator extends AbstractPageRenderDecorator {
 		return xml + "</content>";
 	}
 	
+	public Map<String, String> getContentMap() {
+		return contentMap;
+	}
 }

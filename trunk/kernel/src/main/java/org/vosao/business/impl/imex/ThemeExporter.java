@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -174,6 +175,53 @@ public class ThemeExporter extends AbstractExporter {
 
 	public ResourceExporter getResourceExporter() {
 		return getExporterFactory().getResourceExporter();
+	}
+	
+	/**
+	 * Read and import data from _template.xml file.
+	 * @param path - path to _temlate.xml file.
+	 * @param xml - _template.xml content.
+	 * @return true if successfully imported.
+	 * @throws DocumentException
+	 * @throws DaoTaskException 
+	 */
+	public boolean readTemplateFile(String path, String xml) 
+			throws DocumentException, DaoTaskException {
+		String folderPath = FolderUtil.getFilePath(path);
+		String templateName = getTemplateName(folderPath);
+		if (templateName == null) {
+			return false;
+		}
+		TemplateEntity template = getDao().getTemplateDao().getByUrl(
+				templateName);
+		if (template == null) {
+			template = new TemplateEntity();
+			template.setUrl(templateName);
+		}
+		Element root = DocumentHelper.parseText(xml).getRootElement();
+		String title = root.elementText("title");
+		if (!StringUtils.isEmpty(title)) {
+			template.setTitle(title);
+		}
+		String content = root.elementText("content");
+		if (!StringUtils.isEmpty(content)) {
+			template.setContent(content);
+		}
+		getDaoTaskAdapter().templateSave(template);
+		return true;
+	}
+	
+	private String getTemplateName(String folderPath) {
+		try {
+			String[] chain = FolderUtil.getPathChain(folderPath);
+			if (chain.length == 2 && chain[0].equals("theme")) {
+				return chain[1];
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 }

@@ -64,6 +64,14 @@ public interface ImportExportBusiness {
 		DocumentException, DaoTaskException;
 
 	/**
+	 * Import site data from vz file. Format 2.0
+	 * @return list of imported resources.
+	 * @throws DaoTaskException 
+	 */
+	void importZip2(ZipInputStream in) throws IOException,
+		DocumentException, DaoTaskException;
+
+	/**
 	 * Create export file for folder with files and subfolders.
 	 * @param folder - folder to export.
 	 * @return zip file as byte array

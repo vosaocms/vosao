@@ -154,4 +154,56 @@ public class SiteExporter extends AbstractExporter {
 		return getExporterFactory().getResourceExporter();
 	}
 
+	public boolean importSystemFile(ZipEntry entry, String xml) 
+			throws DocumentException, DaoTaskException {
+		if (entry.getName().equals("_users.xml")) {
+			getUserExporter().readUsersFile(xml);
+			return true;
+		}
+		if (entry.getName().equals("_groups.xml")) {
+			getGroupExporter().readGroupsFile(xml);
+			return true;
+		}
+		if (entry.getName().equals("_config.xml")) {
+			getConfigExporter().readConfigFile(xml);
+			return true;
+		}
+		if (entry.getName().equals("_structures.xml")) {
+			getStructureExporter().readStructuresFile(xml);
+			return true;
+		}
+		if (entry.getName().equals("_forms.xml")) {
+			getFormExporter().readFormsFile(xml);
+			return true;
+		}
+		if (entry.getName().equals("_messages.xml")) {
+			getMessagesExporter().readMessagesFile(xml);
+			return true;
+		}
+		if (entry.getName().equals("_plugins.xml")) {
+			getPluginExporter().readPluginsFile(xml);
+			return true;
+		}
+		
+		if (entry.getName().endsWith("_folder.xml")) {
+			String folderPath = FolderUtil.getFilePath("/" + entry.getName());
+			getResourceExporter().readFolderFile(folderPath, xml);
+			return true;
+		}
+		if (entry.getName().endsWith("_template.xml")) {
+			return true;
+		}
+		if (entry.getName().endsWith("_content.xml")) {
+			return true;
+		}
+		if (entry.getName().endsWith("_comments.xml")) {
+			return true;
+		}
+		if (entry.getName().endsWith("_permissions.xml")) {
+			return true;
+		}
+		return false;
+	}
+	
+	
 }

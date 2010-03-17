@@ -27,11 +27,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.LanguageEntity;
+import org.vosao.utils.StrUtil;
 import org.vosao.utils.XmlUtil;
 
 public class ConfigExporter extends AbstractExporter {
@@ -139,6 +141,18 @@ public class ConfigExporter extends AbstractExporter {
             	getDaoTaskAdapter().languageSave(language);
             }
 		}
+	}
+	
+	/**
+	 * Parse and import data from _config.xml file.
+	 * @param xml - _config.xml content.
+	 * @throws DocumentException 
+	 * @throws DaoTaskException 
+	 */
+	public void readConfigFile(String xml) throws DocumentException, 
+			DaoTaskException {
+		Document doc = DocumentHelper.parseText(xml);
+		readConfigs(doc.getRootElement());
 	}
 	
 }

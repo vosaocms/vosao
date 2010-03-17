@@ -96,6 +96,9 @@ public class FolderUtil {
 		if (s == -1) {
 			return "";
 		}
+		if (s == 0) {
+			return "/";
+		}
 		return path.substring(0, s);
 	}
 	

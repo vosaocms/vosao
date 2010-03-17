@@ -25,6 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -44,41 +45,43 @@ import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
+import org.vosao.utils.FileItem;
 
-public class ImportExportBusinessImpl extends AbstractBusinessImpl 
-	implements ImportExportBusiness {
+public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
+		ImportExportBusiness {
 
-	private static final Log logger = LogFactory.getLog(ImportExportBusinessImpl.class);
-	
+	private static final Log logger = LogFactory
+			.getLog(ImportExportBusinessImpl.class);
+
 	private Business business;
 	private Dao dao;
 	private DaoTaskAdapter daoTaskAdapter;
 	private ExporterFactory exporterFactory;
-	
+
 	private ExporterFactory getExporterFactory() {
 		if (exporterFactory == null) {
-			exporterFactory = new ExporterFactory(getBusiness(), 
+			exporterFactory = new ExporterFactory(getBusiness(),
 					getDaoTaskAdapter());
 		}
 		return exporterFactory;
 	}
-	
+
 	private ThemeExporter getThemeExporter() {
 		return getExporterFactory().getThemeExporter();
 	}
-	
+
 	private ResourceExporter getResourceExporter() {
 		return getExporterFactory().getResourceExporter();
 	}
-	
+
 	private SiteExporter getSiteExporter() {
 		return getExporterFactory().getSiteExporter();
 	}
 
 	@Override
-	public byte[] createExportFile(final List<TemplateEntity> list) 
+	public byte[] createExportFile(final List<TemplateEntity> list)
 			throws IOException {
-		
+
 		ByteArrayOutputStream outData = new ByteArrayOutputStream();
 		ZipOutputStream out = new ZipOutputStream(outData);
 		getThemeExporter().exportThemes(out, list);
@@ -86,19 +89,19 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		return outData.toByteArray();
 	}
 
-	public void importZip(ZipInputStream in) throws IOException, 
+	public void importZip(ZipInputStream in) throws IOException,
 			DocumentException, DaoTaskException {
-		
+
 		List<String> result = new ArrayList<String>();
 		ZipEntry entry;
 		byte[] buffer = new byte[4096];
 		boolean skipping = getDaoTaskAdapter().getCurrentFile() != null;
-		while((entry = in.getNextEntry()) != null) {
+		while ((entry = in.getNextEntry()) != null) {
 			if (skipping) {
-				if (entry.getName().equals(getDaoTaskAdapter().getCurrentFile())) {
+				if (entry.getName()
+						.equals(getDaoTaskAdapter().getCurrentFile())) {
 					skipping = false;
-				}
-				else {
+				} else {
 					continue;
 				}
 			}
@@ -106,42 +109,38 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 			if (entry.isDirectory()) {
 				getBusiness().getFolderBusiness().createFolder(
 						"/" + entry.getName());
-			}
-			else {
+			} else {
 				ByteArrayOutputStream data = new ByteArrayOutputStream();
 				int len = 0;
 				while ((len = in.read(buffer)) > 0) {
 					data.write(buffer, 0, len);
 				}
 				if (getSiteExporter().isSiteContent(entry)) {
-					getSiteExporter().readSiteContent(entry, data.toString("UTF-8"));
-				}
-				else if (getThemeExporter().isThemeDescription(entry)) {
-					getThemeExporter().createThemeByDescription(entry, 
+					getSiteExporter().readSiteContent(entry,
 							data.toString("UTF-8"));
-				}
-				else if (getThemeExporter().isThemeContent(entry)) {
-					getThemeExporter().createThemeByContent(entry, 
+				} else if (getThemeExporter().isThemeDescription(entry)) {
+					getThemeExporter().createThemeByDescription(entry,
 							data.toString("UTF-8"));
-				}
-				else {
-					result.add(getResourceExporter().importResourceFile(
-							entry, data.toByteArray()));
+				} else if (getThemeExporter().isThemeContent(entry)) {
+					getThemeExporter().createThemeByContent(entry,
+							data.toString("UTF-8"));
+				} else {
+					result.add(getResourceExporter().importResourceFile(entry,
+							data.toByteArray()));
 				}
 			}
 			getDaoTaskAdapter().reset();
 		}
 		clearResourcesCache(result);
 	}
-	
+
 	private void clearResourcesCache(List<String> files) {
 		for (String file : files) {
-			getBusiness().getSystemService().getFileCache()
-					.remove(file);
+			getBusiness().getSystemService().getFileCache().remove(file);
 			logger.debug("Clear cache " + file);
 		}
 	}
-	
+
 	@Override
 	public byte[] createSiteExportFile() throws IOException {
 		ByteArrayOutputStream outData = new ByteArrayOutputStream();
@@ -153,17 +152,16 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		out.close();
 		return outData.toByteArray();
 	}
-	
+
 	private void exportRootFolder(ZipOutputStream out) throws IOException {
 		FolderEntity root = getDao().getFolderDao().getByPath("/");
 		if (root == null) {
 			logger.error("Folder not found: /");
-		}
-		else {
+		} else {
 			getResourceExporter().addFolder(out, root, "");
 		}
 	}
-	
+
 	@Override
 	public byte[] createExportFile(FolderEntity folder) throws IOException {
 		ByteArrayOutputStream outData = new ByteArrayOutputStream();
@@ -173,20 +171,21 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		TreeItemDecorator<FolderEntity> exportFolder = root.find(folder);
 		if (exportFolder != null) {
 			String zipPath = removeRootSlash(getBusiness().getFolderBusiness()
-					.getFolderPath(folder, root)) + "/";
+					.getFolderPath(folder, root))
+					+ "/";
 			if (zipPath.equals("/")) {
 				zipPath = "";
 			}
-			getResourceExporter().addResourcesFromFolder(out, exportFolder, zipPath);
+			getResourceExporter().addResourcesFromFolder(out, exportFolder,
+					zipPath);
 			out.close();
 			return outData.toByteArray();
-		}
-		else {
+		} else {
 			logger.error("folder decorator was not found " + folder.getName());
 			return null;
 		}
 	}
-	
+
 	private String removeRootSlash(final String path) {
 		if (path.length() > 0 && path.charAt(0) == '/') {
 			return path.substring(1);
@@ -233,17 +232,17 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 
 	private void exportResources(ZipOutputStream out) throws IOException {
 		TreeItemDecorator<FolderEntity> root = getBusiness()
-			.getFolderBusiness().getTree();
+				.getFolderBusiness().getTree();
 		for (TreeItemDecorator<FolderEntity> child : root.getChildren()) {
 			if (!isSkipFolder(child.getEntity().getName())) {
-				getResourceExporter().addResourcesFromFolder(out, child, 
+				getResourceExporter().addResourcesFromFolder(out, child,
 						child.getEntity().getName() + "/");
-			}			
+			}
 		}
 	}
-	
-	private static String[] skipFolder = {"page", "theme", "tmp"};
-	
+
+	private static String[] skipFolder = { "page", "theme", "tmp" };
+
 	private boolean isSkipFolder(String path) {
 		for (String s : skipFolder) {
 			if (path.startsWith(s)) {
@@ -261,6 +260,39 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl
 		out.close();
 		return outData.toByteArray();
 	}
-	
-	
+
+	public void importZip2(ZipInputStream in) throws IOException,
+			DocumentException, DaoTaskException {
+
+		List<String> result = new ArrayList<String>();
+		ZipEntry entry;
+		byte[] buffer = new byte[4096];
+		boolean skipping = getDaoTaskAdapter().getCurrentFile() != null;
+		while ((entry = in.getNextEntry()) != null) {
+			if (skipping) {
+				if (entry.getName()
+						.equals(getDaoTaskAdapter().getCurrentFile())) {
+					skipping = false;
+				} else {
+					continue;
+				}
+			}
+			getDaoTaskAdapter().setCurrentFile(entry.getName());
+			if (!entry.isDirectory()) {
+				ByteArrayOutputStream data = new ByteArrayOutputStream();
+				int len = 0;
+				while ((len = in.read(buffer)) > 0) {
+					data.write(buffer, 0, len);
+				}
+				if (!getSiteExporter().importSystemFile(entry, 
+						data.toString("UTF-8"))) {
+					result.add(getResourceExporter().importResourceFile(entry,
+							data.toByteArray()));
+				}
+			}
+			getDaoTaskAdapter().reset();
+		}
+		clearResourcesCache(result);
+	}
+
 }

@@ -225,24 +225,19 @@ public class FileUploadServlet extends BaseSpringServlet {
 		throws UploadException {
 
 		String ext = FolderUtil.getFileExt(fileItem.getName());
-		if (!ext.toLowerCase().equals("zip")) {
+		if (!ext.toLowerCase().equals("zip") 
+			&& !ext.toLowerCase().equals("vz")) {
 			throw new UploadException("Wrong file extension.");
 		}
 		FolderEntity folder;
-		try {
-			folder = getBusiness().getFolderBusiness().createFolder(
-					"/tmp");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			throw new UploadException(e.getMessage());
-		}
+		folder = getBusiness().getFolderBusiness().createFolder("/tmp");
 		FileEntity file = new FileEntity(fileItem.getName(), fileItem.getName(),
 				folder.getId(), fileItem.getContentType(), new Date(),
 				data.length);
 		getDao().getFileDao().save(file, data);
 		Queue queue = getSystemService().getQueue("import");
 		queue.add(url(ImportTaskServlet.IMPORT_TASK_URL).param("start", "1")
-				.param("filename", file.getFilename()));
+			.param("filename", file.getFilename()));
 		return createMessage("success", "Saved for import.");
 	}
 
@@ -260,12 +255,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 			}
 			FolderEntity folder;
 			String folderPath = "/page" + page.getFriendlyURL();
-			try {
-				folder = getBusiness().getFolderBusiness().createFolder(folderPath);
-			} catch (UnsupportedEncodingException e) {
-				throw new UploadException("Can't create folder for path " 
-					+ page.getFriendlyURL() + " " + e.getMessage());
-			}
+			folder = getBusiness().getFolderBusiness().createFolder(folderPath);
 			FileEntity file = processResourceFile(imageItem, data, folder);
 			return "<script type=\"text/javascript\">"
 				+ " window.parent.CKEDITOR.tools.callFunction(1,"

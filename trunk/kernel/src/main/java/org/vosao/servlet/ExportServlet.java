@@ -30,8 +30,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.vosao.business.ImportExportBusiness;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
@@ -91,7 +89,7 @@ public class ExportServlet extends BaseSpringServlet {
 			}
 		}
 		response.setContentType(MimeType.getContentTypeByExt("zip"));
-		String downloadFile = "exportTheme.zip";
+		String downloadFile = "exportTheme.vz";
 		response.addHeader("Content-Disposition", "attachment; filename=\"" 
 				+ downloadFile + "\"");
 		send(response, getImportExportBusiness().createExportFile(
@@ -113,7 +111,7 @@ public class ExportServlet extends BaseSpringServlet {
 		}
 		logger.debug("Exporting folder " + folder.getName());
 		response.setContentType(MimeType.getContentTypeByExt("zip"));
-		String downloadFile = "exportFolder.zip";
+		String downloadFile = "exportFolder.vz";
 		response.addHeader("Content-Disposition", "attachment; filename=\"" 
 				+ downloadFile + "\"");
 		send(response, getImportExportBusiness().createExportFile(folder));
@@ -123,7 +121,7 @@ public class ExportServlet extends BaseSpringServlet {
 			HttpServletResponse response) throws IOException {
 		logger.debug("Exporting site.");
 		response.setContentType(MimeType.getContentTypeByExt("zip"));
-		String downloadFile = "exportSite.zip";
+		String downloadFile = "exportSite.vz";
 		response.addHeader("Content-Disposition", "attachment; filename=\"" 
 				+ downloadFile + "\"");
 		send(response, getImportExportBusiness().createSiteExportFile());
@@ -146,7 +144,7 @@ public class ExportServlet extends BaseSpringServlet {
 			HttpServletResponse response) throws IOException {
 		logger.debug("Exporting full site.");
 		response.setContentType(MimeType.getContentTypeByExt("zip"));
-		String downloadFile = "exportFullSite.zip";
+		String downloadFile = "exportFullSite.vz";
 		response.addHeader("Content-Disposition", "attachment; filename=\"" 
 				+ downloadFile + "\"");
 		send(response, getImportExportBusiness().createFullExportFile());
@@ -156,7 +154,7 @@ public class ExportServlet extends BaseSpringServlet {
 			HttpServletResponse response) throws IOException {
 		logger.debug("Exporting resources.");
 		response.setContentType(MimeType.getContentTypeByExt("zip"));
-		String downloadFile = "exportResources.zip";
+		String downloadFile = "exportResources.vz";
 		response.addHeader("Content-Disposition", "attachment; filename=\"" 
 				+ downloadFile + "\"");
 		send(response, getImportExportBusiness().createResourcesExportFile());

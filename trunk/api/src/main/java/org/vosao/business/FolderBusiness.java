@@ -63,7 +63,7 @@ public interface FolderBusiness {
 	 * @return last folder in the path.
 	 * @throws UnsupportedEncodingException
 	 */
-	FolderEntity createFolder(final String path) throws UnsupportedEncodingException; 
+	FolderEntity createFolder(final String path); 
 	
 	String getFolderPath(final FolderEntity folder);
 	String getFolderPath(final FolderEntity folder, 

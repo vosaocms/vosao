@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.dao.DaoTaskException;
@@ -100,8 +101,20 @@ public class GroupExporter extends AbstractExporter {
                     	getDaoTaskAdapter().userGroupSave(userGroup);
                     }
         		}
-            	
             }
 		}		
 	}
+	
+	/**
+	 * Read and import data from _groups/xml file.
+	 * @param xml - _groups.xml file content.
+	 * @throws DaoTaskException
+	 * @throws DocumentException
+	 */
+	public void readGroupsFile(String xml) throws DaoTaskException, 
+			DocumentException {
+		Document doc = DocumentHelper.parseText(xml);
+		readGroups(doc.getRootElement());
+	}
+	
 }

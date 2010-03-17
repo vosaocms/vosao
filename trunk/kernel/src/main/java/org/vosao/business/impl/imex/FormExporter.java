@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.dao.DaoTaskException;
@@ -160,5 +161,15 @@ public class FormExporter extends AbstractExporter {
 		getDaoTaskAdapter().formConfigSave(config);
 	}
 	
-	
+	/**
+	 * Read and import data from _forms.xml file.
+	 * @param xml - _forms.xml content.
+	 * @throws DocumentException
+	 * @throws DaoTaskException
+	 */
+	public void readFormsFile(String xml) throws DocumentException, 
+			DaoTaskException {
+		Document doc = DocumentHelper.parseText(xml);
+		readForms(doc.getRootElement());
+	}
 }

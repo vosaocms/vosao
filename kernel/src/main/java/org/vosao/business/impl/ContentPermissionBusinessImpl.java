@@ -148,11 +148,7 @@ public class ContentPermissionBusinessImpl extends AbstractBusinessImpl
 		}
 		perm.setPermission(permission);
 		getDao().getContentPermissionDao().save(perm);
-		try {
-			getFolderBusiness().createFolder("/page" + url);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		getFolderBusiness().createFolder("/page" + url);
 	}
 
 	@Override

@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.Business;
@@ -79,5 +80,17 @@ public class PluginExporter extends AbstractExporter {
             	getDaoTaskAdapter().pluginSave(plugin);
             }
 		}		
+	}
+	
+	/**
+	 * Read and import data from _plugins.xml file.
+	 * @param xml - _plugins.xml file content.
+	 * @throws DocumentException
+	 * @throws DaoTaskException
+	 */
+	public void readPluginsFile(String xml) throws DocumentException, 
+			DaoTaskException {
+		Document doc = DocumentHelper.parseText(xml);
+		readPlugins(doc.getRootElement());
 	}
 }

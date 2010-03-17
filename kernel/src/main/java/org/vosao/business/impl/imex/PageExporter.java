@@ -21,23 +21,19 @@
 
 package org.vosao.business.impl.imex;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.CommentEntity;
 import org.vosao.entity.ContentEntity;
-import org.vosao.entity.FolderEntity;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.StructureEntity;
@@ -120,7 +116,6 @@ public class PageExporter extends AbstractExporter {
 		pageElement.addElement("version").setText(page.getVersion().toString());
 		pageElement.addElement("versionTitle").setText(page.getVersionTitle());
 		pageElement.addElement("state").setText(page.getState().name());
-		String createUserId = "1";
 		pageElement.addElement("createUserEmail").setText(
 				page.getCreateUserEmail());
 		pageElement.addElement("modUserId").setText(

@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.common.BCrypt;
@@ -86,5 +87,17 @@ public class UserExporter extends AbstractExporter {
             	getDaoTaskAdapter().userSave(user);
             }
 		}		
+	}
+	
+	/**
+	 * Read and import data from _users.xml.
+	 * @param xml - _users.xml content.
+	 * @throws DocumentException 
+	 * @throws DaoTaskException 
+	 */
+	public void readUsersFile(String xml) throws DocumentException, 
+			DaoTaskException {
+		Document doc = DocumentHelper.parseText(xml);
+		readUsers(doc.getRootElement());
 	}
 }

@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.dao.DaoTaskException;
@@ -116,5 +117,17 @@ public class StructureExporter extends AbstractExporter {
             	getDao().getStructureTemplateDao().save(template);
             }
 		}
+	}
+	
+	/**
+	 * Read and import data from _structures.xml file.
+	 * @param xml - _structures.xml content.
+	 * @throws DocumentException
+	 * @throws DaoTaskException
+	 */
+	public void readStructuresFile(String xml) throws DocumentException, 
+			DaoTaskException {
+		Document doc = DocumentHelper.parseText(xml);
+		readStructures(doc.getRootElement());
 	}
 }

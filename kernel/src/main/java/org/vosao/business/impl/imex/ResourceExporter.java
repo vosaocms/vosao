@@ -31,7 +31,9 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.decorators.TreeItemDecorator;
@@ -41,6 +43,7 @@ import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FolderPermissionEntity;
 import org.vosao.entity.GroupEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.enums.FolderPermissionType;
 import org.vosao.utils.FolderUtil;
 import org.vosao.utils.MimeType;
 
@@ -208,8 +211,40 @@ public class ResourceExporter extends AbstractExporter {
 		return "/" + entry.getName();
 	}
 	
-	PageExporter getPageExporter() {
+	private PageExporter getPageExporter() {
 		return getExporterFactory().getPageExporter();
+	}
+	
+	/**
+	 * Read and import data from _folder.xml file.
+	 * @param folderPath - folder path.
+	 * @param xml - _folder.xml file.
+	 * @throws DocumentException 
+	 */
+	public void readFolderFile(String folderPath, String xml) 
+			throws DocumentException {
+		logger.info("readFolderFile " + folderPath);
+		FolderEntity folder = getBusiness().getFolderBusiness().createFolder(
+				folderPath);
+		logger.info("created folder " + folder);
+		Element root = DocumentHelper.parseText(xml).getRootElement();
+		String title = root.elementText("title");
+		if (!StringUtils.isEmpty(title)) {
+			folder.setTitle(title);
+			getDao().getFolderDao().save(folder);
+		}
+		readFolderPermissions(root.element("permissions"), folder);
+	}
+
+	private void readFolderPermissions(Element element, FolderEntity folder) {
+		for (Element permElement : (List<Element>)element.elements("permission")) {
+			GroupEntity group = getDao().getGroupDao().getByName(
+				permElement.elementText("group"));
+			FolderPermissionType permission = FolderPermissionType.valueOf(
+				permElement.elementText("permissionType"));
+			getBusiness().getFolderPermissionBusiness().setPermission(
+					folder, group, permission);
+		}
 	}
 	
 }

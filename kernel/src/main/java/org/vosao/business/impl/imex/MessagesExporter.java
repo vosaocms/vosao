@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.dao.DaoTaskException;
@@ -75,5 +76,17 @@ public class MessagesExporter extends AbstractExporter {
             	getDaoTaskAdapter().messageSave(message);
             }
 		}		
+	}
+	
+	/**
+	 * Read and import data from _messages.xml file.
+	 * @param xml - _messages.xml file content.
+	 * @throws DocumentException
+	 * @throws DaoTaskException
+	 */
+	public void readMessagesFile(String xml) throws DocumentException, 
+			DaoTaskException {
+		Document doc = DocumentHelper.parseText(xml);
+		readMessages(doc.getRootElement());
 	}
 }

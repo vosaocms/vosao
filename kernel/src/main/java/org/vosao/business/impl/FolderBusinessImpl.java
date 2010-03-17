@@ -138,8 +138,7 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 	}
 
 	@Override
-	public FolderEntity createFolder(String aPath) 
-			throws UnsupportedEncodingException {
+	public FolderEntity createFolder(String aPath) {
 		if (StringUtils.isEmpty(aPath)) {
 			return null;
 		}
@@ -148,7 +147,17 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 			path = aPath.substring(0, aPath.length() - 1);
 		}
 		TreeItemDecorator<FolderEntity> root = getTree();
-		String[] chain = FolderUtil.getPathChain(path);
+		if (aPath.equals("/")) {
+			return root.getEntity();
+		}
+		String[] chain;
+		try {
+			chain = FolderUtil.getPathChain(path);
+		}
+		catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return null;
+		}
 		String currentDir = "";
 		FolderEntity parent = root.getEntity();
 		for (String dir : chain) {

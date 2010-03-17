@@ -21,6 +21,7 @@
 
 package org.vosao.business.impl.imex;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
@@ -35,8 +36,6 @@ import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FolderEntity;
 import org.vosao.utils.FolderUtil;
-
-import com.google.apphosting.api.DatastorePb.GetResponse;
 
 public class SiteExporter extends AbstractExporter {
 
@@ -114,93 +113,108 @@ public class SiteExporter extends AbstractExporter {
 		}
 	}
 
-	PluginExporter getPluginExporter() {
+	private PluginExporter getPluginExporter() {
 		return getExporterFactory().getPluginExporter();
 	}
 
-	MessagesExporter getMessagesExporter() {
+	private MessagesExporter getMessagesExporter() {
 		return getExporterFactory().getMessagesExporter();
 	}
 
-	StructureExporter getStructureExporter() {
+	private StructureExporter getStructureExporter() {
 		return getExporterFactory().getStructureExporter();
 	}
 
-	FolderExporter getFolderExporter() {
+	private FolderExporter getFolderExporter() {
 		return getExporterFactory().getFolderExporter();
 	}
 
-	UserExporter getUserExporter() {
+	private UserExporter getUserExporter() {
 		return getExporterFactory().getUserExporter();
 	}
 
-	GroupExporter getGroupExporter() {
+	private GroupExporter getGroupExporter() {
 		return getExporterFactory().getGroupExporter();
 	}
 
-	ConfigExporter getConfigExporter() {
+	private ConfigExporter getConfigExporter() {
 		return getExporterFactory().getConfigExporter();
 	}
 	
-	PageExporter getPageExporter() {
+	private PageExporter getPageExporter() {
 		return getExporterFactory().getPageExporter();
 	}
 
-	FormExporter getFormExporter() {
+	private FormExporter getFormExporter() {
 		return getExporterFactory().getFormExporter();
 	}
 
-	ResourceExporter getResourceExporter() {
+	private ResourceExporter getResourceExporter() {
 		return getExporterFactory().getResourceExporter();
 	}
 
-	public boolean importSystemFile(ZipEntry entry, String xml) 
-			throws DocumentException, DaoTaskException {
+	private ThemeExporter getThemeExporter() {
+		return getExporterFactory().getThemeExporter();
+	}
+
+	private String toXML(ByteArrayOutputStream data) 
+			throws UnsupportedEncodingException {
+		return data.toString("UTF-8");
+	}
+	
+	public boolean importSystemFile(ZipEntry entry, ByteArrayOutputStream data) 
+			throws DocumentException, DaoTaskException, 
+			UnsupportedEncodingException {
 		if (entry.getName().equals("_users.xml")) {
-			getUserExporter().readUsersFile(xml);
+			getUserExporter().readUsersFile(toXML(data));
 			return true;
 		}
 		if (entry.getName().equals("_groups.xml")) {
-			getGroupExporter().readGroupsFile(xml);
+			getGroupExporter().readGroupsFile(toXML(data));
 			return true;
 		}
 		if (entry.getName().equals("_config.xml")) {
-			getConfigExporter().readConfigFile(xml);
+			getConfigExporter().readConfigFile(toXML(data));
 			return true;
 		}
 		if (entry.getName().equals("_structures.xml")) {
-			getStructureExporter().readStructuresFile(xml);
+			getStructureExporter().readStructuresFile(toXML(data));
 			return true;
 		}
 		if (entry.getName().equals("_forms.xml")) {
-			getFormExporter().readFormsFile(xml);
+			getFormExporter().readFormsFile(toXML(data));
 			return true;
 		}
 		if (entry.getName().equals("_messages.xml")) {
-			getMessagesExporter().readMessagesFile(xml);
+			getMessagesExporter().readMessagesFile(toXML(data));
 			return true;
 		}
 		if (entry.getName().equals("_plugins.xml")) {
-			getPluginExporter().readPluginsFile(xml);
+			getPluginExporter().readPluginsFile(toXML(data));
 			return true;
 		}
 		
 		if (entry.getName().endsWith("_folder.xml")) {
 			String folderPath = FolderUtil.getFilePath("/" + entry.getName());
-			getResourceExporter().readFolderFile(folderPath, xml);
+			getResourceExporter().readFolderFile(folderPath, toXML(data));
 			return true;
 		}
 		if (entry.getName().endsWith("_template.xml")) {
-			return true;
+			return getThemeExporter().readTemplateFile("/" + entry.getName(), 
+					toXML(data));
 		}
 		if (entry.getName().endsWith("_content.xml")) {
-			return true;
+			String folderPath = FolderUtil.getFilePath("/" + entry.getName());
+			return getPageExporter().readContentFile(folderPath, toXML(data));
 		}
 		if (entry.getName().endsWith("_comments.xml")) {
-			return true;
+			String folderPath = FolderUtil.getFilePath("/" + entry.getName());
+			return getPageExporter().readCommentsFile(folderPath, toXML(data));
 		}
 		if (entry.getName().endsWith("_permissions.xml")) {
-			return true;
+			String folderPath = FolderUtil.getFilePath("/" + entry.getName());
+			return getPageExporter().readPermissionsFile(folderPath, toXML(
+					data));
 		}
 		return false;
 	}

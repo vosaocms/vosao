@@ -29,6 +29,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.dao.DaoTaskException;
@@ -139,6 +140,14 @@ public class PageExporter extends AbstractExporter {
 		pageElement.addElement("pageType").setText(page.getPageType().name());
 		pageElement.addElement("sortIndex").setText(
 				page.getSortIndex() == null ? "0" : page.getSortIndex().toString());
+		pageElement.addElement("keywords").setText(XmlUtil.notNull(
+				page.getKeywords()));
+		pageElement.addElement("description").setText(XmlUtil.notNull(
+				page.getDescription()));
+		pageElement.addElement("searchable").setText(String.valueOf(
+				page.isSearchable()));
+		pageElement.addElement("velocityProcessing").setText(String.valueOf(
+				page.isVelocityProcessing()));
 		List<ContentEntity> contents = getDao().getPageDao().getContents(
 				page.getId()); 
 		for (ContentEntity content : contents) {
@@ -165,20 +174,20 @@ public class PageExporter extends AbstractExporter {
 	public void readPages(Element pages) throws DaoTaskException {
 		for (Iterator<Element> i = pages.elementIterator(); i.hasNext(); ) {
 			Element pageElement = i.next();
-			readPage(pageElement, null);
+			readPage(pageElement);
 		}
 	}
 
-	private void readPage(Element pageElement, PageEntity parentPage) 
+	private void readPage(Element pageElement) 
 			throws DaoTaskException {
 		PageEntity page = readPageVersion(pageElement);
 		for (Iterator<Element> i = pageElement.elementIterator(); i.hasNext();) {
 			Element element = i.next();
 			if (element.getName().equals("page")) {
-				readPage(element, page);
+				readPage(element);
 			}
 			if (element.getName().equals("comments")) {
-				readComments(element, page);
+				readComments(element, page.getFriendlyURL());
 			}
 			if (element.getName().equals("page-version")) {
 				readPageVersion(element);
@@ -273,6 +282,19 @@ public class PageExporter extends AbstractExporter {
 							+ element.getText());
 				}
 			}
+			if (element.getName().equals("keywords")) {
+				newPage.setKeywords(element.getText());
+			}
+			if (element.getName().equals("description")) {
+				newPage.setDescription(element.getText());
+			}
+			if (element.getName().equals("searchable")) {
+				newPage.setSearchable(XmlUtil.readBooleanText(element, true));
+			}
+			if (element.getName().equals("velocityProcessing")) {
+				newPage.setVelocityProcessing(XmlUtil.readBooleanText(element, 
+						false));
+			}
 		}
 		PageEntity page = getDao().getPageDao().getByUrlVersion(url, 
 				newPage.getVersion());
@@ -302,7 +324,7 @@ public class PageExporter extends AbstractExporter {
 		}
 	}
 	
-	private void readComments(Element commentsElement, PageEntity page) 
+	private void readComments(Element commentsElement, String url) 
 			throws DaoTaskException {
 		for (Iterator<Element> i = commentsElement.elementIterator(); i
 				.hasNext();) {
@@ -321,7 +343,7 @@ public class PageExporter extends AbstractExporter {
 						.attributeValue("disabled"));
 				String content = element.getText();
 				CommentEntity comment = new CommentEntity(name, content,
-						publishDate, page.getFriendlyURL(), disabled);
+						publishDate, url, disabled);
 				getDaoTaskAdapter().commentSave(comment);
 			}
 		}
@@ -335,4 +357,67 @@ public class PageExporter extends AbstractExporter {
 		return getExporterFactory().getPagePermissionExporter();
 	}
 	
+	/**
+	 * Read and import data from _content.xml file.
+	 * @param folderPath - _content.xml file path.
+	 * @param xml - _content.xml file content.
+	 * @return
+	 * @throws DocumentException 
+	 * @throws DaoTaskException 
+	 */
+	public boolean readContentFile(String folderPath, String xml) 
+			throws DocumentException, DaoTaskException {
+		String pageURL = getPageURL(folderPath);
+		if (pageURL == null) {
+			return false;
+		}
+		Document doc = DocumentHelper.parseText(xml);
+		readPage(doc.getRootElement());
+		return true;
+	}
+	
+	/**
+	 * Read and import data from _comments.xml file.
+	 * @param folderPath - _comments.xml file path.
+	 * @param xml - _comments.xml file content.
+	 * @return
+	 * @throws DocumentException 
+	 * @throws DaoTaskException 
+	 */
+	public boolean readCommentsFile(String folderPath, String xml) 
+			throws DocumentException, DaoTaskException {
+		String pageURL = getPageURL(folderPath);
+		if (pageURL == null) {
+			return false;
+		}
+		Document doc = DocumentHelper.parseText(xml);
+		readComments(doc.getRootElement(), pageURL);
+		return true;
+	}
+	
+	/**
+	 * Read and import data from _permissions.xml file.
+	 * @param folderPath - _permissions.xml file path.
+	 * @param xml - _permissions.xml file content.
+	 * @return
+	 * @throws DocumentException 
+	 */
+	public boolean readPermissionsFile(String folderPath, String xml) 
+			throws DocumentException {
+		String pageURL = getPageURL(folderPath);
+		if (pageURL == null) {
+			return false;
+		}
+		Document doc = DocumentHelper.parseText(xml);
+		getPagePermissionExporter().readPagePermissions(doc.getRootElement(), 
+				pageURL);
+		return true;
+	}
+	
+	private String getPageURL(String folderPath) {
+		if (folderPath.startsWith("/page")) {
+			return folderPath.replace("/page", "");
+		}
+		return null;
+	}
 }

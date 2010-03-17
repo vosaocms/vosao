@@ -220,18 +220,17 @@ public class ResourceExporter extends AbstractExporter {
 	 * @param folderPath - folder path.
 	 * @param xml - _folder.xml file.
 	 * @throws DocumentException 
+	 * @throws DaoTaskException 
 	 */
 	public void readFolderFile(String folderPath, String xml) 
-			throws DocumentException {
-		logger.info("readFolderFile " + folderPath);
+			throws DocumentException, DaoTaskException {
 		FolderEntity folder = getBusiness().getFolderBusiness().createFolder(
 				folderPath);
-		logger.info("created folder " + folder);
 		Element root = DocumentHelper.parseText(xml).getRootElement();
 		String title = root.elementText("title");
 		if (!StringUtils.isEmpty(title)) {
 			folder.setTitle(title);
-			getDao().getFolderDao().save(folder);
+			getDaoTaskAdapter().folderSave(folder);
 		}
 		readFolderPermissions(root.element("permissions"), folder);
 	}

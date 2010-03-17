@@ -284,8 +284,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 				while ((len = in.read(buffer)) > 0) {
 					data.write(buffer, 0, len);
 				}
-				if (!getSiteExporter().importSystemFile(entry, 
-						data.toString("UTF-8"))) {
+				if (!getSiteExporter().importSystemFile(entry, data)) {
 					result.add(getResourceExporter().importResourceFile(entry,
 							data.toByteArray()));
 				}

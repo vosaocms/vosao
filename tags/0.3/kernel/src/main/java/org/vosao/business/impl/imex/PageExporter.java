@@ -132,6 +132,14 @@ public class PageExporter extends AbstractExporter {
 		pageElement.addElement("pageType").setText(page.getPageType().name());
 		pageElement.addElement("sortIndex").setText(
 				page.getSortIndex() == null ? "0" : page.getSortIndex().toString());
+		pageElement.addElement("keywords").setText(XmlUtil.notNull(
+				page.getKeywords()));
+		pageElement.addElement("description").setText(XmlUtil.notNull(
+				page.getDescription()));
+		pageElement.addElement("searchable").setText(String.valueOf(
+				page.isSearchable()));
+		pageElement.addElement("velocityProcessing").setText(String.valueOf(
+				page.isVelocityProcessing()));
 		List<ContentEntity> contents = getDao().getPageDao().getContents(
 				page.getId()); 
 		for (ContentEntity content : contents) {
@@ -286,6 +294,19 @@ public class PageExporter extends AbstractExporter {
 					logger.error("Wrong date format for createDate " 
 							+ element.getText());
 				}
+			}
+			if (element.getName().equals("keywords")) {
+				newPage.setKeywords(element.getText());
+			}
+			if (element.getName().equals("description")) {
+				newPage.setDescription(element.getText());
+			}
+			if (element.getName().equals("searchable")) {
+				newPage.setSearchable(XmlUtil.readBooleanText(element, true));
+			}
+			if (element.getName().equals("velocityProcessing")) {
+				newPage.setVelocityProcessing(XmlUtil.readBooleanText(element, 
+						false));
 			}
 		}
 		PageEntity page = getDao().getPageDao().getByUrlVersion(url, 

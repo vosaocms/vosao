@@ -19,8 +19,14 @@
  * email: vosao.dev@gmail.com
  */
 
+var exportTimer = null;
+var clockTimer = null;
+var clockSeconds = 0;
+var exportFilename = null;
+
 $(function(){
     $("#import-dialog").dialog({ width: 400, autoOpen: false });
+    $("#export-dialog").dialog({ width: 400, autoOpen: false });
     $('#upload').ajaxForm(afterUpload);
     Vosao.initJSONRpc(loadTemplates);
     $("#tabs").tabs();
@@ -94,7 +100,8 @@ function onDelete() {
 }
 
 function onExport() {
-    var ids = new Array();
+	clockSeconds = 0;
+	var ids = [];
     $('#templates input:checked').each(function () {
         ids.push(this.value);
     });
@@ -102,19 +109,35 @@ function onExport() {
     	Vosao.info('Nothing selected.');
         return;
     }
-    var link = '/cms/export?type=theme&ids=';
-    $.each(ids, function (n, value) {
-        if (n == 0) {
-            link += value;
-        }
-        else {
-            link += '::' + value;
-        }
-    });
-    location.href = link;
-    $('#templates input:checked').each(function () {
-        this.checked = false;
-    });
-    Vosao.info('Themes were successfully exported.');
+    $("#export-dialog").dialog("open");
+    Vosao.jsonrpc.configService.startExportThemeTask(function(r) {
+    	if (r.result == 'success') {
+    		$('#templates input:checked').each(function () {
+    			this.checked = false;
+    		});
+    		exportFilename = r.message;
+    	    Vosao.infoMessage('#exportInfo', 'Creating export file...');
+            exportTimer = setInterval(checkExport, 10 * 1000);
+            clockTimer = setInterval(showClock, 1000);
+    	}
+    	else {
+    		Vosao.showServiceMessages(r);
+    	}
+    }, Vosao.javaList(ids));
 }
 
+function checkExport() {
+	Vosao.jsonrpc.configService.isExportTaskFinished(function(r) {
+		if (r) {
+			clearInterval(exportTimer);
+			clearInterval(clockTimer);
+			$("#export-dialog").dialog("close");
+			$('#exportDialogButton').attr('disabled', false);
+			location.href = '/file/tmp/' + exportFilename;
+		}
+	}, 'theme');
+}
+
+function showClock() {
+	$('#timer').html(clockSeconds++ + ' sec.');
+}

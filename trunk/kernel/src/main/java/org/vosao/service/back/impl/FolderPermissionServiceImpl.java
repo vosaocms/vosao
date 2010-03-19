@@ -96,10 +96,10 @@ public class FolderPermissionServiceImpl extends AbstractServiceImpl
 		}
 		List<FolderPermissionEntity> inherited = getBusiness()
 				.getFolderPermissionBusiness().getInheritedPermissions(folder);
-		logger.info("inherited " + inherited.size());
+		//logger.info("inherited " + inherited.size());
 		List<FolderPermissionEntity> direct = getDao()
 				.getFolderPermissionDao().selectByFolder(folderId);
-		logger.info("direct " + direct.size());
+		//logger.info("direct " + direct.size());
 		Map<Long, GroupEntity> groups = GroupHelper.createIdMap(getDao()
 				.getGroupDao().select());
 		List<FolderPermissionVO> result = new ArrayList<FolderPermissionVO>();

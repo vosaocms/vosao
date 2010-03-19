@@ -45,8 +45,10 @@ public class CommentDaoTest extends AbstractDaoTest {
 	public void testSave() {
 		PageEntity page = pageTool.addPage("test");
 		CommentEntity comment = commentTool.addComment("alex", "content", page);
-		CommentEntity comment2 = getDao().getCommentDao().getById(null);
+		CommentEntity comment2 = getDao().getCommentDao().getById((Long)null);
 		assertNull(comment2);
+		List<CommentEntity> comments = getDao().getCommentDao().getById((List<Long>)null);
+		assertEquals(0, comments.size());
 		comment2 = getDao().getCommentDao().getById(0L);
 		assertNull(comment2);
 		comment2 = getDao().getCommentDao().getById(
@@ -119,7 +121,7 @@ public class CommentDaoTest extends AbstractDaoTest {
 	public void testGetById()  {
 		PageEntity page = pageTool.addPage("test");
 		CommentEntity c = commentTool.addComment("alex", "content1", page);
-		CommentEntity c2 = getDao().getCommentDao().getById(null);
+		CommentEntity c2 = getDao().getCommentDao().getById((Long)null);
 		assertNull(c2);
 		c2 = getDao().getCommentDao().getById(c.getId());
 		assertNotNull(c2);

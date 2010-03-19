@@ -190,14 +190,14 @@ public class FolderPermissionBusinessImpl extends AbstractBusinessImpl
 	private List<FolderPermissionEntity> getPagePermissions(
 			FolderEntity folder) {
 		String path = getDao().getFolderDao().getFolderPath(folder.getId());
-		logger.info(folder.getName() + " " + path);
+		//logger.info(folder.getName() + " " + path);
 		List<FolderPermissionEntity> result = 
 			new ArrayList<FolderPermissionEntity>();
 		if (path.startsWith(PAGE)) {
 			String pageUrl = getFolderFromPageUrl(path); 
 			List<ContentPermissionEntity> pagePermissions = 
 				getContentPermissionBusiness().selectByUrl(pageUrl);
-			logger.info(pagePermissions.size());
+			//logger.info(pagePermissions.size());
 			for (ContentPermissionEntity perm : pagePermissions) {
 				FolderPermissionEntity p = new FolderPermissionEntity();
 				p.setKey(null);

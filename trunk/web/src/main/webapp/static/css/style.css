@@ -255,7 +255,11 @@ a.button span.ui-icon {
 	margin-bottom: 10px;
 	font-weight: bold;
 }
-	
+
+#timer {
+    text-align: center;
+    font-weight: bold;
+}	
 	
 .ui-widget {
 	font-size: 1em;

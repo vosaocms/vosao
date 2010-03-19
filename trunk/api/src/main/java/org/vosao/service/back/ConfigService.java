@@ -22,6 +22,7 @@
 package org.vosao.service.back;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import org.vosao.entity.ConfigEntity;
@@ -56,4 +57,11 @@ public interface ConfigService extends AbstractService {
 	ServiceResponse startExportTask(String exportType);
 	
 	boolean isExportTaskFinished(String exportType);
+	
+	/**
+	 * Start export themes task chain.
+	 * @return service response.
+	 */
+	ServiceResponse startExportThemeTask(List<String> ids);
+	
 }

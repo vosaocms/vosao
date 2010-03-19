@@ -40,6 +40,8 @@ public interface BaseDao<T extends BaseEntity>
 	
 	T getById(final Long id);
 	
+	List<T> getById(final List<Long> ids);
+
 	void remove(final Long id);
 	
 	void remove(final List<Long> ids);

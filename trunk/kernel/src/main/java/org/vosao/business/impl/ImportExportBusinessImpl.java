@@ -25,10 +25,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,16 +34,17 @@ import org.dom4j.DocumentException;
 import org.vosao.business.Business;
 import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.business.imex.task.TaskTimeoutException;
+import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
 import org.vosao.business.impl.imex.ExporterFactory;
 import org.vosao.business.impl.imex.ResourceExporter;
 import org.vosao.business.impl.imex.SiteExporter;
 import org.vosao.business.impl.imex.ThemeExporter;
-import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
+import org.vosao.business.impl.imex.task.DaoTaskAdapter;
 import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
-import org.vosao.utils.FileItem;
 
 public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 		ImportExportBusiness {
@@ -79,14 +78,10 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 	}
 
 	@Override
-	public byte[] createExportFile(final List<TemplateEntity> list)
-			throws IOException {
-
-		ByteArrayOutputStream outData = new ByteArrayOutputStream();
-		ZipOutputStream out = new ZipOutputStream(outData);
-		getThemeExporter().exportThemes(out, list);
-		out.close();
-		return outData.toByteArray();
+	public void createTemplateExportFile(final ZipOutStreamTaskAdapter zip,
+			final List<TemplateEntity> list)
+			throws IOException, TaskTimeoutException {
+		getThemeExporter().exportThemes(zip, list);
 	}
 
 	public void importZip(ZipInputStream in) throws IOException,
@@ -142,18 +137,16 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 	}
 
 	@Override
-	public byte[] createSiteExportFile() throws IOException {
-		ByteArrayOutputStream outData = new ByteArrayOutputStream();
-		ZipOutputStream out = new ZipOutputStream(outData);
+	public void createSiteExportFile(ZipOutStreamTaskAdapter out) 
+			throws IOException, TaskTimeoutException {
 		exportRootFolder(out);
 		List<TemplateEntity> list = getDao().getTemplateDao().select();
 		getThemeExporter().exportThemes(out, list);
 		getSiteExporter().exportSite(out);
-		out.close();
-		return outData.toByteArray();
 	}
 
-	private void exportRootFolder(ZipOutputStream out) throws IOException {
+	private void exportRootFolder(ZipOutStreamTaskAdapter out) 
+			throws IOException, TaskTimeoutException {
 		FolderEntity root = getDao().getFolderDao().getByPath("/");
 		if (root == null) {
 			logger.error("Folder not found: /");
@@ -163,9 +156,8 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 	}
 
 	@Override
-	public byte[] createExportFile(FolderEntity folder) throws IOException {
-		ByteArrayOutputStream outData = new ByteArrayOutputStream();
-		ZipOutputStream out = new ZipOutputStream(outData);
+	public void createExportFile(final ZipOutStreamTaskAdapter out, FolderEntity folder) 
+			throws IOException, TaskTimeoutException {
 		TreeItemDecorator<FolderEntity> root = getBusiness()
 				.getFolderBusiness().getTree();
 		TreeItemDecorator<FolderEntity> exportFolder = root.find(folder);
@@ -178,11 +170,8 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 			}
 			getResourceExporter().addResourcesFromFolder(out, exportFolder,
 					zipPath);
-			out.close();
-			return outData.toByteArray();
 		} else {
 			logger.error("folder decorator was not found " + folder.getName());
-			return null;
 		}
 	}
 
@@ -218,19 +207,17 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 	}
 
 	@Override
-	public byte[] createFullExportFile() throws IOException {
-		ByteArrayOutputStream outData = new ByteArrayOutputStream();
-		ZipOutputStream out = new ZipOutputStream(outData);
+	public void createFullExportFile(final ZipOutStreamTaskAdapter out) 
+			throws IOException, TaskTimeoutException {
 		exportRootFolder(out);
 		List<TemplateEntity> list = getDao().getTemplateDao().select();
 		getThemeExporter().exportThemes(out, list);
 		getSiteExporter().exportSite(out);
 		exportResources(out);
-		out.close();
-		return outData.toByteArray();
 	}
 
-	private void exportResources(ZipOutputStream out) throws IOException {
+	private void exportResources(ZipOutStreamTaskAdapter out) 
+			throws IOException, TaskTimeoutException {
 		TreeItemDecorator<FolderEntity> root = getBusiness()
 				.getFolderBusiness().getTree();
 		for (TreeItemDecorator<FolderEntity> child : root.getChildren()) {
@@ -253,12 +240,9 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 	}
 
 	@Override
-	public byte[] createResourcesExportFile() throws IOException {
-		ByteArrayOutputStream outData = new ByteArrayOutputStream();
-		ZipOutputStream out = new ZipOutputStream(outData);
+	public void createResourcesExportFile(final ZipOutStreamTaskAdapter out) 
+			throws IOException, TaskTimeoutException {
 		exportResources(out);
-		out.close();
-		return outData.toByteArray();
 	}
 
 	public void importZip2(ZipInputStream in) throws IOException,

@@ -41,8 +41,19 @@ public interface ConfigService extends AbstractService {
 	
 	ServiceResponse reset();
 	
+	/**
+	 * Recreate search index.
+	 * @return service response.
+	 */
 	ServiceResponse reindex();
 	
 	ServiceResponse cacheReset();
 	
+	/**
+	 * Start export task chain.
+	 * @return service response.
+	 */
+	ServiceResponse startExportTask(String exportType);
+	
+	boolean isExportTaskFinished(String exportType);
 }

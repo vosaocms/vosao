@@ -34,6 +34,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.business.imex.task.TaskTimeoutException;
+import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
@@ -47,8 +49,9 @@ public class ThemeExporter extends AbstractExporter {
 		super(factory);
 	}
 	
-	public void exportThemes(final ZipOutputStream out, 
-			final List<TemplateEntity> themes) throws IOException {
+	public void exportThemes(final ZipOutStreamTaskAdapter out, 
+			final List<TemplateEntity> themes) throws IOException,
+			TaskTimeoutException{
 		FolderEntity themeFolder = getDao().getFolderDao().getByPath("/theme");
 		if (themeFolder == null) {
 			logger.error("Folder not found: /theme");
@@ -60,15 +63,17 @@ public class ThemeExporter extends AbstractExporter {
 		}
 	}
 	
-	public void exportTheme(final ZipOutputStream out, 
-			final TemplateEntity theme) throws IOException {
-
+	public void exportTheme(final ZipOutStreamTaskAdapter out, 
+			final TemplateEntity theme) throws IOException, 
+			TaskTimeoutException {
 		String themeFolder = getThemeZipPath(theme);
 		addThemeResources(out, theme);		
 		String descriptionName = themeFolder + "_template.xml";
-		out.putNextEntry(new ZipEntry(descriptionName));
-		out.write(createThemeExportXML(theme).getBytes("UTF-8"));
-		out.closeEntry();
+		if (!out.isSkip(descriptionName)) {
+			out.putNextEntry(new ZipEntry(descriptionName));
+			out.write(createThemeExportXML(theme).getBytes("UTF-8"));
+			out.closeEntry();
+		}
 	}
 
 	private static String getThemeZipPath(final TemplateEntity theme) {
@@ -88,9 +93,9 @@ public class ThemeExporter extends AbstractExporter {
 		return doc.asXML();
 	}
 	
-	private void addThemeResources(final ZipOutputStream out, 
-			final TemplateEntity theme) throws IOException {
-		
+	private void addThemeResources(final ZipOutStreamTaskAdapter out, 
+			final TemplateEntity theme) throws IOException, 
+			TaskTimeoutException {
 		TreeItemDecorator<FolderEntity> root = getBusiness()
 				.getFolderBusiness().getTree();
 		TreeItemDecorator<FolderEntity> themeFolder = getBusiness()

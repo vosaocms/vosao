@@ -37,6 +37,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.business.imex.task.TaskTimeoutException;
+import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
@@ -61,16 +63,18 @@ public class ResourceExporter extends AbstractExporter {
 	 * 	             Should not start with / symbol and should end with / symbol.
 	 * @throws IOException
 	 */
-	public void addFolder(final ZipOutputStream out, 
+	public void addFolder(final ZipOutStreamTaskAdapter out, 
 			final FolderEntity folder, final String zipPath) 
-			throws IOException {
+			throws IOException, TaskTimeoutException {
 		if (zipPath.length() != 0) {
 			out.putNextEntry(new ZipEntry(zipPath));
 			out.closeEntry();
 		}
-		out.putNextEntry(new ZipEntry(zipPath + "_folder.xml"));
-		out.write(getFolderSystemFile(folder).getBytes("UTF-8"));
-		out.closeEntry();
+		if (!out.isSkip(zipPath + "_folder.xml")) {
+			out.putNextEntry(new ZipEntry(zipPath + "_folder.xml"));
+			out.write(getFolderSystemFile(folder).getBytes("UTF-8"));
+			out.closeEntry();
+		}
 	}
 	
 	/**
@@ -81,9 +85,9 @@ public class ResourceExporter extends AbstractExporter {
 	 * 	             Should not start with / symbol and should end with / symbol.
 	 * @throws IOException
 	 */
-	public void addResourcesFromFolder(final ZipOutputStream out, 
+	public void addResourcesFromFolder(final ZipOutStreamTaskAdapter out, 
 			final TreeItemDecorator<FolderEntity> folder, final String zipPath) 
-			throws IOException {
+			throws IOException, TaskTimeoutException {
 		addFolder(out, folder.getEntity(), zipPath);
 		List<String> childrenNames = new ArrayList<String>();
 		for (TreeItemDecorator<FolderEntity> child : folder.getChildren()) {
@@ -114,9 +118,11 @@ public class ResourceExporter extends AbstractExporter {
 				folder.getEntity().getId());
 		for (FileEntity file : files) {
 			String filePath = zipPath + file.getFilename();
-			out.putNextEntry(new ZipEntry(filePath));
-			out.write(getDao().getFileDao().getFileContent(file));
-			out.closeEntry();
+			if (!out.isSkip(filePath)) {
+				out.putNextEntry(new ZipEntry(filePath));
+				out.write(getDao().getFileDao().getFileContent(file));
+				out.closeEntry();
+			}
 		}
 	}
 
@@ -128,9 +134,9 @@ public class ResourceExporter extends AbstractExporter {
 	 * 	             Should not start with / symbol and should end with / symbol.
 	 * @throws IOException
 	 */
-	public void addResourcesFromPage(final ZipOutputStream out, 
+	public void addResourcesFromPage(final ZipOutStreamTaskAdapter out, 
 			final String pageURL, final String zipPath) 
-			throws IOException {
+			throws IOException, TaskTimeoutException {
 		out.putNextEntry(new ZipEntry(zipPath));
 		out.closeEntry();
 		List<PageEntity> children = getDao().getPageDao().getByParent(pageURL);
@@ -145,18 +151,24 @@ public class ResourceExporter extends AbstractExporter {
 		}
 	}
 	
-	private void addPageFiles(final ZipOutputStream out, PageEntity page,
-			String zipPath) throws IOException {
-		saveFile(out, zipPath + "_content.xml", getPageExporter()
+	private void addPageFiles(final ZipOutStreamTaskAdapter out, PageEntity page,
+			String zipPath) throws IOException, TaskTimeoutException {
+		if (!out.isSkip(zipPath + "_content.xml")) {
+			saveFile(out, zipPath + "_content.xml", getPageExporter()
 				.createPageContentXML(page));
-		saveFile(out, zipPath + "_comments.xml", getPageExporter()
+		}
+		if (!out.isSkip(zipPath + "_comments.xml")) {
+			saveFile(out, zipPath + "_comments.xml", getPageExporter()
 				.createPageCommentsXML(page.getFriendlyURL()));
-		saveFile(out, zipPath + "_permissions.xml", 
+		}
+		if (!out.isSkip(zipPath + "_permissions.xml")) {
+			saveFile(out, zipPath + "_permissions.xml", 
 				getPageExporter().createPagePermissionsXML(page.getFriendlyURL()));
+		}
 	}
 	
-	private void saveFile(final ZipOutputStream out, String name, 
-			String content) throws IOException {
+	private void saveFile(final ZipOutStreamTaskAdapter out, String name, 
+			String content) throws IOException, TaskTimeoutException {
 		out.putNextEntry(new ZipEntry(name));
 		out.write(content.getBytes("UTF-8"));
 		out.closeEntry();

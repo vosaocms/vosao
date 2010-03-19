@@ -33,6 +33,7 @@ import org.vosao.dao.BaseDaoImpl;
 import org.vosao.dao.FileChunkDao;
 import org.vosao.entity.FileChunkEntity;
 import org.vosao.entity.FileEntity;
+import org.vosao.utils.ArrayUtil;
 
 import com.google.appengine.api.datastore.Query;
 
@@ -68,22 +69,10 @@ public class FileChunkDaoImpl extends BaseDaoImpl<FileChunkEntity>
 	public List<FileChunkEntity> createChunks(FileEntity file, 
 			byte[] content) {
 		List<FileChunkEntity> result = new ArrayList<FileChunkEntity>();
-		long n = content.length / ENTITY_SIZE_LIMIT;
-		int finalChunkSize = content.length % ENTITY_SIZE_LIMIT;
+		List<byte[]> chunks = ArrayUtil.makeChunks(content, ENTITY_SIZE_LIMIT);
 		int i = 0;
-		int start;
-		int end;
-		for (i = 0; i < n; i++) {
-			start = i * ENTITY_SIZE_LIMIT;
-			end = start + ENTITY_SIZE_LIMIT;
-			result.add(new FileChunkEntity(file.getId(), 
-					Arrays.copyOfRange(content, start, end), i));
-		}
-		if (finalChunkSize > 0) {
-			start = i * ENTITY_SIZE_LIMIT;
-			end = start + finalChunkSize;
-			result.add(new FileChunkEntity(file.getId(), 
-					Arrays.copyOfRange(content, start, end), i));
+		for (byte[] chunk : chunks) {
+			result.add(new FileChunkEntity(file.getId(), chunk, i++));
 		}
 		return result;
 	}
@@ -109,21 +98,11 @@ public class FileChunkDaoImpl extends BaseDaoImpl<FileChunkEntity>
 
 	@Override
 	public byte[] getFileContent(FileEntity file) {
-		List<FileChunkEntity> list = getByFile(file.getId());
-		int size = 0;
-		for (FileChunkEntity chunk : list) {
-			size += chunk.getContent().length;
+		List<byte[]> chunks = new ArrayList<byte[]>();
+		for (FileChunkEntity chunk : getByFile(file.getId())) {
+			chunks.add(chunk.getContent());
 		}
-		byte[] result = new byte[size];
-		int i = 0;
-		int start = 0;
-		for (FileChunkEntity chunk : list) {
-			start = i * ENTITY_SIZE_LIMIT;
-			System.arraycopy(chunk.getContent(), 0, result, start, 
-					chunk.getContent().length);
-			i++;
-		}
-		return result;
+		return ArrayUtil.packChunks(chunks);
 	}
 
 }

@@ -19,15 +19,15 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.impl.imex.dao;
+package org.vosao.business.imex.task;
 
-public class DaoTaskException extends Exception {
+public class TaskTimeoutException extends Exception {
 	
-	public DaoTaskException() {
-		super("Task exception");
+	public TaskTimeoutException() {
+		super("Task timeout exception");
 	}
 
-	public DaoTaskException(String msg) {
+	public TaskTimeoutException(String msg) {
 		super(msg);
 	}
 }

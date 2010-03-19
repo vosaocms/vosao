@@ -1,7 +1,7 @@
 package org.vosao.business.impl.imex;
 
 import org.vosao.business.Business;
-import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
+import org.vosao.business.impl.imex.task.DaoTaskAdapter;
 import org.vosao.common.AbstractServiceBean;
 
 public class ExporterFactory extends AbstractServiceBean {

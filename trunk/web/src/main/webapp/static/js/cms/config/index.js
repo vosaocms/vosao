@@ -20,6 +20,9 @@
  */
 
 var config = '';
+var exportTimer = null;
+var exportFilename = null;
+var exportType = null;
 
 $(function(){
     $("#import-dialog").dialog({ width: 400, autoOpen: false });
@@ -126,10 +129,29 @@ function onExportCancel() {
 }
 
 function onStartExport() {
-    var exportType = $('input[name=exportType]:checked').val();
-	location.href = '/cms/export?type=' + exportType;
-    $("#export-dialog").dialog("close");
-    Vosao.info('Creating export file...');
+	$('#exportDialogButton').attr('disabled', true);
+    exportType = $('input[name=exportType]:checked').val();
+    Vosao.jsonrpc.configService.startExportTask(function(r) {
+    	if (r.result == 'success') {
+    		exportFilename = r.message;
+    	    Vosao.infoMessage('#exportInfo', 'Creating export file...');
+            exportTimer = setInterval(checkExport, 10 * 1000);
+    	}
+    	else {
+    		Vosao.showServiceMessages(r);
+    	}
+    }, exportType);
+}
+
+function checkExport() {
+	Vosao.jsonrpc.configService.isExportTaskFinished(function(r) {
+		if (r) {
+			clearInterval(exportTimer);
+			$("#export-dialog").dialog("close");
+			$('#exportDialogButton').attr('disabled', false);
+			location.href = '/file/tmp/' + exportFilename;
+		}
+	}, exportType);
 }
 
 function onReset() {

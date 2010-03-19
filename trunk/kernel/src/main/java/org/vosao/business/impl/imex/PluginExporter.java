@@ -30,7 +30,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.Business;
-import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
+import org.vosao.business.impl.imex.task.DaoTaskAdapter;
 import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.GroupEntity;

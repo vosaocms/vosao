@@ -21,9 +21,12 @@
 
 package org.vosao.global.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -36,7 +39,10 @@ import javax.cache.CacheStatistics;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.entity.FileChunkEntity;
 import org.vosao.global.CacheService;
+import org.vosao.utils.ArrayUtil;
+import org.vosao.utils.StrUtil;
 
 import com.google.appengine.api.memcache.InvalidValueException;
 
@@ -218,6 +224,41 @@ public class CacheServiceImpl implements CacheService {
 	@Override
 	public Cache getMemcache() {
 		return cache;
+	}
+
+	@Override
+	public byte[] getBlob(String key) {
+		String chunkList = (String)get(key);
+		if (chunkList != null) {
+			List<byte[]> data = new ArrayList<byte[]>();
+			int size = 0;
+			for (String chunkKey : StrUtil.fromCSV(chunkList)) {
+				byte[] chunk = (byte[])get(chunkKey);
+				if (chunk == null) {
+					return null;
+				}
+				data.add(chunk);
+				size += chunk.length;
+			}
+			return ArrayUtil.packChunks(data);
+		}
+		return null;
+	}
+
+	public static int CACHE_SIZE_LIMIT = 1000000; 
+
+	@Override
+	public void putBlob(String key, byte[] data) {
+		List<String> chunkList = new ArrayList<String>();
+		List<byte[]> chunks = ArrayUtil.makeChunks(data, CACHE_SIZE_LIMIT);
+		int i = 0;
+		for (byte[] chunk : chunks) {
+			String chunkKey = key + String.valueOf(i);
+			put(chunkKey, chunk);
+			chunkList.add(chunkKey);
+			i++;
+		}
+		put(key, StrUtil.toCSV(chunkList));
 	}
 
 }

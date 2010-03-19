@@ -26,34 +26,41 @@ import java.util.List;
 import java.util.zip.ZipInputStream;
 
 import org.dom4j.DocumentException;
+import org.vosao.business.imex.task.TaskTimeoutException;
+import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
 import org.vosao.dao.DaoTaskException;
-import org.vosao.dao.Dao;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
 
 public interface ImportExportBusiness {
 
 	/**
-	 * Create export file with selected themes.
+	 * Create export file with selected templates. Inside task execution.
 	 * @param list - selected themes.
 	 * @return zip file as byte array
 	 * @throws IOException
 	 */
-	byte[] createExportFile(final List<TemplateEntity> list) throws IOException;
+	void createTemplateExportFile(final ZipOutStreamTaskAdapter zip, 
+			final List<TemplateEntity> list) throws IOException, 
+			TaskTimeoutException;
 
 	/**
 	 * Create export file for whole site. Excluding unconnected resources.
+	 * Inside task execution.
 	 * @return zip file as byte array
 	 * @throws IOException
 	 */
-	byte[] createSiteExportFile() throws IOException;
+	void createSiteExportFile(final ZipOutStreamTaskAdapter zip) throws IOException,
+			TaskTimeoutException;
 
 	/**
 	 * Create export file for whole site. Including unconnected resources.
+	 * Inside task execution.
 	 * @return zip file as byte array
 	 * @throws IOException
 	 */
-	byte[] createFullExportFile() throws IOException;
+	void createFullExportFile(final ZipOutStreamTaskAdapter zip) throws IOException,
+			TaskTimeoutException;
 
 	/**
 	 * Import site data from zip file.
@@ -73,12 +80,22 @@ public interface ImportExportBusiness {
 
 	/**
 	 * Create export file for folder with files and subfolders.
+	 * Inside task execution.
 	 * @param folder - folder to export.
 	 * @return zip file as byte array
 	 * @throws IOException
 	 */
-	byte[] createExportFile(final FolderEntity folder) throws IOException;
+	void createExportFile(final ZipOutStreamTaskAdapter zip, 
+			final FolderEntity folder) throws IOException, TaskTimeoutException;
 
-	byte[] createResourcesExportFile() throws IOException;
+	/**
+	 * Create resources export file for all folders except /page, /theme, /tmp.
+	 * Inside task execution.
+	 * @param folder - folder to export.
+	 * @return zip file as byte array
+	 * @throws IOException
+	 */
+	void createResourcesExportFile(final ZipOutStreamTaskAdapter zip) 
+			throws IOException, TaskTimeoutException;
 	
 }

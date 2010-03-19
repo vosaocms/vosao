@@ -19,7 +19,7 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.impl.imex.dao;
+package org.vosao.business.impl.imex.task;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -86,7 +86,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 	private boolean isSkip() throws DaoTaskException {
 		current++;
 		if (System.currentTimeMillis() - startTime > 24000) {
-			throw new DaoTaskFinishedException();
+			throw new TaskFinishedException();
 		}
 		if (current < start) {
 			return true;

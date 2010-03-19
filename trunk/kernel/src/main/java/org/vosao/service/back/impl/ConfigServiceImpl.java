@@ -32,11 +32,14 @@ import org.apache.commons.logging.LogFactory;
 import org.vosao.business.SetupBean;
 import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.entity.ConfigEntity;
+import org.vosao.entity.FileEntity;
 import org.vosao.entity.FormConfigEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.ConfigService;
 import org.vosao.service.impl.AbstractServiceImpl;
+import org.vosao.servlet.ExportTaskServlet;
 import org.vosao.servlet.SessionCleanTaskServlet;
+import org.vosao.utils.StrUtil;
 import org.vosao.utils.StreamUtil;
 
 import com.google.appengine.api.labs.taskqueue.Queue;
@@ -136,6 +139,42 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 		Queue queue = getBusiness().getSystemService().getQueue("session-clean");
 		queue.add(url(SessionCleanTaskServlet.SESSION_CLEAN_TASK_URL));
 		return ServiceResponse.createSuccessResponse("Cache successfully reseted.");
+	}
+
+	@Override
+	public ServiceResponse startExportTask(String exportType) {
+		String filename = getExportFilename(exportType);
+		if (filename != null) {
+			Queue queue = getBusiness().getSystemService().getQueue("export");
+			queue.add(url(ExportTaskServlet.EXPORT_TASK_URL)
+				.param("filename", filename)
+				.param("exportType", exportType));
+			return ServiceResponse.createSuccessResponse(filename);
+		}
+		return ServiceResponse.createErrorResponse("Unknowun export type "
+				+ exportType);
+	}
+
+	@Override
+	public boolean isExportTaskFinished(String exportType) {
+		String finishFilename = "/tmp/" + getExportFilename(exportType) + ".txt";
+		FileEntity file = getBusiness().getFileBusiness().findFile(
+				finishFilename);
+		if (file != null) {
+			String content = new String(getDao().getFileDao().getFileContent(
+					file));
+			if ("OK".equals(content)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private String getExportFilename(String exportType) {
+		if (exportType.equals("site")) {
+			return "exportSite.vz";
+		}
+		return null;
 	}
 	
 }

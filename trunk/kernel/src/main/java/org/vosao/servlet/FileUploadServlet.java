@@ -81,6 +81,8 @@ public class FileUploadServlet extends BaseSpringServlet {
 
 	public static final String IMAGE_UPLOAD_PAGE_ID = "imageUploadPageId";
 	
+	private String ckeditorFuncNum = "";
+	
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -102,6 +104,9 @@ public class FileUploadServlet extends BaseSpringServlet {
 				parameters.put(IMAGE_UPLOAD_PAGE_ID, 
 						(String)session.getAttribute(
 								IMAGE_UPLOAD_PAGE_ID));
+				if (request.getParameter("CKEditorFuncNum") != null) {
+					ckeditorFuncNum = request.getParameter("CKEditorFuncNum");
+				}
 				while (iter.hasNext()) {
 					FileItemStream item = iter.next();
 					stream = item.openStream();
@@ -258,14 +263,15 @@ public class FileUploadServlet extends BaseSpringServlet {
 			folder = getBusiness().getFolderBusiness().createFolder(folderPath);
 			FileEntity file = processResourceFile(imageItem, data, folder);
 			return "<script type=\"text/javascript\">"
-				+ " window.parent.CKEDITOR.tools.callFunction(1,"
-				+ "'/file" + folderPath + "/" + file.getFilename() + "');"
+				+ " window.parent.CKEDITOR.tools.callFunction("
+				+ ckeditorFuncNum + ",'/file" 
+				+ folderPath + "/" + file.getFilename() + "');"
 				+ "</script>";
 		}
 		catch (UploadException e) {
 			return "<script type=\"text/javascript\">"
-				+ " window.parent.CKEDITOR.tools.callFunction(1,'',"
-				+ "'" + e.getMessage() + "');"
+				+ " window.parent.CKEDITOR.tools.callFunction("
+				+ ckeditorFuncNum +",'','" + e.getMessage() + "');"
 				+ "</script>";
 		}
 	}

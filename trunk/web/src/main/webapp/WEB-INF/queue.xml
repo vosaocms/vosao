@@ -6,6 +6,11 @@
   </queue>
 
   <queue>
+    <name>export</name>
+    <rate>1/s</rate>
+  </queue>
+
+  <queue>
     <name>reindex</name>
     <rate>1/s</rate>
   </queue>

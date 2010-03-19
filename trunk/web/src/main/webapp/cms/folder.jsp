@@ -124,6 +124,18 @@
 </form>
 </div>
 
+<div id="export-dialog" style="display:none" title="Export window">
+  <form id="exportForm">
+    <p>After export task finish. You will be redirected to created export file
+    stored at "Resources" /tmp folder.</p>
+    <div id="exportInfo" class="form-row"></div>    
+    <div id="timer" class="form-row"></div>
+    <div class="buttons-dlg">
+        <input id="exportCancelButton" type="button" value="Cancel" />
+    </div>
+  </form>
+</div>
+
 
 </body>
 </html>

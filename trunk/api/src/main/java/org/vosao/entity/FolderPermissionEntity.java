@@ -68,7 +68,7 @@ public class FolderPermissionEntity extends BaseEntityImpl {
 	public void save(Entity entity) {
 		super.save(entity);
 		entity.setProperty("folderId", folderId);
-		entity.setProperty("permission", permission.name());
+		entity.setUnindexedProperty("permission", permission.name());
 		entity.setProperty("groupId", groupId);
 	}
 

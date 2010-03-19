@@ -104,23 +104,23 @@ public class PageEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("title", new Text(title));
+		entity.setUnindexedProperty("title", new Text(title));
 		entity.setProperty("friendlyURL", friendlyURL);
 		entity.setProperty("parentUrl", parentUrl);
 		entity.setProperty("template", template);
-		entity.setProperty("publishDate", publishDate);
-		entity.setProperty("commentsEnabled", commentsEnabled);
+		entity.setUnindexedProperty("publishDate", publishDate);
+		entity.setUnindexedProperty("commentsEnabled", commentsEnabled);
 		entity.setProperty("version", version);
-		entity.setProperty("versionTitle", versionTitle);
-		entity.setProperty("state", state.name());
-		entity.setProperty("pageType", pageType.name());
+		entity.setUnindexedProperty("versionTitle", versionTitle);
+		entity.setUnindexedProperty("state", state.name());
+		entity.setUnindexedProperty("pageType", pageType.name());
 		entity.setProperty("structureId", structureId);
 		entity.setProperty("structureTemplateId", structureTemplateId);
-		entity.setProperty("keywords", new Text(keywords));
-		entity.setProperty("description", new Text(description));
-		entity.setProperty("searchable", searchable);
-		entity.setProperty("sortIndex", sortIndex);
-		entity.setProperty("velocityProcessing", velocityProcessing);
+		entity.setUnindexedProperty("keywords", new Text(keywords));
+		entity.setUnindexedProperty("description", new Text(description));
+		entity.setUnindexedProperty("searchable", searchable);
+		entity.setUnindexedProperty("sortIndex", sortIndex);
+		entity.setUnindexedProperty("velocityProcessing", velocityProcessing);
 	}
 
 	public PageEntity(String title, String friendlyURL, 

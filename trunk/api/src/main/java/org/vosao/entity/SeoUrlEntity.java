@@ -48,7 +48,7 @@ public class SeoUrlEntity extends BaseEntityImpl {
 	public void save(Entity entity) {
 		super.save(entity);
 		entity.setProperty("fromLink", fromLink);
-		entity.setProperty("toLink", toLink);
+		entity.setUnindexedProperty("toLink", toLink);
 	}
 
 	public SeoUrlEntity(String aFrom, String aTo) {

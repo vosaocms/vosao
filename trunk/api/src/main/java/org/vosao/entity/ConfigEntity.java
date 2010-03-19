@@ -63,17 +63,17 @@ public class ConfigEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("googleAnalyticsId", googleAnalyticsId);
-		entity.setProperty("siteEmail", siteEmail);
-		entity.setProperty("siteDomain", siteDomain);
-		entity.setProperty("editExt", editExt);
-		entity.setProperty("enableRecaptcha", enableRecaptcha);
-		entity.setProperty("recaptchaPrivateKey", recaptchaPrivateKey);
-		entity.setProperty("recaptchaPublicKey", recaptchaPublicKey);
-		entity.setProperty("commentsEmail", commentsEmail);
-		entity.setProperty("commentsTemplate", new Text(commentsTemplate));
-		entity.setProperty("version", version);
-		entity.setProperty("siteUserLoginUrl", siteUserLoginUrl);
+		entity.setUnindexedProperty("googleAnalyticsId", googleAnalyticsId);
+		entity.setUnindexedProperty("siteEmail", siteEmail);
+		entity.setUnindexedProperty("siteDomain", siteDomain);
+		entity.setUnindexedProperty("editExt", editExt);
+		entity.setUnindexedProperty("enableRecaptcha", enableRecaptcha);
+		entity.setUnindexedProperty("recaptchaPrivateKey", recaptchaPrivateKey);
+		entity.setUnindexedProperty("recaptchaPublicKey", recaptchaPublicKey);
+		entity.setUnindexedProperty("commentsEmail", commentsEmail);
+		entity.setUnindexedProperty("commentsTemplate", new Text(commentsTemplate));
+		entity.setUnindexedProperty("version", version);
+		entity.setUnindexedProperty("siteUserLoginUrl", siteUserLoginUrl);
 	}
 
 	public String getGoogleAnalyticsId() {

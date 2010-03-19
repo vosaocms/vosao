@@ -46,7 +46,7 @@ public class PluginResourceEntity extends BaseEntityImpl {
     @Override
     public void save(Entity entity) {
     	super.save(entity);
-    	entity.setProperty("data", new Blob(data));
+    	entity.setUnindexedProperty("data", new Blob(data));
     	entity.setProperty("url", url);
     	entity.setProperty("pluginName", pluginName);
     }

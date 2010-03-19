@@ -64,10 +64,10 @@ public abstract class BaseEntityImpl implements BaseEntity {
 
 	@Override
 	public void save(Entity entity) {
-		entity.setProperty("createUserEmail", createUserEmail);
-		entity.setProperty("createDate", createDate);
-		entity.setProperty("modUserEmail", modUserEmail);
-		entity.setProperty("modDate", modDate);
+		entity.setUnindexedProperty("createUserEmail", createUserEmail);
+		entity.setUnindexedProperty("createDate", createDate);
+		entity.setUnindexedProperty("modUserEmail", modUserEmail);
+		entity.setUnindexedProperty("modDate", modDate);
 	}
 
 	@Override

@@ -76,9 +76,9 @@ public class ContentPermissionEntity extends BaseEntityImpl {
 	public void save(Entity entity) {
 		super.save(entity);
 		entity.setProperty("url", url);
-		entity.setProperty("allLanguages", allLanguages);
-		entity.setProperty("languages", languages);
-		entity.setProperty("permission", permission.name());
+		entity.setUnindexedProperty("allLanguages", allLanguages);
+		entity.setUnindexedProperty("languages", languages);
+		entity.setUnindexedProperty("permission", permission.name());
 		entity.setProperty("groupId", groupId);
 	}
 

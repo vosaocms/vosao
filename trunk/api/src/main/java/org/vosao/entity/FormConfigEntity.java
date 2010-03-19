@@ -49,8 +49,8 @@ public class FormConfigEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("formTemplate", new Text(formTemplate));
-		entity.setProperty("letterTemplate", new Text(letterTemplate));
+		entity.setUnindexedProperty("formTemplate", new Text(formTemplate));
+		entity.setUnindexedProperty("letterTemplate", new Text(letterTemplate));
 	}
 
 	public String getFormTemplate() {

@@ -45,7 +45,7 @@ public class FolderEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("title", title);
+		entity.setUnindexedProperty("title", title);
 		entity.setProperty("name", name);
 		entity.setProperty("parentId", parentId);
 	}

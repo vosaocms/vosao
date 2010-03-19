@@ -57,9 +57,9 @@ public class CommentEntity extends BaseEntityImpl {
 	public void save(Entity entity) {
 		super.save(entity);
 		entity.setProperty("pageUrl", pageUrl);
-		entity.setProperty("name", name);
-		entity.setProperty("content", new Text(content));
-		entity.setProperty("publishDate", publishDate);
+		entity.setUnindexedProperty("name", name);
+		entity.setUnindexedProperty("content", new Text(content));
+		entity.setUnindexedProperty("publishDate", publishDate);
 		entity.setProperty("disabled", disabled);
 	}
 

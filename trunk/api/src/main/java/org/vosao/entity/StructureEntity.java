@@ -57,7 +57,7 @@ public class StructureEntity extends BaseEntityImpl {
 	public void save(Entity entity) {
 		super.save(entity);
 		entity.setProperty("title", title);
-		entity.setProperty("content", new Text(content));
+		entity.setUnindexedProperty("content", new Text(content));
 	}
 
 	public StructureEntity(String title, String content) {

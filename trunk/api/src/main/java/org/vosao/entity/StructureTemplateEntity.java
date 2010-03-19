@@ -54,8 +54,8 @@ public class StructureTemplateEntity extends BaseEntityImpl {
 		super.save(entity);
 		entity.setProperty("title", title);
 		entity.setProperty("structureId", structureId);
-		entity.setProperty("type", type.name());
-		entity.setProperty("content", new Text(content));
+		entity.setUnindexedProperty("type", type.name());
+		entity.setUnindexedProperty("content", new Text(content));
 	}
 
 	public StructureTemplateEntity(String title, Long structureId, 

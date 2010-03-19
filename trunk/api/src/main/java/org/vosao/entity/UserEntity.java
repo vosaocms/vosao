@@ -61,8 +61,8 @@ public class UserEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("name", name);
-		entity.setProperty("password", password);
+		entity.setUnindexedProperty("name", name);
+		entity.setUnindexedProperty("password", password);
 		entity.setProperty("email", email);
 		entity.setProperty("role", role.name());
 	}

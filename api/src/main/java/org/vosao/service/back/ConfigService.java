@@ -63,5 +63,11 @@ public interface ConfigService extends AbstractService {
 	 * @return service response.
 	 */
 	ServiceResponse startExportThemeTask(List<String> ids);
+
+	/**
+	 * Start export folder task chain.
+	 * @return service response.
+	 */
+	ServiceResponse startExportFolderTask(Long folderId);
 	
 }

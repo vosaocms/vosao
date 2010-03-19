@@ -138,7 +138,7 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse startExportTask(String exportType) {
-		String filename = getExportFilename(exportType);
+		String filename = ExportTaskServlet.getExportFilename(exportType);
 		if (filename != null) {
 			Queue queue = getBusiness().getSystemService().getQueue("export");
 			queue.add(url(ExportTaskServlet.EXPORT_TASK_URL)
@@ -152,7 +152,8 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public boolean isExportTaskFinished(String exportType) {
-		String finishFilename = "/tmp/" + getExportFilename(exportType) + ".txt";
+		String finishFilename = "/tmp/" + ExportTaskServlet.getExportFilename(
+				exportType) + ".txt";
 		FileEntity file = getBusiness().getFileBusiness().findFile(
 				finishFilename);
 		if (file != null) {
@@ -165,24 +166,27 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 		return false;
 	}
 	
-	private String getExportFilename(String exportType) {
-		if (exportType.equals(ExportTaskServlet.TYPE_PARAM_SITE)) {
-			return "exportSite.vz";
-		}
-		if (exportType.equals(ExportTaskServlet.TYPE_PARAM_THEME)) {
-			return "exportTheme.vz";
-		}
-		return null;
-	}
-
 	@Override
 	public ServiceResponse startExportThemeTask(List<String> ids) {
-		String filename = getExportFilename(ExportTaskServlet.TYPE_PARAM_THEME);
+		String filename = ExportTaskServlet.getExportFilename(
+				ExportTaskServlet.TYPE_PARAM_THEME);
 		Queue queue = getBusiness().getSystemService().getQueue("export");
 		queue.add(url(ExportTaskServlet.EXPORT_TASK_URL)
 			.param("filename", filename)
 			.param("exportType", ExportTaskServlet.TYPE_PARAM_THEME)
 			.param("ids", StrUtil.toCSV(ids)));
+		return ServiceResponse.createSuccessResponse(filename);
+	}
+
+	@Override
+	public ServiceResponse startExportFolderTask(Long folderId) {
+		String filename = ExportTaskServlet.getExportFilename(
+				ExportTaskServlet.TYPE_PARAM_FOLDER);
+		Queue queue = getBusiness().getSystemService().getQueue("export");
+		queue.add(url(ExportTaskServlet.EXPORT_TASK_URL)
+			.param("filename", filename)
+			.param("exportType", ExportTaskServlet.TYPE_PARAM_FOLDER)
+			.param("folderId", folderId.toString()));
 		return ServiceResponse.createSuccessResponse(filename);
 	}
 	

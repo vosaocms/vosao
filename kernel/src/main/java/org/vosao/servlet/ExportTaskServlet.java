@@ -40,6 +40,7 @@ import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.imex.task.TaskTimeoutException;
 import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
 import org.vosao.business.impl.imex.task.ZipOutStreamTaskAdapterImpl;
+import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.entity.helper.UserHelper;
 import org.vosao.utils.StrUtil;
@@ -99,19 +100,24 @@ public class ExportTaskServlet extends BaseSpringServlet {
 	        	getImportExportBusiness().createTemplateExportFile(
 	        			zipOutStreamTaskAdapter, templates);
 	        }
-	        //if (exportType.equals(TYPE_PARAM_FOLDER)) {
-	        //	exportFolder(request, response);
-	        //}
+	        if (exportType.equals(TYPE_PARAM_FOLDER)) {
+	        	FolderEntity folder = getDao().getFolderDao().getById(
+	        			Long.valueOf(request.getParameter("folderId")));
+	        	getImportExportBusiness().createExportFile(
+	        			zipOutStreamTaskAdapter, folder);
+	        }
 	        if (exportType.equals(TYPE_PARAM_SITE)) {
 	    		getImportExportBusiness().createSiteExportFile(
 	    				zipOutStreamTaskAdapter);
 	        }
-	        //if (exportType.equals(TYPE_PARAM_FULL)) {
-	        //	exportFull(request, response);
-	        //}
-	        //if (exportType.equals(TYPE_PARAM_RESOURCES)) {
-	        //	exportResources(request, response);
-	        //}
+	        if (exportType.equals(TYPE_PARAM_FULL)) {
+	    		getImportExportBusiness().createFullExportFile(
+	    				zipOutStreamTaskAdapter);
+	        }
+	        if (exportType.equals(TYPE_PARAM_RESOURCES)) {
+	        	getImportExportBusiness().createResourcesExportFile(
+	        			zipOutStreamTaskAdapter);
+	        }
 			saveZip(zipOutStreamTaskAdapter, filename, true);
     		getBusiness().getFileBusiness().saveFile("/tmp/" + filename + ".txt", 
     				"OK".getBytes());
@@ -179,4 +185,24 @@ public class ExportTaskServlet extends BaseSpringServlet {
 			}
 		}
 	}
+	
+	public static String getExportFilename(String exportType) {
+		if (exportType.equals(ExportTaskServlet.TYPE_PARAM_SITE)) {
+			return "exportSite.vz";
+		}
+		if (exportType.equals(ExportTaskServlet.TYPE_PARAM_THEME)) {
+			return "exportTheme.vz";
+		}
+		if (exportType.equals(ExportTaskServlet.TYPE_PARAM_FOLDER)) {
+			return "exportFolder.vz";
+		}
+		if (exportType.equals(ExportTaskServlet.TYPE_PARAM_FULL)) {
+			return "exportFull.vz";
+		}
+		if (exportType.equals(ExportTaskServlet.TYPE_PARAM_RESOURCES)) {
+			return "exportResources.vz";
+		}
+		return null;
+	}
+	
 }

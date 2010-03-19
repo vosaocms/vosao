@@ -33,7 +33,13 @@ var editMode = folderId != '';
 var folderRequest = null;
 var permissions = null;
 
+var exportTimer = null;
+var clockTimer = null;
+var clockSeconds = 0;
+var exportFilename = null;
+
 $(function() {
+    $("#export-dialog").dialog({ width: 400, autoOpen: false });
     var tab = $("#tabs").tabs();
     Vosao.selectTabFromQueryParam(tab);
     $("#file-upload").dialog({ width: 400, autoOpen: false });
@@ -240,7 +246,35 @@ function onCancel() {
 }
 
 function onExport() {
-    location.href = '/cms/export?type=folder&id=' + folderId;
+	clockSeconds = 0;
+    $("#export-dialog").dialog("open");
+    Vosao.jsonrpc.configService.startExportFolderTask(function(r) {
+    	if (r.result == 'success') {
+    		exportFilename = r.message;
+    	    Vosao.infoMessage('#exportInfo', 'Creating export file...');
+            exportTimer = setInterval(checkExport, 10 * 1000);
+            clockTimer = setInterval(showClock, 1000);
+    	}
+    	else {
+    		Vosao.showServiceMessages(r);
+    	}
+    }, folder.id);
+}
+
+function checkExport() {
+	Vosao.jsonrpc.configService.isExportTaskFinished(function(r) {
+		if (r) {
+			clearInterval(exportTimer);
+			clearInterval(clockTimer);
+			$("#export-dialog").dialog("close");
+			$('#exportDialogButton').attr('disabled', false);
+			location.href = '/file/tmp/' + exportFilename;
+		}
+	}, 'theme');
+}
+
+function showClock() {
+	$('#timer').html(clockSeconds++ + ' sec.');
 }
 
 function onAddChild() {

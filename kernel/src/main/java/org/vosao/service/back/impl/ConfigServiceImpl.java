@@ -27,13 +27,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.vosao.business.SetupBean;
 import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FileEntity;
-import org.vosao.entity.FormConfigEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.ConfigService;
 import org.vosao.service.impl.AbstractServiceImpl;
@@ -46,8 +43,6 @@ import com.google.appengine.api.labs.taskqueue.Queue;
 
 public class ConfigServiceImpl extends AbstractServiceImpl 
 		implements ConfigService {
-
-	private static Log logger = LogFactory.getLog(ConfigServiceImpl.class);
 
 	private SetupBean setupBean;
 	
@@ -171,10 +166,24 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 	}
 	
 	private String getExportFilename(String exportType) {
-		if (exportType.equals("site")) {
+		if (exportType.equals(ExportTaskServlet.TYPE_PARAM_SITE)) {
 			return "exportSite.vz";
 		}
+		if (exportType.equals(ExportTaskServlet.TYPE_PARAM_THEME)) {
+			return "exportTheme.vz";
+		}
 		return null;
+	}
+
+	@Override
+	public ServiceResponse startExportThemeTask(List<String> ids) {
+		String filename = getExportFilename(ExportTaskServlet.TYPE_PARAM_THEME);
+		Queue queue = getBusiness().getSystemService().getQueue("export");
+		queue.add(url(ExportTaskServlet.EXPORT_TASK_URL)
+			.param("filename", filename)
+			.param("exportType", ExportTaskServlet.TYPE_PARAM_THEME)
+			.param("ids", StrUtil.toCSV(ids)));
+		return ServiceResponse.createSuccessResponse(filename);
 	}
 	
 }

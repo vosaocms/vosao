@@ -21,6 +21,8 @@
 
 var config = '';
 var exportTimer = null;
+var clockTimer = null;
+var clockSeconds = 0;
 var exportFilename = null;
 var exportType = null;
 
@@ -130,12 +132,14 @@ function onExportCancel() {
 
 function onStartExport() {
 	$('#exportDialogButton').attr('disabled', true);
+    clockSeconds = 0;
     exportType = $('input[name=exportType]:checked').val();
     Vosao.jsonrpc.configService.startExportTask(function(r) {
     	if (r.result == 'success') {
     		exportFilename = r.message;
     	    Vosao.infoMessage('#exportInfo', 'Creating export file...');
             exportTimer = setInterval(checkExport, 10 * 1000);
+            clockTimer = setInterval(showClock, 1000);
     	}
     	else {
     		Vosao.showServiceMessages(r);
@@ -147,11 +151,16 @@ function checkExport() {
 	Vosao.jsonrpc.configService.isExportTaskFinished(function(r) {
 		if (r) {
 			clearInterval(exportTimer);
+			clearInterval(clockTimer);
 			$("#export-dialog").dialog("close");
 			$('#exportDialogButton').attr('disabled', false);
 			location.href = '/file/tmp/' + exportFilename;
 		}
 	}, exportType);
+}
+
+function showClock() {
+	$('#timer').html(clockSeconds++ + ' sec.');
 }
 
 function onReset() {

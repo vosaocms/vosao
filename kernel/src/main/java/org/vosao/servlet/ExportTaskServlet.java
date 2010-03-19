@@ -26,12 +26,12 @@ import static com.google.appengine.api.labs.taskqueue.TaskOptions.Builder.url;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -40,8 +40,9 @@ import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.imex.task.TaskTimeoutException;
 import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
 import org.vosao.business.impl.imex.task.ZipOutStreamTaskAdapterImpl;
-import org.vosao.entity.FileEntity;
+import org.vosao.entity.TemplateEntity;
 import org.vosao.entity.helper.UserHelper;
+import org.vosao.utils.StrUtil;
 
 import com.bradmcevoy.io.StreamUtils;
 import com.google.appengine.api.labs.taskqueue.Queue;
@@ -90,9 +91,14 @@ public class ExportTaskServlet extends BaseSpringServlet {
 			openStream(zipOutStreamTaskAdapter, filename);
 			zipOutStreamTaskAdapter.setStartFile(currentFile);
 			logger.info("Export " + exportType + " " + currentFile);
-	        //if (exportType.equals(TYPE_PARAM_THEME)) {
-	        //	exportThemes(request, response);
-	        //}
+	        if (exportType.equals(TYPE_PARAM_THEME)) {
+	        	List<Long> ids = StrUtil.toLong(StrUtil.fromCSV(
+	        			request.getParameter("ids")));
+	        	List<TemplateEntity> templates = getDao().getTemplateDao()
+	        			.getById(ids);
+	        	getImportExportBusiness().createTemplateExportFile(
+	        			zipOutStreamTaskAdapter, templates);
+	        }
 	        //if (exportType.equals(TYPE_PARAM_FOLDER)) {
 	        //	exportFolder(request, response);
 	        //}

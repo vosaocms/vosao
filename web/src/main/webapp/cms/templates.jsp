@@ -67,5 +67,16 @@
     </div>
 </div>
 
+<div id="export-dialog" style="display:none" title="Export window">
+  <form id="exportForm">
+    <div id="exportInfo" class="form-row"></div>    
+    <div id="timer" class="form-row"></div>
+    <div class="buttons-dlg">
+        <input id="exportCancelButton" type="button" value="Cancel" />
+    </div>
+  </form>
+</div>
+
+
 </body>
 </html>

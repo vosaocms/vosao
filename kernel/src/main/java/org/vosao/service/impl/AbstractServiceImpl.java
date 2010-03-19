@@ -23,12 +23,16 @@ package org.vosao.service.impl;
 
 import java.io.Serializable;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.dao.Dao;
 import org.vosao.service.AbstractService;
 
 public abstract class AbstractServiceImpl implements AbstractService, 
 		Serializable {
+	
+	protected static Log logger = LogFactory.getLog(AbstractServiceImpl.class);
 
 	private Dao dao;
 	private Business business;

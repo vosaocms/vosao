@@ -115,8 +115,8 @@
     <input type="radio" name="exportType" value="resources"/>
         Resources <br/>
     </div>
-    <div id="exportInfo" class="form-row">
-    </div>    
+    <div id="exportInfo" class="form-row"></div>    
+    <div id="timer" class="form-row"></div>
     <div class="buttons-dlg">
         <input id="exportDialogButton" type="submit" value="Export" />
         <input id="exportCancelButton" type="button" value="Cancel" />

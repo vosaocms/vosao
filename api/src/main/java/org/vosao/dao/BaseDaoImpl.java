@@ -24,6 +24,8 @@ package org.vosao.dao;
 import static com.google.appengine.api.datastore.FetchOptions.Builder.withLimit;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -92,6 +94,32 @@ public class BaseDaoImpl<T extends BaseEntity>
 		catch (EntityNotFoundException e) {
 			return null;
 		}
+	}
+
+	@Override
+	public List<T> getById(List<Long> ids) {
+		if (ids == null) {
+			return Collections.EMPTY_LIST;
+		}
+		List<Key> keys = new ArrayList<Key>();
+		List<T> result = new ArrayList<T>();
+		for (Long id : ids) {
+			if (id != null && id > 0) {
+				T model = (T) getEntityCache().getEntity(clazz, id);
+				if (model != null) {
+					result.add(model);
+				}
+				else {
+					keys.add(getKey(id));
+				}
+			}
+		}
+		List<T> models = createModels(getDatastore().get(keys).values());
+		for (T model : models) {
+			getEntityCache().putEntity(clazz, model.getId(), model);
+		}
+		result.addAll(models);
+		return result;
 	}
 
 	private T createModel(Entity entity) {
@@ -191,7 +219,7 @@ public class BaseDaoImpl<T extends BaseEntity>
 		return result;
 	}
 
-	private List<T> createModels(List<Entity> list) {
+	private List<T> createModels(Collection<Entity> list) {
 		List<T> result = new ArrayList<T>();
 		for (Entity entity : list) {
 			result.add(createModel(entity));

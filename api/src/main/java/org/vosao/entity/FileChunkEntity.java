@@ -53,8 +53,8 @@ public class FileChunkEntity extends BaseEntityImpl {
     @Override
     public void save(Entity entity) {
     	super.save(entity);
-    	entity.setProperty("content", new Blob(content));
-    	entity.setProperty("index", index);
+    	entity.setUnindexedProperty("content", new Blob(content));
+    	entity.setUnindexedProperty("index", index);
     	entity.setProperty("fileId", fileId);
     }
 

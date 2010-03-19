@@ -49,7 +49,7 @@ public class LanguageEntity extends BaseEntityImpl {
 	public void save(Entity entity) {
 		super.save(entity);
 		entity.setProperty("code", code);
-		entity.setProperty("title", title);
+		entity.setUnindexedProperty("title", title);
 	}
 
 	public LanguageEntity(final String code, final String title) {

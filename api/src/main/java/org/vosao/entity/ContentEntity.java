@@ -55,7 +55,7 @@ public class ContentEntity extends BaseEntityImpl {
 		entity.setProperty("parentClass", parentClass);
 		entity.setProperty("parentKey", parentKey);
 		entity.setProperty("languageCode", languageCode);
-		entity.setProperty("content", new Text(content));
+		entity.setUnindexedProperty("content", new Text(content));
 	}
 
 	public ContentEntity(String parentClass, Long parentKey, 

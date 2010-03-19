@@ -50,7 +50,7 @@ public class MessageEntity extends BaseEntityImpl {
 		super.save(entity);
 		entity.setProperty("code", code);
 		entity.setProperty("languageCode", languageCode);
-		entity.setProperty("value", value);
+		entity.setUnindexedProperty("value", value);
 	}
 
 	public MessageEntity(final String code, final String languageCode, 

@@ -106,16 +106,16 @@ public class FieldEntity extends BaseEntityImpl {
 		super.save(entity);
 		entity.setProperty("formId", formId);
 		entity.setProperty("name", name);
-		entity.setProperty("title", title);
-		entity.setProperty("fieldType", fieldType.name());
-		entity.setProperty("mandatory", mandatory);
-		entity.setProperty("values", values);
-		entity.setProperty("defaultValue", defaultValue);
-		entity.setProperty("height", height);
-		entity.setProperty("width", width);
-		entity.setProperty("index", index);
-		entity.setProperty("regex", regex);
-		entity.setProperty("regexMessage", regexMessage);
+		entity.setUnindexedProperty("title", title);
+		entity.setUnindexedProperty("fieldType", fieldType.name());
+		entity.setUnindexedProperty("mandatory", mandatory);
+		entity.setUnindexedProperty("values", values);
+		entity.setUnindexedProperty("defaultValue", defaultValue);
+		entity.setUnindexedProperty("height", height);
+		entity.setUnindexedProperty("width", width);
+		entity.setUnindexedProperty("index", index);
+		entity.setUnindexedProperty("regex", regex);
+		entity.setUnindexedProperty("regexMessage", regexMessage);
 	}
 
 	public FieldType getFieldType() {

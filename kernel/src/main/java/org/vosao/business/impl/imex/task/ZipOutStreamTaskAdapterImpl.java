@@ -117,11 +117,6 @@ public class ZipOutStreamTaskAdapterImpl implements ZipOutStreamTaskAdapter {
 			TaskTimeoutException {
 		currentFile = entry.getName();
 		if (!isSkip(entry.getName())) {
-			/*logger.info(entry.getName());
-			try {
-				  Thread.sleep(1000L);    
-			}
-			catch (Exception e) {}*/
 			checkTimeout();
 			getOutStream().putNextEntry(entry);
 			entryOpen = true;

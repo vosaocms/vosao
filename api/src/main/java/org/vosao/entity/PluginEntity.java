@@ -62,14 +62,14 @@ public class PluginEntity extends BaseEntityImpl {
 	public void save(Entity entity) {
 		super.save(entity);
 		entity.setProperty("name", name);
-		entity.setProperty("title", title);
-		entity.setProperty("description", description);
-		entity.setProperty("website", website);
-		entity.setProperty("configStructure", new Text(configStructure));
-		entity.setProperty("configData", new Text(configData));
-		entity.setProperty("entryPointClass", entryPointClass);
-		entity.setProperty("configURL", configURL);
-		entity.setProperty("pageHeader", new Text(pageHeader));
+		entity.setUnindexedProperty("title", title);
+		entity.setUnindexedProperty("description", description);
+		entity.setUnindexedProperty("website", website);
+		entity.setUnindexedProperty("configStructure", new Text(configStructure));
+		entity.setUnindexedProperty("configData", new Text(configData));
+		entity.setUnindexedProperty("entryPointClass", entryPointClass);
+		entity.setUnindexedProperty("configURL", configURL);
+		entity.setUnindexedProperty("pageHeader", new Text(pageHeader));
 	}
 
 	public PluginEntity(String name, String title, String configStructure,

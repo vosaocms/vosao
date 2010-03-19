@@ -47,9 +47,9 @@ public class TemplateEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("title", title);
+		entity.setUnindexedProperty("title", title);
 		entity.setProperty("url", url);
-		entity.setProperty("content", new Text(content));
+		entity.setUnindexedProperty("content", new Text(content));
 	}
 
 	public TemplateEntity(String title, String content, String url) {

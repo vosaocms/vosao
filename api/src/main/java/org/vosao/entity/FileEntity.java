@@ -58,12 +58,12 @@ public class FileEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("title", title);
+		entity.setUnindexedProperty("title", title);
 		entity.setProperty("filename", filename);
 		entity.setProperty("folderId", folderId);
-		entity.setProperty("mimeType", mimeType);
-		entity.setProperty("lastModifiedTime", lastModifiedTime);
-		entity.setProperty("size", size);
+		entity.setUnindexedProperty("mimeType", mimeType);
+		entity.setUnindexedProperty("lastModifiedTime", lastModifiedTime);
+		entity.setUnindexedProperty("size", size);
 	}
 
 	public FileEntity(String aTitle, String aName, Long aFolderId,

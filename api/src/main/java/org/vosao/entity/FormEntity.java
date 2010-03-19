@@ -66,13 +66,13 @@ public class FormEntity extends BaseEntityImpl {
 	public void save(Entity entity) {
 		super.save(entity);
 		entity.setProperty("name", name);
-		entity.setProperty("email", email);
-		entity.setProperty("title", title);
-		entity.setProperty("letterSubject", letterSubject);
-		entity.setProperty("sendButtonTitle", sendButtonTitle);
-		entity.setProperty("resetButtonTitle", resetButtonTitle);
-		entity.setProperty("showResetButton", showResetButton);
-		entity.setProperty("enableCaptcha", enableCaptcha);
+		entity.setUnindexedProperty("email", email);
+		entity.setUnindexedProperty("title", title);
+		entity.setUnindexedProperty("letterSubject", letterSubject);
+		entity.setUnindexedProperty("sendButtonTitle", sendButtonTitle);
+		entity.setUnindexedProperty("resetButtonTitle", resetButtonTitle);
+		entity.setUnindexedProperty("showResetButton", showResetButton);
+		entity.setUnindexedProperty("enableCaptcha", enableCaptcha);
 	}
 
 	public String getName() {

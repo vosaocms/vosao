@@ -34,4 +34,10 @@ public interface FileBusiness {
 	byte[] readFile(String filename);
 	
 	FileEntity findFile(String filename);
+	
+	/**
+	 * Remove file by full pathname.
+	 * @param filename - full file pathname
+	 */
+	void remove(String filename);
 }

@@ -92,8 +92,8 @@ public class ExportServlet extends BaseSpringServlet {
 		String downloadFile = "exportTheme.vz";
 		response.addHeader("Content-Disposition", "attachment; filename=\"" 
 				+ downloadFile + "\"");
-		send(response, getImportExportBusiness().createExportFile(
-				selectedTemplates));
+		//send(response, getImportExportBusiness().createExportFile(
+		//		selectedTemplates));
 	}
 
 	private void exportFolder(HttpServletRequest request,
@@ -114,7 +114,7 @@ public class ExportServlet extends BaseSpringServlet {
 		String downloadFile = "exportFolder.vz";
 		response.addHeader("Content-Disposition", "attachment; filename=\"" 
 				+ downloadFile + "\"");
-		send(response, getImportExportBusiness().createExportFile(folder));
+		//send(response, getImportExportBusiness().createExportFile(folder));
 	}
 	
 	private void exportSite(HttpServletRequest request,
@@ -124,7 +124,7 @@ public class ExportServlet extends BaseSpringServlet {
 		String downloadFile = "exportSite.vz";
 		response.addHeader("Content-Disposition", "attachment; filename=\"" 
 				+ downloadFile + "\"");
-		send(response, getImportExportBusiness().createSiteExportFile());
+		//send(response, getImportExportBusiness().createSiteExportFile());
 	}
 	
 	private void send(HttpServletResponse response, byte[] data) 
@@ -147,7 +147,7 @@ public class ExportServlet extends BaseSpringServlet {
 		String downloadFile = "exportFullSite.vz";
 		response.addHeader("Content-Disposition", "attachment; filename=\"" 
 				+ downloadFile + "\"");
-		send(response, getImportExportBusiness().createFullExportFile());
+		//send(response, getImportExportBusiness().createFullExportFile());
 	}
 	
 	private void exportResources(HttpServletRequest request,
@@ -157,7 +157,7 @@ public class ExportServlet extends BaseSpringServlet {
 		String downloadFile = "exportResources.vz";
 		response.addHeader("Content-Disposition", "attachment; filename=\"" 
 				+ downloadFile + "\"");
-		send(response, getImportExportBusiness().createResourcesExportFile());
+		//send(response, getImportExportBusiness().createResourcesExportFile());
 	}
 	
 }

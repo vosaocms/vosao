@@ -48,7 +48,7 @@ public class LanguageFilter extends AbstractFilter implements Filter {
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
     	if (getBusiness().getLanguage(httpRequest) == null) {
     		String language = request.getLocale().getLanguage();
-    		logger.info("Initial language set " + language);
+    		//logger.info("Initial language set " + language);
     		getBusiness().setLanguage(language, httpRequest);
     	}
     	if (httpRequest.getParameter("language") != null) {
@@ -56,7 +56,7 @@ public class LanguageFilter extends AbstractFilter implements Filter {
     		LanguageEntity language = getDao().getLanguageDao().getByCode(
     				languageCode);
     		if (language != null) {
-    			logger.info("Set language " + language + " by parameter");
+    			//logger.info("Set language " + language + " by parameter");
     			getBusiness().setLanguage(languageCode, httpRequest);
     		}
     	}

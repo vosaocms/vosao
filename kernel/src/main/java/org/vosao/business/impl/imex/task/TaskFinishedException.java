@@ -19,38 +19,13 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.impl.imex;
+package org.vosao.business.impl.imex.task;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.vosao.business.Business;
-import org.vosao.business.impl.imex.task.DaoTaskAdapter;
-import org.vosao.dao.Dao;
+import org.vosao.dao.DaoTaskException;
 
-public abstract class AbstractExporter {
-
-	protected static final Log logger = LogFactory.getLog(AbstractExporter.class);
-
-	private ExporterFactory exporterFactory;
+public class TaskFinishedException extends DaoTaskException {
 	
-	public AbstractExporter(ExporterFactory factory) {
-		exporterFactory = factory;
+	public TaskFinishedException() {
+		super("Task finished");
 	}
-
-	public Dao getDao() {
-		return getBusiness().getDao();
-	}
-
-	public Business getBusiness() {
-		return getExporterFactory().getBusiness(); 
-	}
-	
-	public DaoTaskAdapter getDaoTaskAdapter() {
-		return getExporterFactory().getDaoTaskAdapter();
-	}
-	
-	public ExporterFactory getExporterFactory() {
-		return exporterFactory;
-	}
-	
 }

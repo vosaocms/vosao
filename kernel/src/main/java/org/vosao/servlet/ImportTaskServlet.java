@@ -34,8 +34,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.dom4j.DocumentException;
 import org.vosao.business.CurrentUser;
 import org.vosao.business.ImportExportBusiness;
-import org.vosao.business.impl.imex.dao.DaoTaskAdapter;
-import org.vosao.business.impl.imex.dao.DaoTaskFinishedException;
+import org.vosao.business.impl.imex.task.DaoTaskAdapter;
+import org.vosao.business.impl.imex.task.TaskFinishedException;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.helper.UserHelper;
@@ -43,6 +43,16 @@ import org.vosao.utils.FolderUtil;
 
 import com.google.appengine.api.labs.taskqueue.Queue;
 
+/**
+ * In 25sec task imports data from file located in /tmp folder with name
+ * stored in request parameters.
+ * Parameters:
+ *   filename - file for import located in /tmp folder.
+ *   start - database save counter to start from inside current file
+ *   currentFile - file from imported archive to strat import from. 
+ * @author oleynik
+ *
+ */
 public class ImportTaskServlet extends BaseSpringServlet {
 
 	public static final String IMPORT_TASK_URL = "/_ah/queue/import";
@@ -101,7 +111,7 @@ public class ImportTaskServlet extends BaseSpringServlet {
 			}
 			getDao().getFileDao().remove(file.getId());
 			logger.info("Import finished. " + getDaoTaskAdapter().getEnd());
-		} catch (DaoTaskFinishedException e) {
+		} catch (TaskFinishedException e) {
 			Queue queue = getSystemService().getQueue("import");
 			queue.add(url(IMPORT_TASK_URL).param("start",
 					String.valueOf(getDaoTaskAdapter().getEnd())).param(
@@ -158,7 +168,7 @@ public class ImportTaskServlet extends BaseSpringServlet {
 			}
 			getDao().getFileDao().remove(file.getId());
 			logger.info("Import finished. " + getDaoTaskAdapter().getEnd());
-		} catch (DaoTaskFinishedException e) {
+		} catch (TaskFinishedException e) {
 			Queue queue = getSystemService().getQueue("import");
 			queue.add(url(IMPORT_TASK_URL).param("start",
 					String.valueOf(getDaoTaskAdapter().getEnd())).param(

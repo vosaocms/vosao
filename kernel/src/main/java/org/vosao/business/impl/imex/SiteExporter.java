@@ -33,6 +33,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.business.imex.task.TaskTimeoutException;
+import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FolderEntity;
 import org.vosao.utils.FolderUtil;
@@ -52,16 +54,31 @@ public class SiteExporter extends AbstractExporter {
 		return true;
 	}
 
-	public void exportSite(final ZipOutputStream out) throws IOException {
-		saveFile(out, "_users.xml", getUserExporter().createUsersXML());
-		saveFile(out, "_groups.xml", getGroupExporter().createGroupsXML());
-		saveFile(out, "_config.xml", getConfigExporter().createConfigXML());
-		saveFile(out, "_structures.xml", getStructureExporter()
+	public void exportSite(final ZipOutStreamTaskAdapter out) 
+			throws IOException, TaskTimeoutException {
+		if (!out.isSkip("_users.xml")) {
+			saveFile(out, "_users.xml", getUserExporter().createUsersXML());
+		}
+		if (!out.isSkip("_groups.xml")) {
+			saveFile(out, "_groups.xml", getGroupExporter().createGroupsXML());
+		}
+		if (!out.isSkip("_config.xml")) {
+			saveFile(out, "_config.xml", getConfigExporter().createConfigXML());
+		}
+		if (!out.isSkip("_structures.xml")) {
+			saveFile(out, "_structures.xml", getStructureExporter()
 				.createStructuresXML());
-		saveFile(out, "_forms.xml", getFormExporter().createFormsXML());
-		saveFile(out, "_messages.xml", getMessagesExporter()
+		}
+		if (!out.isSkip("_forms.xml")) {
+			saveFile(out, "_forms.xml", getFormExporter().createFormsXML());
+		}
+		if (!out.isSkip("_messages.xml")) {
+			saveFile(out, "_messages.xml", getMessagesExporter()
 				.createMessagesXML());
-		saveFile(out, "_plugins.xml", getPluginExporter().createPluginsXML());
+		}
+		if (!out.isSkip("_plugins.xml")) {
+			saveFile(out, "_plugins.xml", getPluginExporter().createPluginsXML());
+		}
 		TreeItemDecorator<FolderEntity> page = getBusiness().getFolderBusiness()
 				.findFolderByPath(getBusiness().getFolderBusiness().getTree(), 
 						"/page");
@@ -70,8 +87,8 @@ public class SiteExporter extends AbstractExporter {
 		}
 	}
 
-	private void saveFile(final ZipOutputStream out, String name, 
-			String content) throws IOException {
+	private void saveFile(final ZipOutStreamTaskAdapter out, String name, 
+			String content) throws IOException, TaskTimeoutException {
 		out.putNextEntry(new ZipEntry(name));
 		out.write(content.getBytes("UTF-8"));
 		out.closeEntry();

@@ -19,13 +19,36 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.impl.imex.dao;
+package org.vosao.business.imex.task;
 
-import org.vosao.dao.DaoTaskException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
-public class DaoTaskFinishedException extends DaoTaskException {
-	
-	public DaoTaskFinishedException() {
-		super("Task finished");
-	}
+public interface ZipOutStreamTaskAdapter {
+
+	ZipOutputStream getOutStream();
+
+	void setOutStream(ZipOutputStream out);
+
+	String getStartFile();
+
+	void setStartFile(String startFile);
+
+	String getCurrentFile();
+
+	void setCurrentFile(String currentFile);
+
+	boolean isSkip(String filePath);
+
+	void putNextEntry(ZipEntry entry) throws IOException, TaskTimeoutException;
+
+	void closeEntry() throws IOException;
+
+	void write(byte[] data) throws IOException;
+
+	ByteArrayOutputStream getOutData();
+
+	void setOutData(ByteArrayOutputStream outData);
 }

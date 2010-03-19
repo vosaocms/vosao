@@ -28,11 +28,13 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.business.CurrentUser;
 import org.vosao.business.FileBusiness;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
+import org.vosao.entity.FolderPermissionEntity;
 import org.vosao.servlet.MimeType;
 import org.vosao.utils.FolderUtil;
 
@@ -133,6 +135,31 @@ public class FileBusinessImpl extends AbstractBusinessImpl
 		catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	@Override
+	public void remove(String filename) {
+		String path = FolderUtil.getFilePath(filename);
+		String name = FolderUtil.getFileName(filename);
+		TreeItemDecorator<FolderEntity> folder = getFolderBusiness()
+				.findFolderByPath(getFolderBusiness().getTree(), path);
+		if (folder == null) {
+			logger.error("Folder not found. " + path);
+			return;
+		}
+		FileEntity file = getDao().getFileDao().getByName(folder.getEntity()
+				.getId(), name);
+		if (file == null) {
+			logger.error("File not found. " + filename);
+			return;
+		}
+		FolderPermissionEntity perm = getFolderBusiness()
+				.getFolderPermissionBusiness().getPermission(folder.getEntity(), 
+						CurrentUser.getInstance());
+		if (perm.isChangeGranted()) {
+			getDao().getFileDao().remove(file.getId());
+			getSystemService().getFileCache().remove(filename);
 		}
 	}
 	

@@ -19,7 +19,7 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.impl.imex.dao;
+package org.vosao.business.impl.imex.task;
 
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.CommentEntity;

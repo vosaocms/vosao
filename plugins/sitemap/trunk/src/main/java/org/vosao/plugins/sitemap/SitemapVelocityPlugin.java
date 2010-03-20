@@ -61,6 +61,7 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 			VelocityContext context = new VelocityContext();
 			context.put("root", root);
 			context.put("config", getConfig(plugin));
+			context.put("languageCode", getBusiness().getLanguage());
 			return getBusiness().getSystemService().render(template, context);
 		}
 		catch (Exception e) {

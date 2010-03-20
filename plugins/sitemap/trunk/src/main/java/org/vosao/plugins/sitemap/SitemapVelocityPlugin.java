@@ -21,7 +21,9 @@
 
 package org.vosao.plugins.sitemap;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -38,6 +40,7 @@ import org.vosao.business.vo.PluginPropertyVO;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PluginEntity;
 import org.vosao.utils.ParamUtil;
+import org.vosao.utils.StrUtil;
 import org.vosao.utils.StreamUtil;
 import org.vosao.velocity.plugin.AbstractVelocityPlugin;
 
@@ -54,7 +57,8 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 		try {
 			PluginEntity plugin = getDao().getPluginDao().getByName("sitemap");
 			TreeItemDecorator<PageEntity> root = getBusiness().getPageBusiness()
-				.getTree();
+					.getTree();
+			filterExcude(plugin, root);
 			String template = StreamUtil.getTextResource(
 				SitemapVelocityPlugin.class.getClassLoader(), 
 				"org/vosao/plugins/sitemap/sitemap.vm");
@@ -68,6 +72,42 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 			e.printStackTrace();
 			return e.getMessage();
 		}
+	}
+	
+	private void filterExcude(PluginEntity plugin, 
+			TreeItemDecorator<PageEntity> root) {
+		if (!StringUtils.isEmpty(plugin.getConfigData())) {
+			try {
+				Document doc = DocumentHelper.parseText(plugin.getConfigData());
+				Element rootElement = doc.getRootElement();
+				String exclude = rootElement.elementText("exclude");
+				List<String> urls = StrUtil.fromCSV(exclude);
+				filterChildren(root, urls);
+			}
+			catch (DocumentException e) {
+				logger.error("Sitemap plugin config DocumentException" + e.getMessage());
+			}
+		}
+	}
+
+	private void filterChildren(TreeItemDecorator<PageEntity> page,
+			List<String> urls) {
+		List<TreeItemDecorator<PageEntity>> children = 
+			new ArrayList<TreeItemDecorator<PageEntity>>();
+		for (TreeItemDecorator<PageEntity> child : page.getChildren()) {
+			boolean excluded = false;
+			for (String url : urls) {
+				if (child.getEntity().getFriendlyURL().equals(url)) {
+					excluded = true;
+					break;
+				}
+			}
+			if (!excluded) {
+				children.add(child);
+				filterChildren(child, urls);
+			}
+		}
+		page.setChildren(children);
 	}
 	
 	private Map<String, Object> getConfig(PluginEntity plugin) {

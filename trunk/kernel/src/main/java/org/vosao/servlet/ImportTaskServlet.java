@@ -35,7 +35,7 @@ import org.dom4j.DocumentException;
 import org.vosao.business.CurrentUser;
 import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.impl.imex.task.DaoTaskAdapter;
-import org.vosao.business.impl.imex.task.TaskFinishedException;
+import org.vosao.business.impl.imex.task.DaoTaskTimeoutException;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.helper.UserHelper;
@@ -111,7 +111,7 @@ public class ImportTaskServlet extends BaseSpringServlet {
 			}
 			getDao().getFileDao().remove(file.getId());
 			logger.info("Import finished. " + getDaoTaskAdapter().getEnd());
-		} catch (TaskFinishedException e) {
+		} catch (DaoTaskTimeoutException e) {
 			Queue queue = getSystemService().getQueue("import");
 			queue.add(url(IMPORT_TASK_URL).param("start",
 					String.valueOf(getDaoTaskAdapter().getEnd())).param(
@@ -168,7 +168,7 @@ public class ImportTaskServlet extends BaseSpringServlet {
 			}
 			getDao().getFileDao().remove(file.getId());
 			logger.info("Import finished. " + getDaoTaskAdapter().getEnd());
-		} catch (TaskFinishedException e) {
+		} catch (DaoTaskTimeoutException e) {
 			Queue queue = getSystemService().getQueue("import");
 			queue.add(url(IMPORT_TASK_URL).param("start",
 					String.valueOf(getDaoTaskAdapter().getEnd())).param(

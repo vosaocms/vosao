@@ -23,6 +23,7 @@ package org.vosao.business.impl.imex.task;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.business.imex.task.TaskTimeoutException;
 import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.CommentEntity;
@@ -78,15 +79,15 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 		return current;
 	}
 	
-	public void reset() {
+	public void resetCounters() {
 		current = 0;
 		start = 0;
 	}
 	
 	private boolean isSkip() throws DaoTaskException {
 		current++;
-		if (System.currentTimeMillis() - startTime > 24000) {
-			throw new TaskFinishedException();
+		if (System.currentTimeMillis() - startTime > 25000) {
+			throw new DaoTaskTimeoutException();
 		}
 		if (current < start) {
 			return true;

@@ -21,9 +21,6 @@
 
 package org.vosao.service.vo;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.vosao.entity.FolderPermissionEntity;
 import org.vosao.entity.GroupEntity;
 
@@ -42,7 +39,8 @@ public class FolderPermissionVO {
 	}
 
 	public String getId() {
-		return folderPermission.getId().toString();
+		return folderPermission.getId() == null ? "null" : 
+			folderPermission.getId().toString();
 	}
 
 	public boolean isInherited() {

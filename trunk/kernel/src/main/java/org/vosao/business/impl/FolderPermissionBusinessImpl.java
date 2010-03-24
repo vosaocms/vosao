@@ -200,7 +200,7 @@ public class FolderPermissionBusinessImpl extends AbstractBusinessImpl
 			//logger.info(pagePermissions.size());
 			for (ContentPermissionEntity perm : pagePermissions) {
 				FolderPermissionEntity p = new FolderPermissionEntity();
-				p.setKey(null);
+				p.setId(-perm.getId());
 				p.setPermission(FolderPermissionType
 						.fromContentPermissionType(perm.getPermission()));
 				p.setFolderId(folder.getId());

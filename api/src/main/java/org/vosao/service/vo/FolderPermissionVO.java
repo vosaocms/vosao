@@ -42,7 +42,8 @@ public class FolderPermissionVO {
 	}
 
 	public String getId() {
-		return folderPermission.getId().toString();
+		return folderPermission.getId() == null ? "null" : 
+			folderPermission.getId().toString();
 	}
 
 	public boolean isInherited() {

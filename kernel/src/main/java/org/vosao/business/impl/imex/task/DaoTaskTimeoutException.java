@@ -23,9 +23,9 @@ package org.vosao.business.impl.imex.task;
 
 import org.vosao.dao.DaoTaskException;
 
-public class TaskFinishedException extends DaoTaskException {
+public class DaoTaskTimeoutException extends DaoTaskException {
 	
-	public TaskFinishedException() {
+	public DaoTaskTimeoutException() {
 		super("Task finished");
 	}
 }

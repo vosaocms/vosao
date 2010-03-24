@@ -124,7 +124,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 							data.toByteArray()));
 				}
 			}
-			getDaoTaskAdapter().reset();
+			getDaoTaskAdapter().resetCounters();
 		}
 		clearResourcesCache(result);
 	}
@@ -273,7 +273,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 							data.toByteArray()));
 				}
 			}
-			getDaoTaskAdapter().reset();
+			getDaoTaskAdapter().resetCounters();
 		}
 		clearResourcesCache(result);
 	}

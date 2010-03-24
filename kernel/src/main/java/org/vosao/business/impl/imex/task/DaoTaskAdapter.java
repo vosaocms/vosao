@@ -51,7 +51,7 @@ public interface DaoTaskAdapter {
 
 	int getEnd();
 	
-	void reset();
+	void resetCounters();
 
 	String getCurrentFile();
 

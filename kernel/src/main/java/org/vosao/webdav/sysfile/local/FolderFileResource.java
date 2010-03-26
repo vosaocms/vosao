@@ -21,19 +21,11 @@
 
 package org.vosao.webdav.sysfile.local;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
-import java.util.Map;
 
 import org.vosao.business.Business;
 import org.vosao.entity.FolderEntity;
 import org.vosao.webdav.AbstractFileResource;
-
-import com.bradmcevoy.http.Range;
-import com.bradmcevoy.http.exceptions.BadRequestException;
-import com.bradmcevoy.http.exceptions.NotAuthorizedException;
 
 public class FolderFileResource extends AbstractFileResource {
 
@@ -42,23 +34,10 @@ public class FolderFileResource extends AbstractFileResource {
 	public FolderFileResource(Business aBusiness, FolderEntity aFolder) {
 		super(aBusiness, "_folder.xml", new Date());
 		setContentType("text/xml");
-		setData(new byte[0]);
 		folder = aFolder;
-	}
-
-	@Override
-	public void sendContent(OutputStream out, Range range,
-			Map<String, String> params, String aContentType) throws IOException,
-			NotAuthorizedException, BadRequestException {
-		createXML();
-		super.sendContent(out, range, params, aContentType);
-	}
-
-	private void createXML() throws UnsupportedEncodingException {
-		String xml = getBusiness().getImportExportBusiness()
+		setData(getBusiness().getImportExportBusiness()
 				.getExporterFactory().getResourceExporter().getFolderSystemFile(
-						folder);
-		setData(xml.getBytes("UTF-8"));
+						folder));
 	}
 
 }

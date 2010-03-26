@@ -21,34 +21,18 @@
 
 package org.vosao.webdav.sysfile.global;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Date;
-import java.util.Map;
 
 import org.vosao.business.Business;
 import org.vosao.webdav.AbstractFileResource;
-
-import com.bradmcevoy.http.Range;
-import com.bradmcevoy.http.exceptions.BadRequestException;
-import com.bradmcevoy.http.exceptions.NotAuthorizedException;
 
 public class SeourlsFileResource extends AbstractFileResource {
 
 	public SeourlsFileResource(Business aBusiness, String name) {
 		super(aBusiness, name, new Date());
 		setContentType("text/xml");
-		setData(new byte[0]);
-	}
-
-	@Override
-	public void sendContent(OutputStream out, Range range,
-			Map<String, String> params, String aContentType) throws IOException,
-			NotAuthorizedException, BadRequestException {
-		String xml = getBusiness().getImportExportBusiness().getExporterFactory()
-				.getSeoUrlExporter().createXML();
-		setData(xml.getBytes("UTF-8"));
-		super.sendContent(out, range, params, aContentType);
+		setData(getBusiness().getImportExportBusiness().getExporterFactory()
+				.getSeoUrlExporter().createXML());
 	}
 
 }

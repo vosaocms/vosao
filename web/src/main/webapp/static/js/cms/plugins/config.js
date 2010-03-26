@@ -54,7 +54,7 @@ function showPlugins() {
     		+ plugin.title + '</a></td><td>' + plugin.name 
             + '</td><td>' + plugin.description + '</td>'
             + '<td>' + plugin.website + '</td>'
-            + '<td><a href="#" onclick="onRemove(' + i + ')">\
+            + '<td><a title="Uninstall" href="#" onclick="onRemove(' + i + ')">\
             <img src="/static/images/02_x.png"/></a></td></tr>';
     });
     $('#plugins').html(html + '</table>');

@@ -99,4 +99,8 @@ public interface Business {
 
 	PluginResourceBusiness getPluginResourceBusiness();
 	void setPluginResourceBusiness(final PluginResourceBusiness bean);
+	
+	ImportExportBusiness getImportExportBusiness();
+	void setImportExportBusiness(final ImportExportBusiness bean);
+
 }

@@ -27,9 +27,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Map;
 
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
 import org.vosao.business.Business;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.webdav.AbstractFileResource;
@@ -58,12 +55,10 @@ public class TemplateFileResource extends AbstractFileResource {
 	}
 
 	private void createXML() throws UnsupportedEncodingException {
-		Document doc = DocumentHelper.createDocument();
-		Element e = doc.addElement("template");
-		e.addElement("title").addText(template.getTitle());
-		e.addElement("url").addText(template.getUrl());
-		e.addElement("content").addText(template.getContent());
-		setData(doc.asXML().getBytes("UTF-8"));
+		String xml = getBusiness().getImportExportBusiness()
+				.getExporterFactory().getThemeExporter().createThemeExportXML(
+						template);
+		setData(xml.getBytes("UTF-8"));
 	}
 
 }

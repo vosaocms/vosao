@@ -19,39 +19,17 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.impl.imex;
+package org.vosao.business.imex;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.vosao.business.Business;
-import org.vosao.business.imex.ExporterFactory;
-import org.vosao.business.imex.task.DaoTaskAdapter;
-import org.vosao.dao.Dao;
+import org.dom4j.Element;
 
-public abstract class AbstractExporter {
+/**
+ * @author Alexander Oleynik
+ */
+public interface PagePermissionExporter {
 
-	protected static final Log logger = LogFactory.getLog(AbstractExporter.class);
-
-	private ExporterFactory exporterFactory;
+	void createPagePermissionsXML(final Element permissionsElement, 
+			final String friendlyUrl);
 	
-	public AbstractExporter(ExporterFactory factory) {
-		exporterFactory = factory;
-	}
-
-	public Dao getDao() {
-		return getBusiness().getDao();
-	}
-
-	public Business getBusiness() {
-		return getExporterFactory().getBusiness(); 
-	}
-	
-	public DaoTaskAdapter getDaoTaskAdapter() {
-		return getExporterFactory().getDaoTaskAdapter();
-	}
-	
-	public ExporterFactory getExporterFactory() {
-		return exporterFactory;
-	}
-	
+	void readPagePermissions(Element permissionsElement, final String url);
 }

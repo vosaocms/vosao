@@ -257,6 +257,7 @@
         <property name="pluginResourceBusiness" ref="pluginResourceBusiness"/>
         
         <property name="searchEngine" ref="searchEngine"/>
+        <property name="importExportBusiness" ref="importExportBusiness"/>
     </bean>
 
     <bean id="searchEngine" class="org.vosao.search.impl.SearchEngineImpl">  

@@ -19,39 +19,30 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.impl.imex;
+package org.vosao.business.imex;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.vosao.business.Business;
-import org.vosao.business.imex.ExporterFactory;
-import org.vosao.business.imex.task.DaoTaskAdapter;
-import org.vosao.dao.Dao;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.vosao.dao.DaoTaskException;
+import org.vosao.entity.FormEntity;
 
-public abstract class AbstractExporter {
+public interface FormExporter {
 
-	protected static final Log logger = LogFactory.getLog(AbstractExporter.class);
-
-	private ExporterFactory exporterFactory;
+	String createFormsXML();
 	
-	public AbstractExporter(ExporterFactory factory) {
-		exporterFactory = factory;
-	}
+	void readForms(Element formsElement) throws DaoTaskException;
+	
+	void readFields(Element formElement, FormEntity form) 
+			throws DaoTaskException;
 
-	public Dao getDao() {
-		return getBusiness().getDao();
-	}
-
-	public Business getBusiness() {
-		return getExporterFactory().getBusiness(); 
-	}
+	void readFormConfig(Element configElement) throws DaoTaskException;
 	
-	public DaoTaskAdapter getDaoTaskAdapter() {
-		return getExporterFactory().getDaoTaskAdapter();
-	}
-	
-	public ExporterFactory getExporterFactory() {
-		return exporterFactory;
-	}
-	
+	/**
+	 * Read and import data from _forms.xml file.
+	 * @param xml - _forms.xml content.
+	 * @throws DocumentException
+	 * @throws DaoTaskException
+	 */
+	void readFormsFile(String xml) throws DocumentException, 
+			DaoTaskException;
 }

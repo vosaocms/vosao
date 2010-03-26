@@ -34,13 +34,14 @@ import org.dom4j.DocumentException;
 import org.vosao.business.Business;
 import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.business.imex.ExporterFactory;
+import org.vosao.business.imex.ResourceExporter;
+import org.vosao.business.imex.SiteExporter;
+import org.vosao.business.imex.ThemeExporter;
+import org.vosao.business.imex.task.DaoTaskAdapter;
 import org.vosao.business.imex.task.TaskTimeoutException;
 import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
-import org.vosao.business.impl.imex.ExporterFactory;
-import org.vosao.business.impl.imex.ResourceExporter;
-import org.vosao.business.impl.imex.SiteExporter;
-import org.vosao.business.impl.imex.ThemeExporter;
-import org.vosao.business.impl.imex.task.DaoTaskAdapter;
+import org.vosao.business.impl.imex.ExporterFactoryImpl;
 import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FolderEntity;
@@ -57,9 +58,9 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 	private DaoTaskAdapter daoTaskAdapter;
 	private ExporterFactory exporterFactory;
 
-	private ExporterFactory getExporterFactory() {
+	public ExporterFactory getExporterFactory() {
 		if (exporterFactory == null) {
-			exporterFactory = new ExporterFactory(getBusiness(),
+			exporterFactory = new ExporterFactoryImpl(getBusiness(),
 					getDaoTaskAdapter());
 		}
 		return exporterFactory;

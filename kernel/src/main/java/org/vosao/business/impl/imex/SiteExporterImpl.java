@@ -26,22 +26,34 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.business.imex.ConfigExporter;
+import org.vosao.business.imex.FolderExporter;
+import org.vosao.business.imex.FormExporter;
+import org.vosao.business.imex.GroupExporter;
+import org.vosao.business.imex.MessagesExporter;
+import org.vosao.business.imex.PageExporter;
+import org.vosao.business.imex.PluginExporter;
+import org.vosao.business.imex.ResourceExporter;
+import org.vosao.business.imex.SiteExporter;
+import org.vosao.business.imex.StructureExporter;
+import org.vosao.business.imex.ThemeExporter;
+import org.vosao.business.imex.UserExporter;
 import org.vosao.business.imex.task.TaskTimeoutException;
 import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FolderEntity;
 import org.vosao.utils.FolderUtil;
 
-public class SiteExporter extends AbstractExporter {
+public class SiteExporterImpl extends AbstractExporter 
+		implements SiteExporter {
 
-	public SiteExporter(ExporterFactory factory) {
+	public SiteExporterImpl(ExporterFactoryImpl factory) {
 		super(factory);
 	}
 

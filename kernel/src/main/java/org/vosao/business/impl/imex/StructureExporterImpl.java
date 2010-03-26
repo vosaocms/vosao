@@ -28,6 +28,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.vosao.business.imex.StructureExporter;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.StructureTemplateEntity;
@@ -36,20 +37,26 @@ import org.vosao.enums.StructureTemplateType;
 /**
  * @author Alexander Oleynik
  */
-public class StructureExporter extends AbstractExporter {
+public class StructureExporterImpl extends AbstractExporter 
+		implements StructureExporter {
 
-	public StructureExporter(ExporterFactory factory) {
+	public StructureExporterImpl(ExporterFactoryImpl factory) {
 		super(factory);
 	}
 	
+	@Override
 	public String createStructuresXML() {
 		Document doc = DocumentHelper.createDocument();
 		Element structuresElement = doc.addElement("structures");
+		createStructuresXML(structuresElement);
+		return doc.asXML();
+	}
+
+	private void createStructuresXML(Element structuresElement) {
 		List<StructureEntity> list = getDao().getStructureDao().select();
 		for (StructureEntity structure : list) {
 			createStructureXML(structuresElement, structure);
 		}
-		return doc.asXML();
 	}
 
 	private void createStructureXML(Element structuresElement, 

@@ -25,30 +25,13 @@ import org.vosao.business.Business;
 import org.vosao.dao.Dao;
 import org.vosao.global.SystemService;
 
-public class AbstractServiceBean {
+public interface AbstractServiceBean {
 
-	private Business business;
-	
-	public AbstractServiceBean() {
-	}
+	Business getBusiness();
 
-	public AbstractServiceBean(Business aBusiness) {
-		business = aBusiness;
-	}
+	void setBusiness(Business bean);
 	
-	public Business getBusiness() {
-		return business;
-	}
+	Dao getDao();
 	
-	public void setBusiness(Business bean) {
-		business = bean;
-	}
-	
-	public Dao getDao() {
-		return getBusiness().getDao();
-	}
-	
-	public SystemService getSystemService() {
-		return getBusiness().getSystemService();
-	}
+	SystemService getSystemService();
 }

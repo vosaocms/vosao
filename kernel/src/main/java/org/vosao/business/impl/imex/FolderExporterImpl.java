@@ -22,66 +22,22 @@
 package org.vosao.business.impl.imex;
 
 import java.util.Iterator;
-import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.dom4j.Element;
-import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.business.imex.FolderExporter;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FolderEntity;
-import org.vosao.entity.FolderPermissionEntity;
 import org.vosao.entity.GroupEntity;
 import org.vosao.enums.FolderPermissionType;
 
 /**
  * @author Alexander Oleynik
  */
-public class FolderExporter extends AbstractExporter {
+public class FolderExporterImpl extends AbstractExporter 
+		implements FolderExporter {
 
-	private static final Log logger = LogFactory.getLog(
-			FolderExporter.class);
-
-	public FolderExporter(ExporterFactory factory) {
+	public FolderExporterImpl(ExporterFactoryImpl factory) {
 		super(factory);
-	}
-	
-	public void createFoldersXML(final Element siteElement) {
-		Element foldersElement = siteElement.addElement("folders");
-		TreeItemDecorator<FolderEntity> root = getBusiness().getFolderBusiness()
-				.getTree();
-		createFolderXML(foldersElement, root);		
-	}
-
-	private void createFolderXML(final Element foldersElement, 
-			final TreeItemDecorator<FolderEntity> folder) {
-		Element folderElement = foldersElement.addElement("folder");
-		folderElement.addElement("name").setText(folder.getEntity().getName());
-		folderElement.addElement("title").setText(folder.getEntity().getTitle());
-		createFolderPermissionsXML(folderElement, folder.getEntity());
-		for (TreeItemDecorator<FolderEntity> child : folder.getChildren()) {
-			createFolderXML(folderElement, child);
-		}
-	}
-	
-	private void createFolderPermissionsXML(final Element folderElement, 
-			final FolderEntity folder) {
-		Element permissionsElement = folderElement.addElement("permissions");
-		List<FolderPermissionEntity> list = getDao().getFolderPermissionDao()
-				.selectByFolder(folder.getId());
-		for (FolderPermissionEntity permission : list) {
-			createFolderPermissionXML(permissionsElement, permission);
-		}
-	}
-
-	private void createFolderPermissionXML(Element permissionsElement, 
-			final FolderPermissionEntity permission) {
-		GroupEntity group = getDao().getGroupDao().getById(
-				permission.getGroupId());
-		Element permissionElement = permissionsElement.addElement("permission");
-		permissionElement.addElement("group").setText(group.getName());
-		permissionElement.addElement("permissionType").setText(
-				permission.getPermission().name());
 	}
 	
 	public void readFolders(Element foldersElement) throws DaoTaskException {

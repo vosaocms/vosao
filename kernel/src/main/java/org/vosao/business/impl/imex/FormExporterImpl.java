@@ -28,6 +28,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.vosao.business.imex.FormExporter;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormConfigEntity;
@@ -35,23 +36,29 @@ import org.vosao.entity.FormEntity;
 import org.vosao.enums.FieldType;
 import org.vosao.utils.XmlUtil;
 
-public class FormExporter extends AbstractExporter {
+public class FormExporterImpl extends AbstractExporter 
+		implements FormExporter {
 
-	public FormExporter(ExporterFactory factory) {
+	public FormExporterImpl(ExporterFactoryImpl factory) {
 		super(factory);
 	}
 	
+	@Override
 	public String createFormsXML() {
 		Document doc = DocumentHelper.createDocument();
 		Element formsElement = doc.addElement("forms");
+		createFormsXML(formsElement);
+		return doc.asXML();
+	}
+
+	private void createFormsXML(Element formsElement) {
 		createFormConfigXML(formsElement);
 		List<FormEntity> list = getDao().getFormDao().select();
 		for (FormEntity form : list) {
 			createFormXML(formsElement, form);
 		}
-		return doc.asXML();
 	}
-
+	
 	private void createFormConfigXML(Element formsElement) {
 		FormConfigEntity config = getDao().getFormConfigDao().getConfig();
 		Element configElement = formsElement.addElement("form-config");

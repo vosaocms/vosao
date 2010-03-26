@@ -28,26 +28,33 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.vosao.business.imex.MessagesExporter;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.MessageEntity;
 
 /**
  * @author Alexander Oleynik
  */
-public class MessagesExporter extends AbstractExporter {
+public class MessagesExporterImpl extends AbstractExporter 
+		implements MessagesExporter {
 
-	public MessagesExporter(ExporterFactory factory) {
+	public MessagesExporterImpl(ExporterFactoryImpl factory) {
 		super(factory);
 	}
 	
+	@Override
 	public String createMessagesXML() {
 		Document doc = DocumentHelper.createDocument();
 		Element messagesElement = doc.addElement("messages");
+		createMessagesXML(messagesElement);
+		return doc.asXML();
+	}
+
+	private void createMessagesXML(Element messagesElement) {
 		List<MessageEntity> list = getDao().getMessageDao().select();
 		for (MessageEntity message : list) {
 			createMessageXML(messagesElement, message);
 		}
-		return doc.asXML();
 	}
 
 	private void createMessageXML(Element messagesElement, 

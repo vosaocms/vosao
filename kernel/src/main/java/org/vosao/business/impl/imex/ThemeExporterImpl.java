@@ -34,6 +34,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.business.imex.ResourceExporter;
+import org.vosao.business.imex.ThemeExporter;
 import org.vosao.business.imex.task.TaskTimeoutException;
 import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
 import org.vosao.dao.DaoTaskException;
@@ -41,11 +43,10 @@ import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.utils.FolderUtil;
 
-public class ThemeExporter extends AbstractExporter {
+public class ThemeExporterImpl extends AbstractExporter 
+		implements ThemeExporter {
 
-	public static final String THEME_FOLDER = "theme/";
-
-	public ThemeExporter(ExporterFactory factory) {
+	public ThemeExporterImpl(ExporterFactoryImpl factory) {
 		super(factory);
 	}
 	
@@ -84,7 +85,8 @@ public class ThemeExporter extends AbstractExporter {
 		return "/" + THEME_FOLDER + theme.getUrl();
 	}
 
-	private String createThemeExportXML(final TemplateEntity theme) {
+	@Override
+	public String createThemeExportXML(final TemplateEntity theme) {
 		Document doc = DocumentHelper.createDocument();
 		Element root = doc.addElement("template");
 		root.addElement("title").addText(theme.getTitle());

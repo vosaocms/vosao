@@ -26,12 +26,13 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.vosao.business.imex.PageExporter;
+import org.vosao.business.imex.PagePermissionExporter;
+import org.vosao.business.imex.ResourceExporter;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.CommentEntity;
 import org.vosao.entity.ContentEntity;
@@ -45,11 +46,10 @@ import org.vosao.enums.PageType;
 import org.vosao.utils.DateUtil;
 import org.vosao.utils.XmlUtil;
 
-public class PageExporter extends AbstractExporter {
+public class PageExporterImpl extends AbstractExporter 
+		implements PageExporter {
 
-	private static final Log logger = LogFactory.getLog(PageExporter.class);
-
-	public PageExporter(ExporterFactory factory) {
+	public PageExporterImpl(ExporterFactoryImpl factory) {
 		super(factory);
 	}
 	

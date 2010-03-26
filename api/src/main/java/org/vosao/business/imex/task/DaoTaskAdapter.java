@@ -19,7 +19,7 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.impl.imex.task;
+package org.vosao.business.imex.task;
 
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.CommentEntity;
@@ -34,6 +34,7 @@ import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.MessageEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PluginEntity;
+import org.vosao.entity.SeoUrlEntity;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.StructureTemplateEntity;
 import org.vosao.entity.TemplateEntity;
@@ -94,4 +95,7 @@ public interface DaoTaskAdapter {
 	void userSave(UserEntity entity) throws DaoTaskException;
 
 	void pluginSave(PluginEntity entity) throws DaoTaskException;
+
+	void seoUrlSave(SeoUrlEntity entity) throws DaoTaskException;
+
 }

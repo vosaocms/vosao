@@ -29,6 +29,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.vosao.business.imex.GroupExporter;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.GroupEntity;
 import org.vosao.entity.UserEntity;
@@ -38,20 +39,26 @@ import org.vosao.entity.helper.UserHelper;
 /**
  * @author Alexander Oleynik
  */
-public class GroupExporter extends AbstractExporter {
+public class GroupExporterImpl extends AbstractExporter 
+		implements GroupExporter {
 
-	public GroupExporter(ExporterFactory factory) {
+	public GroupExporterImpl(ExporterFactoryImpl factory) {
 		super(factory);
 	}
 	
+	@Override
 	public String createGroupsXML() {
 		Document doc = DocumentHelper.createDocument();
 		Element groupsElement = doc.addElement("groups");
+		createGroupsXML(groupsElement);
+		return doc.asXML();
+	}
+
+	private void createGroupsXML(Element groupsElement) {
 		List<GroupEntity> list = getDao().getGroupDao().select();
 		for (GroupEntity Group : list) {
 			createGroupXML(groupsElement, Group);
 		}
-		return doc.asXML();
 	}
 
 	private void createGroupXML(Element groupsElement, final GroupEntity group) {

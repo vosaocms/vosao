@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.zip.ZipInputStream;
 
 import org.dom4j.DocumentException;
+import org.vosao.business.imex.ExporterFactory;
 import org.vosao.business.imex.task.TaskTimeoutException;
 import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
 import org.vosao.dao.DaoTaskException;
@@ -33,6 +34,8 @@ import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
 
 public interface ImportExportBusiness {
+
+	ExporterFactory getExporterFactory();
 
 	/**
 	 * Create export file with selected templates. Inside task execution.

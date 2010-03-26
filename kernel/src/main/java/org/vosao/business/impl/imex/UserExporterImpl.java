@@ -30,6 +30,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.vosao.business.imex.UserExporter;
 import org.vosao.common.BCrypt;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.UserEntity;
@@ -38,20 +39,26 @@ import org.vosao.enums.UserRole;
 /**
  * @author Alexander Oleynik
  */
-public class UserExporter extends AbstractExporter {
+public class UserExporterImpl extends AbstractExporter 
+		implements UserExporter {
 
-	public UserExporter(ExporterFactory factory) {
+	public UserExporterImpl(ExporterFactoryImpl factory) {
 		super(factory);
 	}
 	
+	@Override
 	public String createUsersXML() {
 		Document doc = DocumentHelper.createDocument();
 		Element usersElement = doc.addElement("users");
+		createUsersXML(usersElement);
+		return doc.asXML();
+	}
+
+	private void createUsersXML(Element usersElement) {
 		List<UserEntity> list = getDao().getUserDao().select();
 		for (UserEntity user : list) {
 			createUserXML(usersElement, user);
 		}
-		return doc.asXML();
 	}
 
 	private void createUserXML(Element usersElement, final UserEntity user) {

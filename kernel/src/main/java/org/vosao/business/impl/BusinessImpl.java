@@ -39,6 +39,7 @@ import org.vosao.business.FolderBusiness;
 import org.vosao.business.FolderPermissionBusiness;
 import org.vosao.business.FormBusiness;
 import org.vosao.business.GroupBusiness;
+import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.MessageBusiness;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.PluginBusiness;
@@ -78,6 +79,7 @@ public class BusinessImpl implements Business, Serializable {
 	private StructureTemplateBusiness structureTemplateBusiness;
 	private PluginBusiness pluginBusiness;
 	private PluginResourceBusiness pluginResourceBusiness;
+	private ImportExportBusiness importExportBusiness;
 
 	public void init() {
 	}
@@ -322,6 +324,16 @@ public class BusinessImpl implements Business, Serializable {
 
 	public void setSearchEngine(SearchEngine searchEngine) {
 		this.searchEngine = searchEngine;
+	}
+
+	@Override
+	public ImportExportBusiness getImportExportBusiness() {
+		return importExportBusiness;
+	}
+
+	@Override
+	public void setImportExportBusiness(ImportExportBusiness bean) {
+		importExportBusiness = bean;
 	}
 	
 }

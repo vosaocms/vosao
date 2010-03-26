@@ -21,18 +21,10 @@
 
 package org.vosao.webdav.sysfile.local;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
-import java.util.Map;
 
 import org.vosao.business.Business;
 import org.vosao.webdav.AbstractFileResource;
-
-import com.bradmcevoy.http.Range;
-import com.bradmcevoy.http.exceptions.BadRequestException;
-import com.bradmcevoy.http.exceptions.NotAuthorizedException;
 
 public class CommentsFileResource extends AbstractFileResource {
 
@@ -41,23 +33,10 @@ public class CommentsFileResource extends AbstractFileResource {
 	public CommentsFileResource(Business aBusiness, String aPageURL) {
 		super(aBusiness, "_comments.xml", new Date());
 		setContentType("text/xml");
-		setData(new byte[0]);
 		pageURL = aPageURL;
-	}
-
-	@Override
-	public void sendContent(OutputStream out, Range range,
-			Map<String, String> params, String aContentType) throws IOException,
-			NotAuthorizedException, BadRequestException {
-		createXML();
-		super.sendContent(out, range, params, aContentType);
-	}
-
-	private void createXML() throws UnsupportedEncodingException {
-		String xml = getBusiness().getImportExportBusiness()
+		setData(getBusiness().getImportExportBusiness()
 				.getExporterFactory().getPageExporter().createPageCommentsXML(
-						pageURL);
-		setData(xml.getBytes("UTF-8"));
+						pageURL));
 	}
 
 }

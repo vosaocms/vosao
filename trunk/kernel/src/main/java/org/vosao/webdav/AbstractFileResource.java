@@ -23,6 +23,7 @@ package org.vosao.webdav;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Map;
 
@@ -79,6 +80,15 @@ public class AbstractFileResource extends AbstractResource
 
 	public void setData(byte[] data) {
 		this.data = data;
+	}
+
+	public void setData(String data) {
+		try {
+			this.data = data.getBytes("UTF-8");
+		}
+		catch (UnsupportedEncodingException e) {
+			logger.error(e.getMessage());
+		}
 	}
 
 	public String getContentType() {

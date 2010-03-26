@@ -19,39 +19,31 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.impl.imex;
+package org.vosao.business.imex;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.vosao.business.Business;
-import org.vosao.business.imex.ExporterFactory;
-import org.vosao.business.imex.task.DaoTaskAdapter;
-import org.vosao.dao.Dao;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.zip.ZipEntry;
 
-public abstract class AbstractExporter {
+import org.dom4j.DocumentException;
+import org.vosao.business.imex.task.TaskTimeoutException;
+import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
+import org.vosao.dao.DaoTaskException;
 
-	protected static final Log logger = LogFactory.getLog(AbstractExporter.class);
+public interface SiteExporter {
 
-	private ExporterFactory exporterFactory;
+	boolean isSiteContent(final ZipEntry entry)
+			throws UnsupportedEncodingException;
+
+	void exportSite(final ZipOutStreamTaskAdapter out) 
+			throws IOException, TaskTimeoutException;
 	
-	public AbstractExporter(ExporterFactory factory) {
-		exporterFactory = factory;
-	}
-
-	public Dao getDao() {
-		return getBusiness().getDao();
-	}
-
-	public Business getBusiness() {
-		return getExporterFactory().getBusiness(); 
-	}
+	void readSiteContent(final ZipEntry entry, final String xml)
+			throws DocumentException, DaoTaskException;
 	
-	public DaoTaskAdapter getDaoTaskAdapter() {
-		return getExporterFactory().getDaoTaskAdapter();
-	}
-	
-	public ExporterFactory getExporterFactory() {
-		return exporterFactory;
-	}
+	boolean importSystemFile(ZipEntry entry, ByteArrayOutputStream data) 
+			throws DocumentException, DaoTaskException, 
+			UnsupportedEncodingException;
 	
 }

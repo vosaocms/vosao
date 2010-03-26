@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.vosao.enums.PageState;
 import org.vosao.enums.PageType;
 import org.vosao.utils.DateUtil;
@@ -330,6 +331,11 @@ public class PageEntity extends BaseEntityImpl {
 
 	public String getLocalTitle(String lang) {
 		parseTitle();
+		if (!"en".equals(lang)) {
+			if (StringUtils.isEmpty(titles.get(lang))) {
+				return titles.get("en");
+			}
+		}
 		return titles.get(lang);
 	}
 

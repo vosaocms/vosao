@@ -19,39 +19,27 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.impl.imex;
+package org.vosao.business.imex;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.vosao.business.Business;
-import org.vosao.business.imex.ExporterFactory;
-import org.vosao.business.imex.task.DaoTaskAdapter;
-import org.vosao.dao.Dao;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.vosao.dao.DaoTaskException;
 
-public abstract class AbstractExporter {
+/**
+ * @author Alexander Oleynik
+ */
+public interface PluginExporter {
 
-	protected static final Log logger = LogFactory.getLog(AbstractExporter.class);
-
-	private ExporterFactory exporterFactory;
+	String createPluginsXML();
 	
-	public AbstractExporter(ExporterFactory factory) {
-		exporterFactory = factory;
-	}
-
-	public Dao getDao() {
-		return getBusiness().getDao();
-	}
-
-	public Business getBusiness() {
-		return getExporterFactory().getBusiness(); 
-	}
+	void readPlugins(Element PluginsElement) throws DaoTaskException;
 	
-	public DaoTaskAdapter getDaoTaskAdapter() {
-		return getExporterFactory().getDaoTaskAdapter();
-	}
-	
-	public ExporterFactory getExporterFactory() {
-		return exporterFactory;
-	}
-	
+	/**
+	 * Read and import data from _plugins.xml file.
+	 * @param xml - _plugins.xml file content.
+	 * @throws DocumentException
+	 * @throws DaoTaskException
+	 */
+	void readPluginsFile(String xml) throws DocumentException, 
+			DaoTaskException;
 }

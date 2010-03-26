@@ -21,20 +21,13 @@
 
 package org.vosao.webdav.sysfile.global;
 
-import static org.vosao.utils.XmlUtil.notNull;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
 import org.vosao.business.Business;
-import org.vosao.entity.UserEntity;
 import org.vosao.webdav.AbstractFileResource;
 
 import com.bradmcevoy.http.Range;
@@ -58,21 +51,9 @@ public class UsersFileResource extends AbstractFileResource {
 	}
 
 	private void createXML() throws UnsupportedEncodingException {
-		Document doc = DocumentHelper.createDocument();
-		Element e = doc.addElement("users");
-		List<UserEntity> list = getDao().getUserDao().select();
-		for (UserEntity user : list) {
-			createUserXML(e, user);
-		}
-		setData(doc.asXML().getBytes("UTF-8"));
+		String xml = getBusiness().getImportExportBusiness()
+				.getExporterFactory().getUserExporter().createUsersXML();
+		setData(xml.getBytes("UTF-8"));
 	}
 	
-	private void createUserXML(Element usersElement, final UserEntity user) {
-		Element userElement = usersElement.addElement("user");
-		userElement.addElement("name").setText(user.getName());
-		userElement.addElement("email").setText(user.getEmail());
-		userElement.addElement("password").setText(notNull(user.getPassword()));
-		userElement.addElement("role").setText(user.getRole().name());
-	}
-
 }

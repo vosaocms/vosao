@@ -24,9 +24,9 @@ package org.vosao.webdav.sysfile;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
-import org.vosao.common.AbstractServiceBean;
+import org.vosao.common.AbstractServiceBeanImpl;
 
-public abstract class AbstractFileFactory extends AbstractServiceBean 
+public abstract class AbstractFileFactory extends AbstractServiceBeanImpl 
 		implements FileFactory {
 
 	protected static final Log logger = LogFactory.getLog(

@@ -19,39 +19,27 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.impl.imex;
+package org.vosao.business.imex;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.vosao.business.Business;
-import org.vosao.business.imex.ExporterFactory;
-import org.vosao.business.imex.task.DaoTaskAdapter;
-import org.vosao.dao.Dao;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.vosao.dao.DaoTaskException;
 
-public abstract class AbstractExporter {
+/**
+ * @author Alexander Oleynik
+ */
+public interface UserExporter {
 
-	protected static final Log logger = LogFactory.getLog(AbstractExporter.class);
-
-	private ExporterFactory exporterFactory;
+	String createUsersXML();
 	
-	public AbstractExporter(ExporterFactory factory) {
-		exporterFactory = factory;
-	}
-
-	public Dao getDao() {
-		return getBusiness().getDao();
-	}
-
-	public Business getBusiness() {
-		return getExporterFactory().getBusiness(); 
-	}
+	void readUsers(Element usersElement) throws DaoTaskException;
 	
-	public DaoTaskAdapter getDaoTaskAdapter() {
-		return getExporterFactory().getDaoTaskAdapter();
-	}
-	
-	public ExporterFactory getExporterFactory() {
-		return exporterFactory;
-	}
-	
+	/**
+	 * Read and import data from _users.xml.
+	 * @param xml - _users.xml content.
+	 * @throws DocumentException 
+	 * @throws DaoTaskException 
+	 */
+	void readUsersFile(String xml) throws DocumentException, 
+			DaoTaskException;
 }

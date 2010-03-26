@@ -25,11 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.vosao.business.Business;
-import org.vosao.common.AbstractServiceBean;
+import org.vosao.common.AbstractServiceBeanImpl;
 import org.vosao.webdav.sysfile.global.ConfigFileFactory;
 import org.vosao.webdav.sysfile.global.FormsFileFactory;
 import org.vosao.webdav.sysfile.global.GroupsFileFactory;
-import org.vosao.webdav.sysfile.global.LanguagesFileFactory;
 import org.vosao.webdav.sysfile.global.MessagesFileFactory;
 import org.vosao.webdav.sysfile.global.PluginsFileFactory;
 import org.vosao.webdav.sysfile.global.SeourlsFileFactory;
@@ -43,7 +42,7 @@ import org.vosao.webdav.sysfile.local.TemplateFileFactory;
 
 import com.bradmcevoy.http.Resource;
 
-public class SystemFileFactory extends AbstractServiceBean {
+public class SystemFileFactory extends AbstractServiceBeanImpl {
 
 	private List<FileFactory> factories;
 
@@ -55,7 +54,6 @@ public class SystemFileFactory extends AbstractServiceBean {
 		if (factories == null) {
 			factories = new ArrayList<FileFactory>();
 			factories.add(new ConfigFileFactory(getBusiness()));
-			factories.add(new LanguagesFileFactory(getBusiness()));
 			factories.add(new MessagesFileFactory(getBusiness()));
 			factories.add(new UsersFileFactory(getBusiness()));
 			factories.add(new GroupsFileFactory(getBusiness()));

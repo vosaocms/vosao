@@ -23,6 +23,7 @@ package org.vosao.business.impl.imex.task;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.business.imex.task.DaoTaskAdapter;
 import org.vosao.business.imex.task.TaskTimeoutException;
 import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
@@ -38,6 +39,7 @@ import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.MessageEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PluginEntity;
+import org.vosao.entity.SeoUrlEntity;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.StructureTemplateEntity;
 import org.vosao.entity.TemplateEntity;
@@ -380,6 +382,24 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 		}
 		else {
 			getDao().getPluginDao().save(entity);
+		}
+	}
+
+	@Override
+	public void seoUrlSave(SeoUrlEntity entity) throws DaoTaskException {
+		if (isSkip()) {
+			if (entity.getId() == null) {
+				SeoUrlEntity found = getDao().getSeoUrlDao().getByFrom(
+						entity.getFromLink());
+				if (found == null) {
+					throw new DaoTaskException("SeoUrl not found while " 
+						+ "skipping save operation. " + entity.getFromLink());
+				}
+				entity.setId(found.getId());
+			}
+		}
+		else {
+			getDao().getSeoUrlDao().save(entity);
 		}
 	}
 

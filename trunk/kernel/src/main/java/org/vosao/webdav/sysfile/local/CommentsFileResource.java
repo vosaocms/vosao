@@ -25,15 +25,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
 import org.vosao.business.Business;
-import org.vosao.entity.CommentEntity;
-import org.vosao.utils.DateUtil;
 import org.vosao.webdav.AbstractFileResource;
 
 import com.bradmcevoy.http.Range;
@@ -60,20 +54,10 @@ public class CommentsFileResource extends AbstractFileResource {
 	}
 
 	private void createXML() throws UnsupportedEncodingException {
-		Document doc = DocumentHelper.createDocument();
-		Element e = doc.addElement("comments");
-		List<CommentEntity> comments = getDao().getCommentDao().getByPage(
-				pageURL);
-		for (CommentEntity comment : comments) {
-			Element commentElement = e.addElement("comment");
-			commentElement.addAttribute("name", comment.getName());
-			commentElement.addAttribute("disabled", String.valueOf(
-					comment.isDisabled()));
-			commentElement.addAttribute("publishDate", 
-				DateUtil.dateTimeToString(comment.getPublishDate()));
-			commentElement.setText(comment.getContent());
-		}
-		setData(doc.asXML().getBytes("UTF-8"));
+		String xml = getBusiness().getImportExportBusiness()
+				.getExporterFactory().getPageExporter().createPageCommentsXML(
+						pageURL);
+		setData(xml.getBytes("UTF-8"));
 	}
 
 }

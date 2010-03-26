@@ -29,6 +29,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Element;
+import org.vosao.business.imex.PagePermissionExporter;
 import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.GroupEntity;
 import org.vosao.enums.ContentPermissionType;
@@ -36,12 +37,10 @@ import org.vosao.enums.ContentPermissionType;
 /**
  * @author Alexander Oleynik
  */
-public class PagePermissionExporter extends AbstractExporter {
+public class PagePermissionExporterImpl extends AbstractExporter 
+		implements PagePermissionExporter {
 
-	private static final Log logger = LogFactory.getLog(
-			PagePermissionExporter.class);
-
-	public PagePermissionExporter(ExporterFactory factory) {
+	public PagePermissionExporterImpl(ExporterFactoryImpl factory) {
 		super(factory);
 	}
 	

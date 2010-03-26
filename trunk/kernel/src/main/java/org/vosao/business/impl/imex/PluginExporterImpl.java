@@ -23,39 +23,38 @@ package org.vosao.business.impl.imex;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.vosao.business.Business;
-import org.vosao.business.impl.imex.task.DaoTaskAdapter;
-import org.vosao.dao.Dao;
+import org.vosao.business.imex.PluginExporter;
 import org.vosao.dao.DaoTaskException;
-import org.vosao.entity.GroupEntity;
 import org.vosao.entity.PluginEntity;
-import org.vosao.entity.UserEntity;
-import org.vosao.entity.UserGroupEntity;
-import org.vosao.entity.helper.UserHelper;
 
 /**
  * @author Alexander Oleynik
  */
-public class PluginExporter extends AbstractExporter {
+public class PluginExporterImpl extends AbstractExporter 
+		implements PluginExporter {
 
-	public PluginExporter(ExporterFactory factory) {
+	public PluginExporterImpl(ExporterFactoryImpl factory) {
 		super(factory);
 	}
 	
+	@Override
 	public String createPluginsXML() {
 		Document doc = DocumentHelper.createDocument();
-		Element PluginsElement = doc.addElement("plugins");
+		Element pluginsElement = doc.addElement("plugins");
+		createPluginsXML(pluginsElement);
+		return doc.asXML();
+	}
+
+	private void createPluginsXML(Element pluginsElement) {
 		List<PluginEntity> list = getDao().getPluginDao().select();
 		for (PluginEntity plugin : list) {
-			createPluginXML(PluginsElement, plugin);
+			createPluginXML(pluginsElement, plugin);
 		}
-		return doc.asXML();
 	}
 
 	private void createPluginXML(Element pluginsElement, 

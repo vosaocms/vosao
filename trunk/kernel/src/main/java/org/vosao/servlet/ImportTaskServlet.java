@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.dom4j.DocumentException;
 import org.vosao.business.CurrentUser;
 import org.vosao.business.ImportExportBusiness;
-import org.vosao.business.impl.imex.task.DaoTaskAdapter;
+import org.vosao.business.imex.task.DaoTaskAdapter;
 import org.vosao.business.impl.imex.task.DaoTaskTimeoutException;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;

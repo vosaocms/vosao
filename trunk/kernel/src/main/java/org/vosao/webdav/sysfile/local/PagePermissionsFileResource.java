@@ -21,21 +21,13 @@
 
 package org.vosao.webdav.sysfile.local;
 
-import static org.vosao.utils.XmlUtil.notNull;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
 import org.vosao.business.Business;
-import org.vosao.entity.ContentPermissionEntity;
-import org.vosao.entity.GroupEntity;
 import org.vosao.webdav.AbstractFileResource;
 
 import com.bradmcevoy.http.Range;
@@ -62,27 +54,10 @@ public class PagePermissionsFileResource extends AbstractFileResource {
 	}
 
 	private void createXML() throws UnsupportedEncodingException {
-		Document doc = DocumentHelper.createDocument();
-		Element e = doc.addElement("permissions");
-		List<ContentPermissionEntity> list = getDao().getContentPermissionDao()
-				.selectByUrl(pageURL);
-		for (ContentPermissionEntity permission : list) {
-			createPagePermissionXML(e, permission);
-		}
-		setData(doc.asXML().getBytes("UTF-8"));
-	}
-
-	private void createPagePermissionXML(Element permissionsElement, 
-			final ContentPermissionEntity permission) {
-		GroupEntity group = getDao().getGroupDao().getById(permission.getGroupId());
-		Element permissionElement = permissionsElement.addElement("permission");
-		permissionElement.addElement("group").setText(group.getName());
-		permissionElement.addElement("permissionType").setText(
-				permission.getPermission().name());
-		permissionElement.addElement("allLanguages").setText(
-				String.valueOf(permission.isAllLanguages()));
-		permissionElement.addElement("languages").setText(notNull(
-				permission.getLanguages()));
+		String xml = getBusiness().getImportExportBusiness()
+				.getExporterFactory().getPageExporter()
+						.createPagePermissionsXML(pageURL);
+		setData(xml.getBytes("UTF-8"));
 	}
 
 }

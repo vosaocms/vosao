@@ -30,21 +30,28 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.vosao.business.imex.ConfigExporter;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.LanguageEntity;
-import org.vosao.utils.StrUtil;
 import org.vosao.utils.XmlUtil;
 
-public class ConfigExporter extends AbstractExporter {
+public class ConfigExporterImpl extends AbstractExporter 
+		implements ConfigExporter {
 
-	public ConfigExporter(ExporterFactory factory) {
+	public ConfigExporterImpl(ExporterFactoryImpl factory) {
 		super(factory);
 	}
 	
+	@Override
 	public String createConfigXML() {
 		Document doc = DocumentHelper.createDocument();
 		Element configElement = doc.addElement("config");
+		createConfigXML(configElement);
+		return doc.asXML();
+	}		
+	
+	private void createConfigXML(Element configElement) {
 		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
 		configElement.addElement("google-analytics").setText(notNull(
 				config.getGoogleAnalyticsId()));
@@ -69,7 +76,6 @@ public class ConfigExporter extends AbstractExporter {
 		configElement.addElement("siteUserLoginUrl").setText(notNull(
 				config.getSiteUserLoginUrl()));
 		createLanguagesXML(configElement);
-		return doc.asXML();
 	}
 
 	private void createLanguagesXML(Element configElement) {

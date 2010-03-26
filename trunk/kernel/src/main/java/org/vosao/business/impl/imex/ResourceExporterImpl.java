@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
@@ -37,6 +36,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.business.imex.PageExporter;
+import org.vosao.business.imex.ResourceExporter;
 import org.vosao.business.imex.task.TaskTimeoutException;
 import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
 import org.vosao.dao.DaoTaskException;
@@ -49,9 +50,10 @@ import org.vosao.enums.FolderPermissionType;
 import org.vosao.utils.FolderUtil;
 import org.vosao.utils.MimeType;
 
-public class ResourceExporter extends AbstractExporter {
+public class ResourceExporterImpl extends AbstractExporter 
+		implements ResourceExporter {
 
-	public ResourceExporter(ExporterFactory factory) {
+	public ResourceExporterImpl(ExporterFactoryImpl factory) {
 		super(factory);
 	}
 	
@@ -174,7 +176,8 @@ public class ResourceExporter extends AbstractExporter {
 		out.closeEntry();
 	}
 
-	private String getFolderSystemFile(FolderEntity folder) {
+	@Override
+	public String getFolderSystemFile(FolderEntity folder) {
 		Document doc = DocumentHelper.createDocument();
 		Element e = doc.addElement("folder");
 		e.addElement("title").setText(notNull(folder.getTitle()));

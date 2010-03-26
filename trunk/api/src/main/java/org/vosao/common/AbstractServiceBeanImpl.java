@@ -19,21 +19,40 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.webdav.sysfile.global;
+package org.vosao.common;
 
 import org.vosao.business.Business;
+import org.vosao.dao.Dao;
+import org.vosao.global.SystemService;
 
-import com.bradmcevoy.http.Resource;
+public class AbstractServiceBeanImpl implements AbstractServiceBean {
 
-public class LanguagesFileFactory extends AbstractGlobalFileFactory {
-
-	public LanguagesFileFactory(Business business) {
-		super(business, "_languages.xml");
+	private Business business;
+	
+	public AbstractServiceBeanImpl() {
 	}
 
+	public AbstractServiceBeanImpl(Business aBusiness) {
+		business = aBusiness;
+	}
+	
 	@Override
-	public Resource getFile(String path) {
-		return new LanguagesFileResource(getBusiness(), getName());
+	public Business getBusiness() {
+		return business;
 	}
-
+	
+	@Override
+	public void setBusiness(Business bean) {
+		business = bean;
+	}
+	
+	@Override
+	public Dao getDao() {
+		return getBusiness().getDao();
+	}
+	
+	@Override
+	public SystemService getSystemService() {
+		return getBusiness().getSystemService();
+	}
 }

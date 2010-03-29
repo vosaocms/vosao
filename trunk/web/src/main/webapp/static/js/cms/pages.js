@@ -19,8 +19,14 @@
  * email: vosao.dev@gmail.com
  */
 
+var parentURL = null;
+
 $(function() {
+    $("#page-dialog").dialog({ width: 400, autoOpen: false });
 	Vosao.initJSONRpc(loadData);
+	$('#cancelDlgButton').click(onPageCancel);
+    $('#pageForm').submit(function() {onSave(); return false;});
+    $('#title').change(onTitleChange);
 });
 
 function loadData() {
@@ -48,8 +54,8 @@ function renderPage(vo) {
 			+ '" width="16px" />' 
 			+ ' <a href="page/content.jsp?id=' + vo.entity.id + '">'
 			+ vo.entity.title
-			+ '</a> <a title="Add child" href="page/index.jsp?parent=' + pageUrl
-			+ '"><img src="/static/images/add.png"/></a> '
+			+ '</a> <a title="Add child" href="#" onclick="onPageAdd(\'' + vo.entity.friendlyURL
+			+ '\')"><img src="/static/images/add.png"/></a> '
 			+ '<a title="Remove" href="#" onclick="onPageRemove(\'' 
 			+ vo.entity.friendlyURL + '\')">'
 			+ '<img src="/static/images/02_x.png" /></a>';
@@ -78,4 +84,71 @@ function onPageRemove(url) {
 			loadData();
 		}, url);
 	}
+}
+
+function onPageAdd(parent) {
+	parentURL = parent == '/' ? '' : parent;
+	$('#page-dialog').dialog('open');
+	$('#parentURL').html(parentURL + '/');
+	$('#title').focus();
+}
+
+function onPageCancel() {
+	$('#page-dialog').dialog('close');
+}
+
+function onTitleChange() {
+	var url = $("#url").val();
+	var title = $("#title").val();
+	if (url == '') {
+		$("#url").val(Vosao.urlFromTitle(title));
+	}
+}
+
+function validate(vo) {
+	if (vo.title == '') {
+		return 'Title is empty';
+	}
+	else {
+		if (vo.title.indexOf(',') != -1) {
+			return 'Symbol , (coma) is not allowed in title.'
+		}
+	}
+	if (vo.url == '') {
+		return 'Page URL is empty';
+	}
+	else {
+		if (vo.url.indexOf('/') != -1) {
+			return 'Symbol / is not allowed in URL.'
+		}
+	}
+}
+
+function onSave() {
+	var vo = {
+		title : $('#title').val(),
+		url : $('#url').val(),
+		friendlyURL : parentURL + '/' + $('#url').val(),
+		titles : 'en' + $('#title').val()
+	};
+	var error = validate(vo);
+	if (!error) {
+		Vosao.jsonrpc.pageService.addPage(function(r) {
+			if (r.result == 'success') {
+				Vosao.showServiceMessages(r);
+				$('#page-dialog').dialog('close');
+				loadData();
+			}
+			else {
+				showError(r.message);
+			}
+		}, Vosao.javaMap(vo));
+	}
+	else {
+		showError(error);
+	}
+}
+
+function showError(msg) {
+	Vosao.errorMessage('#pageMessages', msg);
 }

@@ -44,6 +44,8 @@ public interface PageService extends AbstractService {
 
 	ServiceResponse savePage(final Map<String, String> page);
 	
+	ServiceResponse addPage(final Map<String, String> page);
+
 	List<PageVO> getChildren(final String url);
 	
 	ServiceResponse deletePages(final List<String> ids);

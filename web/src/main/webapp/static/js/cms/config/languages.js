@@ -167,7 +167,8 @@ var isoLanguages = {
 	bn: 'Bengali; Bangla',
 	bo: 'Tibetan',
 	br: 'Breton',
-
+	bs: 'Bosnian',
+	
 	ca: 'Catalan',
 	co: 'Corsican',
 	cs: 'Czech',

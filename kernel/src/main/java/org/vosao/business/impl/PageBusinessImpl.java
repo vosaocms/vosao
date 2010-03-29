@@ -236,8 +236,8 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 				errors.add("Entered url is reserved for internal use.");
 			}
 		}
-		if (!page.isRoot() 
-			&& StringUtils.isEmpty(page.getPageFriendlyURL())) {
+		if (StringUtils.isEmpty(page.getPageFriendlyURL())
+			&& !page.isRoot()) {
 			errors.add("Friendly URL is empty");
 		}
 		if (StringUtils.isEmpty(page.getTitle())) {

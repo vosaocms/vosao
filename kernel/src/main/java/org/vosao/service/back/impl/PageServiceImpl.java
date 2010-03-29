@@ -43,6 +43,7 @@ import org.vosao.entity.PageEntity;
 import org.vosao.entity.PageTagEntity;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.TagEntity;
+import org.vosao.entity.TemplateEntity;
 import org.vosao.entity.helper.PageHelper;
 import org.vosao.enums.PageState;
 import org.vosao.enums.PageType;
@@ -492,6 +493,27 @@ public class PageServiceImpl extends AbstractServiceImpl
 	public ServiceResponse remove(String pageURL) {
 		getBusiness().getPageBusiness().remove(pageURL);
 		return ServiceResponse.createSuccessResponse("Success");
+	}
+
+	@Override
+	public ServiceResponse addPage(Map<String, String> vo) {
+		PageEntity page = new PageEntity();
+		page.setSortIndex(getBusiness().getPageBusiness().getNextSortIndex(
+					vo.get("friendlyUrl")));
+		page.setFriendlyURL(vo.get("friendlyURL"));
+		TemplateEntity template = getDao().getTemplateDao().select().get(0);
+		page.setTemplate(template.getId());
+		page.setTitleValue(vo.get("titles"));
+		List<String> errors = getBusiness().getPageBusiness()
+			.validateBeforeUpdate(page);
+		if (errors.isEmpty()) {
+			getDao().getPageDao().save(page);
+			return ServiceResponse.createSuccessResponse(page.getId().toString());
+		}
+		else {
+			return ServiceResponse.createErrorResponse(
+					"Errors occured during saving page.", errors);
+		}
 	}
 	
 }

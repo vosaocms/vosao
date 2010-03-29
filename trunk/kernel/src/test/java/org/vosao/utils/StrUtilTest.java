@@ -31,4 +31,10 @@ public class StrUtilTest extends TestCase {
 		assertEquals("\nb\nre d", text);
 	}
 	
+	public void testSplitByWord() {
+		String data = "Hello my friend. \n I am! May \nbe I? Привет лунатикам!";
+		String[] words = StrUtil.splitByWord(data);
+		assertEquals(10, words.length);
+	}
+	
 }

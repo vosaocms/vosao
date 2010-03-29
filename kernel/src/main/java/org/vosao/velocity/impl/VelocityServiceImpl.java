@@ -104,8 +104,7 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 					return content != null ? content : "";
 				}
 			}
-			return getBusiness().getPageBusiness().createPageRenderDecorator(
-					page, aLanguageCode).getContent();
+			return "";
 		}
 		return "Approved content not found";
 	}

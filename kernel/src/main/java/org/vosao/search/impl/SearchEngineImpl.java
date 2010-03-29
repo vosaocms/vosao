@@ -100,7 +100,7 @@ public class SearchEngineImpl implements SearchEngine {
 	}
 
 	private List<ContentEntity> getContentIds(String query) {
-		String[] words = query.split("\\W+");
+		String[] words = StrUtil.splitByWord(query);
 		if (words.length == 0) {
 			return Collections.EMPTY_LIST;
 		}
@@ -208,8 +208,7 @@ public class SearchEngineImpl implements SearchEngine {
 	public void updateIndex(ContentEntity content) {
 		String data = StrUtil.extractTextFromHTML(content.getContent()
 				.toLowerCase());
-		//logger.info(data);
-		String[] words = data.split("\\W+");
+		String[] words = StrUtil.splitByWord(data);
 		Long key = content.getId();
 		clearIndex(key);
 		for (String word : words) {

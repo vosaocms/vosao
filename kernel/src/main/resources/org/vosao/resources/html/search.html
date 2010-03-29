@@ -37,7 +37,7 @@ $(function() {
 });
 
 function checkQuery() {
-    var query = Vosao.getQueryParam('query');
+    var query = decodeURI(Vosao.getQueryParam('query'));
     if (query) {
         $('#query').val(query);
         onSearch();

@@ -145,4 +145,8 @@ public class StrUtil {
 		return result;
 	}
 	
+	public static String[] splitByWord(String data) {
+		return data.split("[ ,.:?!~#\n\t]+");
+	}
+	
 }

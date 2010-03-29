@@ -38,6 +38,7 @@ import org.vosao.service.back.PluginService;
 import org.vosao.service.back.SeoUrlService;
 import org.vosao.service.back.StructureService;
 import org.vosao.service.back.StructureTemplateService;
+import org.vosao.service.back.TagService;
 import org.vosao.service.back.TemplateService;
 import org.vosao.service.back.UserService;
 
@@ -99,5 +100,8 @@ public interface BackService {
 
 	PluginService getPluginService();
 	void setPluginService(PluginService bean);
+
+	TagService getTagService();
+	void setTagService(TagService bean);
 
 }

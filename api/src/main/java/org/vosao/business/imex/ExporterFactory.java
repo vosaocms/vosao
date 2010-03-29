@@ -34,4 +34,6 @@ public interface ExporterFactory extends AbstractServiceBean {
 	UserExporter getUserExporter();
 	
 	SeoUrlExporter getSeoUrlExporter();
+
+	TagExporter getTagExporter();
 }

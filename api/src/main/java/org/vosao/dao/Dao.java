@@ -102,4 +102,11 @@ public interface Dao {
 
 	PluginResourceDao getPluginResourceDao();
 	void setPluginResourceDao(final PluginResourceDao bean);
+	
+	TagDao getTagDao();
+	void setTagDao(final TagDao bean);
+
+	PageTagDao getPageTagDao();
+	void setPageTagDao(final PageTagDao bean);
+	
 }

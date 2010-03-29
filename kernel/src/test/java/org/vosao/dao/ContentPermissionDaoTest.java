@@ -21,6 +21,7 @@
 
 package org.vosao.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.vosao.dao.tool.ContentPermissionTool;
@@ -37,7 +38,7 @@ public class ContentPermissionDaoTest extends AbstractDaoTest {
         contentPermissionTool = new ContentPermissionTool(getDao());
 	}    
 
-	public void testSelectByUrl() {
+	private void createTestCase() {
 		contentPermissionTool.addPermission("/", ContentPermissionType.ADMIN, 
 				1L);
 		contentPermissionTool.addPermission("/", ContentPermissionType.WRITE, 
@@ -50,9 +51,26 @@ public class ContentPermissionDaoTest extends AbstractDaoTest {
 				3L);
 		contentPermissionTool.addPermission("/test", ContentPermissionType.READ, 
 				3L);
+	}	
+
+	public void testSelectByUrl() {
+		createTestCase();
 		List<ContentPermissionEntity> list = getDao().getContentPermissionDao()
 				.selectByUrl("/");
 		assertEquals(3, list.size());
+	}	
+
+	public void testRemoveByGroup() {
+		createTestCase();
+		List<Long> groupIds = new ArrayList<Long>();
+		groupIds.add(3L);
+		groupIds.add(2L);
+		getDao().getContentPermissionDao().removeByGroup(groupIds);
+		List<ContentPermissionEntity> list = getDao().getContentPermissionDao()
+				.selectByUrl("/");
+		assertEquals(1, list.size());
+		list = getDao().getContentPermissionDao().select();
+		assertEquals(1, list.size());
 	}	
 	
 }

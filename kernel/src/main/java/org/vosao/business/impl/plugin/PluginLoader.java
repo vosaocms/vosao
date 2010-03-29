@@ -213,6 +213,7 @@ public class PluginLoader {
 				.getRootElement();
 		result.setName(root.elementText("name"));	
 		result.setTitle(root.elementText("title"));
+		result.setVersion(root.elementText("version"));
 		result.setDescription(root.elementText("description"));
 		result.setWebsite(root.elementText("website"));
 		if (root.element("entry-point-class") != null) {

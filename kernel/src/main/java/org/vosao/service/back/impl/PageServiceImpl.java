@@ -23,6 +23,7 @@ package org.vosao.service.back.impl;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -33,14 +34,15 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
-import org.vosao.business.CurrentUser;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.business.impl.SetupBeanImpl;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.PageTagEntity;
 import org.vosao.entity.StructureEntity;
-import org.vosao.entity.UserEntity;
+import org.vosao.entity.TagEntity;
 import org.vosao.entity.helper.PageHelper;
 import org.vosao.enums.PageState;
 import org.vosao.enums.PageType;
@@ -186,13 +188,16 @@ public class PageServiceImpl extends AbstractServiceImpl
 		if (vo.get("velocityProcessing") != null) {
 			page.setVelocityProcessing(Boolean.valueOf(vo.get("velocityProcessing")));
 		}
+		if (vo.get("skipPostProcessing") != null) {
+			page.setSkipPostProcessing(Boolean.valueOf(vo.get("skipPostProcessing")));
+		}
 		if (vo.get("friendlyUrl") != null) {
 			page.setFriendlyURL(vo.get("friendlyUrl"));
 		}
 		String languageCode = vo.get("languageCode");
 		ContentPermissionEntity perm = getBusiness()
 			.getContentPermissionBusiness().getPermission(
-				page.getFriendlyURL(), CurrentUser.getInstance());
+				page.getFriendlyURL(), VosaoContext.getInstance().getUser());
 		boolean approve = Boolean.valueOf(vo.get("approve"));
 		if (approve	&& perm.isPublishGranted()) {
 			page.setState(PageState.APPROVED);
@@ -232,6 +237,9 @@ public class PageServiceImpl extends AbstractServiceImpl
 		}
 		if (vo.get("description") != null) {
 			page.setDescription(vo.get("description"));
+		}
+		if (vo.get("headHtml") != null) {
+			page.setHeadHtml(vo.get("headHtml"));
 		}
 		List<String> errors = getBusiness().getPageBusiness()
 			.validateBeforeUpdate(page);
@@ -285,7 +293,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 	@Override
 	public ServiceResponse addVersion(String url, String versionTitle) {
 		if (!getBusiness().getContentPermissionBusiness().getPermission(
-				url, CurrentUser.getInstance()).isChangeGranted()) {
+				url, VosaoContext.getInstance().getUser()).isChangeGranted()) {
 			return ServiceResponse.createErrorResponse("Access denied");
 		}
 		List<PageEntity> list = getBusiness().getPageBusiness().selectByUrl(url);
@@ -294,7 +302,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 			return ServiceResponse.createSuccessResponse(
 				getBusiness().getPageBusiness().addVersion(
 					lastPage, lastPage.getVersion() + 1, versionTitle, 
-						CurrentUser.getInstance()).getId().toString());
+					VosaoContext.getInstance().getUser()).getId().toString());
 		}
 		return ServiceResponse.createErrorResponse("Page not found");
 	}
@@ -309,7 +317,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 			return ServiceResponse.createErrorResponse("Page not found");
 		}
 		if (!getBusiness().getContentPermissionBusiness().getPermission(
-				page.getFriendlyURL(), CurrentUser.getInstance())
+				page.getFriendlyURL(), VosaoContext.getInstance().getUser())
 					.isPublishGranted()) {
 			return ServiceResponse.createErrorResponse("Access denied");
 		}
@@ -334,6 +342,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 			result.setContents(getContents(id));
 			result.setPermissions(getContentPermissionService().selectByUrl(
 					url));
+			result.setTags(getPageTags(url));
 			permUrl = result.getPage().getFriendlyURL();
 			if (result.getPage().isStructured()) {
 				StructureEntity structure = getDao().getStructureDao().getById(
@@ -357,6 +366,14 @@ public class PageServiceImpl extends AbstractServiceImpl
 		}
 	}
 
+	public List<TagEntity> getPageTags(String pageURL) {
+		PageTagEntity pageTag = getDao().getPageTagDao().getByURL(pageURL);
+		if (pageTag != null) {
+			return getDao().getTagDao().getById(pageTag.getTags());
+		}
+		return Collections.EMPTY_LIST;
+	}
+	
 	public CommentService getCommentService() {
 		return commentService;
 	}
@@ -422,10 +439,10 @@ public class PageServiceImpl extends AbstractServiceImpl
 			return ServiceResponse.createErrorResponse("Change page type to Simle from Structured first");
 		}
 		page.setModDate(new Date());
-		page.setModUserEmail(CurrentUser.getInstance().getEmail());
+		page.setModUserEmail(VosaoContext.getInstance().getUser().getEmail());
 		ContentPermissionEntity perm = getBusiness()
 				.getContentPermissionBusiness().getPermission(
-					page.getFriendlyURL(), CurrentUser.getInstance());
+					page.getFriendlyURL(), VosaoContext.getInstance().getUser());
 		page.setState(PageState.EDIT);
 		if (!perm.isChangeGranted()) {
 			return ServiceResponse.createErrorResponse("Access denied");
@@ -468,6 +485,12 @@ public class PageServiceImpl extends AbstractServiceImpl
 			return ServiceResponse.createErrorResponse("Page not found");
 		}
 		getBusiness().getPageBusiness().moveUp(page);
+		return ServiceResponse.createSuccessResponse("Success");
+	}
+
+	@Override
+	public ServiceResponse remove(String pageURL) {
+		getBusiness().getPageBusiness().remove(pageURL);
 		return ServiceResponse.createSuccessResponse("Success");
 	}
 	

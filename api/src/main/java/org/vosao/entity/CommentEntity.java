@@ -21,10 +21,16 @@
 
 package org.vosao.entity;
 
+import static org.vosao.utils.EntityUtil.getBooleanProperty;
+import static org.vosao.utils.EntityUtil.getDateProperty;
+import static org.vosao.utils.EntityUtil.getStringProperty;
+import static org.vosao.utils.EntityUtil.getTextProperty;
+import static org.vosao.utils.EntityUtil.setProperty;
+import static org.vosao.utils.EntityUtil.setTextProperty;
+
 import java.util.Date;
 
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Text;
 
 /**
  * @author Alexander Oleynik
@@ -56,11 +62,11 @@ public class CommentEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("pageUrl", pageUrl);
-		entity.setUnindexedProperty("name", name);
-		entity.setUnindexedProperty("content", new Text(content));
-		entity.setUnindexedProperty("publishDate", publishDate);
-		entity.setProperty("disabled", disabled);
+		setProperty(entity, "pageUrl", pageUrl, true);
+		setProperty(entity, "name", name, false);
+		setTextProperty(entity, "content", content);
+		setProperty(entity, "publishDate", publishDate, false);
+		setProperty(entity, "disabled", disabled, true);
 	}
 
 	public CommentEntity(final String aName, final String aContent, 

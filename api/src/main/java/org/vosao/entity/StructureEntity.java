@@ -31,6 +31,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.vo.StructureFieldVO;
+import static org.vosao.utils.EntityUtil.*;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
@@ -56,8 +57,8 @@ public class StructureEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("title", title);
-		entity.setUnindexedProperty("content", new Text(content));
+		setProperty(entity, "title", title, true);
+		setTextProperty(entity, "content", content);
 	}
 
 	public StructureEntity(String title, String content) {

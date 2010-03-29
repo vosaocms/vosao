@@ -38,8 +38,10 @@ import org.vosao.entity.CommentEntity;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.PageTagEntity;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.StructureTemplateEntity;
+import org.vosao.entity.TagEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.enums.PageState;
 import org.vosao.enums.PageType;
@@ -73,6 +75,22 @@ public class PageExporterImpl extends AbstractExporter
 		Element e = doc.addElement("permissions"); 
 		getPagePermissionExporter().createPagePermissionsXML(e, 
 				pageURL);
+		return doc.asXML();
+	}
+
+	public String createPageTagXML(String pageURL) {
+		Document doc = DocumentHelper.createDocument(); 
+		Element e = doc.addElement("tags"); 
+		PageTagEntity pageTag = getDao().getPageTagDao().getByURL(pageURL);
+		if (pageTag != null) {
+			List<TagEntity> tags = getDao().getTagDao().getById(
+					pageTag.getTags());
+			for (TagEntity tag : tags) {
+				Element tagElement = e.addElement("tag");
+				tagElement.addElement("name").setText(
+						getBusiness().getTagBusiness().getPath(tag));
+			}
+		}
 		return doc.asXML();
 	}
 
@@ -144,10 +162,14 @@ public class PageExporterImpl extends AbstractExporter
 				page.getKeywords()));
 		pageElement.addElement("description").setText(XmlUtil.notNull(
 				page.getDescription()));
+		pageElement.addElement("headHtml").setText(XmlUtil.notNull(
+				page.getHeadHtml()));
 		pageElement.addElement("searchable").setText(String.valueOf(
 				page.isSearchable()));
 		pageElement.addElement("velocityProcessing").setText(String.valueOf(
 				page.isVelocityProcessing()));
+		pageElement.addElement("skipPostProcessing").setText(String.valueOf(
+				page.isSkipPostProcessing()));
 		List<ContentEntity> contents = getDao().getPageDao().getContents(
 				page.getId()); 
 		for (ContentEntity content : contents) {
@@ -295,6 +317,13 @@ public class PageExporterImpl extends AbstractExporter
 				newPage.setVelocityProcessing(XmlUtil.readBooleanText(element, 
 						false));
 			}
+			if (element.getName().equals("headHtml")) {
+				newPage.setHeadHtml(element.getText());
+			}
+			if (element.getName().equals("skipPostProcessing")) {
+				newPage.setSkipPostProcessing(XmlUtil.readBooleanText(element, 
+						false));
+			}
 		}
 		PageEntity page = getDao().getPageDao().getByUrlVersion(url, 
 				newPage.getVersion());
@@ -415,9 +444,45 @@ public class PageExporterImpl extends AbstractExporter
 	}
 	
 	private String getPageURL(String folderPath) {
+		if (folderPath.equals("/page")) {
+			return "/";
+		}
 		if (folderPath.startsWith("/page")) {
 			return folderPath.replace("/page", "");
 		}
 		return null;
 	}
+
+	@Override
+	public boolean readPageTagFile(String folderPath, String xml)
+			throws DocumentException {
+		String pageURL = getPageURL(folderPath);
+		if (pageURL == null) {
+			return false;
+		}
+		Document doc = DocumentHelper.parseText(xml);
+		readTags(doc.getRootElement(), pageURL);
+		return true;
+	}
+	
+	private void readTags(Element tagsElement, String pageURL) {
+		for (Iterator<Element> i = tagsElement.elementIterator(); i.hasNext();) {
+			Element element = i.next();
+			if (element.getName().equals("tag")) {
+				readTag(element, pageURL);
+			}
+		}
+	}
+	
+	private void readTag(Element tagElement, String pageURL) {
+		String path = tagElement.elementText("name");
+		TagEntity tag = getBusiness().getTagBusiness().getByPath(path);
+		if (tag != null) {
+			getBusiness().getTagBusiness().addTag(pageURL, tag);
+		}
+		else {
+			logger.error("Tag not found " + path);
+		}
+	}
+	
 }

@@ -21,8 +21,12 @@
 
 package org.vosao.entity;
 
+import static org.vosao.utils.EntityUtil.getStringProperty;
+import static org.vosao.utils.EntityUtil.getTextProperty;
+import static org.vosao.utils.EntityUtil.setProperty;
+import static org.vosao.utils.EntityUtil.setTextProperty;
+
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Text;
 
 public class PluginEntity extends BaseEntityImpl {
 	
@@ -37,6 +41,7 @@ public class PluginEntity extends BaseEntityImpl {
 	private String entryPointClass;
 	private String configURL;
 	private String pageHeader;
+	private String version;
 
 	public PluginEntity() {
 		configStructure = "";
@@ -56,20 +61,22 @@ public class PluginEntity extends BaseEntityImpl {
 		entryPointClass = getStringProperty(entity, "entryPointClass");
 		configURL = getStringProperty(entity, "configURL");
 		pageHeader = getTextProperty(entity, "pageHeader");
+		version = getStringProperty(entity, "version");
 	}
 	
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("name", name);
-		entity.setUnindexedProperty("title", title);
-		entity.setUnindexedProperty("description", description);
-		entity.setUnindexedProperty("website", website);
-		entity.setUnindexedProperty("configStructure", new Text(configStructure));
-		entity.setUnindexedProperty("configData", new Text(configData));
-		entity.setUnindexedProperty("entryPointClass", entryPointClass);
-		entity.setUnindexedProperty("configURL", configURL);
-		entity.setUnindexedProperty("pageHeader", new Text(pageHeader));
+		setProperty(entity, "name", name, true);
+		setProperty(entity, "title", title, false);
+		setProperty(entity, "description", description, false);
+		setProperty(entity, "website", website, false);
+		setTextProperty(entity, "configStructure", configStructure);
+		setTextProperty(entity, "configData", configData);
+		setProperty(entity, "entryPointClass", entryPointClass, false);
+		setProperty(entity, "configURL", configURL, false);
+		setTextProperty(entity, "pageHeader", pageHeader);
+		setProperty(entity, "version", version, false);
 	}
 
 	public PluginEntity(String name, String title, String configStructure,
@@ -152,5 +159,13 @@ public class PluginEntity extends BaseEntityImpl {
 	public void setPageHeader(String pageHeader) {
 		this.pageHeader = pageHeader;
 	}
-	
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
 }

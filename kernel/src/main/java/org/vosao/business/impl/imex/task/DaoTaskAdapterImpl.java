@@ -42,6 +42,7 @@ import org.vosao.entity.PluginEntity;
 import org.vosao.entity.SeoUrlEntity;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.StructureTemplateEntity;
+import org.vosao.entity.TagEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.entity.UserGroupEntity;
@@ -409,6 +410,24 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 
 	public void setCurrentFile(String currentFile) {
 		this.currentFile = currentFile;
+	}
+
+	@Override
+	public void tagSave(TagEntity entity) throws DaoTaskException {
+		if (isSkip()) {
+			if (entity.getId() == null) {
+				TagEntity found = getDao().getTagDao().getByName(
+						entity.getParent(), entity.getName());
+				if (found == null) {
+					throw new DaoTaskException("Tag not found while " 
+						+ "skipping save operation. " + entity.getName());
+				}
+				entity.setId(found.getId());
+			}
+		}
+		else {
+			getDao().getTagDao().save(entity);
+		}
 	}
 	
 }

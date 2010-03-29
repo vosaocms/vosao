@@ -21,6 +21,7 @@
 
 package org.vosao.entity;
 
+import static org.vosao.utils.EntityUtil.*;
 import com.google.appengine.api.datastore.Entity;
 
 public class FolderEntity extends BaseEntityImpl {
@@ -45,9 +46,9 @@ public class FolderEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setUnindexedProperty("title", title);
-		entity.setProperty("name", name);
-		entity.setProperty("parentId", parentId);
+		setProperty(entity, "title", title, false);
+		setProperty(entity, "name", name, true);
+		setProperty(entity, "parentId", parentId, true);
 	}
 
 	public FolderEntity(String aName) {

@@ -28,12 +28,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.vosao.business.CurrentUser;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.FolderPermissionBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.FolderEntity;
 import org.vosao.utils.FolderUtil;
 
@@ -44,8 +42,6 @@ import com.google.appengine.repackaged.com.google.common.base.StringUtil;
  */
 public class FolderBusinessImpl extends AbstractBusinessImpl 
 	implements FolderBusiness {
-
-	private static final Log logger = LogFactory.getLog(FolderBusinessImpl.class);
 
 	private FolderPermissionBusiness folderPermissionBusiness;
 	
@@ -264,12 +260,12 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 
 	private boolean haveReadAccess(FolderEntity folder) {
 		return !getFolderPermissionBusiness().getPermission(folder, 
-				CurrentUser.getInstance()).isDenied();
+				VosaoContext.getInstance().getUser()).isDenied();
 	}
 
 	private boolean haveWriteAccess(FolderEntity folder) {
 		return getFolderPermissionBusiness().getPermission(folder, 
-				CurrentUser.getInstance()).isChangeGranted();
+				VosaoContext.getInstance().getUser()).isChangeGranted();
 	}
 
 	@Override

@@ -35,11 +35,11 @@ public class CurrentUser {
 
 	private static UserEntity user;
 	
-	public static UserEntity getInstance() {
+	public static UserEntity getInstance2() {
 		return user;
 	}
 	
-	public static void setInstance(UserEntity aUser) {
+	public static void setInstance2(UserEntity aUser) {
 		user = aUser;
 	}
 }

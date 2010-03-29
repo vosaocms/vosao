@@ -31,7 +31,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vosao.business.CurrentUser;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.BaseEntity;
 import org.vosao.utils.EntityUtil;
 
@@ -290,7 +290,7 @@ public class BaseDaoImpl<T extends BaseEntity>
 	}
 	
 	private String getCurrentUserEmail() {
-		return CurrentUser.getInstance() == null ? "guest" 
-				: CurrentUser.getInstance().getEmail();
+		return VosaoContext.getInstance().getUser() == null ? "guest" 
+				: VosaoContext.getInstance().getUser().getEmail();
 	}
 }

@@ -24,6 +24,7 @@ package org.vosao.business;
 import java.io.UnsupportedEncodingException;
 
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FolderPermissionEntity;
 import org.vosao.entity.GroupEntity;
@@ -67,7 +68,7 @@ public class FolderBusinessTest extends AbstractBusinessTest {
 
 	private void addGuestPerission(FolderEntity root) {
 		UserEntity tester = addUser("tester","kinyelo@gmail.com", UserRole.ADMIN);
-		CurrentUser.setInstance(tester);
+		VosaoContext.getInstance().setUser(tester);
 		GroupEntity guests = addGroup("guests");
 		GroupEntity developers = addGroup("developers");
 		addUserGroup(tester, developers);

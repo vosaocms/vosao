@@ -167,6 +167,10 @@ public class ResourceExporterImpl extends AbstractExporter
 			saveFile(out, zipPath + "_permissions.xml", 
 				getPageExporter().createPagePermissionsXML(page.getFriendlyURL()));
 		}
+		if (!out.isSkip(zipPath + "_tag.xml")) {
+			saveFile(out, zipPath + "_tag.xml", 
+				getPageExporter().createPageTagXML(page.getFriendlyURL()));
+		}
 	}
 	
 	private void saveFile(final ZipOutStreamTaskAdapter out, String name, 

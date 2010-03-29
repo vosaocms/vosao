@@ -22,7 +22,7 @@
 package org.vosao.entity;
 
 import com.google.appengine.api.datastore.Entity;
-
+import static org.vosao.utils.EntityUtil.*;
 
 public class FormEntity extends BaseEntityImpl {
 
@@ -65,14 +65,14 @@ public class FormEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("name", name);
-		entity.setUnindexedProperty("email", email);
-		entity.setUnindexedProperty("title", title);
-		entity.setUnindexedProperty("letterSubject", letterSubject);
-		entity.setUnindexedProperty("sendButtonTitle", sendButtonTitle);
-		entity.setUnindexedProperty("resetButtonTitle", resetButtonTitle);
-		entity.setUnindexedProperty("showResetButton", showResetButton);
-		entity.setUnindexedProperty("enableCaptcha", enableCaptcha);
+		setProperty(entity, "name", name, true);
+		setProperty(entity, "email", email, false);
+		setProperty(entity, "title", title, false);
+		setProperty(entity, "letterSubject", letterSubject, false);
+		setProperty(entity, "sendButtonTitle", sendButtonTitle, false);
+		setProperty(entity, "resetButtonTitle", resetButtonTitle, false);
+		setProperty(entity, "showResetButton", showResetButton, false);
+		setProperty(entity, "enableCaptcha", enableCaptcha, false);
 	}
 
 	public String getName() {

@@ -59,17 +59,17 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>2.5.2</version>
+        </dependency>
+        <!-- dependency>
+            <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
             <version>2.5.2</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
-            <version>2.5.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
             <version>2.5.2</version>
         </dependency>
         <dependency>
@@ -93,7 +93,7 @@
             <artifactId>cglib</artifactId>
             <version>2.1_3</version>
             <scope>runtime</scope>
-        </dependency>
+        </dependency-->
 
         <!-- Apache commons -->
 
@@ -137,9 +137,9 @@
         </dependency>
 
         <dependency>
-            <groupId>velocity</groupId>
+            <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
-            <version>1.5</version>
+            <version>1.6.3</version>
         </dependency>
 
         <dependency>
@@ -150,7 +150,7 @@
 
         <!-- javax-el -->
 
-        <dependency>
+        <!-- dependency>
             <groupId>javax.el</groupId>
             <artifactId>el-api</artifactId>
             <version>1.0</version>
@@ -159,7 +159,7 @@
             <groupId>com.sun.el</groupId>
             <artifactId>el-ri</artifactId>
             <version>1.0</version>
-        </dependency>
+        </dependency-->
 
         <!-- xml -->
         

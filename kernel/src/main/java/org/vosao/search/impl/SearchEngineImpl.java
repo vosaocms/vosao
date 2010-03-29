@@ -30,7 +30,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
-import org.vosao.business.CurrentUser;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.PageEntity;
@@ -160,7 +160,8 @@ public class SearchEngineImpl implements SearchEngine {
 					continue;
 				}
 		    	if (getBusiness().getContentPermissionBusiness().getPermission(
-		    			page.getFriendlyURL(), CurrentUser.getInstance()).isDenied()) {
+		    			page.getFriendlyURL(), 
+		    			VosaoContext.getInstance().getUser()).isDenied()) {
 		    		continue;
 		    	}
 		    	PageEntity approvedPage = getBusiness().getDao().getPageDao()

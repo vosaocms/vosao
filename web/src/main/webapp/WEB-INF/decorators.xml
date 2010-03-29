@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <decorators defaultdir="/WEB-INF/sitemesh">
-    <excludes>
-        <pattern>*/export.*</pattern>
-        <pattern>*/tags.*</pattern>
-    </excludes>
     <decorator name="login-layout" page="login-layout.jsp">
         <pattern>/login.jsp</pattern>
     </decorator>

@@ -21,6 +21,8 @@
 
 package org.vosao.entity;
 
+import static org.vosao.utils.EntityUtil.*;
+
 import com.google.appengine.api.datastore.Entity;
 
 /**
@@ -47,8 +49,8 @@ public class SeoUrlEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("fromLink", fromLink);
-		entity.setUnindexedProperty("toLink", toLink);
+		setProperty(entity, "fromLink", fromLink, true);
+		setProperty(entity, "toLink", toLink, false);
 	}
 
 	public SeoUrlEntity(String aFrom, String aTo) {

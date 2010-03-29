@@ -39,11 +39,13 @@ import org.vosao.dao.GroupDao;
 import org.vosao.dao.LanguageDao;
 import org.vosao.dao.MessageDao;
 import org.vosao.dao.PageDao;
+import org.vosao.dao.PageTagDao;
 import org.vosao.dao.PluginDao;
 import org.vosao.dao.PluginResourceDao;
 import org.vosao.dao.SeoUrlDao;
 import org.vosao.dao.StructureDao;
 import org.vosao.dao.StructureTemplateDao;
+import org.vosao.dao.TagDao;
 import org.vosao.dao.TemplateDao;
 import org.vosao.dao.UserDao;
 import org.vosao.dao.UserGroupDao;
@@ -78,6 +80,8 @@ public class DaoImpl implements Dao, Serializable {
 	private StructureTemplateDao structureTemplateDao;
 	private PluginDao pluginDao;
 	private PluginResourceDao pluginResourceDao;
+	private TagDao tagDao;
+	private PageTagDao pageTagDao;
 
 	public void clearCache() {
 		pageDao.clearCache();
@@ -102,6 +106,8 @@ public class DaoImpl implements Dao, Serializable {
 		structureTemplateDao.clearCache();
 		pluginDao.clearCache();
 		pluginResourceDao.clearCache();
+		tagDao.clearCache();
+		pageTagDao.clearCache();
 	}
 	
 	public PageDao getPageDao() {
@@ -302,4 +308,25 @@ public class DaoImpl implements Dao, Serializable {
 	public void setFileChunkDao(FileChunkDao bean) {
 		fileChunkDao = bean;
 	}
+	
+	@Override
+	public TagDao getTagDao() {
+		return tagDao;
+	}
+
+	@Override
+	public void setTagDao(TagDao bean) {
+		tagDao = bean;
+	}
+
+	@Override
+	public PageTagDao getPageTagDao() {
+		return pageTagDao;
+	}
+
+	@Override
+	public void setPageTagDao(PageTagDao bean) {
+		pageTagDao = bean;
+	}
+	
 }

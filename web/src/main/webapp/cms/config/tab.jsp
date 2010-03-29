@@ -40,4 +40,7 @@
     <li class="ui-corner-top ui-state-default">
         <a href="groups.jsp">Groups</a>
     </li>
+    <li class="ui-corner-top ui-state-default">
+        <a href="tags.jsp">Tags</a>
+    </li>
 </ul>

@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.TagEntity;
 import org.vosao.service.AbstractService;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.vo.PageRequestVO;
@@ -46,6 +47,8 @@ public interface PageService extends AbstractService {
 	List<PageVO> getChildren(final String url);
 	
 	ServiceResponse deletePages(final List<String> ids);
+
+	ServiceResponse remove(final String pageURL);
 
 	ServiceResponse deletePageVersion(Long id);
 
@@ -83,4 +86,7 @@ public interface PageService extends AbstractService {
 	 * @return
 	 */
 	ServiceResponse moveDown(final Long pageId);
+	
+	List<TagEntity> getPageTags(String pageURL);
+
 }

@@ -21,6 +21,7 @@
 
 package org.vosao.entity;
 
+import static org.vosao.utils.EntityUtil.*;
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Entity;
 
@@ -53,9 +54,9 @@ public class FileChunkEntity extends BaseEntityImpl {
     @Override
     public void save(Entity entity) {
     	super.save(entity);
-    	entity.setUnindexedProperty("content", new Blob(content));
-    	entity.setUnindexedProperty("index", index);
-    	entity.setProperty("fileId", fileId);
+    	setProperty(entity, "content", content);
+    	setProperty(entity, "index", index, false);
+    	setProperty(entity, "fileId", fileId, true);
     }
 
     public byte[] getContent() {

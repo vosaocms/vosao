@@ -141,4 +141,6 @@ public interface VelocityService {
 	 */
 	String findStructureContent(String path, String field, String languageCode);
 	
+	TagVelocityService getTag();
+	
 }

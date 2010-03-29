@@ -21,6 +21,8 @@
 
 package org.vosao.entity;
 
+import static org.vosao.utils.EntityUtil.*;
+
 import com.google.appengine.api.datastore.Entity;
 
 /**
@@ -52,8 +54,8 @@ public class UserGroupEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("groupId", groupId);
-		entity.setProperty("userId", userId);
+		setProperty(entity, "groupId", groupId, true);
+		setProperty(entity, "userId", userId, true);
 	}
 
 	public Long getUserId() {

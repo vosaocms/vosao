@@ -14,6 +14,7 @@ import org.vosao.business.imex.ResourceExporter;
 import org.vosao.business.imex.SeoUrlExporter;
 import org.vosao.business.imex.SiteExporter;
 import org.vosao.business.imex.StructureExporter;
+import org.vosao.business.imex.TagExporter;
 import org.vosao.business.imex.ThemeExporter;
 import org.vosao.business.imex.UserExporter;
 import org.vosao.business.imex.task.DaoTaskAdapter;
@@ -38,6 +39,7 @@ public class ExporterFactoryImpl extends AbstractServiceBeanImpl
 	private ThemeExporter themeExporter;
 	private UserExporter userExporter;
 	private SeoUrlExporter seoUrlExporter;
+	private TagExporter tagExporter;
 	
 	public ExporterFactoryImpl(Business aBusiness, 
 			DaoTaskAdapter aDaoTaskAdapter) {
@@ -145,6 +147,14 @@ public class ExporterFactoryImpl extends AbstractServiceBeanImpl
 			seoUrlExporter = new SeoUrlsExporterImpl(this);
 		}
 		return seoUrlExporter;
+	}
+
+	@Override
+	public TagExporter getTagExporter() {
+		if (tagExporter == null) {
+			tagExporter = new TagExporterImpl(this);
+		}
+		return tagExporter;
 	}
 	
 }

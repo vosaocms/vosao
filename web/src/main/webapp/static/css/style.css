@@ -264,3 +264,18 @@ a.button span.ui-icon {
 .ui-widget {
 	font-size: 1em;
 }
+
+.tag {
+    padding: 4px 8px;
+    margin: 0 2px;
+    border: 1px solid #79B7E7;
+    -moz-border-radius:8px;
+    border-radius: 8px;
+    background-color: #F5F8F9;
+    color: #2E6E9E;
+    font-weight: bold;
+}
+.tag img {
+    position: relative;
+    top: 3px;
+}

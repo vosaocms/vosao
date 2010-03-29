@@ -40,14 +40,9 @@ public interface Business {
 	SearchEngine getSearchEngine();
 	void setSearchEngine(SearchEngine bean);
 
-	UserPreferences getUserPreferences(final HttpServletRequest request);
-	void setUserPreferences(UserPreferences bean, final HttpServletRequest request);
-
 	UserEntity getUser();
 	
-	String getLanguage(final HttpServletRequest request);
 	String getLanguage();
-	void setLanguage(String language, final HttpServletRequest request);
 
 	PageBusiness getPageBusiness();
 	void setPageBusiness(final PageBusiness bean);
@@ -102,5 +97,8 @@ public interface Business {
 	
 	ImportExportBusiness getImportExportBusiness();
 	void setImportExportBusiness(final ImportExportBusiness bean);
+
+	TagBusiness getTagBusiness();
+	void setTagBusiness(final TagBusiness bean);
 
 }

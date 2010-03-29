@@ -23,8 +23,6 @@ package org.vosao.service.front.impl;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.vosao.search.SearchResult;
 import org.vosao.service.front.SearchService;
 import org.vosao.service.impl.AbstractServiceImpl;
@@ -35,19 +33,17 @@ import org.vosao.service.impl.AbstractServiceImpl;
 public class SearchServiceImpl extends AbstractServiceImpl 
 		implements SearchService {
 
-	private static Log logger = LogFactory.getLog(SearchServiceImpl.class);
-
 	@Override
 	public SearchResult search(String query, int start, int count, int textSize,
 			HttpServletRequest request) {
-		String language = getBusiness().getLanguage(request);
+		String language = getBusiness().getLanguage();
 		return getBusiness().getSearchEngine().search(query, start, count,
 				language, textSize);
 	}
 
 	@Override
 	public SearchResult search(String query, HttpServletRequest request) {
-			String language = getBusiness().getLanguage(request);
+			String language = getBusiness().getLanguage();
 		return getBusiness().getSearchEngine().search(query, 0, -1,
 				language, 256);
 	}

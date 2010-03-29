@@ -21,15 +21,8 @@
 
 package org.vosao.entity;
 
-import java.io.Serializable;
-
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
 import org.vosao.enums.UserRole;
+import static org.vosao.utils.EntityUtil.*;
 
 import com.google.appengine.api.datastore.Entity;
 
@@ -61,10 +54,10 @@ public class UserEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setUnindexedProperty("name", name);
-		entity.setUnindexedProperty("password", password);
-		entity.setProperty("email", email);
-		entity.setProperty("role", role.name());
+		setProperty(entity, "name", name, false);
+		setProperty(entity, "password", password, false);
+		setProperty(entity, "email", email, true);
+		setProperty(entity, "role", role.name(), true);
 	}
 
 	public UserEntity(String aName, String aPassword,

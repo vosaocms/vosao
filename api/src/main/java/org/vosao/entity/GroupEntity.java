@@ -22,6 +22,7 @@
 package org.vosao.entity;
 
 import com.google.appengine.api.datastore.Entity;
+import static org.vosao.utils.EntityUtil.*;
 
 /**
  * @author Alexander Oleynik
@@ -49,7 +50,7 @@ public class GroupEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("name", name);
+		setProperty(entity, "name", name, true);
 	}
 
 	public String getName() {

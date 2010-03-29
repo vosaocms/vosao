@@ -145,5 +145,13 @@ public class PageVO {
 	public boolean isVelocityProcessing() {
 		return page.isVelocityProcessing();
 	}
+
+	public String getHeadHtml() {
+		return page.getHeadHtml();
+	}
+
+	public boolean isSkipPostProcessing() {
+		return page.isSkipPostProcessing();
+	}
 	
 }

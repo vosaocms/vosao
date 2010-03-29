@@ -21,6 +21,8 @@
 
 package org.vosao.entity;
 
+import static org.vosao.utils.EntityUtil.*;
+
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
 
@@ -47,9 +49,9 @@ public class TemplateEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setUnindexedProperty("title", title);
-		entity.setProperty("url", url);
-		entity.setUnindexedProperty("content", new Text(content));
+		setProperty(entity, "title", title, false);
+		setProperty(entity, "url", url, true);
+		setTextProperty(entity, "content", content);
 	}
 
 	public TemplateEntity(String title, String content, String url) {

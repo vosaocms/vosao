@@ -35,11 +35,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.vosao.business.CurrentUser;
 import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.imex.task.TaskTimeoutException;
 import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
 import org.vosao.business.impl.imex.task.ZipOutStreamTaskAdapterImpl;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.entity.helper.UserHelper;
@@ -78,7 +78,7 @@ public class ExportTaskServlet extends BaseSpringServlet {
 
 	public void doExport(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		CurrentUser.setInstance(UserHelper.ADMIN);
+		VosaoContext.getInstance().setUser(UserHelper.ADMIN);
 		ZipOutStreamTaskAdapter zipOutStreamTaskAdapter = 
 			new ZipOutStreamTaskAdapterImpl();
 		String filename = request.getParameter("filename");

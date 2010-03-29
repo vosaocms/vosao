@@ -25,6 +25,8 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.vosao.business.Business;
 import org.vosao.dao.Dao;
@@ -34,7 +36,9 @@ import org.vosao.dao.Dao;
  */
 public abstract class AbstractFilter {
 	
-	private FilterConfig config;
+    protected static final Log logger = LogFactory.getLog(AbstractFilter.class);
+
+    private FilterConfig config;
 	private ServletContext servletContext;
 
 	private Dao dao;

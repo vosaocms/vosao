@@ -42,6 +42,7 @@ import org.vosao.business.imex.PluginExporter;
 import org.vosao.business.imex.ResourceExporter;
 import org.vosao.business.imex.SiteExporter;
 import org.vosao.business.imex.StructureExporter;
+import org.vosao.business.imex.TagExporter;
 import org.vosao.business.imex.ThemeExporter;
 import org.vosao.business.imex.UserExporter;
 import org.vosao.business.imex.task.TaskTimeoutException;
@@ -90,6 +91,9 @@ public class SiteExporterImpl extends AbstractExporter
 		}
 		if (!out.isSkip("_plugins.xml")) {
 			saveFile(out, "_plugins.xml", getPluginExporter().createPluginsXML());
+		}
+		if (!out.isSkip("_tags.xml")) {
+			saveFile(out, "_tags.xml", getTagExporter().createXML());
 		}
 		TreeItemDecorator<FolderEntity> page = getBusiness().getFolderBusiness()
 				.findFolderByPath(getBusiness().getFolderBusiness().getTree(), 
@@ -186,6 +190,10 @@ public class SiteExporterImpl extends AbstractExporter
 		return getExporterFactory().getThemeExporter();
 	}
 
+	private TagExporter getTagExporter() {
+		return getExporterFactory().getTagExporter();
+	}
+
 	private String toXML(ByteArrayOutputStream data) 
 			throws UnsupportedEncodingException {
 		return data.toString("UTF-8");
@@ -222,6 +230,10 @@ public class SiteExporterImpl extends AbstractExporter
 			getPluginExporter().readPluginsFile(toXML(data));
 			return true;
 		}
+		if (entry.getName().equals("_tags.xml")) {
+			getTagExporter().read(toXML(data));
+			return true;
+		}
 		
 		if (entry.getName().endsWith("_folder.xml")) {
 			String folderPath = FolderUtil.getFilePath("/" + entry.getName());
@@ -243,6 +255,11 @@ public class SiteExporterImpl extends AbstractExporter
 		if (entry.getName().endsWith("_permissions.xml")) {
 			String folderPath = FolderUtil.getFilePath("/" + entry.getName());
 			return getPageExporter().readPermissionsFile(folderPath, toXML(
+					data));
+		}
+		if (entry.getName().endsWith("_tag.xml")) {
+			String folderPath = FolderUtil.getFilePath("/" + entry.getName());
+			return getPageExporter().readPageTagFile(folderPath, toXML(
 					data));
 		}
 		return false;

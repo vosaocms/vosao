@@ -22,16 +22,16 @@
 package org.vosao.business.impl.pagefilter.fragments;
 
 import org.vosao.business.Business;
-import org.vosao.business.CurrentUser;
 import org.vosao.business.impl.pagefilter.ContentFragment;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.PageEntity;
 
 public class EditorPanelFragment implements ContentFragment {
 
 	@Override
 	public String get(Business business, PageEntity page) {
-		if (CurrentUser.getInstance() != null 
-			&& CurrentUser.getInstance().isEditor()) {
+		if (VosaoContext.getInstance().getUser() != null 
+			&& VosaoContext.getInstance().getUser().isEditor()) {
 			StringBuffer code = new StringBuffer( 
 				"<div id=\"editor-panel\"" 
 				+	"style=\"border-bottom: 1px solid #a5c4d5;"
@@ -46,7 +46,7 @@ public class EditorPanelFragment implements ContentFragment {
 				+ "<a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms/folders.jsp\">Resources</a>"
 				+ "</div>"
 				+ "<div style=\"float:right;margin-right:10px;\">"
-				+ CurrentUser.getInstance().getEmail()
+				+ VosaoContext.getInstance().getUser().getEmail()
 				+ " | <a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms/profile.jsp\">Profile</a>" 
 				+ " | <a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"http://code.google.com/p/vosao/issues/list\">Support</a>"
 				+ " | <a href=\"#\" onclick=\"$('#editor-panel').hide()\">Hide</a> "

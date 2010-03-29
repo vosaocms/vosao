@@ -30,6 +30,7 @@ import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.StructureEntity;
+import org.vosao.entity.TagEntity;
 import org.vosao.entity.TemplateEntity;
 
 /**
@@ -50,6 +51,7 @@ public class PageRequestVO {
     private ContentPermissionEntity pagePermission;
     private List<StructureEntity> structures;
     private List<StructureFieldVO> structureFields;
+    private List<TagEntity> tags;
 	
     public PageRequestVO() {
     	versions = Collections.EMPTY_LIST;
@@ -158,6 +160,14 @@ public class PageRequestVO {
 
 	public void setStructureFields(List<StructureFieldVO> structureFields) {
 		this.structureFields = structureFields;
+	}
+
+	public List<TagEntity> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<TagEntity> tags) {
+		this.tags = tags;
 	}   
     
 }

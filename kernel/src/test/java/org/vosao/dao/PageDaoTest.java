@@ -21,6 +21,7 @@
 
 package org.vosao.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.vosao.dao.tool.PageTool;
@@ -110,7 +111,8 @@ public class PageDaoTest extends AbstractDaoTest {
 	public void testContent() {
 		PageEntity root = pageTool.addPage("root", "/");
 		getDao().getPageDao().setContent(root.getId(), "en", "english");
-		getDao().getPageDao().setContent(root.getId(), "ru", "russian");
+		ContentEntity ruContent = getDao().getPageDao().setContent(
+				root.getId(), "ru", "russian");
 		getDao().getPageDao().setContent(root.getId(), "uk", "ukranian");
 		String c = getDao().getPageDao().getContent(root.getId(), "en");
 		assertEquals("english", c);
@@ -121,6 +123,11 @@ public class PageDaoTest extends AbstractDaoTest {
 		List<ContentEntity> list = getDao().getContentDao().select(
 				PageEntity.class.getName(), root.getId());
 		assertEquals(3, list.size());
+		getDao().getContentDao().removeById(ruContent.getParentClass(), 
+				root.getId());
+		list = getDao().getContentDao().select(
+				PageEntity.class.getName(), root.getId());
+		assertEquals(0, list.size());
 	}
 	
 	public void testGetByParentApproved() {
@@ -171,5 +178,80 @@ public class PageDaoTest extends AbstractDaoTest {
 		assertNull(p);
 	}
 	
+	public void testRemove() {
+		PageEntity root = pageTool.addPage("root", "/");
+		pageTool.addPage("test", "/test");
+		pageTool.addPage("test2", "/test2");
+		pageTool.addPage("megatest", "/test/mega");
+		PageEntity root2 = pageTool.addPage("root", "/");
+		root2.setVersion(2);
+		root2.setState(PageState.EDIT);
+		getDao().getPageDao().save(root2);
+		PageEntity root3 = pageTool.addPage("root", "/");
+		root2.setVersion(3);
+		root2.setState(PageState.EDIT);
+		getDao().getPageDao().save(root3);
+		getDao().getPageDao().remove(root.getId());
+		assertEquals(0, getDao().getPageDao().select().size());
+	}
+
+	public void testRemoveVersion() {
+		PageEntity root = pageTool.addPage("root", "/");
+		PageEntity root2 = pageTool.addPage("root", "/");
+		root2.setVersion(2);
+		root2.setState(PageState.EDIT);
+		getDao().getPageDao().save(root2);
+		PageEntity root3 = pageTool.addPage("root", "/");
+		root3.setVersion(3);
+		root3.setState(PageState.EDIT);
+		getDao().getPageDao().save(root3);
+		getDao().getPageDao().removeVersion(root3.getId());
+		assertEquals(2, getDao().getPageDao().select().size());
+	}
+
+	private void addPage(String title, String url, Long templateId) {
+		PageEntity page = new PageEntity(title, url, templateId, new Date());
+		getDao().getPageDao().save(page);
+	}
 	
+	public void testSelectByTemplate() {
+		addPage("root", "/", 1L);
+		addPage("test", "/test", 1L);
+		addPage("test2", "/test2", 2L);
+		addPage("megatest", "/test/mega", 3L);
+		assertEquals(2, getDao().getPageDao().selectByTemplate(1L).size());
+		assertEquals(1, getDao().getPageDao().selectByTemplate(3L).size());
+	}
+	
+	private void addPageStructure(String title, String url, Long structureId) {
+		PageEntity page = new PageEntity(title, url);
+		page.setStructureId(structureId);
+		getDao().getPageDao().save(page);
+	}
+	
+	public void testSelectByStructure() {
+		addPageStructure("root", "/", 1L);
+		addPageStructure("test", "/test", 1L);
+		addPageStructure("test2", "/test2", 2L);
+		addPageStructure("megatest", "/test/mega", 3L);
+		assertEquals(2, getDao().getPageDao().selectByStructure(1L).size());
+		assertEquals(1, getDao().getPageDao().selectByStructure(3L).size());
+	}
+	
+	private void addPageStructureTemplate(String title, String url, 
+			Long structureTemplateId) {
+		PageEntity page = new PageEntity(title, url);
+		page.setStructureTemplateId(structureTemplateId);
+		getDao().getPageDao().save(page);
+	}
+	
+	public void testSelectByStructureTemplate() {
+		addPageStructureTemplate("root", "/", 1L);
+		addPageStructureTemplate("test", "/test", 1L);
+		addPageStructureTemplate("test2", "/test2", 2L);
+		addPageStructureTemplate("megatest", "/test/mega", 3L);
+		assertEquals(2, getDao().getPageDao().selectByStructureTemplate(1L).size());
+		assertEquals(1, getDao().getPageDao().selectByStructureTemplate(3L).size());
+	}
+
 }

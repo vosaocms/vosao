@@ -46,6 +46,7 @@ import org.vosao.service.back.PluginService;
 import org.vosao.service.back.SeoUrlService;
 import org.vosao.service.back.StructureService;
 import org.vosao.service.back.StructureTemplateService;
+import org.vosao.service.back.TagService;
 import org.vosao.service.back.TemplateService;
 import org.vosao.service.back.UserService;
 import org.vosao.service.plugin.PluginServiceManager;
@@ -75,6 +76,7 @@ public class BackServiceImpl implements BackService, Serializable {
 	private StructureService structureService;
 	private StructureTemplateService structureTemplateService;
 	private PluginService pluginService;
+	private TagService tagService;
 	
 	@Override
 	public void register(JSONRPCBridge bridge) {
@@ -96,6 +98,7 @@ public class BackServiceImpl implements BackService, Serializable {
 		bridge.registerObject("structureService", structureService);
 		bridge.registerObject("structureTemplateService", structureTemplateService);
 		bridge.registerObject("pluginService", pluginService);
+		bridge.registerObject("tagService", tagService);
 		registerPluginServices(bridge);
 	}
 	
@@ -119,6 +122,7 @@ public class BackServiceImpl implements BackService, Serializable {
 		bridge.unregisterObject("structureService");
 		bridge.unregisterObject("structureTemplateService");
 		bridge.unregisterObject("pluginService");
+		bridge.unregisterObject("tagService");
 		unregisterPluginServices(bridge);
 	}
 
@@ -301,6 +305,16 @@ public class BackServiceImpl implements BackService, Serializable {
 	@Override
 	public void setPluginService(PluginService bean) {
 		this.pluginService = bean;
+	}
+
+	@Override
+	public TagService getTagService() {
+		return tagService;
+	}
+
+	@Override
+	public void setTagService(TagService bean) {
+		this.tagService = bean;
 	}
 
 	public Business getBusiness() {

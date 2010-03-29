@@ -21,6 +21,7 @@
 
 package org.vosao.business.impl;
 
+import org.apache.velocity.VelocityContext;
 import org.vosao.business.PageBusiness;
 import org.vosao.dao.Dao;
 import org.vosao.entity.ContentEntity;
@@ -53,8 +54,11 @@ public class SimplePageRenderDecorator extends AbstractPageRenderDecorator {
 			return;
 		}
 		if (isVelocityProcessing()) {
-			setContent(getSystemService().render(contentEntity.getContent(), 
-				getPageBusiness().createContext(getLanguageCode())));
+			VelocityContext context = getPageBusiness().createContext(
+					getLanguageCode());
+			context.put("page", getPage());
+			setContent(getSystemService().render(
+					contentEntity.getContent(), context));
 		}
 		else {
 			setContent(contentEntity.getContent());

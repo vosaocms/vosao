@@ -28,7 +28,7 @@ import org.vosao.entity.TemplateEntity;
 public class TemplateDaoTest extends AbstractDaoTest {
 
 	private TemplateEntity addTemplate(final String title, final String content) {
-		TemplateEntity Template = new TemplateEntity(title, content);
+		TemplateEntity Template = new TemplateEntity(title, content, title);
 		getDao().getTemplateDao().save(Template);
 		return Template;
 	}
@@ -76,5 +76,19 @@ public class TemplateDaoTest extends AbstractDaoTest {
 		Templates.add(Template);
 		assertEquals(4, Templates.size());
 	}
+
+	public void testGetByUrl() {
+		addTemplate("title1", "content1");
+		addTemplate("title2", "content2");
+		addTemplate("title3", "content3");
+		TemplateEntity t = getDao().getTemplateDao().getByUrl("title2");
+		assertNotNull(t);
+		assertEquals("title2", t.getTitle());
+		t = getDao().getTemplateDao().getByUrl(null);
+		assertNull(t);
+		t = getDao().getTemplateDao().getByUrl("terra");
+		assertNull(t);
+	}
+	
 	
 }

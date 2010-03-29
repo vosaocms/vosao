@@ -21,11 +21,11 @@
  */
 %>
 <%@ page contentType="text/html; charset=UTF-8"%>
-<%@ page import="org.vosao.business.CurrentUser" %>
+<%@ page import="org.vosao.common.VosaoContext" %>
 <%@ page import="org.vosao.entity.UserEntity" %>
-<%@ page import="org.vosao.business.impl.SetupBeanImpl" %>
+<%@ page import="org.vosao.business.SetupBean" %>
 <% 
-    UserEntity user = CurrentUser.getInstance();
+    UserEntity user = VosaoContext.getInstance().getUser();
 %>
 <html>
 <head>
@@ -96,7 +96,7 @@
 <div class="clear"> </div>
 
 <div class="version">
-  <span>Vosao CMS Version <%= SetupBeanImpl.FULLVERSION %></span>
+  <span>Vosao CMS Version <%= SetupBean.FULLVERSION %></span>
 </div>
 
 </div>

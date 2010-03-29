@@ -28,7 +28,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vosao.business.CurrentUser;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FolderPermissionEntity;
 import org.vosao.entity.GroupEntity;
@@ -146,7 +146,7 @@ public class FolderPermissionServiceImpl extends AbstractServiceImpl
 		FolderEntity folder = getDao().getFolderDao().getById(folderId);
 		if (folder != null) {
 			return getBusiness().getFolderPermissionBusiness().getPermission(
-				folder, CurrentUser.getInstance());
+				folder, VosaoContext.getInstance().getUser());
 		}
 		return null;
 	}

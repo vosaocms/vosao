@@ -26,11 +26,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import org.vosao.business.PageBusiness;
-import org.vosao.business.impl.SimplePageRenderDecorator;
+import org.vosao.business.Business;
 import org.vosao.business.impl.StructurePageRenderDecorator;
 import org.vosao.business.vo.StructureFieldVO;
-import org.vosao.dao.Dao;
+import org.vosao.common.AbstractServiceBeanImpl;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.UserEntity;
@@ -39,32 +38,21 @@ import org.vosao.enums.UserRole;
 import org.vosao.service.vo.CommentVO;
 import org.vosao.service.vo.UserVO;
 import org.vosao.utils.ListUtil;
+import org.vosao.velocity.TagVelocityService;
 import org.vosao.velocity.VelocityService;
 
 /**
  * @author Alexander Oleynik
  */
-public class VelocityServiceImpl implements VelocityService {
+public class VelocityServiceImpl extends AbstractServiceBeanImpl 
+		implements VelocityService {
 
-	private Dao dao;
-	private PageBusiness pageBusiness;
-	private String languageCode;
+	private TagVelocityService tagVelocityService;
 	
-	public VelocityServiceImpl(Dao aDao, PageBusiness aPageBusiness, 
-			String aLanguageCode) {
-		dao = aDao;
-		languageCode = aLanguageCode;
-		pageBusiness = aPageBusiness;
+	public VelocityServiceImpl(Business business) {
+		super(business);
 	}
 	
-	private Dao getDao() {
-		return dao;
-	}
-	
-	private PageBusiness getPageBusiness() {
-		return pageBusiness;
-	}
-
 	@Override
 	public PageEntity findPage(String path) {
 		PageEntity page = getDao().getPageDao().getByUrl(path);
@@ -89,7 +77,7 @@ public class VelocityServiceImpl implements VelocityService {
 	public String findContent(String path, String aLanguageCode) {
 		PageEntity page = getDao().getPageDao().getByUrl(path);
 		if (page != null) {
-			return getPageBusiness().createPageRenderDecorator(
+			return getBusiness().getPageBusiness().createPageRenderDecorator(
 				page, aLanguageCode).getContent();
 		}
 		return "Approved content not found";
@@ -97,7 +85,7 @@ public class VelocityServiceImpl implements VelocityService {
 
 	@Override
 	public String findStructureContent(String path, String field) {
-		return findStructureContent(path, field, languageCode);
+		return findStructureContent(path, field, getBusiness().getLanguage());
 	}
 	
 	@Override
@@ -109,13 +97,14 @@ public class VelocityServiceImpl implements VelocityService {
 				if (page.isStructured() 
 					&& isStructureFieldExists(page, field)) {
 					StructurePageRenderDecorator pageDecorator = 
-						(StructurePageRenderDecorator) getPageBusiness()
-							.createPageRenderDecorator(page, aLanguageCode);
+						(StructurePageRenderDecorator) getBusiness()
+							.getPageBusiness().createPageRenderDecorator(
+									page, aLanguageCode);
 					String content = pageDecorator.getContentMap().get(field);
 					return content != null ? content : "";
 				}
 			}
-			return getPageBusiness().createPageRenderDecorator(
+			return getBusiness().getPageBusiness().createPageRenderDecorator(
 					page, aLanguageCode).getContent();
 		}
 		return "Approved content not found";
@@ -136,7 +125,7 @@ public class VelocityServiceImpl implements VelocityService {
 
 	@Override
 	public String findContent(String path) {
-		return findContent(path, languageCode);
+		return findContent(path, getBusiness().getLanguage());
 	}
 
 	@Override
@@ -145,15 +134,16 @@ public class VelocityServiceImpl implements VelocityService {
 				path);
 		List<String> result = new ArrayList<String>();
 		for (PageEntity page : pages) {
-			result.add(getPageBusiness().createPageRenderDecorator(
-					page, aLanguageCode).getContent());
+			result.add(getBusiness().getPageBusiness()
+					.createPageRenderDecorator(page, aLanguageCode)
+					.getContent());
 		}
 		return result;
 	}
 
 	@Override
 	public List<String> findChildrenContent(String path) {
-		return findChildrenContent(path, languageCode);
+		return findChildrenContent(path, getBusiness().getLanguage());
 	}
 
 	@Override
@@ -199,6 +189,14 @@ public class VelocityServiceImpl implements VelocityService {
 		List<PageEntity> result = findPageChildren(path, count);
 		Collections.sort(result, PageHelper.SORT_INDEX_ASC);
 		return result;
+	}
+
+	@Override
+	public TagVelocityService getTag() {
+		if (tagVelocityService == null) {
+			tagVelocityService = new TagVelocityServiceImpl(getBusiness());
+		}
+		return tagVelocityService;
 	}
 	
 }

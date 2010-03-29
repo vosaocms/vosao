@@ -24,6 +24,7 @@ package org.vosao.entity;
 import java.util.Date;
 
 import org.vosao.utils.FolderUtil;
+import static org.vosao.utils.EntityUtil.*;
 
 import com.google.appengine.api.datastore.Entity;
 
@@ -58,12 +59,12 @@ public class FileEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setUnindexedProperty("title", title);
-		entity.setProperty("filename", filename);
-		entity.setProperty("folderId", folderId);
-		entity.setUnindexedProperty("mimeType", mimeType);
-		entity.setUnindexedProperty("lastModifiedTime", lastModifiedTime);
-		entity.setUnindexedProperty("size", size);
+		setProperty(entity, "title", title, false);
+		setProperty(entity, "filename", filename, true);
+		setProperty(entity, "folderId", folderId, true);
+		setProperty(entity, "mimeType", mimeType, false);
+		setProperty(entity, "lastModifiedTime", lastModifiedTime, false);
+		setProperty(entity, "size", size, false);
 	}
 
 	public FileEntity(String aTitle, String aName, Long aFolderId,

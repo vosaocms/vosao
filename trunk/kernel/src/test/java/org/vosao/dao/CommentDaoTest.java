@@ -153,5 +153,18 @@ public class CommentDaoTest extends AbstractDaoTest {
 		r = getDao().getCommentDao().getById(roma.getId());
 		assertFalse(r.isDisabled());
 	}	
-	
+
+	public void testRemoveByPage() {
+		PageEntity page = pageTool.addPage("test");
+		commentTool.addComment("yuri", "content1", page);
+		commentTool.addComment("roma", "content2", page, true);
+		List<CommentEntity> list = getDao().getCommentDao().getByPage(
+				page.getFriendlyURL(), false);
+		assertEquals(1, list.size());
+		getDao().getCommentDao().removeByPage(page.getFriendlyURL());
+		list = getDao().getCommentDao().getByPage(page.getFriendlyURL(), false);
+		assertEquals(0, list.size());
+		list = getDao().getCommentDao().getByPage(page.getFriendlyURL(), true);
+		assertEquals(0, list.size());
+	}
 }

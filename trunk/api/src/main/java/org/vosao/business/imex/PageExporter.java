@@ -34,6 +34,8 @@ public interface PageExporter {
 
 	String createPagePermissionsXML(String pageURL);
 
+	String createPageTagXML(String pageURL);
+
 	void readPages(Element pages) throws DaoTaskException;
 	
 	/**
@@ -66,6 +68,9 @@ public interface PageExporter {
 	 * @throws DocumentException 
 	 */
 	boolean readPermissionsFile(String folderPath, String xml) 
+			throws DocumentException;
+
+	boolean readPageTagFile(String folderPath, String xml) 
 			throws DocumentException;
 	
 }

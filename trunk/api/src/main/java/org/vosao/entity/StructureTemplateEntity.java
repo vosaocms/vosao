@@ -22,10 +22,10 @@
 package org.vosao.entity;
 
 import org.vosao.enums.StructureTemplateType;
+import static org.vosao.utils.EntityUtil.*;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
-
 
 public class StructureTemplateEntity extends BaseEntityImpl {
 
@@ -52,10 +52,10 @@ public class StructureTemplateEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("title", title);
-		entity.setProperty("structureId", structureId);
-		entity.setUnindexedProperty("type", type.name());
-		entity.setUnindexedProperty("content", new Text(content));
+		setProperty(entity, "title", title, true);
+		setProperty(entity, "structureId", structureId, true);
+		setProperty(entity, "type", type.name(), false);
+		setTextProperty(entity, "content", content);
 	}
 
 	public StructureTemplateEntity(String title, Long structureId, 

@@ -27,8 +27,8 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.ContentPermissionBusiness;
-import org.vosao.business.CurrentUser;
 import org.vosao.business.FolderPermissionBusiness;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FolderPermissionEntity;
@@ -176,7 +176,7 @@ public class FolderPermissionBusinessImpl extends AbstractBusinessImpl
 			String pageUrl = getFolderFromPageUrl(path);			
 			ContentPermissionEntity pagePermission = 
 				getContentPermissionBusiness().getPermission(
-					pageUrl, CurrentUser.getInstance());
+					pageUrl, VosaoContext.getInstance().getUser());
 			result.setPermission(FolderPermissionType
 					.fromContentPermissionType(pagePermission.getPermission()));
 		}

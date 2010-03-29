@@ -21,20 +21,25 @@
 
 package org.vosao.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.vosao.dao.tool.GroupTool;
 import org.vosao.dao.tool.UserTool;
+import org.vosao.entity.GroupEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.UserRole;
 
 public class UserDaoTest extends AbstractDaoTest {
 
+	private GroupTool groupTool;
 	private UserTool userTool;
 
 	@Override
     public void setUp() throws Exception {
         super.setUp();
         userTool = new UserTool(getDao());
+        groupTool = new GroupTool(getDao());
 	}    
 	
 	public void testSave() {
@@ -105,5 +110,37 @@ public class UserDaoTest extends AbstractDaoTest {
 		List<UserEntity> users2 = getDao().getUserDao().getByRole(UserRole.USER);
 		assertEquals(1, users2.size());
 	}	
+	
+	public void testSelectByGroup() {
+		GroupEntity group1 = groupTool.addGroup("group1");
+		GroupEntity group2 = groupTool.addGroup("group2");
+		UserEntity user1 = userTool.addUser("roma", UserRole.USER); 
+		groupTool.addUserGroup(group1.getId(), user1.getId());
+		groupTool.addUserGroup(group1.getId(), 
+				userTool.addUser("sasha", UserRole.USER).getId());
+		groupTool.addUserGroup(group2.getId(), 
+				userTool.addUser("alex1", UserRole.USER).getId());
+		groupTool.addUserGroup(group2.getId(), 
+				userTool.addUser("alex2", UserRole.USER).getId());
+		groupTool.addUserGroup(group2.getId(), 
+				userTool.addUser("alex3", UserRole.USER).getId());
+		List<UserEntity> list = getDao().getUserDao().selectByGroup(
+				group1.getId());
+		assertEquals(2, list.size());
+		assertEquals(2, getDao().getUserGroupDao().selectByGroup(group1.getId())
+				.size());
+		assertEquals(user1.getId(), getDao().getUserGroupDao().getByUserGroup(
+				group1.getId(), user1.getId()).getUserId());
+		List<Long> ids = new ArrayList<Long>();
+		ids.add(group2.getId());
+		getDao().getUserGroupDao().removeByGroup(ids);
+		assertEquals(0, getDao().getUserGroupDao().selectByGroup(group2.getId())
+				.size());
+		ids.clear();
+		ids.add(user1.getId());
+		getDao().getUserGroupDao().removeByUser(ids);
+		assertEquals(1, getDao().getUserGroupDao().selectByGroup(group1.getId())
+				.size());
+	}
 	
 }

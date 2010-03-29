@@ -49,7 +49,10 @@ function renderPage(vo) {
 			+ ' <a href="page/content.jsp?id=' + vo.entity.id + '">'
 			+ vo.entity.title
 			+ '</a> <a title="Add child" href="page/index.jsp?parent=' + pageUrl
-			+ '">+</a>';
+			+ '"><img src="/static/images/add.png"/></a> '
+			+ '<a title="Remove" href="#" onclick="onPageRemove(\'' 
+			+ vo.entity.friendlyURL + '\')">'
+			+ '<img src="/static/images/02_x.png" /></a>';
 	if (vo.children.list.length > 0) {
 		html += '<ul>';
 		$.each(vo.children.list, function(n, value) {
@@ -66,4 +69,13 @@ function loadUser() {
 		    $('#structuresTab').hide();
 		}
 	});
+}
+
+function onPageRemove(url) {
+	if (confirm('Are you shure?')) {
+		Vosao.jsonrpc.pageService.remove(function(r) {
+			Vosao.showServiceMessages(r);
+			loadData();
+		}, url);
+	}
 }

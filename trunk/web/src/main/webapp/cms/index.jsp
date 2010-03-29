@@ -22,10 +22,10 @@
 %>
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
-<%@ page import="org.vosao.business.CurrentUser" %>
+<%@ page import="org.vosao.common.VosaoContext" %>
 <%@ page import="org.vosao.entity.UserEntity" %>
 <% 
-    UserEntity user = CurrentUser.getInstance();
+    UserEntity user = VosaoContext.getInstance().getUser();
 %>
 <html>
 <head>

@@ -22,6 +22,7 @@
 package org.vosao.entity;
 
 import com.google.appengine.api.datastore.Entity;
+import static org.vosao.utils.EntityUtil.*;
 
 public class LanguageEntity extends BaseEntityImpl {
 
@@ -48,8 +49,8 @@ public class LanguageEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("code", code);
-		entity.setUnindexedProperty("title", title);
+		setProperty(entity, "code", code, true);
+		setProperty(entity, "title", title, false);
 	}
 
 	public LanguageEntity(final String code, final String title) {

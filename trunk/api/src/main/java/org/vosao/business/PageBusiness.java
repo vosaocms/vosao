@@ -30,6 +30,7 @@ import org.vosao.business.PageRenderDecorator;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.UserEntity;
+import org.vosao.velocity.VelocityService;
 
 
 public interface PageBusiness {
@@ -138,4 +139,11 @@ public interface PageBusiness {
 	 */
 	void moveUp(PageEntity page);
 	
+	VelocityService getVelocityService();
+
+	/**
+	 * Remove page by URL with all subpages and page resouces.
+	 */
+	void remove(String pageURL);
+
 }

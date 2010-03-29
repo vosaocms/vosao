@@ -143,4 +143,7 @@ public interface PageRenderDecorator {
 	
 	boolean isVelocityProcessing();
 
+	String getHeadHtml();
+
+	boolean isSkipPostProcessing();
 }

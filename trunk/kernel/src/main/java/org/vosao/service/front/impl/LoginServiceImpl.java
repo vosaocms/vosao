@@ -1,11 +1,11 @@
 package org.vosao.service.front.impl;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vosao.business.UserPreferences;
 import org.vosao.common.BCrypt;
 import org.vosao.entity.UserEntity;
 import org.vosao.filter.AuthenticationFilter;
@@ -44,10 +44,8 @@ public class LoginServiceImpl extends AbstractServiceImpl
 				return passwordIncorrect;
 			}
 		}
-		getBusiness().setUserPreferences(null, request);
-		UserPreferences userPreferences = getBusiness().getUserPreferences(
-				request);
-		userPreferences.setUser(user);
+		HttpSession session = request.getSession(true);
+		session.setAttribute(AuthenticationFilter.USER_SESSION_ATTR, user);
 		String originalView = (String) request.getSession().getAttribute(
 				AuthenticationFilter.ORIGINAL_VIEW_KEY);
 		if (originalView != null) {
@@ -65,7 +63,8 @@ public class LoginServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse logout(HttpServletRequest request) {
-		getBusiness().setUserPreferences(null, request);
+		HttpSession session = request.getSession(true);
+		session.setAttribute(AuthenticationFilter.USER_SESSION_ATTR, null);
 		return ServiceResponse.createSuccessResponse("Successfully logged out");
 	}
 	

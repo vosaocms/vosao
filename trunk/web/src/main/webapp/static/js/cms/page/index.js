@@ -33,6 +33,7 @@ var currentLanguage = '';
 var structureTemplates = null;
     
 $(function(){
+    $("#tag-dialog").dialog({ width: 400, autoOpen: false });
     $(".datepicker").datepicker({dateFormat:'dd.mm.yy'});
     Vosao.initJSONRpc(loadData);
     // hover states on the link buttons
@@ -53,6 +54,7 @@ $(function(){
     $('#metadata').click(function() {
     	$('#meta').toggle();
     });
+    $('#addTag').click(onAddTag);
 });
 
 function loadData() {
@@ -81,6 +83,7 @@ function loadPage() {
 		loadVersions();
 		loadLanguages();
 		loadContents();
+		showTags();
 	} else {
 		pages['1'] = page;
 	}
@@ -134,6 +137,9 @@ function initPageForm() {
 		$('#velocityProcessing').each(function() {
 			this.checked = page.velocityProcessing;
 		});
+		$('#skipPostProcessing').each(function() {
+			this.checked = page.skipPostProcessing;
+		});
 		$('#templates').val(page.template);
 		$('#pageState').html(page.stateString == 'EDIT' ? 'Edit' : 'Approved');
 		$('#pageCreateDate').html(page.createDateString);
@@ -142,6 +148,7 @@ function initPageForm() {
 		$('#pageModUser').html(page.modUserEmail);
 		$('#keywords').html(page.keywords);
 		$('#description').html(page.description);
+		$('#headHtml').html(page.headHtml);
 		$('.contentTab').show();
 		$('.childrenTab').show();
 		$('.commentsTab').show();
@@ -157,7 +164,7 @@ function initPageForm() {
 		$('#parentFriendlyUrl').html(pageParentUrl + urlEnd);
 		$('#pageType').val('SIMPLE');
 		$('#publishDate').val(Vosao.formatDate(new Date()));
-		$('#commentsEnabled, #velocityProcessing').each(function() {
+		$('#commentsEnabled, #velocityProcessing, #skipPostProcessing').each(function() {
 			this.checked = false;
 		});
 		$('#searchable').each(function() {
@@ -170,6 +177,7 @@ function initPageForm() {
 		$('#pageModDate').html('');
 		$('#keywords').html('');
 		$('#description').html('');
+		$('#headHtml').html('');
 		$('.contentTab').hide();
 		$('.childrenTab').hide();
 		$('.commentsTab').hide();
@@ -189,13 +197,15 @@ function onPageUpdate() {
 		commentsEnabled : String($('#commentsEnabled:checked').size() > 0),
 		searchable : String($('#searchable:checked').size() > 0),
 		velocityProcessing : String($('#velocityProcessing:checked').size() > 0),
+		skipPostProcessing : String($('#skipPostProcessing:checked').size() > 0),
 		template : $('#templates option:selected').val(),
 		approve : String($('#approveOnPageSave:checked, #approveOnContentSave:checked').size() > 0),
 		pageType: $('#pageType').val(),
 		structureId: $('#structure').val(),
 		structureTemplateId: $('#structureTemplate').val(),
 		keywords: $('#keywords').val(),
-		description: $('#description').val()
+		description: $('#description').val(),
+		headHtml: $('#headHtml').val()
 	});
 	$.cookie("page_template", pageVO.map.template, {path:'/', expires: 10});
 	Vosao.jsonrpc.pageService.savePage(function(r) {
@@ -335,4 +345,72 @@ function loadContents() {
 			currentLanguage = r.list[0].languageCode;
 		}
 	}
+}
+
+// Tags
+
+function onAddTag() {
+	Vosao.jsonrpc.tagService.getTree(function(r) {
+		$('#tagTree').html(renderTags(r.list));
+        $("#tagTree").treeview({
+			animated: "fast",
+			collapsed: true,
+			unique: true,
+			persist: "cookie",
+			cookieId: "tagTree"
+		});
+        $('#tag-dialog').dialog('open');
+	});
+}
+
+function renderTags(list) {
+	var html = ''
+	$.each(list, function (i, value) {
+		html += renderTag(value);
+	});
+	return html;
+}
+
+function renderTag(vo) {
+	var html = '<li><a href="#" onclick="onTagSelect(' + vo.entity.id + ')">' 
+        + vo.entity.name + '</a>';
+    if (vo.children.list.length > 0) {
+        html += '<ul>';
+        $.each(vo.children.list, function(n, value) {
+            html += renderTag(value);
+        });
+        html += '</ul>';
+    }
+    return html + '</li>';
+}
+
+function onTagSelect(id) {
+	Vosao.jsonrpc.tagService.addTag(function(r){
+		Vosao.showServiceMessages(r);
+	    $('#tag-dialog').dialog('close');
+		callLoadTags();
+	}, page.friendlyURL, id);
+}
+
+function callLoadTags() {
+	Vosao.jsonrpc.pageService.getPageTags(function(r) {
+		pageRequest.tags = r;
+		showTags();
+	}, page.friendlyURL);
+}
+
+function showTags() {
+	var h = '';
+	$.each(pageRequest.tags.list, function (i,value) {
+		h += '<span class="tag">' + value.name + ' <a href="#" onclick="onTagRemove('
+			+ value.id + ')"><img src="/static/images/02_x.png"/></a></span>';
+	});
+	$('#tags').html(h);
+}
+
+function onTagRemove(id) {
+	Vosao.jsonrpc.tagService.removeTag(function(r) {
+		Vosao.showServiceMessages(r);
+		callLoadTags();
+	}, page.friendlyURL, id);
 }

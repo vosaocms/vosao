@@ -37,9 +37,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vosao.business.CurrentUser;
 import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.common.AccessDeniedException;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.SeoUrlEntity;
@@ -138,7 +138,7 @@ public class SiteFilter extends AbstractFilter implements Filter {
     	response.setContentType("text/html");
     	response.setCharacterEncoding("UTF-8");
     	Writer out = response.getWriter();
-    	String language = getBusiness().getLanguage(request);
+    	String language = getBusiness().getLanguage();
     	String content = getBusiness().getPageBusiness().render(page, language);
     	out.write(content);
     }
@@ -157,7 +157,7 @@ public class SiteFilter extends AbstractFilter implements Filter {
     	Integer version = getVersion(request);
     	PageEntity page;
     	if (getBusiness().getContentPermissionBusiness().getPermission(url, 
-    			CurrentUser.getInstance()).isDenied()) {
+    			VosaoContext.getInstance().getUser()).isDenied()) {
     		throw new AccessDeniedException();
     	}
     	if (version == null) {

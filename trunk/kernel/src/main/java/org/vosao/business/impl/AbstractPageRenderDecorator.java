@@ -190,5 +190,15 @@ public abstract class AbstractPageRenderDecorator implements PageRenderDecorator
 	public boolean isVelocityProcessing() {
 		return page.isVelocityProcessing();
 	}
+
+	@Override
+	public String getHeadHtml() {
+		return page.getHeadHtml();
+	}
+	
+	@Override
+	public boolean isSkipPostProcessing() {
+		return page.isSkipPostProcessing();
+	}
 	
 }

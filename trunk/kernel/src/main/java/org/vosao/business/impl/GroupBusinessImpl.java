@@ -26,8 +26,8 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vosao.business.CurrentUser;
 import org.vosao.business.GroupBusiness;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.GroupEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.entity.UserGroupEntity;
@@ -75,7 +75,7 @@ public class GroupBusinessImpl extends AbstractBusinessImpl
 	
 	@Override
 	public void remove(List<Long> ids) {
-		if (CurrentUser.getInstance().isAdmin()) {
+		if (VosaoContext.getInstance().getUser().isAdmin()) {
 			getDao().getUserGroupDao().removeByGroup(ids);
 			getDao().getContentPermissionDao().removeByGroup(ids);
 			getDao().getFolderPermissionDao().removeByGroup(ids);

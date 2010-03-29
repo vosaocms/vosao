@@ -21,6 +21,8 @@
 
 package org.vosao.entity;
 
+import static org.vosao.utils.EntityUtil.*;
+
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Entity;
 
@@ -46,15 +48,15 @@ public class PluginResourceEntity extends BaseEntityImpl {
     @Override
     public void save(Entity entity) {
     	super.save(entity);
-    	entity.setUnindexedProperty("data", new Blob(data));
-    	entity.setProperty("url", url);
-    	entity.setProperty("pluginName", pluginName);
+    	setProperty(entity, "data", data);
+    	setProperty(entity, "url", url, true);
+    	setProperty(entity, "pluginName", pluginName, true);
     }
 
-    public PluginResourceEntity(String plugin, String fileId, byte[] content) {
+    public PluginResourceEntity(String plugin, String anUrl, byte[] content) {
 		this();
 		pluginName = plugin;
-		this.url = fileId;
+		this.url = anUrl;
 		this.data = content;
 	}
 

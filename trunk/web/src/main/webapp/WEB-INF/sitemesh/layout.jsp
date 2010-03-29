@@ -23,10 +23,11 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
-<%@ page import="org.vosao.business.CurrentUser" %>
+<%@ page import="org.vosao.common.VosaoContext" %>
 <%@ page import="org.vosao.entity.UserEntity" %>
+<%@ page import="org.vosao.business.SetupBean" %>
 <% 
-    UserEntity user = CurrentUser.getInstance();
+    UserEntity user = VosaoContext.getInstance().getUser();
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -77,7 +78,7 @@
 <div id="topbar">
 
     <div id="leftmenu">
-        <a href="/cms">Vosao</a> CMS
+        <a href="/cms">Vosao CMS <%= SetupBean.FULLVERSION %></a>        
         <a href="/cms/pages.jsp">Content</a>
 <% if (user.isAdmin()) { %>
         <a href="/cms/templates.jsp">Templates</a>

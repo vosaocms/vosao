@@ -25,13 +25,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vosao.business.CurrentUser;
 import org.vosao.business.FileBusiness;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FolderPermissionEntity;
@@ -156,7 +155,7 @@ public class FileBusinessImpl extends AbstractBusinessImpl
 		}
 		FolderPermissionEntity perm = getFolderBusiness()
 				.getFolderPermissionBusiness().getPermission(folder.getEntity(), 
-						CurrentUser.getInstance());
+						VosaoContext.getInstance().getUser());
 		if (perm.isChangeGranted()) {
 			getDao().getFileDao().remove(file.getId());
 			getSystemService().getFileCache().remove(filename);

@@ -116,6 +116,12 @@
     <bean id="pluginResourceDao" class="org.vosao.dao.impl.PluginResourceDaoImpl"
         parent="abstractDao" />  
 
+    <bean id="tagDao" class="org.vosao.dao.impl.TagDaoImpl"
+        parent="abstractDao" />  
+
+    <bean id="pageTagDao" class="org.vosao.dao.impl.PageTagDaoImpl"
+        parent="abstractDao" />  
+
     <bean id="structureDao" class="org.vosao.dao.impl.StructureDaoImpl"
         parent="abstractDao">
         <property name="structureTemplateDao" ref="structureTemplateDao"/>
@@ -154,6 +160,8 @@
         <property name="structureTemplateDao" ref="structureTemplateDao"/>  
         <property name="pluginDao" ref="pluginDao"/>  
         <property name="pluginResourceDao" ref="pluginResourceDao"/>  
+        <property name="pageTagDao" ref="pageTagDao"/>  
+        <property name="tagDao" ref="tagDao"/>  
     </bean>
 
     <!--=========================== Business ================================-->
@@ -209,6 +217,9 @@
     <bean id="pluginResourceBusiness" class="org.vosao.business.impl.PluginResourceBusinessImpl"
         parent="abstractBusiness" />  
 
+    <bean id="tagBusiness" class="org.vosao.business.impl.TagBusinessImpl"
+        parent="abstractBusiness" />  
+
     <bean id="pluginBusiness" class="org.vosao.business.impl.PluginBusinessImpl"
         parent="abstractBusiness" init-method="init">
         <property name="business" ref="business"/>  
@@ -255,6 +266,7 @@
         <property name="structureTemplateBusiness" ref="structureTemplateBusiness"/>  
         <property name="pluginBusiness" ref="pluginBusiness"/>  
         <property name="pluginResourceBusiness" ref="pluginResourceBusiness"/>
+        <property name="tagBusiness" ref="tagBusiness"/>
         
         <property name="searchEngine" ref="searchEngine"/>
         <property name="importExportBusiness" ref="importExportBusiness"/>
@@ -340,6 +352,9 @@
     <bean id="pluginService" class="org.vosao.service.back.impl.PluginServiceImpl"
         parent="abstractService" />
 
+    <bean id="tagService" class="org.vosao.service.back.impl.TagServiceImpl"
+        parent="abstractService" />
+
     <bean id="configService" class="org.vosao.service.back.impl.ConfigServiceImpl"
         parent="abstractService" >
         <property name="setupBean" ref="setupBean"/>  
@@ -383,6 +398,7 @@
         <property name="structureService" ref="structureService"/>  
         <property name="structureTemplateService" ref="structureTemplateService"/>  
         <property name="pluginService" ref="pluginService"/>  
+        <property name="tagService" ref="tagService"/>  
     </bean>
 
     <!--================== JSON-RPC front services ==========================-->

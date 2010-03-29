@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.jabsorb.JSONRPCBridge;
+import org.vosao.common.VosaoContext;
 import org.vosao.service.BackService;
 import org.vosao.service.FrontService;
 
@@ -45,7 +46,8 @@ public class ServiceFilter extends AbstractFilter implements Filter {
 			FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpSession session = httpRequest.getSession(true);
-        boolean backService = isLoggedIn(httpRequest);
+        boolean backService = isLoggedIn(httpRequest) 
+        	&& !VosaoContext.getInstance().getUser().isSiteUser();
 		enableFrontService(session);
         if (backService) {
         	enableBackService(session);
@@ -85,7 +87,8 @@ public class ServiceFilter extends AbstractFilter implements Filter {
 	}
 
 	private boolean isLoggedIn(final HttpServletRequest request) {
-		return getBusiness().getUserPreferences(request).isLoggedIn();
+		return request.getSession(true).getAttribute(
+				AuthenticationFilter.USER_SESSION_ATTR) != null;
 	}
 
 	private FrontService getFrontService() {

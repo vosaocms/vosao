@@ -21,6 +21,11 @@
 
 package org.vosao.entity;
 
+import static org.vosao.utils.EntityUtil.getBooleanProperty;
+import static org.vosao.utils.EntityUtil.getLongProperty;
+import static org.vosao.utils.EntityUtil.getStringProperty;
+import static org.vosao.utils.EntityUtil.setProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,11 +80,11 @@ public class ContentPermissionEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("url", url);
-		entity.setUnindexedProperty("allLanguages", allLanguages);
-		entity.setUnindexedProperty("languages", languages);
-		entity.setUnindexedProperty("permission", permission.name());
-		entity.setProperty("groupId", groupId);
+		setProperty(entity, "url", url, true);
+		setProperty(entity, "allLanguages", allLanguages, false);
+		setProperty(entity, "languages", languages, false);
+		setProperty(entity, "permission", permission.name(), false);
+		setProperty(entity, "groupId", groupId, true);
 	}
 
 	public String getUrl() {

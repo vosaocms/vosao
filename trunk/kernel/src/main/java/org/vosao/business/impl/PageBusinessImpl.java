@@ -33,22 +33,27 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.tools.generic.AlternatorTool;
+import org.apache.velocity.tools.generic.ComparisonDateTool;
 import org.apache.velocity.tools.generic.DateTool;
 import org.apache.velocity.tools.generic.EscapeTool;
+import org.apache.velocity.tools.generic.IteratorTool;
 import org.apache.velocity.tools.generic.ListTool;
+import org.apache.velocity.tools.generic.MathTool;
 import org.apache.velocity.tools.generic.NumberTool;
 import org.apache.velocity.tools.generic.RenderTool;
 import org.apache.velocity.tools.generic.SortTool;
 import org.apache.velocity.tools.view.tools.LinkTool;
 import org.vosao.business.Business;
-import org.vosao.business.CurrentUser;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.PageRenderDecorator;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.business.impl.pagefilter.BodyBeginPageFilter;
 import org.vosao.business.impl.pagefilter.HeadBeginPageFilter;
+import org.vosao.business.impl.pagefilter.HeadEndPageFilter;
 import org.vosao.business.impl.pagefilter.HtmlEndPageFilter;
 import org.vosao.business.impl.pagefilter.PageFilter;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.ContentPermissionEntity;
@@ -77,6 +82,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	private VelocityPluginService velocityPluginService;
 	private Business business;
 	private List<PageFilter> pageFilters;
+	private VelocityService velocityService;
 
 	public void init() throws Exception {
 		velocityPluginService = new VelocityPluginServiceImpl(getBusiness());
@@ -86,6 +92,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		if (pageFilters == null) {
 			pageFilters = new ArrayList<PageFilter>();
 			pageFilters.add(new HeadBeginPageFilter(getBusiness()));
+			pageFilters.add(new HeadEndPageFilter(getBusiness()));
 			pageFilters.add(new HtmlEndPageFilter(getBusiness()));
 			pageFilters.add(new BodyBeginPageFilter(getBusiness()));
 		}
@@ -176,11 +183,11 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		addVelocityTools(context);
 		context.put("language", language);
 		context.put("config", configEntity);
-		VelocityService velocityService = new VelocityServiceImpl(getDao(),
-				this, languageCode);
-		context.put("service", velocityService);
+		context.put("service", getVelocityService());
 		context.put("plugin", getVelocityPluginService().getPlugins());
 		context.put("messages", business.getMessageBusiness().getBundle(languageCode));
+		context.put("user", VosaoContext.getInstance().getUser());
+		context.put("request", VosaoContext.getInstance().getRequest());
 		return context;
 	}
 	
@@ -192,13 +199,19 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		context.put("number", new NumberTool());
 		context.put("render", new RenderTool());
 		context.put("sorter", new SortTool());
+		context.put("math", new MathTool());
+		context.put("alternator", new AlternatorTool());
+		context.put("comparisonDate", new ComparisonDateTool());
+		context.put("iterator", new IteratorTool());
 	}
 	
 	private String pagePostProcess(final String content, 
 			final PageEntity pageEntity) {
 		String result = content;
-		for (PageFilter filter : getPageFilters()) {
-			result = filter.apply(result, pageEntity);
+		if (!pageEntity.isSkipPostProcessing()) {
+			for (PageFilter filter : getPageFilters()) {
+				result = filter.apply(result, pageEntity);
+			}
 		}
 		return result;
 	}
@@ -318,12 +331,12 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 
 	private boolean canReadPage(String url) {
 		return !business.getContentPermissionBusiness().getPermission(
-				url, CurrentUser.getInstance()).isDenied();
+				url, VosaoContext.getInstance().getUser()).isDenied();
 	}
 
 	private boolean canWritePage(String url) {
 		return business.getContentPermissionBusiness().getPermission(
-				url, CurrentUser.getInstance()).isChangeGranted();
+				url, VosaoContext.getInstance().getUser()).isChangeGranted();
 	}
 
 	@Override
@@ -363,6 +376,16 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	}
 
 	@Override
+	public void remove(String pageURL) {
+		List<PageEntity> pages = getDao().getPageDao().selectByUrl(pageURL);
+		if (pages.size() > 0) {
+			List<Long> ids = new ArrayList<Long>();
+			ids.add(pages.get(0).getId());
+			remove(ids);
+		}
+	}
+	
+	@Override
 	public void removeVersion(Long id) {
 		PageEntity page = getDao().getPageDao().getById(id);
 		if (page != null) {
@@ -385,7 +408,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	private List<ContentEntity> securityFilter(String url, 
 			List<ContentEntity> list) {
 		ContentPermissionEntity perm = business.getContentPermissionBusiness()
-				.getPermission(url, CurrentUser.getInstance());
+				.getPermission(url, VosaoContext.getInstance().getUser());
 		if (perm.isAllLanguages()) {
 			return list;
 		}
@@ -410,7 +433,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	@Override
 	public boolean canChangeContent(String url, String languageCode) {
 		ContentPermissionEntity perm = business.getContentPermissionBusiness()
-				.getPermission(url, CurrentUser.getInstance());
+				.getPermission(url, VosaoContext.getInstance().getUser());
 		if (perm.isAllLanguages()) {
 			return perm.isChangeGranted();
 		}
@@ -547,6 +570,14 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			swapSortIndexes(currentPage.getFriendlyURL(), 
 					pages.get(currentPos - 1).getFriendlyURL());
 		}
+	}
+
+	@Override
+	public VelocityService getVelocityService() {
+		if (velocityService == null) {
+			velocityService = new VelocityServiceImpl(getBusiness());
+		}
+		return velocityService;
 	}
 
 }

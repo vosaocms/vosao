@@ -21,8 +21,13 @@
 
 package org.vosao.entity;
 
+import static org.vosao.utils.EntityUtil.getBooleanProperty;
+import static org.vosao.utils.EntityUtil.getStringProperty;
+import static org.vosao.utils.EntityUtil.getTextProperty;
+import static org.vosao.utils.EntityUtil.setProperty;
+import static org.vosao.utils.EntityUtil.setTextProperty;
+
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Text;
 
 public class ConfigEntity extends BaseEntityImpl {
 
@@ -63,17 +68,17 @@ public class ConfigEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setUnindexedProperty("googleAnalyticsId", googleAnalyticsId);
-		entity.setUnindexedProperty("siteEmail", siteEmail);
-		entity.setUnindexedProperty("siteDomain", siteDomain);
-		entity.setUnindexedProperty("editExt", editExt);
-		entity.setUnindexedProperty("enableRecaptcha", enableRecaptcha);
-		entity.setUnindexedProperty("recaptchaPrivateKey", recaptchaPrivateKey);
-		entity.setUnindexedProperty("recaptchaPublicKey", recaptchaPublicKey);
-		entity.setUnindexedProperty("commentsEmail", commentsEmail);
-		entity.setUnindexedProperty("commentsTemplate", new Text(commentsTemplate));
-		entity.setUnindexedProperty("version", version);
-		entity.setUnindexedProperty("siteUserLoginUrl", siteUserLoginUrl);
+		setProperty(entity, "googleAnalyticsId", googleAnalyticsId, false);
+		setProperty(entity, "siteEmail", siteEmail, false);
+		setProperty(entity, "siteDomain", siteDomain, false);
+		setProperty(entity, "editExt", editExt, false);
+		setProperty(entity, "enableRecaptcha", enableRecaptcha, false);
+		setProperty(entity, "recaptchaPrivateKey", recaptchaPrivateKey, false);
+		setProperty(entity, "recaptchaPublicKey", recaptchaPublicKey, false);
+		setProperty(entity, "commentsEmail", commentsEmail, false);
+		setTextProperty(entity, "commentsTemplate", commentsTemplate);
+		setProperty(entity, "version", version, false);
+		setProperty(entity, "siteUserLoginUrl", siteUserLoginUrl, false);
 	}
 
 	public String getGoogleAnalyticsId() {

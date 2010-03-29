@@ -32,10 +32,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.dom4j.DocumentException;
-import org.vosao.business.CurrentUser;
 import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.imex.task.DaoTaskAdapter;
 import org.vosao.business.impl.imex.task.DaoTaskTimeoutException;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.helper.UserHelper;
@@ -82,7 +82,7 @@ public class ImportTaskServlet extends BaseSpringServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		String filename = request.getParameter("filename");
 		try {
-			CurrentUser.setInstance(UserHelper.ADMIN);
+			VosaoContext.getInstance().setUser(UserHelper.ADMIN);
 			int start = Integer.valueOf(request.getParameter("start"));
 			String currentFile = request.getParameter("currentFile");
 			getDaoTaskAdapter().setStart(start);
@@ -140,7 +140,7 @@ public class ImportTaskServlet extends BaseSpringServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		String filename = request.getParameter("filename");
 		try {
-			CurrentUser.setInstance(UserHelper.ADMIN);
+			VosaoContext.getInstance().setUser(UserHelper.ADMIN);
 			int start = Integer.valueOf(request.getParameter("start"));
 			String currentFile = request.getParameter("currentFile");
 			getDaoTaskAdapter().setStart(start);

@@ -27,6 +27,9 @@
 
   <%@ include file="head.jsp" %>
 
+  <script src="/static/js/jquery.treeview.pack.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="/static/css/jquery.treeview.css" type="text/css" />
+
   <script type="text/javascript" src="/static/js/cms/page/index.js"></script>
     
 </head>
@@ -72,6 +75,10 @@
     <label>Velocity processing</label>
     <input id="velocityProcessing" type="checkbox" />
 </div>
+<div class="form-row">
+    <label>Skip page post-processing</label>
+    <input id="skipPostProcessing" type="checkbox" />
+</div>
 
 <div class="form-row">
     <label>Page type</label>
@@ -93,7 +100,7 @@
 </div>
 
 <div class="form-row">
-    <a id="metadata" href="#">Metadata</a>
+    <a id="metadata" href="#">Metadata & Header</a>
 </div>
 <div id="meta" style="display:none">
 <div class="form-row">
@@ -104,6 +111,16 @@
     <label>META Description</label>
     <textarea id="description" rows="5" cols="80"></textarea>
 </div>
+<div class="form-row">
+    <label>HEAD content</label>
+    <textarea id="headHtml" rows="5" cols="80"></textarea>
+</div>
+</div>
+
+<div class="form-row">
+    <label>Tags</label>
+    <a id="addTag" href="#">Add tag</a>
+    <span id="tags"></span>
 </div>
 
 <div class="buttons">
@@ -122,6 +139,11 @@
 </div>
 
 <%@ include file="versionDialog.jsp" %>
+
+<div id="tag-dialog" style="display:none" title="Select tag">
+    <ul id="tagTree"></ul>
+</div>
+
 
 </body>
 </html>

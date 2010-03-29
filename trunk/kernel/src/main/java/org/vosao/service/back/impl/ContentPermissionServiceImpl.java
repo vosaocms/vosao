@@ -28,7 +28,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
-import org.vosao.business.CurrentUser;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.GroupEntity;
 import org.vosao.entity.helper.GroupHelper;
@@ -137,7 +137,7 @@ public class ContentPermissionServiceImpl extends AbstractServiceImpl
 	@Override
 	public ContentPermissionEntity getPermission(String url) {
 		return getBusiness().getContentPermissionBusiness().getPermission(
-				url, CurrentUser.getInstance());
+				url, VosaoContext.getInstance().getUser());
 	}
 	
 }

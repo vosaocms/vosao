@@ -69,11 +69,16 @@ public abstract class AbstractPageFilter implements PageFilter {
 			tag = tagUpper;
 		}
 		int bodyStart = page.indexOf(tag);
-		int result = page.indexOf(">", bodyStart) + 1;
-		if (result >= page.length()) {
-			page.append(" ");
+		if (tagName.startsWith("</")) {
+			return bodyStart;
 		}
-		return result;
+		else {
+			int result = page.indexOf(">", bodyStart) + 1;
+			if (result >= page.length()) {
+				page.append(" ");
+			}
+			return result;
+		}
 	}
 
 	public String applyTag(String content, PageEntity page, String tag) {

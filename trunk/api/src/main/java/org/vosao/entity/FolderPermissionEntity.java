@@ -22,6 +22,7 @@
 package org.vosao.entity;
 
 import org.vosao.enums.FolderPermissionType;
+import static org.vosao.utils.EntityUtil.*;
 
 import com.google.appengine.api.datastore.Entity;
 
@@ -67,9 +68,9 @@ public class FolderPermissionEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("folderId", folderId);
-		entity.setUnindexedProperty("permission", permission.name());
-		entity.setProperty("groupId", groupId);
+		setProperty(entity, "folderId", folderId, true);
+		setProperty(entity, "permission", permission.name(), false);
+		setProperty(entity, "groupId", groupId, true);
 	}
 
 	public Long getFolderId() {

@@ -23,16 +23,12 @@ package org.vosao.business.impl;
 
 import java.io.Serializable;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.business.CommentBusiness;
 import org.vosao.business.ConfigBusiness;
 import org.vosao.business.ContentPermissionBusiness;
-import org.vosao.business.CurrentUser;
 import org.vosao.business.FieldBusiness;
 import org.vosao.business.FileBusiness;
 import org.vosao.business.FolderBusiness;
@@ -46,9 +42,10 @@ import org.vosao.business.PluginBusiness;
 import org.vosao.business.PluginResourceBusiness;
 import org.vosao.business.StructureBusiness;
 import org.vosao.business.StructureTemplateBusiness;
+import org.vosao.business.TagBusiness;
 import org.vosao.business.TemplateBusiness;
 import org.vosao.business.UserBusiness;
-import org.vosao.business.UserPreferences;
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.entity.UserEntity;
 import org.vosao.global.SystemService;
@@ -80,31 +77,14 @@ public class BusinessImpl implements Business, Serializable {
 	private PluginBusiness pluginBusiness;
 	private PluginResourceBusiness pluginResourceBusiness;
 	private ImportExportBusiness importExportBusiness;
+	private TagBusiness tagBusiness;
 
 	public void init() {
 	}
 	
 	@Override
-	public UserPreferences getUserPreferences(final HttpServletRequest request) {
-		String name = UserPreferences.class.getName();
-		HttpSession session = request.getSession(true);
-		if (session.getAttribute(name) == null) {
-			session.setAttribute(name, new UserPreferences());
-		}
-		return (UserPreferences)session.getAttribute(name);
-	}
-
-	@Override
-	public void setUserPreferences(UserPreferences bean, 
-			final HttpServletRequest request) {
-		String name = UserPreferences.class.getName();
-		HttpSession session = request.getSession(true);
-		session.setAttribute(name, bean);
-	}
-
-	@Override
 	public UserEntity getUser() {
-		return CurrentUser.getInstance();
+		return VosaoContext.getInstance().getUser();
 	}
 	
 	@Override
@@ -196,25 +176,9 @@ public class BusinessImpl implements Business, Serializable {
 		systemService = bean;
 	}
 
-	private static final String LANGUAGE_PARAM = "language";
-	
-	private String language;
-	
-	@Override
-	public String getLanguage(HttpServletRequest request) {
-		language = (String)request.getSession(true).getAttribute(LANGUAGE_PARAM);
-		return language;
-	}
-
 	@Override
 	public String getLanguage() {
-		return language;
-	}
-
-	@Override
-	public void setLanguage(String language, HttpServletRequest request) {
-		request.getSession(true).setAttribute(LANGUAGE_PARAM, language);
-		this.language = language;
+		return VosaoContext.getInstance().getLanguage();
 	}
 
 	@Override
@@ -334,6 +298,16 @@ public class BusinessImpl implements Business, Serializable {
 	@Override
 	public void setImportExportBusiness(ImportExportBusiness bean) {
 		importExportBusiness = bean;
+	}
+
+	@Override
+	public TagBusiness getTagBusiness() {
+		return tagBusiness;
+	}
+
+	@Override
+	public void setTagBusiness(TagBusiness bean) {
+		tagBusiness = bean;
 	}
 	
 }

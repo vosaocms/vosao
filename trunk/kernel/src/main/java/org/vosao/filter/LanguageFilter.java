@@ -29,16 +29,16 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.LanguageEntity;
 
 
 public class LanguageFilter extends AbstractFilter implements Filter {
     
-    private static final Log logger = LogFactory.getLog(LanguageFilter.class);
-
+    private static final String LANGUAGE_SESSION_ATTR = "language";
+    
     public LanguageFilter() {
     	super();
     }
@@ -46,10 +46,13 @@ public class LanguageFilter extends AbstractFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, 
     		FilterChain chain) throws IOException, ServletException {
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
-    	if (getBusiness().getLanguage(httpRequest) == null) {
+    	HttpSession session = httpRequest.getSession(true);
+    	VosaoContext ctx = VosaoContext.getInstance();
+    	if (session.getAttribute(LANGUAGE_SESSION_ATTR) == null) {
     		String language = request.getLocale().getLanguage();
     		//logger.info("Initial language set " + language);
-    		getBusiness().setLanguage(language, httpRequest);
+    		ctx.setLanguage(language);
+    		session.setAttribute(LANGUAGE_SESSION_ATTR, language);
     	}
     	if (httpRequest.getParameter("language") != null) {
     		String languageCode = httpRequest.getParameter("language");
@@ -57,7 +60,8 @@ public class LanguageFilter extends AbstractFilter implements Filter {
     				languageCode);
     		if (language != null) {
     			//logger.info("Set language " + language + " by parameter");
-    			getBusiness().setLanguage(languageCode, httpRequest);
+    			ctx.setLanguage(languageCode);
+        		session.setAttribute(LANGUAGE_SESSION_ATTR, language);
     		}
     	}
         chain.doFilter(request, response);

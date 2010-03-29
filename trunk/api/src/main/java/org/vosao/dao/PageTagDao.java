@@ -19,40 +19,15 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business;
+package org.vosao.dao;
 
-import java.io.Serializable;
+import org.vosao.entity.PageTagEntity;
 
-import org.vosao.entity.UserEntity;
+/**
+ * @author Alexander Oleynik
+ */
+public interface PageTagDao extends BaseDao<PageTagEntity> {
 
-public class UserPreferences implements Serializable {
+	PageTagEntity getByURL(final String url);
 
-	private static final long serialVersionUID = 1L;
-	
-	private static UserPreferences userPreferences;
-	
-	public static UserPreferences getInstance() {
-		if (userPreferences == null) {
-			userPreferences = new UserPreferences();
-		}
-		return userPreferences;
-	}
-	
-	private UserEntity user;
-	
-	public UserPreferences() {
-	}
-	
-	public UserEntity getUser() {
-		return user;
-	}
-
-	public void setUser(UserEntity user) {
-		this.user = user;
-	}
-
-	public boolean isLoggedIn() {
-		return user != null;
-	}
-	
 }

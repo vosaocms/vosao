@@ -30,15 +30,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.CommentBusiness;
 import org.vosao.business.ContentPermissionBusiness;
-import org.vosao.business.CurrentUser;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.CommentEntity;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.utils.EmailUtil;
 import org.vosao.utils.StrUtil;
-
-import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 
 public class CommentBusinessImpl extends AbstractBusinessImpl 
 	implements CommentBusiness {
@@ -87,7 +85,8 @@ public class CommentBusinessImpl extends AbstractBusinessImpl
 		if (ids.size() > 0) {
 			CommentEntity comment = getDao().getCommentDao().getById(ids.get(0));
 			ContentPermissionEntity permission = getContentPermissionBusiness()
-					.getPermission(	comment.getPageUrl(), CurrentUser.getInstance());
+					.getPermission(	comment.getPageUrl(), 
+							VosaoContext.getInstance().getUser());
 			if (permission != null) {
 				return permission.isChangeGranted();
 			}

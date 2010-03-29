@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.vosao.utils.EntityUtil.*;
 import org.apache.commons.lang.StringUtils;
 import org.vosao.enums.FieldType;
 
@@ -104,18 +105,18 @@ public class FieldEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("formId", formId);
-		entity.setProperty("name", name);
-		entity.setUnindexedProperty("title", title);
-		entity.setUnindexedProperty("fieldType", fieldType.name());
-		entity.setUnindexedProperty("mandatory", mandatory);
-		entity.setUnindexedProperty("values", values);
-		entity.setUnindexedProperty("defaultValue", defaultValue);
-		entity.setUnindexedProperty("height", height);
-		entity.setUnindexedProperty("width", width);
-		entity.setUnindexedProperty("index", index);
-		entity.setUnindexedProperty("regex", regex);
-		entity.setUnindexedProperty("regexMessage", regexMessage);
+		setProperty(entity, "formId", formId, true);
+		setProperty(entity, "name", name, true);
+		setProperty(entity, "title", title, false);
+		setProperty(entity, "fieldType", fieldType.name(), false);
+		setProperty(entity, "mandatory", mandatory, false);
+		setProperty(entity, "values", values, false);
+		setProperty(entity, "defaultValue", defaultValue, false);
+		setProperty(entity, "height", height, false);
+		setProperty(entity, "width", width, false);
+		setProperty(entity, "index", index, false);
+		setProperty(entity, "regex", regex, false);
+		setProperty(entity, "regexMessage", regexMessage, false);
 	}
 
 	public FieldType getFieldType() {

@@ -151,13 +151,15 @@ public class FileDaoTest extends AbstractDaoTest {
 	
 	public void testSaveFileEntity() {
 		FolderEntity folder = folderTool.addFolder("test");
-		byte[] content = new byte[1200000];
+		byte[] content = new byte[12000000];
 		Arrays.fill(content, (byte)123);
 		FileEntity file = fileTool.addFile("title1", "test.bat1", "text/plain", 
 				content, folder);
 		byte[] content1 = getDao().getFileDao().getFileContent(file);
 		assertEquals(content.length, content1.length);
-		
+		getDao().getFileDao().removeAll();
+		List<FileEntity> list = getDao().getFileDao().select();
+		assertEquals(0, list.size());
 	}
 
 	public void testCreateChunks() {
@@ -191,6 +193,7 @@ public class FileDaoTest extends AbstractDaoTest {
 		List<Long> ids = new ArrayList<Long>();
 		ids.add(t1.getId());
 		ids.add(t2.getId());
+		ids.add(null);
 		getDao().getFileDao().remove(ids);
 		List<FileEntity> list = getDao().getFileDao().select();
 		assertEquals(1, list.size());
@@ -206,6 +209,7 @@ public class FileDaoTest extends AbstractDaoTest {
 				"file content3".getBytes(),	folder);
 		List<FileEntity> list = getDao().getFileDao().select();
 		assertEquals(3, list.size());
+		getDao().getFileDao().removeByFolder(null);
 		getDao().getFileDao().removeByFolder(folder.getId());
 		list = getDao().getFileDao().select();
 		assertEquals(0, list.size());

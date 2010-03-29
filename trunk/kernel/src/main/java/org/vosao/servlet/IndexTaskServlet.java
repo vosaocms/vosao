@@ -27,9 +27,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.vosao.business.CurrentUser;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.helper.UserHelper;
 
@@ -51,7 +49,7 @@ public class IndexTaskServlet extends BaseSpringServlet {
 			throws ServletException, IOException {
 		String id = request.getParameter("pageId");
 		try {
-			CurrentUser.setInstance(UserHelper.ADMIN);
+			VosaoContext.getInstance().setUser(UserHelper.ADMIN);
 			PageEntity page = getDao().getPageDao().getById(Long.valueOf(id));
 			if (page != null) {
 				getBusiness().getSearchEngine().updateIndex(page);

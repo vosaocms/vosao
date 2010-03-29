@@ -21,6 +21,15 @@
 
 package org.vosao.entity;
 
+import static org.vosao.utils.EntityUtil.getBooleanProperty;
+import static org.vosao.utils.EntityUtil.getDateProperty;
+import static org.vosao.utils.EntityUtil.getIntegerProperty;
+import static org.vosao.utils.EntityUtil.getLongProperty;
+import static org.vosao.utils.EntityUtil.getStringProperty;
+import static org.vosao.utils.EntityUtil.getTextProperty;
+import static org.vosao.utils.EntityUtil.setProperty;
+import static org.vosao.utils.EntityUtil.setTextProperty;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +41,6 @@ import org.vosao.utils.DateUtil;
 import org.vosao.utils.UrlUtil;
 
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Text;
 
 /**
  * @author Alexander Oleynik
@@ -62,6 +70,8 @@ public class PageEntity extends BaseEntityImpl {
 	private boolean searchable;
 	private Integer sortIndex;
 	private boolean velocityProcessing;
+	private String headHtml;
+	private boolean skipPostProcessing;
 
 	// not persisted
 	private Map<String, String> titles;
@@ -75,9 +85,11 @@ public class PageEntity extends BaseEntityImpl {
 		setKeywords("");
 		setDescription("");
 		setTitle("");
+		setHeadHtml("");
 		searchable = true;
 		sortIndex = 0;
 		velocityProcessing = false;
+		skipPostProcessing = false;
 	}
 	
 	@Override
@@ -100,28 +112,32 @@ public class PageEntity extends BaseEntityImpl {
 		searchable = getBooleanProperty(entity, "searchable", true);
 		sortIndex = getIntegerProperty(entity, "sortIndex", 0);
 		velocityProcessing = getBooleanProperty(entity, "velocityProcessing", false);
+		headHtml = getTextProperty(entity, "headHtml");
+		skipPostProcessing = getBooleanProperty(entity, "skipPostProcessing", false);
 	}
 	
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setUnindexedProperty("title", new Text(title));
-		entity.setProperty("friendlyURL", friendlyURL);
-		entity.setProperty("parentUrl", parentUrl);
-		entity.setProperty("template", template);
-		entity.setUnindexedProperty("publishDate", publishDate);
-		entity.setUnindexedProperty("commentsEnabled", commentsEnabled);
-		entity.setProperty("version", version);
-		entity.setUnindexedProperty("versionTitle", versionTitle);
-		entity.setUnindexedProperty("state", state.name());
-		entity.setUnindexedProperty("pageType", pageType.name());
-		entity.setProperty("structureId", structureId);
-		entity.setProperty("structureTemplateId", structureTemplateId);
-		entity.setUnindexedProperty("keywords", new Text(keywords));
-		entity.setUnindexedProperty("description", new Text(description));
-		entity.setUnindexedProperty("searchable", searchable);
-		entity.setUnindexedProperty("sortIndex", sortIndex);
-		entity.setUnindexedProperty("velocityProcessing", velocityProcessing);
+		setTextProperty(entity, "title", title);
+		setProperty(entity, "friendlyURL", friendlyURL, true);
+		setProperty(entity, "parentUrl", parentUrl, true);
+		setProperty(entity, "template", template, true);
+		setProperty(entity, "publishDate", publishDate, false);
+		setProperty(entity, "commentsEnabled", commentsEnabled, false);
+		setProperty(entity, "version", version, true);
+		setProperty(entity, "versionTitle", versionTitle, false);
+		setProperty(entity, "state", state.name(), false);
+		setProperty(entity, "pageType", pageType.name(), false);
+		setProperty(entity, "structureId", structureId, true);
+		setProperty(entity, "structureTemplateId", structureTemplateId, true);
+		setTextProperty(entity, "keywords", keywords);
+		setTextProperty(entity, "description", description);
+		setProperty(entity, "searchable", searchable, false);
+		setProperty(entity, "sortIndex", sortIndex, false);
+		setProperty(entity, "velocityProcessing", velocityProcessing, false);
+		setTextProperty(entity, "headHtml", headHtml);
+		setProperty(entity, "skipPostProcessing", skipPostProcessing, false);
 	}
 
 	public PageEntity(String title, String friendlyURL, 
@@ -401,6 +417,22 @@ public class PageEntity extends BaseEntityImpl {
 
 	public void setVelocityProcessing(boolean velocityProcessing) {
 		this.velocityProcessing = velocityProcessing;
+	}
+
+	public String getHeadHtml() {
+		return headHtml;
+	}
+
+	public void setHeadHtml(String headHtml) {
+		this.headHtml = headHtml;
+	}
+
+	public boolean isSkipPostProcessing() {
+		return skipPostProcessing;
+	}
+
+	public void setSkipPostProcessing(boolean skipPostProcessing) {
+		this.skipPostProcessing = skipPostProcessing;
 	}
 	
 }

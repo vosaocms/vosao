@@ -53,9 +53,6 @@ public class SetupBeanImpl implements SetupBean {
 
 	private static Log log = LogFactory.getLog(SetupBeanImpl.class);
 
-	public static final String VERSION = "0.4";
-	public static final String FULLVERSION = "0.4";
-
 	private Dao dao;
 	private Business business;
 	
@@ -269,6 +266,8 @@ public class SetupBeanImpl implements SetupBean {
 		getDao().getUserGroupDao().removeAll();
 		getDao().getPluginDao().removeAll();
 		getDao().getPluginResourceDao().removeAll();
+		getDao().getTagDao().removeAll();
+		getDao().getPageTagDao().removeAll();
 		clearCache();
 	}
 	

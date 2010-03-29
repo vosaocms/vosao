@@ -33,11 +33,13 @@ import org.vosao.webdav.sysfile.global.MessagesFileFactory;
 import org.vosao.webdav.sysfile.global.PluginsFileFactory;
 import org.vosao.webdav.sysfile.global.SeourlsFileFactory;
 import org.vosao.webdav.sysfile.global.StructuresFileFactory;
+import org.vosao.webdav.sysfile.global.TagsFileFactory;
 import org.vosao.webdav.sysfile.global.UsersFileFactory;
 import org.vosao.webdav.sysfile.local.CommentsFileFactory;
 import org.vosao.webdav.sysfile.local.ContentFileFactory;
 import org.vosao.webdav.sysfile.local.FolderFileFactory;
 import org.vosao.webdav.sysfile.local.PagePermissionsFileFactory;
+import org.vosao.webdav.sysfile.local.TagFileFactory;
 import org.vosao.webdav.sysfile.local.TemplateFileFactory;
 
 import com.bradmcevoy.http.Resource;
@@ -58,6 +60,7 @@ public class SystemFileFactory extends AbstractServiceBeanImpl {
 			factories.add(new UsersFileFactory(getBusiness()));
 			factories.add(new GroupsFileFactory(getBusiness()));
 			factories.add(new PluginsFileFactory(getBusiness()));
+			factories.add(new TagsFileFactory(getBusiness()));
 			factories.add(new FormsFileFactory(getBusiness()));
 			factories.add(new SeourlsFileFactory(getBusiness()));
 			factories.add(new StructuresFileFactory(getBusiness()));
@@ -66,6 +69,7 @@ public class SystemFileFactory extends AbstractServiceBeanImpl {
 			factories.add(new ContentFileFactory(getBusiness()));
 			factories.add(new CommentsFileFactory(getBusiness()));
 			factories.add(new PagePermissionsFileFactory(getBusiness()));
+			factories.add(new TagFileFactory(getBusiness()));
 		}
 		return factories;
 	}

@@ -32,13 +32,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.vosao.business.CurrentUser;
+import org.vosao.common.VosaoContext;
+import org.vosao.entity.UserEntity;
 
 /**
+ * Check authorised and redirect to login. Inject current user into Vosao 
+ * context.
  * @author Aleksandr Oleynik
  */
 public class AuthenticationFilter extends AbstractFilter implements Filter {
 
+    public static final String USER_SESSION_ATTR = "user";
 	public static final String ORIGINAL_VIEW_KEY = "originalViewKey";
 	public static final String LOGIN_VIEW = "/login.jsp";
 	public static final String CMS = "/cms";
@@ -53,8 +57,10 @@ public class AuthenticationFilter extends AbstractFilter implements Filter {
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		HttpSession session = httpRequest.getSession();
         String url = httpRequest.getServletPath();
-		if (!isLoggedIn(httpRequest)) {
-			CurrentUser.setInstance(null);
+        VosaoContext ctx = VosaoContext.getInstance();
+        UserEntity user = (UserEntity)session.getAttribute(USER_SESSION_ATTR);        
+		if (user == null) {
+			ctx.setUser(null);
 			if (url.startsWith(CMS)) {
 				String originalUrl = httpRequest.getRequestURI() 
 					+ (httpRequest.getQueryString() == null ? "" : 
@@ -66,10 +72,8 @@ public class AuthenticationFilter extends AbstractFilter implements Filter {
 			}
 		}
 		else {
-			CurrentUser.setInstance(getBusiness().getUserPreferences(
-					httpRequest).getUser());
-			if (url.startsWith(CMS) && CurrentUser.getInstance().isSiteUser()) {
-				getBusiness().setUserPreferences(null, httpRequest);
+			ctx.setUser(user);
+			if (url.startsWith(CMS) && ctx.getUser().isSiteUser()) {
 				httpResponse.sendRedirect("/");
 				return;
 			}			
@@ -77,8 +81,4 @@ public class AuthenticationFilter extends AbstractFilter implements Filter {
 		chain.doFilter(request, response);
 	}
 
-	private boolean isLoggedIn(final HttpServletRequest request) {
-		return getBusiness().getUserPreferences(request).isLoggedIn();
-	}
-	
 }

@@ -23,6 +23,7 @@ package org.vosao.entity;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
+import static org.vosao.utils.EntityUtil.*;
 
 public class FormConfigEntity extends BaseEntityImpl {
 
@@ -49,8 +50,8 @@ public class FormConfigEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setUnindexedProperty("formTemplate", new Text(formTemplate));
-		entity.setUnindexedProperty("letterTemplate", new Text(letterTemplate));
+		setTextProperty(entity, "formTemplate", formTemplate);
+		setTextProperty(entity, "letterTemplate", letterTemplate);
 	}
 
 	public String getFormTemplate() {

@@ -28,10 +28,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.vosao.business.CurrentUser;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.utils.DateUtil;
@@ -80,7 +78,7 @@ public class FileDownloadServlet extends BaseSpringServlet {
 		}
 		if (isInCache(request.getPathInfo())) {
 			logger.info("from cache " + request.getPathInfo());
-			if (CurrentUser.getInstance() == null) {
+			if (VosaoContext.getInstance().getUser() == null) {
 				getBusiness().getSystemService().getFileCache()
 					.makePublic(request.getPathInfo());
 			}
@@ -95,7 +93,7 @@ public class FileDownloadServlet extends BaseSpringServlet {
 			if (file.getSize() < CACHE_LIMIT) {
 				getBusiness().getSystemService().getFileCache()
 					.put(request.getPathInfo(), file, content);
-				if (CurrentUser.getInstance() == null) {
+				if (VosaoContext.getInstance().getUser() == null) {
 					getBusiness().getSystemService().getFileCache()
 						.makePublic(request.getPathInfo());
 				}
@@ -156,12 +154,12 @@ public class FileDownloadServlet extends BaseSpringServlet {
 	}
 
 	private boolean isAccessDenied(FolderEntity folder) {
-		if (CurrentUser.getInstance() == null) {
+		if (VosaoContext.getInstance().getUser() == null) {
 			return getBusiness().getFolderPermissionBusiness()
 					.getGuestPermission(folder).isDenied();
 		}
 		return getBusiness().getFolderPermissionBusiness()
-				.getPermission(folder, CurrentUser.getInstance()).isDenied();
+				.getPermission(folder, VosaoContext.getInstance().getUser()).isDenied();
 	}
 	
 	

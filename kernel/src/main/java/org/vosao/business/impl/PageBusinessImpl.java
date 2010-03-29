@@ -43,6 +43,7 @@ import org.apache.velocity.tools.generic.MathTool;
 import org.apache.velocity.tools.generic.NumberTool;
 import org.apache.velocity.tools.generic.RenderTool;
 import org.apache.velocity.tools.generic.SortTool;
+import org.apache.velocity.tools.generic.ValueParser;
 import org.apache.velocity.tools.view.tools.LinkTool;
 import org.vosao.business.Business;
 import org.vosao.business.PageBusiness;
@@ -195,7 +196,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		context.put("date", new DateTool());
 		context.put("esc", new EscapeTool());
 		context.put("link", new LinkTool());
-		context.put("lists", new ListTool());
+		context.put("list", new ListTool());
 		context.put("number", new NumberTool());
 		context.put("render", new RenderTool());
 		context.put("sorter", new SortTool());
@@ -203,6 +204,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		context.put("alternator", new AlternatorTool());
 		context.put("comparisonDate", new ComparisonDateTool());
 		context.put("iterator", new IteratorTool());
+		context.put("parser", new ValueParser());
 	}
 	
 	private String pagePostProcess(final String content, 

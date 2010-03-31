@@ -64,11 +64,8 @@ public class FormVelocityServiceImpl implements FormVelocityService {
 			if (StringUtils.isEmpty(formConfig.getFormTemplate())) {
 				return "Error! Form template is empty.";
 			}
-			StringWriter wr = new StringWriter();
-			String log = null;
-			getSystemService().getVelocityEngine().evaluate(
-					context, wr, log, formConfig.getFormTemplate());
-			return wr.toString();
+			return getSystemService().render(formConfig.getFormTemplate(), 
+					context);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

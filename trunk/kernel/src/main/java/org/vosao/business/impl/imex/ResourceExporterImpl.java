@@ -76,6 +76,7 @@ public class ResourceExporterImpl extends AbstractExporter
 			out.putNextEntry(new ZipEntry(zipPath + "_folder.xml"));
 			out.write(getFolderSystemFile(folder).getBytes("UTF-8"));
 			out.closeEntry();
+			out.nextFile();
 		}
 	}
 	
@@ -124,6 +125,7 @@ public class ResourceExporterImpl extends AbstractExporter
 				out.putNextEntry(new ZipEntry(filePath));
 				out.write(getDao().getFileDao().getFileContent(file));
 				out.closeEntry();
+				out.nextFile();
 			}
 		}
 	}
@@ -178,6 +180,7 @@ public class ResourceExporterImpl extends AbstractExporter
 		out.putNextEntry(new ZipEntry(name));
 		out.write(content.getBytes("UTF-8"));
 		out.closeEntry();
+		out.nextFile();
 	}
 
 	@Override
@@ -207,9 +210,8 @@ public class ResourceExporterImpl extends AbstractExporter
 	public String importResourceFile(final ZipEntry entry, byte[] data)
 			throws UnsupportedEncodingException, DaoTaskException {
 
-		String[] chain = FolderUtil.getPathChain(entry);
 		String folderPath = FolderUtil.getFilePath(entry);
-		String fileName = chain[chain.length - 1];
+		String fileName = FolderUtil.getFileName("/" + entry.getName());
 		//logger.debug("importResourceFile: " + folderPath + " " + fileName + " "
 		//		+ data.length);
 		FolderEntity folderEntity = getBusiness().getFolderBusiness()

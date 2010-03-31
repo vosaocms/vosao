@@ -80,18 +80,26 @@ public class ExportTaskServlet extends BaseSpringServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		VosaoContext.getInstance().setUser(UserHelper.ADMIN);
 		ZipOutStreamTaskAdapter zipOutStreamTaskAdapter = 
-			new ZipOutStreamTaskAdapterImpl();
+			new ZipOutStreamTaskAdapterImpl(getBusiness());
 		String filename = request.getParameter("filename");
 		String currentFile = request.getParameter("currentFile");
 		if (currentFile == null) {
 			removeExportFile(filename);
 			getBusiness().getSystemService().getCache().remove(filename);
 		}
+		String fileCounter = request.getParameter("fileCounter");
+		if (fileCounter != null) {
+			zipOutStreamTaskAdapter.setFileCounter(Integer.valueOf(fileCounter));
+		}
+		else {
+			fileCounter = "";
+		}
 		String exportType = request.getParameter("exportType");
 		try {
 			openStream(zipOutStreamTaskAdapter, filename);
 			zipOutStreamTaskAdapter.setStartFile(currentFile);
-			logger.info("Export " + exportType + " " + currentFile);
+			logger.info("Export " + exportType + " " + currentFile + " " 
+					+ fileCounter);
 	        if (exportType.equals(TYPE_PARAM_THEME)) {
 	        	List<Long> ids = StrUtil.toLong(StrUtil.fromCSV(
 	        			request.getParameter("ids")));
@@ -121,7 +129,8 @@ public class ExportTaskServlet extends BaseSpringServlet {
 			saveZip(zipOutStreamTaskAdapter, filename, true);
     		getBusiness().getFileBusiness().saveFile("/tmp/" + filename + ".txt", 
     				"OK".getBytes());
-			logger.info("Export finished. ");
+			logger.info("Export finished. " + zipOutStreamTaskAdapter
+					.getFileCounter());
 		} catch (TaskTimeoutException e) {
 			saveZip(zipOutStreamTaskAdapter, filename, false);
 			Queue queue = getSystemService().getQueue("export");
@@ -129,7 +138,9 @@ public class ExportTaskServlet extends BaseSpringServlet {
 					.param("filename", filename)
 					.param("exportType", exportType)
 					.param("currentFile", 
-							zipOutStreamTaskAdapter.getCurrentFile()));
+							zipOutStreamTaskAdapter.getCurrentFile())
+					.param("fileCounter", String.valueOf(
+							zipOutStreamTaskAdapter.getFileCounter())));
 			logger.info("Added new export task "
 					+ zipOutStreamTaskAdapter.getCurrentFile());
 		} catch (Exception e) {

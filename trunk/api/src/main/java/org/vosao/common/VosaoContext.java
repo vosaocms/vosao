@@ -34,10 +34,15 @@ import org.vosao.entity.UserEntity;
 public class VosaoContext {
 
 	private HttpServletRequest request;
+	private int requestCount;
+	private long startTime;
+	
 	private String language;
 	private UserEntity user;
 	
 	private VosaoContext() {
+		requestCount = 0;
+		startTime = System.currentTimeMillis();
 	}
 
 	public HttpServletRequest getRequest() {
@@ -46,6 +51,8 @@ public class VosaoContext {
 
 	public void setRequest(HttpServletRequest request) {
 		this.request = request;
+		requestCount++;
+		startTime = System.currentTimeMillis();
 	}
 	
 	public String getLanguage() {
@@ -72,5 +79,13 @@ public class VosaoContext {
 			instance = new VosaoContext();
 		}
 		return instance;
+	}
+
+	public int getRequestCount() {
+		return requestCount;
+	}
+
+	public long getStartTime() {
+		return startTime;
 	}
 }

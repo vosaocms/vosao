@@ -41,6 +41,7 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.vosao.common.VosaoContext;
 import org.vosao.global.CacheService;
 import org.vosao.global.FileCache;
 import org.vosao.global.SystemService;
@@ -49,6 +50,8 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.labs.taskqueue.Queue;
 import com.google.appengine.api.labs.taskqueue.QueueFactory;
+import com.google.appengine.api.quota.QuotaService;
+import com.google.appengine.api.quota.QuotaServiceFactory;
 
 public class SystemServiceImpl implements SystemService, Serializable {
 
@@ -144,6 +147,21 @@ public class SystemServiceImpl implements SystemService, Serializable {
 			fileCache = new FileCacheImpl(getCache());			
 		}
 		return fileCache;
+	}
+
+	@Override
+	public QuotaService getQuotaService() {
+		return QuotaServiceFactory.getQuotaService();
+	}
+
+	@Override
+	public long getRequestCPUTimeSeconds() {
+		VosaoContext ctx = VosaoContext.getInstance();
+		long result = (System.currentTimeMillis() - ctx.getStartTime())/1000;
+		if (ctx.getRequestCount() == 1) {
+			result += 15;
+		}
+		return result;
 	}
 
 }

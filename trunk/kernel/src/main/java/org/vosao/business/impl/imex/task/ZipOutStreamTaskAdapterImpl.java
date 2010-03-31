@@ -28,6 +28,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.business.Business;
 import org.vosao.business.imex.task.TaskTimeoutException;
 import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
 
@@ -36,25 +37,27 @@ public class ZipOutStreamTaskAdapterImpl implements ZipOutStreamTaskAdapter {
 	protected static final Log logger = LogFactory
 			.getLog(ZipOutStreamTaskAdapterImpl.class);
 
+	private Business business;
 	private ByteArrayOutputStream outData;
 	private ZipOutputStream outStream;
 	private String startFile;
 	private String currentFile;
-	private long startTime;
 	private boolean started;
 	private boolean entryOpen;
+	private int fileCounter;
 	
-	public ZipOutStreamTaskAdapterImpl(ZipOutputStream out, 
+	public ZipOutStreamTaskAdapterImpl(Business aBusiness, ZipOutputStream out, 
 			ByteArrayOutputStream anOutData) {
-		this();
+		this(aBusiness);
 		out = outStream;
 		outData = anOutData;
 	}
 
-	public ZipOutStreamTaskAdapterImpl() {
+	public ZipOutStreamTaskAdapterImpl(Business aBusiness) {
+		business = aBusiness;
 		started = false;
 		entryOpen = false;
-		startTime = System.currentTimeMillis();
+		fileCounter = 0;
 	}
 
 	@Override
@@ -107,7 +110,7 @@ public class ZipOutStreamTaskAdapterImpl implements ZipOutStreamTaskAdapter {
 	}
 
 	private void checkTimeout() throws TaskTimeoutException {
-		if (System.currentTimeMillis() - startTime > 24000) {
+		if (business.getSystemService().getRequestCPUTimeSeconds() > 25) {
 			throw new TaskTimeoutException();
 		}
 	}
@@ -146,5 +149,17 @@ public class ZipOutStreamTaskAdapterImpl implements ZipOutStreamTaskAdapter {
 	@Override
 	public void setOutData(ByteArrayOutputStream outData) {
 		this.outData = outData;		
+	}
+
+	public int getFileCounter() {
+		return fileCounter;
+	}
+
+	public void setFileCounter(int fileCounter) {
+		this.fileCounter = fileCounter;
+	}
+	
+	public void nextFile() {
+		fileCounter++;
 	}
 }

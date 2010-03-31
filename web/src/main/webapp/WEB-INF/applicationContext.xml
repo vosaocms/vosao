@@ -134,6 +134,7 @@
     </bean>      
 
     <bean id="dao" class="org.vosao.dao.impl.DaoImpl">  
+        <property name="systemService" ref="systemService"/>
         <property name="entityCache" ref="entityCache"/>  
         <property name="queryCache" ref="queryCache"/>
           

@@ -234,15 +234,11 @@ public class FileUploadServlet extends BaseSpringServlet {
 			&& !ext.toLowerCase().equals("vz")) {
 			throw new UploadException("Wrong file extension.");
 		}
-		FolderEntity folder;
-		folder = getBusiness().getFolderBusiness().createFolder("/tmp");
-		FileEntity file = new FileEntity(fileItem.getName(), fileItem.getName(),
-				folder.getId(), fileItem.getContentType(), new Date(),
-				data.length);
-		getDao().getFileDao().save(file, data);
+		getSystemService().getCache().putBlob(fileItem.getName(), data);
 		Queue queue = getSystemService().getQueue("import");
-		queue.add(url(ImportTaskServlet.IMPORT_TASK_URL).param("start", "1")
-			.param("filename", file.getFilename()));
+		queue.add(url(ImportTaskServlet.IMPORT_TASK_URL)
+				.param("start", "1")
+				.param("filename", fileItem.getName()));
 		return createMessage("success", "Saved for import.");
 	}
 

@@ -51,9 +51,11 @@ import org.vosao.dao.UserDao;
 import org.vosao.dao.UserGroupDao;
 import org.vosao.dao.cache.EntityCache;
 import org.vosao.dao.cache.QueryCache;
+import org.vosao.global.SystemService;
 
 public class DaoImpl implements Dao, Serializable {
 
+	private SystemService systemService;
 	private EntityCache entityCache;
 	private QueryCache queryCache;
 	
@@ -108,6 +110,16 @@ public class DaoImpl implements Dao, Serializable {
 		pluginResourceDao.clearCache();
 		tagDao.clearCache();
 		pageTagDao.clearCache();
+	}
+	
+	@Override
+	public SystemService getSystemService() {
+		return systemService;
+	}
+
+	@Override
+	public void setSystemService(SystemService bean) {
+		systemService = bean;
 	}
 	
 	public PageDao getPageDao() {

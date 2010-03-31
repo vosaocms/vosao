@@ -87,18 +87,17 @@ public class ImportTaskServlet extends BaseSpringServlet {
 			String currentFile = request.getParameter("currentFile");
 			getDaoTaskAdapter().setStart(start);
 			getDaoTaskAdapter().setCurrentFile(currentFile);
-			logger.info("Import " + filename + " " + start + " " + currentFile);
-			FolderEntity folder = getBusiness()
-					.getFolderBusiness()
-					.findFolderByPath(
-							getBusiness().getFolderBusiness().getTree(), "/tmp")
-					.getEntity();
-			FileEntity file = getDao().getFileDao().getByName(folder.getId(),
-					filename);
-			if (file == null) {
-				return;
+			String fileCounter = request.getParameter("fileCounter");
+			if (fileCounter != null) {
+				getDaoTaskAdapter().setFileCounter(Integer.valueOf(fileCounter));
 			}
-			byte[] data = getDao().getFileDao().getFileContent(file);
+			else {
+				fileCounter = "";
+			}
+			currentFile = currentFile == null ? "" : currentFile;
+			logger.info("Import " + filename + " " + start + " " + currentFile 
+					+ " " + fileCounter);
+			byte[] data = getSystemService().getCache().getBlob(filename);
 			ByteArrayInputStream inputData = new ByteArrayInputStream(data);
 			try {
 				ZipInputStream in = new ZipInputStream(inputData);
@@ -109,16 +108,19 @@ public class ImportTaskServlet extends BaseSpringServlet {
 			} catch (DocumentException e) {
 				throw new UploadException(e.getMessage());
 			}
-			getDao().getFileDao().remove(file.getId());
-			logger.info("Import finished. " + getDaoTaskAdapter().getEnd());
+			logger.info("Import finished. " + getDaoTaskAdapter().getFileCounter());
 		} catch (DaoTaskTimeoutException e) {
 			Queue queue = getSystemService().getQueue("import");
 			queue.add(url(IMPORT_TASK_URL).param("start",
-					String.valueOf(getDaoTaskAdapter().getEnd())).param(
-					"filename", filename).param("currentFile",
-					getDaoTaskAdapter().getCurrentFile()));
-			logger.info("Added new import task " + getDaoTaskAdapter().getEnd()
-					+ " " + getDaoTaskAdapter().getCurrentFile());
+					String.valueOf(getDaoTaskAdapter().getEnd()))
+					.param("filename", filename)
+					.param("currentFile", 
+							getDaoTaskAdapter().getCurrentFile())
+					.param("fileCounter", String.valueOf(
+							getDaoTaskAdapter().getFileCounter())));
+			logger.info("Added new import task " 
+					+ getDaoTaskAdapter().getCurrentFile() + " "
+					+ getDaoTaskAdapter().getFileCounter());
 		} catch (UploadException e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();
@@ -145,17 +147,20 @@ public class ImportTaskServlet extends BaseSpringServlet {
 			String currentFile = request.getParameter("currentFile");
 			getDaoTaskAdapter().setStart(start);
 			getDaoTaskAdapter().setCurrentFile(currentFile);
-			logger.info("Import " + filename + " " + start + " " + currentFile);
-			FolderEntity folder = getBusiness().getFolderBusiness()
-					.findFolderByPath(
-							getBusiness().getFolderBusiness().getTree(), "/tmp")
-					.getEntity();
-			FileEntity file = getDao().getFileDao().getByName(folder.getId(),
-					filename);
-			if (file == null) {
+			String fileCounter = request.getParameter("fileCounter");
+			if (fileCounter != null) {
+				getDaoTaskAdapter().setFileCounter(Integer.valueOf(fileCounter));
+			}
+			else {
+				fileCounter = "";
+			}
+			currentFile = currentFile == null ? "" : currentFile;
+			logger.info("Import " + filename + " " + start + " " + currentFile
+					+ " " + fileCounter);
+			byte[] data = getSystemService().getCache().getBlob(filename);
+			if (data == null) {
 				return;
 			}
-			byte[] data = getDao().getFileDao().getFileContent(file);
 			ByteArrayInputStream inputData = new ByteArrayInputStream(data);
 			try {
 				ZipInputStream in = new ZipInputStream(inputData);
@@ -166,16 +171,19 @@ public class ImportTaskServlet extends BaseSpringServlet {
 			} catch (DocumentException e) {
 				throw new UploadException(e.getMessage());
 			}
-			getDao().getFileDao().remove(file.getId());
-			logger.info("Import finished. " + getDaoTaskAdapter().getEnd());
+			logger.info("Import finished. " + getDaoTaskAdapter().getFileCounter());
 		} catch (DaoTaskTimeoutException e) {
 			Queue queue = getSystemService().getQueue("import");
 			queue.add(url(IMPORT_TASK_URL).param("start",
-					String.valueOf(getDaoTaskAdapter().getEnd())).param(
-					"filename", filename).param("currentFile",
-					getDaoTaskAdapter().getCurrentFile()));
-			logger.info("Added new import task " + getDaoTaskAdapter().getEnd()
-					+ " " + getDaoTaskAdapter().getCurrentFile());
+					String.valueOf(getDaoTaskAdapter().getEnd()))
+						.param("filename", filename)
+						.param("currentFile", 
+								getDaoTaskAdapter().getCurrentFile())
+						.param("fileCounter", String.valueOf(
+								getDaoTaskAdapter().getFileCounter())));
+			logger.info("Added new import task " 
+					+ getDaoTaskAdapter().getCurrentFile() + " "
+					+ getDaoTaskAdapter().getFileCounter());
 		} catch (UploadException e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();

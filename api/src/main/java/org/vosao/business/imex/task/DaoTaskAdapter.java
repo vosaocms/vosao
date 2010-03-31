@@ -58,6 +58,12 @@ public interface DaoTaskAdapter {
 	String getCurrentFile();
 
 	void setCurrentFile(String file);
+	
+	int getFileCounter();
+	
+	void setFileCounter(int value);
+	
+	void nextFile();
 
 	void configSave(ConfigEntity entity) throws DaoTaskException;
 	

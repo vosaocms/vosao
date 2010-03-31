@@ -74,6 +74,7 @@ public class ThemeExporterImpl extends AbstractExporter
 			out.putNextEntry(new ZipEntry(descriptionName));
 			out.write(createThemeExportXML(theme).getBytes("UTF-8"));
 			out.closeEntry();
+			out.nextFile();
 		}
 	}
 

@@ -102,6 +102,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 				}
 			}
 			getDaoTaskAdapter().setCurrentFile(entry.getName());
+			getDaoTaskAdapter().nextFile();
 			if (entry.isDirectory()) {
 				getBusiness().getFolderBusiness().createFolder(
 						"/" + entry.getName());
@@ -263,6 +264,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 				}
 			}
 			getDaoTaskAdapter().setCurrentFile(entry.getName());
+			getDaoTaskAdapter().nextFile();
 			if (!entry.isDirectory()) {
 				ByteArrayOutputStream data = new ByteArrayOutputStream();
 				int len = 0;

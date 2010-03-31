@@ -24,7 +24,6 @@ package org.vosao.business.impl.imex.task;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.imex.task.DaoTaskAdapter;
-import org.vosao.business.imex.task.TaskTimeoutException;
 import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.CommentEntity;
@@ -57,8 +56,8 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 	private Dao dao;
 	private int current;
 	private int start;
-	private long startTime = 0;
 	private String currentFile;
+	private int fileCounter;
 	
 	public Dao getDao() {
 		return dao;
@@ -75,7 +74,6 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 	public void setStart(int aStart) {
 		this.start = aStart;
 		current = 0;
-		startTime = System.currentTimeMillis();
 	}
 
 	public int getEnd() {
@@ -86,17 +84,14 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 		current = 0;
 		start = 0;
 	}
-	
+
 	private boolean isSkip() throws DaoTaskException {
 		current++;
-		if (System.currentTimeMillis() - startTime > 25000) {
+		if (getDao().getSystemService().getRequestCPUTimeSeconds() > 25) {
 			throw new DaoTaskTimeoutException();
 		}
 		if (current < start) {
 			return true;
-		}
-		if (current == start) {
-			//logger.info("current == start");
 		}
 		return false;
 	}
@@ -429,5 +424,20 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 			getDao().getTagDao().save(entity);
 		}
 	}
-	
+
+	@Override
+	public int getFileCounter() {
+		return fileCounter;
+	}
+
+	@Override
+	public void setFileCounter(int value) {
+		fileCounter = value;
+	}
+
+	@Override
+	public void nextFile() {
+		fileCounter++;
+	}
+
 }

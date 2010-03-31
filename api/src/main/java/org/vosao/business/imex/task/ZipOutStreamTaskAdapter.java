@@ -51,4 +51,11 @@ public interface ZipOutStreamTaskAdapter {
 	ByteArrayOutputStream getOutData();
 
 	void setOutData(ByteArrayOutputStream outData);
+	
+	int getFileCounter();
+
+	void setFileCounter(int fileCounter);
+	
+	void nextFile();
+
 }

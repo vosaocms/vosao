@@ -28,6 +28,7 @@ import org.apache.velocity.app.VelocityEngine;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.labs.taskqueue.Queue;
+import com.google.appengine.api.quota.QuotaService;
 
 
 public interface SystemService {
@@ -41,6 +42,8 @@ public interface SystemService {
 	Queue getQueue(String name);
 
 	VelocityEngine getVelocityEngine();
+	
+	QuotaService getQuotaService();
 
 	/**
 	 * Render velocity template in specified context. 
@@ -53,4 +56,7 @@ public interface SystemService {
 	Transformer getTransformer(String template);
 	
 	DatastoreService getDatastore();
+	
+	long getRequestCPUTimeSeconds();
+
 }

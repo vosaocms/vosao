@@ -20,6 +20,45 @@
  */
 
 var parentURL = null;
+var tree = null;
+var pages = {};
+var page = null;
+
+var tree_options = {
+	selected : encodeURL('/'),
+	plugins : {
+		cookie : { prefix : 'pages_' },	
+		hotkeys : {
+			functions : {
+				'insert' : function() {
+					$.tree.focused().create();
+					return false;
+				}
+				/*'del' : function() {
+					onPageRemove($.tree.focused().get_rollback().selected);
+					return false;
+				},
+				'return' : function() {
+					onPageEdit($.tree.focused().get_rollback().selected);
+					return false;
+				},
+				'f2': function() {},						
+				'ctrl+c': function() {},						
+				'ctrl+x': function() {},					
+				'ctrl+v': function() {}*/						
+			}
+		}
+	},
+	ui : {
+		theme_name: "classic",
+		animation: 200
+	},
+	callback : {
+		onselect : function (node, tree_ong) {
+			//alert('on select ' + node);
+		}
+	}
+};
 
 $(function() {
     $("#page-dialog").dialog({ width: 400, autoOpen: false });
@@ -36,29 +75,22 @@ function loadData() {
 
 function loadTree() {
 	Vosao.jsonrpc.pageService.getTree(function(r) {
-		$('#pages-tree').html(renderPage(r));
-		$("#pages-tree").treeview({
-			animated: "fast",
-			collapsed: true,
-			unique: true,
-			persist: "cookie",
-			cookieId: "pageTree"
-		});
+		$('#pages-tree').html('<ul>' + renderPage(r) + '</ul>');
+		if (tree == null) {
+		  $("#pages-tree").tree(tree_options);
+		  tree = $.tree.reference('#pages-tree');
+		}
+		else {
+			tree.init(tree_options);
+		}
 	});
 }
 
 function renderPage(vo) {
+	pages[vo.entity.friendlyURL] = vo;
 	var pageUrl = encodeURIComponent(vo.entity.friendlyURL);
-	var p = vo.entity.hasPublishedVersion ? 'published' : 'unpublished';
-	var html = '<li> <img src="/static/images/'+ p +'.png" title="' + p 
-			+ '" width="16px" />' 
-			+ ' <a href="page/content.jsp?id=' + vo.entity.id + '">'
-			+ vo.entity.title
-			+ '</a> <a title="Add child" href="#" onclick="onPageAdd(\'' + vo.entity.friendlyURL
-			+ '\')"><img src="/static/images/add.png"/></a> '
-			+ '<a title="Remove" href="#" onclick="onPageRemove(\'' 
-			+ vo.entity.friendlyURL + '\')">'
-			+ '<img src="/static/images/02_x.png" /></a>';
+	var html = '<li id="' + pageUrl.replace(/\%/g,'__') + '"> '
+		    + ' <a href="#"><ins> </ins>' + vo.entity.title + '</a>';
 	if (vo.children.list.length > 0) {
 		html += '<ul>';
 		$.each(vo.children.list, function(n, value) {
@@ -77,21 +109,49 @@ function loadUser() {
 	});
 }
 
+function encodeURL(url) {
+	return encodeURIComponent(url).replace(/\%/g,'__');
+}
+
+function decodeURL(url) {
+	return decodeURIComponent(url.replace(/__/g,'%'));
+}
+
 function onPageRemove(url) {
-	if (confirm('Are you shure?')) {
+	var pageURL = decodeURL(url);
+	if (pageURL == '/') {
+		alert("You can't delete root page!");
+		return;
+	}
+	if (confirm('Removing page. ' + pageURL + ' Are you shure?')) {
 		Vosao.jsonrpc.pageService.remove(function(r) {
 			Vosao.showServiceMessages(r);
-			loadData();
-		}, url);
+			if (r.result == 'success') {
+				$.tree.focused().remove();
+			}
+		}, pageURL);
 	}
 }
 
-function onPageAdd(parent) {
+function onPageAdd(parentURI) {
+	parent = decodeURL(parentURI);
 	parentURL = parent == '/' ? '' : parent;
 	$('#page-dialog').dialog('open');
 	$('#parentURL').html(parentURL + '/');
 	$('#title').val('');
 	$('#url').val('');
+	$('#title').focus();
+	page = null;
+}
+
+function onPageEdit(uri) {
+	var url = decodeURL(uri);
+	page = pages[url];
+	url = url == '/' ? '' : url;
+	$('#page-dialog').dialog('open');
+	$('#parentURL').html(page.entity.parentUrl + '/');
+	$('#title').val(page.entity.title);
+	$('#url').val(page.entity.pageFriendlyURL);
 	$('#title').focus();
 }
 
@@ -127,17 +187,24 @@ function validate(vo) {
 }
 
 function onSave() {
+	var friendlyURL = parentURL + '/' + $('#url').val();
+	var newURL = '';
+	if (page != null) {
+		friendlyURL = page.entity.friendlyURL;
+		newURL = page.entity.parentUrl + '/' + $('#url').val();
+	}
 	var vo = {
-		title : $('#title').val(),
+		newPage : String(page == null),
 		url : $('#url').val(),
-		friendlyURL : parentURL + '/' + $('#url').val(),
-		titles : 'en' + $('#title').val()
+		friendlyURL : friendlyURL,
+		title : $('#title').val(),
+		newURL : newURL
 	};
 	var error = validate(vo);
 	if (!error) {
-		Vosao.jsonrpc.pageService.addPage(function(r) {
+		Vosao.jsonrpc.pageService.updatePage(function(r) {
 			if (r.result == 'success') {
-				Vosao.showServiceMessages(r);
+				Vosao.info('Success');
 				$('#page-dialog').dialog('close');
 				loadData();
 			}

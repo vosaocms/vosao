@@ -1,0 +1,37 @@
+.outline-link {
+    margin-bottom: 10px;
+}
+
+#pages-tree {
+	float: left;
+	font-size: 16px;
+}
+
+#pages-tree a {
+    padding: 1px 5px 4px 5px;
+}
+
+.form-row {
+    height: 35px;
+}
+
+#page-dialog label {
+	height: 0;
+	float: none;
+}
+
+#page-dialog .form-row {
+    margin: 10px 0;
+    height: auto;
+}
+
+#legend {
+    float: right;
+    width: 300px;
+    padding: 0 20px 20px 20px;
+}
+
+.tree li a, .tree li span  {
+	height: 18px;
+	line-height: 18px;
+}

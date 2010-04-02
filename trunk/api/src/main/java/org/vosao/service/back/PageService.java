@@ -42,9 +42,9 @@ public interface PageService extends AbstractService {
 
 	PageEntity getPageByUrl(final String url);
 
-	ServiceResponse savePage(final Map<String, String> page);
+	ServiceResponse savePage(final Map<String, String> vo);
 	
-	ServiceResponse addPage(final Map<String, String> page);
+	ServiceResponse updatePage(final Map<String, String> vo);
 
 	List<PageVO> getChildren(final String url);
 	

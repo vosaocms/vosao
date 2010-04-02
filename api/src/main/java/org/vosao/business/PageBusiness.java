@@ -146,4 +146,12 @@ public interface PageBusiness {
 	 */
 	void remove(String pageURL);
 
+	/**
+	 * Used in outline editor for quick change title and URL. Also used to move 
+	 * page from old URL to new URL.
+	 * @param pageURL - page old friendlyURL.
+	 * @param title - new title.
+	 * @param newURL - new friendlyURL.
+	 */
+	void changeTitleAndURL(String pageURL, String title, String newURL);	
 }

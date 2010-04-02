@@ -66,6 +66,10 @@ public class PageVO {
 		return page.getFriendlyURL();
 	}
 
+	public String getPageFriendlyURL() {
+		return page.getPageFriendlyURL();
+	}
+
 	public String getParentFriendlyURL() {
 		return page.getParentFriendlyURL();
 	}

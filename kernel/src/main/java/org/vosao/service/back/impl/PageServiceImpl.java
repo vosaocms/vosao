@@ -23,7 +23,6 @@ package org.vosao.service.back.impl;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -64,8 +63,7 @@ import org.vosao.utils.StreamUtil;
 /**
  * @author Alexander Oleynik
  */
-public class PageServiceImpl extends AbstractServiceImpl 
-		implements PageService {
+public class PageServiceImpl extends AbstractServiceImpl implements PageService {
 
 	private static Log logger = LogFactory.getLog(PageServiceImpl.class);
 
@@ -77,21 +75,19 @@ public class PageServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public TreeItemDecorator<PageVO> getTree() {
-		List<PageVO> pages = selectLastVersionPages(
-				getBusiness().getPageBusiness().select());
-		Map<String, TreeItemDecorator<PageVO>> buf = 
-				new HashMap<String, TreeItemDecorator<PageVO>>();
+		List<PageVO> pages = selectLastVersionPages(getBusiness()
+				.getPageBusiness().select());
+		Map<String, TreeItemDecorator<PageVO>> buf = new HashMap<String, TreeItemDecorator<PageVO>>();
 		for (PageVO page : pages) {
-			buf.put(page.getFriendlyURL(), 
-					new TreeItemDecorator<PageVO>(page, null));
+			buf.put(page.getFriendlyURL(), new TreeItemDecorator<PageVO>(page,
+					null));
 		}
 		TreeItemDecorator<PageVO> root = null;
 		for (String id : buf.keySet()) {
 			TreeItemDecorator<PageVO> page = buf.get(id);
 			if (StringUtils.isEmpty(page.getEntity().getParentUrl())) {
 				root = page;
-			}
-			else {
+			} else {
 				TreeItemDecorator<PageVO> parent = buf.get(page.getEntity()
 						.getParentUrl());
 				if (parent != null) {
@@ -103,45 +99,44 @@ public class PageServiceImpl extends AbstractServiceImpl
 		sortTree(root);
 		return root;
 	}
-	
+
 	private void sortTree(TreeItemDecorator<PageVO> page) {
 		if (page.isHasChildren()) {
-			Collections.sort(page.getChildren(), 
-				new Comparator<TreeItemDecorator<PageVO>>() {
-					@Override
-					public int compare(TreeItemDecorator<PageVO> o1,
-							TreeItemDecorator<PageVO> o2) {
-						if (o1.getEntity().getSortIndex() > 
-							o2.getEntity().getSortIndex()) {
-							return 1;
+			Collections.sort(page.getChildren(),
+					new Comparator<TreeItemDecorator<PageVO>>() {
+						@Override
+						public int compare(TreeItemDecorator<PageVO> o1,
+								TreeItemDecorator<PageVO> o2) {
+							if (o1.getEntity().getSortIndex() > o2.getEntity()
+									.getSortIndex()) {
+								return 1;
+							}
+							if (o1.getEntity().getSortIndex().equals(
+									o2.getEntity().getSortIndex())) {
+								return 0;
+							}
+							return -1;
 						}
-						if (o1.getEntity().getSortIndex().equals(
-								o2.getEntity().getSortIndex())) {
-							return 0;
-						}
-						return -1;
-					}
-			});
+					});
 			for (TreeItemDecorator<PageVO> child : page.getChildren()) {
 				sortTree(child);
 			}
 		}
 	}
-	
+
 	private List<PageVO> selectLastVersionPages(List<PageEntity> pages) {
 		Map<String, PageEntity> pageMap = new HashMap<String, PageEntity>();
 		Map<String, Boolean> published = new HashMap<String, Boolean>();
 		for (PageEntity page : pages) {
 			if (pageMap.containsKey(page.getFriendlyURL())) {
-				if (pageMap.get(page.getFriendlyURL()).getVersion() 
-						< page.getVersion()) {
+				if (pageMap.get(page.getFriendlyURL()).getVersion() < page
+						.getVersion()) {
 					pageMap.put(page.getFriendlyURL(), page);
 				}
 				if (page.isApproved()) {
 					published.put(page.getFriendlyURL(), true);
 				}
-			}
-			else {
+			} else {
 				pageMap.put(page.getFriendlyURL(), page);
 				published.put(page.getFriendlyURL(), page.isApproved());
 			}
@@ -156,7 +151,6 @@ public class PageServiceImpl extends AbstractServiceImpl
 		}
 		return result;
 	}
-	
 
 	@Override
 	public PageEntity getPage(Long id) {
@@ -187,23 +181,25 @@ public class PageServiceImpl extends AbstractServiceImpl
 			page.setSearchable(Boolean.valueOf(vo.get("searchable")));
 		}
 		if (vo.get("velocityProcessing") != null) {
-			page.setVelocityProcessing(Boolean.valueOf(vo.get("velocityProcessing")));
+			page.setVelocityProcessing(Boolean.valueOf(vo
+					.get("velocityProcessing")));
 		}
 		if (vo.get("skipPostProcessing") != null) {
-			page.setSkipPostProcessing(Boolean.valueOf(vo.get("skipPostProcessing")));
+			page.setSkipPostProcessing(Boolean.valueOf(vo
+					.get("skipPostProcessing")));
 		}
 		if (vo.get("friendlyUrl") != null) {
 			page.setFriendlyURL(vo.get("friendlyUrl"));
 		}
 		String languageCode = vo.get("languageCode");
 		ContentPermissionEntity perm = getBusiness()
-			.getContentPermissionBusiness().getPermission(
-				page.getFriendlyURL(), VosaoContext.getInstance().getUser());
+				.getContentPermissionBusiness().getPermission(
+						page.getFriendlyURL(),
+						VosaoContext.getInstance().getUser());
 		boolean approve = Boolean.valueOf(vo.get("approve"));
-		if (approve	&& perm.isPublishGranted()) {
+		if (approve && perm.isPublishGranted()) {
 			page.setState(PageState.APPROVED);
-		}
-		else {
+		} else {
 			page.setState(PageState.EDIT);
 		}
 		if (!perm.isChangeGranted(languageCode)) {
@@ -212,9 +208,9 @@ public class PageServiceImpl extends AbstractServiceImpl
 		if (vo.get("publishDate") != null) {
 			try {
 				page.setPublishDate(DateUtil.toDate(vo.get("publishDate")));
-			}
-			catch (ParseException e) {
-				return ServiceResponse.createErrorResponse("Date is in wrong format");
+			} catch (ParseException e) {
+				return ServiceResponse
+						.createErrorResponse("Date is in wrong format");
 			}
 		}
 		if (vo.get("template") != null) {
@@ -230,8 +226,8 @@ public class PageServiceImpl extends AbstractServiceImpl
 			page.setStructureId(Long.valueOf(vo.get("structureId")));
 		}
 		if (vo.get("structureTemplateId") != null) {
-			page.setStructureTemplateId(Long.valueOf(
-					vo.get("structureTemplateId")));
+			page.setStructureTemplateId(Long.valueOf(vo
+					.get("structureTemplateId")));
 		}
 		if (vo.get("keywords") != null) {
 			page.setKeywords(vo.get("keywords"));
@@ -243,27 +239,26 @@ public class PageServiceImpl extends AbstractServiceImpl
 			page.setHeadHtml(vo.get("headHtml"));
 		}
 		List<String> errors = getBusiness().getPageBusiness()
-			.validateBeforeUpdate(page);
+				.validateBeforeUpdate(page);
 		if (errors.isEmpty()) {
 			getDao().getPageDao().save(page);
 			if (vo.containsKey("content")) {
-				getBusiness().getPageBusiness().saveContent(page, 
-					languageCode, vo.get("content"), 
-					oldSearchable, page.isSearchable());
+				getBusiness().getPageBusiness().saveContent(page, languageCode,
+						vo.get("content"), oldSearchable, page.isSearchable());
 			}
-			return ServiceResponse.createSuccessResponse(page.getId().toString());
-		}
-		else {
+			return ServiceResponse.createSuccessResponse(page.getId()
+					.toString());
+		} else {
 			return ServiceResponse.createErrorResponse(
 					"Errors occured during saving page.", errors);
 		}
-		
+
 	}
 
 	@Override
 	public List<PageVO> getChildren(String url) {
-		List<PageEntity> pages = getBusiness().getPageBusiness()
-				.getByParent(url);
+		List<PageEntity> pages = getBusiness().getPageBusiness().getByParent(
+				url);
 		Collections.sort(pages, PageHelper.SORT_INDEX_ASC);
 		return PageVO.create(pages);
 	}
@@ -271,15 +266,15 @@ public class PageServiceImpl extends AbstractServiceImpl
 	@Override
 	public ServiceResponse deletePages(List<String> ids) {
 		getBusiness().getPageBusiness().remove(StrUtil.toLong(ids));
-		return ServiceResponse.createSuccessResponse(
-				"Pages were successfully deleted");
+		return ServiceResponse
+				.createSuccessResponse("Pages were successfully deleted");
 	}
 
 	@Override
 	public ServiceResponse deletePageVersion(Long id) {
 		getBusiness().getPageBusiness().removeVersion(id);
-		return ServiceResponse.createSuccessResponse(
-				"Page was successfully deleted");
+		return ServiceResponse
+				.createSuccessResponse("Page was successfully deleted");
 	}
 
 	private List<ContentEntity> getContents(Long pageId) {
@@ -293,17 +288,19 @@ public class PageServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse addVersion(String url, String versionTitle) {
-		if (!getBusiness().getContentPermissionBusiness().getPermission(
-				url, VosaoContext.getInstance().getUser()).isChangeGranted()) {
+		if (!getBusiness().getContentPermissionBusiness().getPermission(url,
+				VosaoContext.getInstance().getUser()).isChangeGranted()) {
 			return ServiceResponse.createErrorResponse("Access denied");
 		}
-		List<PageEntity> list = getBusiness().getPageBusiness().selectByUrl(url);
+		List<PageEntity> list = getBusiness().getPageBusiness()
+				.selectByUrl(url);
 		if (list.size() > 0) {
 			PageEntity lastPage = list.get(list.size() - 1);
-			return ServiceResponse.createSuccessResponse(
-				getBusiness().getPageBusiness().addVersion(
-					lastPage, lastPage.getVersion() + 1, versionTitle, 
-					VosaoContext.getInstance().getUser()).getId().toString());
+			return ServiceResponse.createSuccessResponse(getBusiness()
+					.getPageBusiness().addVersion(lastPage,
+							lastPage.getVersion() + 1, versionTitle,
+							VosaoContext.getInstance().getUser()).getId()
+					.toString());
 		}
 		return ServiceResponse.createErrorResponse("Page not found");
 	}
@@ -319,49 +316,47 @@ public class PageServiceImpl extends AbstractServiceImpl
 		}
 		if (!getBusiness().getContentPermissionBusiness().getPermission(
 				page.getFriendlyURL(), VosaoContext.getInstance().getUser())
-					.isPublishGranted()) {
+				.isPublishGranted()) {
 			return ServiceResponse.createErrorResponse("Access denied");
 		}
 		page.setState(PageState.APPROVED);
 		getDao().getPageDao().save(page);
-		return ServiceResponse.createSuccessResponse(
-				"Page was successfully approved.");
+		return ServiceResponse
+				.createSuccessResponse("Page was successfully approved.");
 	}
 
 	@Override
-	public PageRequestVO getPageRequest(final Long id, 
-			final String parentUrl) {
+	public PageRequestVO getPageRequest(final Long id, final String parentUrl) {
 		try {
-		PageRequestVO result = new PageRequestVO();
-		result.setPage(getPage(id));
-		String permUrl = parentUrl;
-		if (result.getPage() != null) {
-			String url = result.getPage().getFriendlyURL();
-			result.setVersions(getPageVersions(url));
-			result.setChildren(getChildren(url));
-			result.setComments(getCommentService().getByPage(url));
-			result.setContents(getContents(id));
-			result.setPermissions(getContentPermissionService().selectByUrl(
-					url));
-			result.setTags(getPageTags(url));
-			permUrl = result.getPage().getFriendlyURL();
-			if (result.getPage().isStructured()) {
-				StructureEntity structure = getDao().getStructureDao().getById(
-						result.getPage().getStructureId());
-				if (structure != null) {
-					result.setStructureFields(structure.getFields());
+			PageRequestVO result = new PageRequestVO();
+			result.setPage(getPage(id));
+			String permUrl = parentUrl;
+			if (result.getPage() != null) {
+				String url = result.getPage().getFriendlyURL();
+				result.setVersions(getPageVersions(url));
+				result.setChildren(getChildren(url));
+				result.setComments(getCommentService().getByPage(url));
+				result.setContents(getContents(id));
+				result.setPermissions(getContentPermissionService()
+						.selectByUrl(url));
+				result.setTags(getPageTags(url));
+				permUrl = result.getPage().getFriendlyURL();
+				if (result.getPage().isStructured()) {
+					StructureEntity structure = getDao().getStructureDao()
+							.getById(result.getPage().getStructureId());
+					if (structure != null) {
+						result.setStructureFields(structure.getFields());
+					}
 				}
 			}
-		}
-		result.setTemplates(getTemplateService().getTemplates());
-		result.setLanguages(getLanguageService().select());
-		result.setGroups(getGroupService().select());
-		result.setPagePermission(getContentPermissionService().getPermission(
-				permUrl));
-		result.setStructures(getDao().getStructureDao().select());
-		return result;
-		}
-		catch(Exception e) {
+			result.setTemplates(getTemplateService().getTemplates());
+			result.setLanguages(getLanguageService().select());
+			result.setGroups(getGroupService().select());
+			result.setPagePermission(getContentPermissionService()
+					.getPermission(permUrl));
+			result.setStructures(getDao().getStructureDao().select());
+			return result;
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -374,13 +369,13 @@ public class PageServiceImpl extends AbstractServiceImpl
 		}
 		return Collections.EMPTY_LIST;
 	}
-	
+
 	public CommentService getCommentService() {
 		return commentService;
 	}
 
 	public void setCommentService(CommentService bean) {
-		commentService = bean;		
+		commentService = bean;
 	}
 
 	public LanguageService getLanguageService() {
@@ -392,7 +387,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 	}
 
 	public void setLanguageService(LanguageService bean) {
-		languageService = bean;	
+		languageService = bean;
 	}
 
 	public void setTemplateService(TemplateService bean) {
@@ -404,7 +399,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 	}
 
 	public void setContentPermissionService(ContentPermissionService bean) {
-		contentPermissionService = bean;		
+		contentPermissionService = bean;
 	}
 
 	public GroupService getGroupService() {
@@ -418,16 +413,14 @@ public class PageServiceImpl extends AbstractServiceImpl
 	private String loadResource(final String url) {
 		try {
 			return StreamUtil.getTextResource(url);
-		}
-		catch(IOException e) {
+		} catch (IOException e) {
 			logger.error("Can't read comments template." + e);
 			return "Error during load resources " + url;
 		}
 	}
 
 	@Override
-	public ServiceResponse restore(Long pageId, String pageType, 
-			String language) {
+	public ServiceResponse restore(Long pageId, String pageType, String language) {
 		PageEntity page = getPage(pageId);
 		if (page == null) {
 			return ServiceResponse.createErrorResponse("Page not found");
@@ -437,13 +430,15 @@ public class PageServiceImpl extends AbstractServiceImpl
 			return ServiceResponse.createErrorResponse("Wrong page type");
 		}
 		if (page.isStructured()) {
-			return ServiceResponse.createErrorResponse("Change page type to Simle from Structured first");
+			return ServiceResponse
+					.createErrorResponse("Change page type to Simle from Structured first");
 		}
 		page.setModDate(new Date());
 		page.setModUserEmail(VosaoContext.getInstance().getUser().getEmail());
 		ContentPermissionEntity perm = getBusiness()
 				.getContentPermissionBusiness().getPermission(
-					page.getFriendlyURL(), VosaoContext.getInstance().getUser());
+						page.getFriendlyURL(),
+						VosaoContext.getInstance().getUser());
 		page.setState(PageState.EDIT);
 		if (!perm.isChangeGranted()) {
 			return ServiceResponse.createErrorResponse("Access denied");
@@ -451,19 +446,17 @@ public class PageServiceImpl extends AbstractServiceImpl
 		getDao().getPageDao().save(page);
 		getBusiness().getPageBusiness().saveContent(page, language, content,
 				page.isSearchable(), page.isSearchable());
-		return ServiceResponse.createSuccessResponse(
-				"Page successfully restored.");
+		return ServiceResponse
+				.createSuccessResponse("Page successfully restored.");
 	}
 
 	private String getPredefinedContent(String pageType) {
 		String result = null;
 		if (pageType.equals("home")) {
 			result = loadResource(SetupBeanImpl.HOME_PAGE_FILE);
-		}
-		else if (pageType.equals("login")) {
+		} else if (pageType.equals("login")) {
 			result = loadResource(SetupBeanImpl.LOGIN_PAGE_FILE);
-		}
-		else if (pageType.equals("search")) {
+		} else if (pageType.equals("search")) {
 			result = loadResource(SetupBeanImpl.SEARCH_PAGE_FILE);
 		}
 		return result;
@@ -496,24 +489,50 @@ public class PageServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public ServiceResponse addPage(Map<String, String> vo) {
-		PageEntity page = new PageEntity();
-		page.setSortIndex(getBusiness().getPageBusiness().getNextSortIndex(
+	public ServiceResponse updatePage(Map<String, String> vo) {
+		if (vo.get("newPage").equals("true")) {
+			PageEntity page = new PageEntity();
+			page.setSortIndex(getBusiness().getPageBusiness().getNextSortIndex(
 					vo.get("friendlyUrl")));
-		page.setFriendlyURL(vo.get("friendlyURL"));
-		TemplateEntity template = getDao().getTemplateDao().select().get(0);
-		page.setTemplate(template.getId());
-		page.setTitleValue(vo.get("titles"));
-		List<String> errors = getBusiness().getPageBusiness()
-			.validateBeforeUpdate(page);
-		if (errors.isEmpty()) {
-			getDao().getPageDao().save(page);
-			return ServiceResponse.createSuccessResponse(page.getId().toString());
+			page.setFriendlyURL(vo.get("friendlyURL"));
+			TemplateEntity template = getDao().getTemplateDao().select().get(0);
+			page.setTemplate(template.getId());
+			page.setTitle(vo.get("title"));
+			List<String> errors = getBusiness().getPageBusiness()
+					.validateBeforeUpdate(page);
+			if (errors.isEmpty()) {
+				getDao().getPageDao().save(page);
+				return ServiceResponse.createSuccessResponse(page.getId()
+						.toString());
+			} else {
+				return ServiceResponse.createErrorResponse(
+						"Errors occured during saving page.", errors);
+			}
 		}
 		else {
-			return ServiceResponse.createErrorResponse(
+			List<PageEntity> pages = getBusiness().getPageBusiness()
+					.selectByUrl(vo.get("friendlyURL"));
+			if (pages.size() > 0) {
+				PageEntity page = pages.get(0);
+				page.setTitle(vo.get("title"));
+				if (vo.get("newURL") != null) {
+					page.setFriendlyURL(vo.get("newURL"));
+				}
+				List<String> errors = getBusiness().getPageBusiness()
+					.validateBeforeUpdate(page);
+				if (errors.isEmpty()) {
+					getBusiness().getPageBusiness().changeTitleAndURL(
+						vo.get("friendlyURL"), 
+						vo.get("title"), 
+						vo.get("newURL"));
+					return ServiceResponse.createSuccessResponse(page.getId()
+						.toString());
+				}
+				return ServiceResponse.createErrorResponse(
 					"Errors occured during saving page.", errors);
+			}
+			return ServiceResponse.createErrorResponse("Page not found");
 		}
 	}
-	
+
 }

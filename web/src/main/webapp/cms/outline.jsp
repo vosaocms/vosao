@@ -25,10 +25,13 @@
 <html>
 <head>
     <title>Pages</title>
-    <script src="/static/js/jquery.treeview.pack.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="/static/css/jquery.treeview.css" type="text/css" />
-    <script src="/static/js/cms/pages.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="/static/css/pages.css" type="text/css" />
+    <script src="/static/js/jquery.hotkeys.js" type="text/javascript"></script>
+    <script src="/static/js/jquery.tree.js" type="text/javascript"></script>
+    <script src="/static/js/plugins/jquery.tree.hotkeys.js" type="text/javascript"></script>
+    <script src="/static/js/plugins/jquery.tree.cookie.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/static/css/tree/style.css" type="text/css" />
+    <script src="/static/js/cms/outline.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/static/css/outline.css" type="text/css" />
 </head>
 <body>
 
@@ -45,8 +48,64 @@
         <div class="outline-link">
             <a href="pages.jsp">Classic editor</a>
         </div>
-        <ul id="pages-tree"><img src="/static/images/ajax-loader.gif" /></ul>
+        <div id="legend" class="ui-widget ui-widget-content ui-corner-all">
+            <h2>Keyboard shortcuts</h2>
+            <div class="form-row">
+                <strong>Press UP arrow </strong> to move up
+            </div>
+            <div class="form-row">
+                <strong>Press DOWN arrow </strong> to move down
+            </div>
+            <div class="form-row">
+                <strong>Press LEFT arrow </strong> to close branch
+            </div>
+            <div class="form-row">
+                <strong>Press RIGHT arrow </strong> to open branch
+            </div>
+            <div class="form-row">
+                <strong>Press INS </strong> to create page
+            </div>
+            <div class="form-row">
+                <strong>Press F2 </strong> to rename
+            </div>
+            <div class="form-row">
+                <strong>Press DELETE </strong> to remove page
+            </div>
+            <div class="form-row">
+                <strong>Press CTRL + c </strong> to copy page
+            </div>
+            <div class="form-row">
+                <strong>Press CTRL + x </strong> to cut page
+            </div>
+            <div class="form-row">
+                <strong>Press CTRL + v </strong> to paste page
+            </div>
+        </div>
+        <div id="pages-tree"></div>
+        <div class="clear"></div>
+        <div class="buttons">
+            <input id="saveButton" type="submit" value="Save changes" />
+            <input id="restoreButton" type="button" value="Restore saved" />
+        </div>
     </div>
+</div>
+
+<div id="page-dialog" style="display:none" title="New page">
+  <form id="pageForm">
+    <div class="form-row">
+        <label>Page title</label>
+        <input id="title"/>
+    </div>
+    <div class="form-row">
+        <label>Page URL</label>
+        <span id="parentURL"></span> <input id="url"/>
+    </div>
+    <div id="pageMessages"></div>
+    <div class="buttons-dlg">
+        <input id="saveDlgButton" type="submit" value="Save" />
+        <input id="cancelDlgButton" type="button" value="Cancel" />
+    </div>
+  </form>  
 </div>
 
 </body>

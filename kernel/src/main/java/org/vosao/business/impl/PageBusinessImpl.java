@@ -582,5 +582,17 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		return velocityService;
 	}
 
+	@Override
+	public void changeTitleAndURL(String pageURL, String title, String newURL) {
+		if (canWritePage(pageURL)) {
+			List<PageEntity> pages = getDao().getPageDao().selectByUrl(pageURL);
+			for (PageEntity page : pages) {
+				page.setTitle(title);
+				page.setFriendlyURL(newURL);
+				getDao().getPageDao().save(page);
+			}
+		}
+	}
+
 }
 

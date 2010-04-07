@@ -30,9 +30,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.print.attribute.standard.Severity;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.datanucleus.util.StringUtils;
+import org.vosao.business.PageBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.common.VosaoContext;
@@ -42,7 +45,6 @@ import org.vosao.entity.PageEntity;
 import org.vosao.entity.PageTagEntity;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.TagEntity;
-import org.vosao.entity.TemplateEntity;
 import org.vosao.entity.helper.PageHelper;
 import org.vosao.enums.PageState;
 import org.vosao.enums.PageType;
@@ -59,11 +61,13 @@ import org.vosao.service.vo.PageVO;
 import org.vosao.utils.DateUtil;
 import org.vosao.utils.StrUtil;
 import org.vosao.utils.StreamUtil;
+import org.vosao.utils.UrlUtil;
 
 /**
  * @author Alexander Oleynik
  */
-public class PageServiceImpl extends AbstractServiceImpl implements PageService {
+public class PageServiceImpl extends AbstractServiceImpl 
+		implements PageService {
 
 	private static Log logger = LogFactory.getLog(PageServiceImpl.class);
 
@@ -75,8 +79,7 @@ public class PageServiceImpl extends AbstractServiceImpl implements PageService 
 
 	@Override
 	public TreeItemDecorator<PageVO> getTree() {
-		List<PageVO> pages = selectLastVersionPages(getBusiness()
-				.getPageBusiness().select());
+		List<PageVO> pages = selectLastVersionPages(getPageBusiness().select());
 		Map<String, TreeItemDecorator<PageVO>> buf = new HashMap<String, TreeItemDecorator<PageVO>>();
 		for (PageVO page : pages) {
 			buf.put(page.getFriendlyURL(), new TreeItemDecorator<PageVO>(page,
@@ -154,12 +157,12 @@ public class PageServiceImpl extends AbstractServiceImpl implements PageService 
 
 	@Override
 	public PageEntity getPage(Long id) {
-		return getBusiness().getPageBusiness().getById(id);
+		return getPageBusiness().getById(id);
 	}
 
 	@Override
 	public PageEntity getPageByUrl(String url) {
-		return getBusiness().getPageBusiness().getByUrl(url);
+		return getPageBusiness().getByUrl(url);
 	}
 
 	@Override
@@ -170,7 +173,7 @@ public class PageServiceImpl extends AbstractServiceImpl implements PageService 
 		}
 		if (page == null) {
 			page = new PageEntity();
-			page.setSortIndex(getBusiness().getPageBusiness().getNextSortIndex(
+			page.setSortIndex(getPageBusiness().getNextSortIndex(
 					vo.get("friendlyUrl")));
 		}
 		if (vo.get("commentsEnabled") != null) {
@@ -238,12 +241,11 @@ public class PageServiceImpl extends AbstractServiceImpl implements PageService 
 		if (vo.get("headHtml") != null) {
 			page.setHeadHtml(vo.get("headHtml"));
 		}
-		List<String> errors = getBusiness().getPageBusiness()
-				.validateBeforeUpdate(page);
+		List<String> errors = getPageBusiness().validateBeforeUpdate(page);
 		if (errors.isEmpty()) {
 			getDao().getPageDao().save(page);
 			if (vo.containsKey("content")) {
-				getBusiness().getPageBusiness().saveContent(page, languageCode,
+				getPageBusiness().saveContent(page, languageCode,
 						vo.get("content"), oldSearchable, page.isSearchable());
 			}
 			return ServiceResponse.createSuccessResponse(page.getId()
@@ -257,22 +259,21 @@ public class PageServiceImpl extends AbstractServiceImpl implements PageService 
 
 	@Override
 	public List<PageVO> getChildren(String url) {
-		List<PageEntity> pages = getBusiness().getPageBusiness().getByParent(
-				url);
+		List<PageEntity> pages = getPageBusiness().getByParent(url);
 		Collections.sort(pages, PageHelper.SORT_INDEX_ASC);
 		return PageVO.create(pages);
 	}
 
 	@Override
 	public ServiceResponse deletePages(List<String> ids) {
-		getBusiness().getPageBusiness().remove(StrUtil.toLong(ids));
+		getPageBusiness().remove(StrUtil.toLong(ids));
 		return ServiceResponse
 				.createSuccessResponse("Pages were successfully deleted");
 	}
 
 	@Override
 	public ServiceResponse deletePageVersion(Long id) {
-		getBusiness().getPageBusiness().removeVersion(id);
+		getPageBusiness().removeVersion(id);
 		return ServiceResponse
 				.createSuccessResponse("Page was successfully deleted");
 	}
@@ -283,7 +284,7 @@ public class PageServiceImpl extends AbstractServiceImpl implements PageService 
 
 	@Override
 	public List<PageVO> getPageVersions(String url) {
-		return PageVO.create(getBusiness().getPageBusiness().selectByUrl(url));
+		return PageVO.create(getPageBusiness().selectByUrl(url));
 	}
 
 	@Override
@@ -292,12 +293,11 @@ public class PageServiceImpl extends AbstractServiceImpl implements PageService 
 				VosaoContext.getInstance().getUser()).isChangeGranted()) {
 			return ServiceResponse.createErrorResponse("Access denied");
 		}
-		List<PageEntity> list = getBusiness().getPageBusiness()
-				.selectByUrl(url);
+		List<PageEntity> list = getPageBusiness().selectByUrl(url);
 		if (list.size() > 0) {
 			PageEntity lastPage = list.get(list.size() - 1);
-			return ServiceResponse.createSuccessResponse(getBusiness()
-					.getPageBusiness().addVersion(lastPage,
+			return ServiceResponse.createSuccessResponse(
+					getPageBusiness().addVersion(lastPage,
 							lastPage.getVersion() + 1, versionTitle,
 							VosaoContext.getInstance().getUser()).getId()
 					.toString());
@@ -444,7 +444,7 @@ public class PageServiceImpl extends AbstractServiceImpl implements PageService 
 			return ServiceResponse.createErrorResponse("Access denied");
 		}
 		getDao().getPageDao().save(page);
-		getBusiness().getPageBusiness().saveContent(page, language, content,
+		getPageBusiness().saveContent(page, language, content,
 				page.isSearchable(), page.isSearchable());
 		return ServiceResponse
 				.createSuccessResponse("Page successfully restored.");
@@ -468,7 +468,7 @@ public class PageServiceImpl extends AbstractServiceImpl implements PageService 
 		if (page == null) {
 			return ServiceResponse.createErrorResponse("Page not found");
 		}
-		getBusiness().getPageBusiness().moveDown(page);
+		getPageBusiness().moveDown(page);
 		return ServiceResponse.createSuccessResponse("Success");
 	}
 
@@ -478,61 +478,147 @@ public class PageServiceImpl extends AbstractServiceImpl implements PageService 
 		if (page == null) {
 			return ServiceResponse.createErrorResponse("Page not found");
 		}
-		getBusiness().getPageBusiness().moveUp(page);
+		getPageBusiness().moveUp(page);
 		return ServiceResponse.createSuccessResponse("Success");
 	}
 
 	@Override
 	public ServiceResponse remove(String pageURL) {
-		getBusiness().getPageBusiness().remove(pageURL);
+		getPageBusiness().remove(pageURL);
+		return ServiceResponse.createSuccessResponse("Success");
+	}
+
+	private PageBusiness getPageBusiness() {
+		return getBusiness().getPageBusiness();
+	}
+		
+	private String getBaseURL(String url) {
+		if (url.equals("/")) {
+			return "";
+		}
+		return url;
+	}
+	
+	@Override
+	public ServiceResponse rename(Long id, Long parentId, String title) {
+		if (id == null) {
+			PageEntity parent = getPageBusiness().getById(parentId);
+			if (parent == null) {
+				return ServiceResponse.createErrorResponse(
+						"Parent page not found when creating child page.");
+			}
+			String url = getBaseURL(parent.getFriendlyURL()) + "/" 
+					+ UrlUtil.titleToURL(title);
+			PageEntity page = new PageEntity(title, 
+					getPageBusiness().makeUniquePageURL(url));
+			page.setTemplate(parent.getTemplate());
+			getDao().getPageDao().save(page);
+			return ServiceResponse.createSuccessResponse(
+					page.getId().toString());
+		}
+		else {
+			PageEntity page = getPageBusiness().getById(id);
+			if (page == null) {
+				return ServiceResponse.createErrorResponse(
+					"Page not found when changing title.");
+			}
+			if (!getPageBusiness().canChangeContent(
+					page.getFriendlyURL(), null)) {
+				return ServiceResponse.createErrorResponse(
+					"You don't have WRITE permission for page " 
+						+ page.getTitle());
+			}
+			List<PageEntity> versions = getDao().getPageDao().selectByUrl(
+					page.getFriendlyURL());
+			for (PageEntity version : versions) {
+				version.setTitle(title);
+				getDao().getPageDao().save(version);
+			}
+			if (!page.isRoot()) {
+				String url = getBaseURL(page.getParentFriendlyURL()) + "/" 
+					+ UrlUtil.titleToURL(title);
+				getPageBusiness().move(page, 
+						getPageBusiness().makeUniquePageURL(url));
+			}
+			return ServiceResponse.createSuccessResponse("Success");
+		}
+	}
+
+	@Override
+	public ServiceResponse removePage(Long pageId) {
+		PageEntity page = getPageBusiness().getById(pageId);
+		if (page != null && !page.isRoot()) {
+			getPageBusiness().remove(page.getFriendlyURL());
+		}
 		return ServiceResponse.createSuccessResponse("Success");
 	}
 
 	@Override
-	public ServiceResponse updatePage(Map<String, String> vo) {
-		if (vo.get("newPage").equals("true")) {
-			PageEntity page = new PageEntity();
-			page.setSortIndex(getBusiness().getPageBusiness().getNextSortIndex(
-					vo.get("friendlyUrl")));
-			page.setFriendlyURL(vo.get("friendlyURL"));
-			TemplateEntity template = getDao().getTemplateDao().select().get(0);
-			page.setTemplate(template.getId());
-			page.setTitle(vo.get("title"));
-			List<String> errors = getBusiness().getPageBusiness()
-					.validateBeforeUpdate(page);
-			if (errors.isEmpty()) {
-				getDao().getPageDao().save(page);
-				return ServiceResponse.createSuccessResponse(page.getId()
-						.toString());
-			} else {
-				return ServiceResponse.createErrorResponse(
-						"Errors occured during saving page.", errors);
-			}
+	public ServiceResponse movePage(Long pageId, Long refPageId, String type) {
+		PageEntity page = getPageBusiness().getById(pageId);
+		if (page == null) {
+			return ServiceResponse.createErrorResponse("Page not found " 
+					+ pageId);
 		}
-		else {
-			List<PageEntity> pages = getBusiness().getPageBusiness()
-					.selectByUrl(vo.get("friendlyURL"));
-			if (pages.size() > 0) {
-				PageEntity page = pages.get(0);
-				page.setTitle(vo.get("title"));
-				if (vo.get("newURL") != null) {
-					page.setFriendlyURL(vo.get("newURL"));
-				}
-				List<String> errors = getBusiness().getPageBusiness()
-					.validateBeforeUpdate(page);
-				if (errors.isEmpty()) {
-					getBusiness().getPageBusiness().changeTitleAndURL(
-						vo.get("friendlyURL"), 
-						vo.get("title"), 
-						vo.get("newURL"));
-					return ServiceResponse.createSuccessResponse(page.getId()
-						.toString());
-				}
-				return ServiceResponse.createErrorResponse(
-					"Errors occured during saving page.", errors);
-			}
-			return ServiceResponse.createErrorResponse("Page not found");
+		if (page.isRoot()) {
+			return ServiceResponse.createErrorResponse("Can't move root page");
 		}
+		PageEntity refPage = getPageBusiness().getById(refPageId);
+		if (refPage == null) {
+			return ServiceResponse.createErrorResponse(
+					"Reference page not found "	+ refPageId);
+		}
+		if (type.equals("inside")) {
+			String url = getBaseURL(refPage.getFriendlyURL()) + "/" +
+				page.getPageFriendlyURL();
+			getPageBusiness().move(page, 
+					getPageBusiness().makeUniquePageURL(url));
+		}
+		if (type.equals("after")) {
+			String url = getBaseURL(refPage.getParentFriendlyURL()) + "/" +
+				page.getPageFriendlyURL();
+			getPageBusiness().move(page, 
+					getPageBusiness().makeUniquePageURL(url));
+			page = getPageBusiness().getById(pageId);
+			getPageBusiness().moveAfter(page, refPage);
+		}
+		if (type.equals("before")) {
+			String url = getBaseURL(refPage.getParentFriendlyURL()) + "/" +
+				page.getPageFriendlyURL();
+			getPageBusiness().move(page, 
+					getPageBusiness().makeUniquePageURL(url));
+			page = getPageBusiness().getById(pageId);
+			getPageBusiness().moveBefore(page, refPage);
+		}
+		return ServiceResponse.createSuccessResponse("Success");
+	}
+
+	@Override
+	public ServiceResponse copyPage(Long pageId, Long refPageId, String type) {
+		PageEntity page = getPageBusiness().getById(pageId);
+		if (page == null) {
+			return ServiceResponse.createErrorResponse("Page not found " 
+					+ pageId);
+		}
+		PageEntity refPage = getPageBusiness().getById(refPageId);
+		if (refPage == null) {
+			return ServiceResponse.createErrorResponse(
+					"Reference page not found "	+ refPageId);
+		}
+		if (type.equals("inside")) {
+			getPageBusiness().copy(page, refPage.getFriendlyURL());
+		}
+		if (type.equals("after")) {
+			getPageBusiness().copy(page, refPage.getParentFriendlyURL());
+			page = getPageBusiness().getById(pageId);
+			getPageBusiness().moveAfter(page, refPage);
+		}
+		if (type.equals("before")) {
+			getPageBusiness().copy(page, refPage.getParentFriendlyURL());
+			page = getPageBusiness().getById(pageId);
+			getPageBusiness().moveBefore(page, refPage);
+		}
+		return ServiceResponse.createSuccessResponse("Success");
 	}
 
 }

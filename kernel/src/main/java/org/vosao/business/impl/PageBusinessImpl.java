@@ -583,14 +583,108 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	}
 
 	@Override
-	public void changeTitleAndURL(String pageURL, String title, String newURL) {
-		if (canWritePage(pageURL)) {
-			List<PageEntity> pages = getDao().getPageDao().selectByUrl(pageURL);
-			for (PageEntity page : pages) {
-				page.setTitle(title);
-				page.setFriendlyURL(newURL);
+	public void move(PageEntity page, String friendlyURL) {
+		if (getDao().getPageDao().selectByUrl(friendlyURL).size() > 0) {
+			return;
+		}
+		if (canWritePage(page.getFriendlyURL()) 
+			&& canWritePage(friendlyURL)) {
+			List<PageEntity> children = getDao().getPageDao().getByParent(
+					page.getFriendlyURL()); 
+			for (PageEntity child : children) {
+				move(child, friendlyURL + "/" + child.getPageFriendlyURL());
+			}
+			List<PageEntity> versions = getDao().getPageDao().selectByUrl(
+					page.getFriendlyURL());
+			for (PageEntity version : versions) {
+				version.setFriendlyURL(friendlyURL);
+				getDao().getPageDao().save(version);
+			}
+		}
+	}
+
+	@Override
+	public void moveAfter(PageEntity page, PageEntity refPage) {
+		List<PageEntity> pages = getByParent(refPage.getParentFriendlyURL());
+		Collections.sort(pages, PageHelper.SORT_INDEX_ASC);
+		int i = 0;
+		for (PageEntity item : pages) {
+			if (item.equals(refPage)) {
+				item.setSortIndex(i++);
+				getDao().getPageDao().save(item);
+				page.setSortIndex(i);
 				getDao().getPageDao().save(page);
 			}
+			else if (!item.equals(page)) {
+				item.setSortIndex(i);
+				getDao().getPageDao().save(item);
+			}
+			if (!item.equals(page)) {
+				i++;
+			}
+		}
+	}
+
+	@Override
+	public void moveBefore(PageEntity page, PageEntity refPage) {
+		List<PageEntity> pages = getByParent(refPage.getParentFriendlyURL());
+		Collections.sort(pages, PageHelper.SORT_INDEX_ASC);
+		int i = 0;
+		for (PageEntity item : pages) {
+			if (item.equals(refPage)) {
+				page.setSortIndex(i++);
+				getDao().getPageDao().save(page);
+			}
+			if (!item.equals(page)) {
+				item.setSortIndex(i++);
+				getDao().getPageDao().save(item);
+			}
+		}
+	}
+
+	private boolean pageExists(String url) {
+		return getDao().getPageDao().selectByUrl(url).size() > 0;
+	}
+
+	@Override
+	public String makeUniquePageURL(String url) {
+		int suffix = 1;
+		String pageURL = url;
+		while (pageExists(pageURL)) {
+			pageURL = url + suffix;
+			suffix++;
+		}
+		return pageURL;
+	}
+
+	private void copyContent(PageEntity src, PageEntity dst) {
+		List<ContentEntity> contents = getDao().getPageDao().getContents(
+				src.getId());
+		for (ContentEntity content : contents) {
+			ContentEntity newContent = new ContentEntity();
+			newContent.copy(content);
+			newContent.setId(null);
+			newContent.setParentKey(dst.getId());
+			getDao().getContentDao().save(newContent);
+		}
+	}
+	
+	@Override
+	public void copy(PageEntity page, String parentURL) {
+		String newURL = parentURL + "/" + page.getPageFriendlyURL();
+		List<PageEntity> versions = getDao().getPageDao().selectByUrl(
+				page.getFriendlyURL());
+		for (PageEntity version : versions) {
+			PageEntity newVersion = new PageEntity();
+			newVersion.copy(version);
+			newVersion.setId(null);
+			newVersion.setFriendlyURL(newURL);
+			getDao().getPageDao().save(newVersion);
+			copyContent(version, newVersion);
+		}
+		for (PageEntity child : getDao().getPageDao().getByParent(
+				page.getFriendlyURL())) {
+			copy(child, newURL);
 		}
 	}
 

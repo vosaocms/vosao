@@ -22,6 +22,10 @@ public interface BaseEntity extends Serializable {
 	
 	boolean isNew();
 	
+	/**
+	 * Copy all fields from entity.
+	 * @param entity - data to copy from.
+	 */
 	void copy(BaseEntity entity);
 	
 	// audit fields

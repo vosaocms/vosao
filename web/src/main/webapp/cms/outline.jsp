@@ -83,29 +83,7 @@
         </div>
         <div id="pages-tree"></div>
         <div class="clear"></div>
-        <div class="buttons">
-            <input id="saveButton" type="submit" value="Save changes" />
-            <input id="restoreButton" type="button" value="Restore saved" />
-        </div>
     </div>
-</div>
-
-<div id="page-dialog" style="display:none" title="New page">
-  <form id="pageForm">
-    <div class="form-row">
-        <label>Page title</label>
-        <input id="title"/>
-    </div>
-    <div class="form-row">
-        <label>Page URL</label>
-        <span id="parentURL"></span> <input id="url"/>
-    </div>
-    <div id="pageMessages"></div>
-    <div class="buttons-dlg">
-        <input id="saveDlgButton" type="submit" value="Save" />
-        <input id="cancelDlgButton" type="button" value="Cancel" />
-    </div>
-  </form>  
 </div>
 
 </body>

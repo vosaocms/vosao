@@ -139,6 +139,20 @@ public interface PageBusiness {
 	 */
 	void moveUp(PageEntity page);
 	
+	/**
+	 * Place page after refPage in sort order.
+	 * @param page
+	 * @param refPage
+	 */
+	void moveAfter(PageEntity page, PageEntity refPage);
+
+	/**
+	 * Place page before refPage in sort order.
+	 * @param page
+	 * @param refPage
+	 */
+	void moveBefore(PageEntity page, PageEntity refPage);
+
 	VelocityService getVelocityService();
 
 	/**
@@ -147,11 +161,23 @@ public interface PageBusiness {
 	void remove(String pageURL);
 
 	/**
-	 * Used in outline editor for quick change title and URL. Also used to move 
-	 * page from old URL to new URL.
-	 * @param pageURL - page old friendlyURL.
-	 * @param title - new title.
-	 * @param newURL - new friendlyURL.
+	 * Check for free url and if not then add suffix number.
+	 * @param url - url to check
+	 * @return - free page friendly URL.
 	 */
-	void changeTitleAndURL(String pageURL, String title, String newURL);	
-}
+	String makeUniquePageURL(String url);
+
+	/**
+	 * Move page to new friendlyURL. Also change friendlyURL recursively 
+	 * for all children pages.
+	 * @param page - page to change.
+	 * @param friendlyURL - new friendlyURL. 
+	 */
+	void move(PageEntity page, String friendlyURL);
+	
+	/**
+	 * Copy page with subpages to new parent URL.
+	 */
+	void copy(PageEntity page, String parentURL);
+	
+}	

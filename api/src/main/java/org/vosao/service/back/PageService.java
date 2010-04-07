@@ -44,8 +44,6 @@ public interface PageService extends AbstractService {
 
 	ServiceResponse savePage(final Map<String, String> vo);
 	
-	ServiceResponse updatePage(final Map<String, String> vo);
-
 	List<PageVO> getChildren(final String url);
 	
 	ServiceResponse deletePages(final List<String> ids);
@@ -91,4 +89,14 @@ public interface PageService extends AbstractService {
 	
 	List<TagEntity> getPageTags(String pageURL);
 
+	ServiceResponse rename(Long id, Long parentId, String title);
+
+	ServiceResponse removePage(final Long pageId);
+	
+	ServiceResponse movePage(final Long pageId, final Long refPageId, 
+			final String type);
+
+	ServiceResponse copyPage(final Long pageId, final Long refPageId, 
+			final String type);
+	
 }

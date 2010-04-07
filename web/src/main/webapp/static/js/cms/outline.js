@@ -19,13 +19,8 @@
  * email: vosao.dev@gmail.com
  */
 
-var parentURL = null;
-var tree = null;
-var pages = {};
-var page = null;
-
 var tree_options = {
-	selected : encodeURL('/'),
+	selected : '',
 	plugins : {
 		cookie : { prefix : 'pages_' },	
 		hotkeys : {
@@ -34,18 +29,6 @@ var tree_options = {
 					$.tree.focused().create();
 					return false;
 				}
-				/*'del' : function() {
-					onPageRemove($.tree.focused().get_rollback().selected);
-					return false;
-				},
-				'return' : function() {
-					onPageEdit($.tree.focused().get_rollback().selected);
-					return false;
-				},
-				'f2': function() {},						
-				'ctrl+c': function() {},						
-				'ctrl+x': function() {},					
-				'ctrl+v': function() {}*/						
 			}
 		}
 	},
@@ -54,18 +37,18 @@ var tree_options = {
 		animation: 200
 	},
 	callback : {
-		onselect : function (node, tree_ong) {
-			//alert('on select ' + node);
-		}
+		onrename : renamePage,
+		beforedelete : function(node, tree_obj) {
+			return confirm('Delete page. Are you shure?');
+		},
+		ondelete : deletePage,
+		onmove : movePage,
+		oncopy : copyPage
 	}
 };
 
 $(function() {
-    $("#page-dialog").dialog({ width: 400, autoOpen: false });
 	Vosao.initJSONRpc(loadData);
-	$('#cancelDlgButton').click(onPageCancel);
-    $('#pageForm').submit(function() {onSave(); return false;});
-    $('#title').change(onTitleChange);
 });
 
 function loadData() {
@@ -76,20 +59,13 @@ function loadData() {
 function loadTree() {
 	Vosao.jsonrpc.pageService.getTree(function(r) {
 		$('#pages-tree').html('<ul>' + renderPage(r) + '</ul>');
-		if (tree == null) {
-		  $("#pages-tree").tree(tree_options);
-		  tree = $.tree.reference('#pages-tree');
-		}
-		else {
-			tree.init(tree_options);
-		}
+		tree_options.selected = String(r.entity.id);
+		$("#pages-tree").tree(tree_options);
 	});
 }
 
 function renderPage(vo) {
-	pages[vo.entity.friendlyURL] = vo;
-	var pageUrl = encodeURIComponent(vo.entity.friendlyURL);
-	var html = '<li id="' + pageUrl.replace(/\%/g,'__') + '"> '
+	var html = '<li id="' + vo.entity.id + '"> '
 		    + ' <a href="#"><ins> </ins>' + vo.entity.title + '</a>';
 	if (vo.children.list.length > 0) {
 		html += '<ul>';
@@ -109,115 +85,44 @@ function loadUser() {
 	});
 }
 
-function encodeURL(url) {
-	return encodeURIComponent(url).replace(/\%/g,'__');
-}
-
-function decodeURL(url) {
-	return decodeURIComponent(url.replace(/__/g,'%'));
-}
-
-function onPageRemove(url) {
-	var pageURL = decodeURL(url);
-	if (pageURL == '/') {
-		alert("You can't delete root page!");
-		return;
-	}
-	if (confirm('Removing page. ' + pageURL + ' Are you shure?')) {
-		Vosao.jsonrpc.pageService.remove(function(r) {
+function renamePage(node, tree_obj, rb) {
+	var parent = tree_obj.parent(node);
+	var parentId = parent ? $(parent).attr('id') : null;
+	var title = $(node).children('a').text().trim();
+	var nodeId = $(node).attr('id') ? $(node).attr('id') : null;
+	Vosao.jsonrpc.pageService.rename(function(r) {
+		if (r.result == 'success') {
+			if (nodeId == null) {
+				$(node).attr('id', r.message);
+			}
+		}
+		else {
 			Vosao.showServiceMessages(r);
-			if (r.result == 'success') {
-				$.tree.focused().remove();
-			}
-		}, pageURL);
-	}
-}
-
-function onPageAdd(parentURI) {
-	parent = decodeURL(parentURI);
-	parentURL = parent == '/' ? '' : parent;
-	$('#page-dialog').dialog('open');
-	$('#parentURL').html(parentURL + '/');
-	$('#title').val('');
-	$('#url').val('');
-	$('#title').focus();
-	page = null;
-}
-
-function onPageEdit(uri) {
-	var url = decodeURL(uri);
-	page = pages[url];
-	url = url == '/' ? '' : url;
-	$('#page-dialog').dialog('open');
-	$('#parentURL').html(page.entity.parentUrl + '/');
-	$('#title').val(page.entity.title);
-	$('#url').val(page.entity.pageFriendlyURL);
-	$('#title').focus();
-}
-
-function onPageCancel() {
-	$('#page-dialog').dialog('close');
-}
-
-function onTitleChange() {
-	var url = $("#url").val();
-	var title = $("#title").val();
-	if (url == '') {
-		$("#url").val(Vosao.urlFromTitle(title));
-	}
-}
-
-function validate(vo) {
-	if (vo.title == '') {
-		return 'Title is empty';
-	}
-	else {
-		if (vo.title.indexOf(',') != -1) {
-			return 'Symbol , (coma) is not allowed in title.'
 		}
-	}
-	if (vo.url == '') {
-		return 'Page URL is empty';
-	}
-	else {
-		if (vo.url.indexOf('/') != -1) {
-			return 'Symbol / is not allowed in URL.'
-		}
-	}
+	}, nodeId, parentId, title);
+	
 }
 
-function onSave() {
-	var friendlyURL = parentURL + '/' + $('#url').val();
-	var newURL = '';
-	if (page != null) {
-		friendlyURL = page.entity.friendlyURL;
-		newURL = page.entity.parentUrl + '/' + $('#url').val();
-	}
-	var vo = {
-		newPage : String(page == null),
-		url : $('#url').val(),
-		friendlyURL : friendlyURL,
-		title : $('#title').val(),
-		newURL : newURL
-	};
-	var error = validate(vo);
-	if (!error) {
-		Vosao.jsonrpc.pageService.updatePage(function(r) {
-			if (r.result == 'success') {
-				Vosao.info('Success');
-				$('#page-dialog').dialog('close');
-				loadData();
-			}
-			else {
-				showError(r.message);
-			}
-		}, Vosao.javaMap(vo));
-	}
-	else {
-		showError(error);
-	}
+function deletePage(node, tree_obj, rb) {
+	var nodeId = $(node).attr('id');
+	Vosao.jsonrpc.pageService.removePage(function(r) {
+		Vosao.showServiceMessages(r);
+	}, nodeId);
 }
 
-function showError(msg) {
-	Vosao.errorMessage('#pageMessages', msg);
+function movePage(node, ref_node, type, tree_obj, rb) {
+	var nodeId = $(node).attr('id');
+	var refNodeId = $(ref_node).attr('id');
+	Vosao.jsonrpc.pageService.movePage(function(r) {
+		Vosao.showServiceMessages(r);
+	}, nodeId, refNodeId, type);
+}
+
+function copyPage(node, ref_node, type, tree_obj, rb) {
+	var nodeId = $(node).attr('id').replace('_copy', '');
+	var refNodeId = $(ref_node).attr('id');
+	Vosao.jsonrpc.pageService.copyPage(function(r) {
+		Vosao.showServiceMessages(r);
+		location.reload();
+	}, nodeId, refNodeId, type);
 }

@@ -21,6 +21,7 @@
 
 package org.vosao.utils;
 
+
 /**
  * @author Alexander Oleynik
  */
@@ -60,5 +61,11 @@ public class UrlUtil {
 		return friendlyUrl.substring(lastSlash + 1, friendlyUrl.length());
 	}
 	
+	/**
+	 * Convert title to url. Replace spaces to _
+	 */
+	static public String titleToURL(String title) {
+		return title.replace(' ', '_').toLowerCase();
+	}
 	
 }

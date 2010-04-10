@@ -64,10 +64,12 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 	private PluginLoader pluginLoader;
 	private PluginClassLoaderFactory pluginClassLoaderFactory;
 	private Map<String, PluginEntryPoint> plugins;
+	private Map<String, PluginEntity> pluginTimestamps;
 	private PluginResourceCache cache;
 	
 	public void init() {
 		plugins = new HashMap<String, PluginEntryPoint>();
+		pluginTimestamps = new HashMap<String, PluginEntity>();
 	}
 	
 	/**
@@ -87,12 +89,13 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 			throws ClassNotFoundException, InstantiationException, 
 			IllegalAccessException {
 		PluginEntryPoint entryPoint = getEntryPoint(plugin);
-		return entryPoint.getPluginVelocityService();
+		return entryPoint == null ? null : entryPoint.getPluginVelocityService();
 	}
 
 	@Override
 	public void resetPlugin(PluginEntity plugin) {
 		plugins.remove(plugin.getName());
+		pluginTimestamps.remove(plugin.getName());
 		getPluginClassLoaderFactory().resetPlugin(plugin.getName());
 		cache.reset(plugin.getName());
 	}
@@ -186,7 +189,7 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 			throws ClassNotFoundException, InstantiationException,
 			IllegalAccessException {
 		PluginEntryPoint entryPoint = getEntryPoint(plugin);
-		return entryPoint.getPluginBackService();
+		return entryPoint== null ? null : entryPoint.getPluginBackService();
 	}
 
 	@Override
@@ -194,13 +197,23 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 			throws ClassNotFoundException, InstantiationException,
 			IllegalAccessException {
 		PluginEntryPoint entryPoint = getEntryPoint(plugin);
-		return entryPoint.getPluginFrontService();
+		return entryPoint == null ? null : entryPoint.getPluginFrontService();
 	}
 
+	private boolean isNeedRefresh(PluginEntity plugin) {
+		if (pluginTimestamps.containsKey(plugin.getName())) {
+			return !pluginTimestamps.get(plugin.getName()).getModDate()
+					.equals(plugin.getModDate());
+		}
+		return true;
+	}
+	
 	@Override
 	public PluginEntryPoint getEntryPoint(PluginEntity plugin) {
-		if (!plugins.containsKey(plugin.getName())) {
+		if (!plugins.containsKey(plugin.getName()) 
+			|| isNeedRefresh(plugin)) {
 			try {
+				resetPlugin(plugin);
 				ClassLoader pluginClassLoader = getPluginClassLoaderFactory()
 					.getClassLoader(plugin.getName());
 				Class entryPointClass = pluginClassLoader
@@ -212,6 +225,7 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 				entryPoint.setBackService(getBackService());
 				entryPoint.init();
 				plugins.put(plugin.getName(), entryPoint);
+				pluginTimestamps.put(plugin.getName(), plugin);
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -250,11 +264,12 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 		String pluginName = tokens[2];
 		String servlet = tokens[3];
 		PluginEntity plugin = getDao().getPluginDao().getByName(pluginName);
-		if (plugin == null) {
+		if (plugin == null || plugin.isDisabled()) {
 			return null;
 		}
 		try {
-			return getEntryPoint(plugin).getServlets().get(servlet);
+			PluginEntryPoint entryPoint = getEntryPoint(plugin);
+			return entryPoint == null ? null : entryPoint.getServlets().get(servlet);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -263,9 +278,12 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 
 	@Override
 	public void cronSchedule(Date date) {
-		for (PluginEntity plugin : getDao().getPluginDao().select()) {
+		for (PluginEntity plugin : getDao().getPluginDao().selectEnabled()) {
 			PluginEntryPoint entry = getBusiness().getPluginBusiness()
 					.getEntryPoint(plugin);
+			if (entry == null) {
+				return;
+			}
 			for (PluginCronJob job : entry.getJobs()) {
 				try {
 					if (job.isShowTime(date)) {

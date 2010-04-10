@@ -21,6 +21,8 @@
 
 package org.vosao.dao;
 
+import java.util.List;
+
 import org.vosao.entity.PluginEntity;
 
 /**
@@ -30,4 +32,5 @@ public interface PluginDao extends BaseDao<PluginEntity> {
 
 	PluginEntity getByName(String name);
 	
+	List<PluginEntity> selectEnabled();
 }

@@ -21,6 +21,8 @@
 
 package org.vosao.dao.impl;
 
+import java.util.List;
+
 import org.vosao.dao.BaseDaoImpl;
 import org.vosao.dao.PluginDao;
 import org.vosao.entity.PluginEntity;
@@ -42,4 +44,11 @@ public class PluginDaoImpl extends BaseDaoImpl<PluginEntity>
 		return selectOne(q, "getByName", params(name));
 	}
 	
+	@Override
+	public List<PluginEntity> selectEnabled() {
+		Query q = newQuery();
+		q.addFilter("disabled", FilterOperator.EQUAL, false);
+		return select(q, "selectEnabled", params(false));
+	}
+
 }

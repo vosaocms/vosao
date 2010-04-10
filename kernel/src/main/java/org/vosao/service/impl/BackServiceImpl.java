@@ -326,7 +326,7 @@ public class BackServiceImpl implements BackService, Serializable {
 	}
 	
 	private void registerPluginServices(JSONRPCBridge bridge) {
-		for (PluginEntity plugin : getDao().getPluginDao().select()) {
+		for (PluginEntity plugin : getDao().getPluginDao().selectEnabled()) {
 			try {
 				PluginServiceManager manager = getBusiness()
 						.getPluginBusiness().getBackServices(plugin);
@@ -344,7 +344,7 @@ public class BackServiceImpl implements BackService, Serializable {
 	}
 	
 	private void unregisterPluginServices(JSONRPCBridge bridge) {
-		for (PluginEntity plugin : getDao().getPluginDao().select()) {
+		for (PluginEntity plugin : getDao().getPluginDao().selectEnabled()) {
 			try {
 				PluginServiceManager manager = getBusiness()
 					.getPluginBusiness().getBackServices(plugin);

@@ -30,13 +30,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.dom4j.DocumentException;
-import org.jabsorb.JSONRPCBridge;
 import org.vosao.business.plugin.PluginEntryPoint;
 import org.vosao.business.vo.PluginPropertyVO;
 import org.vosao.common.PluginException;
 import org.vosao.entity.PluginEntity;
 import org.vosao.service.plugin.PluginServiceManager;
-import org.vosao.velocity.plugin.VelocityPlugin;
 
 /**
  * @author Alexander Oleynik
@@ -83,7 +81,7 @@ public interface PluginBusiness {
 			IllegalAccessException;
 	
 	/**
-	 * Reload all plugins resources and cache reset.
+	 * Reset all plugin's resources and clear cache.
 	 * @param plugin - plugin for reset.
 	 */
 	void resetPlugin(PluginEntity plugin);

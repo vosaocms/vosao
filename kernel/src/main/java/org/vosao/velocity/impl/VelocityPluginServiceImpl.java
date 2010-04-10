@@ -46,7 +46,7 @@ public class VelocityPluginServiceImpl implements VelocityPluginService {
 	public Map<String, Object> getPlugins() {
 		Map<String, Object> services = new HashMap<String, Object>();
 		services.put("form", form);
-		for (PluginEntity plugin : getDao().getPluginDao().select()) {
+		for (PluginEntity plugin : getDao().getPluginDao().selectEnabled()) {
 			try {
 				Object velocityPlugin = getBusiness().getPluginBusiness()
 					.getVelocityPlugin(plugin);

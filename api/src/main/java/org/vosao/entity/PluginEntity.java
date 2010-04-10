@@ -25,6 +25,7 @@ import static org.vosao.utils.EntityUtil.getStringProperty;
 import static org.vosao.utils.EntityUtil.getTextProperty;
 import static org.vosao.utils.EntityUtil.setProperty;
 import static org.vosao.utils.EntityUtil.setTextProperty;
+import static org.vosao.utils.EntityUtil.getBooleanProperty;
 
 import com.google.appengine.api.datastore.Entity;
 
@@ -42,11 +43,13 @@ public class PluginEntity extends BaseEntityImpl {
 	private String configURL;
 	private String pageHeader;
 	private String version;
+	private boolean disabled;
 
 	public PluginEntity() {
 		configStructure = "";
 		configData = "";
 		pageHeader = "";
+		disabled = false;
     }
     
 	@Override
@@ -62,6 +65,7 @@ public class PluginEntity extends BaseEntityImpl {
 		configURL = getStringProperty(entity, "configURL");
 		pageHeader = getTextProperty(entity, "pageHeader");
 		version = getStringProperty(entity, "version");
+		disabled = getBooleanProperty(entity, "disabled", false);
 	}
 	
 	@Override
@@ -77,6 +81,7 @@ public class PluginEntity extends BaseEntityImpl {
 		setProperty(entity, "configURL", configURL, false);
 		setTextProperty(entity, "pageHeader", pageHeader);
 		setProperty(entity, "version", version, false);
+		setProperty(entity, "disabled", disabled, true);
 	}
 
 	public PluginEntity(String name, String title, String configStructure,
@@ -166,6 +171,14 @@ public class PluginEntity extends BaseEntityImpl {
 
 	public void setVersion(String version) {
 		this.version = version;
+	}
+
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
 	}
 
 }

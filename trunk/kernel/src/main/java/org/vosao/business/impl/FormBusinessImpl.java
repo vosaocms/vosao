@@ -88,7 +88,7 @@ public class FormBusinessImpl extends AbstractBusinessImpl
 			if (error != null) {
 				throw new UploadException(error);
 			}
-			logger.info("Form successfully submited and emailed.");
+			logger.info("Form successfully submitted and emailed.");
 		}
 	}
 	

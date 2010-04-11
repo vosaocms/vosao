@@ -144,7 +144,7 @@ public class FormSendServlet extends BaseSpringServlet {
 			}
 		}
 		getBusiness().getFormBusiness().submit(form, parameters, files);
-		return createMessage("success", "Form was successfully submited.");
+		return createMessage("success", "Form was successfully submitted.");
 	}
 	
 }

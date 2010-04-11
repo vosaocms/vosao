@@ -151,7 +151,7 @@ public class FileDaoTest extends AbstractDaoTest {
 	
 	public void testSaveFileEntity() {
 		FolderEntity folder = folderTool.addFolder("test");
-		byte[] content = new byte[12000000];
+		byte[] content = new byte[1200000];
 		Arrays.fill(content, (byte)123);
 		FileEntity file = fileTool.addFile("title1", "test.bat1", "text/plain", 
 				content, folder);

@@ -38,6 +38,7 @@ var autosaveTimer = '';
 var pageRequest = null;
 var contentEditors = null;
 var browseId = '';
+var editTextarea = false;
     
 $(function(){
     $("#restore-dialog").dialog({ width: 400, autoOpen: false });
@@ -181,7 +182,12 @@ function stopAutosave() {
 function getEditorContent() {
 	if (!editMode) return '';
 	if (page.simple) {
-		return contentEditor.getData();
+		if (editTextarea) {
+			return $('#content').val();
+		}
+		else {
+			return contentEditor.getData();
+		}
 	}
 	if (page.structured) {
 		var xml = '<?xml version="1.0" encoding="utf-8"?>\n<content>\n';
@@ -203,7 +209,12 @@ function getEditorContent() {
 
 function setEditorContent(data) {
 	if (page.simple) {
-	    contentEditor.setData(data);
+	    if (editTextarea) {
+	    	$('#content').val(data);
+	    }
+	    else {
+	    	contentEditor.setData(data);
+	    }
 	}
 	if (page.structured) {
 		var domData = $.xmlDOM(data, function(error) {
@@ -277,6 +288,9 @@ function loadContents() {
 			}
 		}
 		$('#language').val(currentLanguage);
+		if (page.simple) {
+			$('#editorButtons').html('<a href="#" onclick="onEditTextarea()">Edit in TEXTAREA</a>');
+		}
 		setEditorContent(contents[currentLanguage]);
 		$('#titleLocal').val(getTitle());
 	} else {
@@ -327,12 +341,14 @@ function showContentEditor() {
 	});
 	if (page.simple) {
 		$('#page-content').html('<textarea id="content" rows="20" cols="80"></textarea>');
-	    contentEditor = CKEDITOR.replace('content', {
-	        height: 350, width: 'auto',
-	        filebrowserUploadUrl : '/cms/upload',
-	        filebrowserBrowseUrl : '/cms/fileBrowser.jsp',
-	        toolbar : 'Vosao'
-	    });
+	    if (!editTextarea) {
+	    	contentEditor = CKEDITOR.replace('content', {
+	    		height: 350, width: 'auto',
+	    		filebrowserUploadUrl : '/cms/upload',
+	    		filebrowserBrowseUrl : '/cms/fileBrowser.jsp',
+	    		toolbar : 'Vosao'
+	    	});
+	    }
 	}
 	if (page.structured) {
 		var h = '';
@@ -424,4 +440,18 @@ function onRestoreSave() {
 			location.reload();
 		}
 	}, pageId, pageType, currentLanguage);
+}
+
+function onEditTextarea() {
+	editTextarea = true;
+	$('#editorButtons').html('<a href="#" onclick="onEditCKEditor()">Edit in CKEditor</a>');
+	showContentEditor();
+	setEditorContent(contents[currentLanguage]);
+}
+
+function onEditCKEditor() {
+	editTextarea = false;
+	$('#editorButtons').html('<a href="#" onclick="onEditTextarea()">Edit in TEXTAREA</a>');
+	showContentEditor();
+	setEditorContent(contents[currentLanguage]);
 }

@@ -54,6 +54,7 @@
         <label>Title</label>
         <input id="titleLocal" type="text" class="form-title" size="40" />
     </div>
+    <div class="form-row" id="editorButtons"></div>
     <div id="page-content"></div>
 </div>
 <div class="buttons">

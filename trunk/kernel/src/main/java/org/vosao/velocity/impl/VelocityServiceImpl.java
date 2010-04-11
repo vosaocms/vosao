@@ -200,15 +200,7 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 
 	@Override
 	public List<PageEntity> findPageChildren(String path, int start, int count) {
-		List<PageEntity> result = new ArrayList<PageEntity>();
-		List<PageEntity> found = findPageChildren(path);
-		if (start >= 0 && start < found.size()) {
-			int end = start + count < found.size() ? start + count : found.size();
-			for (int i = start; i < end; i++) {
-				result.add(found.get(i));
-			}
-		}
-		return result;
+		return ListUtil.slice(findPageChildren(path), start, count);
 	}
 	
 }

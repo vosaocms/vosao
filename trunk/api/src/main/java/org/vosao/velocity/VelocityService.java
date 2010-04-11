@@ -59,6 +59,17 @@ public interface VelocityService {
 
 	/**
 	 * Find approved last versions of children pages entity by parent page
+	 * friendlyURL. Ordered by publishDate.
+	 * @param path - friendly url.
+	 * @param start - start page index. 0 - based.
+	 * @param count - maximum list size.
+	 * @return list of found pages.
+	 */
+	List<PageEntity> findPageChildren(final String path, final int start, 
+			final int count);
+
+	/**
+	 * Find approved last versions of children pages entity by parent page
 	 * friendlyURL and publish date.
 	 * @param path - firnedly url.
 	 * @param publishDate - publishDate.

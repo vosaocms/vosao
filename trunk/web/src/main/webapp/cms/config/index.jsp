@@ -71,6 +71,20 @@
         <label>Site users login page url</label>
         <input id="siteUserLoginUrl" type="text"/>
     </div>
+    <div class="form-row">
+        <label>Enable Picasa use on the site</label>
+        <input id="enablePicasa" type="checkbox" />
+    </div>
+    <div id="picasa">
+        <div class="form-row">
+            <label>Picasa user name</label>
+            <input id="picasaUser" type="text" />
+        </div>
+        <div class="form-row">
+            <label>Picasa password</label>
+            <input id="picasaPassword" type="text" />
+        </div>
+    </div>
     <div class="buttons">
         <input id="saveButton" type="submit" value="Save" />
         <input id="exportButton" type="button" value="Export" />

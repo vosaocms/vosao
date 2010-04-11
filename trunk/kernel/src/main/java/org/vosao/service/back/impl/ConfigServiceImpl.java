@@ -84,6 +84,15 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 		if (vo.get("siteUserLoginUrl") != null) {
 			config.setSiteUserLoginUrl(vo.get("siteUserLoginUrl"));
 		}
+		if (vo.get("enablePicasa") != null) {
+			config.setEnablePicasa(Boolean.valueOf(vo.get("enablePicasa")));
+		}
+		if (vo.get("picasaUser") != null) {
+			config.setPicasaUser(vo.get("picasaUser"));
+		}
+		if (vo.get("picasaPassword") != null) {
+			config.setPicasaPassword(vo.get("picasaPassword"));
+		}
 		List<String> errors = getBusiness().getConfigBusiness()
 				.validateBeforeUpdate(config);
 		if (errors.isEmpty()) {

@@ -44,6 +44,7 @@ $(function(){
     $('#exportCancelButton').click(onExportCancel);
     $('ul.ui-tabs-nav li:nth-child(1)').addClass('ui-state-active')
 			.removeClass('ui-state-default');
+    $('#enablePicasa').click(togglePicasa);
 });
 
 function loadData() {
@@ -57,6 +58,16 @@ function toggleRecaptcha() {
     }
     else {
         $('#recaptcha').hide();
+    }
+}
+
+function togglePicasa() {
+    var picasa = $('#enablePicasa:checked').size() > 0;
+    if (picasa) {
+        $('#picasa').show();
+    }
+    else {
+        $('#picasa').hide();
     }
 }
 
@@ -104,6 +115,10 @@ function initFormFields() {
     toggleRecaptcha();
     $('#editExt').val(config.editExt);
     $('#siteUserLoginUrl').val(config.siteUserLoginUrl);
+    $('#enablePicasa').each(function () {this.checked = config.enablePicasa});
+    $('#picasaUser').val(config.picasaUser);
+    $('#picasaPassword').val(config.picasaPassword);
+    togglePicasa();
 }
 
 function onSave() {
@@ -114,6 +129,9 @@ function onSave() {
         enableRecaptcha : String($('#enableRecaptcha:checked').size() > 0),
         recaptchaPublicKey : $('#recaptchaPublicKey').val(),
         recaptchaPrivateKey : $('#recaptchaPrivateKey').val(),
+        enablePicasa : String($('#enablePicasa:checked').size() > 0),
+        picasaUser : $('#picasaUser').val(),
+        picasaPassword : $('#picasaPassword').val(),
         editExt : $('#editExt').val(),
         siteUserLoginUrl : $('#siteUserLoginUrl').val()        
     });

@@ -356,6 +356,9 @@
     <bean id="tagService" class="org.vosao.service.back.impl.TagServiceImpl"
         parent="abstractService" />
 
+    <bean id="picasaService" class="org.vosao.service.back.impl.PicasaServiceImpl"
+        parent="abstractService" />
+
     <bean id="configService" class="org.vosao.service.back.impl.ConfigServiceImpl"
         parent="abstractService" >
         <property name="setupBean" ref="setupBean"/>  
@@ -400,6 +403,7 @@
         <property name="structureTemplateService" ref="structureTemplateService"/>  
         <property name="pluginService" ref="pluginService"/>  
         <property name="tagService" ref="tagService"/>  
+        <property name="picasaService" ref="picasaService"/>  
     </bean>
 
     <!--================== JSON-RPC front services ==========================-->

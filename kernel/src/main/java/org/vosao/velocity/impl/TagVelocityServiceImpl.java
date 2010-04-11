@@ -31,6 +31,7 @@ import org.vosao.common.AbstractServiceBeanImpl;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PageTagEntity;
 import org.vosao.entity.TagEntity;
+import org.vosao.utils.ListUtil;
 import org.vosao.velocity.TagVelocityService;
 
 public class TagVelocityServiceImpl extends AbstractServiceBeanImpl implements
@@ -81,6 +82,16 @@ public class TagVelocityServiceImpl extends AbstractServiceBeanImpl implements
 			return getPagesById(tag.getId());
 		}
 		return Collections.EMPTY_LIST;
+	}
+
+	@Override
+	public List<PageEntity> getPagesById(Long tagId, int index, int count) {
+		return ListUtil.slice(getPagesById(tagId), index, count);
+	}
+
+	@Override
+	public List<PageEntity> getPagesByPath(String tagPath, int index, int count) {
+		return ListUtil.slice(getPagesByPath(tagPath), index, count);
 	}
 
 }

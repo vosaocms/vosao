@@ -38,13 +38,36 @@ public interface TagVelocityService {
 	
 	List<TagEntity> getTags(String pageURL);
 	
+	/**
+	 * Get all pages by tag id.
+	 * @param tagId - tag id
+	 * @return found pages.
+	 */
 	List<PageEntity> getPagesById(Long tagId);
 	
+	/**
+	 * Get all pages by tag id.
+	 * @param tagId - tag id
+	 * @param index - starting index.
+	 * @param count - batch size.
+	 * @return found pages.
+	 */
+	List<PageEntity> getPagesById(Long tagId, int index, int count);
+
 	/**
 	 * Get pages of tag selected by tag path in tags tree.
 	 * @param tagPath - path to tag like URL. Path starts with /.
 	 * @return pages by tag.
 	 */
 	List<PageEntity> getPagesByPath(String tagPath);
+
+	/**
+	 * Get pages of tag selected by tag path in tags tree.
+	 * @param tagPath - path to tag like URL. Path starts with /.
+	 * @param index - starting index.
+	 * @param count - batch size.
+	 * @return pages by tag.
+	 */
+	List<PageEntity> getPagesByPath(String tagPath, int index, int count);
 
 }

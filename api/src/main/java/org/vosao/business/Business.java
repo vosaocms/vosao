@@ -28,6 +28,8 @@ import org.vosao.entity.UserEntity;
 import org.vosao.global.SystemService;
 import org.vosao.search.SearchEngine;
 
+import com.google.gdata.client.photos.PicasawebService;
+
 
 public interface Business {
 	
@@ -44,6 +46,8 @@ public interface Business {
 	
 	String getLanguage();
 
+	PicasawebService getPicasawebService();
+	
 	PageBusiness getPageBusiness();
 	void setPageBusiness(final PageBusiness bean);
 

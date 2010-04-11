@@ -44,6 +44,9 @@ public class ConfigEntity extends BaseEntityImpl {
 	private String commentsTemplate;
 	private String version;
 	private String siteUserLoginUrl;
+	private boolean enablePicasa;
+	private String picasaUser;
+	private String picasaPassword;
 
 	public ConfigEntity() {
 		commentsTemplate = "";
@@ -63,6 +66,9 @@ public class ConfigEntity extends BaseEntityImpl {
 		commentsTemplate = getTextProperty(entity, "commentsTemplate");
 		version = getStringProperty(entity, "version");
 		siteUserLoginUrl = getStringProperty(entity, "siteUserLoginUrl");
+		enablePicasa = getBooleanProperty(entity, "enablePicasa", false);
+		picasaUser = getStringProperty(entity, "picasaUser");
+		picasaPassword = getStringProperty(entity, "picasaPassword");
 	}
 	
 	@Override
@@ -79,6 +85,9 @@ public class ConfigEntity extends BaseEntityImpl {
 		setTextProperty(entity, "commentsTemplate", commentsTemplate);
 		setProperty(entity, "version", version, false);
 		setProperty(entity, "siteUserLoginUrl", siteUserLoginUrl, false);
+		setProperty(entity, "enablePicasa", enablePicasa, false);
+		setProperty(entity, "picasaUser", picasaUser, false);
+		setProperty(entity, "picasaPassword", picasaPassword, false);
 	}
 
 	public String getGoogleAnalyticsId() {
@@ -167,6 +176,30 @@ public class ConfigEntity extends BaseEntityImpl {
 
 	public void setSiteUserLoginUrl(String siteUserLoginUrl) {
 		this.siteUserLoginUrl = siteUserLoginUrl;
+	}
+
+	public boolean isEnablePicasa() {
+		return enablePicasa;
+	}
+
+	public void setEnablePicasa(boolean enablePicasa) {
+		this.enablePicasa = enablePicasa;
+	}
+
+	public String getPicasaUser() {
+		return picasaUser;
+	}
+
+	public void setPicasaUser(String picasaUser) {
+		this.picasaUser = picasaUser;
+	}
+
+	public String getPicasaPassword() {
+		return picasaPassword;
+	}
+
+	public void setPicasaPassword(String picasaPassword) {
+		this.picasaPassword = picasaPassword;
 	}
 	
 }

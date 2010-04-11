@@ -34,6 +34,7 @@ import org.vosao.service.back.GroupService;
 import org.vosao.service.back.LanguageService;
 import org.vosao.service.back.MessageService;
 import org.vosao.service.back.PageService;
+import org.vosao.service.back.PicasaService;
 import org.vosao.service.back.PluginService;
 import org.vosao.service.back.SeoUrlService;
 import org.vosao.service.back.StructureService;
@@ -104,4 +105,6 @@ public interface BackService {
 	TagService getTagService();
 	void setTagService(TagService bean);
 
+	PicasaService getPicasaService();
+	void setPicasaService(PicasaService bean);
 }

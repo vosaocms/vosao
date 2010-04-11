@@ -47,9 +47,14 @@ import org.vosao.business.TemplateBusiness;
 import org.vosao.business.UserBusiness;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
+import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.global.SystemService;
 import org.vosao.search.SearchEngine;
+
+import com.google.appengine.repackaged.com.google.common.base.Logger;
+import com.google.gdata.client.photos.PicasawebService;
+import com.google.gdata.util.AuthenticationException;
 
 public class BusinessImpl implements Business, Serializable {
 
@@ -58,6 +63,7 @@ public class BusinessImpl implements Business, Serializable {
 	private SystemService systemService;
 	private Dao dao;
 	private SearchEngine searchEngine;
+	private PicasawebService picasawebService;
 	
 	private PageBusiness pageBusiness;
 	private FolderBusiness folderBusiness;
@@ -310,4 +316,22 @@ public class BusinessImpl implements Business, Serializable {
 		tagBusiness = bean;
 	}
 	
+	@Override
+	public PicasawebService getPicasawebService() {
+		if (picasawebService == null) {
+			picasawebService = new PicasawebService("vosao-cms");
+			ConfigEntity config = getDao().getConfigDao().getConfig();
+			if (config.isEnablePicasa()) {
+				try {
+					picasawebService.setUserCredentials(config.getPicasaUser(),
+						config.getPicasaPassword());
+				}
+				catch (AuthenticationException e) {
+					log.error("Picasa auth problem. " + e.getMessage());
+				}
+			}
+		}
+		return picasawebService;
+	}
+
 }

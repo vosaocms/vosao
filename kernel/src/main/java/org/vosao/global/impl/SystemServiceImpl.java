@@ -52,6 +52,7 @@ import com.google.appengine.api.labs.taskqueue.Queue;
 import com.google.appengine.api.labs.taskqueue.QueueFactory;
 import com.google.appengine.api.quota.QuotaService;
 import com.google.appengine.api.quota.QuotaServiceFactory;
+import com.google.gdata.client.photos.PicasawebService;
 
 public class SystemServiceImpl implements SystemService, Serializable {
 

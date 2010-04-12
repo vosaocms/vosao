@@ -48,7 +48,7 @@ public class PluginServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public List<PluginEntity> select() {
-		return getDao().getPluginDao().select();
+		return getDao().getPluginDao().selectEnabled();
 	}
 
 	@Override

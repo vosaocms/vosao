@@ -65,7 +65,7 @@ public class PluginEntity extends BaseEntityImpl {
 		configURL = getStringProperty(entity, "configURL");
 		pageHeader = getTextProperty(entity, "pageHeader");
 		version = getStringProperty(entity, "version");
-		disabled = getBooleanProperty(entity, "disabled", false);
+		disabled = getBooleanProperty(entity, "disabled", true);
 	}
 	
 	@Override

@@ -19,21 +19,33 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service.back;
+package org.vosao.service.vo;
 
-import java.util.List;
-
-import org.vosao.service.AbstractService;
-import org.vosao.service.vo.AlbumVO;
-import org.vosao.service.vo.PhotoVO;
+import com.google.gdata.data.photos.AlbumEntry;
+import com.google.gdata.data.photos.PhotoEntry;
 
 /**
+ * Value object to be returned from services.
  * @author Alexander Oleynik
  */
-public interface PicasaService extends AbstractService {
-	
-	List<AlbumVO> selectAlbums();
+public class PhotoVO {
 
-	List<PhotoVO> selectPhotos(String albumId);
-	
+    private PhotoEntry photo;
+
+	public PhotoVO(final PhotoEntry entry) {
+		photo = entry;
+	}
+
+	public String getTitle() {
+		return photo.getTitle().getPlainText();
+	}
+
+	public String getThumbnailURL() {
+		return photo.getMediaThumbnails().get(0).getUrl();
+	}
+
+	public String getURL() {
+		return photo.getMediaContents().get(0).getUrl();
+	}
+
 }

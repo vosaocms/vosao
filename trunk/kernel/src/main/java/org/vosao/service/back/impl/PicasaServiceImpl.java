@@ -29,8 +29,11 @@ import java.util.List;
 import org.vosao.service.back.PicasaService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.AlbumVO;
+import org.vosao.service.vo.PhotoVO;
 
 import com.google.gdata.data.photos.AlbumEntry;
+import com.google.gdata.data.photos.AlbumFeed;
+import com.google.gdata.data.photos.PhotoEntry;
 import com.google.gdata.data.photos.UserFeed;
 
 public class PicasaServiceImpl extends AbstractServiceImpl 
@@ -50,6 +53,25 @@ public class PicasaServiceImpl extends AbstractServiceImpl
 			List<AlbumVO> result = new ArrayList<AlbumVO>();
 			for (AlbumEntry myAlbum : myUserFeed.getAlbumEntries()) {
 				result.add(new AlbumVO(myAlbum));
+			}
+			return result;
+		}
+		catch (Exception e) {
+			logger.error(e.getMessage());
+			return Collections.EMPTY_LIST;
+		}
+	}
+
+	@Override
+	public List<PhotoVO> selectPhotos(String albumId) {
+		try {
+			URL feedUrl = new URL("http://picasaweb.google.com/data/feed/api/user/"
+				+ getUsername() + "/albumid/" + albumId);
+			AlbumFeed feed = getBusiness().getPicasawebService()
+				.getFeed(feedUrl, AlbumFeed.class);
+			List<PhotoVO> result = new ArrayList<PhotoVO>();
+			for (PhotoEntry photo : feed.getPhotoEntries()) {
+				result.add(new PhotoVO(photo));
 			}
 			return result;
 		}

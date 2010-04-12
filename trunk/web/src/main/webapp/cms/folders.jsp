@@ -27,6 +27,7 @@
     <title>Folders</title>
     <script src="/static/js/jquery.treeview.pack.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/static/css/jquery.treeview.css" type="text/css" />
+    <link rel="stylesheet" href="/static/css/picasa.css" type="text/css" />
     <script src="/static/js/cms/folders.js" type="text/javascript"></script>
     <script src="/static/js/cms/picasa.js" type="text/javascript"></script>
 </head>
@@ -46,7 +47,10 @@
 
 <div id="tab-2">
     <p id="album-location"></p>
-    <ul id="albums"><img src="/static/images/ajax-loader.gif" /></ul>
+    <div id="albums"><img src="/static/images/ajax-loader.gif" /></div>
+    <hr class="clear" />
+    <div id="photos"></div>
+    <div class="clear"></div>
 </div>
 
 </div>

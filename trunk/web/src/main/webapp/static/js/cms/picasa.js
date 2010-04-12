@@ -20,6 +20,8 @@
  */
 
 var config = null;
+var albums = null;
+var photos = null;
 
 $(function(){
 	Vosao.initJSONRpc(loadConfig);
@@ -36,6 +38,38 @@ function loadConfig() {
 
 function loadAlbums() {
 	Vosao.jsonrpc.picasaService.selectAlbums(function(r) {
-		alert(r.list.length);
+		albums = r.list;
+		showAlbums();
 	});
+}
+
+function showAlbums() {
+	var h = '';
+	$.each(albums, function(i,value) {
+		h += '<a class="album" onclick="onAlbumSelect(\'' + value.id + '\')">'
+			+ '<img src="/static/images/Photos.png" /><p>' 
+			+ value.title + '</p></a>';
+	});
+	$('#albums').html(h);
+}
+
+function onAlbumSelect(id) {
+	Vosao.jsonrpc.picasaService.selectPhotos(function(r) {
+		photos = r.list;
+		showPhotos();
+	}, id)
+}
+
+function showPhotos() {
+	var h = '';
+	$.each(photos, function(i,value) {
+		h += '<a class="photo" onclick="onPhotoSelect(' + i + ')">'
+			+ '<img src="' + value.thumbnailURL + '" />'
+			+ '<p>' + value.title + '</p></a>';
+	});
+	$('#photos').html(h);
+}
+
+function onPhotoSelect(i) {
+	alert('TODO');
 }

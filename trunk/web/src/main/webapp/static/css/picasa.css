@@ -1,0 +1,32 @@
+.album {
+	float: left;
+	width: 64px;
+	height: 88px;
+	display: block;
+	cursor: pointer;
+	margin: 10px;
+}
+.album:hover {
+	background-color: yellow;
+}
+	
+.album p {
+	font-weight: bold;
+	text-align: center;
+}
+
+.photo {
+    float: left;
+    width: 120px;
+    height: 100px;
+    display: block;
+    cursor: pointer;
+    margin: 10px;
+}
+.photo:hover {
+    background-color: yellow;
+}
+    
+.photo p {
+    text-align: center;
+}

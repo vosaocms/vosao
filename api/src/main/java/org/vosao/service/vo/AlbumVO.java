@@ -35,9 +35,16 @@ public class AlbumVO {
 		album = entry;
 	}
 
+	public String getId() {
+		return album.getGphotoId();
+	}
+
 	public String getTitle() {
 		return album.getTitle().getPlainText();
 	}
 
+	public String getName() {
+		return album.getName();
+	}
 	
 }

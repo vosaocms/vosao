@@ -95,7 +95,10 @@ public class PluginLoader {
 		PluginEntity plugin = readPluginConfig(war.get(VOSAO_PLUGIN));
 		PluginEntity p = getDao().getPluginDao().getByName(plugin.getName());
 		if (p != null) {
-			throw new PluginException("Plugin " + plugin.getTitle() + " already installed.");
+			if (!p.isDisabled()) {
+				throw new PluginException("Plugin " + plugin.getTitle() + " already installed.");
+			}
+			getDao().getPluginDao().remove(p.getId());
 		}
 		if (StringUtils.isEmpty(plugin.getEntryPointClass())) {
 			throw new PluginException("Entry point class not defined.");

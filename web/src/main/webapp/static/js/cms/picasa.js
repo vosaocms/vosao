@@ -46,26 +46,27 @@ function loadAlbums() {
 function showAlbums() {
 	var h = '';
 	$.each(albums, function(i,value) {
-		h += '<a class="album" onclick="onAlbumSelect(\'' + value.id + '\')">'
+		h += '<a class="album" onclick="onAlbumSelect(' + i + ')">'
 			+ '<img src="/static/images/Photos.png" /><p>' 
 			+ value.title + '</p></a>';
 	});
 	$('#albums').html(h);
 }
 
-function onAlbumSelect(id) {
+function onAlbumSelect(i) {
+	$('#album-location').text(albums[i].title);
 	Vosao.jsonrpc.picasaService.selectPhotos(function(r) {
 		photos = r.list;
 		showPhotos();
-	}, id)
+	}, albums[i].id)
 }
 
 function showPhotos() {
 	var h = '';
 	$.each(photos, function(i,value) {
-		h += '<a class="photo" onclick="onPhotoSelect(' + i + ')">'
+		h += '<div><a class="photo" onclick="onPhotoSelect(' + i + ')">'
 			+ '<img src="' + value.thumbnailURL + '" />'
-			+ '<p>' + value.title + '</p></a>';
+			+ '<p>' + value.title + '</p></a></div>';
 	});
 	$('#photos').html(h);
 }

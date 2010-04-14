@@ -41,7 +41,7 @@ public class PhotoVO {
 	}
 
 	public String getThumbnailURL() {
-		return photo.getMediaThumbnails().get(0).getUrl();
+		return photo.getMediaThumbnails().get(1).getUrl();
 	}
 
 	public String getURL() {

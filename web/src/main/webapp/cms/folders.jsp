@@ -46,9 +46,9 @@
 </div>
 
 <div id="tab-2">
-    <p id="album-location"></p>
     <div id="albums"><img src="/static/images/ajax-loader.gif" /></div>
-    <hr class="clear" />
+    <hr class="clear picasa-hr" />
+    <p class="album-name">Album : <span id="album-location"></span></p>
     <div id="photos"></div>
     <div class="clear"></div>
 </div>

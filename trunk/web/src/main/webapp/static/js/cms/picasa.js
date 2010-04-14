@@ -33,6 +33,9 @@ function loadConfig() {
 		if (config.enablePicasa) {
 			loadAlbums();
 		}
+		else {
+			$('#albums').html('Picasa is not enabled.');
+		}
 	});
 }
 

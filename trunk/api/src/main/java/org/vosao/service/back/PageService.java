@@ -87,6 +87,8 @@ public interface PageService extends AbstractService {
 	 */
 	ServiceResponse moveDown(final Long pageId);
 	
+	ServiceResponse addPage(Map<String, String> vo);
+	
 	List<TagEntity> getPageTags(String pageURL);
 
 	ServiceResponse rename(Long id, Long parentId, String title);

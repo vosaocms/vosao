@@ -22,6 +22,11 @@
 var rootFolder;
 var browserMode = 'ckeditor';
 
+var config = null;
+var albums = null;
+var photos = null;
+
+
 $(function(){
     $("#tabs").tabs();
 	Vosao.initJSONRpc(loadData);
@@ -34,6 +39,7 @@ $(function(){
 function loadData() {
 	loadFolderTree();
 	loadTree();
+	loadConfig();
 }
 
 function loadFolderTree() {
@@ -165,4 +171,66 @@ function renderPage(vo) {
 		html += '</ul>';
 	}
 	return html + '</li>';
+}
+
+// Picasa
+
+function loadConfig() {
+	Vosao.jsonrpc.configService.getConfig(function(r) {
+		config = r;
+		if (config.enablePicasa) {
+			loadAlbums();
+		}
+		else {
+			$('#albums').html('Picasa is not enabled.');
+		}
+	});
+}
+
+function loadAlbums() {
+	Vosao.jsonrpc.picasaService.selectAlbums(function(r) {
+		albums = r.list;
+		showAlbums();
+	});
+}
+
+function showAlbums() {
+	var h = '';
+	$.each(albums, function(i,value) {
+		h += '<a class="album" onclick="onAlbumSelect(' + i + ')">'
+			+ '<img src="/static/images/Photos.png" /><p>' 
+			+ value.title + '</p></a>';
+	});
+	$('#albums').html(h);
+}
+
+function onAlbumSelect(i) {
+	$('#album-location').text(albums[i].title);
+	Vosao.jsonrpc.picasaService.selectPhotos(function(r) {
+		photos = r.list;
+		showPhotos();
+	}, albums[i].id)
+}
+
+function showPhotos() {
+	var h = '';
+	$.each(photos, function(i,value) {
+		h += '<div><a class="photo" onclick="onPhotoSelect(' + i + ')">'
+			+ '<img src="' + value.thumbnailURL + '" />'
+			+ '<p>' + value.title + '</p></a></div>';
+	});
+	$('#photos').html(h);
+}
+
+function onPhotoSelect(i) {
+   	var path = photos[i].URL;
+	if (browserMode == 'ckeditor') {
+   		var funcNum = Vosao.getQueryParam('CKEditorFuncNum');
+   		window.opener.CKEDITOR.tools.callFunction(funcNum, path);
+   		window.close();
+   	}
+   	if (browserMode == 'page') {
+   		window.opener.setResource(path);
+   		window.close();
+   	}
 }

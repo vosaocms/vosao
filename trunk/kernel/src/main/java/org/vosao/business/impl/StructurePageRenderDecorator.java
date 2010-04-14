@@ -84,9 +84,13 @@ public class StructurePageRenderDecorator extends AbstractPageRenderDecorator {
 			return;
 		}
 		prepareVelocityContent(contentMap);
+		if (structureTemplate == null) {
+			setContent("Structure template is not selected.");
+			return;
+		}
 		if (structureTemplate.isVelocity()) {
 			VelocityContext context = getPageBusiness().createContext(
-					getLanguageCode()); 
+				getLanguageCode()); 
 			context.put("content", contentMap);
 			context.put("page", getPage());
 			setContent(getSystemService().render(structureTemplate.getContent(), 

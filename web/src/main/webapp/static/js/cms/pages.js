@@ -137,7 +137,7 @@ function onSave() {
 	if (!error) {
 		Vosao.jsonrpc.pageService.addPage(function(r) {
 			if (r.result == 'success') {
-				Vosao.showServiceMessages(r);
+				Vosao.info("Page successfully created.");
 				$('#page-dialog').dialog('close');
 				loadData();
 			}

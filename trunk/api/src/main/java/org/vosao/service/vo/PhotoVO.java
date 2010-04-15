@@ -21,7 +21,6 @@
 
 package org.vosao.service.vo;
 
-import com.google.gdata.data.photos.AlbumEntry;
 import com.google.gdata.data.photos.PhotoEntry;
 
 /**
@@ -36,6 +35,10 @@ public class PhotoVO {
 		photo = entry;
 	}
 
+	public String getId() {
+		return photo.getGphotoId();
+	}
+	
 	public String getTitle() {
 		return photo.getTitle().getPlainText();
 	}

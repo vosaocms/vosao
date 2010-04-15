@@ -46,8 +46,6 @@ public interface Business {
 	
 	String getLanguage();
 
-	PicasawebService getPicasawebService();
-	
 	PageBusiness getPageBusiness();
 	void setPageBusiness(final PageBusiness bean);
 
@@ -104,5 +102,8 @@ public interface Business {
 
 	TagBusiness getTagBusiness();
 	void setTagBusiness(final TagBusiness bean);
+
+	PicasaBusiness getPicasaBusiness();
+	void setPicasaBusiness(final PicasaBusiness bean);
 
 }

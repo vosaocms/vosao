@@ -38,6 +38,7 @@ import org.vosao.business.GroupBusiness;
 import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.MessageBusiness;
 import org.vosao.business.PageBusiness;
+import org.vosao.business.PicasaBusiness;
 import org.vosao.business.PluginBusiness;
 import org.vosao.business.PluginResourceBusiness;
 import org.vosao.business.StructureBusiness;
@@ -63,7 +64,6 @@ public class BusinessImpl implements Business, Serializable {
 	private SystemService systemService;
 	private Dao dao;
 	private SearchEngine searchEngine;
-	private PicasawebService picasawebService;
 	
 	private PageBusiness pageBusiness;
 	private FolderBusiness folderBusiness;
@@ -84,6 +84,7 @@ public class BusinessImpl implements Business, Serializable {
 	private PluginResourceBusiness pluginResourceBusiness;
 	private ImportExportBusiness importExportBusiness;
 	private TagBusiness tagBusiness;
+	private PicasaBusiness picasaBusiness;
 
 	public void init() {
 	}
@@ -315,23 +316,15 @@ public class BusinessImpl implements Business, Serializable {
 	public void setTagBusiness(TagBusiness bean) {
 		tagBusiness = bean;
 	}
-	
+
 	@Override
-	public PicasawebService getPicasawebService() {
-		if (picasawebService == null) {
-			picasawebService = new PicasawebService("vosao-cms");
-			ConfigEntity config = getDao().getConfigDao().getConfig();
-			if (config.isEnablePicasa()) {
-				try {
-					picasawebService.setUserCredentials(config.getPicasaUser(),
-						config.getPicasaPassword());
-				}
-				catch (AuthenticationException e) {
-					log.error("Picasa auth problem. " + e.getMessage());
-				}
-			}
-		}
-		return picasawebService;
+	public PicasaBusiness getPicasaBusiness() {
+		return picasaBusiness;
 	}
 
+	@Override
+	public void setPicasaBusiness(PicasaBusiness bean) {
+		picasaBusiness = bean;
+	}
+	
 }

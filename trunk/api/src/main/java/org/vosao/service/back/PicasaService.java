@@ -24,6 +24,7 @@ package org.vosao.service.back;
 import java.util.List;
 
 import org.vosao.service.AbstractService;
+import org.vosao.service.ServiceResponse;
 import org.vosao.service.vo.AlbumVO;
 import org.vosao.service.vo.PhotoVO;
 
@@ -36,4 +37,9 @@ public interface PicasaService extends AbstractService {
 
 	List<PhotoVO> selectPhotos(String albumId);
 	
+	ServiceResponse addAlbum(String title);
+
+	ServiceResponse removeAlbum(String albumId);
+
+	ServiceResponse removePhoto(String albumId, String photoId);
 }

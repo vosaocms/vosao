@@ -25,6 +25,7 @@
 <html>
 <head>
     <title>Folders</title>
+    <script src="/static/js/jquery.form.js" language="javascript"></script>
     <script src="/static/js/jquery.treeview.pack.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/static/css/jquery.treeview.css" type="text/css" />
     <link rel="stylesheet" href="/static/css/picasa.css" type="text/css" />
@@ -47,13 +48,51 @@
 
 <div id="tab-2">
     <div id="albums"><img src="/static/images/ajax-loader.gif" /></div>
-    <hr class="clear picasa-hr" />
-    <p class="album-name">Album : <span id="album-location"></span></p>
-    <div id="photos"></div>
+    <div class="clear">
+        <a id="createAlbumLink" href="#">Create album</a>
+    </div> 
+    <div id="albumDetails">
+        <hr class="clear picasa-hr" />
+        <p class="album-name">
+            Album : <span id="album-location"></span>
+            <a id="deleteAlbumLink" href="#">Delete album</a>
+        </p>
+        <div id="photos"></div>
+        <div class="clear">
+            <a id="uploadPhotoLink" href="#">Upload image</a>
+        </div>
+    </div> 
     <div class="clear"></div>
 </div>
 
 </div>
+
+<div id="album-dialog" style="display:none" title="New album">
+  <form id="albumForm">
+    <div class="form-row">
+        <label>Album title</label>
+        <input id="title"/>
+    </div>
+    <div id="albumMessages"></div>
+    <div class="buttons-dlg">
+        <input type="submit" value="Save" />
+        <input id="cancelAlbumButton" type="button" value="Cancel" />
+    </div>
+  </form>  
+</div>
+
+<div id="upload-dialog" style="display:none" title="Upload photo">
+  <form id="upload" action="/cms/upload" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="fileType" value="picasa" />
+    <input type="hidden" name="albumId" />
+    <input type="file" name="uploadFile" />
+    <div class="buttons-dlg">
+        <input type="submit" value="Upload" />
+        <input id="uploadCancelButton" type="button" value="Cancel" />
+    </div>    
+  </form>
+</div>
+
 
 </body>
 </html>

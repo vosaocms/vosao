@@ -21,38 +21,35 @@
 
 package org.vosao.service.back.impl;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.PicasaService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.AlbumVO;
 import org.vosao.service.vo.PhotoVO;
 
+import com.google.gdata.data.PlainTextConstruct;
 import com.google.gdata.data.photos.AlbumEntry;
-import com.google.gdata.data.photos.AlbumFeed;
 import com.google.gdata.data.photos.PhotoEntry;
-import com.google.gdata.data.photos.UserFeed;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class PicasaServiceImpl extends AbstractServiceImpl 
 		implements PicasaService {
 
-	private String getUsername() {
-		return getDao().getConfigDao().getConfig().getPicasaUser();
-	}
-	
 	@Override
 	public List<AlbumVO> selectAlbums() {
 		try {
-			URL feedUrl = new URL("http://picasaweb.google.com/data/feed/api/user/"
-				+ getUsername() + "?kind=album");
-			UserFeed myUserFeed = getBusiness().getPicasawebService()
-				.getFeed(feedUrl, UserFeed.class);
 			List<AlbumVO> result = new ArrayList<AlbumVO>();
-			for (AlbumEntry myAlbum : myUserFeed.getAlbumEntries()) {
-				result.add(new AlbumVO(myAlbum));
+			for (AlbumEntry album : getBusiness().getPicasaBusiness()
+					.selectAlbums()) {
+				result.add(new AlbumVO(album));
 			}
 			return result;
 		}
@@ -65,12 +62,9 @@ public class PicasaServiceImpl extends AbstractServiceImpl
 	@Override
 	public List<PhotoVO> selectPhotos(String albumId) {
 		try {
-			URL feedUrl = new URL("http://picasaweb.google.com/data/feed/api/user/"
-				+ getUsername() + "/albumid/" + albumId);
-			AlbumFeed feed = getBusiness().getPicasawebService()
-				.getFeed(feedUrl, AlbumFeed.class);
 			List<PhotoVO> result = new ArrayList<PhotoVO>();
-			for (PhotoEntry photo : feed.getPhotoEntries()) {
+			for (PhotoEntry photo : getBusiness().getPicasaBusiness()
+					.selectPhotos(albumId)) {
 				result.add(new PhotoVO(photo));
 			}
 			return result;
@@ -78,6 +72,42 @@ public class PicasaServiceImpl extends AbstractServiceImpl
 		catch (Exception e) {
 			logger.error(e.getMessage());
 			return Collections.EMPTY_LIST;
+		}
+	}
+	
+	@Override
+	public ServiceResponse addAlbum(String title) {
+		try {
+			AlbumEntry myAlbum = new AlbumEntry();
+			myAlbum.setTitle(new PlainTextConstruct(title));
+			myAlbum.setDescription(new PlainTextConstruct(title));
+			getBusiness().getPicasaBusiness().addAlbum(myAlbum);
+			return ServiceResponse.createSuccessResponse("Success.");
+		}
+		catch (Exception e) {
+			return ServiceResponse.createErrorResponse(e.getMessage());
+		}
+	}
+
+	@Override
+	public ServiceResponse removeAlbum(String albumId) {
+		try {
+			getBusiness().getPicasaBusiness().removeAlbum(albumId);
+			return ServiceResponse.createSuccessResponse("Success.");
+		}
+		catch (Exception e) {
+			return ServiceResponse.createErrorResponse(e.getMessage());
+		}
+	}
+
+	@Override
+	public ServiceResponse removePhoto(String albumId, String photoId) {
+		try {
+			getBusiness().getPicasaBusiness().removePhoto(albumId, photoId);
+			return ServiceResponse.createSuccessResponse("Success.");
+		}
+		catch (Exception e) {
+			return ServiceResponse.createErrorResponse(e.getMessage());
 		}
 	}
 	

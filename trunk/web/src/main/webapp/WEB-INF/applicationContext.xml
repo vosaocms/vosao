@@ -221,6 +221,9 @@
     <bean id="tagBusiness" class="org.vosao.business.impl.TagBusinessImpl"
         parent="abstractBusiness" />  
 
+    <bean id="picasaBusiness" class="org.vosao.business.impl.PicasaBusinessImpl"
+        parent="abstractBusiness" />  
+
     <bean id="pluginBusiness" class="org.vosao.business.impl.PluginBusinessImpl"
         parent="abstractBusiness" init-method="init">
         <property name="business" ref="business"/>  
@@ -268,6 +271,7 @@
         <property name="pluginBusiness" ref="pluginBusiness"/>  
         <property name="pluginResourceBusiness" ref="pluginResourceBusiness"/>
         <property name="tagBusiness" ref="tagBusiness"/>
+        <property name="picasaBusiness" ref="picasaBusiness"/>
         
         <property name="searchEngine" ref="searchEngine"/>
         <property name="importExportBusiness" ref="importExportBusiness"/>

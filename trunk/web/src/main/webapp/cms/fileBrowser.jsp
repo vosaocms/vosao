@@ -27,7 +27,7 @@
     <title>File browser</title>
     <script src="/static/js/jquery.treeview.pack.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/static/css/jquery.treeview.css" type="text/css" />
-    <link rel="stylesheet" href="/static/css/picasa.css" type="text/css" />
+    <link rel="stylesheet" href="/static/css/fileBrowser.css" type="text/css" />
     <script src="/static/js/cms/fileBrowser.js" type="text/javascript"></script>
 </head>
 <body>

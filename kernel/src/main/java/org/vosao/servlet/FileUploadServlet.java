@@ -44,6 +44,7 @@ import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.datanucleus.util.StringUtils;
 import org.dom4j.DocumentException;
 import org.vosao.business.ImportExportBusiness;
 import org.vosao.entity.FileEntity;
@@ -54,6 +55,12 @@ import org.vosao.utils.MimeType;
 import org.vosao.utils.StreamUtil;
 
 import com.google.appengine.api.labs.taskqueue.Queue;
+import com.google.gdata.data.PlainTextConstruct;
+import com.google.gdata.data.media.MediaByteArraySource;
+import com.google.gdata.data.media.MediaSource;
+import com.google.gdata.data.photos.AlbumEntry;
+import com.google.gdata.data.photos.PhotoEntry;
+
 import static com.google.appengine.api.labs.taskqueue.TaskOptions.Builder.*;
 
 /**
@@ -72,6 +79,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 	private static final String FILE_TYPE_RESOURCE = "resource";
 	private static final String FILE_TYPE_IMPORT = "import";
 	private static final String FILE_TYPE_PLUGIN = "plugin";
+	private static final String FILE_TYPE_PICASA = "picasa";
 
 	private static final String TEXT_MESSAGE = "::%s::%s::";
 
@@ -167,9 +175,11 @@ public class FileUploadServlet extends BaseSpringServlet {
 		if (fileType.equals(FILE_TYPE_PLUGIN)) {
 			return processPluginFile(fileItem, data);
 		}
+		if (fileType.equals(FILE_TYPE_PICASA)) {
+			return processPicasaFile(fileItem, data, parameters);
+		}
 		return null;
 	}
-	
 	
 	private String processResourceFileJSON(FileItemStream imageItem, byte[] data, 
 			FolderEntity folder) throws UploadException {
@@ -297,4 +307,22 @@ public class FileUploadServlet extends BaseSpringServlet {
 		return createMessage("success", "Saved for import.");
 	}
 
+	private String processPicasaFile(FileItemStream fileItem, byte[] data,
+			Map<String, String> parameters) throws UploadException {
+		try {
+			String albumId = parameters.get("albumId");
+			if (StringUtils.isEmpty(albumId)) {
+				throw new UploadException("Album not found: " + albumId);
+			}
+			getBusiness().getPicasaBusiness().upload(albumId, data, 
+					fileItem.getName());
+			return createMessage("success", "Photo uploaded.");
+		}
+		catch (Exception e) {
+			throw new UploadException(e.getMessage());
+		}
+	}
+
+
+	
 }

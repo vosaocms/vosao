@@ -215,7 +215,7 @@ function onAlbumSelect(i) {
 function showPhotos() {
 	var h = '';
 	$.each(photos, function(i,value) {
-		h += '<div><a class="photo" onclick="onPhotoSelect(' + i + ')">'
+		h += '<div class="photo"><a onclick="onPhotoSelect(' + i + ')">'
 			+ '<img src="' + value.thumbnailURL + '" />'
 			+ '<p>' + value.title + '</p></a></div>';
 	});

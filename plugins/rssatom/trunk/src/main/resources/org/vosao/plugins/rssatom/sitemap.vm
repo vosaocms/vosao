@@ -1,0 +1,22 @@
+#macro( renderSitemap $treeItem $level)
+  <li>
+    #if ( $treeItem.entity.getLocalTitle($languageCode) ) 
+    <a href="$treeItem.entity.friendlyURL">$treeItem.entity.getLocalTitle($languageCode)</a>
+    #else
+    <a href="$treeItem.entity.friendlyURL">$treeItem.entity.title</a>
+    #end
+  #if ($treeItem.hasChildren && $level < $config.level)
+    <ul>
+      #foreach($child in $treeItem.children)
+        #set($newlevel = $level + 1) 
+        #renderSitemap($child $newlevel)
+      #end
+    </ul> 
+  #end
+   </li>
+#end
+
+#set($current=1)
+<ul id="sitemap">
+    #renderSitemap($root $current)
+</ul>

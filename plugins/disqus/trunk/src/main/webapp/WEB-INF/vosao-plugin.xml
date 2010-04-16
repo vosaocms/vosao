@@ -1,6 +1,7 @@
 <vosao-plugin>
     <name>disqus</name>
     <title>Disqus plugin</title>
+    <version>0.4</version>
     <description>
         Disqus plugin allows to use Disqus service for page comments.
         For details visit www.disqus.com

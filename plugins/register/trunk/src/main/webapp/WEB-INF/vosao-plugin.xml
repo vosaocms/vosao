@@ -3,7 +3,7 @@
     <name>register</name>
     
     <title>User self registration plugin</title>
-    
+    <version>0.4</version>
     <description>
         Register plugin allows users to self register on the site.
     </description>

@@ -25,6 +25,7 @@ import java.util.Date;
 
 import org.vosao.entity.BaseEntityImpl;
 import org.vosao.utils.HashUtil;
+import static org.vosao.utils.EntityUtil.*;
 
 import com.google.appengine.api.datastore.Entity;
 
@@ -53,11 +54,11 @@ public class RegistrationEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("name", name);
-		entity.setProperty("email", email);
-		entity.setProperty("password", password);
-		entity.setProperty("createdDate", createdDate);
-		entity.setProperty("sessionKey", sessionKey);
+		setProperty(entity, "name", name, false);
+		setProperty(entity, "email", email, true);
+		setProperty(entity, "password", password, false);
+		setProperty(entity, "createdDate", createdDate, true);
+		setProperty(entity, "sessionKey", sessionKey, true);
 	}
 
 	public String getName() {

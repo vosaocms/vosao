@@ -101,6 +101,7 @@ public class RegisterFrontServiceImpl extends AbstractRegisterService
 		VelocityContext context = new VelocityContext();
 		context.put("config", config);
 		context.put("registerConfig", registerConfig);
+		context.put("registration", reg);
 		if (registerConfig.isSendConfirmAdmin()) {
 			List<String> emails = StrUtil.fromCSV(registerConfig.getAdminEmail());
 			for (String email : emails) {

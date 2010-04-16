@@ -1,5 +1,6 @@
 <div id="login-form">
-    <form>
+    <div id="register-messages"> </div>
+    <form id="registerForm">
         <h3>Registration form</h3>
         <div>
             <label>Name</label>
@@ -18,7 +19,6 @@
             <input type="password" id="password2" />
         </div>
         <div id="recaptcha">&nbsp;</div>
-        <div id="register-messages"> </div>
         <div>
             <input type="button" value="Register" onclick="onRegister()" />
         </div>    
@@ -30,7 +30,7 @@
 <script type="text/javascript">
 
 $(function() {
-#if($config.enableRecaptcha)
+#if($config.enableRecaptcha && $registerConfig.captcha)
     Recaptcha.create('$config.recaptchaPublicKey',
         'recaptcha', {
             theme:'red', 
@@ -69,12 +69,13 @@ function onRegister() {
             if (Vosao.serviceFailed(e)) return;
             if (r.result == 'success') {
                 registerInfo('Success. Confirmation letter was sent to your email.');
+                $('#registerForm').hide();
             }
             else {
                  registerError(r.message);
             }
         }, Vosao.javaMap(vo),
-#if($config.enableRecaptcha)
+#if($config.enableRecaptcha && $registerConfig.captcha)
             Recaptcha.get_challenge(), Recaptcha.get_response());
         Recaptcha.reload();
 #else

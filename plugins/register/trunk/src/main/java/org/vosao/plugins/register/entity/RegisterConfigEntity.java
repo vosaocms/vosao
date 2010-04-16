@@ -22,6 +22,7 @@
 package org.vosao.plugins.register.entity;
 
 import org.vosao.entity.BaseEntityImpl;
+import static org.vosao.utils.EntityUtil.*;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
@@ -60,14 +61,14 @@ public class RegisterConfigEntity extends BaseEntityImpl {
 	@Override
 	public void save(Entity entity) {
 		super.save(entity);
-		entity.setProperty("adminEmail", adminEmail);
-		entity.setProperty("sendConfirmAdmin", sendConfirmAdmin);
-		entity.setProperty("sendConfirmUser", sendConfirmUser);
-		entity.setProperty("clearDays", clearDays);
-		entity.setProperty("registerFormTemplate", new Text(registerFormTemplate));
-		entity.setProperty("confirmUserTemplate", new Text(confirmUserTemplate));
-		entity.setProperty("confirmAdminTemplate", new Text(confirmAdminTemplate));
-		entity.setProperty("captcha", captcha);
+		setProperty(entity, "adminEmail", adminEmail, false);
+		setProperty(entity, "sendConfirmAdmin", sendConfirmAdmin, false);
+		setProperty(entity, "sendConfirmUser", sendConfirmUser, false);
+		setProperty(entity, "clearDays", clearDays, false);
+		setTextProperty(entity, "registerFormTemplate", registerFormTemplate);
+		setTextProperty(entity, "confirmUserTemplate", confirmUserTemplate);
+		setTextProperty(entity, "confirmAdminTemplate", confirmAdminTemplate);
+		setProperty(entity, "captcha", captcha, false);
 	}
 
 	public String getAdminEmail() {

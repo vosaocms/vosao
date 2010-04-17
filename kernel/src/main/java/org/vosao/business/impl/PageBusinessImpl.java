@@ -192,7 +192,8 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		return context;
 	}
 	
-	private void addVelocityTools(final VelocityContext context) {
+	@Override
+	public void addVelocityTools(VelocityContext context) {
 		context.put("date", new DateTool());
 		context.put("esc", new EscapeTool());
 		context.put("link", new LinkTool());

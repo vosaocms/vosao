@@ -39,6 +39,7 @@ import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PluginEntity;
 import org.vosao.entity.helper.PageHelper;
+import org.vosao.utils.ListUtil;
 
 /**
  * Servlet for generating feeds.
@@ -84,7 +85,7 @@ public class RssatomServlet extends HttpServlet {
 		context.put("rss", new RssTool(getBusiness()));
 		String feed = getBusiness().getSystemService().render(template, 
 				context);
-		response.setContentType("text/xml");
+		response.setContentType("application/rss+xml");
 		response.getWriter().write(feed);
 	}
 
@@ -95,7 +96,7 @@ public class RssatomServlet extends HttpServlet {
 			addPages(getBusiness().getPageBusiness().getByUrl(pageURL), result);
 		}
 		Collections.sort(result, PageHelper.PUBLISH_DATE_ASC);
-		return result;
+		return ListUtil.slice(result, 0, rssatomConfig.getItems());
 	}
 	
 	private void addPages(PageEntity page, List<PageEntity> result) {

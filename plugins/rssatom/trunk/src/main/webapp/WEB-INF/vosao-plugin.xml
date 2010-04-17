@@ -1,18 +1,23 @@
 <vosao-plugin>
-    <name>sitemap</name>
-    <title>Sitemap plugin</title>
+    <name>rssatom</name>
+    <title>RSS Atom feed plugin</title>
     <version>0.4</version>
     <description>
-        Sitemap plugin allows to insert sitemap. You can configure
-        page tree level.
+        RssAtom plugin allows to get feeds of site pages. You can select
+        format by providing "format" parameter (rss, atom) to url 
+        /_ah/plugin/rssatom/feed?format=FORMAT
     </description>
     <website>www.vosao.org</website>
     <config>
-        <param name="level" title="Sitemap level" type="Integer" value="2" />
-        <param name="exclude" title="Exclude page URLs (coma separated)" 
-            type="String" value="" />
+        <param name="items" title="Feed items" type="Integer" value="10" />
+        <param name="pages" title="Feed's pages URLs (coma separated)" 
+            type="String" value="/" />
+        <param name="rssTemplate" title="RSS 2.0 Velocity template" 
+            type="Text" value="" />
+        <param name="atomTemplate" title="Atom 1.0 Velocity template" 
+            type="Text" value="" />
     </config>
     <entry-point-class>
-        org.vosao.plugins.sitemap.SitemapEntryPoint
+        org.vosao.plugins.rssatom.RssatomEntryPoint
     </entry-point-class>
 </vosao-plugin>

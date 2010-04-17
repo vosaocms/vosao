@@ -19,20 +19,32 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.plugins.sitemap;
+package org.vosao.plugins.rssatom;
 
-import org.vosao.business.plugin.AbstractPluginEntryPoint;
+import org.vosao.business.Business;
+import org.vosao.entity.PageEntity;
+import org.vosao.utils.StrUtil;
 
-public class SitemapEntryPoint extends AbstractPluginEntryPoint {
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
+public class RssTool {
 
-	private SitemapVelocityPlugin velocityService;
+	private Business business;
 	
-	@Override
-	public Object getPluginVelocityService() {
-		if (velocityService == null) {
-			velocityService = new SitemapVelocityPlugin(getBusiness());
-		}
-		return velocityService;
+	public RssTool(Business aBusiness) {
+		business = aBusiness;
 	}
 	
+	private Business getBusiness() {
+		return business;
+	}
+	
+	public String getDescription(PageEntity page) {
+		String content = getBusiness().getDao().getPageDao().getContent(
+				page.getId(), getBusiness().getLanguage());
+		return StrUtil.extractTextFromHTML(content).substring(0, 300);
+	}
 }

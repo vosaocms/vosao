@@ -21,6 +21,8 @@
 
 package org.vosao.utils;
 
+import java.util.Date;
+
 import com.josephoconnell.html.HTMLInputFilter;
 
 /**
@@ -48,6 +50,32 @@ public class ParamUtil {
 		}
 	}
 	
+	static public Boolean getBoolean(final String s, 
+			final Boolean defaultValue) {
+		try {
+			return Boolean.valueOf(s);
+		}
+		catch (Exception e) {
+			return defaultValue;
+		}
+	}
+
+	/**
+	 * Convert string to date from format dd.mm.yyyy
+	 * @param s
+	 * @param defaultValue
+	 * @return
+	 */
+	static public Date getDate(final String s, 
+			final Date defaultValue) {
+		try {
+			return DateUtil.toDate(s);
+		}
+		catch (Exception e) {
+			return defaultValue;
+		}
+	}
+
 	private static HTMLInputFilter xssFilter = new HTMLInputFilter();
 	
 	static public String filterXSS(String value) {

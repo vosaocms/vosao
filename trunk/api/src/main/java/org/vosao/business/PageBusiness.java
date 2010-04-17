@@ -180,4 +180,6 @@ public interface PageBusiness {
 	 */
 	void copy(PageEntity page, String parentURL);
 	
+	void addVelocityTools(VelocityContext context);
+
 }	

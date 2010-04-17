@@ -23,6 +23,7 @@ package org.vosao.business.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -257,19 +258,20 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 			return null;
 		}
 		String[] tokens = request.getRequestURI().toString().split("/");
-		logger.info(tokens.toString());
-		if (tokens.length < 3) {
+		logger.info(Arrays.toString(tokens));
+		if (tokens.length < 4) {
 			return null;
 		}
-		String pluginName = tokens[2];
-		String servlet = tokens[3];
+		String pluginName = tokens[3];
+		String servlet = tokens[4];
 		PluginEntity plugin = getDao().getPluginDao().getByName(pluginName);
 		if (plugin == null || plugin.isDisabled()) {
 			return null;
 		}
 		try {
 			PluginEntryPoint entryPoint = getEntryPoint(plugin);
-			return entryPoint == null ? null : entryPoint.getServlets().get(servlet);
+			return entryPoint == null ? null : 
+				entryPoint.getServlets().get(servlet);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

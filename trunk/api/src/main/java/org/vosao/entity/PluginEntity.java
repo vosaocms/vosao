@@ -21,11 +21,11 @@
 
 package org.vosao.entity;
 
+import static org.vosao.utils.EntityUtil.getBooleanProperty;
 import static org.vosao.utils.EntityUtil.getStringProperty;
 import static org.vosao.utils.EntityUtil.getTextProperty;
 import static org.vosao.utils.EntityUtil.setProperty;
 import static org.vosao.utils.EntityUtil.setTextProperty;
-import static org.vosao.utils.EntityUtil.getBooleanProperty;
 
 import com.google.appengine.api.datastore.Entity;
 

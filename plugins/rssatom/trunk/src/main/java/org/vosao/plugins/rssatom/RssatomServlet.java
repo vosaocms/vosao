@@ -31,6 +31,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.Business;
 import org.vosao.entity.ConfigEntity;
@@ -46,6 +48,8 @@ import org.vosao.entity.helper.PageHelper;
  *
  */
 public class RssatomServlet extends HttpServlet {
+
+	protected static final Log logger = LogFactory.getLog(RssatomServlet.class);
 
 	private Business business;
 	
@@ -74,11 +78,12 @@ public class RssatomServlet extends HttpServlet {
 			template = rssatomConfig.getAtomTemplate();
 		}
 		VelocityContext context = new VelocityContext();
+		getBusiness().getPageBusiness().addVelocityTools(context);
 		context.put("config", config);
 		context.put("pages", getPages(plugin, rssatomConfig));
 		context.put("rss", new RssTool(getBusiness()));
-		String feed = getBusiness().getSystemService().render(
-				rssatomConfig.getRssTemplate(), context);
+		String feed = getBusiness().getSystemService().render(template, 
+				context);
 		response.setContentType("text/xml");
 		response.getWriter().write(feed);
 	}

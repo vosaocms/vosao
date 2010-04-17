@@ -32,6 +32,8 @@ import org.vosao.utils.StrUtil;
  */
 public class RssTool {
 
+	private static final int DESCRIPTION_SIZE = 200; 
+	
 	private Business business;
 	
 	public RssTool(Business aBusiness) {
@@ -43,8 +45,11 @@ public class RssTool {
 	}
 	
 	public String getDescription(PageEntity page) {
-		String content = getBusiness().getDao().getPageDao().getContent(
-				page.getId(), getBusiness().getLanguage());
-		return StrUtil.extractTextFromHTML(content).substring(0, 300);
+		String content = StrUtil.extractTextFromHTML(
+				getBusiness().getDao().getPageDao().getContent(
+						page.getId(), getBusiness().getLanguage()));
+		int end = content.length() > DESCRIPTION_SIZE ? 
+				DESCRIPTION_SIZE : content.length();
+		return content.substring(0, end - 1);
 	}
 }

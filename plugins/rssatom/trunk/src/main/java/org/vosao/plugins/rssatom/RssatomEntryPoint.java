@@ -56,7 +56,7 @@ public class RssatomEntryPoint extends AbstractPluginEntryPoint {
 			root.addElement("pages").setText(rssatomConfig.getPages());
 			try {
 				root.addElement("rssTemplate").setText(
-					StreamUtil.getTextResource(
+					StreamUtil.getTextResource(this.getClass().getClassLoader(),
 							"org/vosao/plugins/rssatom/rss-template.vm"));
 			}
 			catch (IOException e) {
@@ -64,7 +64,7 @@ public class RssatomEntryPoint extends AbstractPluginEntryPoint {
 			}
 			try {
 				root.addElement("atomTemplate").setText(
-					StreamUtil.getTextResource(
+					StreamUtil.getTextResource(this.getClass().getClassLoader(),
 							"org/vosao/plugins/rssatom/atom-template.vm"));
 			}
 			catch (IOException e) {

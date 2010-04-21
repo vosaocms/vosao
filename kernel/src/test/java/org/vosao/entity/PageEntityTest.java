@@ -53,4 +53,19 @@ public class PageEntityTest extends TestCase {
 		assertEquals("/page/friend/second", page.getFriendlyURL());
 	}
 
+	public void testGetAncestorsURL() {
+		PageEntity page = new PageEntity("test", "/");
+		assertEquals(1, page.getAncestorsURL().size());
+		assertEquals("/", page.getAncestorsURL().get(0));
+		page = new PageEntity("test2", "/test");
+		assertEquals(1, page.getAncestorsURL().size());
+		assertEquals("/test", page.getAncestorsURL().get(0));
+		page = new PageEntity("test3", "/test/more/than/this");
+		assertEquals(4, page.getAncestorsURL().size());
+		assertEquals("/test", page.getAncestorsURL().get(0));
+		assertEquals("/test/more", page.getAncestorsURL().get(1));
+		assertEquals("/test/more/than", page.getAncestorsURL().get(2));
+		assertEquals("/test/more/than/this", page.getAncestorsURL().get(3));
+	}
+	
 }

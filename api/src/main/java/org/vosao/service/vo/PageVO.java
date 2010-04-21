@@ -158,4 +158,7 @@ public class PageVO {
 		return page.isSkipPostProcessing();
 	}
 	
+	public List<String> getAncestorsURL() {
+		return page.getAncestorsURL();
+	}
 }

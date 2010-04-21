@@ -22,6 +22,7 @@
 package org.vosao.business;
 
 import java.util.Date;
+import java.util.List;
 
 import org.vosao.entity.PageEntity;
 
@@ -146,4 +147,7 @@ public interface PageRenderDecorator {
 	String getHeadHtml();
 
 	boolean isSkipPostProcessing();
+	
+	List<String> getAncestorsURL();
+	
 }

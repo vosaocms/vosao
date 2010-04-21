@@ -22,6 +22,7 @@
 package org.vosao.business.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -201,4 +202,8 @@ public abstract class AbstractPageRenderDecorator implements PageRenderDecorator
 		return page.isSkipPostProcessing();
 	}
 	
+	@Override
+	public List<String> getAncestorsURL() {
+		return page.getAncestorsURL();
+	}
 }

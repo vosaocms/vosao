@@ -30,14 +30,19 @@ import static org.vosao.utils.EntityUtil.getTextProperty;
 import static org.vosao.utils.EntityUtil.setProperty;
 import static org.vosao.utils.EntityUtil.setTextProperty;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.vosao.enums.PageState;
 import org.vosao.enums.PageType;
 import org.vosao.utils.DateUtil;
+import org.vosao.utils.FolderUtil;
 import org.vosao.utils.UrlUtil;
 
 import com.google.appengine.api.datastore.Entity;
@@ -435,4 +440,26 @@ public class PageEntity extends BaseEntityImpl {
 		this.skipPostProcessing = skipPostProcessing;
 	}
 	
+	public List<String> getAncestorsURL() {
+		List<String> result = new ArrayList<String>();
+		if (isRoot()) {
+			result.add(getFriendlyURL());
+			return result;
+		}
+		if (getParentUrl().equals("/")) {
+			result.add(getFriendlyURL());
+			return result;
+		}
+		StringBuffer s = new StringBuffer();
+		try {
+			for (String p : FolderUtil.getPathChain(getFriendlyURL())) {
+				 s.append("/").append(p);
+				 result.add(s.toString());
+			}
+		}
+		catch (UnsupportedEncodingException e) {
+			logger.error(e.getMessage());
+		}
+		return result;
+	}
 }

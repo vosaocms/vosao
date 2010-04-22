@@ -44,9 +44,20 @@ public class RssatomEntryPoint extends AbstractPluginEntryPoint {
 		getServlets().put("feed", new RssatomServlet(getBusiness()));
 	}
 	
+	@Override
+	public String getHeadBeginInclude() {
+		RssatomConfig rssatomConfig = new RssatomConfig(getPlugin());
+		return "<link href=\"/_ah/plugin/rssatom/feed?format=atom\" "
+			+ "type=\"application/atom+xml\" rel=\"alternate\" title=\""
+			+ rssatomConfig.getTitle() + "\" />";
+	}
+
+	private PluginEntity getPlugin() {
+		return getBusiness().getDao().getPluginDao().getByName("rssatom");
+	}
+	
 	private void checkConfig() {
-		PluginEntity plugin = getBusiness().getDao().getPluginDao().getByName(
-				"rssatom");
+		PluginEntity plugin = getPlugin();
 		if (StringUtils.isEmpty(plugin.getConfigData())) {
 			RssatomConfig rssatomConfig = new RssatomConfig(plugin);
 			Document doc = DocumentHelper.createDocument();
@@ -54,6 +65,7 @@ public class RssatomEntryPoint extends AbstractPluginEntryPoint {
 			root.addElement("items").setText(String.valueOf(
 					rssatomConfig.getItems()));
 			root.addElement("pages").setText(rssatomConfig.getPages());
+			root.addElement("title").setText(rssatomConfig.getTitle());
 			try {
 				root.addElement("rssTemplate").setText(
 					StreamUtil.getTextResource(this.getClass().getClassLoader(),

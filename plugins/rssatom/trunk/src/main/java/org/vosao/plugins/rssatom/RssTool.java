@@ -21,8 +21,12 @@
 
 package org.vosao.plugins.rssatom;
 
+import java.util.UUID;
+
 import org.vosao.business.Business;
+import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.PluginEntity;
 import org.vosao.utils.StrUtil;
 
 /**
@@ -32,8 +36,6 @@ import org.vosao.utils.StrUtil;
  */
 public class RssTool {
 
-	private static final int DESCRIPTION_SIZE = 200; 
-	
 	private Business business;
 	
 	public RssTool(Business aBusiness) {
@@ -44,12 +46,29 @@ public class RssTool {
 		return business;
 	}
 	
+	private PluginEntity getPlugin() {
+		return getBusiness().getDao().getPluginDao().getByName("rssatom");
+	}
+	
 	public String getDescription(PageEntity page) {
-		String content = StrUtil.extractTextFromHTML(
-				getBusiness().getDao().getPageDao().getContent(
-						page.getId(), getBusiness().getLanguage()));
-		int end = content.length() > DESCRIPTION_SIZE ? 
-				DESCRIPTION_SIZE : content.length();
+		RssatomConfig rssatomConfig = new RssatomConfig(getPlugin());
+		String content = getBusiness().getPageBusiness().getPageContent(page, 
+				getBusiness().getLanguage()).getContent(); 
+		content = StrUtil.extractTextFromHTML(content);
+		int end = content.length() > rssatomConfig.getItemSize() ? 
+				rssatomConfig.getItemSize() : content.length();
 		return content.substring(0, end - 1);
 	}
+	
+	public String getUUID(PageEntity page) {
+		return (new UUID(page.getCreateDate().getTime(), 
+				page.getModDate().getTime())).toString();
+	}
+
+	public String getUUID() {
+		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
+		return (new UUID(config.getCreateDate().getTime(), 
+				config.getModDate().getTime())).toString();
+	}
+
 }

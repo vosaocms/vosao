@@ -1,24 +1,21 @@
-<?xml version="1.0"?>
-<rss version="2.0">
-   <channel>
-      <title>${config.siteDomain} News</title>
-      <link>http://${config.siteDomain}</link>
-      <description>News ${config.siteDomain}</description>
-      <language>en-us</language>
-      <pubDate>${date.long}</pubDate>
-      <lastBuildDate>${date.long}</lastBuildDate>
-      <docs>http://blogs.law.harvard.edu/tech/rss</docs>
-      <generator>Vosao CMS</generator>
-      <managingEditor>${config.siteEmail}</managingEditor>
-      <webMaster>${config.siteEmail}</webMaster>
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>${rssatomConfig.title}</title>
+  <subtitle>${rssatomConfig.title}</subtitle>
+  <link href="http://${config.siteDomain}/"/>
+  <updated>${date.get("yyyy-M-d'T'H:m:sZ")}</updated>
+  <author>
+    <name>Webmaster</name>
+    <email>${config.siteEmail}</email>
+  </author>
+  <id>urn:uuid:${rss.getUUID()}</id>
 #foreach ($page in $pages)
-      <item>
-         <title>${page.title}</title>
-         <link>http://${config.siteDomain}${page.friendlyURL}</link>
-         <description>${rss.getDescription($page)}</description>
-         <pubDate>${date.format('long', $page.publishDate)}</pubDate>
-         <guid>http://${config.siteDomain}${page.friendlyURL}</guid>
-      </item>
+  <entry>
+    <title>$page.title</title>
+    <link href="http://${config.siteDomain}${page.friendlyURL}"/>
+    <id>urn:uuid:${rss.getUUID($page)}</id>
+    <updated>${date.format("yyyy-M-d'T'H:m:sZ", $page.modDate)}</updated>
+    <summary>${rss.getDescription($page)}</summary>
+  </entry>
 #end      
-   </channel>
-</rss>
+</feed>

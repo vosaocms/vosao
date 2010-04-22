@@ -41,13 +41,17 @@ public class RssatomConfig {
 	protected static final Log logger = LogFactory.getLog(RssatomConfig.class);
 	
 	private int items;
+	private int itemSize;
 	private String pages;
+	private String title;
 	private String rssTemplate;
 	private String atomTemplate;
 
 	private RssatomConfig() {
 		items = 10;
+		itemSize = 300;
 		pages = "/";
+		title = "";
 	}
 	
 	public RssatomConfig(PluginEntity plugin) {
@@ -61,10 +65,22 @@ public class RssatomConfig {
 			logger.error("items parameter: " + e.getMessage());
 		}
 		try {
+			itemSize = params.get("itemSize").getValueInteger();
+		}
+		catch (Exception e) {
+			logger.error("itemSize parameter: " + e.getMessage());
+		}
+		try {
 			pages = params.get("pages").getValue();
 		}
 		catch (Exception e) {
 			logger.error("pages parameter: " + e.getMessage());
+		}
+		try {
+			title = params.get("title").getValue();
+		}
+		catch (Exception e) {
+			logger.error("title parameter: " + e.getMessage());
 		}
 		try {
 			rssTemplate = params.get("rssTemplate").getValue();
@@ -114,6 +130,22 @@ public class RssatomConfig {
 
 	public void setAtomTemplate(String atomTemplate) {
 		this.atomTemplate = atomTemplate;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public int getItemSize() {
+		return itemSize;
+	}
+
+	public void setItemSize(int itemSize) {
+		this.itemSize = itemSize;
 	}
 	
 }

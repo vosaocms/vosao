@@ -4,12 +4,15 @@
     <version>0.4</version>
     <description>
         RssAtom plugin allows to get feeds of site pages. You can select
-        format by providing "format" parameter (rss, atom) to url 
-        /_ah/plugin/rssatom/feed?format=FORMAT
+        format by providing "format" parameter to url 
+        /_ah/plugin/rssatom/feed?format={rss,atom}
     </description>
     <website>www.vosao.org</website>
     <config>
+        <param name="title" title="Feed title" type="String" value="Site news" />
         <param name="items" title="Feed items" type="Integer" value="10" />
+        <param name="itemSize" title="Item description size in chars" type="Integer" 
+            value="300" />
         <param name="pages" title="Feed's pages URLs (coma separated)" 
             type="String" value="/" />
         <param name="rssTemplate" title="RSS 2.0 Velocity template" 

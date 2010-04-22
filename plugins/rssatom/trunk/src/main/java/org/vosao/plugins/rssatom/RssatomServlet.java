@@ -74,18 +74,20 @@ public class RssatomServlet extends HttpServlet {
 		String template = "";
 		if (format.equals("rss")) {
 			template = rssatomConfig.getRssTemplate();
+			response.setContentType("application/rss+xml");
 		}
 		if (format.equals("atom")) {
 			template = rssatomConfig.getAtomTemplate();
+			response.setContentType("application/atom+xml");
 		}
 		VelocityContext context = new VelocityContext();
 		getBusiness().getPageBusiness().addVelocityTools(context);
 		context.put("config", config);
+		context.put("rssatomConfig", rssatomConfig);
 		context.put("pages", getPages(plugin, rssatomConfig));
 		context.put("rss", new RssTool(getBusiness()));
 		String feed = getBusiness().getSystemService().render(template, 
 				context);
-		response.setContentType("application/rss+xml");
 		response.getWriter().write(feed);
 	}
 

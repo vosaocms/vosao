@@ -3,7 +3,7 @@
    <channel>
       <title>${config.siteDomain} News</title>
       <link>http://${config.siteDomain}</link>
-      <description>News ${config.siteDomain}</description>
+      <description>${rssatomConfig.title}</description>
       <language>en-us</language>
       <pubDate>${date.long}</pubDate>
       <lastBuildDate>${date.long}</lastBuildDate>

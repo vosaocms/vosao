@@ -81,6 +81,17 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>    
 
+    <!-- Plugin cron filter -->
+
+    <filter>
+        <filter-name>PluginCronFilter</filter-name>
+        <filter-class>org.vosao.filter.PluginCronFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>PluginCronFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>    
+
     <!-- AuthenticationFilter -->
     
     <filter>

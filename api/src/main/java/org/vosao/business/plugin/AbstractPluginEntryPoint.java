@@ -89,4 +89,9 @@ public abstract class AbstractPluginEntryPoint implements PluginEntryPoint {
 		return jobs;
 	}
 	
+	@Override
+	public String getHeadBeginInclude() {
+		return "";
+	}
+
 }

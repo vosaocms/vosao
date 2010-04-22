@@ -24,6 +24,7 @@ package org.vosao.business.impl.pagefilter.fragments;
 import org.apache.commons.lang.StringUtils;
 import org.vosao.business.Business;
 import org.vosao.business.impl.pagefilter.ContentFragment;
+import org.vosao.business.plugin.PluginEntryPoint;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PluginEntity;
 
@@ -32,10 +33,14 @@ public class PluginHeadFragment	implements ContentFragment {
 	@Override
 	public String get(Business business, PageEntity page) {
 		StringBuffer code = new StringBuffer(); 
-		for (PluginEntity plugin : business.getDao().getPluginDao().select()) {
+		for (PluginEntity plugin : business.getDao().getPluginDao()
+				.selectEnabled()) {
 			if (!StringUtils.isEmpty(plugin.getPageHeader())) {
 				code.append(plugin.getPageHeader());
 			}
+			PluginEntryPoint entryPoint = business.getPluginBusiness()
+					.getEntryPoint(plugin);
+			code.append(entryPoint.getHeadBeginInclude());
 		}
 		return code.toString();
 	}

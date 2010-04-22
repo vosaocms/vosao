@@ -21,10 +21,7 @@
 
 package org.vosao.filter;
 
-import static com.google.appengine.api.labs.taskqueue.TaskOptions.Builder.url;
-
 import java.io.IOException;
-import java.util.Date;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -42,18 +39,17 @@ import org.vosao.dao.cache.CacheStat;
 import org.vosao.dao.cache.EntityCache;
 import org.vosao.dao.cache.QueryCache;
 import org.vosao.entity.ConfigEntity;
-import org.vosao.servlet.SessionCleanTaskServlet;
 
-import com.google.appengine.api.labs.taskqueue.Queue;
-
-
+/**
+ * Application initial database creation filter.
+ * @author Alexander Oleynik
+ *
+ */
 public class InitFilter extends AbstractFilter implements Filter {
     
     private static final Log logger = LogFactory.getLog(SiteFilter.class);
 
     private static final String SETUP_URL = "/setup";
-    private static final String PLUGIN_CRON_URL = "/_ah/cron/plugin";
-    private static final String SESSION_CLEAN_CRON_URL = "/_ah/cron/session_clean";
     
     private int localHits;
     private int cacheHits;
@@ -66,7 +62,6 @@ public class InitFilter extends AbstractFilter implements Filter {
   
     public void doFilter(ServletRequest request, ServletResponse response, 
     		FilterChain chain) throws IOException, ServletException {
-    	Date now = new Date();
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
         HttpServletResponse httpResponse = (HttpServletResponse)response;
         String url = httpRequest.getServletPath();
@@ -80,20 +75,6 @@ public class InitFilter extends AbstractFilter implements Filter {
             	logger.info("Setup was successfully completed.");
             }
         	httpResponse.sendRedirect("/");
-        	return;
-        }
-        if (url.equals(PLUGIN_CRON_URL)) {
-        	getBusiness().getPluginBusiness().cronSchedule(now);
-        	logger.info(logCacheStat());
-        	writeContent(httpResponse, "<h4>OK</h4>");
-        	return;
-        }
-        if (url.equals(SESSION_CLEAN_CRON_URL)) {
-    		Queue queue = getBusiness().getSystemService().getQueue(
-    				"session-clean");
-    		queue.add(url(SessionCleanTaskServlet.SESSION_CLEAN_TASK_URL));
-    		logger.info("Added new session clean task");
-        	writeContent(httpResponse, "<h4>OK</h4>");
         	return;
         }
         //startProfile();
@@ -119,13 +100,6 @@ public class InitFilter extends AbstractFilter implements Filter {
         		getBusiness().getSystemService().getCache().getCacheHits() - cacheHits));
         logger.info("dao calls: " + (entity.getCalls() - entityStat.getCalls() + 
         		query.getCalls() - queryStat.getCalls()));
-    }
-    
-    private void writeContent(HttpServletResponse response, String content)
-    		throws IOException {
-    	response.setContentType("text/html");
-    	response.setCharacterEncoding("UTF-8");
-    	response.getWriter().append("<html><body>" + content + "</body></html>");
     }
     
     private String logCacheStat() {

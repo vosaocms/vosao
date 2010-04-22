@@ -54,6 +54,9 @@ public class LanguageFilter extends AbstractFilter implements Filter {
     		ctx.setLanguage(language);
     		session.setAttribute(LANGUAGE_SESSION_ATTR, language);
     	}
+    	else {
+    		ctx.setLanguage((String)session.getAttribute(LANGUAGE_SESSION_ATTR));
+    	}
     	if (httpRequest.getParameter("language") != null) {
     		String languageCode = httpRequest.getParameter("language");
     		LanguageEntity language = getDao().getLanguageDao().getByCode(

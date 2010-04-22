@@ -41,4 +41,11 @@ public interface PluginEntryPoint {
 	Map<String, HttpServlet> getServlets();
 	
 	List<PluginCronJob> getJobs();
+	
+	/**
+	 * Get html head tag include fragment. All pages will include this fragment in 
+	 * head tag.
+	 * @return head tag fragment.
+	 */
+	String getHeadBeginInclude();
 }

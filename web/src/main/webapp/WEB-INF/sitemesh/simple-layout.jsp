@@ -36,7 +36,7 @@
 
     <link rel="stylesheet" href="/static/css/jquery-ui/redmond/jquery-ui.css" type="text/css" />
 
-    <script src="/static/js/jquery.js" language="javascript"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" language="javascript"></script>
     <script src="/static/js/jquery.cookie.js" language="javascript"></script>
     <script src="/static/js/jquery-ui.js" language="javascript"></script>
     <script src="/static/js/jsonrpc.js" language="javascript"></script>

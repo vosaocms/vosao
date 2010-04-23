@@ -30,7 +30,7 @@ public class JavaScriptFragment	implements ContentFragment {
 	@Override
 	public String get(Business business, PageEntity page) {
 		StringBuffer code = new StringBuffer( 
-		    "<script src=\"/static/js/jquery.js\" type=\"text/javascript\"></script>\n"
+		    "<script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js\" type=\"text/javascript\"></script>\n"
 		    +  "<script src=\"/static/js/jquery.form.js\" type=\"text/javascript\"></script>\n"
             +  "<script src=\"/static/js/jsonrpc.js\" type=\"text/javascript\"></script>\n"
             +  "<script src=\"/static/js/vosao.js\" type=\"text/javascript\"></script>\n"

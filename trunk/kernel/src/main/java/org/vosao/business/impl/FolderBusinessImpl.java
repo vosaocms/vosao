@@ -147,13 +147,7 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 			return root.getEntity();
 		}
 		String[] chain;
-		try {
-			chain = FolderUtil.getPathChain(path);
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return null;
-		}
+		chain = FolderUtil.getPathChain(path);
 		String currentDir = "";
 		FolderEntity parent = root.getEntity();
 		for (String dir : chain) {

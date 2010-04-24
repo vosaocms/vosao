@@ -18,6 +18,7 @@
 
 #page-content {
     margin: 10px 0;
+    clear: both;
 }
 
 .label {

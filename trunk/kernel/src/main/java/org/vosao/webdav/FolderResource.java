@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,7 @@ import org.vosao.business.Business;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.TemplateEntity;
 import org.vosao.utils.FolderUtil;
 import org.vosao.utils.StreamUtil;
 import org.vosao.webdav.sysfile.FileFactory;
@@ -52,7 +54,13 @@ public class FolderResource extends AbstractResource implements
 		CollectionResource, GetableResource, PutableResource {
 
 	private FolderEntity folder;
+	/**
+	 * Folder path including /_ah/webdav prefix without trailing slash.
+	 */
 	private String path;
+	/**
+	 * Folder related path without /_ah/webdav prefix.
+	 */
 	private String relPath;
 	private String basePath;
 	private String factoryPath;
@@ -68,6 +76,18 @@ public class FolderResource extends AbstractResource implements
 		relPath = path.replace("/_ah/webdav", "");
 		basePath = relPath.length() <= 1 ? "/_ah/webdav/" : path + "/";
 		factoryPath = relPath.length() < 1 ? "/" : relPath;
+	}
+
+	public FolderResource(Business aBusiness, 
+			SystemFileFactory aSystemFileFactory,
+			String aPath, String name) {
+		super(aBusiness, name, new Date());
+		systemFileFactory = aSystemFileFactory;
+		folder = null;
+		path = FolderUtil.removeTrailingSlash(aPath);
+		relPath = path.replace("/_ah/webdav", "");
+		basePath = relPath.length() <= 1 ? "/_ah/webdav/" : path + "/";
+		factoryPath = relPath.length() < 1 ? "/" : relPath;
 
 	}
 
@@ -76,6 +96,9 @@ public class FolderResource extends AbstractResource implements
 		String childPath = path + "/" + childName;
 		if (systemFileFactory.isSystemFile(childPath)) {
 			return systemFileFactory.getSystemFile(childPath);
+		}
+		if (folder == null) {
+			return null;
 		}
 		List<FolderEntity> children = getDao().getFolderDao().getByParent(
 				folder.getId());
@@ -104,11 +127,22 @@ public class FolderResource extends AbstractResource implements
 	public List<? extends Resource> getChildren() {
 		List<Resource> result = new ArrayList<Resource>();
 		systemFileFactory.addSystemFiles(result, factoryPath);
+		if (folder == null) {
+			return result;
+		}
 		List<FolderEntity> children = getDao().getFolderDao().getByParent(
 				folder.getId());
 		for (FolderEntity child : children) {
 			result.add(new FolderResource(getBusiness(), systemFileFactory, child, 
 					path + "/" + child.getName()));
+		}
+		if (relPath.equals("/theme")) {
+			for (TemplateEntity template : getDao().getTemplateDao().select()) {
+				if (!contains(children, template.getUrl())) {
+					result.add(new FolderResource(getBusiness(), systemFileFactory, 
+							path + "/" + template.getUrl(), template.getUrl()));
+				}
+			}
 		}
 		String pageURL = FolderUtil.getPageURLFromFolderPath(path);
 		if (pageURL != null) {
@@ -162,9 +196,10 @@ public class FolderResource extends AbstractResource implements
 			.append("<link rel=\"stylesheet\" href=\"/static/css/style.css\" type=\"text/css\" />")
 			.append("</head><h2>Vosao WebDAV site repository</h2>");
 		s.append("<table width=\"50%\" class=\"form-table\"><th width=\"40%\">Name</th><th>Size in bytes</th><th>Modified date</th></tr>");
-		List<FolderEntity> children = getDao().getFolderDao().getByParent(
-				folder.getId());
-		if (!folder.isRoot()) {
+		List<FolderEntity> children = folder != null ? 
+				getDao().getFolderDao().getByParent(folder.getId()) :
+				Collections.EMPTY_LIST;
+		if (folder == null || !folder.isRoot()) {
 			String parentPath = FolderUtil.getParentPath(path);
 			s.append("<tr><td colspan=\"3\"><img src=\"/static/images/01_left.png\"/><a href=\"")
 				.append(parentPath).append("\">Parent</a></td></tr>");
@@ -176,6 +211,18 @@ public class FolderResource extends AbstractResource implements
 				.append("><td colspan=\"3\"><img src=\"/static/images/folder.png\"><a href=\"")
 				.append(basePath + child.getName()).append("\">").append(child.getName())
 				.append("</a></td></tr>");
+		}
+		// theme folders
+		if (relPath.equals("/theme")) {
+			for (TemplateEntity template : getDao().getTemplateDao().select()) {
+				if (!contains(children, template.getUrl())) {
+					s.append("<tr ").append(i++ % 2 == 1 ? "class=\"even\"" : "")
+						.append("><td colspan=\"3\"><img src=\"/static/images/folder.png\"><a href=\"")
+						.append(basePath + template.getUrl()).append("\">")
+						.append(template.getUrl())
+						.append("</a></td></tr>");
+				}
+			}
 		}
 		// page folders
 		String pageURL = FolderUtil.getPageURLFromFolderPath(relPath);
@@ -202,15 +249,17 @@ public class FolderResource extends AbstractResource implements
 			}
 		}		
 		// folders files
-		List<FileEntity> files = getDao().getFileDao().getByFolder(folder.getId());
-		for (FileEntity file : files) {
-			s.append("<tr ").append(i++ % 2 == 1 ? "class=\"even\"" : "")
-				.append("><td><img src=\"/static/images/page.png\" /><a href=\"")
-				.append(basePath + file.getFilename())
-				.append("\">").append(file.getFilename())
-				.append("</a></td><td>")
-				.append(file.getSize()).append("</td<td>").append(file.getLastModifiedTime())
-				.append("</td></tr>");
+		if (folder != null) {
+			List<FileEntity> files = getDao().getFileDao().getByFolder(folder.getId());
+			for (FileEntity file : files) {
+				s.append("<tr ").append(i++ % 2 == 1 ? "class=\"even\"" : "")
+					.append("><td><img src=\"/static/images/page.png\" /><a href=\"")
+					.append(basePath + file.getFilename())
+					.append("\">").append(file.getFilename())
+					.append("</a></td><td>")
+					.append(file.getSize()).append("</td<td>").append(file.getLastModifiedTime())
+					.append("</td></tr>");
+			}
 		}
 		s.append("</table>");
 		out.write(s.toString().getBytes("UTF-8"));

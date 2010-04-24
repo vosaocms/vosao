@@ -39,8 +39,7 @@ public class FolderUtil {
 	
 	private static Log logger = LogFactory.getLog(FolderUtil.class);
 	
-	public static String[] getPathChain(final String path) 
-			throws UnsupportedEncodingException {
+	public static String[] getPathChain(final String path) {
         if (path == null) {
         	return new String[]{};
         }
@@ -78,13 +77,7 @@ public class FolderUtil {
 	}
 
 	public static String getFolderName(final String path) {
-		String[] chain;
-		try {
-			chain = getPathChain(path);
-		} catch (UnsupportedEncodingException e) {
-			logger.error(e.getMessage());
-			return null;
-		}
+		String[] chain = getPathChain(path);
 		if (chain.length > 0) {
 			return chain[chain.length-1];
 		}

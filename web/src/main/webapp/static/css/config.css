@@ -10,3 +10,7 @@ label {
 #pages {
 	clear: both;
 }
+
+#tag-dialog label {
+	width: 10em;
+}

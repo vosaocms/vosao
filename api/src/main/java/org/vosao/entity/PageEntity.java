@@ -451,14 +451,9 @@ public class PageEntity extends BaseEntityImpl {
 			return result;
 		}
 		StringBuffer s = new StringBuffer();
-		try {
-			for (String p : FolderUtil.getPathChain(getFriendlyURL())) {
-				 s.append("/").append(p);
-				 result.add(s.toString());
-			}
-		}
-		catch (UnsupportedEncodingException e) {
-			logger.error(e.getMessage());
+		for (String p : FolderUtil.getPathChain(getFriendlyURL())) {
+			 s.append("/").append(p);
+			 result.add(s.toString());
 		}
 		return result;
 	}

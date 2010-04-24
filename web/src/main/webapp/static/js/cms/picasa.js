@@ -35,6 +35,7 @@ $(function(){
     $('#albumForm').submit(function() {onAlbumSave(); return false;});
 	$('#cancelAlbumButton').click(function(){ $('#album-dialog').dialog('close') });
 	$('#uploadAlbumButton').click(function(){ $('#upload-dialog').dialog('close') });
+	$('#uploadCancelButton').click(function(){ $('#upload-dialog').dialog('close') });
 });
 
 function loadConfig() {
@@ -45,6 +46,7 @@ function loadConfig() {
 		}
 		else {
 			$('#albums').html('Picasa is not enabled.');
+			$('#createAlbumLink').hide();
 		}
 	});
 }
@@ -157,6 +159,7 @@ function afterUpload(data) {
     }
     else {
         msg = "Error. " + msg;
+        Vosao.error(msg);
     }   
     $("#upload-dialog").dialog("close");
 }

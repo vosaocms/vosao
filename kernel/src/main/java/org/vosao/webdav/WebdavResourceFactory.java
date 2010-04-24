@@ -31,6 +31,7 @@ import org.vosao.dao.Dao;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.TemplateEntity;
 import org.vosao.utils.FolderUtil;
 import org.vosao.webdav.sysfile.SystemFileFactory;
 
@@ -74,6 +75,13 @@ public class WebdavResourceFactory implements ResourceFactory {
 		if (folderItem != null) {
 			return getFolder(folderItem.getEntity(), aPath);
 		}
+		String[] chain = FolderUtil.getPathChain(path);
+		if (chain.length == 2 && path.startsWith("/theme/")) {
+			TemplateEntity template = getDao().getTemplateDao().getByUrl(chain[1]);
+			if (template != null) {
+				return getThemeFolder(aPath, template.getUrl());
+			}
+		}
 		String pageURL = FolderUtil.getPageURLFromFolderPath(path);
 		if (pageURL != null) {
 			List<PageEntity> pages = getDao().getPageDao().selectByUrl(pageURL);
@@ -91,6 +99,11 @@ public class WebdavResourceFactory implements ResourceFactory {
 	private Resource getFolder(FolderEntity folder, String path) {
 		return new FolderResource(getBusiness(), getSystemFileFactory(), 
 				folder, path);
+	}
+
+	private Resource getThemeFolder(String path, String name) {
+		return new FolderResource(getBusiness(), getSystemFileFactory(), 
+				path, name);
 	}
 
 	private Resource getFile(FileEntity file) {

@@ -77,7 +77,7 @@
     </div>
     <div id="picasa">
         <div class="form-row">
-            <label>Picasa user name</label>
+            <label>Picasa user email</label>
             <input id="picasaUser" type="text" />
         </div>
         <div class="form-row">

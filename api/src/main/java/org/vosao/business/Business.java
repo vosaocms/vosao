@@ -106,4 +106,7 @@ public interface Business {
 	PicasaBusiness getPicasaBusiness();
 	void setPicasaBusiness(final PicasaBusiness bean);
 
+	SetupBean getSetupBean();
+	void setSetupBean(final SetupBean bean);
+	
 }

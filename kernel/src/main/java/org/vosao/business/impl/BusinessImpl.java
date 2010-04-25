@@ -41,6 +41,7 @@ import org.vosao.business.PageBusiness;
 import org.vosao.business.PicasaBusiness;
 import org.vosao.business.PluginBusiness;
 import org.vosao.business.PluginResourceBusiness;
+import org.vosao.business.SetupBean;
 import org.vosao.business.StructureBusiness;
 import org.vosao.business.StructureTemplateBusiness;
 import org.vosao.business.TagBusiness;
@@ -48,14 +49,9 @@ import org.vosao.business.TemplateBusiness;
 import org.vosao.business.UserBusiness;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
-import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.global.SystemService;
 import org.vosao.search.SearchEngine;
-
-import com.google.appengine.repackaged.com.google.common.base.Logger;
-import com.google.gdata.client.photos.PicasawebService;
-import com.google.gdata.util.AuthenticationException;
 
 public class BusinessImpl implements Business, Serializable {
 
@@ -85,6 +81,8 @@ public class BusinessImpl implements Business, Serializable {
 	private ImportExportBusiness importExportBusiness;
 	private TagBusiness tagBusiness;
 	private PicasaBusiness picasaBusiness;
+
+	private SetupBean setupBean;
 
 	public void init() {
 	}
@@ -325,6 +323,16 @@ public class BusinessImpl implements Business, Serializable {
 	@Override
 	public void setPicasaBusiness(PicasaBusiness bean) {
 		picasaBusiness = bean;
+	}
+
+	@Override
+	public SetupBean getSetupBean() {
+		return setupBean;
+	}
+
+	@Override
+	public void setSetupBean(SetupBean bean) {
+		setupBean = bean;
 	}
 	
 }

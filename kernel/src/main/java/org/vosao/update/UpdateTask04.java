@@ -1,20 +1,25 @@
 package org.vosao.update;
 
+import org.vosao.business.Business;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PluginEntity;
 
 public class UpdateTask04 implements UpdateTask {
 
-	private Dao dao;
+	private Business business;
 	
-	public UpdateTask04(Dao aDao) {
-		dao = aDao;
+	public UpdateTask04(Business aBusiness) {
+		business = aBusiness;
 	}
 	
 	private Dao getDao() {
-		return dao;
+		return business.getDao();
 	}
 	
+	private Business getBusiness() {
+		return business;
+	}
+
 	@Override
 	public String getFromVersion() {
 		return "0.3";
@@ -27,6 +32,7 @@ public class UpdateTask04 implements UpdateTask {
 
 	@Override
 	public void update() throws UpdateException {
+		getBusiness().getSetupBean().clearSessions();
 		updatePlugins();
 	}
 
@@ -36,5 +42,6 @@ public class UpdateTask04 implements UpdateTask {
 			getDao().getPluginDao().save(plugin);
 		}
 	}
+	
 	
 }

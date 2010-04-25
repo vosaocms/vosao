@@ -24,7 +24,7 @@ package org.vosao.update;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.vosao.dao.Dao;
+import org.vosao.business.Business;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -38,13 +38,13 @@ public class UpdateManager {
 
 	private List<UpdateTask> tasks;
 	private DatastoreService datastore;
-	private Dao dao;
+	private Business business;
 	
-	public UpdateManager(Dao aDao) {
-		dao = aDao;
+	public UpdateManager(Business aBusiness) {
+		business = aBusiness;
 		datastore = DatastoreServiceFactory.getDatastoreService(); 
 		tasks = new ArrayList<UpdateTask>();
-		tasks.add(new UpdateTask04(dao));
+		tasks.add(new UpdateTask04(business));
 	}
 	
 	public void update() throws UpdateException {

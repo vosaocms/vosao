@@ -42,7 +42,7 @@ import org.vosao.entity.UserEntity;
  */
 public class AuthenticationFilter extends AbstractFilter implements Filter {
 
-    public static final String USER_SESSION_ATTR = "user";
+    public static final String USER_SESSION_ATTR = "userEmail";
 	public static final String ORIGINAL_VIEW_KEY = "originalViewKey";
 	public static final String LOGIN_VIEW = "/login.jsp";
 	public static final String CMS = "/cms";
@@ -58,7 +58,8 @@ public class AuthenticationFilter extends AbstractFilter implements Filter {
 		HttpSession session = httpRequest.getSession();
         String url = httpRequest.getServletPath();
         VosaoContext ctx = VosaoContext.getInstance();
-        UserEntity user = (UserEntity)session.getAttribute(USER_SESSION_ATTR);        
+        String userEmail = (String)session.getAttribute(USER_SESSION_ATTR);
+        UserEntity user = getDao().getUserDao().getByEmail(userEmail);
 		if (user == null) {
 			ctx.setUser(null);
 			if (url.startsWith(CMS)) {

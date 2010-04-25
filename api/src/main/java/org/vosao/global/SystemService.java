@@ -58,6 +58,11 @@ public interface SystemService {
 	
 	DatastoreService getDatastore();
 	
+	/**
+	 * Time duration of current request in seconds. Used in tasks to control
+	 * 30 sec limit.
+	 * @return request seconds.
+	 */
 	long getRequestCPUTimeSeconds();
 	
 }

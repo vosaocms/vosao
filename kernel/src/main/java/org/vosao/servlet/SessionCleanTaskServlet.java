@@ -29,9 +29,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
@@ -54,7 +51,6 @@ public class SessionCleanTaskServlet extends BaseSpringServlet {
 
 	public void clearSessions(HttpServletRequest request, 
 			HttpServletResponse response) throws ServletException, IOException {
-		long startTime = System.currentTimeMillis();
 		String mode = request.getParameter("mode");
 		if (mode != null && mode.equals("start")) {
 			addSessionCleanTask();
@@ -68,7 +64,8 @@ public class SessionCleanTaskServlet extends BaseSpringServlet {
 	        for (Entity session : results.asIterable()) {
 	        	datastore.delete(session.getKey());
 	        	i++;
-	    		if (System.currentTimeMillis() - startTime > 24000) {
+	    		if (getBusiness().getSystemService()
+	    				.getRequestCPUTimeSeconds() > 25) {
 	    			addSessionCleanTask();
 	    			logger.info("Deleted " + i + " sessions.");
 	    			break;

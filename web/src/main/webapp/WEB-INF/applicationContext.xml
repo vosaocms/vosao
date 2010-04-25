@@ -273,6 +273,8 @@
         <property name="tagBusiness" ref="tagBusiness"/>
         <property name="picasaBusiness" ref="picasaBusiness"/>
         
+        <property name="setupBean" ref="setupBean"/>
+
         <property name="searchEngine" ref="searchEngine"/>
         <property name="importExportBusiness" ref="importExportBusiness"/>
     </bean>
@@ -284,7 +286,6 @@
     <!--======================= Setup bean ===========================-->
     
     <bean id="setupBean" class="org.vosao.business.impl.SetupBeanImpl">
-        <property name="dao" ref="dao"/>  
         <property name="business" ref="business"/>  
     </bean>    
 

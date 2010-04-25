@@ -56,7 +56,7 @@ public class UpdateFilter extends AbstractFilter implements Filter {
         String url = httpRequest.getServletPath();
         if (url.equals(UPDATE_URL)) {
         	try {
-        		UpdateManager updateManager = new UpdateManager(getDao());
+        		UpdateManager updateManager = new UpdateManager(getBusiness());
         		updateManager.update();
             	String msg = "Update was successfully completed.";
         		logger.info(msg);

@@ -134,6 +134,7 @@
     </bean>      
 
     <bean id="dao" class="org.vosao.dao.impl.DaoImpl">  
+        <property name="systemService" ref="systemService"/>
         <property name="entityCache" ref="entityCache"/>  
         <property name="queryCache" ref="queryCache"/>
           
@@ -220,6 +221,9 @@
     <bean id="tagBusiness" class="org.vosao.business.impl.TagBusinessImpl"
         parent="abstractBusiness" />  
 
+    <bean id="picasaBusiness" class="org.vosao.business.impl.PicasaBusinessImpl"
+        parent="abstractBusiness" />  
+
     <bean id="pluginBusiness" class="org.vosao.business.impl.PluginBusinessImpl"
         parent="abstractBusiness" init-method="init">
         <property name="business" ref="business"/>  
@@ -267,7 +271,10 @@
         <property name="pluginBusiness" ref="pluginBusiness"/>  
         <property name="pluginResourceBusiness" ref="pluginResourceBusiness"/>
         <property name="tagBusiness" ref="tagBusiness"/>
+        <property name="picasaBusiness" ref="picasaBusiness"/>
         
+        <property name="setupBean" ref="setupBean"/>
+
         <property name="searchEngine" ref="searchEngine"/>
         <property name="importExportBusiness" ref="importExportBusiness"/>
     </bean>
@@ -279,7 +286,6 @@
     <!--======================= Setup bean ===========================-->
     
     <bean id="setupBean" class="org.vosao.business.impl.SetupBeanImpl">
-        <property name="dao" ref="dao"/>  
         <property name="business" ref="business"/>  
     </bean>    
 
@@ -355,6 +361,9 @@
     <bean id="tagService" class="org.vosao.service.back.impl.TagServiceImpl"
         parent="abstractService" />
 
+    <bean id="picasaService" class="org.vosao.service.back.impl.PicasaServiceImpl"
+        parent="abstractService" />
+
     <bean id="configService" class="org.vosao.service.back.impl.ConfigServiceImpl"
         parent="abstractService" >
         <property name="setupBean" ref="setupBean"/>  
@@ -399,6 +408,7 @@
         <property name="structureTemplateService" ref="structureTemplateService"/>  
         <property name="pluginService" ref="pluginService"/>  
         <property name="tagService" ref="tagService"/>  
+        <property name="picasaService" ref="picasaService"/>  
     </bean>
 
     <!--================== JSON-RPC front services ==========================-->

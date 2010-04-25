@@ -53,7 +53,6 @@ public class SetupBeanImpl implements SetupBean {
 
 	private static Log log = LogFactory.getLog(SetupBeanImpl.class);
 
-	private Dao dao;
 	private Business business;
 	
 	private GroupEntity guests;
@@ -83,11 +82,12 @@ public class SetupBeanImpl implements SetupBean {
 		}
 	}
 
-	private void clearSessions() {
+	@Override
+	public void clearSessions() {
 		Queue queue = getBusiness().getSystemService().getQueue("session-clean");
 		queue.add(url(SessionCleanTaskServlet.SESSION_CLEAN_TASK_URL));
 	} 
-	
+
 	private void clearCache() {
 		business.getSystemService().getCache().clear();
 	} 
@@ -183,12 +183,8 @@ public class SetupBeanImpl implements SetupBean {
 		}
 	}
 	
-	public Dao getDao() {
-		return dao;
-	}
-
-	public void setDao(Dao dao) {
-		this.dao = dao;
+	private Dao getDao() {
+		return getBusiness().getDao();
 	}
 
 	public Business getBusiness() {

@@ -45,7 +45,8 @@ public class LoginServiceImpl extends AbstractServiceImpl
 			}
 		}
 		HttpSession session = request.getSession(true);
-		session.setAttribute(AuthenticationFilter.USER_SESSION_ATTR, user);
+		session.setAttribute(AuthenticationFilter.USER_SESSION_ATTR, 
+				user.getEmail());
 		String originalView = (String) request.getSession().getAttribute(
 				AuthenticationFilter.ORIGINAL_VIEW_KEY);
 		if (originalView != null) {

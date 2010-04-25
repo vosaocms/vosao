@@ -64,7 +64,7 @@ public class LanguageFilter extends AbstractFilter implements Filter {
     		if (language != null) {
     			//logger.info("Set language " + language + " by parameter");
     			ctx.setLanguage(languageCode);
-        		session.setAttribute(LANGUAGE_SESSION_ATTR, language);
+        		session.setAttribute(LANGUAGE_SESSION_ATTR, language.getCode());
     		}
     	}
         chain.doFilter(request, response);

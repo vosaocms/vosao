@@ -119,6 +119,7 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 	@Override
 	public ServiceResponse reset() {
 		getSetupBean().clear();
+		getSetupBean().clearFileCache();
 		getSetupBean().setup();
 		return ServiceResponse.createSuccessResponse("Site was successfully reseted.");
 	}
@@ -140,6 +141,7 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 	@Override
 	public ServiceResponse cacheReset() {
 		getDao().clearCache();
+		getSetupBean().clearFileCache();
 		Queue queue = getBusiness().getSystemService().getQueue("session-clean");
 		queue.add(url(SessionCleanTaskServlet.SESSION_CLEAN_TASK_URL));
 		return ServiceResponse.createSuccessResponse("Cache successfully reseted.");

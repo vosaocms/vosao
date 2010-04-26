@@ -49,16 +49,16 @@ public class FileDownloadServlet extends BaseSpringServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-        //log.debug("get file " + request.getPathInfo());
 		String[] chain = FolderUtil.getPathChain(request.getPathInfo());
 		if (chain.length == 0) {
 			response.sendError(response.SC_NOT_FOUND, "File was not specified");
 			return;
 		}
 		if (isInPublicCache(request.getPathInfo())) {
-			logger.info("from public cache " + request.getPathInfo());
-			sendFromCache(request, response);
-			return;
+			if (sendFromCache(request, response)) {
+				logger.info("from public cache " + request.getPathInfo());
+				return;
+			}
 		}	
 		String filename = chain[chain.length-1];		
 		TreeItemDecorator<FolderEntity> tree = getBusiness().getFolderBusiness()
@@ -67,7 +67,6 @@ public class FileDownloadServlet extends BaseSpringServlet {
 				.findFolderByPath(tree, FolderUtil.getFilePath(
 						request.getPathInfo()));
 		if (folder == null) {
-	        //log.info("folder " + request.getPathInfo() + " was not found");
 			response.sendError(response.SC_NOT_FOUND, "Folder " 
 					+ request.getPathInfo() + " was not found");
 			return;
@@ -77,12 +76,12 @@ public class FileDownloadServlet extends BaseSpringServlet {
 			return;
 		}
 		if (isInCache(request.getPathInfo())) {
-			logger.info("from cache " + request.getPathInfo());
 			if (VosaoContext.getInstance().getUser() == null) {
 				getBusiness().getSystemService().getFileCache()
 					.makePublic(request.getPathInfo());
 			}
 			if (sendFromCache(request, response)) {
+				logger.info("from cache " + request.getPathInfo());
 				return;
 			}
 		}	
@@ -115,6 +114,13 @@ public class FileDownloadServlet extends BaseSpringServlet {
 				path);
 	}
 
+	/**
+	 * Send file from file cache.
+	 * @param request
+	 * @param response
+	 * @return true is file was successfully processed, false if not.
+	 * @throws IOException
+	 */
 	private boolean sendFromCache(HttpServletRequest request, 
 			HttpServletResponse response) throws IOException {
 		FileEntity file = getBusiness().getSystemService().getFileCache()

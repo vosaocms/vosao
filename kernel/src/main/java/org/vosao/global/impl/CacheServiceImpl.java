@@ -153,20 +153,21 @@ public class CacheServiceImpl implements CacheService {
 	}
 
 	@Override
-	public Object get(Object arg0) {
+	public Object get(Object key) {
 		try {
-			if (localCache.containsKey(arg0)) {
+			if (localCache.containsKey(key)) {
 				localHits++;
-				return localCache.get(arg0);
+				return localCache.get(key);
 			}
-			Object value = cache.get(arg0);
+			Object value = cache.get(key);
 			if (value != null) {
 				cacheHits++;
-				localCache.put((String)arg0, value);
+				localCache.put((String)key, value);
 			}
 			return value;
 		}
 		catch (InvalidValueException e) {
+			log.error(e.getMessage());
 			return null;
 		}
 	}

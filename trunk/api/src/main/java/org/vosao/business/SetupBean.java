@@ -21,7 +21,11 @@
 
 package org.vosao.business;
 
-
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public interface SetupBean {
 	
 	public static final String VERSION = "0.4";
@@ -41,5 +45,10 @@ public interface SetupBean {
 	 * Clear sessions.
 	 */
 	void clearSessions();
+
+	/**
+	 * Clear file cache.
+	 */
+	void clearFileCache();
 	
 }

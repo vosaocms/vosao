@@ -33,6 +33,7 @@ import org.vosao.business.SetupBean;
 import org.vosao.common.BCrypt;
 import org.vosao.dao.Dao;
 import org.vosao.entity.ConfigEntity;
+import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FormConfigEntity;
 import org.vosao.entity.GroupEntity;
@@ -265,6 +266,25 @@ public class SetupBeanImpl implements SetupBean {
 		getDao().getTagDao().removeAll();
 		getDao().getPageTagDao().removeAll();
 		clearCache();
+	}
+
+	@Override
+	public void clearFileCache() {
+		clearFileCache(getDao().getFolderDao().getByPath("/"));
+	}
+	
+	private void clearFileCache(FolderEntity folder) {
+		String folderPath = getDao().getFolderDao().getFolderPath(
+				folder.getId());
+		for (FileEntity file : getDao().getFileDao().getByFolder(
+				folder.getId())) {
+			getDao().getSystemService().getFileCache().remove(folderPath + "/" 
+					+ file.getFilename());
+		}
+		for (FolderEntity child : getDao().getFolderDao().getByParent(
+				folder.getId())) {
+			clearFileCache(child);
+		}
 	}
 	
 }

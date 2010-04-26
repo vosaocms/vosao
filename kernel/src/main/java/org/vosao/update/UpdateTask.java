@@ -30,6 +30,6 @@ public interface UpdateTask {
 
 	String getToVersion();
 	
-	void update() throws UpdateException;
+	String update() throws UpdateException;
 	
 }

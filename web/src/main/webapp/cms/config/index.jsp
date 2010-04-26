@@ -38,6 +38,10 @@
 <div id="tab-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
   <form id="configForm">
     <div class="form-row">
+        <label>Database schema version</label>
+        <span id="version" />
+    </div>
+    <div class="form-row">
         <label>Google Analytics ID</label>
         <input id="googleAnalyticsId" type="text" />
     </div>

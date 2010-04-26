@@ -55,17 +55,17 @@ public class UpdateFilter extends AbstractFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse)response;
         String url = httpRequest.getServletPath();
         if (url.equals(UPDATE_URL)) {
+        	String msg = "<h2>Vosao CMS Update</h2>";
         	try {
         		UpdateManager updateManager = new UpdateManager(getBusiness());
-        		updateManager.update();
-            	String msg = "Update was successfully completed.";
-        		logger.info(msg);
+        		msg += updateManager.update();
         		writeContent(httpResponse, msg);
             	return;
         	}
         	catch (UpdateException e) {
-        		writeContent(httpResponse, "Errors during update! " 
-        				+ e.getMessage());
+        		writeContent(httpResponse, msg 
+        				+ "<p class=\"color:red;\">Errors during update! " 
+        				+ e.getMessage() + "</p>");
         		return;
         	}
         }

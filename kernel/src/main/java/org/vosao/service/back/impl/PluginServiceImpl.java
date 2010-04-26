@@ -21,17 +21,11 @@
 
 package org.vosao.service.back.impl;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
 import org.vosao.business.vo.PluginPropertyVO;
 import org.vosao.entity.PluginEntity;
 import org.vosao.service.ServiceResponse;
@@ -48,7 +42,7 @@ public class PluginServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public List<PluginEntity> select() {
-		return getDao().getPluginDao().selectEnabled();
+		return getDao().getPluginDao().select();
 	}
 
 	@Override

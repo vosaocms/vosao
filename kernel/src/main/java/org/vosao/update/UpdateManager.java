@@ -47,18 +47,20 @@ public class UpdateManager {
 		tasks.add(new UpdateTask04(business));
 	}
 	
-	public void update() throws UpdateException {
+	public String update() throws UpdateException {
 		if (getConfig().getProperty("version") == null) {
 			addConfigVersion();
 		}
+		StringBuffer result = new StringBuffer();
 		for (UpdateTask task : tasks) {
 			if (getConfig().getProperty("version").equals(task.getFromVersion())) {
-				task.update();
+				result.append("<p>").append(task.update()).append("</p>");
 				Entity config = getConfig();
 				config.setProperty("version", task.getToVersion());
 				datastore.put(config);
 			}
 		}
+		return result.toString();
 	}
 	
 	private Entity getConfig() {

@@ -196,9 +196,15 @@ public class CacheServiceImpl implements CacheService {
 	}
 
 	@Override
-	public Object remove(Object arg0) {
-		localCache.remove(arg0);
-		return cache.remove(arg0);
+	public Object remove(Object key) {
+		localCache.remove(key);
+		try {
+			return cache.remove(key);
+		}
+		catch (InvalidValueException e) {
+			log.error(e.getMessage());
+			return null;
+		}
 	}
 
 	@Override

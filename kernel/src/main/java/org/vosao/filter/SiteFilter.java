@@ -35,8 +35,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.common.AccessDeniedException;
 import org.vosao.common.VosaoContext;
@@ -49,8 +47,6 @@ import org.vosao.entity.SeoUrlEntity;
  */
 public class SiteFilter extends AbstractFilter implements Filter {
     
-    private static final Log log = LogFactory.getLog(SiteFilter.class);
-
     public static final String[] SKIP_URLS = {
 		"/_ah",
 		"/cms",
@@ -59,7 +55,8 @@ public class SiteFilter extends AbstractFilter implements Filter {
 		"/file",
 		"/setup",
 		"/update",
-		"/JSON-RPC"};
+		"/JSON-RPC",
+		"/favicon.ico"};
     
     public SiteFilter() {
     	super();

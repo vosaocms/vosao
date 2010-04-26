@@ -44,16 +44,22 @@ function loadPlugins() {
 
 function showPlugins() {
     var html = '<table class="form-table"><th>Title</th>\
-       <th>Name</th><th>Version</th><th>Description</th><th>Website</th><th></th></tr>';
+       <th>Name</th><th>Version</th><th>Description</th><th>Website</th>\
+       <th>State</th><th></th></tr>';
     $.each(plugins, function(i, plugin) {
         var configURL = '/cms/plugins/plugin.jsp?id=' + plugin.id;
     	if (plugin.configURL) {
         	configURL = '/file/plugins/' + plugin.name + '/' + plugin.configURL;
         }
-    	html += '<tr><td><a href="' + configURL + '">' 
-    		+ plugin.title + '</a></td><td>' + plugin.name 
-            + '</td><td>' + plugin.version + '</td><td>' + plugin.description 
-            + '</td><td>' + plugin.website + '</td>'
+    	var state = plugin.disabled ? 'Disabled' : 'Enabled';
+    	var link = plugin.disabled ? plugin.title :
+    		'<a href="' + configURL + '">' + plugin.title + '</a>';
+    	html += '<tr><td>' + link + '</td>'
+    		+ '<td>' + plugin.name + '</td>'
+    		+ '<td>' + plugin.version + '</td>'
+            + '<td>' + plugin.description  + '</td>'
+            + '<td>' + plugin.website + '</td>'
+            + '<td>' + state + '</td>'
             + '<td><a title="Uninstall" href="#" onclick="onRemove(' + i + ')">\
             <img src="/static/images/02_x.png"/></a></td></tr>';
     });

@@ -106,6 +106,7 @@ function loadConfig() {
 }
 
 function initFormFields() {
+	$('#version').html(config.version);
 	$('#googleAnalyticsId').val(config.googleAnalyticsId);
     $('#siteEmail').val(config.siteEmail);
     $('#siteDomain').val(config.siteDomain);

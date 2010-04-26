@@ -23,6 +23,7 @@ package org.vosao.plugins.rssatom;
 
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.vosao.business.Business;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.PageEntity;
@@ -54,7 +55,13 @@ public class RssTool {
 		RssatomConfig rssatomConfig = new RssatomConfig(getPlugin());
 		String content = getBusiness().getPageBusiness().getPageContent(page, 
 				getBusiness().getLanguage()).getContent(); 
+		if (StringUtils.isEmpty(content)) {
+			return "";
+		}
 		content = StrUtil.extractTextFromHTML(content);
+		if (StringUtils.isEmpty(content)) {
+			return "";
+		}
 		int end = content.length() > rssatomConfig.getItemSize() ? 
 				rssatomConfig.getItemSize() : content.length();
 		return content.substring(0, end - 1);

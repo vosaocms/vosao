@@ -1,0 +1,16 @@
+label {
+	width: 16em;
+}
+
+#groupUsers {
+	margin: 0 auto;
+	width: 20em;
+}
+
+#pages {
+	clear: both;
+}
+
+#tag-dialog label {
+	width: 10em;
+}

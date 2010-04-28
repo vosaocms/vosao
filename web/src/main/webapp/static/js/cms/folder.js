@@ -50,6 +50,7 @@ $(function() {
     $('#folderForm').submit(function() {onUpdate(); return false;});
     $('#cancelButton').click(onCancel);
     $('#exportButton').click(onExport);
+    $('#exportCancelButton').click(onExportCancel);
     $('#createFileButton').click(onCreateFile);
     $('#uploadButton').click(onUpload);
     $('#deleteFilesButton').click(onDeleteFiles);
@@ -270,7 +271,7 @@ function checkExport() {
 			$('#exportDialogButton').attr('disabled', false);
 			location.href = '/file/tmp/' + exportFilename;
 		}
-	}, 'theme');
+	}, 'folder');
 }
 
 function showClock() {
@@ -448,4 +449,10 @@ function loadFolderPermission() {
    	else {
    		$('.securityTab').hide();
    	}
+}
+
+function onExportCancel() {
+	$('#export-dialog').dialog('close');
+	clearInterval(exportTimer);
+	clearInterval(clockTimer);
 }

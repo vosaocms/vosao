@@ -21,6 +21,10 @@
 
 package org.vosao.common;
 
+import java.text.MessageFormat;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.vosao.entity.UserEntity;
@@ -37,7 +41,7 @@ public class VosaoContext {
 	private int requestCount;
 	private long startTime;
 	
-	private String language;
+	private Locale locale;
 	private UserEntity user;
 	
 	private VosaoContext() {
@@ -56,11 +60,15 @@ public class VosaoContext {
 	}
 	
 	public String getLanguage() {
-		return language;
+		return locale.getLanguage();
 	}
 
-	public void setLanguage(String language) {
-		this.language = language;
+	public Locale getLocale() {
+		return locale;
+	}
+
+	public void setLocale(Locale aLocale) {
+		locale = aLocale;
 	}
 
 	public UserEntity getUser() {
@@ -88,4 +96,5 @@ public class VosaoContext {
 	public long getStartTime() {
 		return startTime;
 	}
+	
 }

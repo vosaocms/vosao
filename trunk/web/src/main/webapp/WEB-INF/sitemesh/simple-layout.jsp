@@ -21,7 +21,7 @@
  */
 %>
 <%@ page contentType="text/html; charset=UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -40,6 +40,8 @@
     <script src="/static/js/jquery.cookie.js" language="javascript"></script>
     <script src="/static/js/jquery-ui.js" language="javascript"></script>
     <script src="/static/js/jsonrpc.js" language="javascript"></script>
+
+    <script src="/i18n.js" language="javascript"></script>
     <script src="/static/js/vosao.js" language="javascript"></script>
     <script src="/static/js/cms.js" language="javascript"></script>
     <script src="/static/js/back-services.js" language="javascript"></script>

@@ -24,49 +24,52 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <%@ page import="org.vosao.common.VosaoContext" %>
 <%@ page import="org.vosao.entity.UserEntity" %>
+<%@ page import="java.util.Enumeration" %>
 <% 
     UserEntity user = VosaoContext.getInstance().getUser();
 %>
 <html>
 <head>
-    <title>VOSAO CMS</title>
+    <title><fmt:message key="index.title"/></title>
 </head>
 <body>
 
 <div id="main-panel">
     <div>
         <img src="/static/images/pages.png" />
-        <a href="/cms/pages.jsp">Content pages</a>
-        <p>Here you can edit site content. All content viewed as a tree of pages.
-           You can change various page properties including design template 
-           binding. 
-        </p>
+        <a href="/cms/pages.jsp">
+            <fmt:message key="index.content_pages"/>
+        </a>
+        <p><fmt:message key="index.content_pages.description"/></p>
     </div>
 <% if (user.isAdmin()) { %>
     <div>
         <img src="/static/images/templates.png" />
-        <a href="/cms/templates.jsp">Design templates</a>
-        <p>Here you can edit design templates. Site can have several design 
-           templates. For every page you can select separate template.</p>
+        <a href="/cms/templates.jsp">
+            <fmt:message key="index.design_templates"/>
+        </a>
+        <p><fmt:message key="index.design_templates.description"/></p>
     </div>
 <% } %>    
     <div>
         <img src="/static/images/folders.png" />
-        <a href="/cms/folders.jsp">File resources storage</a>
-        <p>Here you can edit site resources. Resource could be any file
-           including those used in design templates or referenced from pages</p>
+        <a href="/cms/folders.jsp">
+            <fmt:message key="index.file_resources_storage"/>
+        </a>
+        <p><fmt:message key="index.file_resources_storage.description"/></p>
     </div>
 <% if (user.isAdmin()) { %>
     <div>
         <img src="/static/images/config.png" />
-        <a href="/cms/config">Site configuration</a>
-        <p>Here you can change site configuration. Site domain, email,
-           Google Analytics Id, comments template, comments email.</p>
+        <a href="/cms/config">
+            <fmt:message key="index.site_configuration"/>
+        </a>
+        <p><fmt:message key="index.site_configuration.description"/></p>
     </div>
     <div>
         <img src="/static/images/plugins.png" />
-        <a href="/cms/plugins">Plugins</a>
-        <p>Various plugins configuration. Forms. SEO Urls</p>
+        <a href="/cms/plugins"><fmt:message key="index.plugins"/></a>
+        <p><fmt:message key="index.plugins.description"/></p>
     </div>
 <% } %>    
 </div>

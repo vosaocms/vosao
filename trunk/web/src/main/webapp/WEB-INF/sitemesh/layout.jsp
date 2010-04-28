@@ -21,7 +21,7 @@
  */
 %>
 <%@ page contentType="text/html; charset=UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
 <%@ page import="org.vosao.common.VosaoContext" %>
 <%@ page import="org.vosao.entity.UserEntity" %>
@@ -46,6 +46,8 @@
     <script src="/static/js/jquery-ui.js" language="javascript"></script>
     <script src="/static/js/jquery.xmldom.js" language="javascript"></script>
     <script src="/static/js/jsonrpc.js" language="javascript"></script>
+
+    <script src="/i18n.js" language="javascript"></script>
     <script src="/static/js/vosao.js" language="javascript"></script>
     <script src="/static/js/cms.js" language="javascript"></script>
     <script src="/static/js/back-services.js" language="javascript"></script>
@@ -79,21 +81,24 @@
 
     <div id="leftmenu">
         <a href="/cms">Vosao CMS <%= SetupBean.FULLVERSION %></a>        
-        <a href="/cms/pages.jsp">Content</a>
+        <a href="/cms/pages.jsp"><fmt:message key="content"/></a>
 <% if (user.isAdmin()) { %>
-        <a href="/cms/templates.jsp">Templates</a>
+        <a href="/cms/templates.jsp"><fmt:message key="templates"/></a>
 <% } %>        
-        <a href="/cms/folders.jsp">Resources</a>
+        <a href="/cms/folders.jsp"><fmt:message key="resources"/></a>
 <% if (user.isAdmin()) { %>
-        <a href="/cms/config">Configuration</a>
-        <a href="/cms/plugins">Plugins</a>
+        <a href="/cms/config"><fmt:message key="configuration"/></a>
+        <a href="/cms/plugins"><fmt:message key="plugins"/></a>
 <% } %>        
     </div>
     <div id="rightmenu">
         <%= user.getEmail() %> 
-        | <a href="/cms/profile.jsp">Profile</a> 
-        | <a href="#" onclick="onLogout()">Logout</a>
-        | <a href="http://code.google.com/p/vosao/issues/list">Support</a>    
+        | <a href="/cms/profile.jsp"><fmt:message key="profile"/></a> 
+        | <a href="#" onclick="onLogout()"><fmt:message key="logout"/></a>
+        | <%@ include file="/WEB-INF/jsp/locale.jsp" %>
+        | <a href="http://code.google.com/p/vosao/issues/list">
+            <fmt:message key="support"/>
+          </a>    
     </div>
     <span class="clear">&#160;</span>
 </div>

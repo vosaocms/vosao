@@ -163,6 +163,19 @@ Vosao.serviceFailed = function(e) {
 	return false;
 };
 
+Vosao.changeLanguage = function(lang) {
+    var url = location.href.replace('#','');
+    var langIndex = url.indexOf('language=');
+    var sign = location.search.indexOf('?') == -1 ? '?' : '&';
+	if (langIndex > 0) {
+    	url = url.substr(0, langIndex) + (url.length > langIndex + 11 ?  
+    			url.substr(langIndex + 11) : '');
+    	sign = '';
+    }
+    var url = url + sign + 'language=' + lang;
+    location.href = url;
+};
+
 // String enhancements 
 
 String.prototype.trim = function() {

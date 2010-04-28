@@ -22,6 +22,7 @@
 package org.vosao.filter;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -31,13 +32,15 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
-import org.vosao.entity.LanguageEntity;
 
-
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class LanguageFilter extends AbstractFilter implements Filter {
-    
-    private static final String LANGUAGE_SESSION_ATTR = "language";
     
     public LanguageFilter() {
     	super();
@@ -48,24 +51,20 @@ public class LanguageFilter extends AbstractFilter implements Filter {
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
     	HttpSession session = httpRequest.getSession(true);
     	VosaoContext ctx = VosaoContext.getInstance();
-    	if (session.getAttribute(LANGUAGE_SESSION_ATTR) == null) {
-    		String language = request.getLocale().getLanguage();
-    		//logger.info("Initial language set " + language);
-    		ctx.setLanguage(language);
-    		session.setAttribute(LANGUAGE_SESSION_ATTR, language);
+    	if (session.getAttribute(Messages.JSTL_FMT_LOCALE_KEY) == null) {
+    		ctx.setLocale(request.getLocale());
+    		session.setAttribute(Messages.JSTL_FMT_LOCALE_KEY, 
+    				request.getLocale());
     	}
     	else {
-    		ctx.setLanguage((String)session.getAttribute(LANGUAGE_SESSION_ATTR));
+    		ctx.setLocale((Locale)session.getAttribute(
+    				Messages.JSTL_FMT_LOCALE_KEY));
     	}
     	if (httpRequest.getParameter("language") != null) {
     		String languageCode = httpRequest.getParameter("language");
-    		LanguageEntity language = getDao().getLanguageDao().getByCode(
-    				languageCode);
-    		if (language != null) {
-    			//logger.info("Set language " + language + " by parameter");
-    			ctx.setLanguage(languageCode);
-        		session.setAttribute(LANGUAGE_SESSION_ATTR, language.getCode());
-    		}
+   			Locale locale = new Locale(languageCode);
+   			ctx.setLocale(locale);
+       		session.setAttribute(Messages.JSTL_FMT_LOCALE_KEY, locale);
     	}
         chain.doFilter(request, response);
     }

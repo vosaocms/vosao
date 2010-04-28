@@ -279,3 +279,22 @@ a.button span.ui-icon {
     position: relative;
     top: 3px;
 }
+
+#languageSelect {
+}
+#languageDiv {
+	margin: 20px;
+	background-color: white;
+	border: 1px solid gray;
+	padding: 10px;
+	position: fixed;
+	right: 45px;
+	top : 10px;
+	display: none;
+}
+#languageDiv a {
+	display: block;
+}
+#languageDiv a:hover {
+}
+

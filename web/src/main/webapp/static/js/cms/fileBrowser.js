@@ -158,7 +158,8 @@ function loadTree() {
 function renderPage(vo) {
 	var pageUrl = vo.entity.friendlyURL;
 	var p = vo.entity.hasPublishedVersion ? 'published' : 'unpublished';
-	var html = '<li> <img src="/static/images/'+ p +'.png" title="' + p 
+	var published = messages[p];
+	var html = '<li> <img src="/static/images/'+ p +'.png" title="' + published 
 			+ '" width="16px" />' 
 			+ ' <a href="#" onclick="onPageSelected(\'' + pageUrl + '\')">'
 			+ vo.entity.title
@@ -182,7 +183,7 @@ function loadConfig() {
 			loadAlbums();
 		}
 		else {
-			$('#albums').html('Picasa is not enabled.');
+			$('#albums').html(messages['picasa_not_enabled']);
 		}
 	});
 }

@@ -96,7 +96,7 @@ function initFormFields() {
 		$('#mimeType').html(file.mimeType);
 		$('#size').html(file.size);
 		$('#fileLink').html(file.link);
-		$('#download').html('<a href="' + file.link + '">Download</a>');
+		$('#download').html('<a href="' + file.link + '">' + messages['download'] + '</a>');
 		if (file.textFile) {
 			$('.contentTab').show();
 			$('#content').val(file.content);

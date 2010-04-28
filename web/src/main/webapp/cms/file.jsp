@@ -36,8 +36,8 @@
 
 <div id="tabs">
 <ul>
-    <li><a href="#tab-1">File</a></li>
-    <li class="contentTab"><a href="#tab-2">Content</a></li>
+    <li><a href="#tab-1"><fmt:message key="file" /></a></li>
+    <li class="contentTab"><a href="#tab-2"><fmt:message key="content" /></a></li>
 </ul>
 
 <div id="tab-1">
@@ -45,25 +45,25 @@
 
 <div style="float:left">
  <div class="form-row">
-    <label>Title</label>
+    <label><fmt:message key="title" /></label>
     <input id="title" type="text" />
  </div>
  <div class="form-row">
-    <label>Name</label>
+    <label><fmt:message key="name" /></label>
     <input id="name" type="text" />
  </div>
  
 <div id="fileEditDiv">
  <div class="form-row">
-    <label>Content type</label>
+    <label><fmt:message key="content_type" /></label>
     <span id="mimeType"> </span>
  </div>
  <div class="form-row">
-    <label>Size</label>
+    <label><fmt:message key="size" /></label>
     <span id="size"> </span>
  </div>
  <div class="form-row">
-    <label>Exrernal link</label>
+    <label><fmt:message key="external_link" /></label>
     <span id="fileLink"> </span>
  </div>
  <div class="form-row">
@@ -73,8 +73,8 @@
  </div>
   
  <div class="buttons">
-    <input id="saveButton" type="submit" value="Save" />
-    <input id="cancelButton" type="button" value="Cancel" />
+    <input id="saveButton" type="submit" value="<fmt:message key="save" />" />
+    <input id="cancelButton" type="button" value="<fmt:message key="cancel" />" />
  </div>
      
 </div>
@@ -88,14 +88,14 @@
 <div id="tab-2" class="contentTab">
   <form id="contentForm">
     <div>
-        <input id="autosave" type="checkbox" checked="checked"> Autosave</input>
+        <input id="autosave" type="checkbox" checked="checked"> <fmt:message key="autosave" /></input>
     </div>
     <div class="form-row">
         <textarea id="content" rows="20" cols="80"></textarea>
     </div>
     <div class="buttons">
-        <input id="saveContentButton" type="submit" value="Save and continue" />
-        <input id="contentCancelButton" type="button" value="Cancel" />
+        <input id="saveContentButton" type="submit" value="<fmt:message key="save_continue" />" />
+        <input id="contentCancelButton" type="button" value="<fmt:message key="cancel" />" />
     </div>    
   </form>
 </div>

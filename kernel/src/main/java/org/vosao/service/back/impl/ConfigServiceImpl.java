@@ -29,6 +29,7 @@ import java.util.Map;
 
 import org.vosao.business.SetupBean;
 import org.vosao.business.impl.SetupBeanImpl;
+import org.vosao.common.Messages;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FileEntity;
 import org.vosao.service.ServiceResponse;
@@ -41,6 +42,11 @@ import org.vosao.utils.StreamUtil;
 
 import com.google.appengine.api.labs.taskqueue.Queue;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class ConfigServiceImpl extends AbstractServiceImpl 
 		implements ConfigService {
 
@@ -98,11 +104,11 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 		if (errors.isEmpty()) {
 			getDao().getConfigDao().save(config);
 			return ServiceResponse.createSuccessResponse(
-					"Configuration was successfully saved.");
+					Messages.get("successfull_save", "Configuration"));
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
-					"Error during save config.", errors);
+					Messages.get("error_during_save", "config"), errors);
 		}
 	}
 
@@ -113,7 +119,7 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 			SetupBeanImpl.COMMENTS_TEMPLATE_FILE));
 		getDao().getConfigDao().save(config);			
 		return ServiceResponse.createSuccessResponse(
-				"Comments template was successfully restored.");
+				Messages.get("successfull_save", "Comments template"));
 	}
 
 	@Override
@@ -121,7 +127,8 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 		getSetupBean().clear();
 		getSetupBean().clearFileCache();
 		getSetupBean().setup();
-		return ServiceResponse.createSuccessResponse("Site was successfully reseted.");
+		return ServiceResponse.createSuccessResponse(
+				Messages.get("successfull_reset", "Site"));
 	}
 
 	public SetupBean getSetupBean() {
@@ -135,7 +142,8 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 	@Override
 	public ServiceResponse reindex() {
 		getBusiness().getSearchEngine().reindex();
-		return ServiceResponse.createSuccessResponse("Index recreation started.");
+		return ServiceResponse.createSuccessResponse(
+				Messages.get("index_creation_started"));
 	}
 
 	@Override
@@ -144,7 +152,8 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 		getSetupBean().clearFileCache();
 		Queue queue = getBusiness().getSystemService().getQueue("session-clean");
 		queue.add(url(SessionCleanTaskServlet.SESSION_CLEAN_TASK_URL));
-		return ServiceResponse.createSuccessResponse("Cache successfully reseted.");
+		return ServiceResponse.createSuccessResponse(
+				Messages.get("successfull_reset", "Cache"));
 	}
 
 	@Override
@@ -157,8 +166,8 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 				.param("exportType", exportType));
 			return ServiceResponse.createSuccessResponse(filename);
 		}
-		return ServiceResponse.createErrorResponse("Unknowun export type "
-				+ exportType);
+		return ServiceResponse.createErrorResponse(
+				Messages.get("unknown_export_type", exportType));
 	}
 
 	@Override

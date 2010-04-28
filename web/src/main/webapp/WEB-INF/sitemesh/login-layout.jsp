@@ -21,7 +21,7 @@
  */
 %>
 <%@ page contentType="text/html; charset=UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -38,6 +38,8 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" language="javascript"></script>
     <script src="/static/js/jquery-ui.js" language="javascript"></script>
     <script src="/static/js/jsonrpc.js" language="javascript"></script>
+
+    <script src="/i18n.js" language="javascript"></script>
     <script src="/static/js/vosao.js" language="javascript"></script>
     <script src="/static/js/cms.js" language="javascript"></script>
 
@@ -47,6 +49,13 @@
     
 </head>
 <body>
+
+<div id="topbar">
+    <div id="rightmenu" style="margin-right: 30px">
+        <%@ include file="/WEB-INF/jsp/locale.jsp" %>
+    </div>
+    <span class="clear">&#160;</span>
+</div>
 
 <div id="wrapper">
     <decorator:body />

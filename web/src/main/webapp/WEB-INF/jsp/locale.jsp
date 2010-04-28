@@ -20,11 +20,23 @@
  * email: vosao.dev@gmail.com
  */
 %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
-<c:if test="${param['locale'] != null}">
-  <fmt:setLocale value="${param['locale']}" scope="session" />
-</c:if>
+<script type="text/javascript">
+$(function() {
+	$('#languageSelect').click(function() {
+		$('#languageDiv').show();
+		setTimeout(function() {
+	        $('#languageDiv').hide();
+		}, 5000);
+	});
+});
 
-<fmt:setBundle basename="org.vosao.i18n.messages"/>
+</script>
+
+<a id="languageSelect" href="#"><fmt:message key="language"/></a>
+<div id="languageDiv">
+    <a href="#" onclick="Vosao.changeLanguage('en')">English</a>
+    <a href="#" onclick="Vosao.changeLanguage('ru')">Русский</a>
+</div>

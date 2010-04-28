@@ -21,6 +21,7 @@
  */
 %>
 <%@ page contentType="text/html; charset=UTF-8"%>
+<%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <%@ page import="org.vosao.common.VosaoContext" %>
 <%@ page import="org.vosao.entity.UserEntity" %>
 <%@ page import="org.vosao.business.SetupBean" %>
@@ -29,7 +30,7 @@
 %>
 <html>
 <head>
-    <title>Login page</title>
+    <title><fmt:message key="login.title"/></title>
     <link rel="stylesheet" href="/static/css/login.css" type="text/css" />
     <script type="text/javascript">
         var loggedIn = <%= user != null %>;
@@ -42,13 +43,13 @@
             var email = $('#loginEmail').val();
             var password = $('#loginPassword').val();
             if (email == '') {
-                Vosao.errorMessage('#login-messages', 'Email is empty!');
+                Vosao.errorMessage('#login-messages', messages['email_is_empty']);
             }
             else {
             	Vosao.jsonrpc.loginFrontService.login(function (r, e) {
                     if (Vosao.serviceFailed(e)) return;
                     if (r.result == 'success') {
-                    	Vosao.infoMessage('#login-messages', 'Success. Logging in...');
+                    	Vosao.infoMessage('#login-messages', messages['success_logging_in']);
                         document.location.href = r.message;
                     }
                     else {
@@ -64,30 +65,28 @@
 <div id="content">
 <div id="memo">
     <img src="/static/images/login-logo.jpg" />
-    <p>Sign in to change site content.</p>
-    <p>Visit <a href="http://www.vosao.org">www.vosao.org</a> to 
-    get more information about Vosao CMS. </p>
-    <p>If you found a bug please open an issue on project   
-    <a href="http://code.google.com/p/vosao/issues">Issue Tracker</a> </p>
+    <p><fmt:message key="login.sign_in"/></p>
+    <p><fmt:message key="login.visit"/></p>
+    <p><fmt:message key="login.bug"/></p>
 </div>
 
 <div id="login-form">
 <form onsubmit="onLogin(); return false;">
 
-<h4>Sign in with your</h4>
-<h3>Vosao CMS account</h3>
+<h4><fmt:message key="login.sign"/></h4>
+<h3><fmt:message key="login.sign_account"/></h3>
 
 <div class="form-row">
-    <label>Email</label>
+    <label><fmt:message key="email"/></label>
     <input type="text" id="loginEmail" />
 </div>
 <div class="form-row">
-    <label>Password</label>
+    <label><fmt:message key="password"/></label>
     <input type="password" id="loginPassword" />
 </div>
 <div id="login-messages"> </div>
 <div class="buttons-dlg">
-    <input type="submit" value="Login" />
+    <input type="submit" value="<fmt:message key="login"/>" />
 </div>    
 
 </form>
@@ -96,7 +95,7 @@
 <div class="clear"> </div>
 
 <div class="version">
-  <span>Vosao CMS Version <%= SetupBean.FULLVERSION %></span>
+  <span>Vosao CMS <fmt:message key="version"/> <%= SetupBean.FULLVERSION %></span>
 </div>
 
 </div>

@@ -24,7 +24,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>Folder</title>
+    <title><fmt:message key="folder" /></title>
     <script src="/static/js/jquery.form.js" language="javascript"></script>
     <script type="text/javascript">
         var folderId = '<c:out value="${param.id}"/>';
@@ -36,26 +36,26 @@
 
 <div id="tabs">
 <ul>
-    <li><a href="#tab-1">Folder</a></li>
-    <li class="filesTab"><a href="#tab-2">Files</a></li>
-    <li class="childrenTab"><a href="#tab-3">Subfolders</a></li>
-    <li class="securityTab"><a href="#tab-4">Security</a></li>
+    <li><a href="#tab-1"><fmt:message key="folder" /></a></li>
+    <li class="filesTab"><a href="#tab-2"><fmt:message key="files" /></a></li>
+    <li class="childrenTab"><a href="#tab-3"><fmt:message key="subfolders" /></a></li>
+    <li class="securityTab"><a href="#tab-4"><fmt:message key="security" /></a></li>
 </ul>
 
 <div id="tab-1">
 <form id="folderForm">
 <div class="form-row">
-    <label>Title</label>
+    <label><fmt:message key="title" /></label>
     <input id="title" type="text" class="form-title" />
 </div>
 <div class="form-row">
-    <label>Name for URL</label>
+    <label><fmt:message key="folder.name_for_url" /></label>
     <input id="name" type="text" class="form-url"/>
 </div>
 <div class="buttons">
-    <input id="saveButton" type="submit" value="Save" />
-    <input id="cancelButton" type="button" value="Cancel" />
-    <input id="exportButton" type="button" value="Export" />
+    <input id="saveButton" type="submit" value="<fmt:message key="save" />" />
+    <input id="cancelButton" type="button" value="<fmt:message key="cancel" />" />
+    <input id="exportButton" type="button" value="<fmt:message key="export" />" />
 </div>    
 </form>
 </div>
@@ -63,75 +63,84 @@
 <div id="tab-2" class="filesTab">
     <div id="filesTable"> </div>
     <div class="buttons">
-        <input id="createFileButton" type="button" value="Create file" />
-        <input id="uploadButton" type="button" value="Upload file" />
-        <input id="deleteFilesButton" type="button" value="Delete files" />
-        <input id="fileCancelButton" type="button" value="Cancel" />
+        <input id="createFileButton" type="button" 
+            value="<fmt:message key="create_file" />" />
+        <input id="uploadButton" type="button" 
+            value="<fmt:message key="upload_file" />" />
+        <input id="deleteFilesButton" type="button" 
+            value="<fmt:message key="delete_files" />" />
+        <input id="fileCancelButton" type="button" 
+            value="<fmt:message key="cancel" />" />
     </div>
 </div>
 
 <div id="tab-3" class="childrenTab">
     <div id="children"> </div>
     <div class="buttons">
-        <input id="addChildButton" type="button" value="Add child folder" />
-        <input id="deleteFoldersButton" type="button" value="Delete folders" />
-        <input id="folderCancelButton" type="button" value="Cancel" />
+        <input id="addChildButton" type="button" 
+            value="<fmt:message key="folder.add_child_folder" />" />
+        <input id="deleteFoldersButton" type="button" 
+            value="<fmt:message key="folder.delete_folders" />" />
+        <input id="folderCancelButton" type="button" 
+            value="<fmt:message key="cancel" />" />
     </div>    
 </div>
 
 <div id="tab-4" class="securityTab">
     <div id="permissions"> </div>
     <div class="buttons">
-        <input id="addPermissionButton" type="button" value="Add permission" />
-        <input id="deletePermissionButton" type="button" value="Delete permission" />
+        <input id="addPermissionButton" type="button" 
+            value="<fmt:message key="add_permission" />" />
+        <input id="deletePermissionButton" type="button" 
+            value="<fmt:message key="delete_permission" />" />
     </div>    
 </div>
 
 </div>
 
-<div id="file-upload" title="Upload file to folder" style="display:none">
+<div id="file-upload" title="<fmt:message key="folder.upload_file" />" style="display:none">
 <form id="upload" action="/cms/upload" method="post" enctype="multipart/form-data">
-    File upload:
+    <fmt:message key="file_upload" />:
     <input type="hidden" name="fileType" value="resource" />
     <input type="hidden" name="folderId" value="<c:out value="${param.id}" />" />
     <input type="file" name="uploadFile" />
     <div class="buttons-dlg">
-        <input type="submit" value="Send" />
-        <input id="fileUploadCancelButton" type="button" value="Cancel" />
+        <input type="submit" value="<fmt:message key="send" />" />
+        <input id="fileUploadCancelButton" type="button" 
+            value="<fmt:message key="cancel" />" />
     </div>
 </form>
 </div>
 
-<div id="permission-dialog" style="display:none" title="Permission details">
+<div id="permission-dialog" style="display:none" title="<fmt:message key="permission_details" />">
 <form id="permissionForm">
     <div class="form-row">
-        <label>Group</label>
+        <label><fmt:message key="group" /></label>
         <select id="groupSelect"></select>
         <span id="groupName"></span>        
     </div>
     <div id="permissionList" class="form-row">
         <fieldset>
-            <legend>Permission</legend>
-            <input type="radio" name="permission" value="DENIED"/> Denied <br />
-            <input type="radio" name="permission" value="READ" /> Read <br />
-            <input type="radio" name="permission" value="WRITE" /> Read, Write <br />
+            <legend><fmt:message key="permission" /></legend>
+            <input type="radio" name="permission" value="DENIED"/> <fmt:message key="denied" /> <br />
+            <input type="radio" name="permission" value="READ" /> <fmt:message key="read" /> <br />
+            <input type="radio" name="permission" value="WRITE" /> <fmt:message key="read_write" /> <br />
         </fieldset>        
     </div>
     <div class="buttons-dlg">
-        <input id="permissionSaveButton" type="submit" value="Save" />
-        <input id="permissionCancelButton" type="button" value="Cancel" />
+        <input id="permissionSaveButton" type="submit" value="<fmt:message key="save" />" />
+        <input id="permissionCancelButton" type="button" value="<fmt:message key="cancel" />" />
     </div>
 </form>
 </div>
 
-<div id="export-dialog" style="display:none" title="Export window">
+<div id="export-dialog" style="display:none" title="<fmt:message key="folder.export_window" />">
   <form id="exportForm">
-    <p>After export task finish. You will be redirected to created export file
-    stored at "Resources" /tmp folder.</p>
+    <p><fmt:message key="folder.export_window_info" /></p>
     <div id="exportInfo" class="form-row"></div>    
     <div id="timer" class="form-row"></div>
     <div class="buttons-dlg">
-        <input id="exportCancelButton" type="button" value="Cancel" />
+        <input id="exportCancelButton" type="button" value="<fmt:message key="cancel" />" />
     </div>
   </form>
 </div>

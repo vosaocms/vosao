@@ -24,7 +24,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>File browser</title>
+    <title><fmt:message key="fileBrowser.title" /></title>
     <script src="/static/js/jquery.treeview.pack.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/static/css/jquery.treeview.css" type="text/css" />
     <link rel="stylesheet" href="/static/css/fileBrowser.css" type="text/css" />
@@ -34,9 +34,9 @@
 
 <div id="tabs">
 <ul>
-    <li><a href="#tab-1">Vosao resources</a></li>
+    <li><a href="#tab-1"><fmt:message key="fileBrowser.resources" /></a></li>
     <li class="picasaTab"><a href="#tab-2">Picasa</a></li>
-    <li class="pagesTab"><a href="#tab-3">Pages</a></li>
+    <li class="pagesTab"><a href="#tab-3"><fmt:message key="pages" /></a></li>
 </ul>
 
 <div id="tab-1">
@@ -58,7 +58,7 @@
 <div id="tab-2">
     <div id="albums"><img src="/static/images/ajax-loader.gif" /></div>
     <hr class="clear picasa-hr" />
-    <p class="album-name">Album : <span id="album-location"></span></p>
+    <p class="album-name"><fmt:message key="album" /> : <span id="album-location"></span></p>
     <div id="photos"></div>
     <div class="clear"></div>
 </div>

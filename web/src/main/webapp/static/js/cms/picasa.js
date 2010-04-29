@@ -45,7 +45,7 @@ function loadConfig() {
 			loadAlbums();
 		}
 		else {
-			$('#albums').html('Picasa is not enabled.');
+			$('#albums').html(messages['folders.picasa_not_enabled']);
 			$('#createAlbumLink').hide();
 		}
 	});
@@ -106,7 +106,7 @@ function onCreateAlbum() {
 function onAlbumSave() {
 	var title = $('#title').val();
 	if (!title) {
-		Vosao.errorMessage('#albumMessages', 'Title is empty');
+		Vosao.errorMessage('#albumMessages', messages['title_is_empty']);
 		return;
 	}
 	Vosao.jsonrpc.picasaService.addAlbum(function(r) {
@@ -121,7 +121,8 @@ function onAlbumSave() {
 }
 
 function onDeleteAlbum() {
-	if (confirm('You are going to delete album ' + album.title + '. Are you shure?')) {
+	if (confirm(messages['folders.you_delete_album'] + ' ' + album.title 
+			+ '. ' + messages['are_you_sure'])) {
 		Vosao.jsonrpc.picasaService.removeAlbum(function(r) {
 			if (r.result == 'success') {
 				loadAlbums();
@@ -134,7 +135,8 @@ function onDeleteAlbum() {
 
 function onPhotoRemove(i) {
 	photo = photos[i];
-	if (confirm('You are going to delete photo ' + photo.title + '. Are you shure?')) {
+	if (confirm(messages['folders.you_delete_photo'] + ' ' + photo.title 
+			+ '. ' + messages['are_you_sure'])) {
 		Vosao.jsonrpc.picasaService.removePhoto(function(r) {
 			if (r.result == 'success') {
 				albumSelect();
@@ -158,7 +160,7 @@ function afterUpload(data) {
         setTimeout(albumSelect, 3000);
     }
     else {
-        msg = "Error. " + msg;
+        msg = messages['error'] + '. ' + msg;
         Vosao.error(msg);
     }   
     $("#upload-dialog").dialog("close");

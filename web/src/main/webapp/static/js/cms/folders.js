@@ -40,7 +40,8 @@ function loadTree() {
 
 function renderFolder(vo) {
     var html = '<li><a href="folder.jsp?id=' + vo.entity.id + '">' 
-        + vo.entity.title + '</a> <a title="Add child" href="folder.jsp?parent=' 
+        + vo.entity.title + '</a> <a title="' + messages['add_child'] 
+        + '" href="folder.jsp?parent=' 
         + vo.entity.id + '">+</a>';
     if (vo.children.list.length > 0) {
         html += '<ul>';

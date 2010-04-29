@@ -24,7 +24,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>Folders</title>
+    <title><fmt:message key="folders" /></title>
     <script src="/static/js/jquery.form.js" language="javascript"></script>
     <script src="/static/js/jquery.treeview.pack.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/static/css/jquery.treeview.css" type="text/css" />
@@ -37,7 +37,7 @@
 <div id="tabs">
 
 <ul>
-    <li><a href="#tab-1">Folders</a></li>
+    <li><a href="#tab-1"><fmt:message key="folders" /></a></li>
     <li><a href="#tab-2">Picasa</a></li>
 </ul>
 
@@ -49,17 +49,17 @@
 <div id="tab-2">
     <div id="albums"><img src="/static/images/ajax-loader.gif" /></div>
     <div class="clear">
-        <a id="createAlbumLink" href="#">Create album</a>
+        <a id="createAlbumLink" href="#"><fmt:message key="folders.create_album" /></a>
     </div> 
     <div id="albumDetails">
         <hr class="clear picasa-hr" />
         <p class="album-name">
             Album : <span id="album-location"></span>
-            <a id="deleteAlbumLink" href="#">Delete album</a>
+            <a id="deleteAlbumLink" href="#"><fmt:message key="folders.delete_album" /></a>
         </p>
         <div id="photos"></div>
         <div class="clear">
-            <a id="uploadPhotoLink" href="#">Upload image</a>
+            <a id="uploadPhotoLink" href="#"><fmt:message key="folders.upload_image" /></a>
         </div>
     </div> 
     <div class="clear"></div>
@@ -67,28 +67,28 @@
 
 </div>
 
-<div id="album-dialog" style="display:none" title="New album">
+<div id="album-dialog" style="display:none" title="<fmt:message key="folders.new_album" />">
   <form id="albumForm">
     <div class="form-row">
-        <label>Album title</label>
+        <label><fmt:message key="folders.album_title" /></label>
         <input id="title"/>
     </div>
     <div id="albumMessages"></div>
     <div class="buttons-dlg">
-        <input type="submit" value="Save" />
-        <input id="cancelAlbumButton" type="button" value="Cancel" />
+        <input type="submit" value="<fmt:message key="save" />" />
+        <input id="cancelAlbumButton" type="button" value="<fmt:message key="cancel" />" />
     </div>
   </form>  
 </div>
 
-<div id="upload-dialog" style="display:none" title="Upload photo">
+<div id="upload-dialog" style="display:none" title="<fmt:message key="folders.upload_image" />">
   <form id="upload" action="/cms/upload" method="post" enctype="multipart/form-data">
     <input type="hidden" name="fileType" value="picasa" />
     <input type="hidden" name="albumId" />
     <input type="file" name="uploadFile" />
     <div class="buttons-dlg">
-        <input type="submit" value="Upload" />
-        <input id="uploadCancelButton" type="button" value="Cancel" />
+        <input type="submit" value="<fmt:message key="upload" />" />
+        <input id="uploadCancelButton" type="button" value="<fmt:message key="cancel" />" />
     </div>    
   </form>
 </div>

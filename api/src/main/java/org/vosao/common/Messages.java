@@ -103,7 +103,7 @@ public class Messages {
 			if (i++ > 0) {
 				result.append(",");
 			}
-			String msg = messages.get(key).replace("\n", "");
+			String msg = messages.get(key).replace("\n", "").replace("'", "\'");
 			result.append(" '").append(key).append("' : '")
 				.append(msg).append("'\n");
 		}

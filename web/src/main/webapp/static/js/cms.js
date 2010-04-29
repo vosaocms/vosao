@@ -26,7 +26,7 @@
 // Vosao namespace should exists.
 
 if (Vosao == undefined) {
-	alert('Vosao global namespace was not found. Please include vosao.js first.');
+	alert(messages['vosao.namespace_error']);
 }
 
 // ****************************** Constants ************************************
@@ -60,14 +60,14 @@ Vosao.infoMessage = function(widget, msg) {
 	$(widget).html('<div class="ui-widget">\
 		<div class="ui-state-highlight ui-corner-all" style="padding: 0.5em 0.7em;margin: 4px;"><p>\
 		<span class="ui-icon ui-icon-info" style="float:left;margin-right:0.3em" />\
-		<strong>Hey!</strong> ' + msg + '</p></div></div>');
+		<strong>' + messages['vosao.hey']+ '</strong> ' + msg + '</p></div></div>');
 };
 
 Vosao.errorMessage = function(widget, msg) {
 	$(widget).html('<div class="ui-widget">\
 		<div class="ui-state-error ui-corner-all" style="padding: 0.5em 0.7em;margin: 4px;"><p>\
 		<span class="ui-icon ui-icon-alert" style="float:left;margin-right:0.3em" />\
-		<strong>Alert:</strong> ' + msg + '</p></div></div>');
+		<strong>' + messages['alert'] + ':</strong> ' + msg + '</p></div></div>');
 };
 
 Vosao.errorMessages = function(widget, errors) {

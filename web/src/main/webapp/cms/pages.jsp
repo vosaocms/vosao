@@ -24,7 +24,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>Pages</title>
+    <title><fmt:message key="pages" /></title>
     <script src="/static/js/jquery.treeview.pack.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/static/css/jquery.treeview.css" type="text/css" />
     <script src="/static/js/cms/pages.js" type="text/javascript"></script>
@@ -35,10 +35,10 @@
 <div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
     <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
         <li class="ui-corner-top ui-tabs-selected ui-state-active">
-            <a href="#tab-1">Pages</a>
+            <a href="#tab-1"><fmt:message key="pages" /></a>
         </li>
         <li id="structuresTab" class="ui-corner-top ui-state-default">
-            <a href="structures.jsp">Structures</a>
+            <a href="structures.jsp"><fmt:message key="structures" /></a>
         </li>
     </ul>
     <div id="tab-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
@@ -52,17 +52,17 @@
 <div id="page-dialog" style="display:none" title="New page">
   <form id="pageForm">
     <div class="form-row">
-        <label>Page title</label>
+        <label><fmt:message key="pages.page_title" /></label>
         <input id="title"/>
     </div>
     <div class="form-row">
-        <label>Page URL</label>
+        <label><fmt:message key="pages.page_url" /></label>
         <span id="parentURL"></span> <input id="url"/>
     </div>
     <div id="pageMessages"></div>
     <div class="buttons-dlg">
-        <input id="saveDlgButton" type="submit" value="Save" />
-        <input id="cancelDlgButton" type="button" value="Cancel" />
+        <input id="saveDlgButton" type="submit" value="<fmt:message key="save" />" />
+        <input id="cancelDlgButton" type="button" value="<fmt:message key="cancel" />" />
     </div>
   </form>  
 </div>

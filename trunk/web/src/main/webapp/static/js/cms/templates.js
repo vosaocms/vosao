@@ -33,6 +33,7 @@ $(function(){
     $('#addButton').click(onAdd);
     $('#deleteButton').click(onDelete);
     $('#exportButton').click(onExport);
+    $('#exportCancelButton').click(onExportCancel);
     $('#importButton').click(onImport);
     $('#importCancelButton').click(onImportCancel);
     $('#okButton').click(onAfterUploadOk);
@@ -101,6 +102,7 @@ function onDelete() {
 
 function onExport() {
 	clockSeconds = 0;
+	showClock();
 	var ids = [];
     $('#templates input:checked').each(function () {
         ids.push(this.value);
@@ -140,4 +142,10 @@ function checkExport() {
 
 function showClock() {
 	$('#timer').html(clockSeconds++ + ' sec.');
+}
+
+function onExportCancel() {
+	$('#export-dialog').dialog('close');
+	clearInterval(exportTimer);
+	clearInterval(clockTimer);
 }

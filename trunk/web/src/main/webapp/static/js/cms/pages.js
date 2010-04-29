@@ -50,13 +50,16 @@ function loadTree() {
 function renderPage(vo) {
 	var pageUrl = encodeURIComponent(vo.entity.friendlyURL);
 	var p = vo.entity.hasPublishedVersion ? 'published' : 'unpublished';
-	var html = '<li> <img src="/static/images/'+ p +'.png" title="' + p 
+	var published = messages[p];
+	var html = '<li> <img src="/static/images/'+ p +'.png" title="' + published 
 			+ '" width="16px" />' 
 			+ ' <a href="page/content.jsp?id=' + vo.entity.id + '">'
 			+ vo.entity.title
-			+ '</a> <a title="Add child" href="#" onclick="onPageAdd(\'' + vo.entity.friendlyURL
+			+ '</a> <a title="' + messages['add_child'] 
+			+ '" href="#" onclick="onPageAdd(\'' + vo.entity.friendlyURL
 			+ '\')"><img src="/static/images/add.png"/></a> '
-			+ '<a title="Remove" href="#" onclick="onPageRemove(\'' 
+			+ '<a title="' + messages['remove'] 
+			+ '" href="#" onclick="onPageRemove(\'' 
 			+ vo.entity.friendlyURL + '\')">'
 			+ '<img src="/static/images/02_x.png" /></a>';
 	if (vo.children.list.length > 0) {
@@ -78,7 +81,7 @@ function loadUser() {
 }
 
 function onPageRemove(url) {
-	if (confirm('Are you shure?')) {
+	if (confirm(messages['are_you_sure'])) {
 		Vosao.jsonrpc.pageService.remove(function(r) {
 			Vosao.showServiceMessages(r);
 			loadData();
@@ -109,19 +112,19 @@ function onTitleChange() {
 
 function validate(vo) {
 	if (vo.title == '') {
-		return 'Title is empty';
+		return messages['title_is_empty'];
 	}
 	else {
 		if (vo.title.indexOf(',') != -1) {
-			return 'Symbol , (coma) is not allowed in title.'
+			return messages['pages.coma_not_allowed'];
 		}
 	}
 	if (vo.url == '') {
-		return 'Page URL is empty';
+		return messages['pages.url_is_empty'];
 	}
 	else {
 		if (vo.url.indexOf('/') != -1) {
-			return 'Symbol / is not allowed in URL.'
+			return messages['pages.slash_not_allowed'];
 		}
 	}
 }
@@ -137,7 +140,7 @@ function onSave() {
 	if (!error) {
 		Vosao.jsonrpc.pageService.addPage(function(r) {
 			if (r.result == 'success') {
-				Vosao.info("Page successfully created.");
+				Vosao.info(messages['pages.success_created']);
 				$('#page-dialog').dialog('close');
 				loadData();
 			}

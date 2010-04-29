@@ -22,13 +22,13 @@
 // Vosao namespace should exists.
 
 if (Vosao == undefined) {
-	alert('Vosao global namespace was not found. Please include vosao.js first.');
+	alert(messages['vosao.namespace_error']);
 }
 
 Vosao.backServiceFailed = function(e) {
 	if (e != null) {
-		Vosao.error('Can\'t connect to server. ' + e + ' ' + e.message + ' ' 
-				+ e.code + ' ' + e.msg);
+		Vosao.error(messages['vosao.cant_connect'] + ' ' + e + ' ' + e.message 
+			+ ' ' + e.code + ' ' + e.msg);
 		return true;
 	}
 	return false;

@@ -39,7 +39,7 @@ var tree_options = {
 	callback : {
 		onrename : renamePage,
 		beforedelete : function(node, tree_obj) {
-			return confirm('Delete page. Are you shure?');
+			return confirm('Delete page. Are you sure?');
 		},
 		ondelete : deletePage,
 		onmove : movePage,

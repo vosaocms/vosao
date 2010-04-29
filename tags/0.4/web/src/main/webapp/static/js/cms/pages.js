@@ -78,7 +78,7 @@ function loadUser() {
 }
 
 function onPageRemove(url) {
-	if (confirm('Are you shure?')) {
+	if (confirm('Are you sure?')) {
 		Vosao.jsonrpc.pageService.remove(function(r) {
 			Vosao.showServiceMessages(r);
 			loadData();

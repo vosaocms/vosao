@@ -121,7 +121,7 @@ function onAlbumSave() {
 }
 
 function onDeleteAlbum() {
-	if (confirm('You are going to delete album ' + album.title + '. Are you shure?')) {
+	if (confirm('You are going to delete album ' + album.title + '. Are you sure?')) {
 		Vosao.jsonrpc.picasaService.removeAlbum(function(r) {
 			if (r.result == 'success') {
 				loadAlbums();
@@ -134,7 +134,7 @@ function onDeleteAlbum() {
 
 function onPhotoRemove(i) {
 	photo = photos[i];
-	if (confirm('You are going to delete photo ' + photo.title + '. Are you shure?')) {
+	if (confirm('You are going to delete photo ' + photo.title + '. Are you sure?')) {
 		Vosao.jsonrpc.picasaService.removePhoto(function(r) {
 			if (r.result == 'success') {
 				albumSelect();

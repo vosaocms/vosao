@@ -187,7 +187,7 @@ function showClock() {
 
 function onReset() {
 	if (confirm('Are you going to REMOVE ALL DATA from application?')) {
-		if (confirm("ALL DATA WILL BE LOST! Are you shure?")) {
+		if (confirm("ALL DATA WILL BE LOST! Are you sure?")) {
 			Vosao.jsonrpc.configService.reset(function(r) {
 				Vosao.showServiceMessages(r);
 				if (r.result == 'success') {
@@ -199,7 +199,7 @@ function onReset() {
 }
 
 function onReindex() {
-	if (confirm('Are you shure?')) {
+	if (confirm('Are you sure?')) {
 		Vosao.jsonrpc.configService.reindex(function(r) {
 			Vosao.showServiceMessages(r);
 		});
@@ -207,7 +207,7 @@ function onReindex() {
 }
 
 function onCacheReset() {
-	if (confirm('Are you shure?')) {
+	if (confirm('Are you sure?')) {
 		Vosao.jsonrpc.configService.cacheReset(function(r) {
 			Vosao.showServiceMessages(r);
 		});

@@ -165,7 +165,7 @@ function tagErrors(errors) {
 }
 
 function onTagDelete() {
-	if (confirm('Are you shure?')) {
+	if (confirm('Are you sure?')) {
 		Vosao.jsonrpc.tagService.remove(function(r) {
 			Vosao.showServiceMessages(r);
 			$('#tag-dialog').dialog('close');
@@ -175,7 +175,7 @@ function onTagDelete() {
 }
 
 function onPageRemove(i) {
-	if (confirm('Are you shure?')) {
+	if (confirm('Are you sure?')) {
 		Vosao.jsonrpc.tagService.removeTag(function (r) {
 			Vosao.showServiceMessages(r);
 			pages.splice(i,1);

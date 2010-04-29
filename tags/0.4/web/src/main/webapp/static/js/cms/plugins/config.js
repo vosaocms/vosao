@@ -95,7 +95,7 @@ function onAfterUploadOk() {
 }
 
 function onRemove(i) {
-	if (confirm('Are you shure?')) {
+	if (confirm('Are you sure?')) {
 		Vosao.jsonrpc.pluginService.remove(function(r) {
 			Vosao.showServiceMessages(r);
 			if (r.result == 'success') {

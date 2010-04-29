@@ -147,11 +147,14 @@ function onExport() {
 
 function onExportCancel() {
     $("#export-dialog").dialog("close");
+	clearInterval(exportTimer);
+	clearInterval(clockTimer);
 }
 
 function onStartExport() {
 	$('#exportDialogButton').attr('disabled', true);
     clockSeconds = 0;
+    showClock();
     exportType = $('input[name=exportType]:checked').val();
     Vosao.jsonrpc.configService.startExportTask(function(r) {
     	if (r.result == 'success') {

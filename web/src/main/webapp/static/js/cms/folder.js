@@ -249,6 +249,7 @@ function onCancel() {
 
 function onExport() {
 	clockSeconds = 0;
+	showClock();
     $("#export-dialog").dialog("open");
     Vosao.jsonrpc.configService.startExportFolderTask(function(r) {
     	if (r.result == 'success') {
@@ -272,7 +273,7 @@ function checkExport() {
 			$('#exportDialogButton').attr('disabled', false);
 			location.href = '/file/tmp/' + exportFilename;
 		}
-	}, 'theme');
+	}, 'folder');
 }
 
 function showClock() {

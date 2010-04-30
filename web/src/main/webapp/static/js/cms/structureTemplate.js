@@ -113,7 +113,7 @@ function onUpdate(cont) {
 	});
 	Vosao.jsonrpc.structureTemplateService.save(function (r) {
 		if (r.result == 'success') {
-			Vosao.info('Structure template was successfully saved.');
+			Vosao.info(messages['structureTemplate.success_save']);
 			if (!cont) {
 				onCancel();
 			}

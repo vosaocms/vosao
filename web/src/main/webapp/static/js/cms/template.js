@@ -122,7 +122,7 @@ function onUpdate(cont) {
 	});
 	Vosao.jsonrpc.templateService.saveTemplate(function (r) {
 		if (r.result == 'success') {
-			Vosao.info('Template was successfully saved.');
+			Vosao.info(messages['template.success_save']);
 			if (!cont) {
 				location.href = '/cms/templates.jsp';
 			}
@@ -160,13 +160,13 @@ function onWrap() {
 		$('#contentDiv').html('<textarea id="content" cols="' + cols
 				+'" rows="' + rows + '"></textarea>');
 		$('#content').val(text);
-		$('#wrapLink').text(' Unwrap');
+		$('#wrapLink').text(' ' + messages['unwrap']);
 	}
 	if (wrap == undefined) {
 		$('#contentDiv').html('<textarea id="content" cols="' + cols
 				+'" rows="' + rows + '" wrap="off"></textarea>');
 		$('#content').val(text);
-		$('#wrapLink').text(' Wrap');
+		$('#wrapLink').text(' ' + messages['wrap']);
 	}
 }
 

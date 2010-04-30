@@ -67,7 +67,7 @@ Vosao.errorMessage = function(widget, msg) {
 	$(widget).html('<div class="ui-widget">\
 		<div class="ui-state-error ui-corner-all" style="padding: 0.5em 0.7em;margin: 4px;"><p>\
 		<span class="ui-icon ui-icon-alert" style="float:left;margin-right:0.3em" />\
-		<strong>' + messages['alert'] + ':</strong> ' + msg + '</p></div></div>');
+		<strong>' + messages['alert'] + '!</strong> ' + msg + '</p></div></div>');
 };
 
 Vosao.errorMessages = function(widget, errors) {

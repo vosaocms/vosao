@@ -44,10 +44,10 @@ function afterUpload(data) {
     var result = s[1];
     var msg = s[2]; 
     if (result == 'success') {
-        msg = 'Success. File was successfully imported.';
+        msg = messages['templates.success_import'];
     }
     else {
-        msg = "Error. " + msg;
+        msg = messages['error'] + ". " + msg;
     }   
     $("#import-dialog").dialog("close");
     $("#afterUpload-dialog .message").text(msg);
@@ -68,7 +68,8 @@ function onAfterUploadOk() {
 
 function loadTemplates() {
 	Vosao.jsonrpc.templateService.getTemplates(function (r) {
-        var html = '<table class="form-table"><tr><th></th><th>Title</th></tr>';
+        var html = '<table class="form-table"><tr><th></th><th>'
+        	+ messages['title'] + '</th></tr>';
         $.each(r.list, function (n, value) {
             html += '<tr><td><input type="checkbox" value="' + value.id 
                 + '" /></td><td><a href="/cms/template.jsp?id=' + value.id
@@ -89,10 +90,10 @@ function onDelete() {
         ids.push(this.value);
     });
     if (ids.length == 0) {
-    	Vosao.info('Nothing selected.');
+    	Vosao.info(messages['nothing_selected']);
         return;
     }
-    if (confirm('Are you sure?')) {
+    if (confirm(messages['are_you_sure'])) {
     	Vosao.jsonrpc.templateService.deleteTemplates(function(r) {
     		Vosao.showServiceMessages(r);
             loadTemplates();
@@ -108,7 +109,7 @@ function onExport() {
         ids.push(this.value);
     });
     if (ids.length == 0) {
-    	Vosao.info('Nothing selected.');
+    	Vosao.info(messages['nothing_selected']);
         return;
     }
     $("#export-dialog").dialog("open");
@@ -118,7 +119,7 @@ function onExport() {
     			this.checked = false;
     		});
     		exportFilename = r.message;
-    	    Vosao.infoMessage('#exportInfo', 'Creating export file...');
+    	    Vosao.infoMessage('#exportInfo', messages['creating_export_file']);
             exportTimer = setInterval(checkExport, 10 * 1000);
             clockTimer = setInterval(showClock, 1000);
     	}
@@ -141,7 +142,7 @@ function checkExport() {
 }
 
 function showClock() {
-	$('#timer').html(clockSeconds++ + ' sec.');
+	$('#timer').html(clockSeconds++ + ' ' + messages['sec'] + '.');
 }
 
 function onExportCancel() {

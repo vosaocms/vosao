@@ -24,7 +24,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>Pages</title>
+    <title><fmt:message key="pages"/></title>
     <script src="/static/js/cms/structures.js" type="text/javascript"></script>
 </head>
 <body>
@@ -32,17 +32,17 @@
 <div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
     <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
         <li class="ui-corner-top ui-state-default">
-            <a href="pages.jsp">Pages</a>
+            <a href="pages.jsp"><fmt:message key="pages"/></a>
         </li>
         <li class="ui-corner-top ui-tabs-selected ui-state-active">
-            <a href="#">Structures</a>
+            <a href="#"><fmt:message key="structures"/></a>
         </li>
     </ul>
     <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
         <div id="structures"><img src="/static/images/ajax-loader.gif" /></div>
         <div class="buttons">
-            <input id="addButton" type="button" value="Add"/>
-            <input id="deleteButton" type="button" value="Delete"/>
+            <input id="addButton" type="button" value="<fmt:message key="add"/>"/>
+            <input id="deleteButton" type="button" value="<fmt:message key="delete"/>"/>
         </div>    
     </div>
 </div>

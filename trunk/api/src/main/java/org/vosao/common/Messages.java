@@ -103,12 +103,16 @@ public class Messages {
 			if (i++ > 0) {
 				result.append(",");
 			}
-			String msg = messages.get(key).replace("\n", "").replace("'", "\'");
 			result.append(" '").append(key).append("' : '")
-				.append(msg).append("'\n");
+				.append(filterForJS(messages.get(key)))
+				.append("'\n");
 		}
 		result.append("};");
 		return result.toString();
+	}
+	
+	private static String filterForJS(String msg) {
+		return msg.replaceAll("\n", "").replaceAll("'", "\\\\'");
 	}
 	
 	public static boolean isLocaleSupported(Locale locale) {

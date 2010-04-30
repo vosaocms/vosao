@@ -24,7 +24,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>Structure template</title>
+    <title><fmt:message key="structureTemplate.title" /></title>
     <script type="text/javascript">
         var structureTemplateId = '<c:out value="${param.id}"/>';
         var structureId = '<c:out value="${param.structureId}"/>';
@@ -36,16 +36,16 @@
 <div id="tabs">
 
 <ul>
-    <li><a href="#tab-1">Structure template</a></li>
+    <li><a href="#tab-1"><fmt:message key="structureTemplate.title" /></a></li>
 </ul>
 
 <div id="tab-1">
     <div class="form-row">
-        <label>Title</label>
+        <label><fmt:message key="title" /></label>
         <input id="title" type="text" />
     </div>
     <div class="form-row">
-        <label>Template type</label>
+        <label><fmt:message key="template_type" /></label>
         <select id="type">
             <option value="VELOCITY">Velocity</option>
             <option value="XSLT">XSLT</option>
@@ -53,17 +53,17 @@
     </div>
     <div class="form-row">
         <div>
-            <input id="autosave" type="checkbox"> Autosave</input>
-            Editor size:
-            <a id="bigLink" href="#"> Big</a>
-            <a id="smallLink" href="#"> Small</a>
+            <input id="autosave" type="checkbox"> <fmt:message key="autosave" /></input>
+            <fmt:message key="editor_size" />:
+            <a id="bigLink" href="#"> <fmt:message key="big" /></a>
+            <a id="smallLink" href="#"> <fmt:message key="small" /></a>
         </div>
         <textarea id="content" rows="20" cols="80" wrap="off"></textarea>
     </div>
     <div class="buttons">
-        <input id="saveContinueButton" type="button" value="Save and continue" />
-        <input id="saveButton" type="button" value="Save" />
-        <input id="cancelButton" type="button" value="Cancel" />
+        <input id="saveContinueButton" type="button" value="<fmt:message key="save_continue" />" />
+        <input id="saveButton" type="button" value="<fmt:message key="save" />" />
+        <input id="cancelButton" type="button" value="<fmt:message key="cancel" />" />
     </div>
 </div>
 

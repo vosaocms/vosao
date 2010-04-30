@@ -24,7 +24,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>Structure</title>
+    <title><fmt:message key="structure"/></title>
     <script type="text/javascript">
         var structureId = '<c:out value="${param.id}"/>';
     </script>
@@ -35,62 +35,63 @@
 <div id="tabs">
 
 <ul>
-    <li><a href="#tab-1">Structure</a></li>
-    <li><a href="#tab-2">As XML</a></li>
-    <li><a href="#tab-3">Structure templates</a></li>
+    <li><a href="#tab-1"><fmt:message key="structure"/></a></li>
+    <li><a href="#tab-2"><fmt:message key="structure.as_xml"/></a></li>
+    <li><a href="#tab-3"><fmt:message key="structure.templates"/></a></li>
 </ul>
 
 <div id="tab-1">
     <div class="form-row">
-        <label>Title</label>
+        <label><fmt:message key="title"/></label>
         <input id="title" type="text" />
     </div>
     <div class="form-row">
-        <label>Fields</label>
+        <label><fmt:message key="fields"/></label>
         <div id="fields"></div>    
     </div>
     <div class="form-row" style="margin-top: 20px;">
-        <span>Field title</span>
+        <span><fmt:message key="structure.field_title"/></span>
         <input id="fieldTitle" type="text" /> &nbsp;
-        <span>Tag name</span> &nbsp;
+        <span><fmt:message key="structure.tag_name"/></span> &nbsp;
         <input id="fieldName" type="text" /> &nbsp;
         <select id="fieldType"> &nbsp;
-            <option value="TEXT">Text</option>
-            <option value="TEXTAREA">Text area</option>
-            <option value="RESOURCE">Resource link</option>
-            <option value="DATE">Date</option>
+            <option value="TEXT"><fmt:message key="text"/></option>
+            <option value="TEXTAREA"><fmt:message key="text_area"/></option>
+            <option value="RESOURCE"><fmt:message key="resource_link"/></option>
+            <option value="DATE"><fmt:message key="date"/></option>
         </select>
-        <a id="addField" href="#"> Add field</a>
+        <a id="addField" href="#"> <fmt:message key="add_field"/></a>
     </div>
     <div class="buttons">
-        <input id="saveContinueButton" type="button" value="Save and continue" />
-        <input id="saveButton" type="button" value="Save" />
-        <input id="cancelButton" type="button" value="Cancel" />
+        <input id="saveContinueButton" type="button" value="<fmt:message key="save_continue"/>" />
+        <input id="saveButton" type="button" value="<fmt:message key="save"/>" />
+        <input id="cancelButton" type="button" value="<fmt:message key="cancel"/>" />
     </div>
 </div>
 
 <div id="tab-2">
     <div class="form-row">
         <div>
-            <input id="autosave" type="checkbox"> Autosave</input>
-            Editor size:
-            <a id="bigLink" href="#"> Big</a>
-            <a id="smallLink" href="#"> Small</a>
+            <input id="autosave" type="checkbox"> <fmt:message key="autosave"/></input>
+            <fmt:message key="editor_size"/>:
+            <a id="bigLink" href="#"> <fmt:message key="big"/></a>
+            <a id="smallLink" href="#"> <fmt:message key="small"/></a>
         </div>
         <textarea id="content" rows="20" cols="80" wrap="off"></textarea>
     </div>
     <div class="buttons">
-        <input id="saveContinueXMLButton" type="button" value="Save and continue" />
-        <input id="saveXMLButton" type="button" value="Save" />
-        <input id="cancelXMLButton" type="button" value="Cancel" />
+        <input id="saveContinueXMLButton" type="button" 
+            value="<fmt:message key="save_continue"/>" />
+        <input id="saveXMLButton" type="button" value="<fmt:message key="save"/>" />
+        <input id="cancelXMLButton" type="button" value="<fmt:message key="cancel"/>" />
     </div>
 </div>
 
 <div id="tab-3">
     <div id="templates"><img src="/static/images/ajax-loader.gif" /></div>
     <div class="buttons">
-        <input id="addTemplateButton" type="button" value="Add"/>
-        <input id="deleteTemplateButton" type="button" value="Delete"/>
+        <input id="addTemplateButton" type="button" value="<fmt:message key="add"/>"/>
+        <input id="deleteTemplateButton" type="button" value="<fmt:message key="delete"/>"/>
     </div></div>
 </div>
 

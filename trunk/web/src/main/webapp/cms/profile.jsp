@@ -24,7 +24,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>User profile</title>
+    <title><fmt:message key="profile.title" /></title>
     <script src="/static/js/cms/profile.js" type="text/javascript"></script>   
 </head>
 <body>
@@ -32,31 +32,31 @@
 <div id="tabs">
 
     <ul>
-        <li><a href="#tab-1">User profile</a></li>
+        <li><a href="#tab-1"><fmt:message key="profile.title" /></a></li>
     </ul>
     <div id="tab-1">
 
         <div class="form-row">
-            <label>User name</label>
+            <label><fmt:message key="profile.username" /></label>
             <input id="name" type="text" />
         </div>
 
         <div class="form-row">
-            <label>User email</label>
+            <label><fmt:message key="profile.user_email" /></label>
             <input id="email" type="text" disabled="disabled"/>
         </div>
 
         <div class="form-row">
-            <label>Password</label>
+            <label><fmt:message key="password" /></label>
             <input id="password1" type="password" />
         </div>
         <div class="form-row">
-            <label>Retype the password</label>
+            <label><fmt:message key="profile.retype_password" /></label>
             <input id="password2" type="password" />
         </div>
 
         <div class="buttons">
-            <input id="saveButton" type="button" value="Save" />
+            <input id="saveButton" type="button" value="<fmt:message key="save" />" />
         </div>
 
     </div>

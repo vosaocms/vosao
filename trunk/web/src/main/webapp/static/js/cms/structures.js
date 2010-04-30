@@ -27,7 +27,8 @@ $(function(){
 
 function loadStructures() {
 	Vosao.jsonrpc.structureService.select(function (r) {
-        var html = '<table class="form-table"><tr><th></th><th>Title</th></tr>';
+        var html = '<table class="form-table"><tr><th></th><th>' + 
+        	+ messages['title'] + '</th></tr>';
         $.each(r.list, function (n, value) {
             html += '<tr><td><input type="checkbox" value="' + value.id 
                 + '" /></td><td><a href="/cms/structure.jsp?id=' + value.id
@@ -48,10 +49,10 @@ function onDelete() {
         ids.push(this.value);
     });
     if (ids.length == 0) {
-    	Vosao.info('Nothing selected.');
+    	Vosao.info(messages['nothing_selected']);
         return;
     }
-    if (confirm('Are you sure?')) {
+    if (confirm(messages['are_you_sure'])) {
     	Vosao.jsonrpc.structureService.remove(function(r) {
     		Vosao.showServiceMessages(r);
             loadStructures();

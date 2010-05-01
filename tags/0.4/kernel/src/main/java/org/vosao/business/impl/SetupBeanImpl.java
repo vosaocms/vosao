@@ -60,7 +60,6 @@ public class SetupBeanImpl implements SetupBean {
 	
 	public void setup() {
 		log.info("setup...");
-		clearSessions();
 		clearCache();
 		initGroups();
 		initUsers();

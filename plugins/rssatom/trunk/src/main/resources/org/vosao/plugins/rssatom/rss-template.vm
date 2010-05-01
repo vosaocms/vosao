@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <rss version="2.0">
    <channel>
-      <title>${config.siteDomain} News</title>
+      <title>${rssatomConfig.title}</title>
       <link>http://${config.siteDomain}</link>
       <description>${rssatomConfig.title}</description>
       <language>en-us</language>

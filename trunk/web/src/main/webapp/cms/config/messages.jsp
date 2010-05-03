@@ -24,7 +24,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>Site configuration</title>
+    <title><fmt:message key="config.title" /></title>
     <script src="/static/js/jquery.form.js" language="javascript"></script>
     <link rel="stylesheet" href="/static/css/config.css" type="text/css" />
     <script src="/static/js/cms/config/messages.js" type="text/javascript"></script>
@@ -38,24 +38,24 @@
 <div id="tab-4" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
     <div id="messageBundle"> </div>
     <div class="buttons">
-        <input id="addMessageButton" type="button" value="Add" />
-        <input id="removeMessageButton" type="button" value="Remove" />
+        <input id="addMessageButton" type="button" value="<fmt:message key="add" />" />
+        <input id="removeMessageButton" type="button" value="<fmt:message key="remove" />" />
     </div>
 </div>
 
 </div>
 
-<div id="message-dialog" style="display:none" title="Localized message">
+<div id="message-dialog" style="display:none" title="<fmt:message key="config.localized_message" />">
   <form id="messageForm">
     <div class="messages"> </div>
     <div class="form-row">
-        <label>Message code</label>
+        <label><fmt:message key="config.message_code" /></label>
         <input id="messageCode" type="text"/>
     </div>
     <div id="messagesInput"> </div>
     <div class="buttons-dlg">
-        <input id="saveMessageDlgButton" type="submit" value="Save" />
-        <input id="cancelMessageDlgButton" type="button" value="Cancel" />
+        <input id="saveMessageDlgButton" type="submit" value="<fmt:message key="save" />" />
+        <input id="cancelMessageDlgButton" type="button" value="<fmt:message key="cancel" />" />
     </div>
   </form>
 </div>

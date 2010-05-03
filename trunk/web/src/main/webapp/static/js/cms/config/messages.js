@@ -65,10 +65,10 @@ function onRemoveMessage() {
         codes.push(this.value);
     });
     if (codes.length == 0) {
-    	Vosao.info('Nothing selected');
+    	Vosao.info(messages.nothing_selected);
         return;
     }
-    if (confirm('Are you sure?')) {
+    if (confirm(messages.are_you_sure)) {
     	Vosao.jsonrpc.messageService.remove(function (r) {
     		Vosao.info(r.message);
             loadMessages();
@@ -78,7 +78,8 @@ function onRemoveMessage() {
 
 function loadMessages() {
 	Vosao.jsonrpc.messageService.select(function (r) {
-        var h = '<table class="form-table"><tr><th></th><th>Code</th>';
+        var h = '<table class="form-table"><tr><th></th><th>' + messages.code 
+        	+ '</th>';
         $.each(languages, function (i, lang) {
             h += '<th>' + lang.title + '</th>';
         });

@@ -24,7 +24,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>Site configuration</title>
+    <title><fmt:message key="config.title" /></title>
     <script src="/static/js/jquery.treeview.pack.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/static/css/jquery.treeview.css" type="text/css" />
     <link rel="stylesheet" href="/static/css/config.css" type="text/css" />
@@ -39,24 +39,24 @@
 <div id="tab-6" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
     <ul id="tags"></ul>
     <div class="buttons">
-        <input id="addButton" type="button" value="Add" />
+        <input id="addButton" type="button" value="<fmt:message key="add" />" />
     </div>
 </div>
 
 </div>
 
-<div id="tag-dialog" style="display:none" title="Tag details">
+<div id="tag-dialog" style="display:none" title="<fmt:message key="config.tag_details" />">
   <form id="tagForm">
     <div class="messages"> </div>
     <div class="form-row">
-        <label>Tag name</label>
+        <label><fmt:message key="config.tag_name" /></label>
         <input id="tagName" type="text"/>
     </div>
     <div id="pages"></div>
     <div class="buttons-dlg">
-        <input id="tagSaveDlgButton" type="submit" value="Save" />
-        <input id="tagDeleteDlgButton" type="button" value="Delete" />
-        <input id="tagCancelDlgButton" type="button" value="Cancel" />
+        <input id="tagSaveDlgButton" type="submit" value="<fmt:message key="save" />" />
+        <input id="tagDeleteDlgButton" type="button" value="<fmt:message key="delete" />" />
+        <input id="tagCancelDlgButton" type="button" value="<fmt:message key="cancel" />" />
     </div>
   </form>  
 </div>

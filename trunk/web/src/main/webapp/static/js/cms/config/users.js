@@ -51,10 +51,10 @@ function onRemoveUser() {
         ids.push(String(this.value));
     });
     if (ids.length == 0) {
-    	Vosao.info('Nothing selected');
+    	Vosao.info(messages.nothing_selected);
         return;
     }
-    if (confirm('Are you sure?')) {
+    if (confirm(messages.are_you_sure)) {
     	Vosao.jsonrpc.userService.remove(function (r) {
     		Vosao.info(r.message);
             loadUsers();
@@ -64,7 +64,9 @@ function onRemoveUser() {
 
 function loadUsers() {
 	Vosao.jsonrpc.userService.select(function (r) {
-        var h = '<table class="form-table"><tr><th></th><th>Name</th><th>Email</th><th>Role</th></tr>';
+        var h = '<table class="form-table"><tr><th></th><th>' + messages.name 
+        	+ '</th><th>' + messages.email + '</th><th>' + messages.role 
+        	+ '</th></tr>';
         $.each(r.list, function (i, user) {
             h += '<tr><td><input type="checkbox" value="' + user.id 
                 + '"/></td><td>' + user.name + '</td><td>\
@@ -78,9 +80,9 @@ function loadUsers() {
 }
 
 function getRole(role) {
-    if (role == 'ADMIN') return 'Administrator';
-    if (role == 'USER') return 'User';
-    if (role == 'SITE_USER') return 'Site user';
+    if (role == 'ADMIN') return messages.administrator;
+    if (role == 'USER') return messages.user;
+    if (role == 'SITE_USER') return messages.site_user;
 }
 
 function onUserEdit(id) {
@@ -112,10 +114,10 @@ function initUserForm() {
 function validateUser(vo) {
     var errors = [];
     if (vo.email == '') {
-        errors.push('Email is empty');
+        errors.push(messages.email_is_empty);
     }
     if (vo.password1 != vo.password2) {
-        errors.push('Passwords don\'t match');
+        errors.push(messages['config.passwords_dont_match']);
     }
     return errors;
 }

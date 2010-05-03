@@ -24,7 +24,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>Site configuration</title>
+    <title><fmt:message key="config.title" /></title>
     <script src="/static/js/jquery.form.js" language="javascript"></script>
     <link rel="stylesheet" href="/static/css/config.css" type="text/css" />
     <script src="/static/js/cms/config/index.js" type="text/javascript"></script>
@@ -38,7 +38,7 @@
 <div id="tab-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
   <form id="configForm">
     <div class="form-row">
-        <label>Database schema version</label>
+        <label><fmt:message key="config.db_version" /></label>
         <span id="version" />
     </div>
     <div class="form-row">
@@ -46,75 +46,75 @@
         <input id="googleAnalyticsId" type="text" />
     </div>
     <div class="form-row">
-        <label>Site owner email</label>
+        <label><fmt:message key="config.site_owner_email" /></label>
         <input id="siteEmail" type="text" />
     </div>
     <div class="form-row">
-        <label>Site domain</label>
+        <label><fmt:message key="site_domain" /></label>
         <input id="siteDomain" type="text" />
     </div>
     <div class="form-row">
-        <label>Enable reCaptcha use on the site</label>
+        <label><fmt:message key="config.enable_recaptcha" /></label>
         <input id="enableRecaptcha" type="checkbox" />
     </div>
     <div id="recaptcha">
         <div class="form-row">
-            <label>reCaptcha service public key</label>
+            <label><fmt:message key="config.recaptcha_public_key" /></label>
             <input id="recaptchaPublicKey" type="text" size="40"/>
         </div>
         <div class="form-row">
-            <label>reCaptcha service private key</label>
+            <label><fmt:message key="config.recaptcha_private_key" /></label>
             <input id="recaptchaPrivateKey" type="text" size="40"/>
         </div>
     </div>
     <div class="form-row">
-        <label>Editable resource files extensions</label>
+        <label><fmt:message key="config.edit_extension" /></label>
         <input id="editExt" type="text"/>
     </div>
     <div class="form-row">
-        <label>Site users login page url</label>
+        <label><fmt:message key="config.login_url" /></label>
         <input id="siteUserLoginUrl" type="text"/>
     </div>
     <div class="form-row">
-        <label>Enable Picasa use on the site</label>
+        <label><fmt:message key="config.enable_picasa" /></label>
         <input id="enablePicasa" type="checkbox" />
     </div>
     <div id="picasa">
         <div class="form-row">
-            <label>Picasa user email</label>
+            <label>Picasa <fmt:message key="user_email" /></label>
             <input id="picasaUser" type="text" />
         </div>
         <div class="form-row">
-            <label>Picasa password</label>
+            <label>Picasa <fmt:message key="password" /></label>
             <input id="picasaPassword" type="text" />
         </div>
     </div>
     <div class="buttons">
-        <input id="saveButton" type="submit" value="Save" />
-        <input id="exportButton" type="button" value="Export" />
-        <input id="importButton" type="button" value="Import" />
-        <input id="reindexButton" type="button" value="Create search index" />
-        <input id="resetButton" type="button" value="Reset" />
-        <input id="cacheResetButton" type="button" value="Cache reset" />
+        <input id="saveButton" type="submit" value="<fmt:message key="save" />" />
+        <input id="exportButton" type="button" value="<fmt:message key="export" />" />
+        <input id="importButton" type="button" value="<fmt:message key="import" />" />
+        <input id="reindexButton" type="button" value="<fmt:message key="config.create_search_index" />" />
+        <input id="resetButton" type="button" value="<fmt:message key="reset" />" />
+        <input id="cacheResetButton" type="button" value="<fmt:message key="config.cache_reset" />" />
     </div>
   </form>
 </div>
 
 </div>
 
-<div id="import-dialog" title="Import site" style="display:none">
+<div id="import-dialog" title="<fmt:message key="config.import_site" />" style="display:none">
 <form id="upload" action="/cms/upload" method="post" enctype="multipart/form-data">
-    File upload:
+    <fmt:message key="file_upload" />:
     <input type="hidden" name="fileType" value="import" />
     <input type="file" name="uploadFile" />
     <div class="buttons-dlg">
-        <input type="submit" value="Send" />
-        <input id="importCancelButton" type="button" value="Cancel" />
+        <input type="submit" value="<fmt:message key="send" />" />
+        <input id="importCancelButton" type="button" value="<fmt:message key="cancel" />" />
     </div>    
 </form>
 </div>
 
-<div id="afterUpload-dialog" style="display:none" title="Status window">
+<div id="afterUpload-dialog" style="display:none" title="<fmt:message key="status_window" />">
   <form id="okForm">
     <p class="message"></p>
     <div class="buttons-dlg">
@@ -123,21 +123,21 @@
   </form>
 </div>
 
-<div id="export-dialog" style="display:none" title="Export window">
+<div id="export-dialog" style="display:none" title="<fmt:message key="export_window" />">
   <form id="exportForm">
     <div class="form-row">
     <input type="radio" name="exportType" value="full" />
-        Full export <br/>
+        <fmt:message key="config.full_export" /> <br/>
     <input type="radio" name="exportType" value="site" checked="checked"/>
-        Site, pages & resources <br/>
+        <fmt:message key="config.export_site" /> <br/>
     <input type="radio" name="exportType" value="resources"/>
-        Resources <br/>
+        <fmt:message key="resources" /> <br/>
     </div>
     <div id="exportInfo" class="form-row"></div>    
     <div id="timer" class="form-row"></div>
     <div class="buttons-dlg">
-        <input id="exportDialogButton" type="submit" value="Export" />
-        <input id="exportCancelButton" type="button" value="Cancel" />
+        <input id="exportDialogButton" type="submit" value="<fmt:message key="export" />" />
+        <input id="exportCancelButton" type="button" value="<fmt:message key="cancel" />" />
     </div>
   </form>
 </div>

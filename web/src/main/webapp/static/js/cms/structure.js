@@ -174,7 +174,7 @@ function getFieldType(type) {
 
 function showFields() {
 	var h = '<table class="form-table"><tr><th>' + messages['title'] 
-	    + '</th><th>' + messages['structure.tag_name'] + '</th><th>' + 
+	    + '</th><th>' + messages['structure.tag_name'] + '</th><th>'  
 	    + messages['type'] + '</th><th></th></tr>';
 	$.each(fields, function(i, field) {
 		h += '<tr><td>' + field.title + '</td>'

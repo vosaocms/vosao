@@ -24,7 +24,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>Site configuration</title>
+    <title><fmt:message key="config.title" /></title>
     <script src="/static/js/jquery.form.js" language="javascript"></script>
     <link rel="stylesheet" href="/static/css/config.css" type="text/css" />
     <script src="/static/js/cms/config/comments.js" type="text/javascript"></script>
@@ -38,16 +38,16 @@
 <div id="tab-2" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
   <form id="commentsForm">
     <div class="form-row">
-        <label>Comments notification email (or coma separated list)</label>
+        <label><fmt:message key="config.comments_email" /></label>
         <input id="commentsEmail" type="text"/>
     </div>
     <div class="form-row">
-        <label>Comments template</label>
+        <label><fmt:message key="config.comments_template" /></label>
         <textarea id="commentsTemplate" cols="80" rows="20"></textarea>
     </div>
     <div class="buttons">
-        <input id="commentsSaveButton" type="submit" value="Save" />
-        <input id="restoreButton" type="button" value="Restore default" />
+        <input id="commentsSaveButton" type="submit" value="<fmt:message key="save" />" />
+        <input id="restoreButton" type="button" value="<fmt:message key="restore_default" />" />
     </div>
   </form>
 </div>

@@ -24,7 +24,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>Site configuration</title>
+    <title><fmt:message key="config.title" /></title>
     <script src="/static/js/jquery.form.js" language="javascript"></script>
     <link rel="stylesheet" href="/static/css/config.css" type="text/css" />
     <script src="/static/js/cms/config/groups.js" type="text/javascript"></script>
@@ -38,33 +38,33 @@
 <div id="tab-6" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
     <div id="groups"> </div>
     <div class="buttons">
-        <input id="addGroupButton" type="button" value="Add" />
-        <input id="removeGroupButton" type="button" value="Remove" />
+        <input id="addGroupButton" type="button" value="<fmt:message key="add" />" />
+        <input id="removeGroupButton" type="button" value="<fmt:message key="remove" />" />
     </div>
 </div>
 
 </div>
 
-<div id="group-dialog" style="display:none" title="Group details">
+<div id="group-dialog" style="display:none" title="<fmt:message key="config.group_details" />">
   <form id="groupForm">
     <div class="messages"> </div>
     <div class="form-row">
-        <label>Group name</label>
+        <label><fmt:message key="config.group_name" /></label>
         <input id="groupName" type="text"/>
     </div>
     <div class="buttons-dlg">
-        <input id="groupSaveDlgButton" type="submit" value="Save" />
-        <input id="groupCancelDlgButton" type="button" value="Cancel" />
+        <input id="groupSaveDlgButton" type="submit" value="<fmt:message key="save" />" />
+        <input id="groupCancelDlgButton" type="button" value="<fmt:message key="cancel" />" />
     </div>
   </form>  
 </div>
 
-<div id="user-group-dialog" style="display:none" title="Group users">
+<div id="user-group-dialog" style="display:none" title="<fmt:message key="config.group_users" />">
   <form id="userGroupForm">
     <div id="groupUsers"> </div>
     <div class="buttons-dlg">
-        <input id="userGroupSaveDlgButton" type="submit" value="Save" />
-        <input id="userGroupCancelDlgButton" type="button" value="Cancel" />
+        <input id="userGroupSaveDlgButton" type="submit" value="<fmt:message key="save" />" />
+        <input id="userGroupCancelDlgButton" type="button" value="<fmt:message key="cancel" />" />
     </div>
   </form>  
 </div>

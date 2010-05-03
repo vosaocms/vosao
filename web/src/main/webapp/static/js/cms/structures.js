@@ -27,8 +27,8 @@ $(function(){
 
 function loadStructures() {
 	Vosao.jsonrpc.structureService.select(function (r) {
-        var html = '<table class="form-table"><tr><th></th><th>' + 
-        	+ messages['title'] + '</th></tr>';
+        var html = '<table class="form-table"><tr><th></th><th>'  
+        	+ messages.title + '</th></tr>';
         $.each(r.list, function (n, value) {
             html += '<tr><td><input type="checkbox" value="' + value.id 
                 + '" /></td><td><a href="/cms/structure.jsp?id=' + value.id

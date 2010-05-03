@@ -24,7 +24,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>Site configuration</title>
+    <title><fmt:message key="config.title" /></title>
     <script src="/static/js/jquery.form.js" language="javascript"></script>
     <link rel="stylesheet" href="/static/css/config.css" type="text/css" />
     <script src="/static/js/cms/config/users.js" type="text/javascript"></script>
@@ -38,43 +38,43 @@
 <div id="tab-5" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
     <div id="users"> </div>
     <div class="buttons">
-        <input id="addUserButton" type="button" value="Add" />
-        <input id="removeUserButton" type="button" value="Remove" />
+        <input id="addUserButton" type="button" value="<fmt:message key="add" />" />
+        <input id="removeUserButton" type="button" value="<fmt:message key="remove" />" />
     </div>
 </div>
 
 </div>
 
-<div id="user-dialog" style="display:none" title="User details">
+<div id="user-dialog" style="display:none" title="<fmt:message key="config.user_details" />">
   <form id="userForm">
     <div class="messages"> </div>
     <div class="form-row">
-        <label>User name</label>
+        <label><fmt:message key="user_name" /></label>
         <input id="userName" type="text"/>
     </div>
     <div class="form-row">
-        <label>User email</label>
+        <label><fmt:message key="user_email" /></label>
         <input id="userEmail" type="text"/>
     </div>
     <div>
-        <label>User role</label>
+        <label><fmt:message key="user_role" /></label>
         <select id="userRole">
-            <option value="SITE_USER">Site user</option>
-            <option value="USER">User</option>
-            <option value="ADMIN">Administrator</option>
+            <option value="SITE_USER"><fmt:message key="site_user" /></option>
+            <option value="USER"><fmt:message key="user" /></option>
+            <option value="ADMIN"><fmt:message key="administrator" /></option>
         </select>
     </div>
     <div class="form-row">
-        <label>Password</label>
+        <label><fmt:message key="password" /></label>
         <input id="userPassword1" type="password"/>
     </div>
     <div class="form-row">
-        <label>Retype password</label>
+        <label><fmt:message key="retype_password" /></label>
         <input id="userPassword2" type="password"/>
     </div>
     <div class="buttons-dlg">
-        <input id="userSaveDlgButton" type="submit" value="Save" />
-        <input id="userCancelDlgButton" type="button" value="Cancel" />
+        <input id="userSaveDlgButton" type="submit" value="<fmt:message key="save" />" />
+        <input id="userCancelDlgButton" type="button" value="<fmt:message key="cancel" />" />
     </div>
   </form>  
 </div>

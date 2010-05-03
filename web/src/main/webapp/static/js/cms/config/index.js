@@ -76,10 +76,10 @@ function afterUpload(data) {
     var result = s[1];
     var msg = s[2]; 
     if (result == 'success') {
-        msg = 'Success. File was successfully saved for import. Please wait the import process can take long time.';
+        msg = messages['config.saved_for_import'];
     }
     else {
-        msg = "Error. " + msg;
+        msg = messages.error + ". " + msg;
     }   
     $("#import-dialog").dialog("close");
     $("#afterUpload-dialog .message").text(msg);
@@ -159,7 +159,7 @@ function onStartExport() {
     Vosao.jsonrpc.configService.startExportTask(function(r) {
     	if (r.result == 'success') {
     		exportFilename = r.message;
-    	    Vosao.infoMessage('#exportInfo', 'Creating export file...');
+    	    Vosao.infoMessage('#exportInfo', messages.creating_export_file);
             exportTimer = setInterval(checkExport, 10 * 1000);
             clockTimer = setInterval(showClock, 1000);
     	}
@@ -186,8 +186,8 @@ function showClock() {
 }
 
 function onReset() {
-	if (confirm('Are you going to REMOVE ALL DATA from application?')) {
-		if (confirm("ALL DATA WILL BE LOST! Are you shure?")) {
+	if (confirm(messages['config.reset_warning1'])) {
+		if (confirm(messages['config.reset_warning2'])) {
 			Vosao.jsonrpc.configService.reset(function(r) {
 				Vosao.showServiceMessages(r);
 				if (r.result == 'success') {
@@ -199,7 +199,7 @@ function onReset() {
 }
 
 function onReindex() {
-	if (confirm('Are you shure?')) {
+	if (confirm(messages.are_you_sure)) {
 		Vosao.jsonrpc.configService.reindex(function(r) {
 			Vosao.showServiceMessages(r);
 		});
@@ -207,7 +207,7 @@ function onReindex() {
 }
 
 function onCacheReset() {
-	if (confirm('Are you shure?')) {
+	if (confirm(messages.are_you_sure)) {
 		Vosao.jsonrpc.configService.cacheReset(function(r) {
 			Vosao.showServiceMessages(r);
 		});

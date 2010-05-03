@@ -23,24 +23,24 @@
 
 <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
     <li class="ui-corner-top ui-state-default">
-        <a href="index.jsp">Site configuration</a>
+        <a href="index.jsp"><fmt:message key="config.title" /></a>
     </li>
     <li class="ui-corner-top ui-state-default">
-        <a href="comments.jsp">Comments</a>
+        <a href="comments.jsp"><fmt:message key="comments" /></a>
     </li>
     <li class="ui-corner-top ui-state-default">
-        <a href="languages.jsp">Languages</a>
+        <a href="languages.jsp"><fmt:message key="languages" /></a>
     </li>
     <li class="ui-corner-top ui-state-default">
-        <a href="messages.jsp">Message bundle</a>
+        <a href="messages.jsp"><fmt:message key="message_bundle" /></a>
     </li>
     <li class="ui-corner-top ui-state-default">
-        <a href="users.jsp">Users</a>
+        <a href="users.jsp"><fmt:message key="users" /></a>
     </li>
     <li class="ui-corner-top ui-state-default">
-        <a href="groups.jsp">Groups</a>
+        <a href="groups.jsp"><fmt:message key="groups" /></a>
     </li>
     <li class="ui-corner-top ui-state-default">
-        <a href="tags.jsp">Tags</a>
+        <a href="tags.jsp"><fmt:message key="tags" /></a>
     </li>
 </ul>

@@ -24,7 +24,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>SEO Urls</title>
+    <title><fmt:message key="plugins.seo_urls" /></title>
     <link rel="stylesheet" href="/static/css/form.css" type="text/css" />
     <script src="/static/js/cms/plugins/seo-urls.js" type="text/javascript"></script>    
 </head>
@@ -32,7 +32,7 @@
 
 <div id="tabs">
 <ul>
-    <li><a href="#tab-1">SEO Urls</a></li>
+    <li><a href="#tab-1"><fmt:message key="plugins.seo_urls" /></a></li>
 </ul>
 
 <div id="tab-1">
@@ -40,25 +40,25 @@
 <div id="urls"><img src="/static/images/ajax-loader.gif" /></div>
 
 <div class="buttons">
-    <input id="addButton" type="button" value="Add" />
-    <input id="removeButton" type="button" value="Remove" />
+    <input id="addButton" type="button" value="<fmt:message key="add" />" />
+    <input id="removeButton" type="button" value="<fmt:message key="remove" />" />
 </div>
 
-<div id="url-dialog" style="display:none" title="SEO Url details">
+<div id="url-dialog" style="display:none" title="<fmt:message key="seo_urls.details" />">
   <form id="seoForm">
     <div id="url-messages" class="messages"> </div>
     <div class="form-row">
-        <label>From Link URL</label>
+        <label><fmt:message key="seo_urls.from_link" /></label>
         <input id="fromLink" type="text" />
     </div>
     <div class="form-row">
-        <label>On site redirect link URL</label>
+        <label><fmt:message key="seo_urls.to_link" /></label>
         <input id="toLink" type="text" />
     </div>
     <div class="buttons-dlg">
-        <input id="saveAndAddButton" type="button" value="Save and Add" />
-        <input id="saveDlgButton" type="submit" value="Save" />
-        <input id="cancelDlgButton" type="button" value="Cancel" />
+        <input id="saveAndAddButton" type="button" value="<fmt:message key="save_add" />" />
+        <input id="saveDlgButton" type="submit" value="<fmt:message key="save" />" />
+        <input id="cancelDlgButton" type="button" value="<fmt:message key="cancel" />" />
     </div>
   </form>
 </div>

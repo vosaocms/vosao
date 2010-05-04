@@ -34,7 +34,8 @@ $(function() {
 
 function loadUrls() {
 	Vosao.jsonrpc.seoUrlService.select(function (r) {
-        var html = '<table class="form-table"><tr><th></th><th>From</th><th>To</th></tr>';
+        var html = '<table class="form-table"><tr><th></th><th>' 
+        	+ messages.from + '</th><th>' + messages.to + '</th></tr>';
         $.each(r.list, function (i, url) {
             html += '<tr><td><input type="checkbox" value="' 
                 + url.id + '"/></td><td><a href="#" onclick="onEdit('
@@ -79,10 +80,10 @@ function onRemove() {
         ids.push(this.value);
     });
     if (ids.length == 0) {
-    	Vosao.info('Nothing selected.');
+    	Vosao.info(messages.nothing_selected);
         return;
     }
-    if (confirm('Are you sure?')) {
+    if (confirm(messages.are_you_sure)) {
     	Vosao.jsonrpc.seoUrlService.remove(function(r) {
     		Vosao.showServiceMessages(r);
             loadUrls();
@@ -97,10 +98,10 @@ function onSaveAndAdd() {
 function validateSeoUrl(vo) {
     var errors = new Array();
     if (vo.fromLink == '') {
-        errors.push('From link is empty');
+        errors.push(messages['seo_urls.from_link_empty']);
     }
     if (vo.toLink == '') {
-        errors.push('Site redirect link is empty');
+        errors.push(messages['seo_urls.to_link_empty']);
     }
     return errors;
 }

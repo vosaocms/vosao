@@ -43,15 +43,16 @@ function loadPlugins() {
 }
 
 function showPlugins() {
-    var html = '<table class="form-table"><th>Title</th>\
-       <th>Name</th><th>Version</th><th>Description</th><th>Website</th>\
-       <th>State</th><th></th></tr>';
+    var html = '<table class="form-table"><th>' + messages.title + '</th>\
+       <th>' + messages.name + '</th><th>' + messages.version + '</th><th>'
+       + messages.description + '</th><th>' + messages.website + '</th><th>'
+       + messages.state + '</th><th></th></tr>';
     $.each(plugins, function(i, plugin) {
         var configURL = '/cms/plugins/plugin.jsp?id=' + plugin.id;
     	if (plugin.configURL) {
         	configURL = '/file/plugins/' + plugin.name + '/' + plugin.configURL;
         }
-    	var state = plugin.disabled ? 'Disabled' : 'Enabled';
+    	var state = plugin.disabled ? messages.disabled : messages.enabled;
     	var link = plugin.disabled ? plugin.title :
     		'<a href="' + configURL + '">' + plugin.title + '</a>';
     	html += '<tr><td>' + link + '</td>'
@@ -80,10 +81,10 @@ function afterUpload(data) {
     var result = s[1];
     var msg = s[2]; 
     if (result == 'success') {
-        msg = 'Success. Plugin was successfully installed.';
+        msg = messages['plugins.success_install'];
     }
     else {
-        msg = "Error. " + msg;
+        msg = messages.error + ". " + msg;
     }   
     $("#import-dialog").dialog("close");
     $("#afterUpload-dialog .message").text(msg);
@@ -95,7 +96,7 @@ function onAfterUploadOk() {
 }
 
 function onRemove(i) {
-	if (confirm('Are you shure?')) {
+	if (confirm(messages.are_you_sure)) {
 		Vosao.jsonrpc.pluginService.remove(function(r) {
 			Vosao.showServiceMessages(r);
 			if (r.result == 'success') {

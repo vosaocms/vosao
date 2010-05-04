@@ -37,7 +37,7 @@ function loadData() {
 function loadPlugin() {
 	Vosao.jsonrpc.pluginService.getById(function(r) {
 		plugin = r;
-		$('#plugin-title').text('Plugin ' + plugin.name + ' config');
+		$('#plugin-title').text(plugin.name + ' ' + messages['plugin.config']);
 		showPlugin();
 	}, pluginId);
 }
@@ -112,7 +112,7 @@ function getConfigData() {
 	var result = {};
 	if (plugin.configData != '') {
 		var domData = $.xmlDOM(plugin.configData, function(error) {
-			Vosao.error('Content parsing error. ' + error);
+			Vosao.error(messages['plugin.parsing_error']+ ' ' + error);
 		});
 		$(domData).find('plugin-config').children().each(function() {
 			result[this.tagName.toLowerCase()] = $(this).text();
@@ -125,7 +125,7 @@ function validate(vo) {
 	$.each(properties, function(i,value) {
 		var data = vo[value.name];
 		if (value.type == 'Integer' && parseInt(data) == NaN) {
-			return 'Integer expected for ' + value.name;
+			return messages['plugin.integer_expected'] + ' ' + value.name;
 		}
 	});
 }

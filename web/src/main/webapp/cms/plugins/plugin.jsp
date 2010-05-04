@@ -24,7 +24,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>Plugin configuration</title>
+    <title><fmt:message key="plugins.config" /></title>
 
     <script type="text/javascript">
       var pluginId = '<c:out value="${param.id}"/>';
@@ -36,14 +36,14 @@
 
 <div id="tabs">
 <ul>
-    <li><a id="plugin-title" href="#tab-1">Plugin</a></li>
+    <li><a id="plugin-title" href="#tab-1"><fmt:message key="plugin" /></a></li>
 </ul>
 
 <div id="tab-1">
     <div id="properties"></div>
     <div class="buttons">
-        <input id="saveButton" type="button" value="Save" />
-        <input id="cancelButton" type="button" value="Cancel" />
+        <input id="saveButton" type="button" value="<fmt:message key="save" />" />
+        <input id="cancelButton" type="button" value="<fmt:message key="cancel" />" />
     </div>
 </div>
 

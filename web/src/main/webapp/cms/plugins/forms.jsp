@@ -24,32 +24,32 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>Forms</title>
+    <title><fmt:message key="forms" /></title>
     <script src="/static/js/cms/plugins/forms.js" type="text/javascript"></script>    
 </head>
 <body>
 
 <div id="tabs">
 <ul>
-    <li><a href="#tab-1">Forms</a></li>
-    <li><a href="#tab-2">Config</a></li>
+    <li><a href="#tab-1"><fmt:message key="forms" /></a></li>
+    <li><a href="#tab-2"><fmt:message key="config" /></a></li>
 </ul>
 
 <div id="tab-1">
     <div id="forms"> </div>
     <div class="buttons">
-        <input id="addButton" type="button" value="Add" />
-        <input id="deleteButton" type="button" value="Delete" />
+        <input id="addButton" type="button" value="<fmt:message key="add" />" />
+        <input id="deleteButton" type="button" value="<fmt:message key="delete" />" />
     </div>
 </div>
 
 <div id="tab-2">
 
 <div class="form-row">
-    <label>Form template</label>
+    <label><fmt:message key="forms.form_template" /></label>
     <div>
-        <a id="editFormTemplateLink" href="#">edit</a> 
-        <a id="restoreFormTemplateLink" href="#">restore default</a>
+        <a id="editFormTemplateLink" href="#"><fmt:message key="edit" /></a> 
+        <a id="restoreFormTemplateLink" href="#"><fmt:message key="restore_default" /></a>
     </div>
     <div>
         <textarea id="formTemplate" rows="20" cols="80" 
@@ -57,10 +57,10 @@
     </div>
 </div>
 <div class="form-row">
-    <label>Form letter template</label>
+    <label><fmt:message key="forms.letter_template" /></label>
     <div>
-        <a id="editFormLetterLink" href="#" onclick="">edit</a> 
-        <a id="restoreFormLetterLink" href="#">restore default</a>
+        <a id="editFormLetterLink" href="#" onclick=""><fmt:message key="edit" /></a> 
+        <a id="restoreFormLetterLink" href="#"><fmt:message key="restore_default" /></a>
     </div>
     <div>
         <textarea id="letterTemplate" rows="20" cols="80" 
@@ -68,7 +68,7 @@
     </div>
 </div>
 <div class="buttons">
-    <input id="saveButton" type="button" value="Save" />
+    <input id="saveButton" type="button" value="<fmt:message key="save" />" />
 </div>
 </div>
 

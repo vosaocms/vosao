@@ -22,7 +22,7 @@
 %>
   <%@ page import="org.vosao.servlet.FileUploadServlet" %>
   
-  <title>Page</title>
+  <title><fmt:message key="page" /></title>
   <link rel="stylesheet" href="/static/css/page.css" type="text/css" />
   <script type="text/javascript" src="/static/ckeditor/ckeditor.js"></script>
   

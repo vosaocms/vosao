@@ -44,14 +44,14 @@
 
 <div style="padding-right:10px">
     <div style="float:right">
-        <input id="autosave" type="checkbox"> Autosave</input>
+        <input id="autosave" type="checkbox"> <fmt:message key="autosave" /></input>
     </div>
     <div>
-        Select content language: 
+        <fmt:message key="page.select_language" />: 
         <select id="language"></select>
     </div>
     <div class="form-row" style="margin-top:10px;">
-        <label>Title</label>
+        <label><fmt:message key="title" /></label>
         <input id="titleLocal" type="text" class="form-title" size="40" />
     </div>
     <div class="form-row" id="editorButtons"></div>
@@ -59,15 +59,20 @@
 </div>
 <div class="buttons">
     <div id="approveOnContentSaveDiv" class="checkboxes">
-        <input id="approveOnContentSave" type="checkbox"> Approve on Save
+        <input id="approveOnContentSave" type="checkbox"> <fmt:message key="page.approve_save" />
     </div> 
     <input id="saveContinueContentButton" type="button" 
-        value="Save and continue" />
-    <input id="saveContentButton" type="submit" value="Save" />
-    <input id="contentPreviewButton" type="button" value="Preview" />
-    <input id="approveButton" type="button" value="Approve" />
-    <input id="restoreButton" type="button" value="Restore" />
-    <input id="contentCancelButton" type="button" value="Cancel" />
+        value="<fmt:message key="save_continue" />" />
+    <input id="saveContentButton" type="submit" 
+        value="<fmt:message key="save" />" />
+    <input id="contentPreviewButton" type="button" 
+        value="<fmt:message key="preview" />" />
+    <input id="approveButton" type="button" 
+        value="<fmt:message key="approve" />" />
+    <input id="restoreButton" type="button" 
+        value="<fmt:message key="restore" />" />
+    <input id="contentCancelButton" type="button" 
+        value="<fmt:message key="cancel" />" />
 </div>    
 
 </form>
@@ -78,23 +83,22 @@
 
 <%@ include file="versionDialog.jsp" %>
 
-<div id="restore-dialog" style="display:none" title="Restore content">
+<div id="restore-dialog" style="display:none" title="<fmt:message key="page.restore_content" />">
   <form id="restoreForm">
     <div class="form-row">
         <input name="page" type="radio" value="home" checked="checked"/> 
-            Home page <br/>        
+            <fmt:message key="home_page" /> <br/>        
         <input name="page" type="radio" value="login" /> 
-            Login page <br/>        
+            <fmt:message key="login_page" /> <br/>        
         <input name="page" type="radio" value="search" /> 
-            Search page         
+            <fmt:message key="search_page" />         
     </div>
     <div class="buttons-dlg">
         <input id="restoreSaveButton" type="submit" value="OK" />
-        <input id="restoreCancelButton" type="button" value="Cancel" />
+        <input id="restoreCancelButton" type="button" value="<fmt:message key="cancel" />" />
     </div>
   </form>
 </div>
-
 
 </body>
 </html>

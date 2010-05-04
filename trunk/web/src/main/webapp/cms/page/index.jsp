@@ -46,90 +46,94 @@
 <form id="pageForm">
 
 <div id="titleDiv" class="form-row">
-    <label>Title</label>
+    <label><fmt:message key="title" /></label>
     <input id="title" type="text" class="form-title" size="40" />
 </div>
 <div class="form-row">
-    <label>Friendly URL </label>
+    <label><fmt:message key="page.friendly_url" /></label>
     <span id="parentFriendlyUrl"></span>
     <input id="friendlyUrl" type="text" />
     <span id="friendlyUrlSpan"></span>
 </div>
 <div class="form-row">
-    <label>Template</label>
+    <label><fmt:message key="template" /></label>
     <select id="templates"></select>
 </div>
 <div class="form-row">
-    <label>Publication date</label>
+    <label><fmt:message key="page.publication_date" /></label>
     <input id="publishDate" type="text" class="datepicker" size="8"/>
 </div>
 <div class="form-row">
-    <label>Enable comments</label>
+    <label><fmt:message key="enable_comments" /></label>
     <input id="commentsEnabled" type="checkbox" />
 </div>
 <div class="form-row">
-    <label>Include in search results</label>
+    <label><fmt:message key="page.include_search" /></label>
     <input id="searchable" type="checkbox" />
 </div>
 <div class="form-row">
-    <label>Velocity processing</label>
+    <label><fmt:message key="page.velocity_processing" /></label>
     <input id="velocityProcessing" type="checkbox" />
 </div>
 <div class="form-row">
-    <label>Skip page post-processing</label>
+    <label><fmt:message key="page.skip_postprocessing" /></label>
     <input id="skipPostProcessing" type="checkbox" />
 </div>
 
 <div class="form-row">
-    <label>Page type</label>
+    <label><fmt:message key="page.type" /></label>
     <select id="pageType">
-        <option value="SIMPLE">Simple</option>
-        <option value="STRUCTURED">Structured</option>
+        <option value="SIMPLE"><fmt:message key="simple" /></option>
+        <option value="STRUCTURED"><fmt:message key="structured" /></option>
     </select>
 </div>
 
 <div id="structuredControls">
 <div class="form-row">
-    <label>Structure</label>
+    <label><fmt:message key="structure" /></label>
     <select id="structure"></select>
 </div>
 <div class="form-row">
-    <label>Structure template</label>
+    <label><fmt:message key="page.structure_template" /></label>
     <select id="structureTemplate"></select>
 </div>
 </div>
 
 <div class="form-row">
-    <a id="metadata" href="#">Metadata & Header</a>
+    <a id="metadata" href="#"><fmt:message key="page.metadata" /></a>
 </div>
 <div id="meta" style="display:none">
 <div class="form-row">
-    <label>META Keywords</label>
+    <label><fmt:message key="page.meta_keywords" /></label>
     <textarea id="keywords" rows="5" cols="80"></textarea>
 </div>
 <div class="form-row">
-    <label>META Description</label>
+    <label><fmt:message key="page.meta_description" /></label>
     <textarea id="description" rows="5" cols="80"></textarea>
 </div>
 <div class="form-row">
-    <label>HEAD content</label>
+    <label><fmt:message key="page.head_content" /></label>
     <textarea id="headHtml" rows="5" cols="80"></textarea>
 </div>
 </div>
 
 <div class="form-row">
-    <label>Tags</label>
-    <a id="addTag" href="#">Add tag</a>
+    <label><fmt:message key="tags" /></label>
+    <a id="addTag" href="#"><fmt:message key="add_tag" /></a>
     <span id="tags"></span>
 </div>
 
 <div class="buttons">
     <div id="approveOnPageSaveDiv" class="checkboxes">
-        <input id="approveOnPageSave" type="checkbox"> Approve on Save
+        <input id="approveOnPageSave" type="checkbox"> 
+            <fmt:message key="page.approve_save" />
     </div> 
-    <input id="pageSaveButton" type="submit" value="Save" />
-    <input id="pagePreview" type="button" value="Preview" />
-    <input id="pageCancelButton" type="button" value="Cancel" />
+    <input id="pageSaveButton" type="submit" 
+        value="<fmt:message key="save" />" />
+    <input id="pagePreview" type="button" 
+        value="<fmt:message key="preview" />" />
+    <input id="pageCancelButton" type="button" 
+        value="<fmt:message key="cancel" />" />
 </div>    
 
 </form>
@@ -140,7 +144,7 @@
 
 <%@ include file="versionDialog.jsp" %>
 
-<div id="tag-dialog" style="display:none" title="Select tag">
+<div id="tag-dialog" style="display:none" title="<fmt:message key="select_tag" />">
     <ul id="tagTree"></ul>
 </div>
 

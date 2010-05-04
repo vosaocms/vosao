@@ -41,9 +41,12 @@
 <div id="tab-1" class="commentsTab ui-tabs-panel ui-widget-content ui-corner-bottom">
     <div id="comments"> </div>
     <div class="buttons">
-        <input id="enableCommentsButton" type="button" value="Enable comments" />
-        <input id="disableCommentsButton" type="button" value="Disable comments" />
-        <input id="deleteCommentsButton" type="button" value="Delete comments" />
+        <input id="enableCommentsButton" type="button" 
+            value="<fmt:message key="enable_comments" />" />
+        <input id="disableCommentsButton" type="button" 
+            value="<fmt:message key="disable_comments" />" />
+        <input id="deleteCommentsButton" type="button" 
+            value="<fmt:message key="delete_comments" />" />
     </div>    
 </div>
 

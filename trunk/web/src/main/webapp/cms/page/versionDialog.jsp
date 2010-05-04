@@ -24,12 +24,14 @@
 <div id="version-dialog" style="display:none" title="Version title">
   <form id="versionForm">
     <div class="form-row">
-        <label>Version title</label>
+        <label><fmt:message key="page.version_title" /></label>
         <input id="version-title" type="text" />        
     </div>
     <div class="buttons-dlg">
-        <input id="versionSaveButton" type="submit" value="Add" />
-        <input id="versionCancelButton" type="button" value="Cancel" />
+        <input id="versionSaveButton" type="submit" 
+            value="<fmt:message key="add" />" />
+        <input id="versionCancelButton" type="button" 
+            value="<fmt:message key="cancel" />" />
     </div>
   </form>
 </div>

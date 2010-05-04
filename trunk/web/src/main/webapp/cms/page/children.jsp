@@ -41,8 +41,8 @@
 <div id="tab-1" class="childrenTab ui-tabs-panel ui-widget-content ui-corner-bottom">
     <div id="children"> </div>
     <div class="buttons">
-        <input id="addChildButton" type="button" value="Add child page" />
-        <input id="deleteChildButton" type="button" value="Delete pages" />
+        <input id="addChildButton" type="button" value="<fmt:message key="add_child_page" />" />
+        <input id="deleteChildButton" type="button" value="<fmt:message key="delete_pages" />" />
     </div>    
 </div>
 

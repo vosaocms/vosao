@@ -25,13 +25,13 @@
     <div class="vertical-buttons-panel"> </div>      
     <a id="addVersionLink" class="button ui-state-default ui-corner-all" 
         href="#">
-        <span class="ui-icon ui-icon-plus"></span> Add version
+        <span class="ui-icon ui-icon-plus"></span> <fmt:message key="add_version" />
     </a>
     <div id="auditData">
-        <div>Page state: <span id="pageState"> </span></div>
-        <div>User created: <span id="pageCreateUser"> </span></div>
-        <div>Creation date: <span id="pageCreateDate"> </span></div>
-        <div>User modified: <span id="pageModUser"> </span></div>
-        <div>Modify date: <span id="pageModDate"> </span></div>
+        <div><fmt:message key="page.state" />: <span id="pageState"> </span></div>
+        <div><fmt:message key="page.user_created" />: <span id="pageCreateUser"> </span></div>
+        <div><fmt:message key="creation_date" />: <span id="pageCreateDate"> </span></div>
+        <div><fmt:message key="page.user_modified" />: <span id="pageModUser"> </span></div>
+        <div><fmt:message key="modify_date" />: <span id="pageModDate"> </span></div>
     </div>
 </div>

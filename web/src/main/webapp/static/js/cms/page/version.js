@@ -72,7 +72,7 @@ function loadVersions() {
 }
 
 function onVersionDelete(version) {
-	if (confirm('Are you sure?')) {
+	if (confirm(messages.are_you_sure)) {
 		var delPage = pages[version];
 		Vosao.jsonrpc.pageService.deletePageVersion(function(r) {
 			if (version == String(page.version)) {
@@ -106,7 +106,7 @@ function onVersionTitleSave() {
 		if (r.result == 'success') {
 			pageId = r.message;
 			loadData();
-			Vosao.info('Version was successfully added.');
+			Vosao.info(messages['page.version_success_add']);
 		}
 		else {
 			Vosao.showServiceMessages(r);
@@ -126,7 +126,8 @@ function onVersionSelect(version) {
 }
 
 function showAuditInfo() {
-	$('#pageState').html(page.stateString == 'EDIT' ? 'Edit' : 'Approved');
+	$('#pageState').html(page.stateString == 'EDIT' ? 
+			messages.edit : messages.approved);
 	$('#pageCreateDate').html(page.createDateString);
 	$('#pageModDate').html(page.modDateString);
 	$('#pageCreateUser').html(page.createUserEmail);

@@ -27,4 +27,4 @@
   <fmt:setLocale value="${param['locale']}" scope="session" />
 </c:if>
 
-<fmt:setBundle basename="org.vosao.i18n.messages"/>
+<fmt:setBundle basename="org.vosao.resources.messages"/>

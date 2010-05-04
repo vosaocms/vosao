@@ -141,7 +141,8 @@ function initPageForm() {
 			this.checked = page.skipPostProcessing;
 		});
 		$('#templates').val(page.template);
-		$('#pageState').html(page.stateString == 'EDIT' ? 'Edit' : 'Approved');
+		$('#pageState').html(page.stateString == 'EDIT' ? 
+				messages.edit : messages.approved);
 		$('#pageCreateDate').html(page.createDateString);
 		$('#pageModDate').html(page.modDateString);
 		$('#pageCreateUser').html(page.createUserEmail);
@@ -170,7 +171,7 @@ function initPageForm() {
 		$('#searchable').each(function() {
 			this.checked = true;
 		});
-		$('#pageState').html('Edit');
+		$('#pageState').html(messages.edit);
 		$('#pageCreateUser').html('');
 		$('#pageCreateDate').html('');
 		$('#pageModUser').html('');
@@ -214,7 +215,7 @@ function onPageUpdate() {
 				location.href = '/cms/pages.jsp';
 			}
 			pageId = r.message;
-			Vosao.info("Page was successfully saved.");
+			Vosao.info(messages['page.success_save']);
 			location.href = '/cms/page/content.jsp?id=' + pageId;
 		} else {
 			Vosao.showServiceMessages(r);

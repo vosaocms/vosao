@@ -28,22 +28,22 @@
 %>
 <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
     <li class="pageTab ui-corner-top ui-state-default">
-        <a href="index.jsp<%= query %>">Page</a>
+        <a href="index.jsp<%= query %>"><fmt:message key="page" /></a>
     </li>
     <li class="contentTab ui-corner-top ui-state-default">
-        <a href="content.jsp<%= query %>">Content</a>
+        <a href="content.jsp<%= query %>"><fmt:message key="content" /></a>
     </li>
     <li class="childrenTab ui-corner-top ui-state-default">
-        <a href="children.jsp<%= query %>">Children pages</a>
+        <a href="children.jsp<%= query %>"><fmt:message key="page.children_pages" /></a>
     </li>
     <li class="commentsTab ui-corner-top ui-state-default">
-        <a href="comments.jsp<%= query %>">Comments</a>
+        <a href="comments.jsp<%= query %>"><fmt:message key="comments" /></a>
     </li>
     <li class="securityTab ui-corner-top ui-state-default">
-        <a href="security.jsp<%= query %>">Security</a>
+        <a href="security.jsp<%= query %>"><fmt:message key="security" /></a>
     </li>
     <li class="securityTab ui-corner-top ui-state-default">
-        <a id="resources" href="#">Resources</a>
+        <a id="resources" href="#"><fmt:message key="resources" /></a>
     </li>
 </ul>
 

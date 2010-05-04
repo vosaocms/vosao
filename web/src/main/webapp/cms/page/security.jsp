@@ -41,8 +41,10 @@
 <div id="tab-1" class=" securityTab ui-tabs-panel ui-widget-content ui-corner-bottom">
     <div id="permissions"> </div>
     <div class="buttons">
-        <input id="addPermissionButton" type="button" value="Add permission" />
-        <input id="deletePermissionButton" type="button" value="Delete permission" />
+        <input id="addPermissionButton" type="button" 
+            value="<fmt:message key="add_permission" />" />
+        <input id="deletePermissionButton" type="button" 
+            value="<fmt:message key="delete_permission" />" />
     </div>    
 </div>
 
@@ -50,31 +52,33 @@
 
 <%@ include file="versionDialog.jsp" %>
 
-<div id="permission-dialog" style="display:none" title="Permission details">
+<div id="permission-dialog" style="display:none" title="<fmt:message key="permission_details" />">
   <form id="permissionForm">
     <div class="form-row">
-        <label>Group</label>
+        <label><fmt:message key="group" /></label>
         <select id="groupSelect"></select>
         <span id="groupName"></span>        
     </div>
     <div id="permissionList" class="form-row">
         <fieldset>
-            <legend>Permission</legend>
-            <input type="radio" name="permission" value="DENIED"/> Denied <br />
-            <input type="radio" name="permission" value="READ" /> Read <br />
-            <input type="radio" name="permission" value="WRITE" /> Read, Write <br />
-            <input type="radio" name="permission" value="PUBLISH" /> Read, Write, Publish <br />
-            <input type="radio" name="permission" value="ADMIN" /> Read, Write, Publish, Grant permissions <br />
+            <legend><fmt:message key="permission" /></legend>
+            <input type="radio" name="permission" value="DENIED"/> <fmt:message key="denied" /> <br />
+            <input type="radio" name="permission" value="READ" /> <fmt:message key="read" /> <br />
+            <input type="radio" name="permission" value="WRITE" /> <fmt:message key="read_write" /> <br />
+            <input type="radio" name="permission" value="PUBLISH" /> <fmt:message key="read_write_publish" /> <br />
+            <input type="radio" name="permission" value="ADMIN" /> <fmt:message key="read_write_publish_grant" /> <br />
         </fieldset>        
     </div>
     <div class="form-row">
-        <label>All languages</label>
+        <label><fmt:message key="page.all_languages" /></label>
         <input id="allLanguages" type="checkbox" checked="checked" />
     </div>    
     <div id ="permLanguages" class="form-row" style="display:none"> </div>
     <div class="buttons-dlg">
-        <input id="permissionSaveButton" type="submit" value="Save" />
-        <input id="permissionCancelButton" type="button" value="Cancel" />
+        <input id="permissionSaveButton" type="submit" 
+            value="<fmt:message key="save" />" />
+        <input id="permissionCancelButton" type="button" 
+            value="<fmt:message key="cancel" />" />
     </div>
   </form>
 </div>

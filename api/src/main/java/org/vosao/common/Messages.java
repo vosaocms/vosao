@@ -42,7 +42,7 @@ public class Messages {
 		"javax.servlet.jsp.jstl.fmt.locale.session";
 
 	private static final String BUNDLE_BASE_NAME = 
-		"org.vosao.i18n.messages";
+		"org.vosao.resources.messages";
 	
 	private static final Locale[] supportedLocales = {
 		Locale.ENGLISH, 

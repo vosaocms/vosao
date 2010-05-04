@@ -24,31 +24,25 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>Plugins</title>
+    <title><fmt:message key="plugins" /></title>
 </head>
 <body>
 
 <div id="main-panel">
     <div>
         <img src="/static/images/config.png" />
-        <a href="/cms/plugins/config.jsp">Plugins Configuration</a>
-        <p>You can install and configure existing plugins.
-        </p>
+        <a href="/cms/plugins/config.jsp"><fmt:message key="plugins.config" /></a>
+        <p><fmt:message key="plugins.config_info" /></p>
     </div>
     <div>
         <img src="/static/images/form.png" />
-        <a href="/cms/plugins/forms.jsp">Forms</a>
-        <p>Forms plugin will help you to create different kinds of forms. 
-           User entered data will be emailed to specified address.
-        </p>
+        <a href="/cms/plugins/forms.jsp"><fmt:message key="forms" /></a>
+        <p><fmt:message key="plugins.forms_info" /></p>
     </div>
     <div>
         <img src="/static/images/seo_urls.png" />
-        <a href="/cms/plugins/seo-urls.jsp">SEO Urls</a>
-        <p>This plugin will help you to save many spent for SEO advertising
-           and indexing of your previous site. Here you can enter a list of
-           indexed urls and list of corresponding Vosao site urls.
-        </p>
+        <a href="/cms/plugins/seo-urls.jsp"><fmt:message key="plugins.seo_urls" /></a>
+        <p><fmt:message key="plugins.seo_urls_info" /></p>
     </div>
 </div>
 

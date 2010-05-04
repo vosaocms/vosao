@@ -24,7 +24,7 @@ var editMode = formId != '';
 var field = null;
 var fields = null;
 var test = null;
-var messages = {};
+var regexMessages = {};
 
 $(function() {
 	$("#tabs").tabs();
@@ -72,8 +72,9 @@ function loadFields() {
 }
 
 function showFields() {
-	var h = '<table class="form-table"><tr><th></th><th>Title</th>\
-		<th>Name</th><th>Type</th><th></th></tr>';
+	var h = '<table class="form-table"><tr><th></th><th>' + messages.title 
+		+ '</th><th>' + messages.name + '</th><th>' + messages.type 
+		+ '</th><th></th></tr>';
 	$.each(fields, function(i, field) {
 		h += 
 			'<tr>\
@@ -181,7 +182,7 @@ function fieldDialogShowInputs() {
 
 function fieldDialogInit() {
 	if (field == null) {
-		messages = {};
+		regexMessages = {};
 		$('input[name=field.name]').val('');
 		$('input[name=field.title]').val('');
 		$('select[name=field.fieldType]').val('TEXT');
@@ -231,18 +232,18 @@ function createFieldVO() {
 function validateField(fieldVO) {
 	var errors = new Array();
 	if (fieldVO.map.name == '') {
-		errors.push('Name is empty');
+		errors.push(messages.name_is_empty);
 	}
 	if (fieldVO.map.title == '') {
-		errors.push('Title is empty');
+		errors.push(messages.title_is_empty);
 	}
 	var height = Number(fieldVO.map.height);
 	if (fieldVO.map.fieldType == 'TEXT' && height <= 0) {
-		errors.push('Height can\'t be less or zero');
+		errors.push(messages['form.height_zero_error']);
 	}
 	var width = Number(fieldVO.map.width);
 	if (fieldVO.map.fieldType == 'TEXT' && width <= 0) {
-		errors.push('Width can\'t be less or zero');
+		errors.push(messages['form.width_zero_error']);
 	}
 	return errors;
 }
@@ -279,12 +280,13 @@ function onDeleteFields() {
 		ids.push(this.value);
 	});
 	if (ids.length == 0) {
-		Vosao.info('Nothing selected');
+		Vosao.info(messages.nothing_selected);
 		return;
 	}
-	if (confirm('Are you sure?')) {
+	if (confirm(messages.are_you_sure)) {
 		Vosao.jsonrpc.fieldService.remove(function() {
-			Vosao.info(ids.length + ' fields was successfully deleted.');
+			Vosao.info(ids.length + ' ' + messages['form.success_fields_delete'] 
+			    + '.');
 			loadFields();
 		}, Vosao.javaList(ids));
 	}
@@ -348,7 +350,7 @@ function onUpdate() {
 				formId = r.message;
 				editMode = true;
 				loadData();
-				Vosao.info('Form was successfully created.');
+				Vosao.info(messages['form.success_create']);
 			}
 			else {
 				location.href = '/cms/plugins/forms.jsp';
@@ -413,24 +415,24 @@ function swapFields(i, j) {
 }
 
 function getRegexMessage() {
-	if (messages[$('#language').val()]) {
-		return messages[$('#language').val()];
+	if (regexMessages[$('#language').val()]) {
+		return regexMessages[$('#language').val()];
 	}
 	return '';
 }
 
 function onRegexMessageChange() {
-	messages[$('#language').val()] = $('input[name=field.regexMessage]').val();
+	regexMessages[$('#language').val()] = $('input[name=field.regexMessage]').val();
 }
 
 function onLanguageChange() {
-	$('input[name=field.regexMessage]').val(messages[$('#language').val()]);
+	$('input[name=field.regexMessage]').val(regexMessages[$('#language').val()]);
 }
 
 function saveRegexMessage() {
 	var r = '';
 	var i = 0;
-	$.each(messages, function(code, value) {
+	$.each(regexMessages, function(code, value) {
 		r += (i++ == 0 ? '' : '::') + code + value;
 	});
 	return r;
@@ -441,10 +443,10 @@ function loadRegexMessage() {
 		$.each(field.regexMessage.split('::'), function(i, value) {
 			var code = value.substr(0,2);
 			var message = value.substr(2);
-			messages[code] = message;
+			regexMessages[code] = message;
 		});
 	}
 	else {
-		messages = {};
+		regexMessages = {};
 	}
 }

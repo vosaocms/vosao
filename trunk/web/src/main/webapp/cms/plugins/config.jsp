@@ -24,7 +24,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>Forms</title>
+    <title><fmt:message key="plugins" /></title>
     <script src="/static/js/jquery.form.js" language="javascript"></script>
     <script src="/static/js/cms/plugins/config.js" type="text/javascript"></script>    
 </head>
@@ -32,31 +32,31 @@
 
 <div id="tabs">
 <ul>
-    <li><a href="#tab-1">Plugins</a></li>
+    <li><a href="#tab-1"><fmt:message key="plugins" /></a></li>
 </ul>
 
 <div id="tab-1">
     <div id="plugins"></div>
     <div class="buttons">
-        <input id="installButton" type="button" value="Install" />
+        <input id="installButton" type="button" value="<fmt:message key="install" />" />
     </div>
 </div>
 
 </div>
 
-<div id="import-dialog" title="Import site" style="display:none">
+<div id="import-dialog" title="<fmt:message key="install" />" style="display:none">
 <form id="upload" action="/cms/upload" method="post" enctype="multipart/form-data">
-    File upload:
+    <fmt:message key="file_upload" />:
     <input type="hidden" name="fileType" value="plugin" />
     <input type="file" name="uploadFile" />
     <div class="buttons-dlg">
-        <input type="submit" value="Send" />
-        <input id="importCancelButton" type="button" value="Cancel" />
+        <input type="submit" value="<fmt:message key="send" />" />
+        <input id="importCancelButton" type="button" value="<fmt:message key="cancel" />" />
     </div>    
 </form>
 </div>
 
-<div id="afterUpload-dialog" style="display:none" title="Status window">
+<div id="afterUpload-dialog" style="display:none" title="<fmt:message key="status_window" />">
     <p class="message"></p>
     <div class="buttons-dlg">
         <input id="okButton" type="button" value="OK" />

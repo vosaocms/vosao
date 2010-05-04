@@ -24,7 +24,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <title>Form</title>
+    <title><fmt:message key="form" /></title>
     <link rel="stylesheet" href="/static/css/form.css" type="text/css" />
     <script type="text/javascript">
         var formId = '<c:out value="${param.id}"/>';
@@ -35,48 +35,48 @@
 
 <div id="tabs">
 <ul>
-    <li><a href="#tab-1">Form</a></li>
-    <li class="fieldsTab"><a href="#tab-2">Fields</a></li>
+    <li><a href="#tab-1"><fmt:message key="form" /></a></li>
+    <li class="fieldsTab"><a href="#tab-2"><fmt:message key="fields" /></a></li>
 </ul>
 
 <div id="tab-1">
 <form id="form">
 <div class="form-row">
-    <label>Title</label>
+    <label><fmt:message key="title" /></label>
     <input id="title" type="text" />
 </div>
 <div class="form-row">
-    <label>Unique name</label>
+    <label><fmt:message key="form.unique_name" /></label>
     <input id="name" type="text" />
 </div>
 <div class="form-row">
-    <label>Email address (or coma separated list)</label>
+    <label><fmt:message key="form.email" /></label>
     <input id="email" type="text" />
 </div>
 <div class="form-row">
-    <label>Letter subject</label>
+    <label><fmt:message key="letter_subject" /></label>
     <input id="letterSubject" type="text" />
 </div>
 <div class="form-row">
-    <label>"Send" button title</label>
+    <label><fmt:message key="form.send_title" /></label>
     <input id="sendButtonTitle" type="text"/>
 </div>
 <div class="form-row">
-    <label>"Reset" button title</label>
+    <label><fmt:message key="form.reset_title" /></label>
     <input id="resetButtonTitle" type="text"/>
 </div>
 <div class="form-row">
-    <label>Show "Reset" button</label>
+    <label><fmt:message key="form.show_reset" /></label>
     <input id="showResetButton" type="checkbox"/>
 </div>
 <div class="form-row">
-    <label>Enable captcha</label>
+    <label><fmt:message key="enable_captcha" /></label>
     <input id="enableCaptcha" type="checkbox"/>
 </div>
 
 <div class="buttons">
-    <input id="saveButton" type="submit" value="Save" />
-    <input id="cancelButton" type="button" value="Cancel" />
+    <input id="saveButton" type="submit" value="<fmt:message key="save" />" />
+    <input id="cancelButton" type="button" value="<fmt:message key="cancel" />" />
 </div>
 </form>
 </div>
@@ -84,26 +84,26 @@
 <div id="tab-2" class="fieldsTab">
     <div id="fieldsTable"> </div>
     <div class="buttons">
-        <input id="addFieldButton" type="button" value="Add field" />
-        <input id="deleteFieldButton" type="button" value="Delete fields" />
+        <input id="addFieldButton" type="button" value="<fmt:message key="add_field" />" />
+        <input id="deleteFieldButton" type="button" value="<fmt:message key="delete_fields" />" />
     </div>    
 </div>
 
 </div>
 
-<div id="field-dialog" style="display:none" title="Field details">
+<div id="field-dialog" style="display:none" title="<fmt:message key="form.field_details" />">
 <form id="fieldForm">
     <div id="field-messages" class="messages"> </div>
     <div class="form-row">
-        <label>Title</label>
+        <label><fmt:message key="title" /></label>
         <input type="text" name="field.title" />
     </div>
     <div class="form-row">
-        <label>Unique name</label>
+        <label><fmt:message key="form.unique_name" /></label>
         <input type="text" name="field.name" />
     </div>
     <div class="form-row">
-        <label>Field type</label>
+        <label><fmt:message key="form.field_type" /></label>
         <select id="fieldType" name="field.fieldType">
             <option value="TEXT">Text</option>
             <option value="CHECKBOX">Checkbox</option>
@@ -114,40 +114,40 @@
         </select>
     </div>
     <div class="form-row" id="field-width">
-        <label>Width in chars</label>
+        <label><fmt:message key="form.width_chars" /></label>
         <input type="text" name="field.width" />
     </div>
     <div class="form-row" id="field-height">
-        <label>Height in chars</label>
+        <label><fmt:message key="form.height_chars" /></label>
         <input type="text" name="field.height" />
     </div>
     <div class="form-row">
-        <label>Mandatory</label>
+        <label><fmt:message key="mandatory" /></label>
         <input type="checkbox" name="field.mandatory" />
     </div>
     <div class="form-row" id="field-values">
-        <label>Values</label>
+        <label><fmt:message key="values" /></label>
         <textarea name="field.values"></textarea>
     </div>
     <div class="form-row" id="field-defaultValue">
-        <label>Default value</label>
+        <label><fmt:message key="default_value" /></label>
         <input type="text" name="field.defaultValue"/>
     </div>
     <div id="regexDiv">
     <div class="form-row" id="field-defaultValue">
-        <label>Regex validation code</label>
+        <label><fmt:message key="form.regex_code" /></label>
         <input type="text" name="field.regex"/>
     </div>
     <div class="form-row" id="field-defaultValue">
-        <label>Regex error message</label>
+        <label><fmt:message key="form.regex_message" /></label>
         <select id="language"></select> 
         <input type="text" name="field.regexMessage"/>
     </div>
     </div>
     <div class="buttons-dlg">
-        <input id="saveAndAddButton" type="submit" value="Save and Add" />
-        <input id="fieldSaveButton" type="button" value="Save" />
-        <input id="fieldCancelButton" type="button" value="Cancel" />
+        <input id="saveAndAddButton" type="submit" value="<fmt:message key="save_add" />" />
+        <input id="fieldSaveButton" type="button" value="<fmt:message key="save" />" />
+        <input id="fieldCancelButton" type="button" value="<fmt:message key="cancel" />" />
     </div>
 </form>
 </div>

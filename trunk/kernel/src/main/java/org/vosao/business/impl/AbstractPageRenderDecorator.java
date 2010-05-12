@@ -30,6 +30,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.PageRenderDecorator;
+import org.vosao.common.Messages;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
 import org.vosao.global.SystemService;
@@ -176,8 +177,8 @@ public abstract class AbstractPageRenderDecorator implements PageRenderDecorator
 			String commentsTemplate = getDao().getConfigDao().getConfig()
 				.getCommentsTemplate();
 			if (StringUtils.isEmpty(commentsTemplate)) {
-				logger.error("comments template is empty");
-				return "comments template is empty";
+				logger.error(Messages.get("config.comments_template_is_empty"));
+				return Messages.get("config.comments_template_is_empty");
 			}
 			VelocityContext context = getPageBusiness().createContext(
 					getLanguageCode());

@@ -23,11 +23,17 @@ package org.vosao.business.impl;
 
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.PageBusiness;
+import org.vosao.common.Messages;
 import org.vosao.dao.Dao;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.global.SystemService;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class SimplePageRenderDecorator extends AbstractPageRenderDecorator {
 
 	public SimplePageRenderDecorator(PageEntity page,	String languageCode, 
@@ -47,8 +53,8 @@ public class SimplePageRenderDecorator extends AbstractPageRenderDecorator {
 		ContentEntity contentEntity = getPageBusiness().getPageContent(
 				getPage(), getLanguageCode());
 		if (contentEntity == null) {
-			String msg = "Content not found. " + getFriendlyURL() + " " 
-				+ getLanguageCode();
+			String msg = Messages.get("content_not_found") + " " 
+					+ getFriendlyURL() + " " + getLanguageCode();
 			logger.error(msg);
 			setContent(msg);
 			return;

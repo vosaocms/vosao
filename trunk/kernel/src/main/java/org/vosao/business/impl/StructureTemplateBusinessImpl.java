@@ -24,11 +24,9 @@ package org.vosao.business.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.vosao.business.StructureTemplateBusiness;
+import org.vosao.common.Messages;
 import org.vosao.entity.PageEntity;
-import org.vosao.entity.StructureEntity;
 import org.vosao.entity.StructureTemplateEntity;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
@@ -39,9 +37,6 @@ import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 public class StructureTemplateBusinessImpl extends AbstractBusinessImpl 
 	implements StructureTemplateBusiness {
 
-	private static final Log logger = LogFactory.getLog(
-			StructureTemplateBusinessImpl.class);
-	
 	@Override
 	public List<String> validateBeforeUpdate(
 			final StructureTemplateEntity entity) {
@@ -50,16 +45,17 @@ public class StructureTemplateBusinessImpl extends AbstractBusinessImpl
 				.getByTitle(entity.getTitle());
 		if (entity.getId() == null) {
 			if (foundStructure != null) {
-				errors.add("Structure template with such a title already exists");
+				errors.add(Messages.get("structureTemplate.already_exists"));
 			}
 		}
 		else {
-			if (foundStructure != null && !foundStructure.getId().equals(entity.getId())) {
-				errors.add("Structure template with such a title already exists");
+			if (foundStructure != null 
+				&& !foundStructure.getId().equals(entity.getId())) {
+				errors.add(Messages.get("structureTemplate.already_exists"));
 			}
 		}
 		if (StringUtil.isEmpty(entity.getTitle())) {
-			errors.add("Title is empty");
+			errors.add(Messages.get("title_is_empty"));
 		}
 		return errors;
 	}
@@ -76,8 +72,8 @@ public class StructureTemplateBusinessImpl extends AbstractBusinessImpl
 			List<PageEntity> pages = getDao().getPageDao()
 					.selectByStructureTemplate(id);
 			if (pages.size() > 0) {
-				result.add("Structure template " + entity.getTitle() 
-						+ " has references " + pages.get(0).getFriendlyURL());
+				result.add(Messages.get("structureTemplate.has_references", 
+						entity.getTitle(), pages.get(0).getFriendlyURL()));
 			}
 			else {
 				getDao().getStructureTemplateDao().remove(id);

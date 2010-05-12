@@ -54,6 +54,7 @@ import org.vosao.business.impl.pagefilter.HeadBeginPageFilter;
 import org.vosao.business.impl.pagefilter.HeadEndPageFilter;
 import org.vosao.business.impl.pagefilter.HtmlEndPageFilter;
 import org.vosao.business.impl.pagefilter.PageFilter;
+import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.ContentEntity;
@@ -226,23 +227,23 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			PageEntity myPage = getDao().getPageDao().getByUrl(
 					page.getFriendlyURL());
 			if (myPage != null) {
-				errors.add("Page with such friendly URL already exists");
+				errors.add(Messages.get("page.already_exists"));
 			}
 		}
 		if (StringUtils.isEmpty(page.getFriendlyURL())) {
-			errors.add("Friendly URL is empty");
+			errors.add(Messages.get("url_is_empty"));
 		}
 		else {
 			if (SiteFilter.isSkipUrl(page.getFriendlyURL())) {
-				errors.add("Entered url is reserved for internal use.");
+				errors.add(Messages.get("url_reserved"));
 			}
 		}
 		if (StringUtils.isEmpty(page.getPageFriendlyURL())
 			&& !page.isRoot()) {
-			errors.add("Friendly URL is empty");
+			errors.add(Messages.get("url_is_empty"));
 		}
 		if (StringUtils.isEmpty(page.getTitle())) {
-			errors.add("Title is empty");
+			errors.add(Messages.get("title_is_empty"));
 		}
 		return errors;
 	}

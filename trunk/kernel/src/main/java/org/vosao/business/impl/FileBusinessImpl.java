@@ -25,11 +25,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.vosao.business.FileBusiness;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
@@ -42,15 +41,13 @@ import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 public class FileBusinessImpl extends AbstractBusinessImpl 
 	implements FileBusiness {
 
-	private static final Log logger = LogFactory.getLog(FileBusinessImpl.class);
-	
 	private FolderBusiness folderBusiness;
 	
 	@Override
 	public List<String> validateBeforeUpdate(final FileEntity entity) {
 		List<String> errors = new ArrayList<String>();
 		if (StringUtil.isEmpty(entity.getFilename())) {
-			errors.add("Filename is empty");
+			errors.add(Messages.get("filename_is_empty"));
 		}
 		else {
 			FileEntity file = getDao().getFileDao().getByName(
@@ -58,11 +55,11 @@ public class FileBusinessImpl extends AbstractBusinessImpl
 			if ((entity.isNew() && file != null)
 				||
 				(!entity.isNew()) && !file.getId().equals(entity.getId()) ) {
-				errors.add("File with such name already exists in this folder");
+				errors.add(Messages.get("file_already_exists"));
 			}
 		}
 		if (StringUtil.isEmpty(entity.getTitle())) {
-			errors.add("Title is empty");
+			errors.add(Messages.get("title_is_empty"));
 		}
 		return errors;
 	}

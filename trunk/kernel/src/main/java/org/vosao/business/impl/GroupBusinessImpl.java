@@ -24,9 +24,8 @@ package org.vosao.business.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.vosao.business.GroupBusiness;
+import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.GroupEntity;
 import org.vosao.entity.UserEntity;
@@ -40,8 +39,6 @@ import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 public class GroupBusinessImpl extends AbstractBusinessImpl 
 	implements GroupBusiness {
 
-	private static final Log logger = LogFactory.getLog(GroupBusinessImpl.class);
-	
 	@Override
 	public List<String> validateBeforeUpdate(final GroupEntity group) {
 		List<String> errors = new ArrayList<String>();
@@ -49,16 +46,16 @@ public class GroupBusinessImpl extends AbstractBusinessImpl
 				group.getName());
 		if (group.getId() == null) {
 			if (foundGroup != null) {
-				errors.add("Group with such name already exists");
+				errors.add(Messages.get("group_already_exists"));
 			}
 		}
 		else {
 			if (foundGroup != null && !foundGroup.getId().equals(group.getId())) {
-				errors.add("Group with such name already exists");
+				errors.add(Messages.get("group_already_exists"));
 			}
 		}
 		if (StringUtil.isEmpty(group.getName())) {
-			errors.add("Name is empty");
+			errors.add(Messages.get("name_is_empty"));
 		}
 		return errors;
 	}

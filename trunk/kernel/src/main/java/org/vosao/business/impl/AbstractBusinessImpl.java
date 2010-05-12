@@ -29,6 +29,11 @@ import org.vosao.business.AbstractBusiness;
 import org.vosao.dao.Dao;
 import org.vosao.global.SystemService;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public abstract class AbstractBusinessImpl implements AbstractBusiness,
 		Serializable {
 

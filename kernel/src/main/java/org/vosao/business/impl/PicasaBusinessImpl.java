@@ -27,8 +27,8 @@ import java.net.URL;
 import java.util.List;
 
 import org.vosao.business.PicasaBusiness;
+import org.vosao.common.Messages;
 import org.vosao.entity.ConfigEntity;
-import org.vosao.servlet.UploadException;
 import org.vosao.utils.FolderUtil;
 import org.vosao.utils.MimeType;
 
@@ -142,7 +142,8 @@ public class PicasaBusinessImpl extends AbstractBusinessImpl
 			throws MalformedURLException, IOException, ServiceException {
 		AlbumEntry album = findAlbum(albumId);
 		if (album == null) {
-			throw new IllegalArgumentException("Album not found: " + albumId);
+			throw new IllegalArgumentException(Messages.get("album_not_found", 
+					albumId));
 		}
 		PhotoEntry photo = new PhotoEntry();
 		photo.setTitle(new PlainTextConstruct(name));

@@ -24,18 +24,20 @@ package org.vosao.business.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.vosao.business.UserBusiness;
+import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.UserEntity;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class UserBusinessImpl extends AbstractBusinessImpl 
 	implements UserBusiness {
-
-	private static final Log logger = LogFactory.getLog(UserBusinessImpl.class);
 	
 	@Override
 	public List<String> validateBeforeUpdate(final UserEntity user) {
@@ -43,16 +45,16 @@ public class UserBusinessImpl extends AbstractBusinessImpl
 		UserEntity foundUser = getDao().getUserDao().getByEmail(user.getEmail());
 		if (user.getId() == null) {
 			if (foundUser != null) {
-				errors.add("User with such email already exists");
+				errors.add(Messages.get("user_already_exists"));
 			}
 		}
 		else {
 			if (foundUser != null && !foundUser.getId().equals(user.getId())) {
-				errors.add("User with such email already exists");
+				errors.add(Messages.get("user_already_exists"));
 			}
 		}
 		if (StringUtil.isEmpty(user.getEmail())) {
-			errors.add("Email is empty");
+			errors.add(Messages.get("email_is_empty"));
 		}
 		return errors;
 	}

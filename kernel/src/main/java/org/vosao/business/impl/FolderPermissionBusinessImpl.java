@@ -28,6 +28,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.ContentPermissionBusiness;
 import org.vosao.business.FolderPermissionBusiness;
+import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.FolderEntity;
@@ -42,9 +43,6 @@ import org.vosao.enums.FolderPermissionType;
  */
 public class FolderPermissionBusinessImpl extends AbstractBusinessImpl 
 	implements FolderPermissionBusiness {
-
-	private static final Log logger = LogFactory.getLog(
-			FolderPermissionBusinessImpl.class);
 
 	private static final String PAGE = "/page";
 	
@@ -137,13 +135,13 @@ public class FolderPermissionBusinessImpl extends AbstractBusinessImpl
 	public List<String> validateBeforeUpdate(FolderPermissionEntity perm) {
 		List<String> errors = new ArrayList<String>();
 		if (perm.getGroupId() == null) {
-			errors.add("Group is empty");
+			errors.add(Messages.get("group_is_empty"));
 		}
 		if (perm.getFolderId() == null) {
-			errors.add("Folder is empty");
+			errors.add(Messages.get("folder_is_empty"));
 		}
 		if (perm.getPermission() == null) {
-			errors.add("Permission is empty");
+			errors.add(Messages.get("permission_is_empty"));
 		}
 		return errors;
 	}

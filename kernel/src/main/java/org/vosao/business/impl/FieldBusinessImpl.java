@@ -25,9 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.vosao.business.FieldBusiness;
+import org.vosao.common.Messages;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormEntity;
 import org.vosao.enums.FieldType;
@@ -38,29 +37,27 @@ import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 public class FieldBusinessImpl extends AbstractBusinessImpl 
 	implements FieldBusiness {
 
-	private static final Log logger = LogFactory.getLog(FieldBusinessImpl.class);
-	
 	@Override
 	public List<String> validateBeforeUpdate(FieldEntity field) {
 		List<String> errors = new ArrayList<String>();
 		FormEntity form = getDao().getFormDao().getById(field.getFormId());
 		if (form == null) {
-			errors.add("Form id is wrong " + field.getFormId());
+			errors.add(Messages.get("form_not_found", field.getFormId()));
 		}
 		else {		
 			if (field.getId() == null) {
 				FieldEntity myField = getDao().getFieldDao().getByName(
 						form, field.getName());
 				if (myField != null) {
-					errors.add("Field with such name already exists");
+					errors.add(Messages.get("form.field_already_exists"));
 				}
 			}
 		}
 		if (StringUtil.isEmpty(field.getName())) {
-			errors.add("Name is empty");
+			errors.add(Messages.get("name_is_empty"));
 		}
 		if (StringUtil.isEmpty(field.getTitle())) {
-			errors.add("Title is empty");
+			errors.add(Messages.get("title_is_empty"));
 		}
 		return errors;
 	}

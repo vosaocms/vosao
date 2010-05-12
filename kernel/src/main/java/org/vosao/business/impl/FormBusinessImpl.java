@@ -26,10 +26,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.FormBusiness;
+import org.vosao.common.Messages;
 import org.vosao.common.UploadException;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FieldEntity;
@@ -40,28 +39,31 @@ import org.vosao.utils.FileItem;
 import org.vosao.utils.ParamUtil;
 import org.vosao.utils.StrUtil;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class FormBusinessImpl extends AbstractBusinessImpl 
 	implements FormBusiness {
 
-	private static final Log logger = LogFactory.getLog(FormBusinessImpl.class);
-	
 	@Override
 	public List<String> validateBeforeUpdate(final FormEntity entity) {
 		List<String> errors = new ArrayList<String>();
 		if (entity.getId() == null) {
 			FormEntity myForm = getDao().getFormDao().getByName(entity.getName());
 			if (myForm != null) {
-				errors.add("Form with such name already exists");
+				errors.add(Messages.get("form.already_exists"));
 			}
 		}
 		if (StringUtils.isEmpty(entity.getName())) {
-			errors.add("Name is empty");
+			errors.add(Messages.get("name_is_empty"));
 		}
 		if (StringUtils.isEmpty(entity.getTitle())) {
-			errors.add("Title is empty");
+			errors.add(Messages.get("title_is_empty"));
 		}
 		if (StringUtils.isEmpty(entity.getEmail())) {
-			errors.add("Email is empty");
+			errors.add(Messages.get("email_is_empty"));
 		}
 		return errors;
 	}

@@ -21,7 +21,6 @@
 
 package org.vosao.business.impl;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +30,7 @@ import org.apache.commons.lang.StringUtils;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.FolderPermissionBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.FolderEntity;
 import org.vosao.utils.FolderUtil;
@@ -117,18 +117,18 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 			FolderEntity myFolder = getDao().getFolderDao().getByParentName(
 					folder.getParent(), folder.getName());
 			if (myFolder != null) {
-				errors.add("Folder with such name already exists");
+				errors.add(Messages.get("folder_already_exists"));
 			}
 			securityFolder = getDao().getFolderDao().getById(folder.getParent());
 		}
 		if (!haveWriteAccess(securityFolder)) {
-			errors.add("Secutity error");
+			errors.add(Messages.get("access_denied"));
 		}
 		if (StringUtil.isEmpty(folder.getTitle())) {
-			errors.add("Title is empty");
+			errors.add(Messages.get("title_is_empty"));
 		}
 		if (StringUtil.isEmpty(folder.getName())) {
-			errors.add("Name is empty");
+			errors.add(Messages.get("name_is_empty"));
 		}
 		return errors;
 	}

@@ -28,6 +28,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.ConfigBusiness;
+import org.vosao.common.Messages;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.filter.SiteFilter;
 
@@ -68,14 +69,14 @@ public class ConfigBusinessImpl extends AbstractBusinessImpl
 	public List<String> validateBeforeUpdate(ConfigEntity entity) {
 		List<String> errors = new ArrayList<String>();
 		if (StringUtils.isEmpty(entity.getSiteDomain())) {
-			errors.add("Site domain is empty");
+			errors.add(Messages.get("config.site_domain_is_empty"));
 		}
 		if (StringUtils.isEmpty(entity.getSiteEmail())) {
-			errors.add("Site email is empty");
+			errors.add(Messages.get("config.site_email_is_empty"));
 		}
 		if (SiteFilter.isSkipUrl(entity.getSiteUserLoginUrl())) {
 			errors.add(entity.getSiteUserLoginUrl() 
-					+ " url is reserved for internal use");
+					+ Messages.get("config.url_reserved"));
 		}
 		return errors;
 	}

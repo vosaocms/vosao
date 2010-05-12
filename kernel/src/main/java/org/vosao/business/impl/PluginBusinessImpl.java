@@ -33,8 +33,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -53,10 +51,13 @@ import org.vosao.service.BackService;
 import org.vosao.service.FrontService;
 import org.vosao.service.plugin.PluginServiceManager;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class PluginBusinessImpl extends AbstractBusinessImpl 
 	implements PluginBusiness {
-
-	private static final Log logger = LogFactory.getLog(PluginBusinessImpl.class);
 
 	private Business business;
 	private FrontService frontService;

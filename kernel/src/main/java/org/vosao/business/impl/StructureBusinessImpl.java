@@ -24,12 +24,11 @@ package org.vosao.business.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.vosao.business.StructureBusiness;
+import org.vosao.common.Messages;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.StructureEntity;
 
@@ -41,8 +40,6 @@ import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 public class StructureBusinessImpl extends AbstractBusinessImpl 
 	implements StructureBusiness {
 
-	private static final Log logger = LogFactory.getLog(StructureBusinessImpl.class);
-	
 	@Override
 	public List<String> validateBeforeUpdate(final StructureEntity entity) {
 		List<String> errors = new ArrayList<String>();
@@ -50,24 +47,25 @@ public class StructureBusinessImpl extends AbstractBusinessImpl
 				entity.getTitle());
 		if (entity.getId() == null) {
 			if (foundStructure != null) {
-				errors.add("Structure with such title already exists");
+				errors.add(Messages.get("structure.already_exists"));
 			}
 		}
 		else {
-			if (foundStructure != null && !foundStructure.getId().equals(entity.getId())) {
-				errors.add("Structure with such title already exists");
+			if (foundStructure != null 
+				&& !foundStructure.getId().equals(entity.getId())) {
+				errors.add(Messages.get("structure.already_exists"));
 			}
 		}
 		if (StringUtil.isEmpty(entity.getTitle())) {
-			errors.add("Title is empty");
+			errors.add(Messages.get("title_is_empty"));
 		}
 		try {
 			Document document = DocumentHelper.parseText(entity.getContent());
 			if (!document.getRootElement().getName().equals("structure")) {
-				errors.add("XML document must have 'structure' root element.");
+				errors.add(Messages.get("structure.invalid_xml"));
 			}
 		} catch (DocumentException e) {
-			errors.add("Problems parsing content. " + e.getMessage());
+			errors.add(Messages.get("parsing_error") + " " + e.getMessage());
 		}
 		return errors;
 	}
@@ -82,8 +80,8 @@ public class StructureBusinessImpl extends AbstractBusinessImpl
 			}
 			List<PageEntity> pages = getDao().getPageDao().selectByStructure(id);
 			if (pages.size() > 0) {
-				result.add("Structure " + structure.getTitle() 
-						+ " has references " + pages.get(0).getFriendlyURL());
+				result.add(Messages.get("structure.has_references", 
+						structure.getTitle(), pages.get(0).getFriendlyURL()));
 			}
 			else {
 				getDao().getStructureDao().remove(id);

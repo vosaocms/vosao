@@ -24,19 +24,21 @@ package org.vosao.business.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.vosao.business.TemplateBusiness;
+import org.vosao.common.Messages;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class TemplateBusinessImpl extends AbstractBusinessImpl 
 	implements TemplateBusiness {
 
-	private static final Log logger = LogFactory.getLog(TemplateBusinessImpl.class);
-	
 	@Override
 	public List<String> validateBeforeUpdate(final TemplateEntity template) {
 		List<String> errors = new ArrayList<String>();
@@ -44,17 +46,17 @@ public class TemplateBusinessImpl extends AbstractBusinessImpl
 			TemplateEntity myTemplate = getDao().getTemplateDao().getByUrl(
 					template.getUrl());
 			if (myTemplate != null) {
-				errors.add("Template with such URL already exists");
+				errors.add(Messages.get("template.already_exists"));
 			}
 		}
 		if (StringUtil.isEmpty(template.getUrl())) {
-			errors.add("URL is empty");
+			errors.add(Messages.get("url_is_empty"));
 		}
 		if (StringUtil.isEmpty(template.getTitle())) {
-			errors.add("Title is empty");
+			errors.add(Messages.get("title_is_empty"));
 		}
 		if (StringUtil.isEmpty(template.getContent())) {
-			errors.add("Content is empty");
+			errors.add(Messages.get("content_is_empty"));
 		}
 		return errors;
 	}
@@ -69,8 +71,8 @@ public class TemplateBusinessImpl extends AbstractBusinessImpl
 			}
 			List<PageEntity> pages = getDao().getPageDao().selectByTemplate(id);
 			if (pages.size() > 0) {
-				result.add("Template " + template.getTitle() 
-						+ " has references " + pages.get(0).getFriendlyURL());
+				result.add(Messages.get("template.has_references",
+						template.getTitle(), pages.get(0).getFriendlyURL()));
 			}
 			else {
 				getDao().getTemplateDao().remove(id);

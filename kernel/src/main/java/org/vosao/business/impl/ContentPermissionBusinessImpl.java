@@ -31,6 +31,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.ContentPermissionBusiness;
 import org.vosao.business.FolderBusiness;
+import org.vosao.common.Messages;
 import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.GroupEntity;
 import org.vosao.entity.UserEntity;
@@ -155,13 +156,13 @@ public class ContentPermissionBusinessImpl extends AbstractBusinessImpl
 	public List<String> validateBeforeUpdate(ContentPermissionEntity perm) {
 		List<String> errors = new ArrayList<String>();
 		if (perm.getGroupId() == null) {
-			errors.add("Group is empty");
+			errors.add(Messages.get("group_is_empty"));
 		}
 		if (perm.getUrl() == null) {
-			errors.add("Url is empty");
+			errors.add(Messages.get("url_is_empty"));
 		}
 		if (perm.getPermission() == null) {
-			errors.add("Permission is empty");
+			errors.add(Messages.get("permission_is_empty"));
 		}
 		return errors;
 	}
@@ -172,9 +173,7 @@ public class ContentPermissionBusinessImpl extends AbstractBusinessImpl
 		List<ContentPermissionEntity> result = new ArrayList<ContentPermissionEntity>();
 		String myUrl = url;
 		while (myUrl != null) {
-			result
-					.addAll(getDao().getContentPermissionDao().selectByUrl(
-							myUrl));
+			result.addAll(getDao().getContentPermissionDao().selectByUrl(myUrl));
 			if (myUrl.equals("/")) {
 				myUrl = null;
 			} else {

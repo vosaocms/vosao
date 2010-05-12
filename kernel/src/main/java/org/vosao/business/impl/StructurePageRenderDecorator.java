@@ -41,12 +41,18 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.vo.StructureFieldVO;
+import org.vosao.common.Messages;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.StructureTemplateEntity;
 import org.vosao.global.SystemService;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class StructurePageRenderDecorator extends AbstractPageRenderDecorator {
 
 	private StructureEntity structure;
@@ -85,7 +91,7 @@ public class StructurePageRenderDecorator extends AbstractPageRenderDecorator {
 		}
 		prepareVelocityContent(contentMap);
 		if (structureTemplate == null) {
-			setContent("Structure template is not selected.");
+			setContent(Messages.get("structureTemplate.not_selected"));
 			return;
 		}
 		if (structureTemplate.isVelocity()) {
@@ -109,7 +115,8 @@ public class StructurePageRenderDecorator extends AbstractPageRenderDecorator {
 					setContent(output.toString().replaceAll("\\<\\?.*?\\?>", ""));
 				}
 				else {
-					setContent("There is a problem during creating XSLT transfomer.");
+					setContent(Messages.get(
+							"structureTemplate.transformer_create_error"));
 				}					
 			} catch (TransformerException e) {
 				logger.error(e.getMessage());

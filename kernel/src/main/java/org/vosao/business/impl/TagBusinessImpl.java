@@ -29,10 +29,15 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.vosao.business.TagBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.common.Messages;
 import org.vosao.entity.PageTagEntity;
 import org.vosao.entity.TagEntity;
-import org.vosao.service.ServiceResponse;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class TagBusinessImpl extends AbstractBusinessImpl 
 	implements TagBusiness {
 
@@ -66,24 +71,24 @@ public class TagBusinessImpl extends AbstractBusinessImpl
 	@Override
 	public String validateBeforeSave(TagEntity tag) {
 		if (StringUtils.isEmpty(tag.getName())) {
-			return "Name is empty";
+			return Messages.get("name_is_empty");
 		}
 		else {
 			TagEntity found = getDao().getTagDao().getByName(tag.getParent(), 
 					tag.getName());
 			if (tag.isNew()) {
 				if (found != null) {
-					return "Tag with such name already exists.";
+					return Messages.get("tag_already_exists");
 				}
 			}
 			else {
 				if (found != null && !found.getId().equals(tag.getId())) {
-					return "Tag with such name already exists.";
+					return Messages.get("tag_already_exists");
 				}	
 			}
 		}
 		if (tag.getName().indexOf('/') != -1) {
-			return "Tag name can't contain / symbol";
+			return Messages.get("tag_wrong_symbol");
 		}
 		return null;
 	}

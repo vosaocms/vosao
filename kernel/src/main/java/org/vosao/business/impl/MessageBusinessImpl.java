@@ -28,6 +28,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.vosao.business.MessageBusiness;
+import org.vosao.common.Messages;
 import org.vosao.entity.MessageEntity;
 
 /**
@@ -60,10 +61,10 @@ public class MessageBusinessImpl extends AbstractBusinessImpl
 	public List<String> validateBeforeUpdate(MessageEntity entity) {
 		List<String> errors = new ArrayList<String>();
 		if (StringUtils.isEmpty(entity.getCode())) {
-			errors.add("Code is empty");
+			errors.add(Messages.get("code_is_empty"));
 		}
 		if (StringUtils.isEmpty(entity.getLanguageCode())) {
-			errors.add("Language code is empty");
+			errors.add(Messages.get("language_code_is_empty"));
 		}
 		return errors;
 	}

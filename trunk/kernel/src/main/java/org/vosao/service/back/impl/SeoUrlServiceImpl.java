@@ -25,19 +25,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
+import org.vosao.common.Messages;
 import org.vosao.entity.SeoUrlEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.SeoUrlService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.utils.StrUtil;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class SeoUrlServiceImpl extends AbstractServiceImpl 
 		implements SeoUrlService {
-
-	private static final Log logger = LogFactory.getLog(SeoUrlServiceImpl.class);
 
 	@Override
 	public List<SeoUrlEntity> select() {
@@ -48,7 +50,7 @@ public class SeoUrlServiceImpl extends AbstractServiceImpl
 	public ServiceResponse remove(List<String> ids) {
 		getDao().getSeoUrlDao().remove(StrUtil.toLong(ids));
 		return ServiceResponse.createSuccessResponse(
-				"Seo urls were successfully deleted");
+				Messages.get("seo_urls.success_delete"));
 	}
 
 	@Override
@@ -61,7 +63,7 @@ public class SeoUrlServiceImpl extends AbstractServiceImpl
 		SeoUrlEntity found = getDao().getSeoUrlDao().getByFrom(
 				entity.getFromLink());
 		if (found != null && !found.getId().equals(entity.getId())) {
-				errors.add("Sush \"from\" url already exists.");
+				errors.add(Messages.get("seo_urls.already_exists"));
 		}
 		return errors;
 	}
@@ -81,11 +83,11 @@ public class SeoUrlServiceImpl extends AbstractServiceImpl
 		if (errors.isEmpty()) {
 			getDao().getSeoUrlDao().save(seoUrl);
 			return ServiceResponse.createSuccessResponse(
-						"Seo url was successfully saved.");
+					Messages.get("seo_urls.success_save"));
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
-					"Error occured during SEO url save", errors);
+					Messages.get("errors_occured"), errors);
 		}
 	}
 

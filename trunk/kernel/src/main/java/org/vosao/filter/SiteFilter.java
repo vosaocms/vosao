@@ -37,6 +37,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.common.AccessDeniedException;
+import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.PageEntity;
@@ -99,10 +100,7 @@ public class SiteFilter extends AbstractFilter implements Filter {
     	catch (AccessDeniedException e) {
     		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
     		if (StringUtils.isEmpty(config.getSiteUserLoginUrl())) {
-    			renderMessage(httpResponse, 
-    				"<h1>Access denied</h1>" +
-    				"<h3>You need to login before access this page</h3>" +
-    				"<h4>Unfortunately webmaster forgot to configure Site user login page Url.</h4>");
+    			renderMessage(httpResponse, Messages.get("access_denied_page"));
     		}
     		else {
     			HttpSession session = httpRequest.getSession(true);
@@ -116,9 +114,8 @@ public class SiteFilter extends AbstractFilter implements Filter {
 
 	private void showNoApprovedContent(HttpServletResponse httpResponse) 
     		throws IOException {
-    	renderMessage(httpResponse, "<h3>Sorry, but there is no approved content" +
-    			" available for this page.</h3><p>Vosao CMS "+ 
-    			SetupBeanImpl.FULLVERSION +"</p>");
+    	renderMessage(httpResponse, Messages.get("not_approved_page", 
+    			SetupBeanImpl.FULLVERSION));
     }
 
 	public static boolean isSkipUrl(final String url) {

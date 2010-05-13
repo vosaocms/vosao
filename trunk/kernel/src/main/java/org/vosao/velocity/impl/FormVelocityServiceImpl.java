@@ -30,6 +30,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.Business;
 import org.vosao.business.PageBusiness;
+import org.vosao.common.Messages;
 import org.vosao.dao.Dao;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormConfigEntity;
@@ -52,7 +53,7 @@ public class FormVelocityServiceImpl implements FormVelocityService {
 		try {
 			FormEntity form = getDao().getFormDao().getByName(formName);
 			if (form == null) {
-				return "Error! Form " + formName + " was not found.";
+				return Messages.get("form.not_found", formName);
 			}
 			List<FieldEntity> fields = getDao().getFieldDao().getByForm(form);
 			FormConfigEntity formConfig = getDao().getFormConfigDao().getConfig();
@@ -62,7 +63,7 @@ public class FormVelocityServiceImpl implements FormVelocityService {
 			context.put("form", form);
 			context.put("fields", fields);
 			if (StringUtils.isEmpty(formConfig.getFormTemplate())) {
-				return "Error! Form template is empty.";
+				return Messages.get("form.template_is_empty");
 			}
 			return getSystemService().render(formConfig.getFormTemplate(), 
 					context);

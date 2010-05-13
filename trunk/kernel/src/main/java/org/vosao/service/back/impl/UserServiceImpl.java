@@ -25,10 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
 import org.vosao.common.BCrypt;
+import org.vosao.common.Messages;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.UserRole;
 import org.vosao.service.ServiceResponse;
@@ -36,10 +35,13 @@ import org.vosao.service.back.UserService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.UserVO;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class UserServiceImpl extends AbstractServiceImpl 
 		implements UserService {
-
-	private static final Log logger = LogFactory.getLog(UserServiceImpl.class);
 
 	@Override
 	public List<UserVO> select() {
@@ -54,7 +56,7 @@ public class UserServiceImpl extends AbstractServiceImpl
 		}
 		getBusiness().getUserBusiness().remove(idList);
 		return ServiceResponse.createSuccessResponse(
-				"Users were successfully deleted");
+				Messages.get("users.success_delete"));
 	}
 
 	@Override
@@ -87,11 +89,11 @@ public class UserServiceImpl extends AbstractServiceImpl
 		if (errors.isEmpty()) {
 			getDao().getUserDao().save(user);
 			return ServiceResponse.createSuccessResponse(
-						"User was successfully saved.");
+					Messages.get("user.success_save"));
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
-					"Error occured during user save", errors);
+					Messages.get("errors_occured"), errors);
 		}
 	}
 

@@ -30,6 +30,7 @@ import org.vosao.business.Business;
 import org.vosao.business.impl.StructurePageRenderDecorator;
 import org.vosao.business.vo.StructureFieldVO;
 import org.vosao.common.AbstractServiceBeanImpl;
+import org.vosao.common.Messages;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.UserEntity;
@@ -57,7 +58,8 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 	public PageEntity findPage(String path) {
 		PageEntity page = getDao().getPageDao().getByUrl(path);
 		if (page == null) {
-			return new PageEntity("Page not found", "Page not found", null);
+			return new PageEntity(Messages.get("page.not_found", path), 
+					Messages.get("page.not_found", path), null);
 		}
 		return page;
 	}
@@ -80,7 +82,7 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 			return getBusiness().getPageBusiness().createPageRenderDecorator(
 				page, aLanguageCode).getContent();
 		}
-		return "Approved content not found";
+		return Messages.get("approved_content_not_found");
 	}
 
 	@Override
@@ -106,7 +108,7 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 			}
 			return "";
 		}
-		return "Approved content not found";
+		return Messages.get("approved_content_not_found");
 	}
 
 	
@@ -149,7 +151,8 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 	public UserVO findUser(String email) {
 		UserEntity user = getDao().getUserDao().getByEmail(email);
 		if (user == null) {
-			user = new UserEntity("Not found","Not found","Not found",
+			user = new UserEntity(Messages.get("not_found"),
+					Messages.get("not_found"), Messages.get("not_found"),
 					UserRole.USER);
 		}
 		return new UserVO(user);

@@ -25,9 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
+import org.vosao.common.Messages;
 import org.vosao.entity.GroupEntity;
 import org.vosao.entity.UserGroupEntity;
 import org.vosao.service.ServiceResponse;
@@ -41,8 +40,6 @@ import org.vosao.service.vo.UserVO;
  */
 public class GroupServiceImpl extends AbstractServiceImpl 
 		implements GroupService {
-
-	private static final Log logger = LogFactory.getLog(GroupServiceImpl.class);
 
 	@Override
 	public List<GroupVO> select() {
@@ -62,7 +59,7 @@ public class GroupServiceImpl extends AbstractServiceImpl
 		}
 		getBusiness().getGroupBusiness().remove(idList);
 		return ServiceResponse.createSuccessResponse(
-				"Groups were successfully deleted");
+				Messages.get("groups.success_delete"));
 	}
 
 	@Override
@@ -92,11 +89,11 @@ public class GroupServiceImpl extends AbstractServiceImpl
 		if (errors.isEmpty()) {
 			getDao().getGroupDao().save(group);
 			return ServiceResponse.createSuccessResponse(
-						"Group was successfully saved.");
+						Messages.get("group.success_save"));
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
-					"Error occured during Group save", errors);
+					Messages.get("errors_occured", errors));
 		}
 	}
 
@@ -124,10 +121,10 @@ public class GroupServiceImpl extends AbstractServiceImpl
 				}
 			}
 			return ServiceResponse.createSuccessResponse(
-				"Group was successfully updated");
+				Messages.get("group.success_update"));
 		}
 		return ServiceResponse.createErrorResponse(
-			"Group was not found");
+				Messages.get("group_not_found"));
 	}
 
 }

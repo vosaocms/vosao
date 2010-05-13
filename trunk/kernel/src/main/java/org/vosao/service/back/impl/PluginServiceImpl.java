@@ -27,6 +27,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.vo.PluginPropertyVO;
+import org.vosao.common.Messages;
 import org.vosao.entity.PluginEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.PluginService;
@@ -37,8 +38,6 @@ import org.vosao.service.impl.AbstractServiceImpl;
  */
 public class PluginServiceImpl extends AbstractServiceImpl 
 		implements PluginService {
-
-	private static final Log logger = LogFactory.getLog(PluginServiceImpl.class);
 
 	@Override
 	public List<PluginEntity> select() {
@@ -52,10 +51,11 @@ public class PluginServiceImpl extends AbstractServiceImpl
 			if (plugin != null) {
 				getBusiness().getPluginBusiness().uninstall(plugin);
 				return ServiceResponse.createSuccessResponse(
-						"Plugin was successfully uninstalled");
+						Messages.get("plugin.success_uninstall"));
 			}
 			else {
-				return ServiceResponse.createErrorResponse("Plugin was not found");
+				return ServiceResponse.createErrorResponse(
+						Messages.get("plugin.not_found"));
 			}
 		}
 		catch (Exception e) {
@@ -90,11 +90,11 @@ public class PluginServiceImpl extends AbstractServiceImpl
 			plugin.setConfigData(xml);
 			getDao().getPluginDao().save(plugin);
 			return ServiceResponse.createSuccessResponse(
-					"Config was successfully saved.");
+					Messages.get("config.success_save"));
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
-				"Plugin was not found.");
+					Messages.get("plugin.not_found"));
 		}
 	}
 

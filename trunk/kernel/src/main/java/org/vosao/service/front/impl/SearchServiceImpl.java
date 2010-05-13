@@ -36,7 +36,6 @@ public class SearchServiceImpl extends AbstractServiceImpl
 	@Override
 	public SearchResult search(String query, int start, int count, int textSize,
 			HttpServletRequest request) {
-		logger.info(query);
 		String language = getBusiness().getLanguage();
 		return getBusiness().getSearchEngine().search(query, start, count,
 				language, textSize);
@@ -45,7 +44,6 @@ public class SearchServiceImpl extends AbstractServiceImpl
 	@Override
 	public SearchResult search(String query, HttpServletRequest request) {
 			String language = getBusiness().getLanguage();
-		logger.info(query);
 		return getBusiness().getSearchEngine().search(query, 0, -1,
 				language, 256);
 	}

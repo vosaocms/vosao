@@ -34,6 +34,11 @@ import org.vosao.entity.TagEntity;
 import org.vosao.utils.ListUtil;
 import org.vosao.velocity.TagVelocityService;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class TagVelocityServiceImpl extends AbstractServiceBeanImpl implements
 		TagVelocityService {
 

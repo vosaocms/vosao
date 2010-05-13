@@ -23,8 +23,7 @@ package org.vosao.service.back.impl;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.vosao.common.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.CommentService;
 import org.vosao.service.impl.AbstractServiceImpl;
@@ -37,8 +36,6 @@ import org.vosao.utils.StrUtil;
 public class CommentServiceImpl extends AbstractServiceImpl 
 		implements CommentService {
 
-	private static Log logger = LogFactory.getLog(CommentServiceImpl.class);
-	
 	@Override
 	public List<CommentVO> getByPage(String pageUrl) {
 		return CommentVO.create(getDao().getCommentDao().getByPage(pageUrl));
@@ -48,21 +45,21 @@ public class CommentServiceImpl extends AbstractServiceImpl
 	public ServiceResponse deleteComments(List<String> ids) {
 		getBusiness().getCommentBusiness().remove(StrUtil.toLong(ids));
 		return ServiceResponse.createSuccessResponse(
-				"Comments were successfuly deleted");
+				Messages.get("comments_success_delete"));
 	}
 
 	@Override
 	public ServiceResponse disableComments(List<String> ids) {
 		getBusiness().getCommentBusiness().disable(StrUtil.toLong(ids));
 		return ServiceResponse.createSuccessResponse(
-				"Comments were successfuly disabled");
+				Messages.get("comments_success_disable"));
 	}
 
 	@Override
 	public ServiceResponse enableComments(List<String> ids) {
 		getBusiness().getCommentBusiness().enable(StrUtil.toLong(ids));
 		return ServiceResponse.createSuccessResponse(
-				"Comments were successfuly enabled");
+				Messages.get("comments_success_enable"));
 	}
 
 }

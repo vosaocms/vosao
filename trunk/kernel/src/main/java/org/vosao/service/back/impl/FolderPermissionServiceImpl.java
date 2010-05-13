@@ -26,8 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FolderPermissionEntity;
@@ -48,13 +47,11 @@ import com.google.appengine.repackaged.com.google.protobuf.ServiceException;
 public class FolderPermissionServiceImpl extends AbstractServiceImpl 
 		implements FolderPermissionService {
 
-	private static final Log logger = LogFactory.getLog(FolderPermissionServiceImpl.class);
-
 	@Override
 	public ServiceResponse remove(List<String> ids) {
 		getDao().getFolderPermissionDao().remove(StrUtil.toLong(ids));
 		return ServiceResponse.createSuccessResponse(
-				"Folder permissions were successfully deleted");
+				Messages.get("folder.permissions_success_delete"));
 	}
 
 	@Override
@@ -68,19 +65,20 @@ public class FolderPermissionServiceImpl extends AbstractServiceImpl
 			GroupEntity group = getDao().getGroupDao().getById(Long.valueOf((
 				vo.get("groupId"))));
 			if (group == null) {
-				throw new ServiceException("Group not found");
+				throw new ServiceException(Messages.get("group_not_found"));
 			}
 			FolderEntity folder = getDao().getFolderDao().getById(
 					Long.valueOf(vo.get("folderId")));
 			if (folder == null) {
-				throw new ServiceException("Folder not found");
+				throw new ServiceException(Messages.get("folder.not_found",
+						vo.get("folderId")));
 			}
 			FolderPermissionType perm = FolderPermissionType.valueOf(
 				vo.get("permission"));
 			getBusiness().getFolderPermissionBusiness().setPermission(
 					folder, group, perm);
 			return ServiceResponse.createSuccessResponse(
-				"Folder permission was successfully saved.");
+				Messages.get("folder.permission_success_save"));
 		}
 		catch (Exception e) {
 			return ServiceResponse.createErrorResponse(e.toString() + " " 

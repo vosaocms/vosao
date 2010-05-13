@@ -64,10 +64,10 @@ public class Messages {
 		VosaoContext ctx = VosaoContext.getInstance();
 		String pattern = "not found";
 		if (isLocaleSupported(ctx.getLocale())) {
-			pattern  = getBundle(ctx.getRequest()).getString(key);
+			pattern = getBundle(ctx.getRequest()).getString(key);
 		}
 		else {
-			pattern  = getDefaultBundle().getString(key);
+			pattern = getDefaultBundle().getString(key);
 		}
 		if (objects != null) {
 			MessageFormat formatter = new MessageFormat("");

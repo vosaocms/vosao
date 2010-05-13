@@ -21,15 +21,13 @@
 
 package org.vosao.servlet;
 
-import java.io.ByteArrayInputStream;
+import static com.google.appengine.api.labs.taskqueue.TaskOptions.Builder.url;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.zip.ZipInputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -42,11 +40,8 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
-import org.dom4j.DocumentException;
-import org.vosao.business.ImportExportBusiness;
+import org.vosao.common.Messages;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PageEntity;
@@ -55,13 +50,6 @@ import org.vosao.utils.MimeType;
 import org.vosao.utils.StreamUtil;
 
 import com.google.appengine.api.labs.taskqueue.Queue;
-import com.google.gdata.data.PlainTextConstruct;
-import com.google.gdata.data.media.MediaByteArraySource;
-import com.google.gdata.data.media.MediaSource;
-import com.google.gdata.data.photos.AlbumEntry;
-import com.google.gdata.data.photos.PhotoEntry;
-
-import static com.google.appengine.api.labs.taskqueue.TaskOptions.Builder.*;
 
 /**
  * Servlet for uploading images into database.
@@ -82,10 +70,6 @@ public class FileUploadServlet extends BaseSpringServlet {
 	private static final String FILE_TYPE_PICASA = "picasa";
 
 	private static final String TEXT_MESSAGE = "::%s::%s::";
-
-	private static final String FOLDER_NOT_FOUND = "Folder not found";
-	private static final String FOLDER_ID_IS_NULL = "Folder id is null";
-	private static final String PARSE_REQUEST_ERROR = "Parse request error";
 
 	public static final String IMAGE_UPLOAD_PAGE_ID = "imageUploadPageId";
 	
@@ -128,8 +112,8 @@ public class FileUploadServlet extends BaseSpringServlet {
 				}
 				message = processFile(imageFileItem, fileData, parameters);
 			} catch (FileUploadException e) {
-				logger.error(PARSE_REQUEST_ERROR);
-				throw new UploadException(PARSE_REQUEST_ERROR);
+				logger.error(Messages.get("request_parsing_error"));
+				throw new UploadException(Messages.get("request_parsing_error"));
 			}
 		} catch (UploadException e) {
 			message = createMessage("error", e.getMessage()); 
@@ -154,7 +138,8 @@ public class FileUploadServlet extends BaseSpringServlet {
 		
 		if (!parameters.containsKey(FILE_TYPE_PARAM)) {
 			if (!parameters.containsKey(IMAGE_UPLOAD_PAGE_ID)) {
-				throw new UploadException("File type was not specified");
+				throw new UploadException(Messages.get(
+						"file.type_not_specified"));
 			}
 			else {
 				return processResourceFileCKeditor(fileItem, data, 
@@ -164,7 +149,8 @@ public class FileUploadServlet extends BaseSpringServlet {
 		String fileType = parameters.get(FILE_TYPE_PARAM);
 		if (fileType.equals(FILE_TYPE_RESOURCE)) {
 			if (!parameters.containsKey(FOLDER_PARAM)) {
-				throw new UploadException("Folder parameter was not specified");
+				throw new UploadException(Messages.get(
+						"folder.parameter_not_specified"));
 			}
 			return processResourceFileJSON(fileItem, data, 
 					getFolder(Long.valueOf(parameters.get(FOLDER_PARAM))));
@@ -209,7 +195,6 @@ public class FileUploadServlet extends BaseSpringServlet {
 		logger.debug("Clear cache " + cacheUrl);
 		String ext = FilenameUtils.getExtension(path);
 		logger.debug("path " + path + " filename " + filename + " ext " + ext);
-		String message = null;
 		FileEntity file = getDao().getFileDao().getByName(folder.getId(), 
 				filename);
 		if (file == null) {
@@ -227,11 +212,12 @@ public class FileUploadServlet extends BaseSpringServlet {
 		logger.debug("getFolder " + folderId);
 
 		if (folderId == null) {
-			throw new UploadException(FOLDER_ID_IS_NULL);
+			throw new UploadException(Messages.get("folder_is_empty"));
 		}
 		FolderEntity folder = getDao().getFolderDao().getById(folderId);
 		if (folder == null) {
-			throw new UploadException(FOLDER_NOT_FOUND);
+			throw new UploadException(Messages.get("folder.not_found", 
+					folderId));
 		}
 		return folder;
 	}
@@ -242,14 +228,14 @@ public class FileUploadServlet extends BaseSpringServlet {
 		String ext = FolderUtil.getFileExt(fileItem.getName());
 		if (!ext.toLowerCase().equals("zip") 
 			&& !ext.toLowerCase().equals("vz")) {
-			throw new UploadException("Wrong file extension.");
+			throw new UploadException(Messages.get("wrong_file_extension."));
 		}
 		getSystemService().getCache().putBlob(fileItem.getName(), data);
 		Queue queue = getSystemService().getQueue("import");
 		queue.add(url(ImportTaskServlet.IMPORT_TASK_URL)
 				.param("start", "1")
 				.param("filename", fileItem.getName()));
-		return createMessage("success", "Saved for import.");
+		return createMessage("success", Messages.get("saved_for_import"));
 	}
 
 	/**
@@ -262,7 +248,8 @@ public class FileUploadServlet extends BaseSpringServlet {
 		try {
 			PageEntity page = getDao().getPageDao().getById(pageId);
 			if (page == null) {
-				throw new UploadException("Page not found id = " + pageId);
+				throw new UploadException(Messages.get(
+						"page.not_found", pageId));
 			}
 			FolderEntity folder;
 			String folderPath = "/page" + page.getFriendlyURL();
@@ -287,15 +274,11 @@ public class FileUploadServlet extends BaseSpringServlet {
 			parameters.containsKey(IMAGE_UPLOAD_PAGE_ID);
 	}
 	
-	private ImportExportBusiness getImportExportBusiness() {
-		return (ImportExportBusiness) getSpringBean("importExportBusiness");
-	}
-	
 	private String processPluginFile(FileItemStream fileItem, byte[] data)
 			throws UploadException {
 		String ext = FolderUtil.getFileExt(fileItem.getName());
 		if (!ext.toLowerCase().equals("war")) {
-			throw new UploadException("Wrong file extension.");
+			throw new UploadException(Messages.get("wrong_file_extension"));
 		}
 		try {
 			getBusiness().getPluginBusiness().install(fileItem.getName(), data);
@@ -304,7 +287,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 			e.printStackTrace();
 			throw new UploadException(e.getMessage());
 		}
-		return createMessage("success", "Saved for import.");
+		return createMessage("success", Messages.get("saved_for_import"));
 	}
 
 	private String processPicasaFile(FileItemStream fileItem, byte[] data,
@@ -312,17 +295,17 @@ public class FileUploadServlet extends BaseSpringServlet {
 		try {
 			String albumId = parameters.get("albumId");
 			if (StringUtils.isEmpty(albumId)) {
-				throw new UploadException("Album not found: " + albumId);
+				throw new UploadException(Messages.get("album_not_found", 
+						albumId));
 			}
 			getBusiness().getPicasaBusiness().upload(albumId, data, 
 					fileItem.getName());
-			return createMessage("success", "Photo uploaded.");
+			return createMessage("success", Messages.get("photo_uploaded"));
 		}
 		catch (Exception e) {
 			throw new UploadException(e.getMessage());
 		}
 	}
-
 
 	
 }

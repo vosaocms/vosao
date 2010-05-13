@@ -25,8 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.vosao.common.Messages;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormEntity;
 import org.vosao.service.ServiceResponse;
@@ -35,10 +34,13 @@ import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.FieldVO;
 import org.vosao.utils.StrUtil;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class FieldServiceImpl extends AbstractServiceImpl 
 		implements FieldService {
-
-	private static final Log logger = LogFactory.getLog(FieldServiceImpl.class);
 
 	@Override
 	public ServiceResponse updateField(Map<String, String> fieldMap) {
@@ -56,18 +58,18 @@ public class FieldServiceImpl extends AbstractServiceImpl
 					getBusiness().getFieldBusiness().checkOrder(form);
 				}
 				return ServiceResponse.createSuccessResponse(
-						"Field was successfully updated");
+						Messages.get("form.field_success_update"));
 			}
 			else {
 				ServiceResponse resp = ServiceResponse.createErrorResponse( 
-						"Validation errors");
+						Messages.get("validation_errors"));
 				resp.setMessages(validateErrors);
 				return resp;
 			}
 		}
 		else {
 			ServiceResponse resp = ServiceResponse.createErrorResponse( 
-					"Convertion errors");
+					Messages.get("convertation_errors"));
 			resp.setMessages(errors);
 			return resp;
 		}

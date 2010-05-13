@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
@@ -51,7 +52,8 @@ public class FileDownloadServlet extends BaseSpringServlet {
 
 		String[] chain = FolderUtil.getPathChain(request.getPathInfo());
 		if (chain.length == 0) {
-			response.sendError(response.SC_NOT_FOUND, "File was not specified");
+			response.sendError(response.SC_NOT_FOUND, Messages.get(
+					"file.not_specified"));
 			return;
 		}
 		if (isInPublicCache(request.getPathInfo())) {
@@ -67,12 +69,13 @@ public class FileDownloadServlet extends BaseSpringServlet {
 				.findFolderByPath(tree, FolderUtil.getFilePath(
 						request.getPathInfo()));
 		if (folder == null) {
-			response.sendError(response.SC_NOT_FOUND, "Folder " 
-					+ request.getPathInfo() + " was not found");
+			response.sendError(response.SC_NOT_FOUND, Messages.get(
+					"folder.not_found", request.getPathInfo()));
 			return;
 		}
 		if (isAccessDenied(folder.getEntity())) {
-			response.sendError(response.SC_FORBIDDEN, "Access denied");
+			response.sendError(response.SC_FORBIDDEN, Messages.get(
+					"access_denied"));
 			return;
 		}
 		if (isInCache(request.getPathInfo())) {
@@ -100,7 +103,8 @@ public class FileDownloadServlet extends BaseSpringServlet {
 			sendFile(file, content, request, response);
 		}
 		else {
-			response.sendError(response.SC_NOT_FOUND, "File was not found");
+			response.sendError(response.SC_NOT_FOUND, Messages.get(
+					"file.not_found"));
 	        logger.debug("not found file " + request.getPathInfo());
 		}
 	}

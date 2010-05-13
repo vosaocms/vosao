@@ -25,9 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
+import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.GroupEntity;
@@ -41,10 +40,13 @@ import org.vosao.utils.UrlUtil;
 
 import com.google.appengine.repackaged.com.google.protobuf.ServiceException;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class ContentPermissionServiceImpl extends AbstractServiceImpl 
 		implements ContentPermissionService {
-
-	private static final Log logger = LogFactory.getLog(ContentPermissionServiceImpl.class);
 
 	@Override
 	public ServiceResponse remove(List<String> ids) {
@@ -54,7 +56,7 @@ public class ContentPermissionServiceImpl extends AbstractServiceImpl
 		}
 		getDao().getContentPermissionDao().remove(idList);
 		return ServiceResponse.createSuccessResponse(
-				"ContentPermissions were successfully deleted");
+				Messages.get("content_permissions_success_delete"));
 	}
 
 	@Override
@@ -68,7 +70,7 @@ public class ContentPermissionServiceImpl extends AbstractServiceImpl
 			GroupEntity group = getDao().getGroupDao().getById(Long.valueOf((
 				vo.get("groupId"))));
 			if (group == null) {
-				throw new ServiceException("Group not found");
+				throw new ServiceException(Messages.get("group_not_found"));
 			}
 			String url = vo.get("url");
 			ContentPermissionType perm = ContentPermissionType.valueOf(
@@ -78,7 +80,7 @@ public class ContentPermissionServiceImpl extends AbstractServiceImpl
 			getBusiness().getContentPermissionBusiness().setPermission(
 					url, group, perm, languages);
 			return ServiceResponse.createSuccessResponse(
-				"Content permission was successfully saved.");
+					Messages.get("content_permissions_success_save"));
 		}
 		catch (Exception e) {
 			return ServiceResponse.createErrorResponse(e.toString() + " " 

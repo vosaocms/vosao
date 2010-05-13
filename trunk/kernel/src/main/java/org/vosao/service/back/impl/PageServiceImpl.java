@@ -30,14 +30,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.print.attribute.standard.Severity;
-
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.business.impl.SetupBeanImpl;
+import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.ContentPermissionEntity;
@@ -69,8 +66,6 @@ import org.vosao.utils.UrlUtil;
  */
 public class PageServiceImpl extends AbstractServiceImpl 
 		implements PageService {
-
-	private static Log logger = LogFactory.getLog(PageServiceImpl.class);
 
 	private CommentService commentService;
 	private TemplateService templateService;
@@ -207,14 +202,16 @@ public class PageServiceImpl extends AbstractServiceImpl
 			page.setState(PageState.EDIT);
 		}
 		if (!perm.isChangeGranted(languageCode)) {
-			return ServiceResponse.createErrorResponse("Access denied");
+			return ServiceResponse.createErrorResponse(Messages.get(
+					"access_denied"));
 		}
 		if (vo.get("publishDate") != null) {
 			try {
 				page.setPublishDate(DateUtil.toDate(vo.get("publishDate")));
 			} catch (ParseException e) {
 				return ServiceResponse
-						.createErrorResponse("Date is in wrong format");
+						.createErrorResponse(Messages.get(
+								"date_wrong_format"));
 			}
 		}
 		if (vo.get("template") != null) {
@@ -253,7 +250,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 					.toString());
 		} else {
 			return ServiceResponse.createErrorResponse(
-					"Errors occured during saving page.", errors);
+					Messages.get("errors_occured"), errors);
 		}
 
 	}
@@ -269,14 +266,15 @@ public class PageServiceImpl extends AbstractServiceImpl
 	public ServiceResponse deletePages(List<String> ids) {
 		getPageBusiness().remove(StrUtil.toLong(ids));
 		return ServiceResponse
-				.createSuccessResponse("Pages were successfully deleted");
+				.createSuccessResponse(Messages.get(
+						"pages.success_delete"));
 	}
 
 	@Override
 	public ServiceResponse deletePageVersion(Long id) {
 		getPageBusiness().removeVersion(id);
 		return ServiceResponse
-				.createSuccessResponse("Page was successfully deleted");
+				.createSuccessResponse(Messages.get("page.success_delete"));
 	}
 
 	private List<ContentEntity> getContents(Long pageId) {
@@ -292,7 +290,8 @@ public class PageServiceImpl extends AbstractServiceImpl
 	public ServiceResponse addVersion(String url, String versionTitle) {
 		if (!getBusiness().getContentPermissionBusiness().getPermission(url,
 				VosaoContext.getInstance().getUser()).isChangeGranted()) {
-			return ServiceResponse.createErrorResponse("Access denied");
+			return ServiceResponse.createErrorResponse(
+					Messages.get("access_denied"));
 		}
 		List<PageEntity> list = getPageBusiness().selectByUrl(url);
 		if (list.size() > 0) {
@@ -303,27 +302,31 @@ public class PageServiceImpl extends AbstractServiceImpl
 							VosaoContext.getInstance().getUser()).getId()
 					.toString());
 		}
-		return ServiceResponse.createErrorResponse("Page not found");
+		return ServiceResponse.createErrorResponse(Messages.get(
+				"page_not_found", url));
 	}
 
 	@Override
 	public ServiceResponse approve(Long pageId) {
 		if (pageId == null) {
-			return ServiceResponse.createErrorResponse("Page not found");
+			return ServiceResponse.createErrorResponse(Messages.get(
+					"page_not_found", pageId));
 		}
 		PageEntity page = getDao().getPageDao().getById(pageId);
 		if (page == null) {
-			return ServiceResponse.createErrorResponse("Page not found");
+			return ServiceResponse.createErrorResponse(Messages.get(
+					"page_not_found", pageId));
 		}
 		if (!getBusiness().getContentPermissionBusiness().getPermission(
 				page.getFriendlyURL(), VosaoContext.getInstance().getUser())
 				.isPublishGranted()) {
-			return ServiceResponse.createErrorResponse("Access denied");
+			return ServiceResponse.createErrorResponse(
+					Messages.get("access_denied"));
 		}
 		page.setState(PageState.APPROVED);
 		getDao().getPageDao().save(page);
 		return ServiceResponse
-				.createSuccessResponse("Page was successfully approved.");
+				.createSuccessResponse(Messages.get("page.success_approve"));
 	}
 
 	@Override
@@ -415,8 +418,8 @@ public class PageServiceImpl extends AbstractServiceImpl
 		try {
 			return StreamUtil.getTextResource(url);
 		} catch (IOException e) {
-			logger.error("Can't read comments template." + e);
-			return "Error during load resources " + url;
+			logger.error("Can't read resource " + e);
+			return Messages.get("resource_error", url);
 		}
 	}
 
@@ -424,15 +427,17 @@ public class PageServiceImpl extends AbstractServiceImpl
 	public ServiceResponse restore(Long pageId, String pageType, String language) {
 		PageEntity page = getPage(pageId);
 		if (page == null) {
-			return ServiceResponse.createErrorResponse("Page not found");
+			return ServiceResponse.createErrorResponse(Messages.get(
+					"page_not_found", pageId));
 		}
 		String content = getPredefinedContent(pageType);
 		if (content == null) {
-			return ServiceResponse.createErrorResponse("Wrong page type");
+			return ServiceResponse.createErrorResponse(Messages.get(
+					"page.wrong_type"));
 		}
 		if (page.isStructured()) {
 			return ServiceResponse
-					.createErrorResponse("Change page type to Simle from Structured first");
+					.createErrorResponse(Messages.get("page.change_type"));
 		}
 		page.setModDate(new Date());
 		page.setModUserEmail(VosaoContext.getInstance().getUser().getEmail());
@@ -442,13 +447,14 @@ public class PageServiceImpl extends AbstractServiceImpl
 						VosaoContext.getInstance().getUser());
 		page.setState(PageState.EDIT);
 		if (!perm.isChangeGranted()) {
-			return ServiceResponse.createErrorResponse("Access denied");
+			return ServiceResponse.createErrorResponse(Messages.get(
+					"access_denied"));
 		}
 		getDao().getPageDao().save(page);
 		getPageBusiness().saveContent(page, language, content,
 				page.isSearchable(), page.isSearchable());
-		return ServiceResponse
-				.createSuccessResponse("Page successfully restored.");
+		return ServiceResponse.createSuccessResponse(
+				Messages.get("page.success_restore"));
 	}
 
 	private String getPredefinedContent(String pageType) {
@@ -467,26 +473,28 @@ public class PageServiceImpl extends AbstractServiceImpl
 	public ServiceResponse moveDown(Long pageId) {
 		PageEntity page = getDao().getPageDao().getById(pageId);
 		if (page == null) {
-			return ServiceResponse.createErrorResponse("Page not found");
+			return ServiceResponse.createErrorResponse(
+					Messages.get("page.not_found", pageId));
 		}
 		getPageBusiness().moveDown(page);
-		return ServiceResponse.createSuccessResponse("Success");
+		return ServiceResponse.createSuccessResponse(Messages.get("success"));
 	}
 
 	@Override
 	public ServiceResponse moveUp(Long pageId) {
 		PageEntity page = getDao().getPageDao().getById(pageId);
 		if (page == null) {
-			return ServiceResponse.createErrorResponse("Page not found");
+			return ServiceResponse.createErrorResponse(
+					Messages.get("page.not_found", pageId));
 		}
 		getPageBusiness().moveUp(page);
-		return ServiceResponse.createSuccessResponse("Success");
+		return ServiceResponse.createSuccessResponse(Messages.get("success"));
 	}
 
 	@Override
 	public ServiceResponse remove(String pageURL) {
 		getPageBusiness().remove(pageURL);
-		return ServiceResponse.createSuccessResponse("Success");
+		return ServiceResponse.createSuccessResponse(Messages.get("success"));
 	}
 
 	private PageBusiness getPageBusiness() {
@@ -506,7 +514,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 			PageEntity parent = getPageBusiness().getById(parentId);
 			if (parent == null) {
 				return ServiceResponse.createErrorResponse(
-						"Parent page not found when creating child page.");
+						Messages.get("page.not_found", parentId));
 			}
 			String url = getBaseURL(parent.getFriendlyURL()) + "/" 
 					+ UrlUtil.titleToURL(title);
@@ -521,13 +529,12 @@ public class PageServiceImpl extends AbstractServiceImpl
 			PageEntity page = getPageBusiness().getById(id);
 			if (page == null) {
 				return ServiceResponse.createErrorResponse(
-					"Page not found when changing title.");
+						Messages.get("page.not_found", id));
 			}
 			if (!getPageBusiness().canChangeContent(
 					page.getFriendlyURL(), null)) {
 				return ServiceResponse.createErrorResponse(
-					"You don't have WRITE permission for page " 
-						+ page.getTitle());
+						Messages.get("access_denied"));
 			}
 			List<PageEntity> versions = getDao().getPageDao().selectByUrl(
 					page.getFriendlyURL());
@@ -541,7 +548,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 				getPageBusiness().move(page, 
 						getPageBusiness().makeUniquePageURL(url));
 			}
-			return ServiceResponse.createSuccessResponse("Success");
+			return ServiceResponse.createSuccessResponse(Messages.get("success"));
 		}
 	}
 
@@ -551,23 +558,24 @@ public class PageServiceImpl extends AbstractServiceImpl
 		if (page != null && !page.isRoot()) {
 			getPageBusiness().remove(page.getFriendlyURL());
 		}
-		return ServiceResponse.createSuccessResponse("Success");
+		return ServiceResponse.createSuccessResponse(Messages.get("success"));
 	}
 
 	@Override
 	public ServiceResponse movePage(Long pageId, Long refPageId, String type) {
 		PageEntity page = getPageBusiness().getById(pageId);
 		if (page == null) {
-			return ServiceResponse.createErrorResponse("Page not found " 
-					+ pageId);
+			return ServiceResponse.createErrorResponse(
+					Messages.get("page.not_found", pageId));
 		}
 		if (page.isRoot()) {
-			return ServiceResponse.createErrorResponse("Can't move root page");
+			return ServiceResponse.createErrorResponse(
+					Messages.get("page.move_root"));
 		}
 		PageEntity refPage = getPageBusiness().getById(refPageId);
 		if (refPage == null) {
 			return ServiceResponse.createErrorResponse(
-					"Reference page not found "	+ refPageId);
+					Messages.get("page.not_found", refPageId));
 		}
 		if (type.equals("inside")) {
 			String url = getBaseURL(refPage.getFriendlyURL()) + "/" +
@@ -591,20 +599,20 @@ public class PageServiceImpl extends AbstractServiceImpl
 			page = getPageBusiness().getById(pageId);
 			getPageBusiness().moveBefore(page, refPage);
 		}
-		return ServiceResponse.createSuccessResponse("Success");
+		return ServiceResponse.createSuccessResponse(Messages.get("success"));
 	}
 
 	@Override
 	public ServiceResponse copyPage(Long pageId, Long refPageId, String type) {
 		PageEntity page = getPageBusiness().getById(pageId);
 		if (page == null) {
-			return ServiceResponse.createErrorResponse("Page not found " 
-					+ pageId);
+			return ServiceResponse.createErrorResponse(
+					Messages.get("page.not_found", pageId));
 		}
 		PageEntity refPage = getPageBusiness().getById(refPageId);
 		if (refPage == null) {
 			return ServiceResponse.createErrorResponse(
-					"Reference page not found "	+ refPageId);
+					Messages.get("page.not_found", refPageId));
 		}
 		if (type.equals("inside")) {
 			getPageBusiness().copy(page, refPage.getFriendlyURL());
@@ -619,7 +627,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 			page = getPageBusiness().getById(pageId);
 			getPageBusiness().moveBefore(page, refPage);
 		}
-		return ServiceResponse.createSuccessResponse("Success");
+		return ServiceResponse.createSuccessResponse(Messages.get("success"));
 	}
 	
 	@Override
@@ -639,7 +647,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
-					"Errors occured during saving page.", errors);
+					Messages.get("errors_occured"), errors);
 		}
 	}
 

@@ -30,8 +30,12 @@ import org.vosao.entity.PluginEntity;
 import org.vosao.global.SystemService;
 import org.vosao.velocity.FormVelocityService;
 import org.vosao.velocity.VelocityPluginService;
-import org.vosao.velocity.plugin.VelocityPlugin;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class VelocityPluginServiceImpl implements VelocityPluginService {
 
 	private FormVelocityService form;

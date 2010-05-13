@@ -25,12 +25,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.datanucleus.util.StringUtils;
+import org.vosao.common.Messages;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.TemplateService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.utils.StrUtil;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class TemplateServiceImpl extends AbstractServiceImpl 
 		implements TemplateService {
 
@@ -41,11 +47,11 @@ public class TemplateServiceImpl extends AbstractServiceImpl
 			template.setContent(content);
 			getDao().getTemplateDao().save(template);
 			return ServiceResponse.createSuccessResponse(
-					"Template was successfully updated");
+					Messages.get("template.success_save"));
 		}
 		else {
-			return ServiceResponse.createErrorResponse("Template not found " 
-					+ templateId);
+			return ServiceResponse.createErrorResponse(
+					Messages.get("template.not_found", templateId));
 		}
 	}
 
@@ -60,11 +66,11 @@ public class TemplateServiceImpl extends AbstractServiceImpl
 				StrUtil.toLong(ids));
 		if (errors.isEmpty()) {
 			return ServiceResponse.createSuccessResponse(
-				"Templates were successfully deleted");
+					Messages.get("templates.success_delete"));
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
-				"Templates were deleted with errors", errors);
+					Messages.get("errors_occured"), errors);
 			
 		}
 	}
@@ -96,7 +102,7 @@ public class TemplateServiceImpl extends AbstractServiceImpl
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
-					"There was an errors during template save.", errors);			
+					Messages.get("templates.errors_occured"), errors);			
 		}
 	}
 

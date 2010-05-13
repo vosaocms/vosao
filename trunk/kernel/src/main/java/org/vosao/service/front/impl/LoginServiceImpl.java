@@ -4,30 +4,33 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.vosao.common.BCrypt;
+import org.vosao.common.Messages;
 import org.vosao.entity.UserEntity;
 import org.vosao.filter.AuthenticationFilter;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.front.LoginService;
 import org.vosao.service.impl.AbstractServiceImpl;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class LoginServiceImpl extends AbstractServiceImpl 
 		implements LoginService {
 
-	private static final Log logger = LogFactory.getLog(LoginServiceImpl.class);
-	
 	@Override
 	public ServiceResponse login(String email, String password,
 			HttpServletRequest request) {
 		
 		UserEntity user = getDao().getUserDao().getByEmail(email);
 		if (user == null) {
-			return ServiceResponse.createErrorResponse("User was not found.");
+			return ServiceResponse.createErrorResponse(Messages.get(
+					"user_not_found"));
 		}
 		ServiceResponse passwordIncorrect = ServiceResponse.createErrorResponse(
-				"Password incorrect.");
+				Messages.get("password_incorrect"));
 		if (user.getPassword() == null) {
 			if (!StringUtils.isEmpty(password)) {
 				return passwordIncorrect;
@@ -66,7 +69,8 @@ public class LoginServiceImpl extends AbstractServiceImpl
 	public ServiceResponse logout(HttpServletRequest request) {
 		HttpSession session = request.getSession(true);
 		session.setAttribute(AuthenticationFilter.USER_SESSION_ATTR, null);
-		return ServiceResponse.createSuccessResponse("Successfully logged out");
+		return ServiceResponse.createSuccessResponse(Messages.get(
+				"success_logout"));
 	}
 	
 

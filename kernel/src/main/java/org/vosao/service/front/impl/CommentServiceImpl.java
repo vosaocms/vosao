@@ -27,8 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.tanesha.recaptcha.ReCaptchaResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.vosao.common.Messages;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.service.ServiceException;
@@ -44,8 +43,6 @@ import org.vosao.utils.RecaptchaUtil;
 public class CommentServiceImpl extends AbstractServiceImpl 
 		implements CommentService {
 
-	private static Log logger = LogFactory.getLog(CommentServiceImpl.class);
-	
 	@Override
 	public List<CommentVO> getByPage(String pageUrl) {
 		return CommentVO.create(getDao().getCommentDao()
@@ -71,7 +68,7 @@ public class CommentServiceImpl extends AbstractServiceImpl
         	try {
         		addComment(name, comment, pageUrl);
                 return ServiceResponse.createSuccessResponse(
-                		"Comment was successfully created.");
+                		Messages.get("comment_success_create"));
         	}
         	catch (ServiceException e) {
                 return ServiceResponse.createErrorResponse(e.getMessage());
@@ -87,7 +84,7 @@ public class CommentServiceImpl extends AbstractServiceImpl
 			throws ServiceException {
 		PageEntity page = getDao().getPageDao().getByUrl(pageUrl);
 		if (page == null) {
-			throw new ServiceException("Page not found. id = " + pageUrl);
+			throw new ServiceException(Messages.get("page_not_found", pageUrl));
 		}
 		getBusiness().getCommentBusiness().addComment(name, content, page);
 	}

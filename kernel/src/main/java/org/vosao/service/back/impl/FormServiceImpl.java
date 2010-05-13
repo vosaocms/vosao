@@ -25,11 +25,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
-import org.vosao.business.SetupBean;
 import org.vosao.business.impl.SetupBeanImpl;
+import org.vosao.common.Messages;
 import org.vosao.entity.FormConfigEntity;
 import org.vosao.entity.FormEntity;
 import org.vosao.service.ServiceResponse;
@@ -38,10 +36,13 @@ import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.utils.StrUtil;
 import org.vosao.utils.StreamUtil;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class FormServiceImpl extends AbstractServiceImpl 
 		implements FormService {
-
-	private static final Log logger = LogFactory.getLog(FormServiceImpl.class);
 
 	@Override
 	public FormEntity getForm(Long formId) {
@@ -73,7 +74,7 @@ public class FormServiceImpl extends AbstractServiceImpl
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
-					"Errors occured during form save", errors);
+					Messages.get("errors_occured"), errors);
 		}
 	}
 
@@ -86,7 +87,7 @@ public class FormServiceImpl extends AbstractServiceImpl
 	public ServiceResponse deleteForm(List<String> ids) {
 		getDao().getFormDao().remove(StrUtil.toLong(ids));
 		return ServiceResponse.createSuccessResponse(
-				"Forms were successfully deleted.");
+				Messages.get("form.success_delete"));
 	}
 
 	@Override
@@ -101,7 +102,7 @@ public class FormServiceImpl extends AbstractServiceImpl
 		config.setLetterTemplate(vo.get("letterTemplate"));
 		getDao().getFormConfigDao().save(config);
 		return ServiceResponse.createSuccessResponse(
-				"Form configuration was successfully saved.");
+				Messages.get("form.config_success_save"));
 	}
 
 	@Override
@@ -111,7 +112,7 @@ public class FormServiceImpl extends AbstractServiceImpl
 			SetupBeanImpl.FORM_LETTER_FILE));
 		getDao().getFormConfigDao().save(config);			
 		return ServiceResponse.createSuccessResponse(
-				"Form letter was successfully restored.");
+				Messages.get("form.letter_success_restore"));
 	}
 
 	@Override
@@ -121,7 +122,7 @@ public class FormServiceImpl extends AbstractServiceImpl
 			SetupBeanImpl.FORM_TEMPLATE_FILE));
 		getDao().getFormConfigDao().save(config);			
 		return ServiceResponse.createSuccessResponse(
-				"Form template was successfully restored.");
+				Messages.get("form.template_success_restore"));
 	}
 
 }

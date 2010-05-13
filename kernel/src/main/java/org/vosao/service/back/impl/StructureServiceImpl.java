@@ -25,10 +25,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
 import org.vosao.business.vo.StructureFieldVO;
+import org.vosao.common.Messages;
 import org.vosao.entity.StructureEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.StructureService;
@@ -41,8 +40,6 @@ import org.vosao.utils.StrUtil;
 public class StructureServiceImpl extends AbstractServiceImpl 
 		implements StructureService {
 
-	private static final Log logger = LogFactory.getLog(StructureServiceImpl.class);
-
 	@Override
 	public List<StructureEntity> select() {
 		return getDao().getStructureDao().select();
@@ -54,11 +51,11 @@ public class StructureServiceImpl extends AbstractServiceImpl
 				StrUtil.toLong(ids));
 		if (errors.isEmpty()) {
 			return ServiceResponse.createSuccessResponse(
-				"Structures were successfully deleted");
+				Messages.get("structures.success_delete"));
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
-				"Structures were deleted with errors", errors);
+				Messages.get("errors_occured"), errors);
 		}
 	}
 
@@ -88,7 +85,7 @@ public class StructureServiceImpl extends AbstractServiceImpl
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
-					"Error occured during Structure save", errors);
+					Messages.get("errors_occured"), errors);
 		}
 	}
 

@@ -39,8 +39,7 @@ import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.vosao.common.Messages;
 import org.vosao.common.UploadException;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FormEntity;
@@ -59,7 +58,6 @@ public class FormSendServlet extends BaseSpringServlet {
 
 	private static final long MAX_SIZE = 10000000;
 	private static final String TEXT_MESSAGE = "{\"result\":\"%s\", \"message\":\"%s\"}";
-	private static final String PARSE_REQUEST_ERROR = "Parse request error";
 	private static final String FORM_NAME_PARAM = "form-name";
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -90,7 +88,8 @@ public class FormSendServlet extends BaseSpringServlet {
 					}
 				} catch (FileUploadException e) {
 					logger.error(e.getMessage());
-					throw new UploadException(PARSE_REQUEST_ERROR);
+					throw new UploadException(Messages.get(
+							"request_parsing_error"));
 				}
 			}
 			else {
@@ -120,15 +119,14 @@ public class FormSendServlet extends BaseSpringServlet {
 	private String processForm(Map<String, String> parameters,
 			List<FileItem> files, HttpServletRequest request) 
 			throws UploadException {
-		logger.info("parameters " + parameters.toString());
 		String formName = parameters.get(FORM_NAME_PARAM);
 		if (formName == null) {
-			throw new UploadException("Form name parameter was not found.");
+			throw new UploadException(Messages.get(
+					"form.name_parameter_not_found"));
 		}
 		FormEntity form = getDao().getFormDao().getByName(formName);
 		if (form == null) {
-			throw new UploadException("Form with name " + formName 
-					+ " was not found.");
+			throw new UploadException(Messages.get("form.not_found", formName));
 		}
 		ConfigEntity config = getDao().getConfigDao().getConfig();
 		String challenge = parameters.get("recaptcha_challenge_field");
@@ -139,12 +137,11 @@ public class FormSendServlet extends BaseSpringServlet {
 					config.getRecaptchaPrivateKey(), 
 					challenge, response, request);
 			if (!recaptchaResponse.isValid()) {
-				return createMessage("error", 
-						"Incorrect captcha solution.");
+				return createMessage("error", Messages.get("incorrect_captcha"));
 			}
 		}
 		getBusiness().getFormBusiness().submit(form, parameters, files);
-		return createMessage("success", "Form was successfully submitted.");
+		return createMessage("success", Messages.get("form.success_submit"));
 	}
 	
 }

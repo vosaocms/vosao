@@ -27,6 +27,7 @@ import java.util.Map;
 
 import org.datanucleus.util.StringUtils;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.common.Messages;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PageTagEntity;
 import org.vosao.entity.TagEntity;
@@ -35,6 +36,11 @@ import org.vosao.service.back.TagService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.PageVO;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class TagServiceImpl extends AbstractServiceImpl 
 		implements TagService {
 
@@ -68,7 +74,7 @@ public class TagServiceImpl extends AbstractServiceImpl
 		if (error == null) {
 			getDao().getTagDao().save(tag);
 			return ServiceResponse.createSuccessResponse(
-					"Tag was successfully saved.");
+					Messages.get("tag.success_save"));
 		}
 		else {
 			return ServiceResponse.createErrorResponse(error);
@@ -79,7 +85,7 @@ public class TagServiceImpl extends AbstractServiceImpl
 	public ServiceResponse remove(Long id) {
 		getBusiness().getTagBusiness().remove(id);
 		return ServiceResponse.createSuccessResponse(
-				"Tag was successfully removed.");
+				Messages.get("tag.success_remove"));
 	}
 
 	@Override
@@ -92,7 +98,7 @@ public class TagServiceImpl extends AbstractServiceImpl
 			getBusiness().getTagBusiness().addTag(pageURL, tag);
 		}
 		return ServiceResponse.createSuccessResponse(
-				"Tag was successfully added");
+				Messages.get("tag.success_add"));
 	}
 
 	@Override
@@ -102,7 +108,7 @@ public class TagServiceImpl extends AbstractServiceImpl
 			getBusiness().getTagBusiness().removeTag(pageURL, tag);
 		}
 		return ServiceResponse.createSuccessResponse(
-				"Tag was successfully removed");
+				Messages.get("tag.success_remove"));
 	}
 
 	@Override

@@ -27,6 +27,7 @@ import java.util.Map;
 
 import org.datanucleus.util.StringUtils;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.common.Messages;
 import org.vosao.entity.FolderEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.FileService;
@@ -92,7 +93,7 @@ public class FolderServiceImpl extends AbstractServiceImpl
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
-					"Errors occured during folder save", errors);
+					Messages.get("errors_occured"), errors);
 		}
 	}
 
@@ -100,7 +101,7 @@ public class FolderServiceImpl extends AbstractServiceImpl
 	public ServiceResponse deleteFolder(List<String> ids) {
 		getBusiness().getFolderBusiness().recursiveRemove(StrUtil.toLong(ids));
 		return ServiceResponse.createSuccessResponse(
-				"Folders were successsfully deleted.");
+				Messages.get("folder.successs_delete"));
 	}
 
 	@Override

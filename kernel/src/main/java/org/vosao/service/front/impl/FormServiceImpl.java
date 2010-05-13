@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.tanesha.recaptcha.ReCaptchaResponse;
 
+import org.vosao.common.Messages;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FormEntity;
 import org.vosao.service.ServiceResponse;
@@ -35,6 +36,11 @@ import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.utils.EmailUtil;
 import org.vosao.utils.RecaptchaUtil;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class FormServiceImpl extends AbstractServiceImpl 
 		implements FormService {
 
@@ -42,20 +48,20 @@ public class FormServiceImpl extends AbstractServiceImpl
 	public ServiceResponse send(final String name, Map<String, String> params) {
 		FormEntity form = getDao().getFormDao().getByName(name);
 		if (form == null) {
-			return new ServiceResponse("error","Form not found");
+			return new ServiceResponse("error", Messages.get("form_not_found",
+					name));
 		}
 		String msgBody = createLetter(params);
 		String subject = form.getLetterSubject();
 		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
 		String fromAddress = config.getSiteEmail();
-		String fromText = config.getSiteDomain() 
-				+ " admin";
+		String fromText = config.getSiteDomain() + " admin";
 		String toAddress = form.getEmail();
 		String error = EmailUtil.sendEmail(msgBody, subject, fromAddress, fromText, 
 					toAddress);
 		if (error == null) {
-			return new ServiceResponse("success","Form sended to email address " 
-					+ form.getEmail());
+			return new ServiceResponse("success", Messages.get(
+					"form.success_send", form.getEmail()));
 		}
 		else {
 			return new ServiceResponse("error", error);

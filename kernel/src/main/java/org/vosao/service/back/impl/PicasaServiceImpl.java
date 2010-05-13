@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.vosao.common.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.PicasaService;
 import org.vosao.service.impl.AbstractServiceImpl;
@@ -82,7 +83,8 @@ public class PicasaServiceImpl extends AbstractServiceImpl
 			myAlbum.setTitle(new PlainTextConstruct(title));
 			myAlbum.setDescription(new PlainTextConstruct(title));
 			getBusiness().getPicasaBusiness().addAlbum(myAlbum);
-			return ServiceResponse.createSuccessResponse("Success.");
+			return ServiceResponse.createSuccessResponse(
+					Messages.get("success"));
 		}
 		catch (Exception e) {
 			return ServiceResponse.createErrorResponse(e.getMessage());
@@ -93,7 +95,7 @@ public class PicasaServiceImpl extends AbstractServiceImpl
 	public ServiceResponse removeAlbum(String albumId) {
 		try {
 			getBusiness().getPicasaBusiness().removeAlbum(albumId);
-			return ServiceResponse.createSuccessResponse("Success.");
+			return ServiceResponse.createSuccessResponse(Messages.get("success"));
 		}
 		catch (Exception e) {
 			return ServiceResponse.createErrorResponse(e.getMessage());
@@ -104,7 +106,7 @@ public class PicasaServiceImpl extends AbstractServiceImpl
 	public ServiceResponse removePhoto(String albumId, String photoId) {
 		try {
 			getBusiness().getPicasaBusiness().removePhoto(albumId, photoId);
-			return ServiceResponse.createSuccessResponse("Success.");
+			return ServiceResponse.createSuccessResponse(Messages.get("success"));
 		}
 		catch (Exception e) {
 			return ServiceResponse.createErrorResponse(e.getMessage());

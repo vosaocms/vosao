@@ -28,8 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.vosao.common.Messages;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.MessageEntity;
 import org.vosao.service.ServiceResponse;
@@ -42,9 +41,6 @@ import org.vosao.service.vo.MessageVO;
  */
 public class MessageServiceImpl extends AbstractServiceImpl 
 		implements MessageService {
-
-	private static final Log logger = LogFactory.getLog(
-			MessageServiceImpl.class);
 
 	@Override
 	public List<MessageVO> select() {
@@ -81,7 +77,7 @@ public class MessageServiceImpl extends AbstractServiceImpl
 		}
 		getDao().getMessageDao().remove(ids);
 		return ServiceResponse.createSuccessResponse(
-				"Messages were successfully deleted");
+				Messages.get("messages.success_deleted"));
 	}
 
 	@Override
@@ -93,7 +89,7 @@ public class MessageServiceImpl extends AbstractServiceImpl
 	public ServiceResponse save(Map<String, String> vo) {
 		List<String> errors = new ArrayList<String>();
 		if (StringUtils.isEmpty(vo.get("code"))) {
-			errors.add("Code is empty");
+			errors.add(Messages.get("code_is_empty"));
 		}
 		else {
 			String code = StringUtils.strip(vo.get("code"));
@@ -112,10 +108,10 @@ public class MessageServiceImpl extends AbstractServiceImpl
 				}
 			}
 			return ServiceResponse.createSuccessResponse(
-					"Message was successfully saved.");
+					Messages.get("message.success_save"));
 		}
 		return ServiceResponse.createErrorResponse(
-				"Error occured during Message save", errors);
+				Messages.get("errors_occured"), errors);
 	}
 
 	@Override

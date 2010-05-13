@@ -24,9 +24,8 @@ package org.vosao.service.back.impl;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
+import org.vosao.common.Messages;
 import org.vosao.entity.StructureTemplateEntity;
 import org.vosao.enums.StructureTemplateType;
 import org.vosao.service.ServiceResponse;
@@ -40,20 +39,17 @@ import org.vosao.utils.StrUtil;
 public class StructureTemplateServiceImpl extends AbstractServiceImpl 
 		implements StructureTemplateService {
 
-	private static final Log logger = LogFactory.getLog(
-			StructureTemplateServiceImpl.class);
-
 	@Override
 	public ServiceResponse remove(List<String> ids) {
 		List<String> errors = getBusiness().getStructureTemplateBusiness()
 				.remove(StrUtil.toLong(ids));
 		if (errors.isEmpty()) {
 			return ServiceResponse.createSuccessResponse(
-				"Structure templates were successfully deleted");
+				Messages.get("structureTemplate.success_delete"));
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
-				"Structure templates were deleted with errors", errors);
+				Messages.get("errors_occured"), errors);
 		}
 	}
 
@@ -85,7 +81,7 @@ public class StructureTemplateServiceImpl extends AbstractServiceImpl
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
-					"Error occured during structure template save", errors);
+					Messages.get("errors_occured"), errors);
 		}
 	}
 

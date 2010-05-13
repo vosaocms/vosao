@@ -26,9 +26,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
+import org.vosao.common.Messages;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.service.ServiceResponse;
@@ -39,10 +38,13 @@ import org.vosao.utils.FolderUtil;
 import org.vosao.utils.MimeType;
 import org.vosao.utils.StrUtil;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class FileServiceImpl extends AbstractServiceImpl 
 		implements FileService {
-
-	private static Log logger = LogFactory.getLog(FileServiceImpl.class);
 
 	@Override
 	public List<FileEntity> getByFolder(Long folderId) {
@@ -52,7 +54,8 @@ public class FileServiceImpl extends AbstractServiceImpl
 	@Override
 	public ServiceResponse deleteFiles(List<String> fileIds) {
 		getDao().getFileDao().remove(StrUtil.toLong(fileIds));
-		return new ServiceResponse("success", "Files was successfully deleted.");
+		return new ServiceResponse("success", Messages.get(
+				"files.success_delete"));
 	}
 
 	@Override
@@ -79,15 +82,15 @@ public class FileServiceImpl extends AbstractServiceImpl
 						.getFolderPath(folder) + "/" + file.getFilename();
 				getBusiness().getSystemService().getCache().remove(cacheUrl);
 				return ServiceResponse.createSuccessResponse(
-						"File was successfully updated");
+						Messages.get("file.success_update"));
 			} catch (UnsupportedEncodingException e) {
 				return ServiceResponse.createErrorResponse(
-						"Error! Unsupported encoding.");
+						Messages.get("unsupported_encoding"));
 			}
 		}
 		else {
-			return ServiceResponse.createErrorResponse("File not found " 
-					+ fileId);
+			return ServiceResponse.createErrorResponse(Messages.get(
+					"file.not_found"));
 		}
 	}
 
@@ -139,11 +142,11 @@ public class FileServiceImpl extends AbstractServiceImpl
 			getBusiness().getSystemService().getCache().remove(cacheUrl);
 			getDao().getFileDao().save(file);
 			return ServiceResponse.createSuccessResponse(
-					"File was successfully saved.");
+					Messages.get("file.success_update"));
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
-					"Errors occured during file save", errors);
+					Messages.get("errors_occured"), errors);
 		}
 	}
 

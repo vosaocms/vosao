@@ -25,20 +25,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
+import org.vosao.common.Messages;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.LanguageService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.utils.StrUtil;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class LanguageServiceImpl extends AbstractServiceImpl 
 		implements LanguageService {
-
-	private static final Log logger = LogFactory.getLog(
-			LanguageServiceImpl.class);
 
 	@Override
 	public List<LanguageEntity> select() {
@@ -49,7 +50,7 @@ public class LanguageServiceImpl extends AbstractServiceImpl
 	public ServiceResponse remove(List<String> ids) {
 		getDao().getLanguageDao().remove(StrUtil.toLong(ids));
 		return ServiceResponse.createSuccessResponse(
-				"Languages were successfully deleted");
+				Messages.get("languages.success_delete"));
 	}
 
 	@Override
@@ -62,7 +63,7 @@ public class LanguageServiceImpl extends AbstractServiceImpl
 		LanguageEntity found = getDao().getLanguageDao().getByCode(
 				entity.getCode());
 		if (found != null && !found.getId().equals(entity.getId())) {
-				errors.add("This language code already registered.");
+				errors.add(Messages.get("language.code_registered"));
 		}
 		return errors;
 	}
@@ -83,11 +84,11 @@ public class LanguageServiceImpl extends AbstractServiceImpl
 		if (errors.isEmpty()) {
 			getDao().getLanguageDao().save(language);
 			return ServiceResponse.createSuccessResponse(
-						"Language was successfully saved.");
+						Messages.get("language.success_save"));
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
-					"Error occured during Language save", errors);
+					Messages.get("errors_occured"), errors);
 		}
 	}
 

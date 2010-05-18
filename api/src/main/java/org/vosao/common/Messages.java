@@ -97,6 +97,8 @@ public class Messages {
 		StringBuffer result = new StringBuffer();
 		result.append("locale = '").append(ctx.getLocale().toString())
 				.append("';\n");
+		result.append("locale_language = '")
+			.append(ctx.getLocale().getLanguage()).append("';\n");
 		result.append("messages = {\n");
 		int i = 0;
 		for (String key : messages.keySet()) {

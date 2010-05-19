@@ -45,6 +45,7 @@
     <p><fmt:message key="login.sign_in"/></p>
     <p><fmt:message key="login.visit"/></p>
     <p><fmt:message key="login.bug"/></p>
+    <p><fmt:message key="login.forum"/></p>
 </div>
 
 <div id="login-form">

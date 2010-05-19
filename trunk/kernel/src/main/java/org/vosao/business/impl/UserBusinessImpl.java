@@ -21,13 +21,20 @@
 
 package org.vosao.business.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.velocity.VelocityContext;
 import org.vosao.business.UserBusiness;
 import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
+import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.UserEntity;
+import org.vosao.utils.EmailUtil;
+import org.vosao.utils.HashUtil;
+import org.vosao.utils.StreamUtil;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 
@@ -64,6 +71,38 @@ public class UserBusinessImpl extends AbstractBusinessImpl
 		if (VosaoContext.getInstance().getUser().isAdmin()) {
 			getDao().getUserGroupDao().removeByUser(ids);
 			getDao().getUserDao().remove(ids);
+		}
+	}
+
+	@Override
+	public void forgotPassword(String email) {
+		UserEntity user = getDao().getUserDao().getByEmail(email);
+		if (user == null) {
+			return;
+		}
+		String key = HashUtil.getMD5(email 
+				+ String.valueOf((new Date()).getTime()));
+		user.setForgotPasswordKey(key);
+		getDao().getUserDao().save(user);
+		String template = "";
+		try {
+			template = StreamUtil.getTextResource(
+					"org/vosao/resources/html/forgot-letter.html");
+		}
+		catch (IOException e) {
+			logger.error(e.getMessage());
+			return;
+		}
+		ConfigEntity config = getDao().getConfigDao().getConfig();
+		VelocityContext context = new VelocityContext();
+		context.put("user", user);
+		context.put("config", config);
+		context.put("key", key);
+		String letter = getSystemService().render(template, context);
+		String error = EmailUtil.sendEmail(letter, "Forgot password", 
+				config.getSiteEmail(), "Site admin", email);
+		if (error != null) {
+			logger.error(error);
 		}
 	}
 	

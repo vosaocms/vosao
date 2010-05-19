@@ -74,6 +74,7 @@ import org.vosao.velocity.VelocityPluginService;
 import org.vosao.velocity.VelocityService;
 import org.vosao.velocity.impl.VelocityPluginServiceImpl;
 import org.vosao.velocity.impl.VelocityServiceImpl;
+import org.vosao.velocity.impl.VosaoTool;
 
 /**
  * @author Alexander Oleynik
@@ -209,6 +210,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		context.put("comparisonDate", new ComparisonDateTool());
 		context.put("iterator", new IteratorTool());
 		context.put("parser", new ValueParser());
+		context.put("vosao", new VosaoTool());
 	}
 	
 	private String pagePostProcess(final String content, 

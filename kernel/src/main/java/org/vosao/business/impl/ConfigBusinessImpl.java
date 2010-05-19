@@ -25,8 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.vosao.business.ConfigBusiness;
 import org.vosao.common.Messages;
 import org.vosao.entity.ConfigEntity;
@@ -34,8 +32,6 @@ import org.vosao.filter.SiteFilter;
 
 public class ConfigBusinessImpl extends AbstractBusinessImpl 
 	implements ConfigBusiness {
-
-	private static final Log logger = LogFactory.getLog(ConfigBusinessImpl.class);
 
 	@Override
 	public ConfigEntity getConfig() {

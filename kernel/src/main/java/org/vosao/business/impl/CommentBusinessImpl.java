@@ -26,8 +26,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.vosao.business.CommentBusiness;
 import org.vosao.business.ContentPermissionBusiness;
 import org.vosao.common.VosaoContext;
@@ -40,8 +38,6 @@ import org.vosao.utils.StrUtil;
 
 public class CommentBusinessImpl extends AbstractBusinessImpl 
 	implements CommentBusiness {
-
-	private static final Log logger = LogFactory.getLog(CommentBusinessImpl.class);
 
 	private static final String COMMENT_LETTER_SUBJECT = "New comment";
 	

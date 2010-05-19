@@ -30,8 +30,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.tools.generic.AlternatorTool;
 import org.apache.velocity.tools.generic.ComparisonDateTool;
@@ -81,8 +79,6 @@ import org.vosao.velocity.impl.VosaoTool;
  */
 public class PageBusinessImpl extends AbstractBusinessImpl 
 	implements PageBusiness {
-
-    private static final Log logger = LogFactory.getLog(PageBusinessImpl.class);
 
 	private VelocityPluginService velocityPluginService;
 	private Business business;

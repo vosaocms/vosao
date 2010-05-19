@@ -86,7 +86,7 @@
         </div>
         <div class="form-row">
             <label>Picasa <fmt:message key="password" /></label>
-            <input id="picasaPassword" type="text" />
+            <input id="picasaPassword" type="password" />
         </div>
     </div>
     <div class="buttons">

@@ -19,7 +19,7 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business;
+package org.vosao.business.page;
 
 import java.util.Date;
 import java.util.List;

@@ -19,7 +19,7 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.impl;
+package org.vosao.business.page.impl;
 
 import java.util.Date;
 import java.util.List;
@@ -29,7 +29,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.PageBusiness;
-import org.vosao.business.PageRenderDecorator;
+import org.vosao.business.page.PageRenderDecorator;
 import org.vosao.common.Messages;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;

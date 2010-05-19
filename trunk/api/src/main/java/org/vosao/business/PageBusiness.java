@@ -26,7 +26,7 @@ import java.util.List;
 
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.decorators.TreeItemDecorator;
-import org.vosao.business.PageRenderDecorator;
+import org.vosao.business.page.PageRenderDecorator;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.UserEntity;

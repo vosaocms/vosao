@@ -19,7 +19,7 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.impl;
+package org.vosao.business.page.impl;
 
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.PageBusiness;

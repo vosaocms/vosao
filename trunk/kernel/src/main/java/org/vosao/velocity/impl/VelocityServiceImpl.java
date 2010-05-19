@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.vosao.business.Business;
-import org.vosao.business.impl.StructurePageRenderDecorator;
+import org.vosao.business.page.impl.StructurePageRenderDecorator;
 import org.vosao.business.vo.StructureFieldVO;
 import org.vosao.common.AbstractServiceBeanImpl;
 import org.vosao.common.Messages;

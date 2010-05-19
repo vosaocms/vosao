@@ -28,8 +28,6 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.dom4j.DocumentException;
 import org.vosao.business.Business;
 import org.vosao.business.ImportExportBusiness;
@@ -49,9 +47,6 @@ import org.vosao.entity.TemplateEntity;
 
 public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 		ImportExportBusiness {
-
-	private static final Log logger = LogFactory
-			.getLog(ImportExportBusinessImpl.class);
 
 	private Business business;
 	private Dao dao;

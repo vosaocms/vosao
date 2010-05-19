@@ -21,14 +21,11 @@
 
 package org.vosao.business.impl;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.vosao.business.ContentPermissionBusiness;
 import org.vosao.business.FolderBusiness;
 import org.vosao.common.Messages;
@@ -44,9 +41,6 @@ import org.vosao.utils.UrlUtil;
  */
 public class ContentPermissionBusinessImpl extends AbstractBusinessImpl
 		implements ContentPermissionBusiness {
-
-	private static final Log logger = LogFactory
-			.getLog(ContentPermissionBusinessImpl.class);
 
 	private FolderBusiness folderBusiness;
 	

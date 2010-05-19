@@ -1,3 +1,4 @@
+<%
 /**
  * Vosao CMS. Simple CMS for Google App Engine.
  * Copyright (C) 2009 Vosao development team
@@ -18,25 +19,19 @@
  *
  * email: vosao.dev@gmail.com
  */
+%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
+<html>
+<head>
+    <title><fmt:message key="login.change_password_fail"/></title>
+    <link rel="stylesheet" href="/static/css/login.css" type="text/css" />
+</head>
+<body>
 
-package org.vosao.dao;
+<div id="content">
 
-import java.util.List;
+<fmt:message key="login.change_password_fail_page"/>
 
-import org.vosao.entity.UserEntity;
-import org.vosao.enums.UserRole;
-
-/**
- * @author Alexander Oleynik
- */
-public interface UserDao extends BaseDao<UserEntity> {
-
-	UserEntity getByEmail(final String email);
-
-	List<UserEntity> getByRole(final UserRole role);
-
-	List<UserEntity> selectByGroup(final Long groupId);
-	
-	UserEntity getByKey(final String key);
-	
-}
+</body>
+</html>

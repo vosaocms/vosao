@@ -210,6 +210,17 @@
         <url-pattern>/_ah/webdav/*</url-pattern>
     </servlet-mapping>
 
+    <!-- Forgot password servlet -->
+
+    <servlet>
+        <servlet-name>ForgotPasswordServlet</servlet-name>
+        <servlet-class>org.vosao.servlet.ForgotPasswordServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ForgotPasswordServlet</servlet-name>
+        <url-pattern>/_ah/changePassword</url-pattern>
+    </servlet-mapping>
+
     <!-- Tasks -->
 
     <servlet>

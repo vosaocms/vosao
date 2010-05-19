@@ -37,6 +37,7 @@ public class UserEntity extends BaseEntityImpl {
 	private String password;
 	private String email;
 	private UserRole role;
+	private String forgotPasswordKey;
 	
 	public UserEntity() {
 		role = UserRole.USER;
@@ -49,6 +50,7 @@ public class UserEntity extends BaseEntityImpl {
 		password = getStringProperty(entity, "password");
 		email = getStringProperty(entity, "email");
 		role = UserRole.valueOf(getStringProperty(entity, "role"));
+		forgotPasswordKey = getStringProperty(entity, "forgotPasswordKey");
 	}
 	
 	@Override
@@ -58,6 +60,7 @@ public class UserEntity extends BaseEntityImpl {
 		setProperty(entity, "password", password, false);
 		setProperty(entity, "email", email, true);
 		setProperty(entity, "role", role.name(), true);
+		setProperty(entity, "forgotPasswordKey", forgotPasswordKey, true);
 	}
 
 	public UserEntity(String aName, String aPassword,
@@ -131,6 +134,14 @@ public class UserEntity extends BaseEntityImpl {
 	
 	public boolean isEditor() {
 		return isAdmin() || isUser();
+	}
+
+	public String getForgotPasswordKey() {
+		return forgotPasswordKey;
+	}
+
+	public void setForgotPasswordKey(String forgotPasswordKey) {
+		this.forgotPasswordKey = forgotPasswordKey;
 	}
 	
 }

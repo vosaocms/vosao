@@ -32,32 +32,9 @@
 <head>
     <title><fmt:message key="login.title"/></title>
     <link rel="stylesheet" href="/static/css/login.css" type="text/css" />
+    <script type="text/javascript" src="/static/js/cms/login.js"></script>
     <script type="text/javascript">
-        var loggedIn = <%= user != null %>;
-    
-        function onLogin() {
-            if (loggedIn) {
-                location.href = '/cms';
-                return;
-            }
-            var email = $('#loginEmail').val();
-            var password = $('#loginPassword').val();
-            if (email == '') {
-                Vosao.errorMessage('#login-messages', messages['email_is_empty']);
-            }
-            else {
-            	Vosao.jsonrpc.loginFrontService.login(function (r, e) {
-                    if (Vosao.serviceFailed(e)) return;
-                    if (r.result == 'success') {
-                    	Vosao.infoMessage('#login-messages', messages['success_logging_in']);
-                        document.location.href = r.message;
-                    }
-                    else {
-                    	Vosao.errorMessage('#login-messages', r.message);
-                    }
-                }, email, password);
-            }                
-        }
+        loggedIn = <%= user != null %>;
     </script>
 </head>
 <body>
@@ -87,6 +64,8 @@
 <div id="login-messages"> </div>
 <div class="buttons-dlg">
     <input type="submit" value="<fmt:message key="login"/>" />
+    <br/>
+    <a href="#" id="forgot"><fmt:message key="forgot_password"/></a>
 </div>    
 
 </form>
@@ -99,6 +78,23 @@
 </div>
 
 </div>
+
+<div class="messages"> </div>
+
+<div id="forgot-dialog" style="display:none" title="<fmt:message key="forgot_password"/>">
+  <form id="forgotForm">
+    <p style="margin-bottom: 20px;"><fmt:message key="login.forgot_dialog"/></p>
+    <div class="form-row">
+        <label style="width: 80px;"><fmt:message key="email"/></label>
+        <input type="text" id="email" />
+    </div>
+    <div class="buttons-dlg">
+        <input type="submit" value="OK" />
+        <input id="forgotCancelButton" type="button" value="<fmt:message key="cancel" />" />
+    </div>
+  </form>
+</div>
+
 
 </body>
 </html>

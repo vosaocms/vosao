@@ -3,6 +3,7 @@
 <decorators defaultdir="/WEB-INF/sitemesh">
     <decorator name="login-layout" page="login-layout.jsp">
         <pattern>/login.jsp</pattern>
+        <pattern>/forgotPasswordFail.jsp</pattern>
     </decorator>
     <decorator name="simple-layout" page="simple-layout.jsp">
         <pattern>/cms/fileBrowser.jsp</pattern>

@@ -25,10 +25,17 @@ import java.util.List;
 
 import org.vosao.entity.UserEntity;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public interface UserBusiness {
 
 	List<String> validateBeforeUpdate(final UserEntity User);
 	
 	void remove(final List<Long> ids);
+	
+	void forgotPassword(String email);
 	
 }

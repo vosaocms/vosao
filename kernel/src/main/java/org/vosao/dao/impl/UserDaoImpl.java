@@ -76,4 +76,14 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity>
 		this.userGroupDao = userGroupDao;
 	}
 
+	@Override
+	public UserEntity getByKey(String key) {
+		if (key == null) {
+			return null;
+		}
+		Query q = newQuery();
+		q.addFilter("forgotPasswordKey", EQUAL, key);
+		return selectOne(q, "getByKey", params(key));
+	}
+
 }

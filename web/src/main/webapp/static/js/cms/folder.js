@@ -70,6 +70,7 @@ function loadData() {
 		folderRequest = r;
 	    loadFolder();
 	    loadGroups();
+	    showBreadcrumbs();
 	    if (!editMode) {
 	        $('.filesTab').hide();
 	        $('.childrenTab').hide();
@@ -459,4 +460,21 @@ function onExportCancel() {
 	$('#export-dialog').dialog('close');
 	clearInterval(exportTimer);
 	clearInterval(clockTimer);
+}
+
+function showBreadcrumbs() {
+	var h = '';
+	var parent = folderRequest.parent;
+	$.each(folderRequest.ancestors.list, function(i,value) {
+		var name = value.name == '/' ? 'file' : value.name;
+		h += '<a href="/cms/folder.jsp?id=' + value.id + '">' + name + '</a> / ';
+	});
+	if (editMode) {
+		h += ' ' + ( folder.name == '/' ? 'file' : folder.name );
+	}
+	else {
+		h += '<a href="/cms/folder.jsp?id=' + parent.id + '">' + parent.name 
+			+ '</a>';
+	}
+	$('#crumbs').html(h);
 }

@@ -34,7 +34,14 @@
 </head>
 <body>
 
-<div id="tabs">
+<div id="breadcrumbs">
+    <span class="button ui-state-default ui-corner-all" style="padding:4px 10px;">
+        <a href="/cms/folders.jsp"><fmt:message key="resources" />:</a> /
+        <span id="crumbs"></span>
+    </span>
+</div>
+
+<div id="tabs" style="top:14px;">
 <ul>
     <li><a href="#tab-1"><fmt:message key="folder" /></a></li>
     <li class="filesTab"><a href="#tab-2"><fmt:message key="files" /></a></li>

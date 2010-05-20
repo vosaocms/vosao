@@ -34,7 +34,10 @@
 
 <%@ include file="versionsBox.jsp" %>
 
-<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+<%@ include file="breadcrumbs.jsp" %>
+
+<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all"
+    style="margin-top: 14px;">
 
 <%@ include file="tab.jsp" %>
 

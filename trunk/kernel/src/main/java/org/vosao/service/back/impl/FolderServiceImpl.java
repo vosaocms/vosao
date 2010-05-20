@@ -107,7 +107,8 @@ public class FolderServiceImpl extends AbstractServiceImpl
 	@Override
 	public FolderRequestVO getFolderRequest(Long folderId, Long folderParentId) {
 		FolderRequestVO result = new FolderRequestVO();
-		result.setFolder(getFolder(folderId));
+		FolderEntity folder = getFolder(folderId);
+		result.setFolder(folder);
 		Long permFolderId = folderParentId;
 		if (result.getFolder() != null) {
 			result.setChildren(getByParent(folderId));
@@ -115,6 +116,13 @@ public class FolderServiceImpl extends AbstractServiceImpl
 			result.setPermissions(getFolderPermissionService().selectByFolder(
 					folderId));
 			permFolderId = folderId;
+			result.setAncestors(getDao().getFolderDao().getAncestors(folder));
+			result.setParent(getFolder(folder.getParent()));
+		}
+		else {
+			FolderEntity parent = getFolder(folderParentId);
+			result.setAncestors(getDao().getFolderDao().getAncestors(parent));
+			result.setParent(parent);
 		}
 		result.setGroups(getGroupService().select());
 		result.setFolderPermission(getFolderPermissionService().getPermission(

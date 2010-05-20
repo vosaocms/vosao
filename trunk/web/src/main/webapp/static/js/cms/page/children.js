@@ -50,6 +50,7 @@ function loadData() {
 		pageRequest = r;
 		page = pageRequest.page;
 		loadPage();
+		breadcrumbsShow();
 	}, pageId, pageParentUrl);
 }
 

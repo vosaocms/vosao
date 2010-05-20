@@ -35,6 +35,8 @@ import org.vosao.entity.FolderPermissionEntity;
 public class FolderRequestVO {
 
     private FolderEntity folder;
+    private FolderEntity parent;
+    private List<FolderEntity> ancestors;
     private List<FileEntity> files;
     private List<FolderEntity> children;
     private List<FolderPermissionVO> permissions;
@@ -46,6 +48,7 @@ public class FolderRequestVO {
     	children = Collections.EMPTY_LIST;
     	permissions = Collections.EMPTY_LIST;
     	groups = Collections.EMPTY_LIST;
+    	ancestors = Collections.EMPTY_LIST;
     }
 
 	public FolderEntity getFolder() {
@@ -94,6 +97,22 @@ public class FolderRequestVO {
 
 	public void setFiles(List<FileEntity> files) {
 		this.files = files;
+	}
+
+	public List<FolderEntity> getAncestors() {
+		return ancestors;
+	}
+
+	public void setAncestors(List<FolderEntity> ancestors) {
+		this.ancestors = ancestors;
+	}
+
+	public FolderEntity getParent() {
+		return parent;
+	}
+
+	public void setParent(FolderEntity parent) {
+		this.parent = parent;
 	}
     
 }

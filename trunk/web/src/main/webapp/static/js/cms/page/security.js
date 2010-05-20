@@ -62,6 +62,7 @@ function loadData() {
 		page = pageRequest.page;
 		loadLanguages();
 		loadPage();
+		breadcrumbsShow();
 	}, pageId, pageParentUrl);
 }
 

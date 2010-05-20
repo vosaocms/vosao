@@ -64,6 +64,7 @@ function loadData() {
 		loadTemplates();
 		loadStructures();
 		loadPage();
+		breadcrumbsShow();
 	}, pageId, pageParentUrl);
 }
 

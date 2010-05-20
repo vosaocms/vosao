@@ -19,24 +19,35 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+$(function() {
+	$('#rootPage').click(function () { breadcrumbsEdit('/'); });
+});
 
-import java.util.List;
-
-import org.vosao.entity.FolderEntity;
-
-/**
- * @author Alexander Oleynik
- */
-public interface FolderDao extends BaseDao<FolderEntity> {
-
-	FolderEntity getByPath(final String path);
-
-	String getFolderPath(final Long folderId);
-
-	List<FolderEntity> getByParent(final Long id);
-
-	FolderEntity getByParentName(final Long parentid, final String name);
-	
-	List<FolderEntity> getAncestors(final FolderEntity folder);
+function breadcrumbsShow() {
+	var path = pageParentUrl;
+	if (editMode) {
+		path = pageRequest.page.friendlyURL;
+	}
+	var h = '';
+	var pages = path.substr(1).split('/');
+	if (pages.length > 0) {
+		var currentPath = ''; 
+		$.each(pages, function(i,value) {
+			currentPath += '/' + value;
+			if (pages.length - 1 == i && editMode) {
+				h += ' ' + pages[pages.length - 1];
+			}
+			else {
+				h += ' <a href="#" onclick="breadcrumbsEdit(\'' 
+					+ currentPath + '\')">' + value + '</a> /';
+			}
+		});
+	}
+	$('#crumbs').html(h);
 }
+	
+function breadcrumbsEdit(path) {
+	Vosao.jsonrpc.pageService.getPageByUrl(function(r) {
+		location.href = '/cms/page/content.jsp?id=' + r.id;
+	}, path);
+}	

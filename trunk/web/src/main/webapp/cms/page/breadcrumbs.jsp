@@ -20,24 +20,11 @@
  * email: vosao.dev@gmail.com
  */
 %>
-  <%@ page import="org.vosao.servlet.FileUploadServlet" %>
-  
-  <title><fmt:message key="page" /></title>
-  <link rel="stylesheet" href="/static/css/page.css" type="text/css" />
-  <script type="text/javascript" src="/static/ckeditor/ckeditor.js"></script>
-  
-<%
-    if (request.getParameter("id") != null) {    
-        session.setAttribute(FileUploadServlet.IMAGE_UPLOAD_PAGE_ID, 
-        		request.getParameter("id"));
-    }
-%>  
-  
-  <script type="text/javascript">
-    var pageId = '<c:out value="${param.id}"/>';
-    var pageParentUrl = decodeURIComponent('<c:out value="${param.parent}"/>');
-  </script>
 
-  <script type="text/javascript" src="/static/js/cms/page/version.js"></script>
-  <script type="text/javascript" src="/static/js/cms/page/breadcrumbs.js"></script>
- 
+<div id="breadcrumbs">
+    <span class="button ui-state-default ui-corner-all" style="padding:4px 10px;">
+        <a href="/cms/pages.jsp"><fmt:message key="content" />:</a> 
+        <a id="rootPage" href="#">/</a> 
+        <span id="crumbs"></span>
+    </span>
+</div>

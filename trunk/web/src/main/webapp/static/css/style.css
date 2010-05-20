@@ -298,3 +298,6 @@ a.button span.ui-icon {
 #languageDiv a:hover {
 }
 
+#breadcrumbs a:hover {
+	color: #E17009;
+}

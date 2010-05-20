@@ -86,5 +86,21 @@ public class FolderDaoImpl extends BaseDaoImpl<FolderEntity>
 		}
 		return result.toString();
 	}
+
+	@Override
+	public List<FolderEntity> getAncestors(FolderEntity folder) {
+		List<FolderEntity> result = new ArrayList<FolderEntity>();
+		FolderEntity current = folder;
+		while (current.getParent() != null) {
+			FolderEntity parent = getById(current.getParent());
+			if (parent == null) {
+				break;
+			}
+			result.add(parent);
+			current = parent;
+		}
+		Collections.reverse(result);
+		return result;
+	}
 	
 }

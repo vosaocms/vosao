@@ -45,6 +45,7 @@ public class UpdateManager {
 		datastore = DatastoreServiceFactory.getDatastoreService(); 
 		tasks = new ArrayList<UpdateTask>();
 		tasks.add(new UpdateTask04(business));
+		tasks.add(new UpdateTask05(business));
 	}
 	
 	public String update() throws UpdateException {

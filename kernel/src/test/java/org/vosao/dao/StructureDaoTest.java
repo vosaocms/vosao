@@ -34,7 +34,7 @@ public class StructureDaoTest extends AbstractDaoTest {
 		StructureEntity s = getDao().getStructureDao().save(
 				new StructureEntity(title, content));
 		getDao().getStructureTemplateDao().save(new StructureTemplateEntity(
-				title, s.getId(), StructureTemplateType.VELOCITY, content));
+				title, title, s.getId(), StructureTemplateType.VELOCITY, content));
 		return s;
 	}
 	
@@ -50,7 +50,7 @@ public class StructureDaoTest extends AbstractDaoTest {
 		s = getDao().getStructureDao().getByTitle("megahit");
 		assertNull(s);
 		StructureTemplateEntity st = getDao().getStructureTemplateDao()
-				.getByTitle("sitemap");
+				.getByName("sitemap");
 		assertNotNull(st);
 	}	
 

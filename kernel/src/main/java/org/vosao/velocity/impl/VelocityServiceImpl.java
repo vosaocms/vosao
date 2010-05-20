@@ -26,13 +26,16 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.velocity.VelocityContext;
 import org.vosao.business.Business;
 import org.vosao.business.page.impl.StructurePageRenderDecorator;
 import org.vosao.business.vo.StructureFieldVO;
 import org.vosao.common.AbstractServiceBeanImpl;
 import org.vosao.common.Messages;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.StructureEntity;
+import org.vosao.entity.StructureTemplateEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.entity.helper.PageHelper;
 import org.vosao.enums.UserRole;
@@ -204,6 +207,28 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 	@Override
 	public List<PageEntity> findPageChildren(String path, int start, int count) {
 		return ListUtil.slice(findPageChildren(path), start, count);
+	}
+
+	@Override
+	public String renderStructureContent(String path,
+			String structureTemplateName) {
+		PageEntity page = getDao().getPageDao().getByUrl(path);
+		if (page != null) {
+			if (!page.isStructured()) {
+				return Messages.get("page.not_structural");
+			}
+			StructureTemplateEntity template = getDao()
+					.getStructureTemplateDao().getByName(structureTemplateName);
+			if (template == null) {
+				return Messages.get("structureTemplate.not_found",
+						structureTemplateName);
+			}
+			return getBusiness().getPageBusiness()
+				.createStructuredPageRenderDecorator(page, 
+						VosaoContext.getInstance().getLanguage(),
+						template).getContent();
+		}
+		return Messages.get("approved_content_not_found");
 	}
 	
 }

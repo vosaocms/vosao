@@ -19,20 +19,56 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.dao;
+package org.vosao.update;
 
-import java.util.List;
-
+import org.vosao.business.Business;
+import org.vosao.dao.Dao;
 import org.vosao.entity.StructureTemplateEntity;
 
 /**
+ * 
  * @author Alexander Oleynik
+ *
  */
-public interface StructureTemplateDao extends 
-		BaseDao<StructureTemplateEntity> {
+public class UpdateTask05 implements UpdateTask {
 
-	List<StructureTemplateEntity> selectByStructure(final Long structureId);
+	private Business business;
+	
+	public UpdateTask05(Business aBusiness) {
+		business = aBusiness;
+	}
+	
+	private Dao getDao() {
+		return business.getDao();
+	}
+	
+	private Business getBusiness() {
+		return business;
+	}
 
-	StructureTemplateEntity getByName(final String name);
+	@Override
+	public String getFromVersion() {
+		return "0.4";
+	}
+
+	@Override
+	public String getToVersion() {
+		return "0.5";
+	}
+
+	@Override
+	public String update() throws UpdateException {
+		getBusiness().getSetupBean().clearSessions();
+		updateStructureTemplates();
+		return "Successfully updated to 0.5 version.";
+	}
+
+	private void updateStructureTemplates() {
+		for (StructureTemplateEntity template : getDao()
+				.getStructureTemplateDao().select()) {
+			template.setName(template.getTitle());
+			getDao().getStructureTemplateDao().save(template);
+		}
+	}
 	
 }

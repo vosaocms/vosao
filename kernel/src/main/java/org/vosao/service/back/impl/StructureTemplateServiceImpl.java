@@ -68,6 +68,7 @@ public class StructureTemplateServiceImpl extends AbstractServiceImpl
 		if (entity == null) {
 			entity = new StructureTemplateEntity();
 		}
+		entity.setName(vo.get("name"));
 		entity.setTitle(vo.get("title"));
 		entity.setContent(vo.get("content"));
 		entity.setStructureId(Long.valueOf(vo.get("structureId")));

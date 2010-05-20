@@ -59,7 +59,8 @@ public class StructurePageRenderDecorator extends AbstractPageRenderDecorator {
 	private StructureTemplateEntity structureTemplate;
 	private Map<String, String> contentMap;
 
-	public StructurePageRenderDecorator(PageEntity page,	String languageCode, 
+	public StructurePageRenderDecorator(PageEntity page, String languageCode, 
+			StructureTemplateEntity template,
 			Dao dao,
 			PageBusiness pageBusiness, 
 			SystemService systemService) {
@@ -69,15 +70,20 @@ public class StructurePageRenderDecorator extends AbstractPageRenderDecorator {
 		setDao(dao);
 		setPageBusiness(pageBusiness);
 		setSystemService(systemService);
-		initStructure();
+		initStructure(template);
 		prepareContent();
 	}
 
-	private void initStructure() {
+	private void initStructure(StructureTemplateEntity template) {
 		structure = getDao().getStructureDao().getById(getPage()
 				.getStructureId());
-		structureTemplate = getDao().getStructureTemplateDao().getById(
+		if (template != null) {
+			structureTemplate = template;
+		}
+		else {
+			structureTemplate = getDao().getStructureTemplateDao().getById(
 				getPage().getStructureTemplateId());
+		}
 	}
 	
 	private void prepareContent() {

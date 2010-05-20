@@ -42,7 +42,7 @@ public class StructureTemplateBusinessImpl extends AbstractBusinessImpl
 			final StructureTemplateEntity entity) {
 		List<String> errors = new ArrayList<String>();
 		StructureTemplateEntity foundStructure = getDao().getStructureTemplateDao()
-				.getByTitle(entity.getTitle());
+				.getByName(entity.getName());
 		if (entity.getId() == null) {
 			if (foundStructure != null) {
 				errors.add(Messages.get("structureTemplate.already_exists"));
@@ -56,6 +56,9 @@ public class StructureTemplateBusinessImpl extends AbstractBusinessImpl
 		}
 		if (StringUtil.isEmpty(entity.getTitle())) {
 			errors.add(Messages.get("title_is_empty"));
+		}
+		if (StringUtil.isEmpty(entity.getName())) {
+			errors.add(Messages.get("name_is_empty"));
 		}
 		return errors;
 	}

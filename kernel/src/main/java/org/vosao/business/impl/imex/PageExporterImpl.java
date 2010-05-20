@@ -282,7 +282,7 @@ public class PageExporterImpl extends AbstractExporter
 			}
 			if (element.getName().equals("structureTemplate")) {
 				StructureTemplateEntity structureTemplate = getDao()
-						.getStructureTemplateDao().getByTitle(element.getText());
+						.getStructureTemplateDao().getByName(element.getText());
 				newPage.setStructureTemplateId(structureTemplate == null ? null : 
 						structureTemplate.getId());
 			}

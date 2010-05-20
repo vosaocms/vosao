@@ -634,7 +634,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 	public ServiceResponse addPage(Map<String, String> vo) {
 		PageEntity page = new PageEntity();
 		page.setSortIndex(getBusiness().getPageBusiness().getNextSortIndex(
-					vo.get("friendlyUrl")));
+					vo.get("friendlyURL")));
 		page.setFriendlyURL(vo.get("friendlyURL"));
 		TemplateEntity template = getDao().getTemplateDao().select().get(0);
 		page.setTemplate(template.getId());

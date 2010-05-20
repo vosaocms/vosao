@@ -41,6 +41,10 @@
 
 <div id="tab-1">
     <div class="form-row">
+        <label><fmt:message key="name" /></label>
+        <input id="name" type="text" />
+    </div>
+    <div class="form-row">
         <label><fmt:message key="title" /></label>
         <input id="title" type="text" />
     </div>

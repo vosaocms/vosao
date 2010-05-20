@@ -154,4 +154,13 @@ public interface VelocityService {
 	
 	TagVelocityService getTag();
 	
+	/**
+	 * Render structure page specified by path using structure template 
+	 * specified by unique structureTemplateName.
+	 * @param path - page path.
+	 * @param structureTemplateName - structure template name.
+	 * @return - rendered content.
+	 */
+	String renderStructureContent(String path, String structureTemplateName);
+	
 }

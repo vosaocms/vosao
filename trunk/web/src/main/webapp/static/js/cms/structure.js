@@ -290,12 +290,15 @@ function loadTemplates() {
 }
 
 function showTemplates() {
-	var h = '<table class="form-table"><tr><th></th><th>' + messages['title']
-	    + '</th><th><th>' + messages['type'] + '</th></tr>';
+	var h = '<table class="form-table"><tr><th></th>'
+		+ '<th>' + messages.title + '</th>'
+		+ '<th>' + messages.name + '</th>'
+		+ '<th>' + messages.type + '</th></tr>';
 	$.each(templates, function(i, template) {
 		h += '<tr><td><input type="checkbox" value="' + template.id + '"></td>'
-		    + '<td><a href="structureTemplate.jsp?id=' + template.id + '">' 
-		    + template.title + '</a></td>'
+			+ '<td><a href="structureTemplate.jsp?id=' + template.id + '">'
+		    + template.name + '</a></td>'
+		    + '<td>' + template.title + '</td>'
 		    + '<td>' + getTemplateType(template.typeString) + '</td></tr>';
 	});
 	$('#templates').html(h + '</table>');

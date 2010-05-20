@@ -21,17 +21,27 @@
 
 package org.vosao.entity;
 
+import static org.vosao.utils.EntityUtil.getLongProperty;
+import static org.vosao.utils.EntityUtil.getStringProperty;
+import static org.vosao.utils.EntityUtil.getTextProperty;
+import static org.vosao.utils.EntityUtil.setProperty;
+import static org.vosao.utils.EntityUtil.setTextProperty;
+
 import org.vosao.enums.StructureTemplateType;
-import static org.vosao.utils.EntityUtil.*;
 
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Text;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class StructureTemplateEntity extends BaseEntityImpl {
 
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 
 	private String title;
+	private String name;
 	private Long structureId;
 	private StructureTemplateType type;
 	private String content;
@@ -44,6 +54,7 @@ public class StructureTemplateEntity extends BaseEntityImpl {
 	public void load(Entity entity) {
 		super.load(entity);
 		title = getStringProperty(entity, "title");
+		name = getStringProperty(entity, "name");
 		structureId = getLongProperty(entity, "structureId");
 		type = StructureTemplateType.valueOf(getStringProperty(entity, "type"));
 		content = getTextProperty(entity, "content");
@@ -53,14 +64,16 @@ public class StructureTemplateEntity extends BaseEntityImpl {
 	public void save(Entity entity) {
 		super.save(entity);
 		setProperty(entity, "title", title, true);
+		setProperty(entity, "name", name, true);
 		setProperty(entity, "structureId", structureId, true);
 		setProperty(entity, "type", type.name(), false);
 		setTextProperty(entity, "content", content);
 	}
 
-	public StructureTemplateEntity(String title, Long structureId, 
+	public StructureTemplateEntity(String name, String title, Long structureId, 
 			StructureTemplateType type, String content) {
 		this();
+		this.name = name;
 		this.title = title;
 		this.structureId = structureId;
 		this.type = type;
@@ -109,5 +122,13 @@ public class StructureTemplateEntity extends BaseEntityImpl {
 
 	public boolean isXSLT() {
 		return type.equals(StructureTemplateType.XSLT);
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

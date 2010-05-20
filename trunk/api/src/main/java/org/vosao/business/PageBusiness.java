@@ -29,6 +29,7 @@ import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.business.page.PageRenderDecorator;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.StructureTemplateEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.velocity.VelocityService;
 
@@ -98,6 +99,10 @@ public interface PageBusiness {
 	PageRenderDecorator createPageRenderDecorator(final PageEntity page,
 			final String languageCode);
 	
+	PageRenderDecorator createStructuredPageRenderDecorator(
+			final PageEntity page, final String languageCode, 
+			StructureTemplateEntity template);
+
 	List<String> validateBeforeUpdate(final PageEntity page);
 	
 	ContentEntity getPageContent(final PageEntity page, 

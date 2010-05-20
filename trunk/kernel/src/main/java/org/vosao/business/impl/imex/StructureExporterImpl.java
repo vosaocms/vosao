@@ -81,6 +81,7 @@ public class StructureExporterImpl extends AbstractExporter
 			StructureTemplateEntity template) {
 		Element templateElement = templatesElement.addElement("template");
 		templateElement.addElement("title").setText(template.getTitle());
+		templateElement.addElement("name").setText(template.getName());
 		templateElement.addElement("type").setText(template.getTypeString());
 		templateElement.addElement("content").setText(template.getContent());
 	}	
@@ -112,13 +113,15 @@ public class StructureExporterImpl extends AbstractExporter
 			Element element = i.next();
             if (element.getName().equals("template")) {
             	String title = element.elementText("title");
+            	String name = element.elementText("name");
+            	name = name == null ? title : name;
             	String content = element.elementText("content");
             	StructureTemplateType type = StructureTemplateType.valueOf(
             			element.elementText("type"));
             	StructureTemplateEntity template = getDao()
-            			.getStructureTemplateDao().getByTitle(title);
+            			.getStructureTemplateDao().getByName(name);
             	if (template == null) {
-            		template = new StructureTemplateEntity(
+            		template = new StructureTemplateEntity(name,
             			title, structure.getId(), type, content);
             	}
             	getDao().getStructureTemplateDao().save(template);

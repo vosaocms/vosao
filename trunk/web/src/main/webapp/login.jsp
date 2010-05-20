@@ -66,6 +66,7 @@
 <div class="buttons-dlg">
     <input type="submit" value="<fmt:message key="login"/>" />
     <br/>
+    <br/>
     <a href="#" id="forgot"><fmt:message key="forgot_password"/></a>
 </div>    
 

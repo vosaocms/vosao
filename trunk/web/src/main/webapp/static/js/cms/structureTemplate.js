@@ -88,11 +88,13 @@ function loadStructureTemplate() {
 
 function initStructureTemplateForm() {
 	if (structureTemplate != null) {
+		$('#name').val(structureTemplate.name);
 		$('#title').val(structureTemplate.title);
 		$('#type').val(structureTemplate.typeString);
         $('#content').val(structureTemplate.content);
 	}
 	else {
+        $('#name').val('');
         $('#title').val('');
         $('#type').val('VELOCITY');
         $('#content').val('');
@@ -106,6 +108,7 @@ function onCancel() {
 function onUpdate(cont) {
 	var structureTemplateVO = Vosao.javaMap({
 	    id : structureTemplateId,
+	    name : Vosao.strip($('#name').val()),
 	    title : Vosao.strip($('#title').val()),
 	    type: $('#type').val(),
 	    structureId: String(structureId),

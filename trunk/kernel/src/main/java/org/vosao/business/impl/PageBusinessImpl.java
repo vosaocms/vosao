@@ -62,6 +62,7 @@ import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.StructureTemplateEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.entity.helper.PageHelper;
@@ -168,13 +169,27 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 					getDao(), this, getSystemService());
 		}
 		if (page.isStructured()) {
-			return new StructurePageRenderDecorator(page, languageCode, 
+			return new StructurePageRenderDecorator(page, languageCode, null, 
 					getDao(), this, getSystemService());
 		}
 		logger.error("Wrong page type " + page.getTitle());
 		return null;
 	}
 	
+	@Override	
+	public PageRenderDecorator createStructuredPageRenderDecorator(
+			final PageEntity page, final String languageCode,
+			StructureTemplateEntity template) {
+		if (page.isStructured()) {
+			return new StructurePageRenderDecorator(page, languageCode, 
+					template, getDao(), this, getSystemService());
+		}
+		else {
+			logger.error("Wrong page type " + page.getTitle());
+			return null;
+		}
+	}
+
 	@Override
 	public VelocityContext createContext(final String languageCode) {
 		LanguageEntity language = getDao().getLanguageDao().getByCode(

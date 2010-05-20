@@ -34,6 +34,7 @@ import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.UserService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.UserVO;
+import org.vosao.utils.ParamUtil;
 
 /**
  * 
@@ -84,6 +85,9 @@ public class UserServiceImpl extends AbstractServiceImpl
 		if (!StringUtils.isEmpty(vo.get("role"))) {
 			user.setRole(UserRole.valueOf(vo.get("role")));
 		}
+		if (!StringUtils.isEmpty(vo.get("disabled"))) {
+			user.setDisabled(ParamUtil.getBoolean(vo.get("disabled"), false));
+		}
 		List<String> errors = getBusiness().getUserBusiness()
 				.validateBeforeUpdate(user);
 		if (errors.isEmpty()) {
@@ -107,5 +111,18 @@ public class UserServiceImpl extends AbstractServiceImpl
 		return UserVO.create(getDao().getUserDao().selectByGroup(
 				Long.valueOf(groupId)));
 	}
+
+	@Override
+	public ServiceResponse disable(Long userId, boolean disable) {
+		UserEntity user = getDao().getUserDao().getById(userId);
+		if (user == null) {
+			return ServiceResponse.createErrorResponse(Messages.get(
+					"user_not_found"));
+		}
+		user.setDisabled(disable);
+		getDao().getUserDao().save(user);
+		return ServiceResponse.createSuccessResponse(Messages.get("success"));
+	}
+
 
 }

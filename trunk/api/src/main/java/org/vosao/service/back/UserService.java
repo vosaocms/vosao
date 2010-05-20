@@ -48,4 +48,5 @@ public interface UserService extends AbstractService {
 	
 	List<UserVO> selectByGroup(final String groupId);
 	
+	ServiceResponse disable(final Long userId, boolean disable);
 }

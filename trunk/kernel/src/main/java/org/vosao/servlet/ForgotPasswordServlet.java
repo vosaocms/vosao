@@ -43,7 +43,7 @@ public class ForgotPasswordServlet extends BaseSpringServlet {
 			throws ServletException, IOException {
 		String key = request.getParameter("key");
 		UserEntity user = getDao().getUserDao().getByKey(key);
-		if (user == null) {
+		if (user == null || user.isDisabled()) {
 			RequestDispatcher dispatcher = getServletContext()
 					.getRequestDispatcher("/forgotPasswordFail.jsp");
 			dispatcher.forward(request,response);

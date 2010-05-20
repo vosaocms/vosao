@@ -23,12 +23,13 @@ var user = null;
 var users = null;
 
 $(function(){
-    $("#user-dialog").dialog({ width: 460, autoOpen: false });
+    $("#user-dialog").dialog({ width: 560, autoOpen: false });
     Vosao.initJSONRpc(loadData);
     $('#addUserButton').click(onAddUser);
     $('#removeUserButton').click(onRemoveUser);
     $('#userForm').submit(function() {onUserSave(); return false;});
     $('#userCancelDlgButton').click(onUserCancel);
+    $('#userDisableDlgButton').click(onUserDisable);
     $('ul.ui-tabs-nav li:nth-child(5)').addClass('ui-state-active')
 			.removeClass('ui-state-default');
 });
@@ -66,13 +67,15 @@ function loadUsers() {
 	Vosao.jsonrpc.userService.select(function (r) {
         var h = '<table class="form-table"><tr><th></th><th>' + messages.name 
         	+ '</th><th>' + messages.email + '</th><th>' + messages.role 
-        	+ '</th></tr>';
+        	+ '</th><th>' + messages.access + '</th></tr>';
         $.each(r.list, function (i, user) {
-            h += '<tr><td><input type="checkbox" value="' + user.id 
+            var disabled = user.disabled ? messages.disabled : messages.enabled;
+        	h += '<tr><td><input type="checkbox" value="' + user.id 
                 + '"/></td><td>' + user.name + '</td><td>\
                 <a href="#" onclick="onUserEdit(' + user.id + ')">' 
                 + user.email + '</a></td><td>'
-                + getRole(user.role) + '</td></tr>';
+                + getRole(user.role) + '</td>'
+                + '<td>' + disabled + '</td></tr>';
         });
         $('#users').html(h + '</table>');
         $('#users tr:even').addClass('even');
@@ -99,12 +102,15 @@ function initUserForm() {
         $('#userEmail').val('');
         $('#userEmail').removeAttr('disabled');
         $('#userRole').val('');
+        $('#userDisableDlgButton').hide();
 	}
 	else {
         $('#userName').val(user.name);
         $('#userEmail').val(user.email);
         $('#userEmail').attr('disabled', true);
         $('#userRole').val(user.roleString);
+        $('#userDisableDlgButton').val(user.disabled ? messages.enable : 
+    		messages.disable).show();
 	}
     $('#userPassword1').val('');
     $('#userPassword2').val('');
@@ -160,4 +166,12 @@ function userError(msg) {
 
 function userErrors(errors) {
 	Vosao.errorMessages('#user-dialog .messages', errors);
+}
+
+function onUserDisable() {
+	Vosao.jsonrpc.userService.disable(function(r) {
+        $('#user-dialog').dialog('close');
+        Vosao.showServiceMessages(r);
+        loadUsers();
+	}, user.id, !user.disabled);
 }

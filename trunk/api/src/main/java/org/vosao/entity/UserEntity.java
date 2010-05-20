@@ -31,16 +31,18 @@ import com.google.appengine.api.datastore.Entity;
  */
 public class UserEntity extends BaseEntityImpl {
 
-	private static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 4L;
 
 	private String name;
 	private String password;
 	private String email;
 	private UserRole role;
 	private String forgotPasswordKey;
+	private boolean disabled;
 	
 	public UserEntity() {
 		role = UserRole.USER;
+		disabled = false;
 	}
 	
 	@Override
@@ -51,6 +53,7 @@ public class UserEntity extends BaseEntityImpl {
 		email = getStringProperty(entity, "email");
 		role = UserRole.valueOf(getStringProperty(entity, "role"));
 		forgotPasswordKey = getStringProperty(entity, "forgotPasswordKey");
+		disabled = getBooleanProperty(entity, "disabled", false);
 	}
 	
 	@Override
@@ -61,6 +64,7 @@ public class UserEntity extends BaseEntityImpl {
 		setProperty(entity, "email", email, true);
 		setProperty(entity, "role", role.name(), true);
 		setProperty(entity, "forgotPasswordKey", forgotPasswordKey, true);
+		setProperty(entity, "disabled", disabled, false);
 	}
 
 	public UserEntity(String aName, String aPassword,
@@ -142,6 +146,14 @@ public class UserEntity extends BaseEntityImpl {
 
 	public void setForgotPasswordKey(String forgotPasswordKey) {
 		this.forgotPasswordKey = forgotPasswordKey;
+	}
+
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
 	}
 	
 }

@@ -24,6 +24,7 @@ package org.vosao.update;
 import org.vosao.business.Business;
 import org.vosao.dao.Dao;
 import org.vosao.entity.StructureTemplateEntity;
+import org.vosao.entity.UserEntity;
 
 /**
  * 
@@ -60,6 +61,7 @@ public class UpdateTask05 implements UpdateTask {
 	public String update() throws UpdateException {
 		getBusiness().getSetupBean().clearSessions();
 		updateStructureTemplates();
+		updateUsers();
 		return "Successfully updated to 0.5 version.";
 	}
 
@@ -71,4 +73,10 @@ public class UpdateTask05 implements UpdateTask {
 		}
 	}
 	
+	private void updateUsers() {
+		for (UserEntity user : getDao().getUserDao().select()) {
+			user.setDisabled(false);
+			getDao().getUserDao().save(user);
+		}
+	}
 }

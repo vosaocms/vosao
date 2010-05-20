@@ -35,6 +35,7 @@ import org.vosao.common.BCrypt;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.UserRole;
+import org.vosao.utils.ParamUtil;
 
 /**
  * @author Alexander Oleynik
@@ -67,6 +68,8 @@ public class UserExporterImpl extends AbstractExporter
 		userElement.addElement("email").setText(user.getEmail());
 		userElement.addElement("password").setText(notNull(user.getPassword()));
 		userElement.addElement("role").setText(user.getRole().name());
+		userElement.addElement("disabled").setText(
+				String.valueOf(user.isDisabled()));
 	}
 	
 	public void readUsers(Element usersElement) throws DaoTaskException {
@@ -76,6 +79,8 @@ public class UserExporterImpl extends AbstractExporter
             if (element.getName().equals("user")) {
             	String email = element.elementText("email");
             	String name = element.elementText("name");
+            	boolean disabled = ParamUtil.getBoolean(
+            			element.elementText("disabled"), false);
             	String password = element.elementText("password");
             	try {
             		BCrypt.checkpw("test", password);
@@ -91,6 +96,7 @@ public class UserExporterImpl extends AbstractExporter
             	user.setName(name);
             	user.setPassword(password);
             	user.setRole(role);
+            	user.setDisabled(disabled);
             	getDaoTaskAdapter().userSave(user);
             }
 		}		

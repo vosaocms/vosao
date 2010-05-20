@@ -21,7 +21,6 @@
 
 package org.vosao.service.front.impl;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
@@ -45,7 +44,7 @@ public class LoginServiceImpl extends AbstractServiceImpl
 	@Override
 	public ServiceResponse login(String email, String password) {
 		UserEntity user = getDao().getUserDao().getByEmail(email);
-		if (user == null) {
+		if (user == null || user.isDisabled()) {
 			return ServiceResponse.createErrorResponse(Messages.get(
 					"user_not_found"));
 		}

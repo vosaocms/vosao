@@ -28,6 +28,7 @@ import org.vosao.entity.UserEntity;
 
 /**
  * Value object to be returned from services.
+ * 
  * @author Alexander Oleynik
  */
 public class UserVO {
@@ -60,5 +61,9 @@ public class UserVO {
 	
 	public String getRole() {
 		return user.getRole().name();
+	}
+	
+	public boolean isDisabled() {
+		return user.isDisabled();
 	}
 }

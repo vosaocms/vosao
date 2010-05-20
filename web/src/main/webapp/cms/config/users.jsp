@@ -74,6 +74,7 @@
     </div>
     <div class="buttons-dlg">
         <input id="userSaveDlgButton" type="submit" value="<fmt:message key="save" />" />
+        <input id="userDisableDlgButton" type="button" value="<fmt:message key="disable" />" />
         <input id="userCancelDlgButton" type="button" value="<fmt:message key="cancel" />" />
     </div>
   </form>  

@@ -22,7 +22,6 @@
 package org.vosao.global.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -39,7 +38,6 @@ import javax.cache.CacheStatistics;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vosao.entity.FileChunkEntity;
 import org.vosao.global.CacheService;
 import org.vosao.utils.ArrayUtil;
 import org.vosao.utils.StrUtil;
@@ -185,9 +183,15 @@ public class CacheServiceImpl implements CacheService {
 	}
 
 	@Override
-	public Object put(Object arg0, Object arg1) {
-		localCache.put((String)arg0, arg1);
-		return cache.put(arg0, arg1);
+	public Object put(Object key, Object value) {
+		localCache.put((String)key, value);
+		try {
+			return cache.put(key, value);
+		}
+		catch (Exception e) {
+			log.error(e.getMessage());
+			return value;
+		}
 	}
 
 	@Override
@@ -201,7 +205,7 @@ public class CacheServiceImpl implements CacheService {
 		try {
 			return cache.remove(key);
 		}
-		catch (InvalidValueException e) {
+		catch (Exception e) {
 			log.error(e.getMessage());
 			return null;
 		}

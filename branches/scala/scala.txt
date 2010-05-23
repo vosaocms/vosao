@@ -1,0 +1,3 @@
+This fork of 0.4 version is an effort to rewrite Vosao CMS to scala language.
+
+This is some kind of research in scala pros and cons on real project.

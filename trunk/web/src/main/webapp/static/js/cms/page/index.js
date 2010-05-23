@@ -148,9 +148,9 @@ function initPageForm() {
 		$('#pageModDate').html(page.modDateString);
 		$('#pageCreateUser').html(page.createUserEmail);
 		$('#pageModUser').html(page.modUserEmail);
-		$('#keywords').html(page.keywords);
-		$('#description').html(page.description);
-		$('#headHtml').html(page.headHtml);
+		$('#keywords').val(page.keywords);
+		$('#description').val(page.description);
+		$('#headHtml').val(page.headHtml);
 		$('.contentTab').show();
 		$('.childrenTab').show();
 		$('.commentsTab').show();
@@ -177,9 +177,9 @@ function initPageForm() {
 		$('#pageCreateDate').html('');
 		$('#pageModUser').html('');
 		$('#pageModDate').html('');
-		$('#keywords').html('');
-		$('#description').html('');
-		$('#headHtml').html('');
+		$('#keywords').val('');
+		$('#description').val('');
+		$('#headHtml').val('');
 		$('.contentTab').hide();
 		$('.childrenTab').hide();
 		$('.commentsTab').hide();

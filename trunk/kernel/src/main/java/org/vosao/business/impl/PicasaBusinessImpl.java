@@ -32,6 +32,7 @@ import org.vosao.entity.ConfigEntity;
 import org.vosao.utils.FolderUtil;
 import org.vosao.utils.MimeType;
 
+import com.google.gdata.client.Query;
 import com.google.gdata.client.photos.PicasawebService;
 import com.google.gdata.data.PlainTextConstruct;
 import com.google.gdata.data.media.MediaByteArraySource;
@@ -154,5 +155,26 @@ public class PicasaBusinessImpl extends AbstractBusinessImpl
 				photo);
 	}
 
+	@Override
+	public AlbumEntry findAlbumByTitle(String title)
+			throws MalformedURLException, IOException, ServiceException {
+		for (AlbumEntry album : selectAlbums()) {
+			if (album.getTitle().getPlainText().indexOf(title) != -1) {
+				return album;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public List<PhotoEntry> findPhotos(String title, int count)
+			throws MalformedURLException, IOException, ServiceException {
+		Query myQuery = new Query(new URL(getPicasaURL()));
+		myQuery.setStringCustomParameter("kind", "photo");
+		myQuery.setMaxResults(count);
+		myQuery.setFullTextQuery(title);
+		AlbumFeed feed = getPicasawebService().query(myQuery, AlbumFeed.class);
+		return feed.getPhotoEntries();
+	}
 
 }

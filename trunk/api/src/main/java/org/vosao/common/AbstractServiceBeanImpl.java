@@ -21,12 +21,18 @@
 
 package org.vosao.common;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.dao.Dao;
 import org.vosao.global.SystemService;
 
-public class AbstractServiceBeanImpl implements AbstractServiceBean {
+public abstract class AbstractServiceBeanImpl implements 
+		AbstractServiceBean {
 
+	protected static final Log logger = LogFactory.getLog(
+			AbstractServiceBeanImpl.class);
+	
 	private Business business;
 	
 	public AbstractServiceBeanImpl() {

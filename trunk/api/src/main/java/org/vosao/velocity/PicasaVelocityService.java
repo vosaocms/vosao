@@ -19,47 +19,25 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service.vo;
+package org.vosao.velocity;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gdata.data.photos.PhotoEntry;
+import org.vosao.service.vo.AlbumVO;
+import org.vosao.service.vo.PhotoVO;
 
 /**
- * Value object to be returned from services.
  * @author Alexander Oleynik
  */
-public class PhotoVO {
+public interface PicasaVelocityService {
 
-    private PhotoEntry photo;
-
-	public PhotoVO(final PhotoEntry entry) {
-		photo = entry;
-	}
-
-	public String getId() {
-		return photo.getGphotoId();
-	}
+	List<AlbumVO> findAlbums();
 	
-	public String getTitle() {
-		return photo.getTitle().getPlainText();
-	}
-
-	public String getThumbnailURL() {
-		return photo.getMediaThumbnails().get(1).getUrl();
-	}
-
-	public String getURL() {
-		return photo.getMediaContents().get(0).getUrl();
-	}
-
-	public static List<PhotoVO> create(List<PhotoEntry> photos) {
-		List<PhotoVO> result = new ArrayList<PhotoVO>();
-		for (PhotoEntry photo : photos) {
-			result.add(new PhotoVO(photo));
-		}
-		return result;
-	}
+	AlbumVO findAlbumById(String albumId);
 	
+	AlbumVO findAlbumByTitle(String title);
+	
+	List<PhotoVO> findPhotos(String title, int count);
+	
+	List<PhotoVO> findPhotosInAlbum(String albumId);
 }

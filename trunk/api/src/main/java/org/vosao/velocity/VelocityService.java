@@ -154,6 +154,8 @@ public interface VelocityService {
 	
 	TagVelocityService getTag();
 	
+	PicasaVelocityService getPicasa();
+	
 	/**
 	 * Render structure page specified by path using structure template 
 	 * specified by unique structureTemplateName.

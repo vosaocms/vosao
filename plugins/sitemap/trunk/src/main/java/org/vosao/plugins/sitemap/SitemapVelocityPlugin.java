@@ -53,7 +53,7 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 		setBusiness(business);
 	}
 	
-	public String render() {
+	private String renderSitemap(String templateUrl) {
 		try {
 			PluginEntity plugin = getDao().getPluginDao().getByName("sitemap");
 			TreeItemDecorator<PageEntity> root = getBusiness().getPageBusiness()
@@ -61,10 +61,12 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 			filterExcude(plugin, root);
 			String template = StreamUtil.getTextResource(
 				SitemapVelocityPlugin.class.getClassLoader(), 
-				"org/vosao/plugins/sitemap/sitemap.vm");
+				templateUrl);
 			VelocityContext context = new VelocityContext();
+			getBusiness().getPageBusiness().addVelocityTools(context);
 			context.put("root", root);
 			context.put("config", getConfig(plugin));
+			context.put("siteConfig", getDao().getConfigDao().getConfig());
 			context.put("languageCode", getBusiness().getLanguage());
 			return getBusiness().getSystemService().render(template, context);
 		}
@@ -74,6 +76,10 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 		}
 	}
 	
+	public String render() {
+		return renderSitemap("org/vosao/plugins/sitemap/sitemap.vm");
+	}
+
 	private void filterExcude(PluginEntity plugin, 
 			TreeItemDecorator<PageEntity> root) {
 		if (!StringUtils.isEmpty(plugin.getConfigData())) {
@@ -133,5 +139,10 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 		}
 		return result;
 	}
+
+	public String renderXML() {
+		return renderSitemap("org/vosao/plugins/sitemap/sitemapxml.vm");
+	}
+	
 	
 }

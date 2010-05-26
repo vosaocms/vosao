@@ -1,7 +1,7 @@
 <vosao-plugin>
     <name>sitemap</name>
     <title>Sitemap plugin</title>
-    <version>0.4</version>
+    <version>0.5</version>
     <description>
         Sitemap plugin allows to insert sitemap. You can configure
         page tree level.

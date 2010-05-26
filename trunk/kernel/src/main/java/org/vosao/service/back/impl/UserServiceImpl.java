@@ -52,12 +52,18 @@ public class UserServiceImpl extends AbstractServiceImpl
 	@Override
 	public ServiceResponse remove(List<String> ids) {
 		List<Long> idList = new ArrayList<Long>();
-		for (String id : ids) {
-			idList.add(Long.valueOf(id));
+		String msg = Messages.get("users.success_delete");
+		for (String idString : ids) {
+			Long id = Long.valueOf(idString);
+			if (getBusiness().getUser().getId().equals(id)) {
+				msg = Messages.get("users.cant_delete_myself");
+			}
+			else {
+				idList.add(id);
+			}
 		}
 		getBusiness().getUserBusiness().remove(idList);
-		return ServiceResponse.createSuccessResponse(
-				Messages.get("users.success_delete"));
+		return ServiceResponse.createSuccessResponse(msg);
 	}
 
 	@Override

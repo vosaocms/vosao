@@ -97,10 +97,10 @@ object EntityUtil {
 		}
 	}
 
-	def getListProperty(entity: Entity, name: String): List[Any] = {
+	def getListProperty(entity: Entity, name: String): List[Object] = {
 		val p: Any = entity.getProperty(name)
 		p match {
-			case l: java.util.List[Any] => List(l)
+			case l: java.util.List[Object] => List(l)
 			case _ => Nil
 		}
 	}

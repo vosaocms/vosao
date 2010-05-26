@@ -19,61 +19,32 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.utils
-
-import java.util.Date
-
-import com.josephoconnell.html.HTMLInputFilter
+package org.vosao.enums
 
 /**
  * @author Alexander Oleynik
  */
-object ParamUtil {
-
-	def getInteger(s: String, defaultValue: Int): Int = {
-		try {
-			s.toInt
-		}
-		catch {
-			case e: NumberFormatException => defaultValue
-		}
+object FolderPermissionType {
+	val DENIED = "DENIED"
+	val READ = "READ"
+	val WRITE= "WRITE"
+	val ADMIN = "ADMIN"
+	
+	def fromContentPermissionType(perm: String): String = perm match {
+		case ContentPermissionType.DENIED => DENIED
+		case ContentPermissionType.READ => READ
+		case ContentPermissionType.ADMIN => ADMIN
+		case _ => WRITE
 	}
 	
-	def getLong(s: String, defaultValue: Long): Long = {
-		try {
-			s.toLong
-		}
-		catch {
-			case e: NumberFormatException => defaultValue
-		}
+	def getOrdinal(permission: String) = permission match {
+		case DENIED => 0
+		case READ => 1
+		case WRITE => 2
+		case ADMIN => 3
+		case _ => 0
 	}
+		
+	def isHigher(p1: String, p2: String) = getOrdinal(p1) > getOrdinal(p2)
 
-	def getBoolean(s: String, defaultValue: Boolean): Boolean = {
-		try {
-			s.toBoolean
-		}
-		catch {
-			case e: NumberFormatException => defaultValue
-		}
-	}
-
-	/**
-	 * Convert string to date from format dd.mm.yyyy
-	 * @param s
-	 * @param defaultValue
-	 * @return
-	 */
-	def getDate(s: String, defaultValue: Date): Date = {
-		try {
-			DateUtil.toDate(s)
-		}
-		catch {
-			case _ => defaultValue
-		}
-	}
-
-	val xssFilter = new HTMLInputFilter()
-	
-	def filterXSS(value: String): String  = xssFilter.filter(value)
-	
 }

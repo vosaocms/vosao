@@ -19,61 +19,45 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.utils
+package org.vosao.entity
 
-import java.util.Date
-
-import com.josephoconnell.html.HTMLInputFilter
+import scala.collection.mutable.ListBuffer
+import scala.reflect.BeanProperty
+import org.vosao.utils.EntityUtil._
+import com.google.appengine.api.datastore.Entity
 
 /**
  * @author Alexander Oleynik
  */
-object ParamUtil {
+class TagEntity extends BaseEntity {
 
-	def getInteger(s: String, defaultValue: Int): Int = {
-		try {
-			s.toInt
-		}
-		catch {
-			case e: NumberFormatException => defaultValue
-		}
+	@BeanProperty
+	var parent: Long
+
+	@BeanProperty
+	var name: String
+
+	@BeanProperty
+	var pages: List[String] = Nil
+	
+	override def load(entity: Entity) {
+		super.load(entity)
+		parent = getLongProperty(entity, "parent")
+		name = getStringProperty(entity, "name")
+		pages = getListProperty(entity, "pages").asInstanceOf[List[String]]
 	}
 	
-	def getLong(s: String, defaultValue: Long): Long = {
-		try {
-			s.toLong
-		}
-		catch {
-			case e: NumberFormatException => defaultValue
-		}
+	override def save(entity: Entity) {
+		super.save(entity)
+		setProperty(entity, "name", name, true)
+		setProperty(entity, "parent", parent, true)
+		setProperty(entity, "pages", pages)
 	}
 
-	def getBoolean(s: String, defaultValue: Boolean): Boolean = {
-		try {
-			s.toBoolean
-		}
-		catch {
-			case e: NumberFormatException => defaultValue
-		}
+	def this(aParent: Long, aName: String) {
+		this()
+		name = aName
+		parent = aParent
 	}
-
-	/**
-	 * Convert string to date from format dd.mm.yyyy
-	 * @param s
-	 * @param defaultValue
-	 * @return
-	 */
-	def getDate(s: String, defaultValue: Date): Date = {
-		try {
-			DateUtil.toDate(s)
-		}
-		catch {
-			case _ => defaultValue
-		}
-	}
-
-	val xssFilter = new HTMLInputFilter()
-	
-	def filterXSS(value: String): String  = xssFilter.filter(value)
 	
 }

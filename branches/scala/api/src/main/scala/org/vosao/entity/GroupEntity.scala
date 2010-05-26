@@ -19,61 +19,32 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.utils
+package org.vosao.entity
 
-import java.util.Date
-
-import com.josephoconnell.html.HTMLInputFilter
+import scala.reflect.BeanProperty
+import com.google.appengine.api.datastore.Entity
+import org.vosao.utils.EntityUtil._
 
 /**
  * @author Alexander Oleynik
  */
-object ParamUtil {
+class GroupEntity extends BaseEntity {
 
-	def getInteger(s: String, defaultValue: Int): Int = {
-		try {
-			s.toInt
-		}
-		catch {
-			case e: NumberFormatException => defaultValue
-		}
+	@BeanProperty
+	var name: String
+	
+	def this(aName: String) {
+		this()
+		name = aName
 	}
 	
-	def getLong(s: String, defaultValue: Long): Long = {
-		try {
-			s.toLong
-		}
-		catch {
-			case e: NumberFormatException => defaultValue
-		}
+	override def load(entity: Entity) {
+		super.load(entity)
+		name = getStringProperty(entity, "name")
 	}
-
-	def getBoolean(s: String, defaultValue: Boolean): Boolean = {
-		try {
-			s.toBoolean
-		}
-		catch {
-			case e: NumberFormatException => defaultValue
-		}
-	}
-
-	/**
-	 * Convert string to date from format dd.mm.yyyy
-	 * @param s
-	 * @param defaultValue
-	 * @return
-	 */
-	def getDate(s: String, defaultValue: Date): Date = {
-		try {
-			DateUtil.toDate(s)
-		}
-		catch {
-			case _ => defaultValue
-		}
-	}
-
-	val xssFilter = new HTMLInputFilter()
 	
-	def filterXSS(value: String): String  = xssFilter.filter(value)
-	
+	override def save(entity: Entity) {
+		super.save(entity)
+		setProperty(entity, "name", name, true)
+	}
 }

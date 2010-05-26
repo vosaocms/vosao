@@ -19,61 +19,37 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.utils
+package org.vosao.entity
 
-import java.util.Date
-
-import com.josephoconnell.html.HTMLInputFilter
+import scala.reflect.BeanProperty
+import org.vosao.utils.EntityUtil._
+import com.google.appengine.api.datastore.Entity
 
 /**
  * @author Alexander Oleynik
  */
-object ParamUtil {
+class PageTagEntity extends BaseEntity {
 
-	def getInteger(s: String, defaultValue: Int): Int = {
-		try {
-			s.toInt
-		}
-		catch {
-			case e: NumberFormatException => defaultValue
-		}
+	@BeanProperty
+	var pageURL: String
+
+	@BeanProperty
+	var tags: List[Long] = List()
+	
+	override def load(entity: Entity) {
+		super.load(entity)
+		pageURL = getStringProperty(entity, "pageURL")
+		tags = getListProperty(entity, "tags").asInstanceOf[List[Long]]
 	}
 	
-	def getLong(s: String, defaultValue: Long): Long = {
-		try {
-			s.toLong
-		}
-		catch {
-			case e: NumberFormatException => defaultValue
-		}
+	override def save(entity: Entity) {
+		super.save(entity)
+		setProperty(entity, "pageURL", pageURL, true)
+		setProperty(entity, "tags", tags)
 	}
 
-	def getBoolean(s: String, defaultValue: Boolean): Boolean = {
-		try {
-			s.toBoolean
-		}
-		catch {
-			case e: NumberFormatException => defaultValue
-		}
+	def this(aPageURL: String) {
+		this()
+		pageURL = aPageURL
 	}
-
-	/**
-	 * Convert string to date from format dd.mm.yyyy
-	 * @param s
-	 * @param defaultValue
-	 * @return
-	 */
-	def getDate(s: String, defaultValue: Date): Date = {
-		try {
-			DateUtil.toDate(s)
-		}
-		catch {
-			case _ => defaultValue
-		}
-	}
-
-	val xssFilter = new HTMLInputFilter()
-	
-	def filterXSS(value: String): String  = xssFilter.filter(value)
-	
 }

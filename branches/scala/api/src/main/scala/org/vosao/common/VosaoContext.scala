@@ -19,61 +19,49 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.utils
+package org.vosao.common;
 
-import java.util.Date
+import javax.servlet.http.HttpServletRequest
 
-import com.josephoconnell.html.HTMLInputFilter
+import org.vosao.entity.UserEntity
 
 /**
+ * Because of GAE is single threaded we can store request scoped data in 
+ * singleton and set it in filter.
+ * 
  * @author Alexander Oleynik
  */
-object ParamUtil {
+object VosaoContext {
 
-	def getInteger(s: String, defaultValue: Int): Int = {
-		try {
-			s.toInt
-		}
-		catch {
-			case e: NumberFormatException => defaultValue
-		}
+	private var request: HttpServletRequest = null
+	private var requestCount = 0
+	private var startTime = System.currentTimeMillis()
+	
+	private var language: String = null
+	private var user: UserEntity = null
+	
+	def getRequest() = request
+
+	def setRequest(request: HttpServletRequest) {
+		this.request = request;
+		requestCount = requestCount + 1
+		startTime = System.currentTimeMillis
 	}
 	
-	def getLong(s: String, defaultValue: Long): Long = {
-		try {
-			s.toLong
-		}
-		catch {
-			case e: NumberFormatException => defaultValue
-		}
+	def getLanguage() = language
+
+	def setLanguage(language: String) {
+		this.language = language
 	}
 
-	def getBoolean(s: String, defaultValue: Boolean): Boolean = {
-		try {
-			s.toBoolean
-		}
-		catch {
-			case e: NumberFormatException => defaultValue
-		}
-	}
-
-	/**
-	 * Convert string to date from format dd.mm.yyyy
-	 * @param s
-	 * @param defaultValue
-	 * @return
-	 */
-	def getDate(s: String, defaultValue: Date): Date = {
-		try {
-			DateUtil.toDate(s)
-		}
-		catch {
-			case _ => defaultValue
-		}
-	}
-
-	val xssFilter = new HTMLInputFilter()
+	def getUser() = user
 	
-	def filterXSS(value: String): String  = xssFilter.filter(value)
+	def setUser(user: UserEntity) {
+		this.user = user
+	}
+
+	def getRequestCount() = requestCount
+
+	def getStartTime() = startTime
 	
 }

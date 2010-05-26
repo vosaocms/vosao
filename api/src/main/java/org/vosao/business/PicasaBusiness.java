@@ -59,4 +59,11 @@ public interface PicasaBusiness {
 		
 	PhotoEntry upload(String albumId, byte[] data, String name) 
 			throws MalformedURLException, IOException, ServiceException;
+	
+	AlbumEntry findAlbumByTitle(String title)
+		throws MalformedURLException, IOException, ServiceException;
+	
+	List<PhotoEntry> findPhotos(String title, int count)
+		throws MalformedURLException, IOException, ServiceException;
+	
 }

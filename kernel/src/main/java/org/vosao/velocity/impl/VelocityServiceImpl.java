@@ -26,7 +26,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.velocity.VelocityContext;
 import org.vosao.business.Business;
 import org.vosao.business.page.impl.StructurePageRenderDecorator;
 import org.vosao.business.vo.StructureFieldVO;
@@ -42,6 +41,7 @@ import org.vosao.enums.UserRole;
 import org.vosao.service.vo.CommentVO;
 import org.vosao.service.vo.UserVO;
 import org.vosao.utils.ListUtil;
+import org.vosao.velocity.PicasaVelocityService;
 import org.vosao.velocity.TagVelocityService;
 import org.vosao.velocity.VelocityService;
 
@@ -52,6 +52,7 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 		implements VelocityService {
 
 	private TagVelocityService tagVelocityService;
+	private PicasaVelocityService picasaVelocityService;
 	
 	public VelocityServiceImpl(Business business) {
 		super(business);
@@ -229,6 +230,14 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 						template).getContent();
 		}
 		return Messages.get("approved_content_not_found");
+	}
+
+	@Override
+	public PicasaVelocityService getPicasa() {
+		if (picasaVelocityService == null) {
+			picasaVelocityService = new PicasaVelocityServiceImpl(getBusiness());
+		}
+		return picasaVelocityService;
 	}
 	
 }

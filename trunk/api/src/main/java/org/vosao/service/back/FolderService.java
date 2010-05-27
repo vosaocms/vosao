@@ -53,4 +53,5 @@ public interface FolderService extends AbstractService {
 	ServiceResponse saveFolder(final Map<String, String> vo);
 	
 	ServiceResponse deleteFolder(final List<String> ids);
+	
 }

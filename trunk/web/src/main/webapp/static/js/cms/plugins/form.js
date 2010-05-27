@@ -27,6 +27,7 @@ var fields = null;
 var test = null;
 var regexMessages = {};
 var formData = null;
+var formDataIndex = 0;
 
 $(function() {
 	$("#tabs").tabs();
@@ -523,6 +524,7 @@ function onDeleteData() {
 }
 
 function onShowFormData(i) {
+	formDataIndex = i;
 	var data = formData[i];
 	var h = '<table class="form-table"><tr><th>' + messages.name 
 		+ '</th><th>' + messages.value + '</th></tr>';
@@ -541,5 +543,9 @@ function onShowFormData(i) {
 }
 
 function onFormDataSend() {
-	alert('TODO');
+	if (confirm(messages.are_you_sure)) {
+		Vosao.jsonrpc.formService.sendFormLetter(function(r) {
+			Vosao.showServiceMessages(r);
+		}, formData[formDataIndex].id);
+	}
 }

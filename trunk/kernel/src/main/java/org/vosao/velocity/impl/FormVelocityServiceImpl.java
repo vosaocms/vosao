@@ -21,7 +21,7 @@
 
 package org.vosao.velocity.impl;
 
-import java.io.StringWriter;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -34,10 +34,17 @@ import org.vosao.common.Messages;
 import org.vosao.dao.Dao;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormConfigEntity;
+import org.vosao.entity.FormDataEntity;
 import org.vosao.entity.FormEntity;
+import org.vosao.entity.helper.EntityHelper;
 import org.vosao.global.SystemService;
 import org.vosao.velocity.FormVelocityService;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class FormVelocityServiceImpl implements FormVelocityService {
 
 	private static final Log logger = LogFactory.getLog(FormVelocityServiceImpl.class);
@@ -88,6 +95,18 @@ public class FormVelocityServiceImpl implements FormVelocityService {
 	
 	private SystemService getSystemService() {
 		return getBusiness().getSystemService();
+	}
+
+	@Override
+	public List<FormDataEntity> findData(String formName) {
+		FormEntity form = getDao().getFormDao().getByName(formName);
+		if (formName != null) {
+			List<FormDataEntity> result = getDao().getFormDataDao().getByForm(
+					form);
+			Collections.sort(result, EntityHelper.MOD_DATE_DESC);
+			return result;
+		}
+		return Collections.EMPTY_LIST;
 	}
 	
 }

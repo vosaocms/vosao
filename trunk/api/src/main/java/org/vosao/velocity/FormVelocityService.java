@@ -21,6 +21,10 @@
 
 package org.vosao.velocity;
 
+import java.util.List;
+
+import org.vosao.entity.FormDataEntity;
+
 public interface FormVelocityService {
 
 	/**
@@ -30,4 +34,10 @@ public interface FormVelocityService {
 	 */
 	String render(final String formName);
 	
+	/**
+	 * Find form data stored in db. Ordered by modDate DESC
+	 * @param formName - form name.
+	 * @return - found form data list.
+	 */
+	List<FormDataEntity> findData(String formName);
 }

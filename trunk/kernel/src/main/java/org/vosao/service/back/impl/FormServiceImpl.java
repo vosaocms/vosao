@@ -144,4 +144,20 @@ public class FormServiceImpl extends AbstractServiceImpl
 		return getDao().getFormDataDao().getByForm(form);
 	}
 
+	@Override
+	public ServiceResponse sendFormLetter(Long formDataId) {
+		FormDataEntity formData = getDao().getFormDataDao().getById(
+				formDataId);
+		if (formData == null) {
+			return ServiceResponse.createErrorResponse(Messages.get("not_found"));
+		}
+		FormEntity form = getDao().getFormDao().getById(formData.getFormId());
+		String error = getBusiness().getFormBusiness().sendEmail(formData);
+		if (error != null) {
+			return ServiceResponse.createErrorResponse(error);
+		}
+		return ServiceResponse.createSuccessResponse(Messages.get(
+				"form.success_send", form.getEmail()));
+	}
+
 }

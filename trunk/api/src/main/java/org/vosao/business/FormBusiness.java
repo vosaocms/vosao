@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.vosao.common.UploadException;
+import org.vosao.entity.FormDataEntity;
 import org.vosao.entity.FormEntity;
 import org.vosao.utils.FileItem;
 
@@ -40,5 +41,7 @@ public interface FormBusiness {
 	 */
 	void submit(final FormEntity form, final Map<String, String> parameters, 
 			final List<FileItem> files, String ipAddress) throws UploadException;
+
+	String sendEmail(FormDataEntity formData);
 	
 }

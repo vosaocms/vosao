@@ -53,4 +53,7 @@ public interface FormService extends AbstractService {
 	ServiceResponse removeData(List<String> ids);
 	
 	List<FormDataEntity> getFormData(Long formId);
+
+	ServiceResponse sendFormLetter(Long formDataId);
+
 }

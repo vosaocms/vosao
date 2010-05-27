@@ -36,6 +36,7 @@ import org.vosao.business.FolderBusiness;
 import org.vosao.business.FormBusiness;
 import org.vosao.common.Messages;
 import org.vosao.common.UploadException;
+import org.vosao.dao.FormDao;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormConfigEntity;
@@ -44,6 +45,7 @@ import org.vosao.entity.FormEntity;
 import org.vosao.enums.FieldType;
 import org.vosao.utils.EmailUtil;
 import org.vosao.utils.FileItem;
+import org.vosao.utils.FolderUtil;
 import org.vosao.utils.ParamUtil;
 import org.vosao.utils.StrUtil;
 
@@ -58,11 +60,15 @@ public class FormBusinessImpl extends AbstractBusinessImpl
 	private FolderBusiness folderBusiness;
 	private FileBusiness fileBusiness;
 	
+	private FormDao getFormDao() {
+		return getDao().getFormDao();
+	}
+	
 	@Override
 	public List<String> validateBeforeUpdate(final FormEntity entity) {
 		List<String> errors = new ArrayList<String>();
 		if (entity.getId() == null) {
-			FormEntity myForm = getDao().getFormDao().getByName(entity.getName());
+			FormEntity myForm = getFormDao().getByName(entity.getName());
 			if (myForm != null) {
 				errors.add(Messages.get("form.already_exists"));
 			}
@@ -83,30 +89,15 @@ public class FormBusinessImpl extends AbstractBusinessImpl
 	public void submit(FormEntity form, Map<String, String> parameters,
 			List<FileItem> files, String ipAddress) throws UploadException {
 		filterXSS(parameters);
-		saveFormData(form, parameters, files, ipAddress);
-		ConfigEntity config = getDao().getConfigDao().getConfig();
-		FormConfigEntity formConfig = getDao().getFormConfigDao().getConfig();
-		VelocityContext context = new VelocityContext();
-		List<FieldEntity> fields = getDao().getFieldDao().getByForm(form);
-		context.put("form", form);
-		context.put("fields", fields);
-		context.put("values", parameters);
-		context.put("config", config);
-		String letter = getSystemService().render(
-				formConfig.getLetterTemplate(), context);
-		List<String> emails = StrUtil.fromCSV(form.getEmail());
-		for (String email : emails) {
-			String error = EmailUtil.sendEmail(letter, form.getLetterSubject(), 
-				config.getSiteEmail(), "Site admin", StringUtils.strip(email), 
-				files);
-			if (error != null) {
-				throw new UploadException(error);
-			}
-			logger.info("Form successfully submitted and emailed.");
+		FormDataEntity formData = saveFormData(form, parameters, files, 
+				ipAddress);
+		String error = sendEmail(formData);
+		if (error != null) {
+			throw new UploadException(error);
 		}
 	}
 	
-	private void saveFormData(FormEntity form, Map<String, String> parameters,
+	private FormDataEntity saveFormData(FormEntity form, Map<String, String> parameters,
 			List<FileItem> files, String ipAddress) {
 		FormDataEntity formData = new FormDataEntity(form.getId(), "");
 		formData.setIpAddress(ipAddress);
@@ -126,7 +117,7 @@ public class FormBusinessImpl extends AbstractBusinessImpl
 			root.addElement(field.getName()).setText(value);
 		}
 		formData.setData(doc.asXML());
-		getDao().getFormDataDao().save(formData);
+		return getDao().getFormDataDao().save(formData);
 	}
 	
 	private void filterXSS(Map<String, String> params) {
@@ -149,7 +140,7 @@ public class FormBusinessImpl extends AbstractBusinessImpl
 	}
 	
 	public String getFilePath(FormDataEntity formData) {
-		FormEntity form = getDao().getFormDao().getById(formData.getFormId());
+		FormEntity form = getFormDao().getById(formData.getFormId());
 		return "/form/" + form.getName() + "/" + formData.getUuid();
 	}
 
@@ -167,5 +158,54 @@ public class FormBusinessImpl extends AbstractBusinessImpl
 
 	public void setFileBusiness(FileBusiness fileBusiness) {
 		this.fileBusiness = fileBusiness;
+	}
+
+	@Override
+	public String sendEmail(FormDataEntity formData) {
+		FormEntity form = getFormDao().getById(formData.getFormId());
+		ConfigEntity config = getDao().getConfigDao().getConfig();
+		FormConfigEntity formConfig = getDao().getFormConfigDao().getConfig();
+		VelocityContext context = new VelocityContext();
+		List<FieldEntity> fields = getDao().getFieldDao().getByForm(form);
+		context.put("form", form);
+		context.put("fields", fields);
+		context.put("values", formData.getValues());
+		context.put("config", config);
+		String letter = getSystemService().render(
+				formConfig.getLetterTemplate(), context);
+		List<String> emails = StrUtil.fromCSV(form.getEmail());
+		for (String email : emails) {
+			String error = EmailUtil.sendEmail(
+					letter, 
+					form.getLetterSubject(), 
+					config.getSiteEmail(), 
+					"Site admin", 
+					StringUtils.strip(email), 
+					getFileItems(formData));
+			if (error != null) {
+				return error;
+			}
+			logger.info("Form successfully submitted and emailed.");
+		}
+		return null;
+	}
+	
+	private List<FileItem> getFileItems(FormDataEntity formData) {
+		List<FileItem> result = new ArrayList<FileItem>();
+		FormEntity form = getFormDao().getById(formData.getFormId());
+		List<FieldEntity> fields = getDao().getFieldDao().getByForm(form);
+		Map<String, String> values = formData.getValues();
+		for (FieldEntity field : fields) {
+			if (field.getFieldType().equals(FieldType.FILE)
+				&& values.containsKey(field.getName()) 
+				&& !StringUtils.isEmpty(values.get(field.getName()))) {
+					String filepath = values.get(field.getName()).replace("/file", "");
+					result.add(new FileItem(
+							field.getName(), 
+							FolderUtil.getFileName(filepath),
+							getFileBusiness().readFile(filepath)));
+			}
+		}
+		return result;
 	}
 }

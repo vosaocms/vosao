@@ -21,6 +21,9 @@
 
 package org.vosao.velocity.impl;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.vosao.utils.StrUtil;
 
 /**
@@ -45,4 +48,9 @@ public class VosaoTool {
 		return text.substring(start, end);
 	}
 
+	public List reverse(List list) {
+		Collections.reverse(list);
+		return list;
+	}
+	
 }

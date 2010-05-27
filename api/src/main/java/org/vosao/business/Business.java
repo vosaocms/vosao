@@ -21,16 +21,16 @@
 
 package org.vosao.business;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.vosao.dao.Dao;
 import org.vosao.entity.UserEntity;
 import org.vosao.global.SystemService;
 import org.vosao.search.SearchEngine;
 
-import com.google.gdata.client.photos.PicasawebService;
-
-
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public interface Business {
 	
 	SystemService getSystemService();
@@ -108,5 +108,8 @@ public interface Business {
 
 	SetupBean getSetupBean();
 	void setSetupBean(final SetupBean bean);
-	
+
+	FormDataBusiness getFormDataBusiness();
+	void setFormDataBusiness(final FormDataBusiness bean);
+
 }

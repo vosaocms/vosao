@@ -39,6 +39,6 @@ public interface FormBusiness {
 	 * @param files - form parameters of FILE type.
 	 */
 	void submit(final FormEntity form, final Map<String, String> parameters, 
-			final List<FileItem> files) throws UploadException;
+			final List<FileItem> files, String ipAddress) throws UploadException;
 	
 }

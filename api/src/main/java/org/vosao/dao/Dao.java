@@ -112,5 +112,8 @@ public interface Dao {
 
 	PageTagDao getPageTagDao();
 	void setPageTagDao(final PageTagDao bean);
-	
+
+	FormDataDao getFormDataDao();
+	void setFormDataDao(final FormDataDao bean);
+
 }

@@ -106,8 +106,10 @@ public class FormSendServlet extends BaseSpringServlet {
 		catch (Exception e) {
 			message = createMessage("error", e.getMessage()); 
 			logger.error(message);
+			e.printStackTrace();
 		}
 		response.setContentType("text/html");
+    	response.setCharacterEncoding("UTF-8");
 		response.setStatus(200);
 		response.getWriter().write(message);
 	}
@@ -140,7 +142,8 @@ public class FormSendServlet extends BaseSpringServlet {
 				return createMessage("error", Messages.get("incorrect_captcha"));
 			}
 		}
-		getBusiness().getFormBusiness().submit(form, parameters, files);
+		getBusiness().getFormBusiness().submit(form, parameters, files, 
+				request.getRemoteAddr());
 		return createMessage("success", Messages.get("form.success_submit"));
 	}
 	

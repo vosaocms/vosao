@@ -122,6 +122,9 @@
     <bean id="pageTagDao" class="org.vosao.dao.impl.PageTagDaoImpl"
         parent="abstractDao" />  
 
+    <bean id="formDataDao" class="org.vosao.dao.impl.FormDataDaoImpl"
+        parent="abstractDao" />  
+
     <bean id="structureDao" class="org.vosao.dao.impl.StructureDaoImpl"
         parent="abstractDao">
         <property name="structureTemplateDao" ref="structureTemplateDao"/>
@@ -163,6 +166,7 @@
         <property name="pluginResourceDao" ref="pluginResourceDao"/>  
         <property name="pageTagDao" ref="pageTagDao"/>  
         <property name="tagDao" ref="tagDao"/>  
+        <property name="formDataDao" ref="formDataDao"/>  
     </bean>
 
     <!--=========================== Business ================================-->
@@ -180,7 +184,10 @@
         parent="abstractBusiness" />  
 
     <bean id="formBusiness" class="org.vosao.business.impl.FormBusinessImpl"
-        parent="abstractBusiness" />  
+        parent="abstractBusiness" >
+        <property name="folderBusiness" ref="folderBusiness"/>  
+        <property name="fileBusiness" ref="fileBusiness"/>  
+    </bean>      
 
     <bean id="fileBusiness" class="org.vosao.business.impl.FileBusinessImpl"
         parent="abstractBusiness" >
@@ -222,6 +229,9 @@
         parent="abstractBusiness" />  
 
     <bean id="picasaBusiness" class="org.vosao.business.impl.PicasaBusinessImpl"
+        parent="abstractBusiness" />  
+
+    <bean id="formDataBusiness" class="org.vosao.business.impl.FormDataBusinessImpl"
         parent="abstractBusiness" />  
 
     <bean id="pluginBusiness" class="org.vosao.business.impl.PluginBusinessImpl"
@@ -272,6 +282,7 @@
         <property name="pluginResourceBusiness" ref="pluginResourceBusiness"/>
         <property name="tagBusiness" ref="tagBusiness"/>
         <property name="picasaBusiness" ref="picasaBusiness"/>
+        <property name="formDataBusiness" ref="formDataBusiness"/>
         
         <property name="setupBean" ref="setupBean"/>
 

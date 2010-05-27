@@ -37,6 +37,7 @@
 <ul>
     <li><a href="#tab-1"><fmt:message key="form" /></a></li>
     <li class="fieldsTab"><a href="#tab-2"><fmt:message key="fields" /></a></li>
+    <li class="dataTab"><a href="#tab-3"><fmt:message key="saved_data" /></a></li>
 </ul>
 
 <div id="tab-1">
@@ -73,6 +74,10 @@
     <label><fmt:message key="enable_captcha" /></label>
     <input id="enableCaptcha" type="checkbox"/>
 </div>
+<div class="form-row">
+    <label><fmt:message key="enable_save" /></label>
+    <input id="enableSave" type="checkbox"/>
+</div>
 
 <div class="buttons">
     <input id="saveButton" type="submit" value="<fmt:message key="save" />" />
@@ -86,6 +91,13 @@
     <div class="buttons">
         <input id="addFieldButton" type="button" value="<fmt:message key="add_field" />" />
         <input id="deleteFieldButton" type="button" value="<fmt:message key="delete_fields" />" />
+    </div>    
+</div>
+
+<div id="tab-3" class="dataTab">
+    <div id="dataTable"></div>
+    <div class="buttons">
+        <input id="deleteDataButton" type="button" value="<fmt:message key="delete" />" />
     </div>    
 </div>
 
@@ -151,6 +163,17 @@
     </div>
 </form>
 </div>
+
+<div id="formData-dialog" style="display:none" title="<fmt:message key="form.form_data" />">
+<form id="formDataForm">
+    <div id="formData"></div>
+    <div class="buttons-dlg">
+        <input id="formDataSendButton" type="button" value="<fmt:message key="send" />" />
+        <input id="formDataCancelButton" type="button" value="<fmt:message key="cancel" />" />
+    </div>
+</form>
+</div>
+
 
 </body>
 </html>

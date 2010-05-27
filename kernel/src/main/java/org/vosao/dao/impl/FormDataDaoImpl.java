@@ -19,38 +19,37 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service.back;
+package org.vosao.dao.impl;
 
-import java.io.IOException;
+import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
+
 import java.util.List;
-import java.util.Map;
 
-import org.vosao.entity.FormConfigEntity;
+import org.vosao.dao.BaseDaoImpl;
+import org.vosao.dao.FormDataDao;
 import org.vosao.entity.FormDataEntity;
 import org.vosao.entity.FormEntity;
-import org.vosao.service.AbstractService;
-import org.vosao.service.ServiceResponse;
 
+import com.google.appengine.api.datastore.Query;
 
-public interface FormService extends AbstractService {
-	
-	ServiceResponse saveForm(Map<String, String> vo);
-	
-	FormEntity getForm(final Long formId);
-	
-	List<FormEntity> select();
-	
-	ServiceResponse deleteForm(final List<String> ids);
-	
-	FormConfigEntity getFormConfig();
-	
-	ServiceResponse saveFormConfig(final Map<String, String> vo);
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
+public class FormDataDaoImpl extends BaseDaoImpl<FormDataEntity> 
+		implements FormDataDao {
 
-	ServiceResponse restoreFormTemplate() throws IOException;
+	public FormDataDaoImpl() {
+		super(FormDataEntity.class);
+	}
+
+	@Override
+	public List<FormDataEntity> getByForm(final FormEntity form) {
+		Query q = newQuery();
+		q.addFilter("formId", EQUAL, form.getId());
+		return select(q, "getByForm", params(form.getId()));
+	}
 	
-	ServiceResponse restoreFormLetter() throws IOException;
 	
-	ServiceResponse removeData(List<String> ids);
-	
-	List<FormDataEntity> getFormData(Long formId);
 }

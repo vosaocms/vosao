@@ -35,6 +35,7 @@ import org.vosao.dao.FolderDao;
 import org.vosao.dao.FolderPermissionDao;
 import org.vosao.dao.FormConfigDao;
 import org.vosao.dao.FormDao;
+import org.vosao.dao.FormDataDao;
 import org.vosao.dao.GroupDao;
 import org.vosao.dao.LanguageDao;
 import org.vosao.dao.MessageDao;
@@ -84,6 +85,7 @@ public class DaoImpl implements Dao, Serializable {
 	private PluginResourceDao pluginResourceDao;
 	private TagDao tagDao;
 	private PageTagDao pageTagDao;
+	private FormDataDao formDataDao;
 
 	public void clearCache() {
 		pageDao.clearCache();
@@ -110,6 +112,7 @@ public class DaoImpl implements Dao, Serializable {
 		pluginResourceDao.clearCache();
 		tagDao.clearCache();
 		pageTagDao.clearCache();
+		formDataDao.clearCache();
 	}
 	
 	@Override
@@ -340,5 +343,15 @@ public class DaoImpl implements Dao, Serializable {
 	public void setPageTagDao(PageTagDao bean) {
 		pageTagDao = bean;
 	}
-	
+
+	@Override
+	public FormDataDao getFormDataDao() {
+		return formDataDao;
+	}
+
+	@Override
+	public void setFormDataDao(FormDataDao bean) {
+		formDataDao = bean;
+	}
+
 }

@@ -29,6 +29,7 @@ import org.datanucleus.util.StringUtils;
 import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.common.Messages;
 import org.vosao.entity.FormConfigEntity;
+import org.vosao.entity.FormDataEntity;
 import org.vosao.entity.FormEntity;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.FormService;
@@ -66,6 +67,7 @@ public class FormServiceImpl extends AbstractServiceImpl
 		form.setSendButtonTitle(vo.get("sendButtonTitle"));
 		form.setShowResetButton(Boolean.valueOf(vo.get("showResetButton")));
 		form.setEnableCaptcha(Boolean.valueOf(vo.get("enableCaptcha")));
+		form.setEnableSave(Boolean.valueOf(vo.get("enableSave")));
 		List<String> errors = getBusiness().getFormBusiness()
 			.validateBeforeUpdate(form);
 		if (errors.isEmpty()) {
@@ -123,6 +125,23 @@ public class FormServiceImpl extends AbstractServiceImpl
 		getDao().getFormConfigDao().save(config);			
 		return ServiceResponse.createSuccessResponse(
 				Messages.get("form.template_success_restore"));
+	}
+
+	@Override
+	public ServiceResponse removeData(List<String> ids) {
+		getDao().getFormDataDao().remove(StrUtil.toLong(ids));
+		return ServiceResponse.createSuccessResponse(
+				Messages.get("success"));
+
+	}
+
+	@Override
+	public List<FormDataEntity> getFormData(Long formId) {
+		FormEntity form = getDao().getFormDao().getById(formId);
+		if (form == null) {
+			return null;
+		}
+		return getDao().getFormDataDao().getByForm(form);
 	}
 
 }

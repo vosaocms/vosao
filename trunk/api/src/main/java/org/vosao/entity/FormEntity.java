@@ -24,9 +24,14 @@ package org.vosao.entity;
 import com.google.appengine.api.datastore.Entity;
 import static org.vosao.utils.EntityUtil.*;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class FormEntity extends BaseEntityImpl {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
 	private String name;
 	private String title;
@@ -36,6 +41,7 @@ public class FormEntity extends BaseEntityImpl {
 	private boolean showResetButton;
 	private String resetButtonTitle;
 	private boolean enableCaptcha;
+	private boolean enableSave;
 
 	public FormEntity() {
 	}
@@ -60,6 +66,7 @@ public class FormEntity extends BaseEntityImpl {
 		resetButtonTitle = getStringProperty(entity, "resetButtonTitle");
 		showResetButton = getBooleanProperty(entity, "showResetButton", false);
 		enableCaptcha = getBooleanProperty(entity, "enableCaptcha", false);
+		enableSave = getBooleanProperty(entity, "enableSave", false);
 	}
 	
 	@Override
@@ -73,6 +80,7 @@ public class FormEntity extends BaseEntityImpl {
 		setProperty(entity, "resetButtonTitle", resetButtonTitle, false);
 		setProperty(entity, "showResetButton", showResetButton, false);
 		setProperty(entity, "enableCaptcha", enableCaptcha, false);
+		setProperty(entity, "enableSave", enableSave, false);
 	}
 
 	public String getName() {
@@ -137,6 +145,14 @@ public class FormEntity extends BaseEntityImpl {
 
 	public void setEnableCaptcha(boolean enableCaptcha) {
 		this.enableCaptcha = enableCaptcha;
+	}
+
+	public boolean isEnableSave() {
+		return enableSave;
+	}
+
+	public void setEnableSave(boolean enableSave) {
+		this.enableSave = enableSave;
 	}
 	
 }

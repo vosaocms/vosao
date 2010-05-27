@@ -22,18 +22,26 @@
 package org.vosao.business.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.vosao.business.FileBusiness;
+import org.vosao.business.FolderBusiness;
 import org.vosao.business.FormBusiness;
 import org.vosao.common.Messages;
 import org.vosao.common.UploadException;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormConfigEntity;
+import org.vosao.entity.FormDataEntity;
 import org.vosao.entity.FormEntity;
+import org.vosao.enums.FieldType;
 import org.vosao.utils.EmailUtil;
 import org.vosao.utils.FileItem;
 import org.vosao.utils.ParamUtil;
@@ -47,6 +55,9 @@ import org.vosao.utils.StrUtil;
 public class FormBusinessImpl extends AbstractBusinessImpl 
 	implements FormBusiness {
 
+	private FolderBusiness folderBusiness;
+	private FileBusiness fileBusiness;
+	
 	@Override
 	public List<String> validateBeforeUpdate(final FormEntity entity) {
 		List<String> errors = new ArrayList<String>();
@@ -70,8 +81,9 @@ public class FormBusinessImpl extends AbstractBusinessImpl
 
 	@Override
 	public void submit(FormEntity form, Map<String, String> parameters,
-			List<FileItem> files) throws UploadException {
+			List<FileItem> files, String ipAddress) throws UploadException {
 		filterXSS(parameters);
+		saveFormData(form, parameters, files, ipAddress);
 		ConfigEntity config = getDao().getConfigDao().getConfig();
 		FormConfigEntity formConfig = getDao().getFormConfigDao().getConfig();
 		VelocityContext context = new VelocityContext();
@@ -94,6 +106,29 @@ public class FormBusinessImpl extends AbstractBusinessImpl
 		}
 	}
 	
+	private void saveFormData(FormEntity form, Map<String, String> parameters,
+			List<FileItem> files, String ipAddress) {
+		FormDataEntity formData = new FormDataEntity(form.getId(), "");
+		formData.setIpAddress(ipAddress);
+		getDao().getFormDataDao().save(formData);
+		formData.setUuid(formData.getId().toString());
+		Map<String, String> filesMap = saveFormDataFiles(formData, files);
+		List<FieldEntity> fields = getDao().getFieldDao().getByForm(form);
+		Document doc = DocumentHelper.createDocument();
+		Element root = doc.addElement("formData");
+		for (FieldEntity field: fields) {
+			String value = parameters.containsKey(field.getName()) ? 
+					parameters.get(field.getName()) : "";
+			if (field.getFieldType().equals(FieldType.FILE) 
+				&& filesMap.containsKey(field.getName())) {
+				value = filesMap.get(field.getName());
+			}
+			root.addElement(field.getName()).setText(value);
+		}
+		formData.setData(doc.asXML());
+		getDao().getFormDataDao().save(formData);
+	}
+	
 	private void filterXSS(Map<String, String> params) {
 		for (String key : params.keySet()) {
 			String value = params.get(key);
@@ -101,4 +136,36 @@ public class FormBusinessImpl extends AbstractBusinessImpl
 		}
 	}
 	
+	private Map<String, String> saveFormDataFiles(FormDataEntity formData,
+			List<FileItem> files) {
+		Map<String, String> result = new HashMap<String, String>();
+		getFolderBusiness().createFolder(getFilePath(formData));
+		for (FileItem file: files) {
+			String filepath = getFilePath(formData) + "/" + file.getFilename();
+			getFileBusiness().saveFile(filepath, file.getData());			
+			result.put(file.getFieldName(), "/file" + filepath);
+		}
+		return result;
+	}
+	
+	public String getFilePath(FormDataEntity formData) {
+		FormEntity form = getDao().getFormDao().getById(formData.getFormId());
+		return "/form/" + form.getName() + "/" + formData.getUuid();
+	}
+
+	public FolderBusiness getFolderBusiness() {
+		return folderBusiness;
+	}
+
+	public void setFolderBusiness(FolderBusiness folderBusiness) {
+		this.folderBusiness = folderBusiness;
+	}
+
+	public FileBusiness getFileBusiness() {
+		return fileBusiness;
+	}
+
+	public void setFileBusiness(FileBusiness fileBusiness) {
+		this.fileBusiness = fileBusiness;
+	}
 }

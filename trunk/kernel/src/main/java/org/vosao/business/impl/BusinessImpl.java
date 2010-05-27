@@ -23,8 +23,6 @@ package org.vosao.business.impl;
 
 import java.io.Serializable;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.business.CommentBusiness;
 import org.vosao.business.ConfigBusiness;
@@ -34,6 +32,7 @@ import org.vosao.business.FileBusiness;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.FolderPermissionBusiness;
 import org.vosao.business.FormBusiness;
+import org.vosao.business.FormDataBusiness;
 import org.vosao.business.GroupBusiness;
 import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.MessageBusiness;
@@ -53,9 +52,12 @@ import org.vosao.entity.UserEntity;
 import org.vosao.global.SystemService;
 import org.vosao.search.SearchEngine;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class BusinessImpl implements Business, Serializable {
-
-	private static final Log log = LogFactory.getLog(BusinessImpl.class);
 
 	private SystemService systemService;
 	private Dao dao;
@@ -81,6 +83,7 @@ public class BusinessImpl implements Business, Serializable {
 	private ImportExportBusiness importExportBusiness;
 	private TagBusiness tagBusiness;
 	private PicasaBusiness picasaBusiness;
+	private FormDataBusiness formDataBusiness;
 
 	private SetupBean setupBean;
 
@@ -334,5 +337,15 @@ public class BusinessImpl implements Business, Serializable {
 	public void setSetupBean(SetupBean bean) {
 		setupBean = bean;
 	}
-	
+
+	@Override
+	public FormDataBusiness getFormDataBusiness() {
+		return formDataBusiness;
+	}
+
+	@Override
+	public void setFormDataBusiness(FormDataBusiness bean) {
+		formDataBusiness = bean;
+	}
+
 }

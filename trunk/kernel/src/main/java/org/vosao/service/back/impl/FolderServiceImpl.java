@@ -101,7 +101,7 @@ public class FolderServiceImpl extends AbstractServiceImpl
 	public ServiceResponse deleteFolder(List<String> ids) {
 		getBusiness().getFolderBusiness().recursiveRemove(StrUtil.toLong(ids));
 		return ServiceResponse.createSuccessResponse(
-				Messages.get("folder.successs_delete"));
+				Messages.get("folder.success_delete"));
 	}
 
 	@Override

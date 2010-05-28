@@ -54,11 +54,11 @@ function showPlugins() {
         }
     	var state = plugin.disabled ? messages.disabled : messages.enabled;
     	var link = plugin.disabled ? plugin.title :
-    		'<a href="' + configURL + '">' + plugin.title + '</a>';
+    		'<a href="' + configURL + '">' + Vosao.message(plugin.title) + '</a>';
     	html += '<tr><td>' + link + '</td>'
     		+ '<td>' + plugin.name + '</td>'
     		+ '<td>' + plugin.version + '</td>'
-            + '<td>' + plugin.description  + '</td>'
+            + '<td>' + Vosao.message(plugin.description)  + '</td>'
             + '<td>' + plugin.website + '</td>'
             + '<td>' + state + '</td>'
             + '<td><a title="Uninstall" href="#" onclick="onRemove(' + i + ')">\

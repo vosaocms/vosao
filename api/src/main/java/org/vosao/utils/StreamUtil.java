@@ -36,13 +36,18 @@ public class StreamUtil {
 		return getTextResource(StreamUtil.class.getClassLoader(), path);
 	}
 
-	public static String getTextResource(ClassLoader classLoader,
+	public static InputStream getResource(ClassLoader classLoader,
 			final String path) throws IOException {
 		ClassPathResource res = new ClassPathResource(path, classLoader);
 		if (res == null) {
 			throw new IOException("Empty resource.");
 		}
-		InputStream in = res.getInputStream();
+		return res.getInputStream();
+	}
+	
+	public static String getTextResource(ClassLoader classLoader,
+			final String path) throws IOException {
+		InputStream in = getResource(classLoader, path);
 		if (in == null) {
 			throw new IOException("Empty input stream.");
 		}

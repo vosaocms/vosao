@@ -25,7 +25,6 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -47,10 +46,10 @@ public class Messages {
 		Locale.ENGLISH, 
 		new Locale("ru")};
 	
-	private static Map<Locale, ResourceBundle> bundles = 
-			new HashMap<Locale, ResourceBundle>();
+	private static Map<Locale, VosaoResourceBundle> bundles = 
+			new HashMap<Locale, VosaoResourceBundle>();
 	
-	private static ResourceBundle getBundle(HttpServletRequest request) {
+	private static VosaoResourceBundle getBundle(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		Locale sessionLocale = (Locale)session.getAttribute(JSTL_FMT_LOCALE_KEY);
 		Locale locale = sessionLocale != null ? sessionLocale : 
@@ -58,11 +57,11 @@ public class Messages {
 		return getBundle(locale);
 	}
 	
-	private static ResourceBundle getDefaultBundle() {
+	private static VosaoResourceBundle getDefaultBundle() {
 		return getBundle(Locale.ENGLISH);
 	}
 
-	private static ResourceBundle getBundle(Locale locale) {
+	private static VosaoResourceBundle getBundle(Locale locale) {
 		if (!bundles.containsKey(locale)) {
 			bundles.put(locale, new VosaoResourceBundle(locale));
 		}
@@ -95,11 +94,11 @@ public class Messages {
 	public static String getJSMessages() {
 		VosaoContext ctx = VosaoContext.getInstance();
 		Map<String, String> messages = new HashMap<String, String>();
-		ResourceBundle defaultBundle = getDefaultBundle();
+		VosaoResourceBundle defaultBundle = getDefaultBundle();
 		for (String key : defaultBundle.keySet()) {
 			messages.put(key, defaultBundle.getString(key));
 		}
-		ResourceBundle bundle = getBundle(ctx.getRequest());
+		VosaoResourceBundle bundle = getBundle(ctx.getRequest());
 		for (String key : bundle.keySet()) {
 			messages.put(key, bundle.getString(key));
 		}

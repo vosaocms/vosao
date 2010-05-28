@@ -48,4 +48,10 @@ public interface PluginEntryPoint {
 	 * @return head tag fragment.
 	 */
 	String getHeadBeginInclude();
+	
+	/**
+	 * Get message bundle class path. For example: org.vosao.resources.messages
+	 * @return bundle name.
+	 */
+	String getBundleName();
 }

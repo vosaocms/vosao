@@ -28,11 +28,11 @@ import java.util.List;
 import org.vosao.business.FileBusiness;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
-import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FolderPermissionEntity;
+import org.vosao.i18n.Messages;
 import org.vosao.servlet.MimeType;
 import org.vosao.utils.FolderUtil;
 

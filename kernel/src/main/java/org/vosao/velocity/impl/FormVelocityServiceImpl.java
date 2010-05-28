@@ -30,7 +30,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.Business;
 import org.vosao.business.PageBusiness;
-import org.vosao.common.Messages;
 import org.vosao.dao.Dao;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormConfigEntity;
@@ -38,6 +37,7 @@ import org.vosao.entity.FormDataEntity;
 import org.vosao.entity.FormEntity;
 import org.vosao.entity.helper.EntityHelper;
 import org.vosao.global.SystemService;
+import org.vosao.i18n.Messages;
 import org.vosao.velocity.FormVelocityService;
 
 /**

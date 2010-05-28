@@ -23,11 +23,11 @@ package org.vosao.business.page.impl;
 
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.PageBusiness;
-import org.vosao.common.Messages;
 import org.vosao.dao.Dao;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.global.SystemService;
+import org.vosao.i18n.Messages;
 
 /**
  * 

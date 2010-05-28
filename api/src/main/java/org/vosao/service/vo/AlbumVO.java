@@ -24,7 +24,7 @@ package org.vosao.service.vo;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.vosao.common.Messages;
+import org.vosao.i18n.Messages;
 
 import com.google.gdata.data.photos.AlbumEntry;
 

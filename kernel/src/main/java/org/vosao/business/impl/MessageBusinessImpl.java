@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.vosao.business.MessageBusiness;
-import org.vosao.common.Messages;
 import org.vosao.entity.MessageEntity;
+import org.vosao.i18n.Messages;
 
 /**
  * @author Alexander Oleynik

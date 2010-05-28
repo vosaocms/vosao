@@ -25,9 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.datanucleus.util.StringUtils;
-import org.vosao.common.Messages;
 import org.vosao.entity.StructureTemplateEntity;
 import org.vosao.enums.StructureTemplateType;
+import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.StructureTemplateService;
 import org.vosao.service.impl.AbstractServiceImpl;

@@ -28,12 +28,12 @@ import java.util.Set;
 
 import org.vosao.business.ContentPermissionBusiness;
 import org.vosao.business.FolderBusiness;
-import org.vosao.common.Messages;
 import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.GroupEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.entity.UserGroupEntity;
 import org.vosao.enums.ContentPermissionType;
+import org.vosao.i18n.Messages;
 import org.vosao.utils.UrlUtil;
 
 /**

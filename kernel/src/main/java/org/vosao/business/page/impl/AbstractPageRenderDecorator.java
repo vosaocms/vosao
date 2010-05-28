@@ -30,10 +30,10 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.page.PageRenderDecorator;
-import org.vosao.common.Messages;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
 import org.vosao.global.SystemService;
+import org.vosao.i18n.Messages;
 import org.vosao.utils.DateUtil;
 
 public abstract class AbstractPageRenderDecorator implements PageRenderDecorator {

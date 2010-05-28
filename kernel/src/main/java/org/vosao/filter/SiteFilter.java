@@ -37,11 +37,11 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.common.AccessDeniedException;
-import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.SeoUrlEntity;
+import org.vosao.i18n.Messages;
 
 /**
  * @author Alexander Oleynik

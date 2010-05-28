@@ -30,9 +30,9 @@ import org.apache.commons.lang.StringUtils;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.FolderPermissionBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
-import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.FolderEntity;
+import org.vosao.i18n.Messages;
 import org.vosao.utils.FolderUtil;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;

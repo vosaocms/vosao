@@ -25,9 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.vosao.business.TemplateBusiness;
-import org.vosao.common.Messages;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
+import org.vosao.i18n.Messages;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 

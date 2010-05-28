@@ -23,7 +23,7 @@ package org.vosao.service.back.impl;
 
 import java.util.List;
 
-import org.vosao.common.Messages;
+import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.CommentService;
 import org.vosao.service.impl.AbstractServiceImpl;

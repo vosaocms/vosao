@@ -19,7 +19,7 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.common;
+package org.vosao.i18n;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -29,6 +29,8 @@ import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.vosao.common.VosaoContext;
 
 /**
  * Message bundle helper class for creatng localized messages from Java code.
@@ -41,25 +43,32 @@ public class Messages {
 	public static final String JSTL_FMT_LOCALE_KEY = 
 		"javax.servlet.jsp.jstl.fmt.locale.session";
 
-	private static final String BUNDLE_BASE_NAME = 
-		"org.vosao.resources.messages";
-	
 	private static final Locale[] supportedLocales = {
 		Locale.ENGLISH, 
 		new Locale("ru")};
+	
+	private static Map<Locale, ResourceBundle> bundles = 
+			new HashMap<Locale, ResourceBundle>();
 	
 	private static ResourceBundle getBundle(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		Locale sessionLocale = (Locale)session.getAttribute(JSTL_FMT_LOCALE_KEY);
 		Locale locale = sessionLocale != null ? sessionLocale : 
 			request.getLocale();
-		return ResourceBundle.getBundle(BUNDLE_BASE_NAME, locale);
+		return getBundle(locale);
 	}
 	
 	private static ResourceBundle getDefaultBundle() {
-		return ResourceBundle.getBundle(BUNDLE_BASE_NAME, Locale.ENGLISH);
+		return getBundle(Locale.ENGLISH);
 	}
 
+	private static ResourceBundle getBundle(Locale locale) {
+		if (!bundles.containsKey(locale)) {
+			bundles.put(locale, new VosaoResourceBundle(locale));
+		}
+		return bundles.get(locale);
+	}
+	
 	public static String get(String key, Object...objects) {
 		VosaoContext ctx = VosaoContext.getInstance();
 		String pattern = "not found";

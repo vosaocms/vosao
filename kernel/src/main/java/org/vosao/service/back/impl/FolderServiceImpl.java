@@ -27,8 +27,8 @@ import java.util.Map;
 
 import org.datanucleus.util.StringUtils;
 import org.vosao.business.decorators.TreeItemDecorator;
-import org.vosao.common.Messages;
 import org.vosao.entity.FolderEntity;
+import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.FileService;
 import org.vosao.service.back.FolderPermissionService;

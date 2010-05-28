@@ -28,10 +28,10 @@ import java.util.List;
 
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.UserBusiness;
-import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.UserEntity;
+import org.vosao.i18n.Messages;
 import org.vosao.utils.EmailUtil;
 import org.vosao.utils.HashUtil;
 import org.vosao.utils.StreamUtil;

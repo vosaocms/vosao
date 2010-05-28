@@ -26,13 +26,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FolderPermissionEntity;
 import org.vosao.entity.GroupEntity;
 import org.vosao.entity.helper.GroupHelper;
 import org.vosao.enums.FolderPermissionType;
+import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.FolderPermissionService;
 import org.vosao.service.impl.AbstractServiceImpl;

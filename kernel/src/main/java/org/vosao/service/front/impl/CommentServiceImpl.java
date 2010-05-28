@@ -27,9 +27,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.tanesha.recaptcha.ReCaptchaResponse;
 
-import org.vosao.common.Messages;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceException;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.front.CommentService;

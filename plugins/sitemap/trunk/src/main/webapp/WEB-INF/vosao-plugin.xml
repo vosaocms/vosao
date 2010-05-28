@@ -1,16 +1,12 @@
 <vosao-plugin>
     <name>sitemap</name>
-    <title>Sitemap plugin</title>
+    <title>$sitemap.title</title>
     <version>0.5</version>
-    <description>
-        Sitemap plugin allows to insert sitemap. You can configure
-        page tree level.
-    </description>
+    <description>$sitemap.description</description>
     <website>www.vosao.org</website>
     <config>
-        <param name="level" title="Sitemap level" type="Integer" value="2" />
-        <param name="exclude" title="Exclude page URLs (coma separated)" 
-            type="String" value="" />
+        <param name="level" title="$sitemap.level" type="Integer" value="2" />
+        <param name="exclude" title="$sitemap.exclude" type="String" value="" />
     </config>
     <entry-point-class>
         org.vosao.plugins.sitemap.SitemapEntryPoint

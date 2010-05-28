@@ -35,4 +35,8 @@ public class SitemapEntryPoint extends AbstractPluginEntryPoint {
 		return velocityService;
 	}
 	
+	@Override
+	public String getBundleName() {
+		return "org.vosao.plugins.sitemap.messages";
+	}
 }

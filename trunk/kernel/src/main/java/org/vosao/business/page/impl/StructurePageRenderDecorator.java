@@ -41,12 +41,12 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.vo.StructureFieldVO;
-import org.vosao.common.Messages;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.StructureTemplateEntity;
 import org.vosao.global.SystemService;
+import org.vosao.i18n.Messages;
 
 /**
  * 

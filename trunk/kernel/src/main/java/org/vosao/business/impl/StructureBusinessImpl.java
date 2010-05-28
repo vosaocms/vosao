@@ -28,9 +28,9 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.vosao.business.StructureBusiness;
-import org.vosao.common.Messages;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.StructureEntity;
+import org.vosao.i18n.Messages;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 

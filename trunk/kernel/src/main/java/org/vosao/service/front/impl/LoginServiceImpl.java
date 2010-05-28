@@ -25,10 +25,10 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.vosao.common.BCrypt;
-import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.UserEntity;
 import org.vosao.filter.AuthenticationFilter;
+import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.front.LoginService;
 import org.vosao.service.impl.AbstractServiceImpl;

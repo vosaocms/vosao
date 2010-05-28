@@ -26,12 +26,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.datanucleus.util.StringUtils;
-import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.GroupEntity;
 import org.vosao.entity.helper.GroupHelper;
 import org.vosao.enums.ContentPermissionType;
+import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.ContentPermissionService;
 import org.vosao.service.impl.AbstractServiceImpl;

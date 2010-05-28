@@ -32,8 +32,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
+import org.vosao.i18n.Messages;
 import org.vosao.utils.DateUtil;
 
 /**

@@ -48,6 +48,7 @@ public class ContextFilter extends AbstractFilter implements Filter {
     		FilterChain chain) throws IOException, ServletException {
     	VosaoContext ctx = VosaoContext.getInstance();
     	ctx.setRequest((HttpServletRequest)request);
+    	ctx.setBusiness(getBusiness());
     	chain.doFilter(request, response);
     }
 }

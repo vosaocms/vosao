@@ -29,9 +29,9 @@ import java.util.Map;
 
 import org.vosao.business.SetupBean;
 import org.vosao.business.impl.SetupBeanImpl;
-import org.vosao.common.Messages;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FileEntity;
+import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.ConfigService;
 import org.vosao.service.impl.AbstractServiceImpl;

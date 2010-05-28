@@ -27,10 +27,10 @@ import java.util.Map;
 
 import org.datanucleus.util.StringUtils;
 import org.vosao.business.impl.SetupBeanImpl;
-import org.vosao.common.Messages;
 import org.vosao.entity.FormConfigEntity;
 import org.vosao.entity.FormDataEntity;
 import org.vosao.entity.FormEntity;
+import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.FormService;
 import org.vosao.service.impl.AbstractServiceImpl;

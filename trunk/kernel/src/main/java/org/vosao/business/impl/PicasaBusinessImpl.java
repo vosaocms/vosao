@@ -27,8 +27,8 @@ import java.net.URL;
 import java.util.List;
 
 import org.vosao.business.PicasaBusiness;
-import org.vosao.common.Messages;
 import org.vosao.entity.ConfigEntity;
+import org.vosao.i18n.Messages;
 import org.vosao.utils.FolderUtil;
 import org.vosao.utils.MimeType;
 

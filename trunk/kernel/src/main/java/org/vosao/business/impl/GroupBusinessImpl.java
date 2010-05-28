@@ -25,11 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.vosao.business.GroupBusiness;
-import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.GroupEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.entity.UserGroupEntity;
+import org.vosao.i18n.Messages;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 

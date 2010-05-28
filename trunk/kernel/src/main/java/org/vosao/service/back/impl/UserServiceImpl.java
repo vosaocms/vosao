@@ -27,9 +27,9 @@ import java.util.Map;
 
 import org.datanucleus.util.StringUtils;
 import org.vosao.common.BCrypt;
-import org.vosao.common.Messages;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.UserRole;
+import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.UserService;
 import org.vosao.service.impl.AbstractServiceImpl;

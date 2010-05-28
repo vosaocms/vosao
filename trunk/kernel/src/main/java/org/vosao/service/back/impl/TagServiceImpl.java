@@ -27,10 +27,10 @@ import java.util.Map;
 
 import org.datanucleus.util.StringUtils;
 import org.vosao.business.decorators.TreeItemDecorator;
-import org.vosao.common.Messages;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PageTagEntity;
 import org.vosao.entity.TagEntity;
+import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.TagService;
 import org.vosao.service.impl.AbstractServiceImpl;

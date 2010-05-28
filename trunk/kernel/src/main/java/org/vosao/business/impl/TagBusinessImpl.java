@@ -29,9 +29,9 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.vosao.business.TagBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
-import org.vosao.common.Messages;
 import org.vosao.entity.PageTagEntity;
 import org.vosao.entity.TagEntity;
+import org.vosao.i18n.Messages;
 
 /**
  * 

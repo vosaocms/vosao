@@ -32,8 +32,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.vosao.common.Messages;
 import org.vosao.common.VosaoContext;
+import org.vosao.i18n.Messages;
 
 /**
  * 

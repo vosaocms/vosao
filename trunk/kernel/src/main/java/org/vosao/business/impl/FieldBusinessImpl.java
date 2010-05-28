@@ -26,10 +26,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.vosao.business.FieldBusiness;
-import org.vosao.common.Messages;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormEntity;
 import org.vosao.enums.FieldType;
+import org.vosao.i18n.Messages;
 import org.vosao.utils.ParamUtil;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;

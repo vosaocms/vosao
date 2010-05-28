@@ -27,8 +27,8 @@ import java.util.Map;
 
 import org.datanucleus.util.StringUtils;
 import org.vosao.business.vo.StructureFieldVO;
-import org.vosao.common.Messages;
 import org.vosao.entity.StructureEntity;
+import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.StructureService;
 import org.vosao.service.impl.AbstractServiceImpl;

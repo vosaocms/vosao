@@ -28,9 +28,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.vosao.common.Messages;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.MessageEntity;
+import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.MessageService;
 import org.vosao.service.impl.AbstractServiceImpl;

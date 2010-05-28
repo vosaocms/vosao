@@ -26,9 +26,9 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.vosao.business.ConfigBusiness;
-import org.vosao.common.Messages;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.filter.SiteFilter;
+import org.vosao.i18n.Messages;
 
 public class ConfigBusinessImpl extends AbstractBusinessImpl 
 	implements ConfigBusiness {

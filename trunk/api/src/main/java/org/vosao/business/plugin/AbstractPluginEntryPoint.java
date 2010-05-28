@@ -93,5 +93,10 @@ public abstract class AbstractPluginEntryPoint implements PluginEntryPoint {
 	public String getHeadBeginInclude() {
 		return "";
 	}
+	
+	@Override
+	public String getBundleName() {
+		return null;
+	}
 
 }

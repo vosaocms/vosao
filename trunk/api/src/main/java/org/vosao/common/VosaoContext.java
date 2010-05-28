@@ -21,12 +21,11 @@
 
 package org.vosao.common;
 
-import java.text.MessageFormat;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.vosao.business.Business;
 import org.vosao.entity.UserEntity;
 
 /**
@@ -43,6 +42,7 @@ public class VosaoContext {
 	
 	private Locale locale;
 	private UserEntity user;
+	private Business business;
 	
 	private VosaoContext() {
 		requestCount = 0;
@@ -95,6 +95,14 @@ public class VosaoContext {
 
 	public long getStartTime() {
 		return startTime;
+	}
+
+	public Business getBusiness() {
+		return business;
+	}
+
+	public void setBusiness(Business business) {
+		this.business = business;
 	}
 	
 }

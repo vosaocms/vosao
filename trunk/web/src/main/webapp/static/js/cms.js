@@ -105,3 +105,10 @@ Vosao.idMap = function(list) {
 	});
 	return map;
 };
+
+Vosao.message = function(s) {
+	if (s.charAt(0) == '$') {
+		return messages[s.substr(1)];
+	}	
+	return s;
+};

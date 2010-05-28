@@ -300,4 +300,9 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 		}
 	}
 
+	@Override
+	public ClassLoader getClassLoader(PluginEntity plugin) {
+		return getPluginClassLoaderFactory().getClassLoader(plugin.getName());
+	}
+
 }

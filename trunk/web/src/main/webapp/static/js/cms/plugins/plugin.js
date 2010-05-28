@@ -66,22 +66,23 @@ function showPlugin() {
 	$.each(properties, function(i,value) {
 		var data = notNull(configData[value.name.toLowerCase()] ? 
 				configData[value.name.toLowerCase()] : value.defaultValue);
+		var title = Vosao.message(value.title);
 		if (value.type == 'String' || value.type == 'Integer') {
-			h += '<div class="form-row"><label>' + value.title + '</label>'
+			h += '<div class="form-row"><label>' + title + '</label>'
 				+ '<input id="property-' + value.name + '" value="' 
 				+ Vosao.escapeHtml(data) + '"/></div>';
 		}
 		if (value.type == 'Date') {
-			h += '<div class="form-row"><label>' + value.title + '</label>'
+			h += '<div class="form-row"><label>' + title + '</label>'
 				+ '<input id="property-' + value.name + '"/></div>';
 		}
 		if (value.type == 'Boolean') {
-			h += '<div class="form-row"><label>' + value.title + '</label>'
+			h += '<div class="form-row"><label>' + title + '</label>'
 				+ '<input type="checkbox" id="property-' + value.name 
 				+ '"/></div>';
 		}
 		if (value.type == 'Text') {
-			h += '<div class="form-row"><label>' + value.title + '</label>'
+			h += '<div class="form-row"><label>' + title + '</label>'
 				+ '<textarea id="property-' + value.name + '" cols="80" rows="25">'
 				+ data + '</textarea></div>';
 		}

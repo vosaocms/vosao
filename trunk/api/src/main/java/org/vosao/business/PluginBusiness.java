@@ -117,5 +117,7 @@ public interface PluginBusiness {
 	 * @param date - run datetime.
 	 */
 	void cronSchedule(Date date);
+	
+	ClassLoader getClassLoader(PluginEntity plugin);
 
 }

@@ -26,8 +26,11 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.business.plugin.PluginEntryPoint;
 import org.vosao.common.VosaoContext;
@@ -42,6 +45,9 @@ public class VosaoResourceBundle extends ResourceBundle {
 
 	private static final String BUNDLE_NAME = "org.vosao.resources.messages";
 
+	private static final Log logger = LogFactory.getLog(
+			VosaoResourceBundle.class);
+	
 	private Locale locale;
 
 	public VosaoResourceBundle(Locale aLocale) {
@@ -65,7 +71,11 @@ public class VosaoResourceBundle extends ResourceBundle {
 	protected Object handleGetObject(String key) {
 		Object result = null;
 		for (ResourceBundle bundle : getResourceBundles()) {
-			result = bundle.getObject(key);
+			try {
+				result = bundle.getObject(key);
+			}
+			catch (MissingResourceException e) {
+			}
 			if (result != null) {
 				return result;
 			}
@@ -81,7 +91,8 @@ public class VosaoResourceBundle extends ResourceBundle {
 					.getEntryPoint(plugin);
 			if (entryPoint.getBundleName() != null) {
 				result.add(ResourceBundle.getBundle(entryPoint.getBundleName(),
-						locale, entryPoint.getClass().getClassLoader()));
+						locale, 
+						getBusiness().getPluginBusiness().getClassLoader(plugin)));
 			}
 		}
 		result.add(ResourceBundle.getBundle(BUNDLE_NAME, locale));

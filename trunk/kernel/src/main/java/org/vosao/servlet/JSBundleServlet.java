@@ -24,15 +24,11 @@ package org.vosao.servlet;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.vosao.common.VosaoContext;
 import org.vosao.i18n.Messages;
 import org.vosao.utils.DateUtil;
 
@@ -43,30 +39,19 @@ import org.vosao.utils.DateUtil;
  */
 public class JSBundleServlet extends BaseSpringServlet {
 
-	private Map<Locale, String> jsBundle = new HashMap<Locale, String>();
-	private Date lastModified = new Date();
-	
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		byte[] content = getJSBundle(VosaoContext.getInstance().getLocale())
-				.getBytes("UTF-8");
+		byte[] content = Messages.getJSMessages().getBytes("UTF-8");
 		response.setHeader("Content-type", "text/javascript; charset=\"utf-8\"");
     	response.setCharacterEncoding("UTF-8");
 		response.setHeader("Content-Length", String.valueOf(content.length));
 		response.setHeader("Last-Modified", 
-				DateUtil.toHeaderString(lastModified));
+				DateUtil.toHeaderString(new Date()));
 		BufferedOutputStream output = new BufferedOutputStream(
 				response.getOutputStream());
 		output.write(content);
 		output.flush();
 		output.close();
-	}
-	
-	private String getJSBundle(Locale locale) {
-		if (!jsBundle.containsKey(locale)) {
-			jsBundle.put(locale,Messages.getJSMessages());
-		}
-		return jsBundle.get(locale);
 	}
 	
 }

@@ -23,6 +23,7 @@ var registrations = null;
 var config = null;
 
 $(function(){
+	localize();
     $("#tabs").tabs();
     Vosao.initJSONRpc(loadData);
     $('#configForm').submit(function() {onSave(); return false;});
@@ -53,19 +54,19 @@ function showConfig() {
 
 function validate(vo) {
 	if (!vo.adminEmail) {
-		return 'Admin email is empty';
+		return messages['register.admin_email_empty'];
 	}
 	if (isNaN(parseInt(vo.clearDays))) {
-		return 'Clear days is not a number';
+		return messages['register.clear_days_nan'];
 	}
 	if (!vo.registerFormTemplate) {
-		return 'Register Form Template is empty';
+		return messages['register.template_empty'];
 	}
 	if (!vo.confirmUserTemplate) {
-		return 'Confirm User Template is empty';
+		return messages['register.confirm_user_empty'];
 	}
 	if (!vo.confirmAdminTemplate) {
-		return 'Confirm Admin Template is empty';
+		return messages['register.confirm_admin_empty'];
 	}
 }
 
@@ -99,21 +100,22 @@ function loadRegistrations() {
 }
 
 function showRegistrations() {
-	var h = '<table class="form-table"><tr><th>Registration date</th>\
-		<th>Email</th><th>Name</th><th></th></tr>';
+	var h = '<table class="form-table"><tr><th>' + messages['register.date']
+	    + '</th><th>' + messages.email + '</th><th>' + messages.name 
+	    + '</th><th></th></tr>';
 	$.each(registrations, function(i,value) {
-		h += '<tr><td>' + value.createdDateString + '</td>\
-			<td>' + value.email + '</td><td>' + value.name + '</td>\
-			<td><a href="#" onclick="onConfirm(' + i + ')" title="Confirm">\
-			<img src="/static/images/02_plus.png" /></a>\
-			<a href="#" onclick="onRemove(' + i + ')" title="Remove">\
-			<img src="/static/images/02_x.png" /></a></td></tr>';
+		h += '<tr><td>' + value.createdDateString + '</td><td>' 
+			+ value.email + '</td><td>' + value.name 
+			+ '</td><td><a href="#" onclick="onConfirm(' + i 
+			+ ')" title="Confirm"><img src="/static/images/02_plus.png" /></a>'
+			+ '<a href="#" onclick="onRemove(' + i + ')" title="' 
+			+ messages.remove + '"><img src="/static/images/02_x.png" /></a></td></tr>';
 	});
 	$('#registrations').html(h + '</table>');
 }
 
 function onConfirm(i) {
-	if (confirm('Are you shure?')) {
+	if (confirm(messages.are_you_sure)) {
 		Vosao.jsonrpc.registerBackService.confirmRegistration(function(r) {
 			Vosao.showServiceMessages(r);
 			if (r.result == 'success') {
@@ -124,7 +126,7 @@ function onConfirm(i) {
 }
 
 function onRemove(i) {
-	if (confirm('Are you shure?')) {
+	if (confirm(messages.are_you_sure)) {
 		Vosao.jsonrpc.registerBackService.removeRegistration(function(r) {
 			Vosao.showServiceMessages(r);
 			if (r.result == 'success') {
@@ -138,7 +140,7 @@ function onFormTemplateRestore() {
 	Vosao.jsonrpc.registerBackService.restoreRegisterFormTemplate(function(r) {
 		if (r.result == 'success') {
 			$('#registerFormTemplate').val(r.message);
-			Vosao.info('Successfully restored.');
+			Vosao.info(messages.success);
 		}
 		else {
 			Vosao.showServiceMessages(r);
@@ -150,7 +152,7 @@ function onConfirmUserLetterRestore() {
 	Vosao.jsonrpc.registerBackService.restoreUserConfirmLetter(function(r) {
 		if (r.result == 'success') {
 			$('#confirmUserTemplate').val(r.message);
-			Vosao.info('Successfully restored.');
+			Vosao.info(messages.success);
 		}
 		else {
 			Vosao.showServiceMessages(r);
@@ -162,10 +164,43 @@ function onConfirmAdminLetterRestore() {
 	Vosao.jsonrpc.registerBackService.restoreAdminConfirmLetter(function(r) {
 		if (r.result == 'success') {
 			$('#confirmAdminTemplate').val(r.message);
-			Vosao.info('Successfully restored.');
+			Vosao.info(messages.success);
 		}
 		else {
 			Vosao.showServiceMessages(r);
 		}
 	});
+}
+
+function localize() {
+	document.title = messages['register.plugin_config'];
+	$('#leftmenu a:eq(1)').text(messages.content);
+	$('#leftmenu a:eq(2)').text(messages.templates);
+	$('#leftmenu a:eq(3)').text(messages.resources);
+	$('#leftmenu a:eq(4)').text(messages.configuration);
+	$('#leftmenu a:eq(5)').text(messages.plugins);
+	$('#leftmenu a:eq(6)').text(messages['plugins.config']);
+
+	$('#rightmenu a:eq(0)').text(messages.profile);
+	$('#rightmenu a:eq(1)').text(messages.logout);
+	$('#languageSelect').text(messages.language);
+	$('#rightmenu a:contains(support)').text(messages.support);
+	
+	$('#tabs ul li:eq(0) a').text(messages['register.tab1']);
+	$('#tabs ul li:eq(1) a').text(messages.templates);
+	$('#tabs ul li:eq(2) a').text(messages['register.tab3']);
+	
+	$('#tab-1 div:eq(0) label').text(messages['register.admin_email']);
+	$('#tab-1 div:eq(1) label').text(messages['register.send_confirm_admin']);
+	$('#tab-1 div:eq(2) label').text(messages['register.send_confirm_user']);
+	$('#tab-1 div:eq(3) label').text(messages['register.clear_days']);
+	$('#tab-1 div:eq(4) label').text(messages['register.enable_captcha']);
+
+	$('input[value=save]').val(messages.save);
+	$('input[value=cancel]').val(messages.cancel);
+	
+	$('#tab-2 div:eq(0) span').html(messages['register.registration_form']);
+	$('#tab-2 a').text(messages.restore);
+	$('#tab-2 div:eq(1) span').html(messages['register.confirm_user_letter']);
+	$('#tab-2 div:eq(2) span').html(messages['register.confirm_admin_letter']);
 }

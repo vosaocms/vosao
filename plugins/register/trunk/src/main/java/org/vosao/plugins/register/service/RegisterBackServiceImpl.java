@@ -29,6 +29,7 @@ import org.vosao.business.Business;
 import org.vosao.common.BCrypt;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.UserRole;
+import org.vosao.i18n.Messages;
 import org.vosao.plugins.register.dao.RegisterDao;
 import org.vosao.plugins.register.entity.RegisterConfigEntity;
 import org.vosao.plugins.register.entity.RegistrationEntity;
@@ -99,7 +100,8 @@ public class RegisterBackServiceImpl extends AbstractRegisterService
 		config.setConfirmAdminTemplate(vo.get("confirmAdminTemplate"));
 		config.setCaptcha(Boolean.valueOf(vo.get("captcha")));
 		getRegisterDao().getRegisterConfigDao().save(config);
-		return ServiceResponse.createSuccessResponse("Saved.");
+		return ServiceResponse.createSuccessResponse(
+				Messages.get("success"));
 	}
 
 	@Override
@@ -138,7 +140,8 @@ public class RegisterBackServiceImpl extends AbstractRegisterService
 		if (reg != null) {
 			getRegisterDao().getRegistrationDao().remove(id);
 		}
-		return ServiceResponse.createSuccessResponse("Successfully removed.");
+		return ServiceResponse.createSuccessResponse(
+				Messages.get("success"));
 	}
 
 	@Override
@@ -151,7 +154,7 @@ public class RegisterBackServiceImpl extends AbstractRegisterService
 			getDao().getUserDao().save(user);
 			getRegisterDao().getRegistrationDao().remove(id);
 		}
-		return ServiceResponse.createSuccessResponse("Successfully confirmed.");
+		return ServiceResponse.createSuccessResponse(Messages.get("success"));
 	}
 	
 }

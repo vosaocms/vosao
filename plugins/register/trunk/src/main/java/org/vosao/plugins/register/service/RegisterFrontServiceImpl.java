@@ -35,6 +35,7 @@ import org.vosao.business.Business;
 import org.vosao.common.PluginException;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.UserEntity;
+import org.vosao.i18n.Messages;
 import org.vosao.plugins.register.dao.RegisterDao;
 import org.vosao.plugins.register.entity.RegisterConfigEntity;
 import org.vosao.plugins.register.entity.RegistrationEntity;
@@ -64,7 +65,7 @@ public class RegisterFrontServiceImpl extends AbstractRegisterService
 				challenge, response, request); 
 			if (!recaptchaResponse.isValid()) {
 				return ServiceResponse.createErrorResponse(
-						"Captcha is not valid");
+						Messages.get("incorrect_captcha"));
 			}
 		}
 		RegistrationEntity reg = getRegisterDao().getRegistrationDao()
@@ -79,13 +80,14 @@ public class RegisterFrontServiceImpl extends AbstractRegisterService
 		reg.createSessionKey();
 		UserEntity user = getDao().getUserDao().getByEmail(reg.getEmail());
 		if (user != null) {
-			return ServiceResponse.createErrorResponse("User with email " + 
-					reg.getEmail() + " already exists.");
+			return ServiceResponse.createErrorResponse(Messages.get(
+					"register.user_exists", reg.getEmail()));
 		}
 		getRegisterDao().getRegistrationDao().save(reg);
 		try {
 			sendConfirmLetter(reg);
-			return ServiceResponse.createSuccessResponse("Saved.");
+			return ServiceResponse.createSuccessResponse(
+					Messages.get("success"));
 		}
 		catch (PluginException e) {
 			e.printStackTrace();

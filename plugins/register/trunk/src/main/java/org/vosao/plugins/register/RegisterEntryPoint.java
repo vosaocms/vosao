@@ -87,4 +87,8 @@ public class RegisterEntryPoint extends AbstractPluginEntryPoint {
 		return velocityPlugin;
 	}
 	
+	@Override
+	public String getBundleName() {
+		return "org.vosao.plugins.register.resources.messages";
+	}
 }

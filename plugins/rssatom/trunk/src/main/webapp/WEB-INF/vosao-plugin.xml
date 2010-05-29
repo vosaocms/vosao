@@ -1,23 +1,20 @@
 <vosao-plugin>
     <name>rssatom</name>
-    <title>RSS Atom feed plugin</title>
-    <version>0.4</version>
-    <description>
-        RssAtom plugin allows to get feeds of site pages. You can select
-        format by providing "format" parameter to url 
-        /_ah/plugin/rssatom/feed?format={rss,atom}
-    </description>
+    <title>$rssatom.title</title>
+    <version>0.5</version>
+    <description>$rssatom.description</description>
     <website>www.vosao.org</website>
     <config>
-        <param name="title" title="Feed title" type="String" value="Site news" />
-        <param name="items" title="Feed items" type="Integer" value="10" />
-        <param name="itemSize" title="Item description size in chars" type="Integer" 
+        <param name="title" title="$rssatom.feed_title" type="String" 
+            value="Site news" />
+        <param name="items" title="$rssatom.feed_items" type="Integer" 
+            value="10" />
+        <param name="itemSize" title="$rssatom.item_size" type="Integer" 
             value="300" />
-        <param name="pages" title="Feed's pages URLs (coma separated)" 
-            type="String" value="/" />
-        <param name="rssTemplate" title="RSS 2.0 Velocity template" 
-            type="Text" value="" />
-        <param name="atomTemplate" title="Atom 1.0 Velocity template" 
+        <param name="pages" title="$rssatom.pages" type="String" value="/" />
+        <param name="rssTemplate" title="$rssatom.rss_template" type="Text" 
+            value="" />
+        <param name="atomTemplate" title="$rssatom.atom_template" 
             type="Text" value="" />
     </config>
     <entry-point-class>

@@ -87,4 +87,8 @@ public class RssatomEntryPoint extends AbstractPluginEntryPoint {
 		}
 	}
 	
+	@Override
+	public String getBundleName() {
+		return "org.vosao.plugins.rssatom.messages";
+	}
 }

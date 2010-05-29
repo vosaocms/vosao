@@ -42,7 +42,11 @@ public class JSBundleServlet extends BaseSpringServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		byte[] content = Messages.getJSMessages().getBytes("UTF-8");
-		response.setHeader("Content-type", "text/javascript; charset=\"utf-8\"");
+		response.setHeader("Content-type", "text/javascript; charset=\"utf-8\""); 
+		response.setHeader("Expires", "Sat, 6 May 1995 12:00:00 GMT");
+		response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+		response.setHeader("Pragma", "no-cache");
     	response.setCharacterEncoding("UTF-8");
 		response.setHeader("Content-Length", String.valueOf(content.length));
 		response.setHeader("Last-Modified", 

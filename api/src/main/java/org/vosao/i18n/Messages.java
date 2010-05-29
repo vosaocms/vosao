@@ -22,6 +22,7 @@
 package org.vosao.i18n;
 
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -96,7 +97,7 @@ public class Messages {
 		VosaoContext ctx = VosaoContext.getInstance();
 		Map<String, String> messages = new HashMap<String, String>();
 		VosaoResourceBundle defaultBundle = getDefaultBundle();
-		for (String key : defaultBundle.keySet()) {
+		for (String key : Collections.list(defaultBundle.getKeys())) {
 			try {
 				messages.put(key, defaultBundle.getString(key));
 			}
@@ -104,7 +105,7 @@ public class Messages {
 			}
 		}
 		VosaoResourceBundle bundle = getBundle(ctx.getRequest());
-		for (String key : bundle.keySet()) {
+		for (String key : Collections.list(bundle.getKeys())) {
 			try {
 				messages.put(key, bundle.getString(key));
 			}

@@ -25,6 +25,7 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -96,11 +97,19 @@ public class Messages {
 		Map<String, String> messages = new HashMap<String, String>();
 		VosaoResourceBundle defaultBundle = getDefaultBundle();
 		for (String key : defaultBundle.keySet()) {
-			messages.put(key, defaultBundle.getString(key));
+			try {
+				messages.put(key, defaultBundle.getString(key));
+			}
+			catch (MissingResourceException e) {
+			}
 		}
 		VosaoResourceBundle bundle = getBundle(ctx.getRequest());
 		for (String key : bundle.keySet()) {
-			messages.put(key, bundle.getString(key));
+			try {
+				messages.put(key, bundle.getString(key));
+			}
+			catch (MissingResourceException e) {
+			}
 		}
 		StringBuffer result = new StringBuffer();
 		result.append("locale = '").append(ctx.getLocale().toString())

@@ -274,6 +274,9 @@ public class SetupBeanImpl implements SetupBean {
 	}
 	
 	private void clearFileCache(FolderEntity folder) {
+		if (folder == null) {
+			return;
+		}
 		String folderPath = getDao().getFolderDao().getFolderPath(
 				folder.getId());
 		for (FileEntity file : getDao().getFileDao().getByFolder(

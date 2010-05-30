@@ -27,6 +27,9 @@ $(function(){
     $("#tabs").tabs();
     Vosao.initJSONRpc(loadData);
     $('#configForm').submit(function() {onSave(); return false;});
+    $('#cancelTemplateButton, #cancelButton').click(function() {
+    	location.href = "/cms/plugins/config.jsp";
+    });
 });
 
 function loadData() {

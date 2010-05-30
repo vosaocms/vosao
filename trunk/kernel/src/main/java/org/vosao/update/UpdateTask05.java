@@ -23,6 +23,7 @@ package org.vosao.update;
 
 import org.vosao.business.Business;
 import org.vosao.dao.Dao;
+import org.vosao.entity.PluginEntity;
 import org.vosao.entity.StructureTemplateEntity;
 import org.vosao.entity.UserEntity;
 
@@ -62,6 +63,7 @@ public class UpdateTask05 implements UpdateTask {
 		getBusiness().getSetupBean().clearSessions();
 		updateStructureTemplates();
 		updateUsers();
+		updatePlugins();
 		return "Successfully updated to 0.5 version.";
 	}
 
@@ -79,4 +81,12 @@ public class UpdateTask05 implements UpdateTask {
 			getDao().getUserDao().save(user);
 		}
 	}
+	
+	private void updatePlugins() {
+		for (PluginEntity plugin : getDao().getPluginDao().select()) {
+			plugin.setDisabled(true);
+			getDao().getPluginDao().save(plugin);
+		}
+	}
+
 }

@@ -79,6 +79,8 @@ public class FormExporterImpl extends AbstractExporter
 				form.isShowResetButton()));
 		formElement.addAttribute("enableCaptcha", String.valueOf(
 				form.isEnableCaptcha()));
+		formElement.addAttribute("enableSave", String.valueOf(
+				form.isEnableSave()));
 		formElement.addAttribute("resetButtonTitle", form.getResetButtonTitle());
 		List<FieldEntity> fields = getDao().getFieldDao().getByForm(form);
 		for (FieldEntity field : fields) {
@@ -102,6 +104,8 @@ public class FormExporterImpl extends AbstractExporter
             			"showResetButton", false));
             	form.setEnableCaptcha(XmlUtil.readBooleanAttr(element, 
             			"enableCaptcha", false));
+            	form.setEnableSave(XmlUtil.readBooleanAttr(element, 
+            			"enableSave", false));
             	form.setResetButtonTitle(element.attributeValue("resetButtonTitle"));
             	getDaoTaskAdapter().formSave(form);
             	readFields(element, form);

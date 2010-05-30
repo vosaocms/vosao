@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.vosao.business.Business;
+import org.vosao.dao.Dao;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -61,6 +62,7 @@ public class UpdateManager {
 				datastore.put(config);
 			}
 		}
+		getDao().getConfigDao().clearCache();
 		return result.toString();
 	}
 	
@@ -74,6 +76,10 @@ public class UpdateManager {
 		config.setProperty("version", "0.0.2");
 		config.setProperty("enableRecaptcha", false);
 		datastore.put(config);
+	}
+	
+	private Dao getDao() {
+		return business.getDao();
 	}
 	
 }

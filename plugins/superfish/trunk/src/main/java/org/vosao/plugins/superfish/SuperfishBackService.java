@@ -28,9 +28,15 @@ import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PluginEntity;
+import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.plugin.AbstractServicePlugin;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class SuperfishBackService extends AbstractServicePlugin {
 
 	public SuperfishBackService(Business business) {
@@ -56,7 +62,7 @@ public class SuperfishBackService extends AbstractServicePlugin {
 			plugin.setConfigData(config.toXML());
 			getDao().getPluginDao().save(plugin);
 			return ServiceResponse.createSuccessResponse(
-					"Changes successfully saved.");
+					Messages.get("success"));
 		}
 		catch (Exception e) {
 			e.printStackTrace();			
@@ -78,7 +84,7 @@ public class SuperfishBackService extends AbstractServicePlugin {
 			plugin.setConfigData(config.toXML());
 			getDao().getPluginDao().save(plugin);
 			return ServiceResponse.createSuccessResponse(
-					"Changes successfully saved.");
+					Messages.get("success"));
 		}
 		catch (Exception e) {
 			e.printStackTrace();			

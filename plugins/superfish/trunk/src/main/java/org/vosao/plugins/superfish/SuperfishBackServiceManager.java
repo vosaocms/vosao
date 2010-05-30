@@ -26,6 +26,11 @@ import org.vosao.business.Business;
 import org.vosao.service.plugin.AbstractServicePlugin;
 import org.vosao.service.plugin.PluginServiceManager;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class SuperfishBackServiceManager extends AbstractServicePlugin 
 		implements PluginServiceManager {
 

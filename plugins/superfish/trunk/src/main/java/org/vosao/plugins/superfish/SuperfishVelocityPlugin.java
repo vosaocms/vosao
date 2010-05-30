@@ -34,6 +34,11 @@ import org.vosao.entity.PluginEntity;
 import org.vosao.utils.StreamUtil;
 import org.vosao.velocity.plugin.AbstractVelocityPlugin;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class SuperfishVelocityPlugin extends AbstractVelocityPlugin {
 
 	public SuperfishVelocityPlugin(Business aBusiness) {

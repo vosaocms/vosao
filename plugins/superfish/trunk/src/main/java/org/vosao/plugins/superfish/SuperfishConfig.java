@@ -29,6 +29,11 @@ import java.util.Map;
 import org.datanucleus.util.StringUtils;
 import org.vosao.utils.StrUtil;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class SuperfishConfig {
 
 	private Map<String, Integer> enabledPages;

@@ -31,8 +31,10 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.business.SetupBean;
 import org.vosao.update.UpdateException;
 import org.vosao.update.UpdateManager;
 
@@ -55,11 +57,14 @@ public class UpdateFilter extends AbstractFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse)response;
         String url = httpRequest.getServletPath();
         if (url.equals(UPDATE_URL)) {
-        	String msg = "<h2>Vosao CMS Update</h2>";
+        	String msg = "<h2>Vosao CMS " + SetupBean.FULLVERSION + " Update</h2>";
         	try {
         		UpdateManager updateManager = new UpdateManager(getBusiness());
-        		msg += updateManager.update();
-        		writeContent(httpResponse, msg);
+        		String updateMsg = updateManager.update();
+        		if (StringUtils.isEmpty(updateMsg)) {
+        			updateMsg = "Database is already updated.";
+        		}
+        		writeContent(httpResponse, msg + updateMsg);
             	return;
         	}
         	catch (UpdateException e) {

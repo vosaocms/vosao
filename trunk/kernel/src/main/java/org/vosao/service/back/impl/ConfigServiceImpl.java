@@ -50,8 +50,6 @@ import com.google.appengine.api.labs.taskqueue.Queue;
 public class ConfigServiceImpl extends AbstractServiceImpl 
 		implements ConfigService {
 
-	private SetupBean setupBean;
-	
 	@Override
 	public ConfigEntity getConfig() {
 		return getBusiness().getConfigBusiness().getConfig();
@@ -131,12 +129,8 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 				Messages.get("successfull_reset", "Site"));
 	}
 
-	public SetupBean getSetupBean() {
-		return setupBean;
-	}
-
-	public void setSetupBean(SetupBean setupBean) {
-		this.setupBean = setupBean;
+	private SetupBean getSetupBean() {
+		return getBusiness().getSetupBean();
 	}
 
 	@Override

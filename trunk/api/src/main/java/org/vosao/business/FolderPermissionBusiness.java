@@ -34,9 +34,6 @@ import org.vosao.enums.FolderPermissionType;
  */
 public interface FolderPermissionBusiness {
 	
-	ContentPermissionBusiness getContentPermissionBusiness();
-	void setContentPermissionBusiness(ContentPermissionBusiness bean);
-	
 	FolderPermissionEntity getPermission(final FolderEntity folder, 
 			final UserEntity user);
 

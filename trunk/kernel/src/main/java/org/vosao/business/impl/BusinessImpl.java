@@ -48,9 +48,12 @@ import org.vosao.business.TemplateBusiness;
 import org.vosao.business.UserBusiness;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
+import org.vosao.dao.impl.DaoImpl;
 import org.vosao.entity.UserEntity;
 import org.vosao.global.SystemService;
+import org.vosao.global.impl.SystemServiceImpl;
 import org.vosao.search.SearchEngine;
+import org.vosao.search.impl.SearchEngineImpl;
 
 /**
  * 
@@ -87,9 +90,6 @@ public class BusinessImpl implements Business, Serializable {
 
 	private SetupBean setupBean;
 
-	public void init() {
-	}
-	
 	@Override
 	public UserEntity getUser() {
 		return VosaoContext.getInstance().getUser();
@@ -97,6 +97,9 @@ public class BusinessImpl implements Business, Serializable {
 	
 	@Override
 	public PageBusiness getPageBusiness() {
+		if (pageBusiness == null) {
+			pageBusiness = new PageBusinessImpl();
+		}
 		return pageBusiness;
 	}
 
@@ -107,6 +110,9 @@ public class BusinessImpl implements Business, Serializable {
 	
 	@Override
 	public FolderBusiness getFolderBusiness() {
+		if (folderBusiness == null) {
+			folderBusiness = new FolderBusinessImpl();
+		}
 		return folderBusiness;
 	}
 
@@ -117,6 +123,9 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public TemplateBusiness getTemplateBusiness() {
+		if (templateBusiness == null) {
+			templateBusiness = new TemplateBusinessImpl();
+		}
 		return templateBusiness;
 	}
 
@@ -127,6 +136,9 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public ConfigBusiness getConfigBusiness() {
+		if (configBusiness == null) {
+			configBusiness = new ConfigBusinessImpl();
+		}
 		return configBusiness;
 	}
 	@Override
@@ -136,6 +148,9 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public FormBusiness getFormBusiness() {
+		if (formBusiness == null) {
+			formBusiness = new FormBusinessImpl();
+		}
 		return formBusiness;
 	}
 
@@ -146,6 +161,9 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public FileBusiness getFileBusiness() {
+		if (fileBusiness == null) {
+			fileBusiness = new FileBusinessImpl();
+		}
 		return fileBusiness;
 	}
 
@@ -156,6 +174,9 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public CommentBusiness getCommentBusiness() {
+		if (commentBusiness == null) {
+			commentBusiness = new CommentBusinessImpl();
+		}
 		return commentBusiness;
 	}
 
@@ -166,6 +187,9 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public FieldBusiness getFieldBusiness() {
+		if (fieldBusiness == null) {
+			fieldBusiness = new FieldBusinessImpl();
+		}
 		return fieldBusiness;
 	}
 
@@ -176,6 +200,9 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public SystemService getSystemService() {
+		if (systemService == null) {
+			systemService = new SystemServiceImpl();
+		}
 		return systemService;
 	}
 
@@ -191,6 +218,9 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public MessageBusiness getMessageBusiness() {
+		if (messageBusiness == null) {
+			messageBusiness = new MessageBusinessImpl();
+		}
 		return messageBusiness;
 	}
 
@@ -201,6 +231,9 @@ public class BusinessImpl implements Business, Serializable {
 	
 	@Override
 	public UserBusiness getUserBusiness() {
+		if (userBusiness == null) {
+			userBusiness = new UserBusinessImpl();
+		}
 		return userBusiness;
 	}
 
@@ -211,6 +244,9 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public ContentPermissionBusiness getContentPermissionBusiness() {
+		if (contentPermissionBusiness == null) {
+			contentPermissionBusiness = new ContentPermissionBusinessImpl();
+		}
 		return contentPermissionBusiness;
 	}
 
@@ -221,6 +257,9 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public GroupBusiness getGroupBusiness() {
+		if (groupBusiness == null) {
+			groupBusiness = new GroupBusinessImpl();
+		}
 		return groupBusiness;
 	}
 
@@ -231,6 +270,9 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public FolderPermissionBusiness getFolderPermissionBusiness() {
+		if (folderPermissionBusiness == null) {
+			folderPermissionBusiness = new FolderPermissionBusinessImpl();
+		}
 		return folderPermissionBusiness;
 	}
 
@@ -241,6 +283,9 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public StructureBusiness getStructureBusiness() {
+		if (structureBusiness == null) {
+			structureBusiness = new StructureBusinessImpl();
+		}
 		return structureBusiness;
 	}
 
@@ -251,6 +296,9 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public StructureTemplateBusiness getStructureTemplateBusiness() {
+		if (structureTemplateBusiness == null) {
+			structureTemplateBusiness = new StructureTemplateBusinessImpl();
+		}
 		return structureTemplateBusiness;
 	}
 
@@ -262,6 +310,9 @@ public class BusinessImpl implements Business, Serializable {
 	
 	@Override
 	public PluginBusiness getPluginBusiness() {
+		if (pluginBusiness == null) {
+			pluginBusiness = new PluginBusinessImpl();
+		}
 		return pluginBusiness;
 	}
 
@@ -272,6 +323,9 @@ public class BusinessImpl implements Business, Serializable {
 	
 	@Override
 	public PluginResourceBusiness getPluginResourceBusiness() {
+		if (pluginResourceBusiness == null) {
+			pluginResourceBusiness = new PluginResourceBusinessImpl();
+		}
 		return pluginResourceBusiness;
 	}
 
@@ -282,6 +336,9 @@ public class BusinessImpl implements Business, Serializable {
 	
 	@Override
 	public Dao getDao() {
+		if (dao == null) {
+			dao = new DaoImpl();
+		}
 		return dao;
 	}
 
@@ -291,6 +348,9 @@ public class BusinessImpl implements Business, Serializable {
 	}
 
 	public SearchEngine getSearchEngine() {
+		if (searchEngine == null) {
+			searchEngine = new SearchEngineImpl();
+		}
 		return searchEngine;
 	}
 
@@ -300,6 +360,9 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public ImportExportBusiness getImportExportBusiness() {
+		if (importExportBusiness == null) {
+			importExportBusiness = new ImportExportBusinessImpl();
+		}
 		return importExportBusiness;
 	}
 
@@ -310,6 +373,9 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public TagBusiness getTagBusiness() {
+		if (tagBusiness == null) {
+			tagBusiness = new TagBusinessImpl();
+		}
 		return tagBusiness;
 	}
 
@@ -320,6 +386,9 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public PicasaBusiness getPicasaBusiness() {
+		if (picasaBusiness == null) {
+			picasaBusiness = new PicasaBusinessImpl();
+		}
 		return picasaBusiness;
 	}
 
@@ -330,6 +399,9 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public SetupBean getSetupBean() {
+		if (setupBean == null) {
+			setupBean = new SetupBeanImpl();
+		}
 		return setupBean;
 	}
 
@@ -340,6 +412,9 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public FormDataBusiness getFormDataBusiness() {
+		if (formDataBusiness == null) {
+			formDataBusiness = new FormDataBusinessImpl();
+		}
 		return formDataBusiness;
 	}
 

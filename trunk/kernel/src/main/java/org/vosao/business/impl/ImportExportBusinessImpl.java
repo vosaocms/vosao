@@ -29,7 +29,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.dom4j.DocumentException;
-import org.vosao.business.Business;
 import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.business.imex.ExporterFactory;
@@ -40,6 +39,7 @@ import org.vosao.business.imex.task.DaoTaskAdapter;
 import org.vosao.business.imex.task.TaskTimeoutException;
 import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
 import org.vosao.business.impl.imex.ExporterFactoryImpl;
+import org.vosao.business.impl.imex.task.DaoTaskAdapterImpl;
 import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FolderEntity;
@@ -48,8 +48,6 @@ import org.vosao.entity.TemplateEntity;
 public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 		ImportExportBusiness {
 
-	private Business business;
-	private Dao dao;
 	private DaoTaskAdapter daoTaskAdapter;
 	private ExporterFactory exporterFactory;
 
@@ -179,23 +177,14 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 		return path;
 	}
 
-	public Business getBusiness() {
-		return business;
-	}
-
-	public void setBusiness(Business business) {
-		this.business = business;
-	}
-
 	public Dao getDao() {
-		return dao;
-	}
-
-	public void setDao(Dao dao) {
-		this.dao = dao;
+		return getBusiness().getDao();
 	}
 
 	public DaoTaskAdapter getDaoTaskAdapter() {
+		if (daoTaskAdapter == null) {
+			daoTaskAdapter = new DaoTaskAdapterImpl();
+		}
 		return daoTaskAdapter;
 	}
 

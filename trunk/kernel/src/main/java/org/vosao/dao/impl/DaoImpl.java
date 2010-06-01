@@ -23,6 +23,7 @@ package org.vosao.dao.impl;
 
 import java.io.Serializable;
 
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.CommentDao;
 import org.vosao.dao.ConfigDao;
 import org.vosao.dao.ContentDao;
@@ -52,11 +53,12 @@ import org.vosao.dao.UserDao;
 import org.vosao.dao.UserGroupDao;
 import org.vosao.dao.cache.EntityCache;
 import org.vosao.dao.cache.QueryCache;
+import org.vosao.dao.cache.impl.EntityCacheImpl;
+import org.vosao.dao.cache.impl.QueryCacheImpl;
 import org.vosao.global.SystemService;
 
 public class DaoImpl implements Dao, Serializable {
 
-	private SystemService systemService;
 	private EntityCache entityCache;
 	private QueryCache queryCache;
 	
@@ -117,22 +119,23 @@ public class DaoImpl implements Dao, Serializable {
 	
 	@Override
 	public SystemService getSystemService() {
-		return systemService;
+		return VosaoContext.getInstance().getBusiness().getSystemService();
 	}
 
-	@Override
-	public void setSystemService(SystemService bean) {
-		systemService = bean;
-	}
-	
 	public PageDao getPageDao() {
-		return pageDao;
+		if (pageDao == null) {
+			pageDao = new PageDaoImpl();
+		}
+		return pageDao; 
 	}
 	public void setPageDao(PageDao aPageDao) {
 		pageDao = aPageDao;		
 	}
 
 	public FileDao getFileDao() {
+		if (fileDao == null) {
+			fileDao = new FileDaoImpl();
+		}
 		return fileDao;
 	}
 	public void setFileDao(FileDao aFileDao) {
@@ -140,6 +143,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 
 	public UserDao getUserDao() {
+		if (userDao == null) {
+			userDao = new UserDaoImpl();
+		}
 		return userDao;
 	}
 	public void setUserDao(UserDao aUserDao) {
@@ -147,6 +153,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 	
 	public FolderDao getFolderDao() {
+		if (folderDao == null) {
+			folderDao = new FolderDaoImpl();
+		}
 		return folderDao;
 	}
 	
@@ -155,6 +164,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 	
 	public TemplateDao getTemplateDao() {
+		if (templateDao == null) {
+			templateDao = new TemplateDaoImpl();
+		}
 		return templateDao;
 	}
 	
@@ -163,6 +175,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 
 	public ConfigDao getConfigDao() {
+		if (configDao == null) {
+			configDao = new ConfigDaoImpl();
+		}
 		return configDao;
 	}
 	
@@ -171,6 +186,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 
 	public FormDao getFormDao() {
+		if (formDao == null) {
+			formDao = new FormDaoImpl();
+		}
 		return formDao;
 	}
 
@@ -179,6 +197,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 
 	public FormConfigDao getFormConfigDao() {
+		if (formConfigDao == null) {
+			formConfigDao = new FormConfigDaoImpl();
+		}
 		return formConfigDao;
 	}
 
@@ -187,6 +208,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 
 	public CommentDao getCommentDao() {
+		if (commentDao == null) {
+			commentDao = new CommentDaoImpl();
+		}
 		return commentDao;
 	}
 	
@@ -195,6 +219,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 
 	public FieldDao getFieldDao() {
+		if (fieldDao == null) {
+			fieldDao = new FieldDaoImpl();
+		}
 		return fieldDao;
 	}
 
@@ -203,6 +230,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 	
 	public SeoUrlDao getSeoUrlDao() {
+		if (seoUrlDao == null) {
+			seoUrlDao = new SeoUrlDaoImpl();
+		}
 		return seoUrlDao;
 	}
 	
@@ -211,6 +241,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 
 	public LanguageDao getLanguageDao() {
+		if (languageDao == null) {
+			languageDao = new LanguageDaoImpl();
+		}
 		return languageDao;
 	}
 	
@@ -219,6 +252,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 
 	public ContentDao getContentDao() {
+		if (contentDao == null) {
+			contentDao = new ContentDaoImpl();
+		}
 		return contentDao;
 	}
 	
@@ -227,6 +263,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 
 	public MessageDao getMessageDao() {
+		if (messageDao == null) {
+			messageDao = new MessageDaoImpl();
+		}
 		return messageDao;
 	}
 	
@@ -235,6 +274,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 
 	public GroupDao getGroupDao() {
+		if (groupDao == null) {
+			groupDao = new GroupDaoImpl();
+		}
 		return groupDao;
 	}
 	
@@ -243,6 +285,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 
 	public UserGroupDao getUserGroupDao() {
+		if (userGroupDao == null) {
+			userGroupDao = new UserGroupDaoImpl();
+		}
 		return userGroupDao;
 	}
 	
@@ -251,6 +296,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 
 	public ContentPermissionDao getContentPermissionDao() {
+		if (contentPermissionDao == null) {
+			contentPermissionDao = new ContentPermissionDaoImpl();
+		}
 		return contentPermissionDao;
 	}
 	
@@ -259,6 +307,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 
 	public FolderPermissionDao getFolderPermissionDao() {
+		if (folderPermissionDao == null) {
+			folderPermissionDao = new FolderPermissionDaoImpl();
+		}
 		return folderPermissionDao;
 	}
 	
@@ -267,6 +318,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 	
 	public StructureDao getStructureDao() {
+		if (structureDao == null) {
+			structureDao = new StructureDaoImpl();
+		}
 		return structureDao;
 	}
 	
@@ -275,6 +329,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 	
 	public StructureTemplateDao getStructureTemplateDao() {
+		if (structureTemplateDao == null) {
+			structureTemplateDao = new StructureTemplateDaoImpl();
+		}
 		return structureTemplateDao;
 	}
 	
@@ -283,6 +340,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 	
 	public EntityCache getEntityCache() {
+		if (entityCache == null) {
+			entityCache = new EntityCacheImpl();
+		}
 		return entityCache;
 	}
 	
@@ -291,6 +351,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 	
 	public QueryCache getQueryCache() {
+		if (queryCache == null) {
+			queryCache = new QueryCacheImpl();
+		}
 		return queryCache;
 	}
 	
@@ -299,6 +362,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 
 	public PluginDao getPluginDao() {
+		if (pluginDao == null) {
+			pluginDao = new PluginDaoImpl();
+		}
 		return pluginDao;
 	}
 	
@@ -307,6 +373,9 @@ public class DaoImpl implements Dao, Serializable {
 	}
 
 	public PluginResourceDao getPluginResourceDao() {
+		if (pluginResourceDao == null) {
+			pluginResourceDao = new PluginResourceDaoImpl();
+		}
 		return pluginResourceDao;
 	}
 	
@@ -316,6 +385,9 @@ public class DaoImpl implements Dao, Serializable {
 
 	@Override
 	public FileChunkDao getFileChunkDao() {
+		if (fileChunkDao == null) {
+			fileChunkDao = new FileChunkDaoImpl();
+		}
 		return fileChunkDao;
 	}
 
@@ -326,6 +398,9 @@ public class DaoImpl implements Dao, Serializable {
 	
 	@Override
 	public TagDao getTagDao() {
+		if (tagDao == null) {
+			tagDao = new TagDaoImpl();
+		}
 		return tagDao;
 	}
 
@@ -336,6 +411,9 @@ public class DaoImpl implements Dao, Serializable {
 
 	@Override
 	public PageTagDao getPageTagDao() {
+		if (pageTagDao == null) {
+			pageTagDao = new PageTagDaoImpl();
+		}
 		return pageTagDao;
 	}
 
@@ -346,6 +424,9 @@ public class DaoImpl implements Dao, Serializable {
 
 	@Override
 	public FormDataDao getFormDataDao() {
+		if (formDataDao == null) {
+			formDataDao = new FormDataDaoImpl();
+		}
 		return formDataDao;
 	}
 

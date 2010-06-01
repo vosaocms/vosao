@@ -92,11 +92,11 @@ public class ServiceFilter extends AbstractFilter implements Filter {
 	}
 
 	private FrontService getFrontService() {
-		return (FrontService)getSpringBean("frontService");
+		return VosaoContext.getInstance().getFrontService();
 	}
 
 	private BackService getBackService() {
-		return (BackService)getSpringBean("backService");
+		return VosaoContext.getInstance().getBackService();
 	}
 	
 }

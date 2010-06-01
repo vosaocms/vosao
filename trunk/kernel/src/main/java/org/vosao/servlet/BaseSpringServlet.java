@@ -25,9 +25,8 @@ import javax.servlet.http.HttpServlet;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.vosao.business.Business;
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.global.SystemService;
 
@@ -54,7 +53,7 @@ public class BaseSpringServlet extends HttpServlet {
 	 * @return Business bean.
 	 */
 	public Business getBusiness() {
-		return (Business) getSpringBean("business");
+		return VosaoContext.getInstance().getBusiness();
 	}
 
 	/**
@@ -63,16 +62,11 @@ public class BaseSpringServlet extends HttpServlet {
 	 * @return Dao bean.
 	 */
 	public Dao getDao() {
-		return (Dao) getSpringBean("dao");
+		return getBusiness().getDao();
 	}
 	
 	public SystemService getSystemService() {
-		return (SystemService) getSpringBean("systemService");
-	}
-
-	public Object getSpringBean(final String name) {
-		return WebApplicationContextUtils.getRequiredWebApplicationContext(
-				getServletContext()).getBean(name);
+		return getBusiness().getSystemService();
 	}
 
 }

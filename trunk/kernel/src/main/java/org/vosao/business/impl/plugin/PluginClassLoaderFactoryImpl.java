@@ -28,6 +28,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.plugin.PluginClassLoaderFactory;
 import org.vosao.business.plugin.PluginResourceCache;
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.global.SystemService;
 
@@ -35,8 +36,6 @@ public class PluginClassLoaderFactoryImpl implements PluginClassLoaderFactory {
 
 	private static final Log logger = LogFactory.getLog(PluginClassLoader.class);
 	
-	private SystemService systemService;
-	private Dao dao;
 	private Map<String, ClassLoader> classLoaders;
 	private PluginResourceCache cache;
 	
@@ -62,22 +61,17 @@ public class PluginClassLoaderFactoryImpl implements PluginClassLoaderFactory {
 	}
 	
 	public SystemService getSystemService() {
-		return systemService;
-	}
-
-	public void setSystemService(SystemService systemService) {
-		this.systemService = systemService;
+		return VosaoContext.getInstance().getBusiness().getSystemService();
 	}
 
 	public Dao getDao() {
-		return dao;
-	}
-
-	public void setDao(Dao dao) {
-		this.dao = dao;
+		return VosaoContext.getInstance().getBusiness().getDao();
 	}
 
 	public PluginResourceCache getCache() {
+		if (cache == null) {
+			cache = new PluginResourceCacheImpl();
+		}
 		return cache;
 	}
 

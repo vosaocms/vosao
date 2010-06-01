@@ -29,7 +29,6 @@ import org.apache.velocity.app.VelocityEngine;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.labs.taskqueue.Queue;
 import com.google.appengine.api.quota.QuotaService;
-import com.google.gdata.client.photos.PicasawebService;
 
 
 public interface SystemService {

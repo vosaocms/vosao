@@ -25,6 +25,7 @@ import java.io.Serializable;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.cache.EntityCache;
 import org.vosao.dao.cache.QueryCache;
 import org.vosao.global.SystemService;
@@ -33,32 +34,20 @@ public class AbstractDaoImpl implements AbstractDao, Serializable {
 
 	protected static final Log logger = LogFactory.getLog(AbstractDaoImpl.class);
 
-	private EntityCache entityCache;
-	private QueryCache queryCache;
-	private SystemService systemService;
-
 	public EntityCache getEntityCache() {
-		return entityCache;
-	}
-
-	public void setEntityCache(EntityCache entityCache) {
-		this.entityCache = entityCache;
+		return VosaoContext.getInstance().getBusiness().getDao().getEntityCache();
 	}
 
 	public QueryCache getQueryCache() {
-		return queryCache;
-	}
-
-	public void setQueryCache(QueryCache queryCache) {
-		this.queryCache = queryCache;
+		return VosaoContext.getInstance().getBusiness().getDao().getQueryCache();
 	}
 
 	public SystemService getSystemService() {
-		return systemService;
+		return VosaoContext.getInstance().getBusiness().getSystemService();
 	}
 
-	public void setSystemService(SystemService systemService) {
-		this.systemService = systemService;
+	protected Dao getDao() {
+		return VosaoContext.getInstance().getBusiness().getDao();
 	}
-
+	
 }

@@ -24,7 +24,6 @@ package org.vosao.dao.impl;
 import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;

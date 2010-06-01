@@ -31,6 +31,7 @@ import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.business.SetupBean;
 import org.vosao.common.BCrypt;
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FileEntity;
@@ -54,8 +55,6 @@ public class SetupBeanImpl implements SetupBean {
 
 	private static Log log = LogFactory.getLog(SetupBeanImpl.class);
 
-	private Business business;
-	
 	private GroupEntity guests;
 	
 	public void setup() {
@@ -90,7 +89,7 @@ public class SetupBeanImpl implements SetupBean {
 	} 
 
 	private void clearCache() {
-		business.getSystemService().getCache().clear();
+		getBusiness().getSystemService().getCache().clear();
 	} 
 
 	private void initUsers() {
@@ -189,11 +188,7 @@ public class SetupBeanImpl implements SetupBean {
 	}
 
 	public Business getBusiness() {
-		return business;
-	}
-
-	public void setBusiness(Business business) {
-		this.business = business;
+		return VosaoContext.getInstance().getBusiness();
 	}
 
 	public static final String COMMENTS_TEMPLATE_FILE = 

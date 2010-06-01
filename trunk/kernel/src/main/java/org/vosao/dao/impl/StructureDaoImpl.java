@@ -23,6 +23,7 @@ package org.vosao.dao.impl;
 
 import java.util.List;
 
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.BaseDaoImpl;
 import org.vosao.dao.StructureDao;
 import org.vosao.dao.StructureTemplateDao;
@@ -38,20 +39,15 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 public class StructureDaoImpl extends BaseDaoImpl<StructureEntity> 
 		implements StructureDao {
 
-	private StructureTemplateDao structreTemplateDao;
-	
 	public StructureDaoImpl() {
 		super(StructureEntity.class);
 	}
 
 	public StructureTemplateDao getStructureTemplateDao() {
-		return structreTemplateDao;
+		return VosaoContext.getInstance().getBusiness().getDao()
+				.getStructureTemplateDao();
 	}
 	
-	public void setStructureTemplateDao(StructureTemplateDao bean) {
-		structreTemplateDao = bean;
-	}
-		
 	@Override
 	public StructureEntity getByTitle(String title) {
 		Query q = newQuery();

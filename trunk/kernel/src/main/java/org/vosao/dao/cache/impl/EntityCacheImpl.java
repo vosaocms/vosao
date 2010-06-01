@@ -29,6 +29,7 @@ import javax.cache.Cache;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.cache.CacheStat;
 import org.vosao.dao.cache.EntityCache;
 import org.vosao.global.SystemService;
@@ -40,7 +41,6 @@ public class EntityCacheImpl implements EntityCache, Serializable {
 	protected static final Log logger = LogFactory.getLog(
 			EntityCacheImpl.class);
 	
-	private SystemService systemService;
 	private long calls;
 	private long hits;
 	
@@ -128,15 +128,11 @@ public class EntityCacheImpl implements EntityCache, Serializable {
 	}
 
 	public SystemService getSystemService() {
-		return systemService;
+		return VosaoContext.getInstance().getBusiness().getSystemService();
 	}
 
-	public void setSystemService(SystemService systemService) {
-		this.systemService = systemService;
-	}
-	
 	private Cache getCache() {
-		return systemService.getCache();
+		return getSystemService().getCache();
 	}
 
 	@Override

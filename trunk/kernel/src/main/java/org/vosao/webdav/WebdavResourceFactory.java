@@ -27,6 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
@@ -43,8 +44,6 @@ public class WebdavResourceFactory implements ResourceFactory {
 	protected static final Log logger = LogFactory.getLog(
 			WebdavResourceFactory.class);
 
-	
-	private Business business;
 	private TreeItemDecorator<FolderEntity> root;
 	private SystemFileFactory systemFileFactory;
 	
@@ -56,11 +55,7 @@ public class WebdavResourceFactory implements ResourceFactory {
 	}
 
 	public Business getBusiness() {
-		return business;
-	}
-
-	public void setBusiness(Business business) {
-		this.business = business;
+		return VosaoContext.getInstance().getBusiness();
 	}
 
 	@Override

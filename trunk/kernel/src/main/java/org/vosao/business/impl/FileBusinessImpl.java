@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.vosao.business.FileBusiness;
 import org.vosao.business.FolderBusiness;
+import org.vosao.business.FolderPermissionBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.FileEntity;
@@ -41,8 +42,6 @@ import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 public class FileBusinessImpl extends AbstractBusinessImpl 
 	implements FileBusiness {
 
-	private FolderBusiness folderBusiness;
-	
 	@Override
 	public List<String> validateBeforeUpdate(final FileEntity entity) {
 		List<String> errors = new ArrayList<String>();
@@ -107,12 +106,12 @@ public class FileBusinessImpl extends AbstractBusinessImpl
 		}
 	}
 
-	public FolderBusiness getFolderBusiness() {
-		return folderBusiness;
+	private FolderBusiness getFolderBusiness() {
+		return getBusiness().getFolderBusiness();
 	}
 
-	public void setFolderBusiness(FolderBusiness folderBusiness) {
-		this.folderBusiness = folderBusiness;
+	private FolderPermissionBusiness getFolderPermissionBusiness() {
+		return getBusiness().getFolderPermissionBusiness();
 	}
 
 	@Override
@@ -150,8 +149,8 @@ public class FileBusinessImpl extends AbstractBusinessImpl
 			logger.error("File not found. " + filename);
 			return;
 		}
-		FolderPermissionEntity perm = getFolderBusiness()
-				.getFolderPermissionBusiness().getPermission(folder.getEntity(), 
+		FolderPermissionEntity perm = getFolderPermissionBusiness()
+				.getPermission(folder.getEntity(), 
 						VosaoContext.getInstance().getUser());
 		if (perm.isChangeGranted()) {
 			getDao().getFileDao().remove(file.getId());

@@ -39,6 +39,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.Business;
 import org.vosao.business.PluginBusiness;
+import org.vosao.business.impl.plugin.PluginClassLoaderFactoryImpl;
 import org.vosao.business.impl.plugin.PluginLoader;
 import org.vosao.business.plugin.PluginClassLoaderFactory;
 import org.vosao.business.plugin.PluginCronJob;
@@ -46,6 +47,7 @@ import org.vosao.business.plugin.PluginEntryPoint;
 import org.vosao.business.plugin.PluginResourceCache;
 import org.vosao.business.vo.PluginPropertyVO;
 import org.vosao.common.PluginException;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.PluginEntity;
 import org.vosao.service.BackService;
 import org.vosao.service.FrontService;
@@ -59,17 +61,12 @@ import org.vosao.service.plugin.PluginServiceManager;
 public class PluginBusinessImpl extends AbstractBusinessImpl 
 	implements PluginBusiness {
 
-	private Business business;
-	private FrontService frontService;
-	private BackService backService;
-	
 	private PluginLoader pluginLoader;
 	private PluginClassLoaderFactory pluginClassLoaderFactory;
 	private Map<String, PluginEntryPoint> plugins;
 	private Map<String, PluginEntity> pluginTimestamps;
-	private PluginResourceCache cache;
 	
-	public void init() {
+	public PluginBusinessImpl() {
 		plugins = new HashMap<String, PluginEntryPoint>();
 		pluginTimestamps = new HashMap<String, PluginEntity>();
 	}
@@ -99,10 +96,13 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 		plugins.remove(plugin.getName());
 		pluginTimestamps.remove(plugin.getName());
 		getPluginClassLoaderFactory().resetPlugin(plugin.getName());
-		cache.reset(plugin.getName());
+		getCache().reset(plugin.getName());
 	}
 
 	public PluginClassLoaderFactory getPluginClassLoaderFactory() {
+		if (pluginClassLoaderFactory == null) {
+			pluginClassLoaderFactory = new PluginClassLoaderFactoryImpl();
+		}
 		return pluginClassLoaderFactory;
 	}
 
@@ -116,14 +116,6 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 		resetPlugin(plugin);
 	}
 	
-	public Business getBusiness() {
-		return business;
-	}
-
-	public void setBusiness(Business business) {
-		this.business = business;
-	}
-
 	public PluginLoader getPluginLoader() {
 		if (pluginLoader == null) {
 			pluginLoader = new PluginLoader(getDao(), getBusiness());
@@ -132,11 +124,7 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 	}
 
 	public PluginResourceCache getCache() {
-		return cache;
-	}
-
-	public void setCache(PluginResourceCache cache) {
-		this.cache = cache;
+		return pluginClassLoaderFactory.getCache();
 	}
 
 	@Override
@@ -237,19 +225,11 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 	}
 
 	public FrontService getFrontService() {
-		return frontService;
-	}
-
-	public void setFrontService(FrontService frontService) {
-		this.frontService = frontService;
+		return VosaoContext.getInstance().getFrontService();
 	}
 
 	public BackService getBackService() {
-		return backService;
-	}
-
-	public void setBackService(BackService backService) {
-		this.backService = backService;
+		return VosaoContext.getInstance().getBackService();
 	}
 
 	@Override

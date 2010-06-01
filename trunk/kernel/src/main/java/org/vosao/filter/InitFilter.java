@@ -69,7 +69,7 @@ public class InitFilter extends AbstractFilter implements Filter {
             ConfigEntity config = getDao().getConfigDao().getConfig();
             if (config == null || !SetupBeanImpl.VERSION.equals(
             		config.getVersion())) {
-            	SetupBean setupBean = (SetupBean)getSpringBean("setupBean");
+            	SetupBean setupBean = getBusiness().getSetupBean();
             	setupBean.clear();
             	setupBean.setup();
             	logger.info("Setup was successfully completed.");
@@ -108,11 +108,11 @@ public class InitFilter extends AbstractFilter implements Filter {
     }
     
     private EntityCache getEntityCache() {
-    	return (EntityCache) getSpringBean("entityCache");
+    	return getDao().getEntityCache();
     }
 
     private QueryCache getQueryCache() {
-    	return (QueryCache) getSpringBean("queryCache");
+    	return getDao().getQueryCache();
     }
     
 }

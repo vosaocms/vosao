@@ -27,6 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jabsorb.JSONRPCBridge;
 import org.vosao.business.Business;
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PluginEntity;
 import org.vosao.service.FrontService;
@@ -34,15 +35,16 @@ import org.vosao.service.front.CommentService;
 import org.vosao.service.front.FormService;
 import org.vosao.service.front.LoginService;
 import org.vosao.service.front.SearchService;
+import org.vosao.service.front.impl.CommentServiceImpl;
+import org.vosao.service.front.impl.FormServiceImpl;
+import org.vosao.service.front.impl.LoginServiceImpl;
+import org.vosao.service.front.impl.SearchServiceImpl;
 import org.vosao.service.plugin.PluginServiceManager;
 
 public class FrontServiceImpl implements FrontService, Serializable {
 
 	private static final Log log = LogFactory.getLog(FrontServiceImpl.class);
 
-	private Dao dao;
-	private Business business;
-	
 	private LoginService loginService;
 	private FormService formService;
 	private CommentService commentService;
@@ -50,10 +52,10 @@ public class FrontServiceImpl implements FrontService, Serializable {
 	
 	@Override
 	public void register(JSONRPCBridge bridge) {
-		bridge.registerObject("loginFrontService", loginService);
-		bridge.registerObject("formFrontService", formService);
-		bridge.registerObject("commentFrontService", commentService);
-		bridge.registerObject("searchFrontService", searchService);
+		bridge.registerObject("loginFrontService", getLoginService());
+		bridge.registerObject("formFrontService", getFormService());
+		bridge.registerObject("commentFrontService", getCommentService());
+		bridge.registerObject("searchFrontService", getSearchService());
 		registerPluginServices(bridge);
 	}
 	
@@ -68,6 +70,9 @@ public class FrontServiceImpl implements FrontService, Serializable {
 
 	@Override
 	public FormService getFormService() {
+		if (formService == null) {
+			formService = new FormServiceImpl();
+		}
 		return formService;
 	}
 
@@ -78,6 +83,9 @@ public class FrontServiceImpl implements FrontService, Serializable {
 
 	@Override
 	public LoginService getLoginService() {
+		if (loginService == null) {
+			loginService = new LoginServiceImpl();
+		}
 		return loginService;
 	}
 
@@ -88,6 +96,9 @@ public class FrontServiceImpl implements FrontService, Serializable {
 
 	@Override
 	public CommentService getCommentService() {
+		if (commentService == null) {
+			commentService = new CommentServiceImpl();
+		}
 		return commentService;
 	}
 
@@ -96,20 +107,12 @@ public class FrontServiceImpl implements FrontService, Serializable {
 		commentService = bean;
 	}
 
-	public Business getBusiness() {
-		return business;
+	private Business getBusiness() {
+		return VosaoContext.getInstance().getBusiness();
 	}
 
-	public void setBusiness(Business business) {
-		this.business = business;
-	}
-
-	public Dao getDao() {
-		return dao;
-	}
-
-	public void setDao(Dao dao) {
-		this.dao = dao;
+	private Dao getDao() {
+		return getBusiness().getDao();
 	}
 	
 	private void registerPluginServices(JSONRPCBridge bridge) {
@@ -150,6 +153,9 @@ public class FrontServiceImpl implements FrontService, Serializable {
 
 	@Override
 	public SearchService getSearchService() {
+		if (searchService == null) {
+			searchService = new SearchServiceImpl();
+		}
 		return searchService;
 	}
 

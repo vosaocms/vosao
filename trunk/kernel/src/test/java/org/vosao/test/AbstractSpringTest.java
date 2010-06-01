@@ -21,14 +21,11 @@
 
 package org.vosao.test;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.vosao.test.LocalDatastoreTestCase;
+import org.vosao.business.impl.BusinessImpl;
+import org.vosao.common.VosaoContext;
 
 public abstract class AbstractSpringTest extends LocalDatastoreTestCase {
 	
-    private ApplicationContext context;
-
 	@Override
     public void setUp() throws Exception {
         super.setUp();
@@ -36,12 +33,7 @@ public abstract class AbstractSpringTest extends LocalDatastoreTestCase {
 	}    
     
     private void initContext() {
-        context = new ClassPathXmlApplicationContext(
-                new String[] {"classpath:applicationContext.xml"});
+        VosaoContext.getInstance().setBusiness(new BusinessImpl());
     }
-
-	public ApplicationContext getContext() {
-		return context;
-	}
 	
 }

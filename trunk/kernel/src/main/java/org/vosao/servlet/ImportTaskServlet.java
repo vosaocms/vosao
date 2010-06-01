@@ -129,11 +129,11 @@ public class ImportTaskServlet extends BaseSpringServlet {
 	}
 
 	private ImportExportBusiness getImportExportBusiness() {
-		return (ImportExportBusiness) getSpringBean("importExportBusiness");
+		return getBusiness().getImportExportBusiness();
 	}
 
 	private DaoTaskAdapter getDaoTaskAdapter() {
-		return (DaoTaskAdapter) getSpringBean("daoTaskAdapter");
+		return getImportExportBusiness().getDaoTaskAdapter();
 	}
 
 	public void doImport2(HttpServletRequest request,

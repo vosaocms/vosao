@@ -36,8 +36,6 @@ import com.google.appengine.api.datastore.Query;
 public class FileDaoImpl extends BaseDaoImpl<FileEntity> 
 		implements FileDao {
 
-	private FileChunkDao fileChunkDao;
-	
 	public FileDaoImpl() {
 		super(FileEntity.class);
 	}
@@ -96,11 +94,7 @@ public class FileDaoImpl extends BaseDaoImpl<FileEntity>
 	}
 
 	public FileChunkDao getFileChunkDao() {
-		return fileChunkDao;
-	}
-
-	public void setFileChunkDao(FileChunkDao fileChunkDao) {
-		this.fileChunkDao = fileChunkDao;
+		return getDao().getFileChunkDao();
 	}
 
 	@Override

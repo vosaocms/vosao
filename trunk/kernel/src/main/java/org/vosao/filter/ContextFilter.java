@@ -30,7 +30,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.vosao.business.impl.BusinessImpl;
 import org.vosao.common.VosaoContext;
+import org.vosao.service.impl.BackServiceImpl;
+import org.vosao.service.impl.FrontServiceImpl;
 
 /**
  * Vosao context creation and request injection.
@@ -48,7 +51,15 @@ public class ContextFilter extends AbstractFilter implements Filter {
     		FilterChain chain) throws IOException, ServletException {
     	VosaoContext ctx = VosaoContext.getInstance();
     	ctx.setRequest((HttpServletRequest)request);
-    	ctx.setBusiness(getBusiness());
+    	if (ctx.getBusiness() == null) {
+        	ctx.setBusiness(new BusinessImpl());
+    	}
+    	if (ctx.getFrontService() == null) {
+        	ctx.setFrontService(new FrontServiceImpl());
+    	}
+    	if (ctx.getBackService() == null) {
+        	ctx.setBackService(new BackServiceImpl());
+    	}
     	chain.doFilter(request, response);
     }
 }

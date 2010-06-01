@@ -41,8 +41,6 @@ public class CommentBusinessImpl extends AbstractBusinessImpl
 
 	private static final String COMMENT_LETTER_SUBJECT = "New comment";
 	
-	private ContentPermissionBusiness contentPermissionBusiness;
-	
 	@Override
 	public CommentEntity addComment(String name, String content, 
 			PageEntity page) {
@@ -111,16 +109,8 @@ public class CommentBusinessImpl extends AbstractBusinessImpl
 		}		
 	}
 
-	@Override
-	public ContentPermissionBusiness getContentPermissionBusiness() {
-		return contentPermissionBusiness;
+	private ContentPermissionBusiness getContentPermissionBusiness() {
+		return getBusiness().getContentPermissionBusiness();
 	}
-
-	@Override
-	public void setContentPermissionBusiness(ContentPermissionBusiness bean) {
-		contentPermissionBusiness = bean;		
-	}
-
-	
 	
 }

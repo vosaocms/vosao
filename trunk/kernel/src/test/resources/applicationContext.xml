@@ -12,169 +12,10 @@
            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
-    <!--========================== System service ===========================-->
-    
-    <bean id="systemService" class="org.vosao.global.impl.SystemServiceImpl"
-        init-method="init" />  
-
-    <!--========================== Plugin system ============================-->
-
-    <bean id="pluginResourceCache" 
-        class="org.vosao.business.impl.plugin.PluginResourceCacheImpl">
-        <property name="systemService" ref="systemService"/>  
-    </bean>      
-
-    <bean id="pluginClassLoaderFactory" 
-        class="org.vosao.business.impl.plugin.PluginClassLoaderFactoryImpl">
-        <property name="systemService" ref="systemService"/>  
-        <property name="dao" ref="dao"/>  
-        <property name="cache" ref="pluginResourceCache"/>  
-    </bean>      
-    
-
-    <!--============================== DAO ==================================-->
-    
-    <bean id="entityCache"  class="org.vosao.dao.cache.impl.EntityCacheImpl">
-        <property name="systemService" ref="systemService"/>
-    </bean>
-
-    <bean id="queryCache"  class="org.vosao.dao.cache.impl.QueryCacheImpl">
-        <property name="systemService" ref="systemService"/>
-    </bean>
-
-    <bean id="abstractDao" abstract="true"
-        class="org.vosao.dao.impl.AbstractDaoImpl">
-        <property name="entityCache" ref="entityCache"/>
-        <property name="queryCache" ref="queryCache"/>
-        <property name="systemService" ref="systemService"/>
-    </bean>
-         
-    <bean id="fileChunkDao" class="org.vosao.dao.impl.FileChunkDaoImpl"
-        parent="abstractDao"/>
-
-    <bean id="fileDao" class="org.vosao.dao.impl.FileDaoImpl"
-        parent="abstractDao">
-        <property name="fileChunkDao" ref="fileChunkDao" />
-    </bean>    
-
-    <bean id="folderDao" class="org.vosao.dao.impl.FolderDaoImpl"
-        parent="abstractDao" />  
-
-    <bean id="userDao" class="org.vosao.dao.impl.UserDaoImpl"
-        parent="abstractDao" >
-        <property name="userGroupDao" ref="userGroupDao" />
-    </bean>      
-
-    <bean id="templateDao" class="org.vosao.dao.impl.TemplateDaoImpl"
-        parent="abstractDao" />  
-
-    <bean id="configDao" class="org.vosao.dao.impl.ConfigDaoImpl"
-        parent="abstractDao" />  
-
-    <bean id="formDao" class="org.vosao.dao.impl.FormDaoImpl"
-        parent="abstractDao" />  
-
-    <bean id="formConfigDao" class="org.vosao.dao.impl.FormConfigDaoImpl"
-        parent="abstractDao" />  
-
-    <bean id="commentDao" class="org.vosao.dao.impl.CommentDaoImpl"
-        parent="abstractDao" />  
-
-    <bean id="fieldDao" class="org.vosao.dao.impl.FieldDaoImpl"
-        parent="abstractDao" />  
-
-    <bean id="seoUrlDao" class="org.vosao.dao.impl.SeoUrlDaoImpl"
-        parent="abstractDao" />  
-
-    <bean id="languageDao" class="org.vosao.dao.impl.LanguageDaoImpl"
-        parent="abstractDao" />  
-
-    <bean id="contentDao" class="org.vosao.dao.impl.ContentDaoImpl"
-        parent="abstractDao" />  
-
-    <bean id="messageDao" class="org.vosao.dao.impl.MessageDaoImpl"
-        parent="abstractDao" />  
-    
-    <bean id="groupDao" class="org.vosao.dao.impl.GroupDaoImpl"
-        parent="abstractDao" />  
-
-    <bean id="userGroupDao" class="org.vosao.dao.impl.UserGroupDaoImpl"
-        parent="abstractDao" />  
-
-    <bean id="contentPermissionDao" class="org.vosao.dao.impl.ContentPermissionDaoImpl"
-        parent="abstractDao" />  
-
-    <bean id="folderPermissionDao" class="org.vosao.dao.impl.FolderPermissionDaoImpl"
-        parent="abstractDao" />  
-
-    <bean id="structureTemplateDao" class="org.vosao.dao.impl.StructureTemplateDaoImpl"
-        parent="abstractDao" />  
-
-    <bean id="pluginDao" class="org.vosao.dao.impl.PluginDaoImpl"
-        parent="abstractDao" />  
-
-    <bean id="pluginResourceDao" class="org.vosao.dao.impl.PluginResourceDaoImpl"
-        parent="abstractDao" />  
-
-    <bean id="tagDao" class="org.vosao.dao.impl.TagDaoImpl"
-        parent="abstractDao" />  
-
-    <bean id="pageTagDao" class="org.vosao.dao.impl.PageTagDaoImpl"
-        parent="abstractDao" />  
-
-    <bean id="formDataDao" class="org.vosao.dao.impl.FormDataDaoImpl"
-        parent="abstractDao" />  
-
-    <bean id="structureDao" class="org.vosao.dao.impl.StructureDaoImpl"
-        parent="abstractDao">
-        <property name="structureTemplateDao" ref="structureTemplateDao"/>
-    </bean>      
-
-    <bean id="pageDao" class="org.vosao.dao.impl.PageDaoImpl"
-        parent="abstractDao">
-        <property name="contentDao" ref="contentDao"/>  
-        <property name="commentDao" ref="commentDao"/>  
-    </bean>      
-
-    <bean id="dao" class="org.vosao.dao.impl.DaoImpl">  
-        <property name="systemService" ref="systemService"/>
-        <property name="entityCache" ref="entityCache"/>  
-        <property name="queryCache" ref="queryCache"/>
-          
-        <property name="pageDao" ref="pageDao"/>  
-        <property name="fileDao" ref="fileDao"/>  
-        <property name="fileChunkDao" ref="fileChunkDao"/>  
-        <property name="folderDao" ref="folderDao"/>  
-        <property name="userDao" ref="userDao"/>  
-        <property name="templateDao" ref="templateDao"/>  
-        <property name="configDao" ref="configDao"/>  
-        <property name="formDao" ref="formDao"/>  
-        <property name="formConfigDao" ref="formConfigDao"/>  
-        <property name="fieldDao" ref="fieldDao"/>  
-        <property name="commentDao" ref="commentDao"/>  
-        <property name="seoUrlDao" ref="seoUrlDao"/>  
-        <property name="languageDao" ref="languageDao"/>  
-        <property name="contentDao" ref="contentDao"/>  
-        <property name="messageDao" ref="messageDao"/>  
-        <property name="groupDao" ref="groupDao"/>  
-        <property name="userGroupDao" ref="userGroupDao"/>  
-        <property name="contentPermissionDao" ref="contentPermissionDao"/>  
-        <property name="folderPermissionDao" ref="folderPermissionDao"/>  
-        <property name="structureDao" ref="structureDao"/>  
-        <property name="structureTemplateDao" ref="structureTemplateDao"/>  
-        <property name="pluginDao" ref="pluginDao"/>  
-        <property name="pluginResourceDao" ref="pluginResourceDao"/>  
-        <property name="pageTagDao" ref="pageTagDao"/>  
-        <property name="tagDao" ref="tagDao"/>  
-        <property name="formDataDao" ref="formDataDao"/>  
-    </bean>
-
     <!--=========================== Business ================================-->
 
     <bean id="abstractBusiness" abstract="true"
         class="org.vosao.business.impl.AbstractBusinessImpl">
-        <property name="dao" ref="dao"/>  
-        <property name="systemService" ref="systemService"/>  
     </bean>
     
     <bean id="templateBusiness" class="org.vosao.business.impl.TemplateBusinessImpl"
@@ -239,8 +80,6 @@
         <property name="business" ref="business"/>  
         <property name="frontService" ref="frontService"/>  
         <property name="backService" ref="backService"/>  
-        <property name="pluginClassLoaderFactory" ref="pluginClassLoaderFactory"/>  
-        <property name="cache" ref="pluginResourceCache"/>  
     </bean>      
  
     <bean id="commentBusiness" class="org.vosao.business.impl.CommentBusinessImpl"
@@ -260,9 +99,6 @@
 
     <bean id="business" class="org.vosao.business.impl.BusinessImpl"
         init-method="init">  
-        <property name="systemService" ref="systemService"/>
-        <property name="dao" ref="dao"/>
-          
         <property name="pageBusiness" ref="pageBusiness"/>  
         <property name="folderBusiness" ref="folderBusiness"/>  
         <property name="templateBusiness" ref="templateBusiness"/>  
@@ -304,12 +140,10 @@
     
     <bean id="daoTaskAdapter"
         class="org.vosao.business.impl.imex.task.DaoTaskAdapterImpl">
-        <property name="dao" ref="dao"/>  
     </bean>
     
     <bean id="importExportBusiness" 
         class="org.vosao.business.impl.ImportExportBusinessImpl">
-        <property name="dao" ref="dao"/>  
         <property name="business" ref="business"/>  
         <property name="daoTaskAdapter" ref="daoTaskAdapter"/>  
     </bean>
@@ -318,8 +152,6 @@
 
     <bean id="abstractService" abstract="true"
         class="org.vosao.service.impl.AbstractServiceImpl">
-        <property name="dao" ref="dao"/>  
-        <property name="business" ref="business"/>  
     </bean>
 
     <!--==================== JSON-RPC back services =========================-->
@@ -397,9 +229,6 @@
     </bean>    
 
     <bean id="backService" class="org.vosao.service.impl.BackServiceImpl">
-        <property name="dao" ref="dao"/>  
-        <property name="business" ref="business"/>  
-      
         <property name="fileService" ref="fileService"/>  
         <property name="folderService" ref="folderService"/>  
         <property name="commentService" ref="commentService"/>  
@@ -437,9 +266,6 @@
         parent="abstractService" />  
 
     <bean id="frontService" class="org.vosao.service.impl.FrontServiceImpl">  
-        <property name="dao" ref="dao"/>  
-        <property name="business" ref="business"/>  
-      
         <property name="loginService" ref="loginFrontService"/>  
         <property name="formService" ref="formFrontService"/>  
         <property name="commentService" ref="commentFrontService"/>  

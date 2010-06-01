@@ -26,6 +26,8 @@ import java.io.Serializable;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.AbstractBusiness;
+import org.vosao.business.Business;
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.global.SystemService;
 
@@ -40,27 +42,16 @@ public abstract class AbstractBusinessImpl implements AbstractBusiness,
 	protected static final Log logger = LogFactory.getLog(
 			AbstractBusinessImpl.class);
 
-	private Dao dao;
-	private SystemService systemService;
-	
-	@Override
-	public Dao getDao() {
-		return dao;
+	protected Dao getDao() {
+		return getBusiness().getDao();
 	}
 
-	@Override
-	public void setDao(Dao aDao) {
-		dao = aDao;		
+	protected SystemService getSystemService() {
+		return getBusiness().getSystemService();
 	}
 
-	@Override
-	public SystemService getSystemService() {
-		return systemService;
-	}
-	
-	@Override
-	public void setSystemService(SystemService bean) {
-		systemService = bean;
+	protected Business getBusiness() {
+		return VosaoContext.getInstance().getBusiness();
 	}
 
 }

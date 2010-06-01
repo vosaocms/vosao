@@ -22,21 +22,33 @@
 package org.vosao.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.vosao.webdav.WebdavResourceFactory;
+
+import com.bradmcevoy.http.AuthenticationHandler;
+import com.bradmcevoy.http.AuthenticationService;
+import com.bradmcevoy.http.CompressingResponseHandler;
 import com.bradmcevoy.http.HttpManager;
 import com.bradmcevoy.http.Request;
+import com.bradmcevoy.http.ResourceFactory;
 import com.bradmcevoy.http.Response;
 import com.bradmcevoy.http.ServletResponse;
+import com.bradmcevoy.http.http11.auth.BasicAuthHandler;
+import com.bradmcevoy.http.webdav.DefaultWebDavResponseHandler;
+import com.bradmcevoy.http.webdav.WebDavResponseHandler;
 
 public class WebdavServlet extends BaseSpringServlet {
 	    
 	    ServletConfig config;
 	    HttpManager httpManager;
+	    AuthenticationService authService;
 	    
 	    private static final ThreadLocal<HttpServletRequest> originalRequest = 
 	    		new ThreadLocal<HttpServletRequest>();
@@ -65,14 +77,16 @@ public class WebdavServlet extends BaseSpringServlet {
 	    public void init(ServletConfig config) throws ServletException {
 	        try {
 	            this.config = config;
-	            httpManager = (HttpManager) getSpringBean("milton.http.manager");
+	            httpManager = new HttpManager(getResourceFactory(),
+	            		getCompressingHandler(),
+	            		getAuthService());
 	        } catch (Throwable ex) {
 	            logger.error("Exception starting milton servlet " + ex.getMessage());
 	            throw new RuntimeException(ex);
 	        }        
 	    }
 	    
-	    public void service(javax.servlet.ServletRequest servletRequest, javax.servlet.ServletResponse servletResponse) throws ServletException, IOException {
+		public void service(javax.servlet.ServletRequest servletRequest, javax.servlet.ServletResponse servletResponse) throws ServletException, IOException {
 	        HttpServletRequest req = (HttpServletRequest) servletRequest;
 	        HttpServletResponse resp = (HttpServletResponse) servletResponse;
 	        try {
@@ -98,8 +112,27 @@ public class WebdavServlet extends BaseSpringServlet {
 	    }
 
 	    public void destroy() {
-	        
 	    }
+	    
+	    private ResourceFactory getResourceFactory() {
+	    	return new WebdavResourceFactory();
+	    }
+	    
+	    private AuthenticationService getAuthService() {
+			if (authService == null) {
+				List<AuthenticationHandler> handlers = 
+					new ArrayList<AuthenticationHandler>();
+				handlers.add(new BasicAuthHandler());
+				authService = new AuthenticationService(handlers);
+			}
+			return authService;
+		}
+
+		private WebDavResponseHandler getCompressingHandler() {
+			return new CompressingResponseHandler(
+					new DefaultWebDavResponseHandler(getAuthService()));
+		}
+	    
 	}
 
 

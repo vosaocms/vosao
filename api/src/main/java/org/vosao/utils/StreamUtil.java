@@ -11,7 +11,6 @@ import java.io.ObjectOutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.core.io.ClassPathResource;
 
 public class StreamUtil {
 
@@ -38,11 +37,11 @@ public class StreamUtil {
 
 	public static InputStream getResource(ClassLoader classLoader,
 			final String path) throws IOException {
-		ClassPathResource res = new ClassPathResource(path, classLoader);
-		if (res == null) {
+		InputStream in = classLoader.getResourceAsStream(path);
+		if (in == null) {
 			throw new IOException("Empty resource.");
 		}
-		return res.getInputStream();
+		return in; 
 	}
 	
 	public static String getTextResource(ClassLoader classLoader,

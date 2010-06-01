@@ -67,12 +67,6 @@ import org.vosao.utils.UrlUtil;
 public class PageServiceImpl extends AbstractServiceImpl 
 		implements PageService {
 
-	private CommentService commentService;
-	private TemplateService templateService;
-	private LanguageService languageService;
-	private ContentPermissionService contentPermissionService;
-	private GroupService groupService;
-
 	@Override
 	public TreeItemDecorator<PageVO> getTree() {
 		List<PageVO> pages = selectLastVersionPages(getPageBusiness().select());
@@ -374,44 +368,24 @@ public class PageServiceImpl extends AbstractServiceImpl
 		return Collections.EMPTY_LIST;
 	}
 
-	public CommentService getCommentService() {
-		return commentService;
+	private CommentService getCommentService() {
+		return getBackService().getCommentService();
 	}
 
-	public void setCommentService(CommentService bean) {
-		commentService = bean;
+	private LanguageService getLanguageService() {
+		return getBackService().getLanguageService();
 	}
 
-	public LanguageService getLanguageService() {
-		return languageService;
+	private TemplateService getTemplateService() {
+		return getBackService().getTemplateService();
 	}
 
-	public TemplateService getTemplateService() {
-		return templateService;
+	private ContentPermissionService getContentPermissionService() {
+		return getBackService().getContentPermissionService();
 	}
 
-	public void setLanguageService(LanguageService bean) {
-		languageService = bean;
-	}
-
-	public void setTemplateService(TemplateService bean) {
-		templateService = bean;
-	}
-
-	public ContentPermissionService getContentPermissionService() {
-		return contentPermissionService;
-	}
-
-	public void setContentPermissionService(ContentPermissionService bean) {
-		contentPermissionService = bean;
-	}
-
-	public GroupService getGroupService() {
-		return groupService;
-	}
-
-	public void setGroupService(GroupService bean) {
-		groupService = bean;
+	private GroupService getGroupService() {
+		return getBackService().getGroupService();
 	}
 
 	private String loadResource(final String url) {

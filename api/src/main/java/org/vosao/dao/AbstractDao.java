@@ -31,12 +31,6 @@ public interface AbstractDao {
 
 	QueryCache getQueryCache(); 
 
-	void setEntityCache(EntityCache bean);
-
-	void setQueryCache(QueryCache bean);
-
 	SystemService getSystemService();
-
-	void setSystemService(SystemService systemService);
 
 }

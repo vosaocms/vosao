@@ -24,6 +24,7 @@ package org.vosao.business.impl.imex.task;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.imex.task.DaoTaskAdapter;
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.CommentEntity;
@@ -53,18 +54,13 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 
 	private static final Log logger = LogFactory.getLog(DaoTaskAdapterImpl.class);
 
-	private Dao dao;
 	private int current;
 	private int start;
 	private String currentFile;
 	private int fileCounter;
 	
 	public Dao getDao() {
-		return dao;
-	}
-
-	public void setDao(Dao dao) {
-		this.dao = dao;
+		return VosaoContext.getInstance().getBusiness().getDao();
 	}
 
 	public int getStart() {

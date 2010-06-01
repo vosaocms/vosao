@@ -28,9 +28,6 @@ import org.vosao.entity.PageEntity;
 
 public interface CommentBusiness {
 
-	ContentPermissionBusiness getContentPermissionBusiness();
-	void setContentPermissionBusiness(ContentPermissionBusiness bean);
-
 	/**
 	 * Security filtered dao version.
 	 */

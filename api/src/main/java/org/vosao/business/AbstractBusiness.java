@@ -21,21 +21,7 @@
 
 package org.vosao.business;
 
-import java.util.List;
-
-import org.vosao.dao.Dao;
-import org.vosao.entity.FolderEntity;
-import org.vosao.entity.FolderPermissionEntity;
-import org.vosao.global.SystemService;
 
 public interface AbstractBusiness {
 	
-	Dao getDao();
-	
-	void setDao(Dao dao);
-	
-	SystemService getSystemService();
-	
-	void setSystemService(SystemService bean);
-
 }

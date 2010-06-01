@@ -27,8 +27,8 @@ import javax.servlet.ServletException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.vosao.business.Business;
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 
 /**
@@ -41,33 +41,23 @@ public abstract class AbstractFilter {
     private FilterConfig config;
 	private ServletContext servletContext;
 
-	private Dao dao;
-	private Business business;
-
 	public AbstractFilter() {
 	}
 
 	public void init(FilterConfig filterConfig) throws ServletException {
 		config = filterConfig;
 		servletContext = config.getServletContext();
-		dao = (Dao) getSpringBean("dao");
-		business = (Business) getSpringBean("business");
 	}
 	
 	public void destroy() {
 	}
 	
-	protected Object getSpringBean(final String name) {
-		return WebApplicationContextUtils.getRequiredWebApplicationContext(
-				servletContext).getBean(name);
-	}
-	
 	public Dao getDao() {
-		return dao;
+		return getBusiness().getDao();
 	}
 
 	public Business getBusiness() {
-		return business;
+		return VosaoContext.getInstance().getBusiness();
 	}
 
 }

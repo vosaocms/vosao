@@ -42,8 +42,6 @@ import org.vosao.utils.UrlUtil;
 public class ContentPermissionBusinessImpl extends AbstractBusinessImpl
 		implements ContentPermissionBusiness {
 
-	private FolderBusiness folderBusiness;
-	
 	@Override
 	public ContentPermissionEntity getGuestPermission(final String url) {
 		GroupEntity guests = getDao().getGroupDao().getGuestsGroup();
@@ -196,14 +194,8 @@ public class ContentPermissionBusinessImpl extends AbstractBusinessImpl
 		return result;
 	}
 
-	@Override
-	public FolderBusiness getFolderBusiness() {
-		return folderBusiness;
-	}
-
-	@Override
-	public void setFolderBusiness(FolderBusiness bean) {
-		folderBusiness = bean;
+	private FolderBusiness getFolderBusiness() {
+		return getBusiness().getFolderBusiness();
 	}
 
 }

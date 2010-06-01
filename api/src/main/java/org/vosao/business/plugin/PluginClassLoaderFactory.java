@@ -6,4 +6,8 @@ public interface PluginClassLoaderFactory {
 
 	void resetPlugin(String pluginName);
 	
+	PluginResourceCache getCache();
+
+	void setCache(PluginResourceCache cache);
+
 }

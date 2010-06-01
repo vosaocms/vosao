@@ -57,9 +57,6 @@ import org.vosao.utils.StrUtil;
 public class FormBusinessImpl extends AbstractBusinessImpl 
 	implements FormBusiness {
 
-	private FolderBusiness folderBusiness;
-	private FileBusiness fileBusiness;
-	
 	private FormDao getFormDao() {
 		return getDao().getFormDao();
 	}
@@ -144,20 +141,12 @@ public class FormBusinessImpl extends AbstractBusinessImpl
 		return "/form/" + form.getName() + "/" + formData.getUuid();
 	}
 
-	public FolderBusiness getFolderBusiness() {
-		return folderBusiness;
+	private FolderBusiness getFolderBusiness() {
+		return getBusiness().getFolderBusiness();
 	}
 
-	public void setFolderBusiness(FolderBusiness folderBusiness) {
-		this.folderBusiness = folderBusiness;
-	}
-
-	public FileBusiness getFileBusiness() {
-		return fileBusiness;
-	}
-
-	public void setFileBusiness(FileBusiness fileBusiness) {
-		this.fileBusiness = fileBusiness;
+	private FileBusiness getFileBusiness() {
+		return getBusiness().getFileBusiness();
 	}
 
 	@Override

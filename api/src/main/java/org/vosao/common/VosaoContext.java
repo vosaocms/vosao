@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.vosao.business.Business;
 import org.vosao.entity.UserEntity;
+import org.vosao.service.BackService;
+import org.vosao.service.FrontService;
 
 /**
  * Because of GAE is single threaded we can store request scoped data in 
@@ -43,6 +45,8 @@ public class VosaoContext {
 	private Locale locale;
 	private UserEntity user;
 	private Business business;
+	private FrontService frontService;
+	private BackService backService;
 	
 	private VosaoContext() {
 		requestCount = 0;
@@ -88,7 +92,7 @@ public class VosaoContext {
 		}
 		return instance;
 	}
-
+	
 	public int getRequestCount() {
 		return requestCount;
 	}
@@ -103,6 +107,22 @@ public class VosaoContext {
 
 	public void setBusiness(Business business) {
 		this.business = business;
+	}
+
+	public FrontService getFrontService() {
+		return frontService;
+	}
+
+	public void setFrontService(FrontService frontService) {
+		this.frontService = frontService;
+	}
+
+	public BackService getBackService() {
+		return backService;
+	}
+
+	public void setBackService(BackService backService) {
+		this.backService = backService;
 	}
 	
 }

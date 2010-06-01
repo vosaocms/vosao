@@ -43,7 +43,6 @@ import org.apache.velocity.tools.generic.RenderTool;
 import org.apache.velocity.tools.generic.SortTool;
 import org.apache.velocity.tools.generic.ValueParser;
 import org.apache.velocity.tools.view.tools.LinkTool;
-import org.vosao.business.Business;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.business.impl.pagefilter.BodyBeginPageFilter;
@@ -82,14 +81,9 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	implements PageBusiness {
 
 	private VelocityPluginService velocityPluginService;
-	private Business business;
 	private List<PageFilter> pageFilters;
 	private VelocityService velocityService;
 
-	public void init() throws Exception {
-		velocityPluginService = new VelocityPluginServiceImpl(getBusiness());
-	}
-	
 	private List<PageFilter> getPageFilters() {
 		if (pageFilters == null) {
 			pageFilters = new ArrayList<PageFilter>();
@@ -195,13 +189,14 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		LanguageEntity language = getDao().getLanguageDao().getByCode(
 				languageCode);
 		VelocityContext context = new VelocityContext();
-		ConfigEntity configEntity = business.getConfigBusiness().getConfig();
+		ConfigEntity configEntity = getBusiness().getConfigBusiness().getConfig();
 		addVelocityTools(context);
 		context.put("language", language);
 		context.put("config", configEntity);
 		context.put("service", getVelocityService());
 		context.put("plugin", getVelocityPluginService().getPlugins());
-		context.put("messages", business.getMessageBusiness().getBundle(languageCode));
+		context.put("messages", getBusiness().getMessageBusiness().getBundle(
+				languageCode));
 		context.put("user", VosaoContext.getInstance().getUser());
 		context.put("request", VosaoContext.getInstance().getRequest());
 		return context;
@@ -269,6 +264,9 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	}
 
 	public VelocityPluginService getVelocityPluginService() {
+		if (velocityPluginService == null) {
+			velocityPluginService = new VelocityPluginServiceImpl(getBusiness());
+		}
 		return velocityPluginService;
 	}
 
@@ -349,12 +347,12 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	}
 
 	private boolean canReadPage(String url) {
-		return !business.getContentPermissionBusiness().getPermission(
+		return !getBusiness().getContentPermissionBusiness().getPermission(
 				url, VosaoContext.getInstance().getUser()).isDenied();
 	}
 
 	private boolean canWritePage(String url) {
-		return business.getContentPermissionBusiness().getPermission(
+		return getBusiness().getContentPermissionBusiness().getPermission(
 				url, VosaoContext.getInstance().getUser()).isChangeGranted();
 	}
 
@@ -379,18 +377,19 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 				}
 			}
 		}
-		TreeItemDecorator<FolderEntity> root = business.getFolderBusiness()
+		TreeItemDecorator<FolderEntity> root = getBusiness().getFolderBusiness()
 				.getTree();
 		List<Long> folderIds = new ArrayList<Long>();
 		for (Long id : removeIds) {
 			PageEntity page = getDao().getPageDao().getById(id);
-			TreeItemDecorator<FolderEntity> folder = business.getFolderBusiness()
+			TreeItemDecorator<FolderEntity> folder = getBusiness()
+					.getFolderBusiness()
 					.findFolderByPath(root, "/page" + page.getFriendlyURL()); 
 			if (folder != null) {	
 				folderIds.add(folder.getEntity().getId());
 			}
 		}
-		business.getFolderBusiness().recursiveRemove(folderIds);
+		getBusiness().getFolderBusiness().recursiveRemove(folderIds);
 		getDao().getPageDao().remove(removeIds);
 	}
 
@@ -426,7 +425,8 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 
 	private List<ContentEntity> securityFilter(String url, 
 			List<ContentEntity> list) {
-		ContentPermissionEntity perm = business.getContentPermissionBusiness()
+		ContentPermissionEntity perm = getBusiness()
+				.getContentPermissionBusiness()
 				.getPermission(url, VosaoContext.getInstance().getUser());
 		if (perm.isAllLanguages()) {
 			return list;
@@ -451,21 +451,14 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 
 	@Override
 	public boolean canChangeContent(String url, String languageCode) {
-		ContentPermissionEntity perm = business.getContentPermissionBusiness()
+		ContentPermissionEntity perm = getBusiness()
+				.getContentPermissionBusiness()
 				.getPermission(url, VosaoContext.getInstance().getUser());
 		if (perm.isAllLanguages()) {
 			return perm.isChangeGranted();
 		}
 		return perm.isChangeGranted() && perm.getLanguagesList().contains(
 				languageCode);
-	}
-
-	public Business getBusiness() {
-		return business;
-	}
-
-	public void setBusiness(Business bean) {
-		this.business = bean;
 	}
 
 	@Override

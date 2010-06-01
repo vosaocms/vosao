@@ -45,10 +45,6 @@ import org.vosao.utils.StrUtil;
 public class FolderServiceImpl extends AbstractServiceImpl 
 		implements FolderService {
 
-	private FileService fileService;
-	private FolderPermissionService folderPermissionService;
-	private GroupService groupService;
-	
 	@Override
 	public TreeItemDecorator<FolderEntity> getTree() {
 		return getBusiness().getFolderBusiness().getTree();
@@ -131,27 +127,15 @@ public class FolderServiceImpl extends AbstractServiceImpl
 	}
 
 	public FileService getFileService() {
-		return fileService;
-	}
-
-	public void setFolderPermissionService(FolderPermissionService bean) {
-		folderPermissionService = bean;
+		return getBackService().getFileService();
 	}
 
 	public FolderPermissionService getFolderPermissionService() {
-		return folderPermissionService;
-	}
-
-	public void setGroupService(GroupService bean) {
-		groupService = bean;
+		return getBackService().getFolderPermissionService();
 	}
 	
 	public GroupService getGroupService() {
-		return groupService;
-	}
-
-	public void setFileService(FileService bean) {
-		fileService = bean;
+		return getBackService().getGroupService();
 	}
 
 	@Override

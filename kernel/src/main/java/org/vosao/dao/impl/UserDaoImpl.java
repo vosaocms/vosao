@@ -24,6 +24,7 @@ package org.vosao.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.BaseDaoImpl;
 import org.vosao.dao.UserDao;
 import org.vosao.dao.UserGroupDao;
@@ -37,8 +38,6 @@ import static com.google.appengine.api.datastore.Query.FilterOperator.*;
 public class UserDaoImpl extends BaseDaoImpl<UserEntity> 
 		implements UserDao {
 
-	private UserGroupDao userGroupDao;
-	
 	public UserDaoImpl() {
 		super(UserEntity.class);
 	}
@@ -68,12 +67,9 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity>
 		return result;
 	}
 
-	public UserGroupDao getUserGroupDao() {
-		return userGroupDao;
-	}
-
-	public void setUserGroupDao(UserGroupDao userGroupDao) {
-		this.userGroupDao = userGroupDao;
+	private UserGroupDao getUserGroupDao() {
+		return VosaoContext.getInstance().getBusiness().getDao()
+				.getUserGroupDao();
 	}
 
 	@Override

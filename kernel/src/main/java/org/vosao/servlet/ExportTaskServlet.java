@@ -168,7 +168,7 @@ public class ExportTaskServlet extends BaseSpringServlet {
 	}
 
 	private ImportExportBusiness getImportExportBusiness() {
-		return (ImportExportBusiness) getSpringBean("importExportBusiness");
+		return getBusiness().getImportExportBusiness();
 	}
 
 	private void openStream(ZipOutStreamTaskAdapter zip, String filename) {

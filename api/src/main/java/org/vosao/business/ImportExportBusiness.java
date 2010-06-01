@@ -27,6 +27,7 @@ import java.util.zip.ZipInputStream;
 
 import org.dom4j.DocumentException;
 import org.vosao.business.imex.ExporterFactory;
+import org.vosao.business.imex.task.DaoTaskAdapter;
 import org.vosao.business.imex.task.TaskTimeoutException;
 import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
 import org.vosao.dao.DaoTaskException;
@@ -101,4 +102,6 @@ public interface ImportExportBusiness {
 	void createResourcesExportFile(final ZipOutStreamTaskAdapter zip) 
 			throws IOException, TaskTimeoutException;
 	
+	DaoTaskAdapter getDaoTaskAdapter();
+	void setDaoTaskAdapter(DaoTaskAdapter daoTaskAdapter);
 }

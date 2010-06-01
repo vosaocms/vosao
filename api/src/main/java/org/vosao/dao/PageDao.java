@@ -63,10 +63,6 @@ public interface PageDao extends BaseDao<PageEntity> {
 	ContentEntity setContent(final Long pageId, final String languageCode, 
 			final String content);
 	
-	ContentDao getContentDao();
-
-	void setContentDao(ContentDao bean);
-	
 	List<ContentEntity> getContents(final Long pageId);
 	
 	/**

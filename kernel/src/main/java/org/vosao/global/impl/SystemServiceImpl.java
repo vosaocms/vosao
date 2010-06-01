@@ -52,7 +52,6 @@ import com.google.appengine.api.labs.taskqueue.Queue;
 import com.google.appengine.api.labs.taskqueue.QueueFactory;
 import com.google.appengine.api.quota.QuotaService;
 import com.google.appengine.api.quota.QuotaServiceFactory;
-import com.google.gdata.client.photos.PicasawebService;
 
 public class SystemServiceImpl implements SystemService, Serializable {
 
@@ -65,27 +64,28 @@ public class SystemServiceImpl implements SystemService, Serializable {
 	private DatastoreService datastore;
 	private FileCache fileCache;	
 	
-	public void init() {
-		cache = new CacheServiceImpl();
-        try {
-            velocityEngine = new VelocityEngine("WEB-INF/velocity.properties");
-			velocityEngine.init();
-		} catch (Exception e) {
-            log.error("Can't init velocity engine. " + e.getMessage());
-		}
-		xsltFactory = TransformerFactory.newInstance();
+	public SystemServiceImpl() {
 		transformers = new HashMap<String, Transformer>();
-		datastore = DatastoreServiceFactory.getDatastoreService();
 	}
 	
-
 	@Override
 	public CacheService getCache() {
+		if (cache == null) {
+			cache = new CacheServiceImpl();
+		}
 		return cache;
 	}
 
 	@Override
 	public VelocityEngine getVelocityEngine() {
+		if (velocityEngine == null) {
+	        try {
+	            velocityEngine = new VelocityEngine("WEB-INF/velocity.properties");
+				velocityEngine.init();
+			} catch (Exception e) {
+	            log.error("Can't init velocity engine. " + e.getMessage());
+			}
+		}
 		return velocityEngine;
 	}
 
@@ -112,7 +112,7 @@ public class SystemServiceImpl implements SystemService, Serializable {
 		String key = String.valueOf(template.hashCode());
 		if (!transformers.containsKey(key)) {
 			try {
-				Transformer transformer = xsltFactory.newTransformer(
+				Transformer transformer = getXsltFactory().newTransformer(
 						new StreamSource(new ByteArrayInputStream(
 								template.getBytes("UTF-8"))));
 				transformers.put(key, transformer);				
@@ -127,6 +127,13 @@ public class SystemServiceImpl implements SystemService, Serializable {
 		return transformers.get(key);
 	}
 
+	private TransformerFactory getXsltFactory() {
+		if (xsltFactory == null) {
+			xsltFactory = TransformerFactory.newInstance();
+		}
+		return xsltFactory;
+	}
+	
 	@Override
 	public Queue getDefaultQueue() {
 		return QueueFactory.getDefaultQueue();
@@ -139,6 +146,9 @@ public class SystemServiceImpl implements SystemService, Serializable {
 
 	@Override
 	public DatastoreService getDatastore() {
+		if (datastore == null) {
+			datastore = DatastoreServiceFactory.getDatastoreService();
+		}
 		return datastore;
 	}
 

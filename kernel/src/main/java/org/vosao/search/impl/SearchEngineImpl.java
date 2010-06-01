@@ -45,11 +45,9 @@ public class SearchEngineImpl implements SearchEngine {
 
 	private static final Log logger = LogFactory.getLog(
 			SearchEngineImpl.class);
-
 	
 	private static final String INDEX_MOD_DATE = "IndexModDate";
 	
-	private Business business;
 	private HashMap<String, ArrayList<Long>> index;
 	private Date indexModDate;
 
@@ -276,11 +274,7 @@ public class SearchEngineImpl implements SearchEngine {
 	}
 	
 	public Business getBusiness() {
-		return business;
-	}
-
-	public void setBusiness(Business business) {
-		this.business = business;
+		return VosaoContext.getInstance().getBusiness();
 	}
 
 	public HashMap<String, ArrayList<Long>> getIndex() {

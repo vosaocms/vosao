@@ -27,6 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jabsorb.JSONRPCBridge;
 import org.vosao.business.Business;
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PluginEntity;
 import org.vosao.service.BackService;
@@ -50,15 +51,32 @@ import org.vosao.service.back.StructureTemplateService;
 import org.vosao.service.back.TagService;
 import org.vosao.service.back.TemplateService;
 import org.vosao.service.back.UserService;
+import org.vosao.service.back.impl.CommentServiceImpl;
+import org.vosao.service.back.impl.ConfigServiceImpl;
+import org.vosao.service.back.impl.ContentPermissionServiceImpl;
+import org.vosao.service.back.impl.FieldServiceImpl;
+import org.vosao.service.back.impl.FileServiceImpl;
+import org.vosao.service.back.impl.FolderPermissionServiceImpl;
+import org.vosao.service.back.impl.FolderServiceImpl;
+import org.vosao.service.back.impl.FormServiceImpl;
+import org.vosao.service.back.impl.GroupServiceImpl;
+import org.vosao.service.back.impl.LanguageServiceImpl;
+import org.vosao.service.back.impl.MessageServiceImpl;
+import org.vosao.service.back.impl.PageServiceImpl;
+import org.vosao.service.back.impl.PicasaServiceImpl;
+import org.vosao.service.back.impl.PluginServiceImpl;
+import org.vosao.service.back.impl.SeoUrlServiceImpl;
+import org.vosao.service.back.impl.StructureServiceImpl;
+import org.vosao.service.back.impl.StructureTemplateServiceImpl;
+import org.vosao.service.back.impl.TagServiceImpl;
+import org.vosao.service.back.impl.TemplateServiceImpl;
+import org.vosao.service.back.impl.UserServiceImpl;
 import org.vosao.service.plugin.PluginServiceManager;
 
 public class BackServiceImpl implements BackService, Serializable {
 
 	private static final Log log = LogFactory.getLog(BackServiceImpl.class);
 
-	private Dao dao;
-	private Business business;
-	
 	private FileService fileService;
 	private FolderService folderService;
 	private CommentService commentService;
@@ -82,26 +100,29 @@ public class BackServiceImpl implements BackService, Serializable {
 	
 	@Override
 	public void register(JSONRPCBridge bridge) {
-		bridge.registerObject("fileService", fileService);
-		bridge.registerObject("folderService", folderService);
-		bridge.registerObject("commentService", commentService);
-		bridge.registerObject("pageService", pageService);
-		bridge.registerObject("templateService", templateService);
-		bridge.registerObject("fieldService", fieldService);
-		bridge.registerObject("formService", formService);
-		bridge.registerObject("configService", configService);
-		bridge.registerObject("seoUrlService", seoUrlService);
-		bridge.registerObject("userService", userService);
-		bridge.registerObject("languageService", languageService);
-		bridge.registerObject("messageService", messageService);
-		bridge.registerObject("groupService", groupService);
-		bridge.registerObject("contentPermissionService", contentPermissionService);
-		bridge.registerObject("folderPermissionService", folderPermissionService);
-		bridge.registerObject("structureService", structureService);
-		bridge.registerObject("structureTemplateService", structureTemplateService);
-		bridge.registerObject("pluginService", pluginService);
-		bridge.registerObject("tagService", tagService);
-		bridge.registerObject("picasaService", picasaService);
+		bridge.registerObject("fileService", getFileService());
+		bridge.registerObject("folderService", getFolderService());
+		bridge.registerObject("commentService", getCommentService());
+		bridge.registerObject("pageService", getPageService());
+		bridge.registerObject("templateService", getTemplateService());
+		bridge.registerObject("fieldService", getFieldService());
+		bridge.registerObject("formService", getFormService());
+		bridge.registerObject("configService", getConfigService());
+		bridge.registerObject("seoUrlService", getSeoUrlService());
+		bridge.registerObject("userService", getUserService());
+		bridge.registerObject("languageService", getLanguageService());
+		bridge.registerObject("messageService", getMessageService());
+		bridge.registerObject("groupService", getGroupService());
+		bridge.registerObject("contentPermissionService", 
+				getContentPermissionService());
+		bridge.registerObject("folderPermissionService", 
+				getFolderPermissionService());
+		bridge.registerObject("structureService", getStructureService());
+		bridge.registerObject("structureTemplateService", 
+				getStructureTemplateService());
+		bridge.registerObject("pluginService", getPluginService());
+		bridge.registerObject("tagService", getTagService());
+		bridge.registerObject("picasaService", getPicasaService());
 		registerPluginServices(bridge);
 	}
 	
@@ -132,6 +153,9 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	@Override
 	public FileService getFileService() {
+		if (fileService == null) {
+			fileService = new FileServiceImpl();
+		}
 		return fileService;
 	}
 
@@ -142,6 +166,9 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	@Override
 	public FolderService getFolderService() {
+		if (folderService == null) {
+			folderService = new FolderServiceImpl();
+		}
 		return folderService;
 	}
 
@@ -152,6 +179,9 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	@Override
 	public CommentService getCommentService() {
+		if (commentService == null) {
+			commentService = new CommentServiceImpl();
+		}
 		return commentService;
 	}
 
@@ -162,6 +192,9 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	@Override
 	public PageService getPageService() {
+		if (pageService == null) {
+			pageService = new PageServiceImpl();
+		}
 		return pageService;
 	}
 
@@ -172,6 +205,9 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	@Override
 	public TemplateService getTemplateService() {
+		if (templateService == null) {
+			templateService = new TemplateServiceImpl();
+		}
 		return templateService;
 	}
 
@@ -182,6 +218,9 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	@Override
 	public FieldService getFieldService() {
+		if (fieldService == null) {
+			fieldService = new FieldServiceImpl();
+		}
 		return fieldService;
 	}
 
@@ -192,6 +231,9 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	@Override
 	public ConfigService getConfigService() {
+		if (configService == null) {
+			configService = new ConfigServiceImpl();
+		}
 		return configService;
 	}
 
@@ -202,6 +244,9 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	@Override
 	public FormService getFormService() {
+		if (formService == null) {
+			formService = new FormServiceImpl();
+		}
 		return formService;
 	}
 
@@ -212,6 +257,9 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	@Override
 	public SeoUrlService getSeoUrlService() {
+		if (seoUrlService == null) {
+			seoUrlService = new SeoUrlServiceImpl();
+		}
 		return seoUrlService;
 	}
 
@@ -222,6 +270,9 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	@Override
 	public UserService getUserService() {
+		if (userService == null) {
+			userService = new UserServiceImpl();
+		}
 		return userService;
 	}
 
@@ -232,6 +283,9 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	@Override
 	public LanguageService getLanguageService() {
+		if (languageService == null) {
+			languageService = new LanguageServiceImpl();
+		}
 		return languageService;
 	}
 
@@ -242,6 +296,9 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	@Override
 	public MessageService getMessageService() {
+		if (messageService == null) {
+			messageService = new MessageServiceImpl();
+		}
 		return messageService;
 	}
 
@@ -252,6 +309,9 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	@Override
 	public GroupService getGroupService() {
+		if (groupService == null) {
+			groupService = new GroupServiceImpl();
+		}
 		return groupService;
 	}
 
@@ -262,6 +322,9 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	@Override
 	public ContentPermissionService getContentPermissionService() {
+		if (contentPermissionService == null) {
+			contentPermissionService = new ContentPermissionServiceImpl();
+		}
 		return contentPermissionService;
 	}
 
@@ -272,6 +335,9 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	@Override
 	public FolderPermissionService getFolderPermissionService() {
+		if (folderPermissionService == null) {
+			folderPermissionService = new FolderPermissionServiceImpl();
+		}
 		return folderPermissionService;
 	}
 
@@ -282,6 +348,9 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	@Override
 	public StructureService getStructureService() {
+		if (structureService == null) {
+			structureService = new StructureServiceImpl();
+		}
 		return structureService;
 	}
 
@@ -292,6 +361,9 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	@Override
 	public StructureTemplateService getStructureTemplateService() {
+		if (structureTemplateService == null) {
+			structureTemplateService = new StructureTemplateServiceImpl();
+		}
 		return structureTemplateService;
 	}
 
@@ -303,6 +375,9 @@ public class BackServiceImpl implements BackService, Serializable {
 	
 	@Override
 	public PluginService getPluginService() {
+		if (pluginService == null) {
+			pluginService = new PluginServiceImpl();
+		}
 		return pluginService;
 	}
 
@@ -313,6 +388,9 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	@Override
 	public TagService getTagService() {
+		if (tagService == null) {
+			tagService = new TagServiceImpl();
+		}
 		return tagService;
 	}
 
@@ -323,6 +401,9 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	@Override
 	public PicasaService getPicasaService() {
+		if (picasaService == null) {
+			picasaService = new PicasaServiceImpl();
+		}
 		return picasaService;
 	}
 
@@ -331,14 +412,10 @@ public class BackServiceImpl implements BackService, Serializable {
 		this.picasaService = bean;
 	}
 
-	public Business getBusiness() {
-		return business;
+	private Business getBusiness() {
+		return VosaoContext.getInstance().getBusiness();
 	}
 
-	public void setBusiness(Business business) {
-		this.business = business;
-	}
-	
 	private void registerPluginServices(JSONRPCBridge bridge) {
 		for (PluginEntity plugin : getDao().getPluginDao().selectEnabled()) {
 			try {
@@ -375,13 +452,8 @@ public class BackServiceImpl implements BackService, Serializable {
 		}
 	}
 
-	public Dao getDao() {
-		return dao;
+	private Dao getDao() {
+		return getBusiness().getDao();
 	}
-
-	public void setDao(Dao dao) {
-		this.dao = dao;
-	}
-	
 	
 }

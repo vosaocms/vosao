@@ -43,8 +43,6 @@ import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 public class FolderBusinessImpl extends AbstractBusinessImpl 
 	implements FolderBusiness {
 
-	private FolderPermissionBusiness folderPermissionBusiness;
-	
 	@Override
 	public TreeItemDecorator<FolderEntity> getTree(
 			final List<FolderEntity> folders) {
@@ -242,14 +240,8 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 		return root;
 	}
 
-	@Override
-	public FolderPermissionBusiness getFolderPermissionBusiness() {
-		return folderPermissionBusiness;
-	}
-
-	@Override
-	public void setFolderPermissionBusiness(FolderPermissionBusiness bean) {
-		folderPermissionBusiness = bean;		
+	private FolderPermissionBusiness getFolderPermissionBusiness() {
+		return getBusiness().getFolderPermissionBusiness();
 	}
 
 	private boolean haveReadAccess(FolderEntity folder) {

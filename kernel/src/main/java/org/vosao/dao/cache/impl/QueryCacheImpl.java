@@ -31,6 +31,7 @@ import javax.cache.Cache;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.cache.CacheStat;
 import org.vosao.dao.cache.QueryCache;
 import org.vosao.global.SystemService;
@@ -40,7 +41,6 @@ public class QueryCacheImpl implements QueryCache, Serializable {
 	protected static final Log logger = LogFactory.getLog(
 			QueryCacheImpl.class);
 
-	private SystemService systemService;
 	private long calls;
 	private long hits;
 	
@@ -50,15 +50,11 @@ public class QueryCacheImpl implements QueryCache, Serializable {
 	}
 
 	public SystemService getSystemService() {
-		return systemService;
+		return VosaoContext.getInstance().getBusiness().getSystemService();
 	}
 
-	public void setSystemService(SystemService systemService) {
-		this.systemService = systemService;
-	}
-	
 	private Cache getCache() {
-		return systemService.getCache();
+		return getSystemService().getCache();
 	}
 
 	private String getQueryMapKey(Class clazz) {

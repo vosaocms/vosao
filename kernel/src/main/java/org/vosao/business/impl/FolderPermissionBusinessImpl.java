@@ -44,8 +44,6 @@ public class FolderPermissionBusinessImpl extends AbstractBusinessImpl
 
 	private static final String PAGE = "/page";
 	
-	private ContentPermissionBusiness contentPermissionBusiness;
-	
 	@Override
 	public FolderPermissionEntity getGuestPermission(
 			final FolderEntity folder) {
@@ -207,14 +205,8 @@ public class FolderPermissionBusinessImpl extends AbstractBusinessImpl
 		return result;
 	}
 	
-	@Override
-	public ContentPermissionBusiness getContentPermissionBusiness() {
-		return contentPermissionBusiness;
-	}
-
-	@Override
-	public void setContentPermissionBusiness(ContentPermissionBusiness bean) {
-		contentPermissionBusiness = bean;		
+	private ContentPermissionBusiness getContentPermissionBusiness() {
+		return getBusiness().getContentPermissionBusiness();
 	}
 	
 	

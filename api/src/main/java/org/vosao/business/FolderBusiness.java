@@ -32,9 +32,6 @@ import org.vosao.entity.FolderEntity;
  */
 public interface FolderBusiness {
 
-	FolderPermissionBusiness getFolderPermissionBusiness();
-	void setFolderPermissionBusiness(FolderPermissionBusiness bean);
-
 	/**
 	 * Security filtered dao version.
 	 * @return found folder.

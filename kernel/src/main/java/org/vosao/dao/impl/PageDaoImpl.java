@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.BaseDaoImpl;
 import org.vosao.dao.CommentDao;
 import org.vosao.dao.ContentDao;
@@ -46,9 +47,6 @@ public class PageDaoImpl extends BaseDaoImpl<PageEntity>
 
 	private static final String PAGE_CLASS_NAME = PageEntity.class.getName();
 
-	private ContentDao contentDao;
-	private CommentDao commentDao;
-	
 	public PageDaoImpl() {
 		super(PageEntity.class);
 	}
@@ -132,14 +130,8 @@ public class PageDaoImpl extends BaseDaoImpl<PageEntity>
 		return getContentDao().save(contentEntity);
 	}
 
-	@Override
-	public ContentDao getContentDao() {
-		return contentDao;
-	}
-
-	@Override
-	public void setContentDao(ContentDao contentDao) {
-		this.contentDao = contentDao;
+	private ContentDao getContentDao() {
+		return VosaoContext.getInstance().getBusiness().getDao().getContentDao();
 	}
 
 	@Override
@@ -225,11 +217,7 @@ public class PageDaoImpl extends BaseDaoImpl<PageEntity>
 				params(structureTemplateId));
 	}
 
-	public CommentDao getCommentDao() {
-		return commentDao;
-	}
-
-	public void setCommentDao(CommentDao commentDao) {
-		this.commentDao = commentDao;
+	private CommentDao getCommentDao() {
+		return VosaoContext.getInstance().getBusiness().getDao().getCommentDao();
 	}
 }

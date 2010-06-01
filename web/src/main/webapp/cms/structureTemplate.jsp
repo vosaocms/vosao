@@ -48,13 +48,13 @@
         <label><fmt:message key="title" /></label>
         <input id="title" type="text" />
     </div>
-    <div class="form-row">
+    <!-- div class="form-row">
         <label><fmt:message key="template_type" /></label>
         <select id="type">
             <option value="VELOCITY">Velocity</option>
             <option value="XSLT">XSLT</option>
         </select>
-    </div>
+    </div-->
     <div class="form-row">
         <div>
             <input id="autosave" type="checkbox"> <fmt:message key="autosave" /></input>

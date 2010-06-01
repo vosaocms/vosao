@@ -90,13 +90,13 @@ function initStructureTemplateForm() {
 	if (structureTemplate != null) {
 		$('#name').val(structureTemplate.name);
 		$('#title').val(structureTemplate.title);
-		$('#type').val(structureTemplate.typeString);
+		//$('#type').val(structureTemplate.typeString);
         $('#content').val(structureTemplate.content);
 	}
 	else {
         $('#name').val('');
         $('#title').val('');
-        $('#type').val('VELOCITY');
+        //$('#type').val('VELOCITY');
         $('#content').val('');
 	}
 }
@@ -110,7 +110,7 @@ function onUpdate(cont) {
 	    id : structureTemplateId,
 	    name : Vosao.strip($('#name').val()),
 	    title : Vosao.strip($('#title').val()),
-	    type: $('#type').val(),
+	    type: 'VELOCITY', //$('#type').val(),
 	    structureId: String(structureId),
         content : $('#content').val()
 	});

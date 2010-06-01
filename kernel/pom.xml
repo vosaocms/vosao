@@ -154,11 +154,11 @@
 
         <!-- xslt -->
         
-        <dependency>
+        <!-- dependency>
             <groupId>saxon</groupId>
             <artifactId>saxon</artifactId>
             <version>9.2</version>
-        </dependency>
+        </dependency-->
 
         <!-- json -->
         

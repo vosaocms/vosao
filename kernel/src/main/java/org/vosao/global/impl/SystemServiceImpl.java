@@ -109,7 +109,7 @@ public class SystemServiceImpl implements SystemService, Serializable {
 
 	@Override
 	public Transformer getTransformer(String template) {
-		String key = String.valueOf(template.hashCode());
+		/*String key = String.valueOf(template.hashCode());
 		if (!transformers.containsKey(key)) {
 			try {
 				Transformer transformer = getXsltFactory().newTransformer(
@@ -124,12 +124,13 @@ public class SystemServiceImpl implements SystemService, Serializable {
 				return null;
 			}
 		}
-		return transformers.get(key);
+		return transformers.get(key);*/
+		return null;
 	}
 
 	private TransformerFactory getXsltFactory() {
 		if (xsltFactory == null) {
-			xsltFactory = TransformerFactory.newInstance();
+			//xsltFactory = TransformerFactory.newInstance();
 		}
 		return xsltFactory;
 	}

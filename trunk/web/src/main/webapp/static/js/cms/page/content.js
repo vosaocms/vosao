@@ -20,7 +20,7 @@
  */
  
 /**
- * Declared in page.jsp
+ * Declared in page.vm
  * 
  *   var pageId;
  *   var pageParentUrl;
@@ -150,7 +150,7 @@ function onPageUpdate(continueFlag) {
 		if (r.result == 'success') {
 			Vosao.info(messages['page.success_save']);
 			if (!continueFlag) {
-				location.href = '/cms/pages.jsp';
+				location.href = '/cms/pages.vm';
 			}
 			else {
 				callLoadPage();
@@ -200,9 +200,9 @@ function getEditorContent() {
 					+ '</' + field.name + '>\n';
 			}
 			if (field.type == 'TEXTAREA') {
-				xml += '<' + field.name + '>'
-					+ Vosao.escapeHtml(contentEditors[field.name].getData())  
-					+ '</' + field.name + '>\n';
+				xml += '<' + field.name + '><![CDATA['
+					+ contentEditors[field.name].getData().replace(']]>', ']]]')  
+					+ ']]></' + field.name + '>\n';
 			}
 		});
 		return xml + '</content>';
@@ -257,7 +257,7 @@ function onPagePreview() {
 }
 
 function onPageCancel() {
-	location.href = '/cms/pages.jsp';
+	location.href = '/cms/pages.vm';
 }
 
 function onLanguageChange() {
@@ -348,7 +348,7 @@ function showContentEditor() {
 	    	contentEditor = CKEDITOR.replace('content', {
 	    		height: 350, width: 'auto',
 	    		filebrowserUploadUrl : '/cms/upload',
-	    		filebrowserBrowseUrl : '/cms/fileBrowser.jsp',
+	    		filebrowserBrowseUrl : '/cms/fileBrowser.vm',
 	    		toolbar : 'Vosao'
 	    	});
 	    }
@@ -383,7 +383,7 @@ function showContentEditor() {
 					var ckeditor = CKEDITOR.replace('field' + field.name, {
 				        height: 150, width: 'auto',
 				        filebrowserUploadUrl : '/cms/upload',
-				        filebrowserBrowseUrl : '/cms/fileBrowser.jsp',
+				        filebrowserBrowseUrl : '/cms/fileBrowser.vm',
 				        toolbar : 'Vosao'
 				    });
 					contentEditors[field.name] = ckeditor;
@@ -395,7 +395,7 @@ function showContentEditor() {
 
 function browseResources(id) {
 	browseId = id;
-	window.open('/cms/fileBrowser.jsp?mode=page');
+	window.open('/cms/fileBrowser.vm?mode=page');
 }
 
 function setResource(path) {

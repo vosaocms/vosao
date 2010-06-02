@@ -50,7 +50,7 @@ function loadProperties() {
 }
 
 function onCancel() {
-	location.href = 'config.jsp';
+	location.href = 'config.vm';
 }
 
 function notNull(s) {

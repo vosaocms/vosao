@@ -19,6 +19,9 @@
  * email: vosao.dev@gmail.com
  */
 
+var structureTemplateId = Vosao.getQueryParam('id');
+var structureId = Vosao.getQueryParam('structureId');
+
 var structureTemplate = '';
 var editMode = structureTemplateId != '';
 var autosaveTimer = '';
@@ -102,7 +105,7 @@ function initStructureTemplateForm() {
 }
 
 function onCancel() {
-    location.href = '/cms/structure.jsp?tab=2&id=' + structureId;
+    location.href = '/cms/structure.vm?tab=2&id=' + structureId;
 }
 
 function onUpdate(cont) {

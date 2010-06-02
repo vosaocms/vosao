@@ -53,7 +53,7 @@ function renderPage(vo) {
 	var published = messages[p];
 	var html = '<li> <img src="/static/images/'+ p +'.png" title="' + published 
 			+ '" width="16px" />' 
-			+ ' <a href="page/content.jsp?id=' + vo.entity.id + '">'
+			+ ' <a href="page/content.vm?id=' + vo.entity.id + '">'
 			+ vo.entity.title
 			+ '</a> <a title="' + messages['add_child'] 
 			+ '" href="#" onclick="onPageAdd(\'' + vo.entity.friendlyURL

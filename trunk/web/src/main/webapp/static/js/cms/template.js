@@ -19,6 +19,8 @@
  * email: vosao.dev@gmail.com
  */
 
+var templateId = Vosao.getQueryParam('id');
+
 var template = '';
 var editMode = templateId != '';
 var autosaveTimer = '';
@@ -110,7 +112,7 @@ function initTemplateForm() {
 }
 
 function onCancel() {
-    location.href = '/cms/templates.jsp';
+    location.href = '/cms/templates.vm';
 }
 
 function onUpdate(cont) {
@@ -124,7 +126,7 @@ function onUpdate(cont) {
 		if (r.result == 'success') {
 			Vosao.info(messages['template.success_save']);
 			if (!cont) {
-				location.href = '/cms/templates.jsp';
+				location.href = '/cms/templates.vm';
 			}
 			else if (!editMode) {
 				templateId = r.message;
@@ -173,10 +175,10 @@ function onWrap() {
 // Resources
 
 function onResources() {
-	$.cookie('folderReturnPath', '/cms/template.jsp?id=' + template.id, 
+	$.cookie('folderReturnPath', '/cms/template.vm?id=' + template.id, 
 			{path:'/', expires: 10});
 	Vosao.jsonrpc.folderService.createFolderByPath(function(r) {
-		location.href = '/cms/folder.jsp?tab=1&id=' + r.id;
+		location.href = '/cms/folder.vm?tab=1&id=' + r.id;
     }, '/theme/' + template.url);
 }
 

@@ -48,6 +48,6 @@ function breadcrumbsShow() {
 	
 function breadcrumbsEdit(path) {
 	Vosao.jsonrpc.pageService.getPageByUrl(function(r) {
-		location.href = '/cms/page/content.jsp?id=' + r.id;
+		location.href = '/cms/page/content.vm?id=' + r.id;
 	}, path);
 }	

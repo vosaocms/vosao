@@ -19,8 +19,10 @@
  * email: vosao.dev@gmail.com
  */
 
+var fileId = Vosao.getQueryParam('id');
+var folderId = Vosao.getQueryParam('folderId');
 var file = '';
-var editMode = fileId != '';
+var editMode = fileId =! false;
 var autosaveTimer = '';
 
 $(function() {
@@ -126,7 +128,7 @@ function onUpdate() {
 	});
 	Vosao.jsonrpc.fileService.saveFile(function(r) {
 		if (r.result == 'success') {
-			location.href = '/cms/folder.jsp?id=' + folderId;
+			location.href = '/cms/folder.vm?id=' + folderId;
 		} else {
 			Vosao.showServiceMessages(r);
 		}
@@ -134,5 +136,5 @@ function onUpdate() {
 }
 
 function onCancel() {
-	location.href = '/cms/folder.jsp?id=' + folderId;
+	location.href = '/cms/folder.vm?id=' + folderId;
 }

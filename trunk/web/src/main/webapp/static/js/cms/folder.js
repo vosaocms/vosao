@@ -19,13 +19,8 @@
  * email: vosao.dev@gmail.com
  */
 
-/**
- * Declared in folder.jsp
- *  
- *   var folderId = '<c:out value="${param.id}"/>';
- *   var folderParentId = '<c:out value="${param.parent}"/>';
- *
- */   
+var folderId = Vosao.getQueryParam('id');
+var folderParentId = Vosao.getQueryParam('parent');
 
 var files = '';
 var folder = null;
@@ -63,6 +58,7 @@ $(function() {
     $('#deletePermissionButton').click(onDeletePermission);
     $('#permissionForm').submit(function() {onPermissionSave(); return false;});
     $('#permissionCancelButton').click(onPermissionCancel);
+    $('#file-upload input[name=folderId]').val(folderId);
 });
 
 function loadData() {
@@ -141,7 +137,7 @@ function loadFiles() {
     $.each(files.list, function(i, file) { 
         h += '<tr>\
 <td><input type="checkbox" name="item' + i + '" value="' + file.id + '"/></td>\
-<td><a href="/cms/file.jsp?id=' + file.id + '">' + file.title + '</a></td>\
+<td><a href="/cms/file.vm?id=' + file.id + '">' + file.title + '</a></td>\
 <td>' + file.filename + '</td>\
 <td>' + file.mimeType + '</td>\
 <td>' + file.size + ' ' + messages['bytes'] + '</td></tr>';
@@ -180,7 +176,7 @@ function onDeleteFiles() {
 }
 
 function onCreateFile() {
-    location.href = "/cms/file.jsp?folderId=" + folderId;
+    location.href = "/cms/file.vm?folderId=" + folderId;
 }
 
 function onTitleChange() {
@@ -209,7 +205,7 @@ function loadChildren() {
 		+ messages['title'] + '</th><th>' + messages['name'] + '</th></tr>';
     $.each(folderRequest.children.list, function (i, child) {
         html += '<tr><td><input type="checkbox" value="' + child.id
-            + '"/></td><td><a href="/cms/folder.jsp?id=' + child.id 
+            + '"/></td><td><a href="/cms/folder.vm?id=' + child.id 
             + '">' + child.title + '</td><td>' + child.name + '</td></tr>';
     });
     $('#children').html(html + '</table>');
@@ -244,7 +240,7 @@ function onCancel() {
     	location.href = $.cookie("folderReturnPath");
     }
     else {
-    	location.href = '/cms/folders.jsp';
+    	location.href = '/cms/folders.vm';
     }
 }
 
@@ -282,7 +278,7 @@ function showClock() {
 }
 
 function onAddChild() {
-    location.href = '/cms/folder.jsp?parent=' + folderId;
+    location.href = '/cms/folder.vm?parent=' + folderId;
 }
 
 function getParentFolderIds() {
@@ -467,13 +463,13 @@ function showBreadcrumbs() {
 	var parent = folderRequest.parent;
 	$.each(folderRequest.ancestors.list, function(i,value) {
 		var name = value.name == '/' ? 'file' : value.name;
-		h += '<a href="/cms/folder.jsp?id=' + value.id + '">' + name + '</a> / ';
+		h += '<a href="/cms/folder.vm?id=' + value.id + '">' + name + '</a> / ';
 	});
 	if (editMode) {
 		h += ' ' + ( folder.name == '/' ? 'file' : folder.name );
 	}
 	else {
-		h += '<a href="/cms/folder.jsp?id=' + parent.id + '">' + parent.name 
+		h += '<a href="/cms/folder.vm?id=' + parent.id + '">' + parent.name 
 			+ '</a>';
 	}
 	$('#crumbs').html(h);

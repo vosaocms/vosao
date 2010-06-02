@@ -51,20 +51,20 @@ public class LanguageFilter extends AbstractFilter implements Filter {
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
     	HttpSession session = httpRequest.getSession(true);
     	VosaoContext ctx = VosaoContext.getInstance();
-    	if (session.getAttribute(Messages.JSTL_FMT_LOCALE_KEY) == null) {
+    	if (session.getAttribute(Messages.LOCALE_KEY) == null) {
     		ctx.setLocale(request.getLocale());
-    		session.setAttribute(Messages.JSTL_FMT_LOCALE_KEY, 
+    		session.setAttribute(Messages.LOCALE_KEY, 
     				request.getLocale());
     	}
     	else {
     		ctx.setLocale((Locale)session.getAttribute(
-    				Messages.JSTL_FMT_LOCALE_KEY));
+    				Messages.LOCALE_KEY));
     	}
     	if (httpRequest.getParameter("language") != null) {
     		String languageCode = httpRequest.getParameter("language");
    			Locale locale = new Locale(languageCode);
    			ctx.setLocale(locale);
-       		session.setAttribute(Messages.JSTL_FMT_LOCALE_KEY, locale);
+       		session.setAttribute(Messages.LOCALE_KEY, locale);
     	}
         chain.doFilter(request, response);
     }

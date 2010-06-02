@@ -41,8 +41,7 @@ import org.vosao.common.VosaoContext;
  */
 public class Messages {
 
-	public static final String JSTL_FMT_LOCALE_KEY = 
-		"javax.servlet.jsp.jstl.fmt.locale.session";
+	public static final String LOCALE_KEY = "locale";
 
 	private static final Locale[] supportedLocales = {
 		Locale.ENGLISH, 
@@ -53,7 +52,7 @@ public class Messages {
 	
 	private static VosaoResourceBundle getBundle(HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		Locale sessionLocale = (Locale)session.getAttribute(JSTL_FMT_LOCALE_KEY);
+		Locale sessionLocale = (Locale)session.getAttribute(LOCALE_KEY);
 		Locale locale = sessionLocale != null ? sessionLocale : 
 			request.getLocale();
 		return getBundle(locale);

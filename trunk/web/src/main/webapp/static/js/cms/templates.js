@@ -72,7 +72,7 @@ function loadTemplates() {
         	+ messages['title'] + '</th></tr>';
         $.each(r.list, function (n, value) {
             html += '<tr><td><input type="checkbox" value="' + value.id 
-                + '" /></td><td><a href="/cms/template.jsp?id=' + value.id
+                + '" /></td><td><a href="/cms/template.vm?id=' + value.id
                 +'">' + value.title + '</a></td></tr>';
         });
         $('#templates').html(html + '</table>');
@@ -81,7 +81,7 @@ function loadTemplates() {
 }
 
 function onAdd() {
-	location.href = '/cms/template.jsp';
+	location.href = '/cms/template.vm';
 }
 
 function onDelete() {

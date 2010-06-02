@@ -77,7 +77,7 @@ function onVersionDelete(version) {
 		Vosao.jsonrpc.pageService.deletePageVersion(function(r) {
 			if (version == String(page.version)) {
 				if (versions.length == 1) {
-					location.href = '/cms/pages.jsp';
+					location.href = '/cms/pages.vm';
 				} else {
 					var previousVersion = versions[0];
 					if (versions.indexOf(version) == 0) {

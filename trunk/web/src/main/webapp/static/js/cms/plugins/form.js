@@ -376,7 +376,7 @@ function onUpdate() {
 				Vosao.info(messages['form.success_create']);
 			}
 			else {
-				location.href = '/cms/plugins/forms.jsp';
+				location.href = '/cms/plugins/forms.vm';
 			}
 		}
 		else {
@@ -386,7 +386,7 @@ function onUpdate() {
 }
 
 function onCancel() {
-	location.href = '/cms/plugins/forms.jsp';
+	location.href = '/cms/plugins/forms.vm';
 }
 
 function onTitleChange() {

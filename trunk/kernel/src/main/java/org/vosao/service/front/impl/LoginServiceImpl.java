@@ -74,12 +74,12 @@ public class LoginServiceImpl extends AbstractServiceImpl
 				AuthenticationFilter.ORIGINAL_VIEW_KEY);
 		if (originalView != null) {
 			session.removeAttribute(AuthenticationFilter.ORIGINAL_VIEW_KEY);
-			if (originalView.equals("/login.jsp")) {
-				originalView = "/cms/index.jsp";
+			if (originalView.equals("/login.vm")) {
+				originalView = "/cms/index.vm";
 			}
 		}
 		else {
-			originalView = "/cms/index.jsp";
+			originalView = "/cms/index.vm";
 		}
 		return ServiceResponse.createSuccessResponse(originalView);
 	}

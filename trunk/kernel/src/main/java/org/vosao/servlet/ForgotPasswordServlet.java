@@ -45,7 +45,7 @@ public class ForgotPasswordServlet extends BaseSpringServlet {
 		UserEntity user = getDao().getUserDao().getByKey(key);
 		if (user == null || user.isDisabled()) {
 			RequestDispatcher dispatcher = getServletContext()
-					.getRequestDispatcher("/forgotPasswordFail.jsp");
+					.getRequestDispatcher("/forgotPasswordFail.vm");
 			dispatcher.forward(request,response);
 		}
 		else {
@@ -54,7 +54,7 @@ public class ForgotPasswordServlet extends BaseSpringServlet {
 			HttpSession session = request.getSession(true);
 			session.setAttribute(AuthenticationFilter.USER_SESSION_ATTR, 
 					user.getEmail());
-			response.sendRedirect("/cms/profile.jsp");
+			response.sendRedirect("/cms/profile.vm");
 		}
 	}
 	

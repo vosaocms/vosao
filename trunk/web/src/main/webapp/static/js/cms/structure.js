@@ -19,6 +19,8 @@
  * email: vosao.dev@gmail.com
  */
 
+var structureId = Vosao.getQueryParam('id');
+
 var structure = '';
 var editMode = structureId != '';
 var autosaveTimer = '';
@@ -110,7 +112,7 @@ function initStructureForm() {
 }
 
 function onCancel() {
-    location.href = '/cms/structures.jsp';
+    location.href = '/cms/structures.vm';
 }
 
 function onUpdate(cont) {
@@ -123,7 +125,7 @@ function onUpdate(cont) {
 		if (r.result == 'success') {
 			Vosao.info(messages['structure.success_save']);
 			if (!cont) {
-				location.href = '/cms/structures.jsp';
+				location.href = '/cms/structures.vm';
 			}
 			else if (!editMode) {
 				structureId = r.message;
@@ -296,7 +298,7 @@ function showTemplates() {
 		+ '<th>' + messages.type + '</th></tr>';
 	$.each(templates, function(i, template) {
 		h += '<tr><td><input type="checkbox" value="' + template.id + '"></td>'
-			+ '<td><a href="structureTemplate.jsp?id=' + template.id + '">'
+			+ '<td><a href="structureTemplate.vm?id=' + template.id + '">'
 		    + template.name + '</a></td>'
 		    + '<td>' + template.title + '</td>'
 		    + '<td>' + getTemplateType(template.typeString) + '</td></tr>';
@@ -312,7 +314,7 @@ function getTemplateType(type) {
 }
 
 function onAddTemplate() {
-	location.href = 'structureTemplate.jsp?structureId=' + structureId;
+	location.href = 'structureTemplate.vm?structureId=' + structureId;
 }
 
 function onDeleteTemplate() {

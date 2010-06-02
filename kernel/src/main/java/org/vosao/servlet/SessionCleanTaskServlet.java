@@ -35,7 +35,7 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.labs.taskqueue.Queue;
 
-public class SessionCleanTaskServlet extends BaseSpringServlet {
+public class SessionCleanTaskServlet extends AbstractServlet {
 
 	public static final String SESSION_CLEAN_TASK_URL = "/_ah/queue/session_clean";
 	

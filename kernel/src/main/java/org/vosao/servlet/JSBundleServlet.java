@@ -37,7 +37,7 @@ import org.vosao.utils.DateUtil;
  * @author Alexander Oleynik
  *
  */
-public class JSBundleServlet extends BaseSpringServlet {
+public class JSBundleServlet extends AbstractServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

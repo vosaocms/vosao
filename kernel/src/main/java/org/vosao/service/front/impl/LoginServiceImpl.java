@@ -24,6 +24,8 @@ package org.vosao.service.front.impl;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.vosao.business.mq.Topic;
+import org.vosao.business.mq.message.SimpleMessage;
 import org.vosao.common.BCrypt;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.UserEntity;
@@ -81,6 +83,8 @@ public class LoginServiceImpl extends AbstractServiceImpl
 		else {
 			originalView = "/cms/index.vm";
 		}
+		getMessageQueue().publish(new SimpleMessage(Topic.LOGIN, 
+				user.getEmail()));
 		return ServiceResponse.createSuccessResponse(originalView);
 	}
 

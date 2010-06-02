@@ -23,9 +23,9 @@ package org.vosao.business;
 
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
-import org.vosao.test.AbstractSpringTest;
+import org.vosao.test.AbstractVosaoContextTest;
 
-public abstract class AbstractBusinessTest extends AbstractSpringTest {
+public abstract class AbstractBusinessTest extends AbstractVosaoContextTest {
 	
 	@Override
     public void setUp() throws Exception {

@@ -56,7 +56,7 @@ import com.google.appengine.api.labs.taskqueue.Queue;
  * 
  * @author Aleksandr Oleynik
  */
-public class FileUploadServlet extends BaseSpringServlet {
+public class FileUploadServlet extends AbstractServlet {
 	private static final long serialVersionUID = 6098745782027999297L;
 
 	private static final long MAX_SIZE = 10000000;
@@ -191,8 +191,7 @@ public class FileUploadServlet extends BaseSpringServlet {
 		String filename = FilenameUtils.getName(path);
 		String cacheUrl = getBusiness().getFolderBusiness()
 				.getFolderPath(folder) + "/" + filename;
-		getBusiness().getSystemService().getCache().remove(cacheUrl);
-		logger.debug("Clear cache " + cacheUrl);
+		getBusiness().getSystemService().getFileCache().remove(cacheUrl);
 		String ext = FilenameUtils.getExtension(path);
 		logger.debug("path " + path + " filename " + filename + " ext " + ext);
 		FileEntity file = getDao().getFileDao().getByName(folder.getId(), 

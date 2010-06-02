@@ -44,7 +44,7 @@ import com.bradmcevoy.http.http11.auth.BasicAuthHandler;
 import com.bradmcevoy.http.webdav.DefaultWebDavResponseHandler;
 import com.bradmcevoy.http.webdav.WebDavResponseHandler;
 
-public class WebdavServlet extends BaseSpringServlet {
+public class WebdavServlet extends AbstractServlet {
 	    
 	    ServletConfig config;
 	    HttpManager httpManager;

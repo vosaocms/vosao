@@ -27,33 +27,48 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.vosao.business.mq.Message;
+import org.vosao.business.mq.TopicSubscriber;
 import org.vosao.common.VosaoContext;
-import org.vosao.entity.PageEntity;
 import org.vosao.entity.helper.UserHelper;
+import org.vosao.utils.StreamUtil;
 
-public class IndexTaskServlet extends AbstractServlet {
+import com.google.appengine.repackaged.com.google.common.util.Base64;
 
-	public static final String TASK_URL = "/_ah/queue/reindex";
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
+public class MessageQueueTaskServlet extends AbstractServlet {
+
+	public static final String MQ_URL = "/_ah/queue/mq";
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		doIndexing(request, response);
+		execute(request, response);
 	}
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		doIndexing(request, response);
+		execute(request, response);
 	}
 
-	public void doIndexing(HttpServletRequest request, HttpServletResponse response)
+	public void execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String id = request.getParameter("pageId");
+		String topic = request.getParameter("topic");
+		if (topic == null) {
+			logger.error("Topic is null");
+			return;
+		}
 		try {
+			Message message = (Message)StreamUtil.toObject(
+					Base64.decode(request.getParameter("message")));
+			logger.info("MQ: " + topic + " " + message);
 			VosaoContext.getInstance().setUser(UserHelper.ADMIN);
-			PageEntity page = getDao().getPageDao().getById(Long.valueOf(id));
-			if (page != null) {
-				getBusiness().getSearchEngine().updateIndex(page);
-				getBusiness().getSearchEngine().saveIndex();
+			for (TopicSubscriber subscriber : getMessageQueue()
+				.getSubscribers(topic)) {
+				subscriber.onMessage(message);
 			}
 		}
 		catch(Exception e) {

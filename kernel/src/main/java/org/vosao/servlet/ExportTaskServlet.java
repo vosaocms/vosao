@@ -57,7 +57,7 @@ import com.google.appengine.api.labs.taskqueue.Queue;
  * 
  * @author Alexander Oleynik
  */
-public class ExportTaskServlet extends BaseSpringServlet {
+public class ExportTaskServlet extends AbstractServlet {
 
 	public static final String EXPORT_TASK_URL = "/_ah/queue/export";
 	public final static String TYPE_PARAM_THEME = "theme";

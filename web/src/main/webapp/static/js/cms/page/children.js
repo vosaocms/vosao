@@ -20,7 +20,7 @@
  */
  
 /**
- * Declared in page.jsp
+ * Declared in page.vm
  * 
  *   var pageId;
  *   var pageParentUrl;
@@ -89,7 +89,7 @@ function loadChildren() {
     	+ '</th><th>' + messages['page.friendly_url'] + '</th><th></th></tr>';
     $.each(children, function (n, value) {
         html += '<tr><td><input type="checkbox" value="' + value.id 
-        + '"/></td><td><a href="/cms/page/content.jsp?id=' + value.id 
+        + '"/></td><td><a href="/cms/page/content.vm?id=' + value.id 
         +'">' + value.title + '</a></td><td>' + value.friendlyURL + '</td>\
 		<td><a href="#" onclick="onPageUp(' + n + ')"><img src="/static/images/02_up.png"/></a>\
         <a href="#" onclick="onPageDown(' + n + ')"><img src="/static/images/02_down.png"/></a>\
@@ -100,7 +100,7 @@ function loadChildren() {
 }
 
 function onAddChild() {
-	location.href = '/cms/page/index.jsp?parent=' + encodeURIComponent(page.friendlyURL);
+	location.href = '/cms/page/index.vm?parent=' + encodeURIComponent(page.friendlyURL);
 }
 
 function onDelete() {

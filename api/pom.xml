@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.vosao</groupId>
         <artifactId>vosaocms</artifactId>
-        <version>0.5</version>
+        <version>0.6</version>
     </parent>    
     <artifactId>vosao-api</artifactId>
     <packaging>jar</packaging>
@@ -37,19 +37,6 @@
             <type>pom</type>
         </dependency>
         
-        <!--jstl -->
-
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-            <version>1.1.2</version>
-        </dependency>
-        <dependency>
-            <groupId>taglibs</groupId>
-            <artifactId>standard</artifactId>
-            <version>1.1.2</version>
-        </dependency>
-
         <!-- Apache commons -->
 
         <dependency>
@@ -86,12 +73,6 @@
         <!-- sitemesh -->
     
         <dependency>
-            <groupId>opensymphony</groupId>
-            <artifactId>sitemesh</artifactId>
-            <version>2.4.2</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
             <version>1.6.3</version>
@@ -100,7 +81,7 @@
         <dependency>
             <groupId>velocity-tools</groupId>
             <artifactId>velocity-tools</artifactId>
-            <version>1.4</version>
+            <version>2.0</version>
         </dependency>
 
         <!-- xml -->

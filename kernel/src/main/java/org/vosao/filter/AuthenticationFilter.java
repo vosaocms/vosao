@@ -44,7 +44,7 @@ public class AuthenticationFilter extends AbstractFilter implements Filter {
 
     public static final String USER_SESSION_ATTR = "userEmail";
 	public static final String ORIGINAL_VIEW_KEY = "originalViewKey";
-	public static final String LOGIN_VIEW = "/login.jsp";
+	public static final String LOGIN_VIEW = "/login.vm";
 	public static final String CMS = "/cms";
 
 	public AuthenticationFilter() {

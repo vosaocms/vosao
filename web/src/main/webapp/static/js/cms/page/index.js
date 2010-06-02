@@ -20,7 +20,7 @@
  */
  
 /**
- * Declared in page.jsp
+ * Declared in page.vm
  * 
  *   var pageId;
  *   var pageParentUrl;
@@ -213,11 +213,11 @@ function onPageUpdate() {
 	Vosao.jsonrpc.pageService.savePage(function(r) {
 		if (r.result == 'success') {
 			if (editMode) {
-				location.href = '/cms/pages.jsp';
+				location.href = '/cms/pages.vm';
 			}
 			pageId = r.message;
 			Vosao.info(messages['page.success_save']);
-			location.href = '/cms/page/content.jsp?id=' + pageId;
+			location.href = '/cms/page/content.vm?id=' + pageId;
 		} else {
 			Vosao.showServiceMessages(r);
 		}
@@ -253,7 +253,7 @@ function onPagePreview() {
 }
 
 function onPageCancel() {
-	location.href = '/cms/pages.jsp';
+	location.href = '/cms/pages.vm';
 }
 
 function onPageApprove() {

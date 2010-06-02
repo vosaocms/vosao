@@ -45,7 +45,7 @@ function loadForms() {
         	+ '</th></tr>';
         $.each(r.list, function(i, form) {
             html += '<tr><td><input type="checkbox" value="' + form.id
-                + '"/></td><td><a href="/cms/plugins/form.jsp?id=' + form.id 
+                + '"/></td><td><a href="/cms/plugins/form.vm?id=' + form.id 
                 + '">' + form.title + '</a></td><td>' + form.name 
                 + '</td><td>' + form.email + '</td></tr>';
         });
@@ -55,7 +55,7 @@ function loadForms() {
 }
 
 function onAdd() {
-    location.href = '/cms/plugins/form.jsp';
+    location.href = '/cms/plugins/form.vm';
 }
     
 function onDelete() {

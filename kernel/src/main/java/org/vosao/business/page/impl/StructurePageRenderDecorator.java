@@ -153,8 +153,8 @@ public class StructurePageRenderDecorator extends AbstractPageRenderDecorator {
 				getLanguageCode()).getContent();
 		Document doc = DocumentHelper.parseText(xml);
 		for (StructureFieldVO field : fields) {
-				String fieldContent = StringEscapeUtils.unescapeHtml(
-						doc.getRootElement().elementText(field.getName()));
+				String fieldContent = doc.getRootElement().elementText(
+						field.getName()).replace("]]]", "]]>");
 				result.put(field.getName(), fieldContent);
 		}
 		return result;
@@ -165,9 +165,9 @@ public class StructurePageRenderDecorator extends AbstractPageRenderDecorator {
 		List<StructureFieldVO> fields = structure.getFields();
 		for (StructureFieldVO field : fields) {
 			String fieldContent = contentMap.get(field.getName());
-			xml.append("<").append(field.getName()).append(">")
-					.append(StringEscapeUtils.escapeHtml(fieldContent))
-					.append("</").append(field.getName()).append(">");
+			xml.append("<").append(field.getName()).append("><!CDATA[")
+					.append(fieldContent.replace("]]>", "]]]"))
+					.append("]]></").append(field.getName()).append(">");
 		}
 		return xml + "</content>";
 	}

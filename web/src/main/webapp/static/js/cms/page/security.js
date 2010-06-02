@@ -20,7 +20,7 @@
  */
  
 /**
- * Declared in page.jsp
+ * Declared in page.vm
  * 
  *   var pageId;
  *   var pageParentUrl;

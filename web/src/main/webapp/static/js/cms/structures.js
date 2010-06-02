@@ -31,7 +31,7 @@ function loadStructures() {
         	+ messages.title + '</th></tr>';
         $.each(r.list, function (n, value) {
             html += '<tr><td><input type="checkbox" value="' + value.id 
-                + '" /></td><td><a href="/cms/structure.jsp?id=' + value.id
+                + '" /></td><td><a href="/cms/structure.vm?id=' + value.id
                 +'">' + value.title + '</a></td></tr>';
         });
         $('#structures').html(html + '</table>');
@@ -40,7 +40,7 @@ function loadStructures() {
 }
 
 function onAdd() {
-	location.href = '/cms/structure.jsp';
+	location.href = '/cms/structure.vm';
 }
 
 function onDelete() {

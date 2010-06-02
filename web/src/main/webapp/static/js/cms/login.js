@@ -55,7 +55,7 @@ $(function() {
 
 function onLogin() {
 	if (loggedIn) {
-		location.href = '/cms';
+		location.href = '/cms/index.vm';
 		return;
 	}
 	var email = $('#loginEmail').val();

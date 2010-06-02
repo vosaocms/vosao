@@ -24,6 +24,9 @@ package org.vosao.velocity.impl;
 import java.util.Collections;
 import java.util.List;
 
+import org.vosao.business.SetupBean;
+import org.vosao.common.VosaoContext;
+import org.vosao.entity.UserEntity;
 import org.vosao.utils.StrUtil;
 
 /**
@@ -53,4 +56,20 @@ public class VosaoTool {
 		return list;
 	}
 	
+	public boolean isLoggedIn() {
+		return VosaoContext.getInstance().getUser() != null;
+	}
+	
+	public UserEntity getUser() {
+		return VosaoContext.getInstance().getUser();
+	}
+	
+	public String getFullVersion() {
+		return SetupBean.FULLVERSION;
+	}
+	
+	public void setSessionAttribute(String name, Object value) {
+		VosaoContext.getInstance().getRequest().getSession().setAttribute(
+				name, value);
+	}
 }

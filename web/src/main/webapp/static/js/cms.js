@@ -112,3 +112,13 @@ Vosao.message = function(s) {
 	}	
 	return s;
 };
+
+$(function() {
+	$('#languageSelect').click(function() {
+		$('#languageDiv').show();
+		setTimeout(function() {
+	        $('#languageDiv').hide();
+		}, 5000);
+	});
+});
+

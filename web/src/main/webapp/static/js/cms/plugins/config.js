@@ -48,7 +48,7 @@ function showPlugins() {
        + messages.description + '</th><th>' + messages.website + '</th><th>'
        + messages.state + '</th><th></th></tr>';
     $.each(plugins, function(i, plugin) {
-        var configURL = '/cms/plugins/plugin.jsp?id=' + plugin.id;
+        var configURL = '/cms/plugins/plugin.vm?id=' + plugin.id;
     	if (plugin.configURL) {
         	configURL = '/file/plugins/' + plugin.name + '/' + plugin.configURL;
         }

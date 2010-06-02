@@ -26,6 +26,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 import org.vosao.business.Business;
+import org.vosao.business.mq.MessageQueue;
 import org.vosao.entity.UserEntity;
 import org.vosao.service.BackService;
 import org.vosao.service.FrontService;
@@ -47,6 +48,7 @@ public class VosaoContext {
 	private Business business;
 	private FrontService frontService;
 	private BackService backService;
+	private MessageQueue messageQueue;
 	
 	private VosaoContext() {
 		requestCount = 0;
@@ -123,6 +125,14 @@ public class VosaoContext {
 
 	public void setBackService(BackService backService) {
 		this.backService = backService;
+	}
+
+	public MessageQueue getMessageQueue() {
+		return messageQueue;
+	}
+
+	public void setMessageQueue(MessageQueue messageQueue) {
+		this.messageQueue = messageQueue;
 	}
 	
 }

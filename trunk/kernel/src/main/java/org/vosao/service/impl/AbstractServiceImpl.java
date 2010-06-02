@@ -26,6 +26,7 @@ import java.io.Serializable;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
+import org.vosao.business.mq.MessageQueue;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.service.AbstractService;
@@ -51,6 +52,10 @@ public abstract class AbstractServiceImpl implements AbstractService,
 
 	protected BackService getBackService() {
 		return VosaoContext.getInstance().getBackService();
+	}
+	
+	protected MessageQueue getMessageQueue() {
+		return VosaoContext.getInstance().getMessageQueue();
 	}
 	
 }

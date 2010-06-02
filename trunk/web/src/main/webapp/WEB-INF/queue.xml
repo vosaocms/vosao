@@ -20,4 +20,9 @@
     <rate>1/s</rate>
   </queue>
 
+  <queue>
+    <name>message-queue</name>
+    <rate>50/s</rate>
+  </queue>
+
 </queue-entries>

@@ -214,6 +214,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>MessageQueueTask</servlet-name>
+        <servlet-class>org.vosao.servlet.MessageQueueTaskServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MessageQueueTask</servlet-name>
+        <url-pattern>/_ah/queue/mq</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>JSBundleServlet</servlet-name>
         <servlet-class>org.vosao.servlet.JSBundleServlet</servlet-class>
     </servlet>

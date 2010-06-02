@@ -22,9 +22,15 @@
 package org.vosao.test;
 
 import org.vosao.business.impl.BusinessImpl;
+import org.vosao.business.impl.mq.MessageQueueImpl;
 import org.vosao.common.VosaoContext;
 
-public abstract class AbstractSpringTest extends LocalDatastoreTestCase {
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
+public abstract class AbstractVosaoContextTest extends LocalDatastoreTestCase {
 	
 	@Override
     public void setUp() throws Exception {
@@ -33,6 +39,7 @@ public abstract class AbstractSpringTest extends LocalDatastoreTestCase {
 	}    
     
     private void initContext() {
+        VosaoContext.getInstance().setMessageQueue(new MessageQueueImpl());
         VosaoContext.getInstance().setBusiness(new BusinessImpl());
     }
 	

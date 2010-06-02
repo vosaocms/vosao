@@ -41,7 +41,7 @@ import org.vosao.utils.FolderUtil;
  * 
  * @author Aleksandr Oleynik
  */
-public class FileDownloadServlet extends BaseSpringServlet {
+public class FileDownloadServlet extends AbstractServlet {
 	
 	private static final long CACHE_LIMIT = 1048576;
 	

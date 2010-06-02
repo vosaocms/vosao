@@ -37,7 +37,7 @@ import org.vosao.filter.AuthenticationFilter;
  * @author Alexander Oleynik
  *
  */
-public class ForgotPasswordServlet extends BaseSpringServlet {
+public class ForgotPasswordServlet extends AbstractServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

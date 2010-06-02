@@ -52,7 +52,7 @@ import org.vosao.utils.StreamUtil;
  * 
  * @author Aleksandr Oleynik 
  */
-public class FormSendServlet extends BaseSpringServlet {
+public class FormSendServlet extends AbstractServlet {
 	
 	private static final long serialVersionUID = 1L;
 

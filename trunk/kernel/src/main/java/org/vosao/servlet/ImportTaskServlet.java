@@ -51,7 +51,7 @@ import com.google.appengine.api.labs.taskqueue.Queue;
  * @author oleynik
  *
  */
-public class ImportTaskServlet extends BaseSpringServlet {
+public class ImportTaskServlet extends AbstractServlet {
 
 	public static final String IMPORT_TASK_URL = "/_ah/queue/import";
 

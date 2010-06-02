@@ -200,9 +200,9 @@ function getEditorContent() {
 					+ '</' + field.name + '>\n';
 			}
 			if (field.type == 'TEXTAREA') {
-				xml += '<' + field.name + '>'
-					+ Vosao.escapeHtml(contentEditors[field.name].getData())  
-					+ '</' + field.name + '>\n';
+				xml += '<' + field.name + '><![CDATA['
+					+ contentEditors[field.name].getData().replace(']]>', ']]]')  
+					+ ']]></' + field.name + '>\n';
 			}
 		});
 		return xml + '</content>';

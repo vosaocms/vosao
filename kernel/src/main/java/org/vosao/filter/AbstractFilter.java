@@ -28,6 +28,7 @@ import javax.servlet.ServletException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
+import org.vosao.business.mq.MessageQueue;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 
@@ -52,12 +53,16 @@ public abstract class AbstractFilter {
 	public void destroy() {
 	}
 	
-	public Dao getDao() {
+	protected Dao getDao() {
 		return getBusiness().getDao();
 	}
 
-	public Business getBusiness() {
+	protected Business getBusiness() {
 		return VosaoContext.getInstance().getBusiness();
+	}
+	
+	protected MessageQueue getMessageQueue() {
+		return VosaoContext.getInstance().getMessageQueue();
 	}
 
 }

@@ -31,6 +31,11 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vosao.business.impl.mq.subscriber.ExportTaskSubscriber;
+import org.vosao.business.impl.mq.subscriber.FileChangedSubscriber;
+import org.vosao.business.impl.mq.subscriber.ImportTaskSubscriber;
+import org.vosao.business.impl.mq.subscriber.IndexTaskSubscriber;
+import org.vosao.business.impl.mq.subscriber.SessionCleanTaskSubscriber;
 import org.vosao.business.mq.Message;
 import org.vosao.business.mq.MessageQueue;
 import org.vosao.business.mq.QueueSpeed;
@@ -57,12 +62,15 @@ public class MessageQueueImpl implements MessageQueue {
 		new HashMap<String, List<TopicSubscriber>>();
 	
 	public MessageQueueImpl() {
-		subscribe();
+		registerSubscribers();
 	}
 	
-	private void subscribe() {
+	private void registerSubscribers() {
+		subscribe(Topic.FILE_CHANGED.name(), new FileChangedSubscriber());
 		subscribe(Topic.EXPORT.name(), new ExportTaskSubscriber());
-		
+		subscribe(Topic.SESSION_CLEAN.name(), new SessionCleanTaskSubscriber());
+		subscribe(Topic.IMPORT.name(), new ImportTaskSubscriber());
+		subscribe(Topic.INDEX_PAGE.name(), new IndexTaskSubscriber());
 	}
 
 	private SystemService getSystemService() {

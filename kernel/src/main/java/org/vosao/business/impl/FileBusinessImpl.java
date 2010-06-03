@@ -34,8 +34,8 @@ import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.FolderPermissionEntity;
 import org.vosao.i18n.Messages;
-import org.vosao.servlet.MimeType;
 import org.vosao.utils.FolderUtil;
+import org.vosao.utils.MimeType;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 

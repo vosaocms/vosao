@@ -19,43 +19,24 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.mq;
+package org.vosao.business.impl.mq.subscriber;
+
+import org.vosao.business.impl.mq.AbstractSubscriber;
+import org.vosao.business.mq.Message;
+import org.vosao.business.mq.message.SimpleMessage;
 
 /**
  * 
  * @author Alexander Oleynik
  *
  */
-public enum Topic {
-	
-	/**
-	 *  SimpleMessage: message -> user email
-	 */
-	LOGIN,
+public class FileChangedSubscriber extends AbstractSubscriber {
 
-	/**
-	 *  SimpleMessage: message -> file url
-	 */
-	FILE_CHANGED,
+	@Override
+	public void onMessage(Message message) {
+		SimpleMessage msg = (SimpleMessage)message;
+		getBusiness().getSystemService().getFileCache().remove(msg.getMessage());
+		logger.debug("Clear file cache " + msg.getMessage());
+	}
 
-	/**
-	 *  ExportMessage
-	 */
-	EXPORT,
-	
-	/**
-	 *  ImportMessage
-	 */
-	IMPORT,
-
-	/**
-	 *  SimpleMessage: message -> pageId
-	 */
-	INDEX_PAGE,
-
-	/**
-	 * SimpleMessage: message -> mode
-	 */
-	SESSION_CLEAN;
-	
 }

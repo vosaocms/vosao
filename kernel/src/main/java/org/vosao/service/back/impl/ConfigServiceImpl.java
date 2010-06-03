@@ -21,27 +21,24 @@
 
 package org.vosao.service.back.impl;
 
-import static com.google.appengine.api.labs.taskqueue.TaskOptions.Builder.url;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import org.vosao.business.SetupBean;
 import org.vosao.business.impl.SetupBeanImpl;
-import org.vosao.business.impl.mq.ExportMessage;
-import org.vosao.business.impl.mq.ExportTaskSubscriber;
+import org.vosao.business.impl.mq.message.ExportMessage;
+import org.vosao.business.impl.mq.subscriber.ExportTaskSubscriber;
+import org.vosao.business.mq.Topic;
+import org.vosao.business.mq.message.SimpleMessage;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FileEntity;
 import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.ConfigService;
 import org.vosao.service.impl.AbstractServiceImpl;
-import org.vosao.servlet.SessionCleanTaskServlet;
 import org.vosao.utils.StrUtil;
 import org.vosao.utils.StreamUtil;
-
-import com.google.appengine.api.labs.taskqueue.Queue;
 
 /**
  * 
@@ -145,8 +142,8 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 	public ServiceResponse cacheReset() {
 		getDao().clearCache();
 		getSetupBean().clearFileCache();
-		Queue queue = getBusiness().getSystemService().getQueue("session-clean");
-		queue.add(url(SessionCleanTaskServlet.SESSION_CLEAN_TASK_URL));
+		getMessageQueue().publish(new SimpleMessage(
+				Topic.SESSION_CLEAN.name(), "start"));
 		return ServiceResponse.createSuccessResponse(
 				Messages.get("successfull_reset", "Cache"));
 	}

@@ -21,8 +21,6 @@
 
 package org.vosao.filter;
 
-import static com.google.appengine.api.labs.taskqueue.TaskOptions.Builder.url;
-
 import java.io.IOException;
 import java.util.Date;
 
@@ -36,9 +34,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vosao.servlet.SessionCleanTaskServlet;
-
-import com.google.appengine.api.labs.taskqueue.Queue;
+import org.vosao.business.mq.Topic;
+import org.vosao.business.mq.message.SimpleMessage;
 
 /**
  * Execute plugin cron tasks.
@@ -68,9 +65,8 @@ public class PluginCronFilter extends AbstractFilter implements Filter {
         	return;
         }
         if (url.equals(SESSION_CLEAN_CRON_URL)) {
-    		Queue queue = getBusiness().getSystemService().getQueue(
-    				"session-clean");
-    		queue.add(url(SessionCleanTaskServlet.SESSION_CLEAN_TASK_URL));
+    		getMessageQueue().publish(new SimpleMessage(
+    				Topic.SESSION_CLEAN.name(), "start"));
     		logger.info("Added new session clean task");
         	writeContent(httpResponse, "<h4>OK</h4>");
         	return;

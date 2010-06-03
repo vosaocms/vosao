@@ -4,8 +4,6 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
 
-    <!-- Vosao context filter -->
-    
     <filter>
         <filter-name>ContextFilter</filter-name>
         <filter-class>org.vosao.filter.ContextFilter</filter-class>
@@ -15,8 +13,6 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>    
 
-    <!-- GAE specific InitFilter -->
-    
     <filter>
         <filter-name>InitFilter</filter-name>
         <filter-class>org.vosao.filter.InitFilter</filter-class>
@@ -26,8 +22,6 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>    
 
-    <!-- Update filter -->
-    
     <filter>
         <filter-name>UpdateFilter</filter-name>
         <filter-class>org.vosao.filter.UpdateFilter</filter-class>
@@ -37,8 +31,6 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>    
 
-    <!-- i18n filter -->
-    
     <filter>
         <filter-name>LanguageFilter</filter-name>
         <filter-class>org.vosao.filter.LanguageFilter</filter-class>
@@ -47,8 +39,6 @@
         <filter-name>LanguageFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>    
-
-    <!-- Plugin cron filter -->
 
     <filter>
         <filter-name>PluginCronFilter</filter-name>
@@ -59,8 +49,6 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>    
 
-    <!-- AuthenticationFilter -->
-    
     <filter>
         <filter-name>AuthenticationFilter</filter-name>
         <filter-class>org.vosao.filter.AuthenticationFilter</filter-class>
@@ -70,8 +58,6 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>    
 
-    <!-- ServiceFilter -->
-    
     <filter>
         <filter-name>ServiceFilter</filter-name>
         <filter-class>org.vosao.filter.ServiceFilter</filter-class>
@@ -81,8 +67,6 @@
         <url-pattern>/JSON-RPC/*</url-pattern>
     </filter-mapping>    
 
-    <!-- SiteFilter -->
-    
     <filter>
         <filter-name>SiteFilter</filter-name>
         <filter-class>org.vosao.filter.SiteFilter</filter-class>
@@ -91,8 +75,6 @@
         <filter-name>SiteFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>    
-
-    <!-- Velocity *.vm support -->
 
     <servlet>
         <servlet-name>velocity</servlet-name>
@@ -104,8 +86,6 @@
         <servlet-name>velocity</servlet-name>
         <url-pattern>*.vm</url-pattern>
     </servlet-mapping>
-
-    <!-- JSON-RPC -->
 
     <servlet>
         <servlet-name>org.jabsorb.JSONRPCServlet</servlet-name>
@@ -120,8 +100,6 @@
         <url-pattern>/JSON-RPC/*</url-pattern>
     </servlet-mapping>
 
-    <!-- File upload servlet -->
-
     <servlet>
         <servlet-name>FileUpload</servlet-name>
         <servlet-class>org.vosao.servlet.FileUploadServlet</servlet-class>
@@ -130,8 +108,6 @@
         <servlet-name>FileUpload</servlet-name>
         <url-pattern>/cms/upload</url-pattern>
     </servlet-mapping>
-
-    <!-- File download servlet -->
 
     <servlet>
         <servlet-name>FileDownload</servlet-name>
@@ -142,8 +118,6 @@
         <url-pattern>/file/*</url-pattern>
     </servlet-mapping>
 
-    <!-- Form plugin send servlet -->
-
     <servlet>
         <servlet-name>FormSend</servlet-name>
         <servlet-class>org.vosao.servlet.FormSendServlet</servlet-class>
@@ -152,8 +126,6 @@
         <servlet-name>FormSend</servlet-name>
         <url-pattern>/_ah/plugin/form/send</url-pattern>
     </servlet-mapping>
-
-    <!-- WebDAV servlet -->
 
     <servlet>
         <servlet-name>WebdavServlet</servlet-name>
@@ -164,8 +136,6 @@
         <url-pattern>/_ah/webdav/*</url-pattern>
     </servlet-mapping>
 
-    <!-- Forgot password servlet -->
-
     <servlet>
         <servlet-name>ForgotPasswordServlet</servlet-name>
         <servlet-class>org.vosao.servlet.ForgotPasswordServlet</servlet-class>
@@ -173,35 +143,6 @@
     <servlet-mapping>
         <servlet-name>ForgotPasswordServlet</servlet-name>
         <url-pattern>/_ah/changePassword</url-pattern>
-    </servlet-mapping>
-
-    <!-- Tasks -->
-
-    <servlet>
-        <servlet-name>ImportTask</servlet-name>
-        <servlet-class>org.vosao.servlet.ImportTaskServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ImportTask</servlet-name>
-        <url-pattern>/_ah/queue/import</url-pattern>
-    </servlet-mapping>
-    
-    <servlet>
-        <servlet-name>IndexTask</servlet-name>
-        <servlet-class>org.vosao.servlet.IndexTaskServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>IndexTask</servlet-name>
-        <url-pattern>/_ah/queue/reindex</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>SessionCleanTask</servlet-name>
-        <servlet-class>org.vosao.servlet.SessionCleanTaskServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>SessionCleanTask</servlet-name>
-        <url-pattern>/_ah/queue/session_clean</url-pattern>
     </servlet-mapping>
 
     <servlet>

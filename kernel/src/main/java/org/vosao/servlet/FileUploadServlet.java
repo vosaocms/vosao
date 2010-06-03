@@ -41,6 +41,8 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.io.FilenameUtils;
 import org.datanucleus.util.StringUtils;
+import org.vosao.business.impl.mq.message.ImportMessage;
+import org.vosao.common.UploadException;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PageEntity;
@@ -230,10 +232,8 @@ public class FileUploadServlet extends AbstractServlet {
 			throw new UploadException(Messages.get("wrong_file_extension."));
 		}
 		getSystemService().getCache().putBlob(fileItem.getName(), data);
-		Queue queue = getSystemService().getQueue("import");
-		queue.add(url(ImportTaskServlet.IMPORT_TASK_URL)
-				.param("start", "1")
-				.param("filename", fileItem.getName()));
+		getMessageQueue().publish(new ImportMessage.Builder()
+				.setStart(1).setFilename(fileItem.getName()).create());
 		return createMessage("success", Messages.get("saved_for_import"));
 	}
 

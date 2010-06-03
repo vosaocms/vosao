@@ -29,8 +29,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vosao.business.mq.Message;
 import org.vosao.business.mq.MessageQueue;
+import org.vosao.business.mq.QueueSpeed;
+import org.vosao.business.mq.Topic;
 import org.vosao.business.mq.TopicSubscriber;
 import org.vosao.common.VosaoContext;
 import org.vosao.global.SystemService;
@@ -47,16 +51,47 @@ import com.google.appengine.repackaged.com.google.common.util.Base64;
  */
 public class MessageQueueImpl implements MessageQueue {
 
+	private static final Log logger = LogFactory.getLog(MessageQueueImpl.class);
+	
 	private Map<String, List<TopicSubscriber>> subscribers = 
 		new HashMap<String, List<TopicSubscriber>>();
 	
+	public MessageQueueImpl() {
+		subscribe();
+	}
+	
+	private void subscribe() {
+		subscribe(Topic.EXPORT.name(), new ExportTaskSubscriber());
+		
+	}
+
 	private SystemService getSystemService() {
 		return VosaoContext.getInstance().getBusiness().getSystemService();
 	}
 	
+	private String getQueueName(Message message) {
+		if (message.getSpeed() == null) {
+			return "mq-high";
+		}
+		else if (message.getSpeed().equals(QueueSpeed.HIGH)) {
+			return "mq-high";
+		}
+		else if (message.getSpeed().equals(QueueSpeed.MEDIUM)) {
+			return "mq-medium";
+		}
+		else if (message.getSpeed().equals(QueueSpeed.LOW)) {
+			return "mq-low";
+		}
+		return "mq-high";
+	}
+	
 	@Override
 	public void publish(Message message) {
-		Queue queue = getSystemService().getQueue("import");
+		Queue queue = getSystemService().getQueue(getQueueName(message));
+		if (message.getTopic() == null) {
+			logger.error("Topic is null in message " + message);
+			return;
+		}
 		queue.add(url(MessageQueueTaskServlet.MQ_URL)
 				.param("topic", message.getTopic())
 				.param("message", Base64.encode(StreamUtil.toBytes(message))));

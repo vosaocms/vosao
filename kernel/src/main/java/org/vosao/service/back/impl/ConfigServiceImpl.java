@@ -29,13 +29,14 @@ import java.util.Map;
 
 import org.vosao.business.SetupBean;
 import org.vosao.business.impl.SetupBeanImpl;
+import org.vosao.business.impl.mq.ExportMessage;
+import org.vosao.business.impl.mq.ExportTaskSubscriber;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FileEntity;
 import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.ConfigService;
 import org.vosao.service.impl.AbstractServiceImpl;
-import org.vosao.servlet.ExportTaskServlet;
 import org.vosao.servlet.SessionCleanTaskServlet;
 import org.vosao.utils.StrUtil;
 import org.vosao.utils.StreamUtil;
@@ -152,22 +153,29 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse startExportTask(String exportType) {
-		String filename = ExportTaskServlet.getExportFilename(exportType);
+		try {
+			
+		String filename = ExportTaskSubscriber.getExportFilename(exportType);
 		if (filename != null) {
-			Queue queue = getBusiness().getSystemService().getQueue("export");
-			queue.add(url(ExportTaskServlet.EXPORT_TASK_URL)
-				.param("filename", filename)
-				.param("exportType", exportType));
+			getMessageQueue().publish(new ExportMessage.Builder()
+					.setFilename(filename)
+					.setExportType(exportType).create());
 			return ServiceResponse.createSuccessResponse(filename);
 		}
 		return ServiceResponse.createErrorResponse(
 				Messages.get("unknown_export_type", exportType));
+		
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
 	public boolean isExportTaskFinished(String exportType) {
-		String finishFilename = "/tmp/" + ExportTaskServlet.getExportFilename(
-				exportType) + ".txt";
+		String finishFilename = "/tmp/" + ExportTaskSubscriber
+				.getExportFilename(exportType) + ".txt";
 		FileEntity file = getBusiness().getFileBusiness().findFile(
 				finishFilename);
 		if (file != null) {
@@ -182,25 +190,23 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 	
 	@Override
 	public ServiceResponse startExportThemeTask(List<String> ids) {
-		String filename = ExportTaskServlet.getExportFilename(
-				ExportTaskServlet.TYPE_PARAM_THEME);
-		Queue queue = getBusiness().getSystemService().getQueue("export");
-		queue.add(url(ExportTaskServlet.EXPORT_TASK_URL)
-			.param("filename", filename)
-			.param("exportType", ExportTaskServlet.TYPE_PARAM_THEME)
-			.param("ids", StrUtil.toCSV(ids)));
+		String filename = ExportTaskSubscriber.getExportFilename(
+				ExportTaskSubscriber.TYPE_PARAM_THEME);
+		getMessageQueue().publish(new ExportMessage.Builder()
+				.setFilename(filename)
+				.setExportType(ExportTaskSubscriber.TYPE_PARAM_THEME)
+				.setIds(StrUtil.toLong(ids)).create());
 		return ServiceResponse.createSuccessResponse(filename);
 	}
 
 	@Override
 	public ServiceResponse startExportFolderTask(Long folderId) {
-		String filename = ExportTaskServlet.getExportFilename(
-				ExportTaskServlet.TYPE_PARAM_FOLDER);
-		Queue queue = getBusiness().getSystemService().getQueue("export");
-		queue.add(url(ExportTaskServlet.EXPORT_TASK_URL)
-			.param("filename", filename)
-			.param("exportType", ExportTaskServlet.TYPE_PARAM_FOLDER)
-			.param("folderId", folderId.toString()));
+		String filename = ExportTaskSubscriber.getExportFilename(
+				ExportTaskSubscriber.TYPE_PARAM_FOLDER);
+		getMessageQueue().publish(new ExportMessage.Builder()
+				.setFilename(filename)
+				.setExportType(ExportTaskSubscriber.TYPE_PARAM_FOLDER)
+				.setFolderId(folderId).create());
 		return ServiceResponse.createSuccessResponse(filename);
 	}
 	

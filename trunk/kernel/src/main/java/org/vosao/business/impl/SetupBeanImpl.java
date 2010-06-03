@@ -21,8 +21,6 @@
 
 package org.vosao.business.impl;
 
-import static com.google.appengine.api.labs.taskqueue.TaskOptions.Builder.url;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -30,6 +28,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.business.SetupBean;
+import org.vosao.business.mq.MessageQueue;
+import org.vosao.business.mq.Topic;
+import org.vosao.business.mq.message.SimpleMessage;
 import org.vosao.common.BCrypt;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
@@ -46,10 +47,7 @@ import org.vosao.enums.ContentPermissionType;
 import org.vosao.enums.FolderPermissionType;
 import org.vosao.enums.PageState;
 import org.vosao.enums.UserRole;
-import org.vosao.servlet.SessionCleanTaskServlet;
 import org.vosao.utils.StreamUtil;
-
-import com.google.appengine.api.labs.taskqueue.Queue;
 
 public class SetupBeanImpl implements SetupBean {
 
@@ -84,8 +82,8 @@ public class SetupBeanImpl implements SetupBean {
 
 	@Override
 	public void clearSessions() {
-		Queue queue = getBusiness().getSystemService().getQueue("session-clean");
-		queue.add(url(SessionCleanTaskServlet.SESSION_CLEAN_TASK_URL));
+		getMessageQueue().publish(new SimpleMessage(
+				Topic.SESSION_CLEAN.name(), "start"));
 	} 
 
 	private void clearCache() {
@@ -187,8 +185,12 @@ public class SetupBeanImpl implements SetupBean {
 		return getBusiness().getDao();
 	}
 
-	public Business getBusiness() {
+	private Business getBusiness() {
 		return VosaoContext.getInstance().getBusiness();
+	}
+	
+	private MessageQueue getMessageQueue() {
+		return VosaoContext.getInstance().getMessageQueue();
 	}
 
 	public static final String COMMENTS_TEMPLATE_FILE = 

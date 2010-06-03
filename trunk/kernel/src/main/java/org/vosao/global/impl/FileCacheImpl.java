@@ -25,11 +25,6 @@ import javax.cache.Cache;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vosao.business.mq.Message;
-import org.vosao.business.mq.Topic;
-import org.vosao.business.mq.TopicSubscriber;
-import org.vosao.business.mq.message.SimpleMessage;
-import org.vosao.common.VosaoContext;
 import org.vosao.entity.FileEntity;
 import org.vosao.global.FileCache;
 
@@ -46,17 +41,6 @@ public class FileCacheImpl implements FileCache {
 	
 	public FileCacheImpl(Cache cache) {
 		this.cache = cache;
-		VosaoContext.getInstance().getMessageQueue().subscribe(
-			Topic.FILE_CHANGED.name(), new TopicSubscriber() {
-
-				@Override
-				public void onMessage(Message message) {
-					SimpleMessage msg = (SimpleMessage)message;
-					remove(msg.getMessage());
-					logger.debug("Clear file cache " + msg.getMessage());
-				}
-				
-			});
 	}
 	
 	@Override

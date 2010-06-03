@@ -19,39 +19,28 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.servlet;
+package org.vosao.business.impl.mq.subscriber;
 
-import static com.google.appengine.api.labs.taskqueue.TaskOptions.Builder.url;
-
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.vosao.business.impl.mq.AbstractSubscriber;
+import org.vosao.business.mq.Message;
+import org.vosao.business.mq.Topic;
+import org.vosao.business.mq.message.SimpleMessage;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.labs.taskqueue.Queue;
 
-public class SessionCleanTaskServlet extends AbstractServlet {
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
+public class SessionCleanTaskSubscriber extends AbstractSubscriber {
 
-	public static final String SESSION_CLEAN_TASK_URL = "/_ah/queue/session_clean";
-	
-	public void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		clearSessions(request, response);
-	}
-	
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		clearSessions(request, response);
-	}
-
-	public void clearSessions(HttpServletRequest request, 
-			HttpServletResponse response) throws ServletException, IOException {
-		String mode = request.getParameter("mode");
+	public void onMessage(Message message) {
+		SimpleMessage msg = (SimpleMessage) message;
+		String mode =  msg.getMessage();
 		if (mode != null && mode.equals("start")) {
 			addSessionCleanTask();
 		}
@@ -75,8 +64,8 @@ public class SessionCleanTaskServlet extends AbstractServlet {
 	}
 	
 	private void addSessionCleanTask() {
-		Queue queue = getSystemService().getQueue("session-clean");
-		queue.add(url(SESSION_CLEAN_TASK_URL));
+		getMessageQueue().publish(new SimpleMessage(Topic.SESSION_CLEAN.name(), 
+				null));
 		logger.info("Added new session clean task");
 	}
 	

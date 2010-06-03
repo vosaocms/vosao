@@ -46,8 +46,8 @@ import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PluginEntity;
 import org.vosao.entity.PluginResourceEntity;
-import org.vosao.servlet.MimeType;
 import org.vosao.utils.FolderUtil;
+import org.vosao.utils.MimeType;
 import org.vosao.utils.StrUtil;
 
 public class PluginLoader {

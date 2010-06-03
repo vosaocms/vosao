@@ -19,35 +19,25 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.servlet;
+package org.vosao.business.impl.mq.subscriber;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.vosao.business.impl.mq.AbstractSubscriber;
+import org.vosao.business.mq.Message;
+import org.vosao.business.mq.message.SimpleMessage;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.helper.UserHelper;
 
-public class IndexTaskServlet extends AbstractServlet {
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
+public class IndexTaskSubscriber extends AbstractSubscriber {
 
-	public static final String TASK_URL = "/_ah/queue/reindex";
-	
-	public void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doIndexing(request, response);
-	}
-	
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doIndexing(request, response);
-	}
-
-	public void doIndexing(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		String id = request.getParameter("pageId");
+	public void onMessage(Message message) {
+		SimpleMessage msg = (SimpleMessage)message;
+		String id = msg.getMessage();
 		try {
 			VosaoContext.getInstance().setUser(UserHelper.ADMIN);
 			PageEntity page = getDao().getPageDao().getById(Long.valueOf(id));

@@ -6,11 +6,6 @@
   </queue>
 
   <queue>
-    <name>export</name>
-    <rate>1/s</rate>
-  </queue>
-
-  <queue>
     <name>reindex</name>
     <rate>1/s</rate>
   </queue>
@@ -21,8 +16,16 @@
   </queue>
 
   <queue>
-    <name>message-queue</name>
-    <rate>50/s</rate>
+    <name>mq-high</name>
+    <rate>35/s</rate>
+  </queue>
+  <queue>
+    <name>mq-medium</name>
+    <rate>10/s</rate>
+  </queue>
+  <queue>
+    <name>mq-low</name>
+    <rate>1/s</rate>
   </queue>
 
 </queue-entries>

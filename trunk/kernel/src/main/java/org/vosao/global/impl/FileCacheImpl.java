@@ -47,7 +47,7 @@ public class FileCacheImpl implements FileCache {
 	public FileCacheImpl(Cache cache) {
 		this.cache = cache;
 		VosaoContext.getInstance().getMessageQueue().subscribe(
-			Topic.FILE_CHANGED, new TopicSubscriber() {
+			Topic.FILE_CHANGED.name(), new TopicSubscriber() {
 
 				@Override
 				public void onMessage(Message message) {

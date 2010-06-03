@@ -26,21 +26,21 @@ package org.vosao.business.mq;
  * @author Alexander Oleynik
  *
  */
-public enum Topic {
+public enum QueueSpeed {
+
+	/**
+	 * Task queue rate 50/sec.
+	 */
+	HIGH,
 	
 	/**
-	 *  SimpleMessage: message -> user email
+	 * Task queue rate 10/sec.
 	 */
-	LOGIN,
+	MEDIUM,
 
 	/**
-	 *  SimpleMessage: message -> file url
+	 * Task queue rate 1/sec.
 	 */
-	FILE_CHANGED,
-
-	/**
-	 *  ExportMessage
-	 */
-	EXPORT;
+	LOW;
 	
 }

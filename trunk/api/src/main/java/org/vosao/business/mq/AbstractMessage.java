@@ -28,9 +28,10 @@ import java.io.Serializable;
  * @author Alexander Oleynik
  *
  */
-public class AbstractMessage implements Message, Serializable {
+public abstract class AbstractMessage implements Message, Serializable {
 
 	private String topic;
+	private QueueSpeed speed;
 
 	public String getTopic() {
 		return topic;
@@ -38,6 +39,14 @@ public class AbstractMessage implements Message, Serializable {
 
 	public void setTopic(String topic) {
 		this.topic = topic;
+	}
+
+	public QueueSpeed getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(QueueSpeed speed) {
+		this.speed = speed;
 	}
 	
 }

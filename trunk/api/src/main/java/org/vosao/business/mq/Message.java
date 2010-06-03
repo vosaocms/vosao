@@ -29,5 +29,7 @@ package org.vosao.business.mq;
 public interface Message {
 
 	String getTopic();
+
+	QueueSpeed getSpeed();
 	
 }

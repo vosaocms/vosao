@@ -83,7 +83,7 @@ public class LoginServiceImpl extends AbstractServiceImpl
 		else {
 			originalView = "/cms/index.vm";
 		}
-		getMessageQueue().publish(new SimpleMessage(Topic.LOGIN, 
+		getMessageQueue().publish(new SimpleMessage(Topic.LOGIN.name(), 
 				user.getEmail()));
 		return ServiceResponse.createSuccessResponse(originalView);
 	}

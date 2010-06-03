@@ -187,15 +187,6 @@
     </servlet-mapping>
     
     <servlet>
-        <servlet-name>ExportTask</servlet-name>
-        <servlet-class>org.vosao.servlet.ExportTaskServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ExportTask</servlet-name>
-        <url-pattern>/_ah/queue/export</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>IndexTask</servlet-name>
         <servlet-class>org.vosao.servlet.IndexTaskServlet</servlet-class>
     </servlet>

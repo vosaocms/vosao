@@ -19,28 +19,40 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.mq;
+package org.vosao.business.impl.mq;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.vosao.business.Business;
+import org.vosao.business.mq.MessageQueue;
+import org.vosao.business.mq.TopicSubscriber;
+import org.vosao.common.VosaoContext;
+import org.vosao.dao.Dao;
+import org.vosao.global.SystemService;
 
 /**
  * 
  * @author Alexander Oleynik
  *
  */
-public enum Topic {
+public abstract class AbstractSubscriber implements TopicSubscriber {
+
+	protected static final Log logger = LogFactory.getLog(AbstractSubscriber.class);
+
+	protected Business getBusiness() {
+		return VosaoContext.getInstance().getBusiness();
+	}
+
+	protected Dao getDao() {
+		return getBusiness().getDao();
+	}
+		
+	protected SystemService getSystemService() {
+		return getBusiness().getSystemService();
+	}
 	
-	/**
-	 *  SimpleMessage: message -> user email
-	 */
-	LOGIN,
-
-	/**
-	 *  SimpleMessage: message -> file url
-	 */
-	FILE_CHANGED,
-
-	/**
-	 *  ExportMessage
-	 */
-	EXPORT;
+	protected MessageQueue getMessageQueue() {
+		return VosaoContext.getInstance().getMessageQueue();
+	}
 	
 }

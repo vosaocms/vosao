@@ -21,18 +21,14 @@
 
 package org.vosao.global.impl;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -44,6 +40,7 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.vosao.common.VosaoContext;
 import org.vosao.global.CacheService;
 import org.vosao.global.FileCache;
+import org.vosao.global.PageCache;
 import org.vosao.global.SystemService;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -63,6 +60,7 @@ public class SystemServiceImpl implements SystemService, Serializable {
 	private Map<String, Transformer> transformers;
 	private DatastoreService datastore;
 	private FileCache fileCache;	
+	private PageCache pageCache;
 	
 	public SystemServiceImpl() {
 		transformers = new HashMap<String, Transformer>();
@@ -174,6 +172,17 @@ public class SystemServiceImpl implements SystemService, Serializable {
 			result += 15;
 		}
 		return result;
+	}
+
+	public PageCache getPageCache() {
+		if (pageCache == null) {
+			pageCache = new PageCacheImpl();
+		}
+		return pageCache;
+	}
+
+	public void setPageCache(PageCache pageCache) {
+		this.pageCache = pageCache;
 	}
 
 }

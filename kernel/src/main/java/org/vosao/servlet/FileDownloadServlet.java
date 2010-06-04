@@ -30,8 +30,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.common.VosaoContext;
+import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
+import org.vosao.global.FileCacheItem;
 import org.vosao.i18n.Messages;
 import org.vosao.utils.DateUtil;
 import org.vosao.utils.FolderUtil;
@@ -43,7 +45,7 @@ import org.vosao.utils.FolderUtil;
  */
 public class FileDownloadServlet extends AbstractServlet {
 	
-	private static final long CACHE_LIMIT = 1048576;
+	private static final long CACHE_LIMIT = 1048000;
 	
 	private static final long serialVersionUID = 6098745782027999297L;
 
@@ -56,11 +58,9 @@ public class FileDownloadServlet extends AbstractServlet {
 					"file.not_specified"));
 			return;
 		}
-		if (isInPublicCache(request.getPathInfo())) {
-			if (sendFromCache(request, response)) {
-				logger.info("from public cache " + request.getPathInfo());
-				return;
-			}
+		if (servedFromPublicCache(request.getPathInfo(), request, response)) {
+			logger.info("from public cache " + request.getPathInfo());
+			return;
 		}	
 		String filename = chain[chain.length-1];		
 		TreeItemDecorator<FolderEntity> tree = getBusiness().getFolderBusiness()
@@ -78,27 +78,18 @@ public class FileDownloadServlet extends AbstractServlet {
 					"access_denied"));
 			return;
 		}
-		if (isInCache(request.getPathInfo())) {
-			if (VosaoContext.getInstance().getUser() == null) {
-				getBusiness().getSystemService().getFileCache()
-					.makePublic(request.getPathInfo());
-			}
-			if (sendFromCache(request, response)) {
-				logger.info("from cache " + request.getPathInfo());
-				return;
-			}
-		}	
+		if (servedFromCache(request.getPathInfo(), request, response)) {
+			logger.info("from cache " + request.getPathInfo());
+			return;
+		}
 		FileEntity file = getDao().getFileDao().getByName(
 				folder.getEntity().getId(), filename);
 		if (file != null) {
 			byte[] content = getDao().getFileDao().getFileContent(file);
 			if (file.getSize() < CACHE_LIMIT) {
-				getBusiness().getSystemService().getFileCache()
-					.put(request.getPathInfo(), file, content);
-				if (VosaoContext.getInstance().getUser() == null) {
-					getBusiness().getSystemService().getFileCache()
-						.makePublic(request.getPathInfo());
-				}
+				getSystemService().getFileCache().put(request.getPathInfo(), 
+						new FileCacheItem(file, content, 
+								VosaoContext.getInstance().getUser() == null));
 			}
 			sendFile(file, content, request, response);
 		}
@@ -109,38 +100,36 @@ public class FileDownloadServlet extends AbstractServlet {
 		}
 	}
 	
-	private boolean isInCache(final String path) {
-		return getBusiness().getSystemService().getFileCache().isInCache(path);
-	}
-	
-	private boolean isInPublicCache(final String path) {
-		return getBusiness().getSystemService().getFileCache().isInPublicCache(
-				path);
+	private boolean servedFromPublicCache(final String path,
+			HttpServletRequest request,	HttpServletResponse response) 
+			throws IOException {
+		FileCacheItem item = getSystemService().getFileCache().get(path);
+		if (item != null && item.isPublicCache()) {
+			ConfigEntity config = getDao().getConfigDao().getConfig();
+			if (config.getCacheResetDate() == null
+					|| item.getTimestamp().after(config.getCacheResetDate())) {
+				sendFile(item.getFile(), item.getContent(), request, response);
+				return true;
+			}
+		}
+		return false;
 	}
 
-	/**
-	 * Send file from file cache.
-	 * @param request
-	 * @param response
-	 * @return true is file was successfully processed, false if not.
-	 * @throws IOException
-	 */
-	private boolean sendFromCache(HttpServletRequest request, 
-			HttpServletResponse response) throws IOException {
-		FileEntity file = getBusiness().getSystemService().getFileCache()
-				.getFile(request.getPathInfo());
-		if (file == null) {
-			return false;
+	private boolean servedFromCache(final String path,
+			HttpServletRequest request,	HttpServletResponse response) 
+			throws IOException {
+		FileCacheItem item = getSystemService().getFileCache().get(path);
+		if (item != null) {
+			ConfigEntity config = getDao().getConfigDao().getConfig();
+			if (config.getCacheResetDate() == null
+					|| item.getTimestamp().after(config.getCacheResetDate())) {
+				sendFile(item.getFile(), item.getContent(), request, response);
+				return true;
+			}
 		}
-		byte[] content = getBusiness().getSystemService().getFileCache()
-				.getContent(request.getPathInfo());
-		if (content == null) {
-			return false;
-		}
-		sendFile(file, content, request, response);
-		return true;
+		return false;
 	}
-	
+
 	private void sendFile(final FileEntity file, byte[] content, 
 			HttpServletRequest request,	HttpServletResponse response) 
 			throws IOException {
@@ -169,8 +158,8 @@ public class FileDownloadServlet extends AbstractServlet {
 					.getGuestPermission(folder).isDenied();
 		}
 		return getBusiness().getFolderPermissionBusiness()
-				.getPermission(folder, VosaoContext.getInstance().getUser()).isDenied();
+				.getPermission(folder, VosaoContext.getInstance().getUser())
+				.isDenied();
 	}
-	
 	
 }

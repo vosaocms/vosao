@@ -21,37 +21,45 @@
 
 package org.vosao.global;
 
-import javax.cache.Cache;
+import java.io.Serializable;
+import java.util.Date;
+
+import org.vosao.entity.FileEntity;
 
 /**
  * 
  * @author Alexander Oleynik
  *
  */
-public interface CacheService extends Cache {
-
-	void resetLocalCache();
+public class FileCacheItem implements Serializable {
 	
-	int getLocalHits();
-
-	int getCacheHits();
+	private FileEntity file;
+	private byte[] content;
+	private boolean publicCache;
+	private Date timestamp;
 	
-	Cache getMemcache();
-	
-	/**
-	 * Save in cache big object. Big object can have size more than 1 MB. 
-	 * (Google limitation for objects stored in cache
-	 * http://code.google.com/appengine/docs/python/memcache/overview.html#Quotas_and_Limits)
-	 * @param key
-	 * @param data
-	 */
-	void putBlob(String key, byte[] data);
+	public FileCacheItem(FileEntity file, byte[] content, boolean publicCache) {
+		super();
+		timestamp = new Date();
+		this.file = file;
+		this.content = content;
+		this.publicCache = publicCache;
+	}
 
-	/**
-	 * Get big object from cache. Big object can have size more than 1 MB. 
-	 * (Google limitation for objects stored in cache
-	 * http://code.google.com/appengine/docs/python/memcache/overview.html#Quotas_and_Limits)
-	 * @param key
-	 */
-	byte[] getBlob(String key);
+	public FileEntity getFile() {
+		return file;
+	}
+
+	public byte[] getContent() {
+		return content;
+	}
+
+	public boolean isPublicCache() {
+		return publicCache;
+	}
+
+	public Date getTimestamp() {
+		return timestamp;
+	}
+	
 }

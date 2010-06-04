@@ -49,6 +49,7 @@ public class ConfigEntity extends BaseEntityImpl {
 
 	public ConfigEntity() {
 		commentsTemplate = "";
+		cacheResetDate = new Date();
 	}
 
 	@Override

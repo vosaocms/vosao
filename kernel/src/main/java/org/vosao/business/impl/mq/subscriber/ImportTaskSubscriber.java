@@ -93,6 +93,7 @@ public class ImportTaskSubscriber extends AbstractSubscriber {
 			} catch (DocumentException e) {
 				throw new UploadException(e.getMessage());
 			}
+			getSystemService().getPageCache().reset();
 			logger.info("Import finished. " + getDaoTaskAdapter().getFileCounter());
 		} catch (DaoTaskTimeoutException e) {
 			getMessageQueue().publish(new ImportMessage.Builder()
@@ -147,6 +148,7 @@ public class ImportTaskSubscriber extends AbstractSubscriber {
 			} catch (DocumentException e) {
 				throw new UploadException(e.getMessage());
 			}
+			getSystemService().getPageCache().reset();
 			logger.info("Import finished. " + getDaoTaskAdapter().getFileCounter());
 		} catch (DaoTaskTimeoutException e) {
 			getMessageQueue().publish(new ImportMessage.Builder()

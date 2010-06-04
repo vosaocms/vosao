@@ -181,6 +181,9 @@ public class PageServiceImpl extends AbstractServiceImpl
 			page.setSkipPostProcessing(Boolean.valueOf(vo
 					.get("skipPostProcessing")));
 		}
+		if (vo.get("cached") != null) {
+			page.setCached(Boolean.valueOf(vo.get("cached")));
+		}
 		if (vo.get("friendlyUrl") != null) {
 			page.setFriendlyURL(vo.get("friendlyUrl"));
 		}

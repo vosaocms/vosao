@@ -76,6 +76,10 @@
     <label>$messages.get("page.skip_postprocessing")</label>
     <input id="skipPostProcessing" type="checkbox" />
 </div>
+<div class="form-row">
+    <label>$messages.get("page.cache_enabled")</label>
+    <input id="cached" type="checkbox" />
+</div>
 
 <div class="form-row">
     <label>$messages.get("page.type")</label>

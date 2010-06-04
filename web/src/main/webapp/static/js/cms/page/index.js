@@ -141,6 +141,9 @@ function initPageForm() {
 		$('#skipPostProcessing').each(function() {
 			this.checked = page.skipPostProcessing;
 		});
+		$('#cached').each(function() {
+			this.checked = page.cached;
+		});
 		$('#templates').val(page.template);
 		$('#pageState').html(page.stateString == 'EDIT' ? 
 				messages.edit : messages.approved);
@@ -166,9 +169,10 @@ function initPageForm() {
 		$('#parentFriendlyUrl').html(pageParentUrl + urlEnd);
 		$('#pageType').val('SIMPLE');
 		$('#publishDate').val(Vosao.formatDate(new Date()));
-		$('#commentsEnabled, #velocityProcessing, #skipPostProcessing').each(function() {
-			this.checked = false;
-		});
+		$('#commentsEnabled, #velocityProcessing, #skipPostProcessing, #cached')
+			.each(function() {
+				this.checked = false;
+			});
 		$('#searchable').each(function() {
 			this.checked = true;
 		});
@@ -200,6 +204,7 @@ function onPageUpdate() {
 		searchable : String($('#searchable:checked').size() > 0),
 		velocityProcessing : String($('#velocityProcessing:checked').size() > 0),
 		skipPostProcessing : String($('#skipPostProcessing:checked').size() > 0),
+		cached : String($('#cached:checked').size() > 0),
 		template : $('#templates option:selected').val(),
 		approve : String($('#approveOnPageSave:checked, #approveOnContentSave:checked').size() > 0),
 		pageType: $('#pageType').val(),

@@ -31,6 +31,7 @@ import org.vosao.business.Business;
 import org.vosao.business.mq.MessageQueue;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
+import org.vosao.global.SystemService;
 
 /**
  * @author Alexander Oleynik
@@ -65,4 +66,8 @@ public abstract class AbstractFilter {
 		return VosaoContext.getInstance().getMessageQueue();
 	}
 
+	protected SystemService getSystemService() {
+		return getBusiness().getSystemService();
+	}
+	
 }

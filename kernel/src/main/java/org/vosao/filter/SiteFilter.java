@@ -23,6 +23,7 @@ package org.vosao.filter;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Date;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -76,6 +77,9 @@ public class SiteFilter extends AbstractFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
+        if (servedFromCache(url, httpResponse)) {
+        	return;
+        }
         SeoUrlEntity seoUrl = getDao().getSeoUrlDao().getByFrom(url);
         if (seoUrl != null) {
             httpResponse.sendRedirect(seoUrl.getToLink());
@@ -112,6 +116,36 @@ public class SiteFilter extends AbstractFilter implements Filter {
     	}
     }
 
+	private boolean servedFromCache(String url,	HttpServletResponse response) 
+			throws IOException {
+		ConfigEntity config = getDao().getConfigDao().getConfig();
+		String pageKey = getPageKey(url);
+		String page = (String)getSystemService().getCache().get(pageKey);
+		if (page != null) {
+			String pageDateKey = getPageDateKey(url);
+			Date pageDate = (Date)getSystemService().getCache().get(pageDateKey);
+			if (pageDate != null) {
+				if (config.getCacheResetDate() == null 
+						|| pageDate.after(config.getCacheResetDate())) {
+			    	response.setContentType("text/html");
+			    	response.setCharacterEncoding("UTF-8");
+			    	Writer out = response.getWriter();
+			    	out.write(page);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private String getPageKey(String url) {
+		return "page:" + url;
+	}
+	
+	private String getPageDateKey(String url) {
+		return getPageKey(url) + ":Date";
+	}
+
 	private void showNoApprovedContent(HttpServletResponse httpResponse) 
     		throws IOException {
     	renderMessage(httpResponse, Messages.get("not_approved_page", 
@@ -136,6 +170,12 @@ public class SiteFilter extends AbstractFilter implements Filter {
     	String language = getBusiness().getLanguage();
     	String content = getBusiness().getPageBusiness().render(page, language);
     	out.write(content);
+    	if (page.isCached()) {
+    		getSystemService().getCache().put(getPageKey(
+    				page.getFriendlyURL()), content);
+    		getSystemService().getCache().put(getPageDateKey(
+    				page.getFriendlyURL()), new Date());
+    	}
     }
     
     private Integer getVersion(HttpServletRequest request) {

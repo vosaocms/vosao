@@ -23,7 +23,6 @@ package org.vosao.filter;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Date;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -70,14 +69,14 @@ public class SiteFilter extends AbstractFilter implements Filter {
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
         HttpServletResponse httpResponse = (HttpServletResponse)response;
         String url = httpRequest.getServletPath();
-        if (processPluginServlet(request, response)) {
-        	return;
-        }
         if (isSkipUrl(url)) {
             chain.doFilter(request, response);
             return;
         }
         if (servedFromCache(url, httpResponse)) {
+        	return;
+        }
+        if (processPluginServlet(request, response)) {
         	return;
         }
         SeoUrlEntity seoUrl = getDao().getSeoUrlDao().getByFrom(url);
@@ -118,32 +117,15 @@ public class SiteFilter extends AbstractFilter implements Filter {
 
 	private boolean servedFromCache(String url,	HttpServletResponse response) 
 			throws IOException {
-		ConfigEntity config = getDao().getConfigDao().getConfig();
-		String pageKey = getPageKey(url);
-		String page = (String)getSystemService().getCache().get(pageKey);
+		String page = getSystemService().getPageCache().get(url);
 		if (page != null) {
-			String pageDateKey = getPageDateKey(url);
-			Date pageDate = (Date)getSystemService().getCache().get(pageDateKey);
-			if (pageDate != null) {
-				if (config.getCacheResetDate() == null 
-						|| pageDate.after(config.getCacheResetDate())) {
-			    	response.setContentType("text/html");
-			    	response.setCharacterEncoding("UTF-8");
-			    	Writer out = response.getWriter();
-			    	out.write(page);
-					return true;
-				}
-			}
+	    	response.setContentType("text/html");
+	    	response.setCharacterEncoding("UTF-8");
+	    	Writer out = response.getWriter();
+	    	out.write(page);
+			return true;
 		}
 		return false;
-	}
-
-	private String getPageKey(String url) {
-		return "page:" + url;
-	}
-	
-	private String getPageDateKey(String url) {
-		return getPageKey(url) + ":Date";
 	}
 
 	private void showNoApprovedContent(HttpServletResponse httpResponse) 
@@ -171,10 +153,7 @@ public class SiteFilter extends AbstractFilter implements Filter {
     	String content = getBusiness().getPageBusiness().render(page, language);
     	out.write(content);
     	if (page.isCached()) {
-    		getSystemService().getCache().put(getPageKey(
-    				page.getFriendlyURL()), content);
-    		getSystemService().getCache().put(getPageDateKey(
-    				page.getFriendlyURL()), new Date());
+    		getSystemService().getPageCache().put(page.getFriendlyURL(), content);
     	}
     }
     

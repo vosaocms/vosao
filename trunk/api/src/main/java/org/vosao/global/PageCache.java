@@ -19,47 +19,22 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.global.impl;
+package org.vosao.global;
 
-import javax.cache.Cache;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.vosao.global.FileCache;
-import org.vosao.global.FileCacheItem;
 
 /**
  * 
  * @author Alexander Oleynik
  *
  */
-public class FileCacheImpl implements FileCache {
+public interface PageCache {
 
-	private static final Log logger = LogFactory.getLog(FileCacheImpl.class);
+	void put(String url, String content);
 	
-	private Cache cache;
+	String get(String url);
 	
-	public FileCacheImpl(Cache cache) {
-		this.cache = cache;
-	}
+	void remove(String url);
 	
-	private String getFileKey(String path) {
-		return "file:" + path;
-	}
+	void reset();
 	
-	@Override
-	public FileCacheItem get(String path) {
-		return (FileCacheItem)cache.get(getFileKey(path));
-	}
-
-	@Override
-	public void put(String path, FileCacheItem item) {
-		cache.put(getFileKey(path), item);
-	}
-
-	@Override
-	public void remove(String path) {
-		cache.remove(getFileKey(path));
-	}
-
 }

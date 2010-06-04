@@ -30,12 +30,18 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.labs.taskqueue.Queue;
 import com.google.appengine.api.quota.QuotaService;
 
-
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public interface SystemService {
 	
 	CacheService getCache();
 	
 	FileCache getFileCache();
+	
+	PageCache getPageCache();
 	
 	Queue getDefaultQueue();
 

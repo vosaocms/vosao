@@ -22,7 +22,6 @@
 package org.vosao.service.back.impl;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -141,9 +140,7 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse cacheReset() {
-		ConfigEntity config = getDao().getConfigDao().getConfig();
-		config.setCacheResetDate(new Date());
-		getDao().getConfigDao().save(config);
+		getBusiness().getSystemService().getPageCache().reset();
 		getDao().clearCache();
 		getSetupBean().clearFileCache();
 		getMessageQueue().publish(new SimpleMessage(

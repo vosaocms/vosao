@@ -466,6 +466,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			boolean oldSearchable, boolean searchable) {
 		ContentEntity contentEntity = getDao().getPageDao().setContent(
 				page.getId(), language, content);
+		getSystemService().getPageCache().remove(page.getFriendlyURL());
 		if (searchable) {
 			if (oldSearchable) {
 				getBusiness().getSearchEngine().updateIndex(contentEntity);

@@ -22,20 +22,21 @@
 package org.vosao.dao.cache.impl;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.cache.Cache;
+import java.util.Date;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.cache.CacheStat;
 import org.vosao.dao.cache.EntityCache;
+import org.vosao.global.CacheService;
 import org.vosao.global.SystemService;
 
-import com.google.appengine.api.memcache.InvalidValueException;
-
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class EntityCacheImpl implements EntityCache, Serializable {
 
 	protected static final Log logger = LogFactory.getLog(
@@ -55,83 +56,40 @@ public class EntityCacheImpl implements EntityCache, Serializable {
 	
 	@Override
 	public Object getEntity(Class clazz, Object id) {
-		calls++;
-		Set<String> entityKeys = getEntityKeySet(clazz);
-		String key = getEntityKey(clazz, id);
-		if (entityKeys.contains(key) && getCache().containsKey(key)) {
-			Object result = getCache().get(key);
-			if (result != null) {
-				hits++;
+		try {
+			calls++;
+			CacheItem item = (CacheItem)getCache().get(getEntityKey(clazz, id));
+			if (item != null) {
+				Date globalResetDate = getCache().getResetDate();
+				if (globalResetDate == null 
+						|| item.getTimestamp().after(globalResetDate)) {
+					hits++;
+					return item.getData();
+				}
 			}
-			return result;
+		}
+		catch (Exception e) {
+			logger.error(e.getMessage());
 		}
 		return null;
 	}
 
-	private String getEntityKeySetKey(Class clazz) {
-		return "entityList:" + clazz.getName();
-	}
-	
-	private Set<String> getEntityKeySet(Class clazz) {
-		Set<String> result = (Set<String>) getCache().get(getEntityKeySetKey(clazz));
-		if (result == null) {
-			result = new HashSet<String>();
-		}
-		return result;
-	}
-	
-	private void updateEntityKeySet(Class clazz, Set<String> set) {
-		getCache().put(getEntityKeySetKey(clazz), set);
-	}
-	
-	private void addEntityToKeySet(Class clazz, String key) {
-		Set<String> set = getEntityKeySet(clazz);
-		set.add(key);
-		updateEntityKeySet(clazz, set);
-	}
-	
-	private void removeEntityFromKeySet(Class clazz, String key) {
-		Set<String> set = getEntityKeySet(clazz);
-		set.remove(key);
-		updateEntityKeySet(clazz, set);
-	}
-	
 	@Override
 	public void putEntity(Class clazz, Object id, Object entity) {
 		String key = getEntityKey(clazz, id);
-		getCache().put(key, entity);
-		addEntityToKeySet(clazz, key);
-	}
-
-	@Override
-	public void removeEntities(Class clazz) {
-		Set<String> keySet = getEntityKeySet(clazz);
-		for (String key : keySet) {
-			try {
-				getCache().remove(key);
-			}
-			catch (InvalidValueException e) {
-				logger.error(e.getMessage());
-			}
-		}
-		keySet.clear();
-		updateEntityKeySet(clazz, keySet);
+		getCache().put(key, new CacheItem(entity));
 	}
 
 	@Override
 	public void removeEntity(Class clazz, Object id) {
-		String key = getEntityKey(clazz, id);
-		if (getCache().containsKey(key)) {
-			getCache().remove(getEntityKey(clazz, id));
-		}
-		removeEntityFromKeySet(clazz, key);
+		getCache().remove(getEntityKey(clazz, id));
 	}
 
 	public SystemService getSystemService() {
 		return VosaoContext.getInstance().getBusiness().getSystemService();
 	}
 
-	private Cache getCache() {
+	private CacheService getCache() {
 		return getSystemService().getCache();
 	}
 

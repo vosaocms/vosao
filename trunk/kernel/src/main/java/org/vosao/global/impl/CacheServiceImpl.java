@@ -24,6 +24,7 @@ package org.vosao.global.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,7 @@ public class CacheServiceImpl implements CacheService {
 	private static final Log log = LogFactory.getLog(CacheServiceImpl.class);
 
 	private static final long LOCAL_CACHE_TTL = 5000;
+	private static final String RESET_DATE_KEY = "cacheResetDate";
 	
 	private Cache cache;
 	private Map<String, Object> localCache;
@@ -127,7 +129,8 @@ public class CacheServiceImpl implements CacheService {
 	@Override
 	public void clear() {
 		localCache.clear();
-		cache.clear();		
+		cache.clear();
+		put(RESET_DATE_KEY, new Date());
 	}
 
 	@Override
@@ -270,6 +273,11 @@ public class CacheServiceImpl implements CacheService {
 			i++;
 		}
 		put(key, StrUtil.toCSV(chunkList));
+	}
+
+	@Override
+	public Date getResetDate() {
+		return (Date)get(RESET_DATE_KEY);
 	}
 
 }

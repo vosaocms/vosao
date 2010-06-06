@@ -69,7 +69,6 @@ public class BaseDaoImpl<T extends BaseEntity>
 	@Override
 	public void clearCache() {
 		try {
-			getEntityCache().removeEntities(clazz);
 			getQueryCache().removeQueries(clazz);
 		}
 		catch (Exception e) {
@@ -160,7 +159,6 @@ public class BaseDaoImpl<T extends BaseEntity>
 	}
 
 	protected void removeSelected(Query q) {
-		getEntityCache().removeEntities(clazz);
 		getQueryCache().removeQueries(clazz);
 		PreparedQuery p = getDatastore().prepare(q);
 		List<Key> keys = new ArrayList<Key>();

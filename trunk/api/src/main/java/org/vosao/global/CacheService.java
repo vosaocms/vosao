@@ -21,6 +21,8 @@
 
 package org.vosao.global;
 
+import java.util.Date;
+
 import javax.cache.Cache;
 
 /**
@@ -54,4 +56,6 @@ public interface CacheService extends Cache {
 	 * @param key
 	 */
 	byte[] getBlob(String key);
+	
+	Date getResetDate();
 }

@@ -22,18 +22,14 @@
 package org.vosao.dao.cache.impl;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.cache.Cache;
+import java.util.Date;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.cache.CacheStat;
 import org.vosao.dao.cache.QueryCache;
+import org.vosao.global.CacheService;
 import org.vosao.global.SystemService;
 
 public class QueryCacheImpl implements QueryCache, Serializable {
@@ -53,25 +49,8 @@ public class QueryCacheImpl implements QueryCache, Serializable {
 		return VosaoContext.getInstance().getBusiness().getSystemService();
 	}
 
-	private Cache getCache() {
+	private CacheService getCache() {
 		return getSystemService().getCache();
-	}
-
-	private String getQueryMapKey(Class clazz) {
-		return "queries:" + clazz.getName();
-	}
-	
-	private Map<String, Set<String>> getQueryMap(Class clazz) {
-		Map<String, Set<String>> result = (Map<String, Set<String>>) getCache()
-				.get(getQueryMapKey(clazz));
-		if (result == null) {
-			result = new HashMap<String, Set<String>>();
-		}
-		return result;
-	}
-	
-	private void updateQueryMap(Class clazz, Map<String, Set<String>> map) {
-		getCache().put(getQueryMapKey(clazz), map);
 	}
 
 	private String getQueryKey(Class clazz, String query, Object[] params) {
@@ -85,40 +64,49 @@ public class QueryCacheImpl implements QueryCache, Serializable {
 		return result.toString();
 	}
 
+	private String getClassResetdateKey(Class clazz) {
+		return "classResetDate:" + clazz.getName();
+	}
+	
+	private Date getClassResetDate(Class clazz) {
+		return (Date)getCache().get(getClassResetdateKey(clazz));
+	}
+	
 	@Override
 	public Object getQuery(Class clazz, String query, Object[] params) {
-		calls++;
-		Map<String, Set<String>> map = getQueryMap(clazz);
-		Set<String> set = map.get(query);
-		String key = getQueryKey(clazz, query, params);
-		if (set != null && set.contains(key) && getCache().containsKey(key)) {
-			Object result = getCache().get(key);
-			if (result != null) {
-				hits++;
+		try {
+			calls++;
+			CacheItem item = (CacheItem)getCache().get(getQueryKey(clazz, query, 
+					params));
+			if (item != null) {
+				Date globalResetDate = getCache().getResetDate();
+				if (globalResetDate == null 
+						|| item.getTimestamp().after(globalResetDate)) {
+					Date classResetDate = getClassResetDate(clazz);
+					if (classResetDate == null
+							|| item.getTimestamp().after(classResetDate)) {
+						hits++;
+						return item.getData();
+					}
+				}
 			}
-			return result;
 		}
-		return null;
+		catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return null; 
 	}
 
 	@Override
 	public void putQuery(Class clazz, String query, Object[] params, 
 			Object value) {
-		Map<String, Set<String>> map = getQueryMap(clazz);
-		Set<String> set = map.get(query);
 		String key = getQueryKey(clazz, query, params);
-		if (set == null) {
-			set = new HashSet<String>();
-			map.put(query, set);
-		}
-		set.add(key);
-		getCache().put(key, value);
-		updateQueryMap(clazz, map);
+		getCache().put(key, new CacheItem(value));
 	}
 
 	@Override
 	public void removeQueries(Class clazz) {
-		updateQueryMap(clazz, new HashMap<String, Set<String>>());
+		getCache().put(getClassResetdateKey(clazz), new Date());
 	}
 
 	@Override

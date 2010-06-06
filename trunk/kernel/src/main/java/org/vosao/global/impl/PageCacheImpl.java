@@ -24,13 +24,11 @@ package org.vosao.global.impl;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.cache.Cache;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
-import org.vosao.entity.ConfigEntity;
+import org.vosao.global.CacheService;
 import org.vosao.global.PageCache;
 
 /**
@@ -44,10 +42,10 @@ public class PageCacheImpl implements PageCache {
 		private String content;
 		private Date timestamp;
 		
-		public CacheItem(String content, Date timestamp) {
+		public CacheItem(String content) {
 			super();
 			this.content = content;
-			this.timestamp = timestamp;
+			this.timestamp = new Date();
 		}
 		
 		public String getContent() {
@@ -66,7 +64,7 @@ public class PageCacheImpl implements PageCache {
 		return "page:" + url;
 	}
 	
-	private Cache getCache() {
+	private CacheService getCache() {
 		return VosaoContext.getInstance().getBusiness().getSystemService()
 				.getCache();
 	}
@@ -80,9 +78,9 @@ public class PageCacheImpl implements PageCache {
 		try {
 			CacheItem item = (CacheItem)getCache().get(getPageKey(url));
 			if (item != null) {
-				ConfigEntity config = getDao().getConfigDao().getConfig();
-				if (config.getCacheResetDate() == null 
-						|| item.getTimestamp().after(config.getCacheResetDate())) {
+				if (getCache().getResetDate() == null 
+						|| item.getTimestamp().after(getCache()
+								.getResetDate())) {
 					return item.getContent();
 				}
 			}
@@ -95,20 +93,12 @@ public class PageCacheImpl implements PageCache {
 
 	@Override
 	public void put(String url, String content) {
-		CacheItem item = new CacheItem(content, new Date());
-		getCache().put(getPageKey(url), item);
+		getCache().put(getPageKey(url), new CacheItem(content));
 	}
 
 	@Override
 	public void remove(String url) {
 		getCache().remove(getPageKey(url));		
-	}
-
-	@Override
-	public void reset() {
-		ConfigEntity config = getDao().getConfigDao().getConfig();
-		config.setCacheResetDate(new Date());
-		getDao().getConfigDao().save(config);
 	}
 
 }

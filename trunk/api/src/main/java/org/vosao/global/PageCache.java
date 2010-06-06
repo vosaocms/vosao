@@ -35,6 +35,4 @@ public interface PageCache {
 	
 	void remove(String url);
 	
-	void reset();
-	
 }

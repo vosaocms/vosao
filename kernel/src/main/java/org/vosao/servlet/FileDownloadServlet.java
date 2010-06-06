@@ -33,6 +33,7 @@ import org.vosao.common.VosaoContext;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
+import org.vosao.global.CacheService;
 import org.vosao.global.FileCacheItem;
 import org.vosao.i18n.Messages;
 import org.vosao.utils.DateUtil;
@@ -105,9 +106,8 @@ public class FileDownloadServlet extends AbstractServlet {
 			throws IOException {
 		FileCacheItem item = getSystemService().getFileCache().get(path);
 		if (item != null && item.isPublicCache()) {
-			ConfigEntity config = getDao().getConfigDao().getConfig();
-			if (config.getCacheResetDate() == null
-					|| item.getTimestamp().after(config.getCacheResetDate())) {
+			if (getCache().getResetDate() == null
+					|| item.getTimestamp().after(getCache().getResetDate())) {
 				sendFile(item.getFile(), item.getContent(), request, response);
 				return true;
 			}
@@ -115,14 +115,17 @@ public class FileDownloadServlet extends AbstractServlet {
 		return false;
 	}
 
+	private CacheService getCache() {
+		return getSystemService().getCache();
+	}
+	
 	private boolean servedFromCache(final String path,
 			HttpServletRequest request,	HttpServletResponse response) 
 			throws IOException {
 		FileCacheItem item = getSystemService().getFileCache().get(path);
 		if (item != null) {
-			ConfigEntity config = getDao().getConfigDao().getConfig();
-			if (config.getCacheResetDate() == null
-					|| item.getTimestamp().after(config.getCacheResetDate())) {
+			if (getCache().getResetDate() == null
+					|| item.getTimestamp().after(getCache().getResetDate())) {
 				sendFile(item.getFile(), item.getContent(), request, response);
 				return true;
 			}

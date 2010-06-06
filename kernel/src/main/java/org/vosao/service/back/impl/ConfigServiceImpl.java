@@ -140,7 +140,7 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse cacheReset() {
-		getBusiness().getSystemService().getPageCache().reset();
+		getBusiness().getSystemService().getCache().clear();
 		getSetupBean().clearFileCache();
 		getMessageQueue().publish(new SimpleMessage(
 				Topic.SESSION_CLEAN.name(), "start"));

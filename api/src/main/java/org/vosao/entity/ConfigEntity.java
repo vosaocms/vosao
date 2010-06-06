@@ -45,11 +45,9 @@ public class ConfigEntity extends BaseEntityImpl {
 	private boolean enablePicasa;
 	private String picasaUser;
 	private String picasaPassword;
-	private Date cacheResetDate;
 
 	public ConfigEntity() {
 		commentsTemplate = "";
-		cacheResetDate = new Date();
 	}
 
 	@Override
@@ -69,7 +67,6 @@ public class ConfigEntity extends BaseEntityImpl {
 		enablePicasa = getBooleanProperty(entity, "enablePicasa", false);
 		picasaUser = getStringProperty(entity, "picasaUser");
 		picasaPassword = getStringProperty(entity, "picasaPassword");
-		cacheResetDate = getDateProperty(entity, "cacheResetDate");
 	}
 	
 	@Override
@@ -89,7 +86,6 @@ public class ConfigEntity extends BaseEntityImpl {
 		setProperty(entity, "enablePicasa", enablePicasa, false);
 		setProperty(entity, "picasaUser", picasaUser, false);
 		setProperty(entity, "picasaPassword", picasaPassword, false);
-		setProperty(entity, "cacheResetDate", cacheResetDate, false);
 	}
 
 	public String getGoogleAnalyticsId() {
@@ -202,14 +198,6 @@ public class ConfigEntity extends BaseEntityImpl {
 
 	public void setPicasaPassword(String picasaPassword) {
 		this.picasaPassword = picasaPassword;
-	}
-
-	public Date getCacheResetDate() {
-		return cacheResetDate;
-	}
-
-	public void setCacheResetDate(Date cacheResetDate) {
-		this.cacheResetDate = cacheResetDate;
 	}
 	
 }

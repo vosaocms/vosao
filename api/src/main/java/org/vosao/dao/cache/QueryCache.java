@@ -21,6 +21,11 @@
 
 package org.vosao.dao.cache;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public interface QueryCache {
 
 	void putQuery(Class clazz, String query, Object[] params, Object value);

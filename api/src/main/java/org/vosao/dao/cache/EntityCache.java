@@ -29,7 +29,5 @@ public interface EntityCache {
 	
 	void removeEntity(Class clazz, Object id);
 	
-	void removeEntities(Class clazz);
-	
 	CacheStat getStat();
 }

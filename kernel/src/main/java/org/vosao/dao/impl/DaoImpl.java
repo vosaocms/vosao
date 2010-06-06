@@ -89,34 +89,6 @@ public class DaoImpl implements Dao, Serializable {
 	private PageTagDao pageTagDao;
 	private FormDataDao formDataDao;
 
-	public void clearCache() {
-		pageDao.clearCache();
-		fileDao.clearCache();
-		folderDao.clearCache();
-		userDao.clearCache();
-		templateDao.clearCache();
-		configDao.clearCache();
-		formDao.clearCache();
-		formConfigDao.clearCache();
-		commentDao.clearCache();
-		fieldDao.clearCache();
-		seoUrlDao.clearCache();
-		languageDao.clearCache();
-		contentDao.clearCache();
-		messageDao.clearCache();
-		groupDao.clearCache();
-		userGroupDao.clearCache();
-		contentPermissionDao.clearCache();
-		folderPermissionDao.clearCache();
-		structureDao.clearCache();
-		structureTemplateDao.clearCache();
-		pluginDao.clearCache();
-		pluginResourceDao.clearCache();
-		tagDao.clearCache();
-		pageTagDao.clearCache();
-		formDataDao.clearCache();
-	}
-	
 	@Override
 	public SystemService getSystemService() {
 		return VosaoContext.getInstance().getBusiness().getSystemService();

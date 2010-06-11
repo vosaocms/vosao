@@ -86,11 +86,6 @@ public class ServiceFilter extends AbstractFilter implements Filter {
 		return (JSONRPCBridge) session.getAttribute("JSONRPCBridge");
 	}
 
-	private boolean isLoggedIn(final HttpServletRequest request) {
-		return request.getSession(true).getAttribute(
-				AuthenticationFilter.USER_SESSION_ATTR) != null;
-	}
-
 	private FrontService getFrontService() {
 		return VosaoContext.getInstance().getFrontService();
 	}

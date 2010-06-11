@@ -73,7 +73,7 @@ public class SiteFilter extends AbstractFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        if (servedFromCache(url, httpResponse)) {
+        if (!isLoggedIn(httpRequest) && servedFromCache(url, httpResponse)) {
         	return;
         }
         if (processPluginServlet(request, response)) {
@@ -152,7 +152,7 @@ public class SiteFilter extends AbstractFilter implements Filter {
     	String language = getBusiness().getLanguage();
     	String content = getBusiness().getPageBusiness().render(page, language);
     	out.write(content);
-    	if (page.isCached()) {
+    	if (!isLoggedIn(request) && page.isCached()) {
     		getSystemService().getPageCache().put(page.getFriendlyURL(), content);
     	}
     }

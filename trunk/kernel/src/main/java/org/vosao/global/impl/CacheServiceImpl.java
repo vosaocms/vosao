@@ -161,10 +161,8 @@ public class CacheServiceImpl implements CacheService {
 				return localCache.get(key);
 			}
 			Object value = cache.get(key);
-			if (value != null) {
-				cacheHits++;
-				localCache.put((String)key, value);
-			}
+			localCache.put((String)key, value);
+			cacheHits++;
 			return value;
 		}
 		catch (InvalidValueException e) {

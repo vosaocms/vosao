@@ -24,6 +24,7 @@ package org.vosao.filter;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -70,4 +71,9 @@ public abstract class AbstractFilter {
 		return getBusiness().getSystemService();
 	}
 	
+	protected boolean isLoggedIn(final HttpServletRequest request) {
+		return request.getSession(true).getAttribute(
+				AuthenticationFilter.USER_SESSION_ATTR) != null;
+	}
+
 }

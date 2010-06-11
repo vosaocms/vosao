@@ -90,7 +90,8 @@ public class VosaoResourceBundle extends ResourceBundle {
 			PluginEntryPoint entryPoint = getBusiness().getPluginBusiness()
 					.getEntryPoint(plugin);
 			if (entryPoint.getBundleName() != null) {
-				result.add(ResourceBundle.getBundle(entryPoint.getBundleName(),
+				result.add(ResourceBundle.getBundle(
+						entryPoint.getBundleName(),
 						locale, 
 						getBusiness().getPluginBusiness().getClassLoader(plugin)));
 			}

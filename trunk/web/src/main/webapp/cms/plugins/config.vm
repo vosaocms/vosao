@@ -36,7 +36,7 @@
 <div id="tab-1">
     <div id="plugins"></div>
     <div class="buttons">
-        <input id="installButton" type="button" value="$messages.get("install")" />
+        <input id="installButton" type="button" value="$messages.get("install_update")" />
     </div>
 </div>
 

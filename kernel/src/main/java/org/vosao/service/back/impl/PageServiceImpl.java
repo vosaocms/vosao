@@ -238,7 +238,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 		}
 		List<String> errors = getPageBusiness().validateBeforeUpdate(page);
 		if (errors.isEmpty()) {
-			getDao().getPageDao().save(page);
+			getPageBusiness().save(page);
 			if (vo.containsKey("content")) {
 				getPageBusiness().saveContent(page, languageCode,
 						vo.get("content"), oldSearchable, page.isSearchable());
@@ -321,7 +321,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 					Messages.get("access_denied"));
 		}
 		page.setState(PageState.APPROVED);
-		getDao().getPageDao().save(page);
+		getPageBusiness().save(page);
 		return ServiceResponse
 				.createSuccessResponse(Messages.get("page.success_approve"));
 	}
@@ -427,7 +427,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 			return ServiceResponse.createErrorResponse(Messages.get(
 					"access_denied"));
 		}
-		getDao().getPageDao().save(page);
+		getPageBusiness().save(page);
 		getPageBusiness().saveContent(page, language, content,
 				page.isSearchable(), page.isSearchable());
 		return ServiceResponse.createSuccessResponse(
@@ -498,7 +498,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 			PageEntity page = new PageEntity(title, 
 					getPageBusiness().makeUniquePageURL(url));
 			page.setTemplate(parent.getTemplate());
-			getDao().getPageDao().save(page);
+			getPageBusiness().save(page);
 			return ServiceResponse.createSuccessResponse(
 					page.getId().toString());
 		}
@@ -517,7 +517,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 					page.getFriendlyURL());
 			for (PageEntity version : versions) {
 				version.setTitle(title);
-				getDao().getPageDao().save(version);
+				getPageBusiness().save(version);
 			}
 			if (!page.isRoot()) {
 				String url = getBaseURL(page.getParentFriendlyURL()) + "/" 
@@ -619,13 +619,19 @@ public class PageServiceImpl extends AbstractServiceImpl
 		List<String> errors = getBusiness().getPageBusiness()
 			.validateBeforeUpdate(page);
 		if (errors.isEmpty()) {
-			getDao().getPageDao().save(page);
+			getPageBusiness().save(page);
 			return ServiceResponse.createSuccessResponse(page.getId().toString());
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
 					Messages.get("errors_occured"), errors);
 		}
+	}
+
+	@Override
+	public ServiceResponse resetCache(String url) {
+		getBusiness().getSystemService().getPageCache().remove(url);
+		return ServiceResponse.createSuccessResponse(Messages.get("success"));
 	}
 
 

@@ -53,7 +53,7 @@ function showPlugins() {
         	configURL = '/file/plugins/' + plugin.name + '/' + plugin.configURL;
         }
     	var state = plugin.disabled ? messages.disabled : messages.enabled;
-    	var link = plugin.disabled ? plugin.title :
+    	var link = plugin.disabled ? Vosao.message(plugin.title) :
     		'<a href="' + configURL + '">' + Vosao.message(plugin.title) + '</a>';
     	html += '<tr><td>' + link + '</td>'
     		+ '<td>' + plugin.name + '</td>'

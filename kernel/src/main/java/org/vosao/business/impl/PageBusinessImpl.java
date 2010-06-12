@@ -388,6 +388,8 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			if (folder != null) {	
 				folderIds.add(folder.getEntity().getId());
 			}
+			getBusiness().getSystemService().getPageCache().remove(
+					page.getFriendlyURL());
 		}
 		getBusiness().getFolderBusiness().recursiveRemove(folderIds);
 		getDao().getPageDao().remove(removeIds);
@@ -400,6 +402,10 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			List<Long> ids = new ArrayList<Long>();
 			ids.add(pages.get(0).getId());
 			remove(ids);
+			for (PageEntity page : pages) {
+				getBusiness().getSystemService().getPageCache().remove(
+						page.getFriendlyURL());
+			}
 		}
 	}
 	
@@ -409,6 +415,8 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		if (page != null) {
 			if (canWritePage(page.getFriendlyURL())) {
 				getDao().getPageDao().removeVersion(id);
+				getBusiness().getSystemService().getPageCache().remove(
+						page.getFriendlyURL());
 			}
 		}
 	}
@@ -611,6 +619,10 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 				version.setFriendlyURL(friendlyURL);
 				getDao().getPageDao().save(version);
 			}
+			getBusiness().getSystemService().getPageCache().remove(
+					page.getFriendlyURL());
+			getBusiness().getSystemService().getPageCache().remove(
+					friendlyURL);
 		}
 	}
 
@@ -677,6 +689,8 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			newContent.setId(null);
 			newContent.setParentKey(dst.getId());
 			getDao().getContentDao().save(newContent);
+			getBusiness().getSystemService().getPageCache().remove(
+					dst.getFriendlyURL());
 		}
 	}
 	
@@ -690,13 +704,20 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			newVersion.copy(version);
 			newVersion.setId(null);
 			newVersion.setFriendlyURL(newURL);
-			getDao().getPageDao().save(newVersion);
+			save(newVersion);
 			copyContent(version, newVersion);
 		}
 		for (PageEntity child : getDao().getPageDao().getByParent(
 				page.getFriendlyURL())) {
 			copy(child, newURL);
 		}
+	}
+
+	@Override
+	public void save(PageEntity page) {
+		getDao().getPageDao().save(page);
+		getBusiness().getSystemService().getPageCache().remove(
+				page.getFriendlyURL());
 	}
 
 }

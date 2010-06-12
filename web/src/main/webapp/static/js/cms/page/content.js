@@ -61,6 +61,7 @@ $(function(){
     		.removeClass('ui-state-default');
     $('#restoreForm').submit(function() {onRestoreSave(); return false;});
     $('#restoreCancelButton').click(onRestoreCancel);
+    $('#resetCacheButton').click(onResetCache);
 });
 
 function loadData() {
@@ -459,4 +460,12 @@ function onEditCKEditor() {
 		+ messages['page.edit_textarea'] + '</a>');
 	showContentEditor();
 	setEditorContent(contents[currentLanguage]);
+}
+
+function onResetCache() {
+	if (editMode) {
+		Vosao.jsonrpc.pageService.resetCache(function(r) {
+			Vosao.showServiceMessages(r);
+		}, page.friendlyURL);
+	}
 }

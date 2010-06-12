@@ -55,6 +55,8 @@
 </head>
 <body>
 
+<div id="loading" style="display: none">Loading...</div>
+
 <div id="topbar">
     <div id="rightmenu" style="margin-right: 30px">
         #parse('/layouts/locale.vm')

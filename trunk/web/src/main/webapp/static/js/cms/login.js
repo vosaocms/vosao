@@ -39,7 +39,9 @@ $(function() {
     		Vosao.error(messages.email_is_empty);
     		return false;
     	}
+    	$('#loading').show();
     	Vosao.jsonrpc.loginFrontService.forgotPassword(function(r) {
+    		$('#loading').hide();
     		if (r.result == 'success') {
     	    	Vosao.info(messages['login.password_letter_success']);
     		}

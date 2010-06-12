@@ -47,6 +47,7 @@ public class UpdateManager {
 		tasks = new ArrayList<UpdateTask>();
 		tasks.add(new UpdateTask04(business));
 		tasks.add(new UpdateTask05(business));
+		tasks.add(new UpdateTask06(business));
 	}
 	
 	public String update() throws UpdateException {

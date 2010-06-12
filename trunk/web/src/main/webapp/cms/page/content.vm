@@ -65,6 +65,8 @@
         value="$messages.get("approve")" />
     <input id="restoreButton" type="button" 
         value="$messages.get("restore")" />
+    <input id="resetCacheButton" type="button" 
+        value="$messages.get("page.reset_cache")" />
     <input id="contentCancelButton" type="button" 
         value="$messages.get("cancel")" />
 </div>    

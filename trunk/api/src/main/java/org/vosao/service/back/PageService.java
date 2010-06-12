@@ -101,4 +101,5 @@ public interface PageService extends AbstractService {
 	ServiceResponse copyPage(final Long pageId, final Long refPageId, 
 			final String type);
 	
+	ServiceResponse resetCache(String url);
 }

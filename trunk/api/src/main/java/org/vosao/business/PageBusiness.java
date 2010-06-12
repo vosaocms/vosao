@@ -80,8 +80,11 @@ public interface PageBusiness {
 	 */
 	List<PageEntity> selectByUrl(final String url);
 	
-	
-	
+	/**
+	 * With added business processing dao version.
+	 */
+	void save(PageEntity page);
+		
 	TreeItemDecorator<PageEntity> getTree(final List<PageEntity> pages);
 		
 	TreeItemDecorator<PageEntity> getTree();

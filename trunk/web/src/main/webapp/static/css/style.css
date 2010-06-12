@@ -81,7 +81,7 @@ input[type=text], input[type=password], select {
     left: 0;
     z-index: 5000;
     background-color: yellow;
-    font-size: 15px;
+    font-size: 17px;
     color: red;
     padding: 2px 6px;
 }

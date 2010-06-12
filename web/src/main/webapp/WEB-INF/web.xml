@@ -163,6 +163,10 @@
         <url-pattern>/i18n.js</url-pattern>
     </servlet-mapping>
 
+	<welcome-file-list>
+		<welcome-file>index.vm</welcome-file>
+	</welcome-file-list>
+
     <!-- Google AppStats -->
     
     <!-- filter>

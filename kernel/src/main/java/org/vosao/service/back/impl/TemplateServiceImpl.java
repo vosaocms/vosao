@@ -102,7 +102,7 @@ public class TemplateServiceImpl extends AbstractServiceImpl
 		}
 		else {
 			return ServiceResponse.createErrorResponse(
-					Messages.get("templates.errors_occured"), errors);			
+					Messages.get("errors_occured"), errors);			
 		}
 	}
 

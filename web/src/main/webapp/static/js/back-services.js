@@ -39,9 +39,11 @@ Vosao.serviceHandler = function(serviceFunc) {
 		var callback = arguments[0];
 		var serviceFuncArgs = arguments;
 		serviceFuncArgs[0] = function (r, e) {
+			$('#loading').hide();
 			if (Vosao.backServiceFailed(e)) return;
 			callback(r);
 		};
+		$('#loading').show();
 		serviceFunc.apply(null, serviceFuncArgs);
 	}
 };

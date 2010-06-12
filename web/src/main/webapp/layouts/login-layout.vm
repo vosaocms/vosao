@@ -55,7 +55,7 @@
 </head>
 <body>
 
-<div id="loading" style="display: none">Loading...</div>
+<div id="loading" style="display: none">$messages.get("loading")</div>
 
 <div id="topbar">
     <div id="rightmenu" style="margin-right: 30px">

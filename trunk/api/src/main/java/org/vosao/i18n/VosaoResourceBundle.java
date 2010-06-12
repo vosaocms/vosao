@@ -80,7 +80,7 @@ public class VosaoResourceBundle extends ResourceBundle {
 				return result;
 			}
 		}
-		return result;
+		return "_" + key + "_";
 	}
 
 	private List<ResourceBundle> getResourceBundles() {

@@ -22,7 +22,7 @@
 var fileId = Vosao.getQueryParam('id');
 var folderId = Vosao.getQueryParam('folderId');
 var file = '';
-var editMode = fileId =! false;
+var editMode = fileId != '';
 var autosaveTimer = '';
 
 $(function() {

@@ -27,9 +27,9 @@ import java.util.Map;
 
 import org.vosao.business.SetupBean;
 import org.vosao.business.impl.SetupBeanImpl;
-import org.vosao.business.impl.mq.message.ExportMessage;
 import org.vosao.business.impl.mq.subscriber.ExportTaskSubscriber;
 import org.vosao.business.mq.Topic;
+import org.vosao.business.mq.message.ExportMessage;
 import org.vosao.business.mq.message.SimpleMessage;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FileEntity;

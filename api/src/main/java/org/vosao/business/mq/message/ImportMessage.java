@@ -19,9 +19,7 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.impl.mq.message;
-
-import java.util.List;
+package org.vosao.business.mq.message;
 
 import org.vosao.business.mq.AbstractMessage;
 import org.vosao.business.mq.QueueSpeed;
@@ -32,77 +30,62 @@ import org.vosao.business.mq.Topic;
  * @author Alexander Oleynik
  *
  */
-public class ExportMessage extends AbstractMessage {
+public class ImportMessage extends AbstractMessage {
 
 	public static class Builder {
-		
 		private String filename;
+		private int start;
 		private String currentFile;
 		private int fileCounter;
-		private String exportType;
-		private List<Long> ids;
-		private Long folderId;
-
-		public ExportMessage create() {
-			return new ExportMessage(filename, currentFile, fileCounter,
-					exportType, ids, folderId);
+		
+		public ImportMessage create() {
+			return new ImportMessage(filename, start, currentFile, fileCounter);
 		}
-
+		
 		public Builder setFilename(String filename) {
 			this.filename = filename;
 			return this;
 		}
-
+		
+		public Builder setStart(int start) {
+			this.start = start;
+			return this;
+		}
+		
 		public Builder setCurrentFile(String currentFile) {
 			this.currentFile = currentFile;
 			return this;
 		}
-
+		
 		public Builder setFileCounter(int fileCounter) {
 			this.fileCounter = fileCounter;
-			return this;
-		}
-
-		public Builder setExportType(String exportType) {
-			this.exportType = exportType;
-			return this;
-		}
-
-		public Builder setIds(List<Long> ids) {
-			this.ids = ids;
-			return this;
-		}
-
-		public Builder setFolderId(Long folderId) {
-			this.folderId = folderId;
 			return this;
 		}
 		
 	}
 	
-	
 	private String filename;
+	private int start;
 	private String currentFile;
 	private int fileCounter;
-	private String exportType;
-	private List<Long> ids;
-	private Long folderId;
-	
-	private ExportMessage(String filename, String currentFile, int fileCounter,
-			String exportType, List<Long> ids, Long folderId) {
+
+	public ImportMessage(String filename, int start, String currentFile,
+			int fileCounter) {
 		super();
-		setTopic(Topic.EXPORT.name());
+		setTopic(Topic.IMPORT.name());
 		setSpeed(QueueSpeed.LOW);
 		this.filename = filename;
+		this.start = start;
 		this.currentFile = currentFile;
 		this.fileCounter = fileCounter;
-		this.exportType = exportType;
-		this.ids = ids;
-		this.folderId = folderId;
 	}
 
 	public String getFilename() {
 		return filename;
+	}
+
+	public int getStart() {
+		return start;
 	}
 
 	public String getCurrentFile() {
@@ -112,17 +95,6 @@ public class ExportMessage extends AbstractMessage {
 	public int getFileCounter() {
 		return fileCounter;
 	}
-
-	public String getExportType() {
-		return exportType;
-	}
-
-	public List<Long> getIds() {
-		return ids;
-	}
-
-	public Long getFolderId() {
-		return folderId;
-	}
+	
 	
 }

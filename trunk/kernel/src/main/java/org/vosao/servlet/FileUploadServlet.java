@@ -41,7 +41,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.io.FilenameUtils;
 import org.datanucleus.util.StringUtils;
-import org.vosao.business.impl.mq.message.ImportMessage;
+import org.vosao.business.mq.message.ImportMessage;
 import org.vosao.common.UploadException;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;

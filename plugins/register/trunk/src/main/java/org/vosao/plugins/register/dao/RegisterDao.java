@@ -22,7 +22,6 @@
 package org.vosao.plugins.register.dao;
 
 import org.vosao.business.Business;
-import org.vosao.dao.AbstractDao;
 import org.vosao.dao.Dao;
 
 public class RegisterDao {
@@ -39,16 +38,9 @@ public class RegisterDao {
 		return getBusiness().getDao();
 	}
 
-	private void injectDependencies(AbstractDao bean) {
-		bean.setEntityCache(getDao().getEntityCache());
-		bean.setQueryCache(getDao().getQueryCache());
-		bean.setSystemService(getBusiness().getSystemService());
-	}
-	
 	public RegistrationDao getRegistrationDao() {
 		if (registrationDao == null) {
 			registrationDao = new RegistrationDaoImpl();
-			injectDependencies(registrationDao);
 		}
 		return registrationDao;
 	}
@@ -56,7 +48,6 @@ public class RegisterDao {
 	public RegisterConfigDao getRegisterConfigDao() {
 		if (registerConfigDao == null) {
 			registerConfigDao = new RegisterConfigDaoImpl();
-			injectDependencies(registerConfigDao);
 		}
 		return registerConfigDao;
 	}

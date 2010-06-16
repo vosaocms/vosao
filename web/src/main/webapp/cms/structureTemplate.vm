@@ -31,12 +31,12 @@
 
 <div id="tab-1">
     <div class="form-row">
-        <label>$messages.get("name")</label>
-        <input id="name" type="text" />
-    </div>
-    <div class="form-row">
         <label>$messages.get("title")</label>
         <input id="title" type="text" />
+    </div>
+    <div class="form-row">
+        <label>$messages.get("name")</label>
+        <input id="name" type="text" />
     </div>
     <!-- div class="form-row">
         <label>$messages.get("template_type")</label>

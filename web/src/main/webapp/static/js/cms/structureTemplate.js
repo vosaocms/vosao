@@ -35,7 +35,19 @@ $(function(){
     $('#saveContinueButton').click(onSaveContinue);
     $('#saveButton').click(onSave);
     $('#cancelButton').click(onCancel);
+    $('#title').change(onTitleChange);
 });
+
+function onTitleChange() {
+	if (editMode) {
+		return;
+	}
+	var name = $("#name").val();
+	var title = $("#title").val();
+	if (name == '') {
+		$("#name").val(Vosao.urlFromTitle(title));
+	}
+}
 
 function onSaveContinue() {
 	onUpdate(true);

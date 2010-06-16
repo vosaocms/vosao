@@ -299,8 +299,8 @@ function showTemplates() {
 	$.each(templates, function(i, template) {
 		h += '<tr><td><input type="checkbox" value="' + template.id + '"></td>'
 			+ '<td><a href="structureTemplate.vm?id=' + template.id + '">'
-		    + template.name + '</a></td>'
-		    + '<td>' + template.title + '</td>'
+		    + template.title + '</a></td>'
+		    + '<td>' + template.name + '</td>'
 		    + '<td>' + getTemplateType(template.typeString) + '</td></tr>';
 	});
 	$('#templates').html(h + '</table>');

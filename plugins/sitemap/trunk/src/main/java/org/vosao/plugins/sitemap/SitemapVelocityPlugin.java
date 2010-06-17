@@ -37,6 +37,7 @@ import org.dom4j.Element;
 import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.business.vo.PluginPropertyVO;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PluginEntity;
 import org.vosao.utils.ParamUtil;
@@ -144,5 +145,34 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 		return renderSitemap("org/vosao/plugins/sitemap/sitemapxml.vm");
 	}
 	
+	public String renderBreadcrumbs(String url) {
+		VosaoContext ctx = VosaoContext.getInstance();
+		StringBuilder b = new StringBuilder();
+		StringBuilder path = new StringBuilder("/");
+		PageEntity page = getBusiness().getPageBusiness().getByUrl(
+				path.toString());
+		b.append("<ul><li><a href=\"/\">")
+				.append(page.getLocalTitle(ctx.getLanguage()))
+				.append("</a></li>");
+		if (!url.equals("/")) {
+			path.deleteCharAt(0);
+			for (String part : url.substring(1).split("/")) {
+				path.append("/").append(part);
+				b.append("<li>");
+				page = getBusiness().getPageBusiness().getByUrl(path.toString());
+				if (path.toString().equals(url)) {
+					b.append(page.getLocalTitle(ctx.getLanguage()));
+				}
+				else {
+					b.append("<a href=\"").append(path).append("\">")
+						.append(page.getLocalTitle(ctx.getLanguage()))
+						.append("</a>");
+				}
+				b.append("</li>");
+			}
+		}
+		b.append("</ul>");
+		return b.toString();
+	}
 	
 }

@@ -85,12 +85,6 @@ public interface PageRenderDecorator {
 	Date getPublishDate();
 
 	/**
-	 * Get page publish date in dd.mm.yyyy format.
-	 * @return publish date in dd.mm.yyyy format
-	 */
-	String getPublishDateString();
-
-	/**
 	 * Comments enabled for page.
 	 * @return comments enabled or page flag.
 	 */
@@ -122,9 +116,9 @@ public interface PageRenderDecorator {
 
 	/**
 	 * Get page created date.
-	 * @return page created date in dd.mm.yyyy format.
+	 * @return page created date.
 	 */
-	String getCreateDate();
+	Date getCreateDate();
 
 	/**
 	 * Get modify user email.
@@ -134,10 +128,10 @@ public interface PageRenderDecorator {
 
 	/**
 	 * Get page modification date.
-	 * @return page modification date in dd.mm.yyyy format.
+	 * @return page modification date.
 	 */
-	String getModDate();
-	
+	Date getModDate();
+
 	String getKeywords();
 	
 	String getDescription();

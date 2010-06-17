@@ -80,7 +80,7 @@ public class FileServiceImpl extends AbstractServiceImpl
 						file.getFolderId());
 				String cacheUrl = getBusiness().getFolderBusiness()
 						.getFolderPath(folder) + "/" + file.getFilename();
-				getBusiness().getSystemService().getCache().remove(cacheUrl);
+				getBusiness().getSystemService().getFileCache().remove(cacheUrl);
 				return ServiceResponse.createSuccessResponse(
 						Messages.get("file.success_update"));
 			} catch (UnsupportedEncodingException e) {
@@ -139,7 +139,7 @@ public class FileServiceImpl extends AbstractServiceImpl
 					FolderUtil.getFileExt(file.getFilename())));
 			String cacheUrl = getBusiness().getFolderBusiness()
 					.getFolderPath(folder) + "/" + file.getFilename();
-			getBusiness().getSystemService().getCache().remove(cacheUrl);
+			getBusiness().getSystemService().getFileCache().remove(cacheUrl);
 			getDao().getFileDao().save(file);
 			return ServiceResponse.createSuccessResponse(
 					Messages.get("file.success_update"));

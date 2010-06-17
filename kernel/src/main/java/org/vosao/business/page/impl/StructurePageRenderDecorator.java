@@ -104,7 +104,7 @@ public class StructurePageRenderDecorator extends AbstractPageRenderDecorator {
 			VelocityContext context = getPageBusiness().createContext(
 				getLanguageCode()); 
 			context.put("content", contentMap);
-			context.put("page", getPage());
+			context.put("page", this);
 			setContent(getSystemService().render(structureTemplate.getContent(), 
 					context));
 		}

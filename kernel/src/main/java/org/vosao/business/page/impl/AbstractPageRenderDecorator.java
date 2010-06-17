@@ -120,10 +120,6 @@ public abstract class AbstractPageRenderDecorator implements PageRenderDecorator
 		return page.getPublishDate();
 	}
 	
-	public String getPublishDateString() {
-		return DateUtil.toString(page.getPublishDate());
-	}
-
 	public boolean isCommentsEnabled() {
 		return page.isCommentsEnabled();
 	}
@@ -144,16 +140,16 @@ public abstract class AbstractPageRenderDecorator implements PageRenderDecorator
 		return page.getCreateUserEmail();
 	}
 	
-	public String getCreateDate() {
-		return DateUtil.dateTimeToString(page.getCreateDate());
+	public Date getCreateDate() {
+		return page.getCreateDate();
 	}
 
 	public String getModUserEmail() {
 		return page.getModUserEmail();
 	}
 	
-	public String getModDate() {
-		return DateUtil.dateTimeToString(page.getModDate());
+	public Date getModDate() {
+		return page.getModDate();
 	}
 
 	public String getDescription() {

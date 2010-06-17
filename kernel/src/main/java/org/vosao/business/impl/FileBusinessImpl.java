@@ -98,6 +98,7 @@ public class FileBusinessImpl extends AbstractBusinessImpl
 						new Date(), data.length);
 			}
 			getDao().getFileDao().save(file, data);
+			getSystemService().getFileCache().remove(filename);
 			return file;
 		}
 		catch (Exception e) {

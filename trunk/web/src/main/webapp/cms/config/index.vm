@@ -93,6 +93,7 @@
         <input id="importButton" type="button" value="$messages.get("import")" />
         <input id="reindexButton" type="button" value="$messages.get("config.create_search_index")" />
         <input id="resetButton" type="button" value="$messages.get("reset")" />
+        <input id="loadDefaultSiteButton" type="button" value="$messages.get("config.load_default_site")" />
         <input id="cacheResetButton" type="button" value="$messages.get("config.cache_reset")" />
     </div>
   </form>

@@ -30,6 +30,7 @@ import org.vosao.business.Business;
 import org.vosao.business.SetupBean;
 import org.vosao.business.mq.MessageQueue;
 import org.vosao.business.mq.Topic;
+import org.vosao.business.mq.message.ImportMessage;
 import org.vosao.business.mq.message.SimpleMessage;
 import org.vosao.common.BCrypt;
 import org.vosao.common.VosaoContext;
@@ -53,6 +54,8 @@ public class SetupBeanImpl implements SetupBean {
 
 	private static Log log = LogFactory.getLog(SetupBeanImpl.class);
 
+	private static final String DEFAULT_SITE = "default.vz";
+	
 	private GroupEntity guests;
 	
 	public void setup() {
@@ -284,6 +287,22 @@ public class SetupBeanImpl implements SetupBean {
 		for (FolderEntity child : getDao().getFolderDao().getByParent(
 				folder.getId())) {
 			clearFileCache(child);
+		}
+	}
+
+	@Override
+	public void loadDefaultSite() {
+		try {
+			byte[] file = StreamUtil.getBytesResource(DEFAULT_SITE);
+			getBusiness().getSystemService().getCache().putBlob(
+					DEFAULT_SITE, file);
+			getMessageQueue().publish(new ImportMessage.Builder()
+					.setStart(1)
+					.setFilename(DEFAULT_SITE)
+					.create());
+		}
+		catch (IOException e) {
+			log.error("Can't load default site: " + e.getMessage());
 		}
 	}
 	

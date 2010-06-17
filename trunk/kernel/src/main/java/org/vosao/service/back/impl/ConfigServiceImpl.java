@@ -206,5 +206,12 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 				.setFolderId(folderId).create());
 		return ServiceResponse.createSuccessResponse(filename);
 	}
+
+	@Override
+	public ServiceResponse loadDefaultSite() {
+		getSetupBean().loadDefaultSite();
+		return ServiceResponse.createSuccessResponse(
+				Messages.get("success"));
+	}
 	
 }

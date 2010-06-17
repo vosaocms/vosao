@@ -34,5 +34,7 @@ public interface StructureTemplateDao extends
 	List<StructureTemplateEntity> selectByStructure(final Long structureId);
 
 	StructureTemplateEntity getByName(final String name);
+
+	StructureTemplateEntity getByTitle(final String title);
 	
 }

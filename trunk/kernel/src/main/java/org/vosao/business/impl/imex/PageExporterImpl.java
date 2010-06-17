@@ -154,7 +154,7 @@ public class PageExporterImpl extends AbstractExporter
 		StructureTemplateEntity structureTemplate = getDao()
 				.getStructureTemplateDao().getById(page.getStructureTemplateId());
 		pageElement.addElement("structureTemplate").setText(
-				structureTemplate == null ? ""	: structureTemplate.getTitle());
+				structureTemplate == null ? ""	: structureTemplate.getName());
 		pageElement.addElement("pageType").setText(page.getPageType().name());
 		pageElement.addElement("sortIndex").setText(
 				page.getSortIndex() == null ? "0" : page.getSortIndex().toString());
@@ -283,6 +283,10 @@ public class PageExporterImpl extends AbstractExporter
 			if (element.getName().equals("structureTemplate")) {
 				StructureTemplateEntity structureTemplate = getDao()
 						.getStructureTemplateDao().getByName(element.getText());
+				if (structureTemplate == null) {
+					structureTemplate = getDao()
+						.getStructureTemplateDao().getByTitle(element.getText());
+				}
 				newPage.setStructureTemplateId(structureTemplate == null ? null : 
 						structureTemplate.getId());
 			}

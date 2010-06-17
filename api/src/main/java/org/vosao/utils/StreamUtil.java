@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -56,6 +57,20 @@ public class StreamUtil {
 			buf.append(reader.readLine()).append("\n");
 		}
 		return buf.toString();
+	}
+
+	public static byte[] getBytesResource(final String path) 
+			throws IOException {
+		return getBytesResource(StreamUtil.class.getClassLoader(), path);
+	}
+	
+	public static byte[] getBytesResource(ClassLoader classLoader,
+			final String path) throws IOException {
+		InputStream in = getResource(classLoader, path);
+		if (in == null) {
+			throw new IOException("Empty input stream.");
+		}
+		return IOUtils.toByteArray(in);
 	}
 
 	/**

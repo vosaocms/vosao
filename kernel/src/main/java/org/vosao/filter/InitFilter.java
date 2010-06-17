@@ -73,6 +73,7 @@ public class InitFilter extends AbstractFilter implements Filter {
             	setupBean.clear();
             	setupBean.setup();
             	logger.info("Setup was successfully completed.");
+            	setupBean.loadDefaultSite();
             }
         	httpResponse.sendRedirect("/");
         	return;

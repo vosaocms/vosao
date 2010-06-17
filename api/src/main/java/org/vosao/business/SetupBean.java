@@ -51,4 +51,6 @@ public interface SetupBean {
 	 */
 	void clearFileCache();
 	
+	void loadDefaultSite();
+	
 }

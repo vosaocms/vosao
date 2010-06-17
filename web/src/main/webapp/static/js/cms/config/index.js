@@ -39,6 +39,7 @@ $(function(){
     $('#resetButton').click(onReset);
     $('#cacheResetButton').click(onCacheReset);
     $('#reindexButton').click(onReindex);
+    $('#loadDefaultSiteButton').click(onLoadDefaultSite);
     $('#okForm').submit(function() {onAfterUploadOk(); return false;});
     $('#exportForm').submit(function() {onStartExport(); return false;});
     $('#exportCancelButton').click(onExportCancel);
@@ -209,6 +210,14 @@ function onReindex() {
 function onCacheReset() {
 	if (confirm(messages.are_you_sure)) {
 		Vosao.jsonrpc.configService.cacheReset(function(r) {
+			Vosao.showServiceMessages(r);
+		});
+	}
+}
+
+function onLoadDefaultSite() {
+	if (confirm(messages.are_you_sure)) {
+		Vosao.jsonrpc.configService.loadDefaultSite(function(r) {
 			Vosao.showServiceMessages(r);
 		});
 	}

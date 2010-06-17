@@ -159,7 +159,10 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 					getDao().getFolderDao().save(newFolder);
 					parent = newFolder;
 				}
-				else return null;
+				else {
+					logger.error("access denied " + path);
+					return null;
+				}
 			}
 			else {
 				parent = folder.getEntity();

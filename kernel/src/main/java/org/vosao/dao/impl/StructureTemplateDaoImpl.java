@@ -52,6 +52,13 @@ public class StructureTemplateDaoImpl
 	public StructureTemplateEntity getByName(String name) {
 		Query q = newQuery();
 		q.addFilter("name", FilterOperator.EQUAL, name);
-		return selectOne(q, "getByTitle", params(name));
+		return selectOne(q, "getByName", params(name));
+	}
+
+	@Override
+	public StructureTemplateEntity getByTitle(String title) {
+		Query q = newQuery();
+		q.addFilter("title", FilterOperator.EQUAL, title);
+		return selectOne(q, "getByTitle", params(title));
 	}
 }

@@ -50,15 +50,20 @@ public class SessionCleanTaskSubscriber extends AbstractSubscriber {
 	        Query query = new Query("_ah_SESSION");
 	        PreparedQuery results = datastore.prepare(query);
 	        int i = 0;
+	        boolean end = true;
 	        for (Entity session : results.asIterable()) {
 	        	datastore.delete(session.getKey());
 	        	i++;
 	    		if (getBusiness().getSystemService()
 	    				.getRequestCPUTimeSeconds() > 25) {
 	    			addSessionCleanTask();
-	    			logger.info("Deleted " + i + " sessions.");
+	    			end = false;
 	    			break;
 	    		}
+	        }
+			logger.info("Deleted " + i + " sessions.");
+	        if (end) {
+	        	logger.info("Finished session cleaning.");
 	        }
 		}
 	}

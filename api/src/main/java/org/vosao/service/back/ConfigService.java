@@ -70,4 +70,5 @@ public interface ConfigService extends AbstractService {
 	 */
 	ServiceResponse startExportFolderTask(Long folderId);
 	
+	ServiceResponse loadDefaultSite();
 }

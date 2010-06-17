@@ -30,6 +30,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 
 /**
  * 
@@ -48,6 +49,8 @@ public class SessionCleanTaskSubscriber extends AbstractSubscriber {
 	        DatastoreService datastore = getBusiness().getSystemService()
 	        		.getDatastore(); 
 	        Query query = new Query("_ah_SESSION");
+	        query.addFilter("_expires", FilterOperator.LESS_THAN, 
+	        		System.currentTimeMillis());
 	        PreparedQuery results = datastore.prepare(query);
 	        int i = 0;
 	        boolean end = true;

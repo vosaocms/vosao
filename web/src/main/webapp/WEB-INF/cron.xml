@@ -8,6 +8,6 @@
   <cron>
     <url>/_ah/cron/session_clean</url>
     <description>Session clean from datastore</description>
-    <schedule>every monday 01:00</schedule>
+    <schedule>every day 01:00</schedule>
   </cron>
 </cronentries>

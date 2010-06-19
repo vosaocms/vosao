@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -187,7 +188,7 @@ public class EntityUtil {
 			entity.setProperty(name, value);
 		}
 		else {
-			entity.setUnindexedProperty(name, value);
+			entity.setUnindexedProperty(name, value); 
 		}
 	}
 

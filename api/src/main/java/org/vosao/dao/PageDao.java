@@ -21,6 +21,7 @@
 
 package org.vosao.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.vosao.entity.ContentEntity;
@@ -36,6 +37,17 @@ public interface PageDao extends BaseDao<PageEntity> {
 	List<PageEntity> selectAllChildren(final String parentUrl);
 	
 	/**
+	 * Select all children versions for parent page with publishDate in period
+	 * between startDate and endDate.
+	 * @param parentUrl - parent page url.
+	 * @param startDate - period start date (inclusive).
+	 * @param endDate - period end date (exclusive).
+	 * @return pages list.
+	 */
+	List<PageEntity> selectAllChildren(final String parentUrl,
+			final Date startDate, final Date endDate);
+
+	/**
 	 * Select pages latest versions by parent page.
 	 * @param url
 	 * @return
@@ -48,6 +60,16 @@ public interface PageDao extends BaseDao<PageEntity> {
 	 * @return
 	 */
 	List<PageEntity> getByParentApproved(final String url);
+
+	/**
+	 * Select pages approved latest versions by parent page.
+	 * @param url
+	 * @param startDate - period start date (inclusive).
+	 * @param endDate - period end date (exclusive).
+	 * @return
+	 */
+	List<PageEntity> getByParentApproved(final String url, Date startDate,
+			Date endDate);
 
 	/**
 	 * Get latest version approved page by url.

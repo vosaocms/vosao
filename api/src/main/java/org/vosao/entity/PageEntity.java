@@ -131,7 +131,7 @@ public class PageEntity extends BaseEntityImpl {
 		setProperty(entity, "friendlyURL", friendlyURL, true);
 		setProperty(entity, "parentUrl", parentUrl, true);
 		setProperty(entity, "template", template, true);
-		setProperty(entity, "publishDate", publishDate, false);
+		setProperty(entity, "publishDate", publishDate, true);
 		setProperty(entity, "commentsEnabled", commentsEnabled, false);
 		setProperty(entity, "version", version, true);
 		setProperty(entity, "versionTitle", versionTitle, false);

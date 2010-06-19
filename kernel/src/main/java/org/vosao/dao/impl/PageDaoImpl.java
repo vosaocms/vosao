@@ -23,6 +23,7 @@ package org.vosao.dao.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +83,17 @@ public class PageDaoImpl extends BaseDaoImpl<PageEntity>
 		return select(q, "selectAllChildren", params(parentUrl));
 	}
 	
+	public List<PageEntity> selectAllChildren(final String parentUrl,
+			Date startDate, Date endDate) {
+		Query q = newQuery();
+		q.addFilter("parentUrl", FilterOperator.EQUAL, parentUrl);
+		q.addFilter("publishDate", FilterOperator.GREATER_THAN_OR_EQUAL, 
+				startDate);
+		q.addFilter("publishDate", FilterOperator.LESS_THAN, endDate);
+		return select(q, "selectAllChildrenDate", params(parentUrl, startDate,
+				endDate));
+	}
+
 	@Override
 	public void remove(List<Long> ids) {
 		for (Long id : ids) {
@@ -189,6 +201,15 @@ public class PageDaoImpl extends BaseDaoImpl<PageEntity>
 	@Override
 	public List<PageEntity> getByParentApproved(final String url) {
 		List<PageEntity> result = filterApproved(selectAllChildren(url));
+		Collections.sort(result, PageHelper.PUBLISH_DATE_ASC);
+		return result;
+	}
+
+	@Override
+	public List<PageEntity> getByParentApproved(final String url, 
+			Date startDate, Date endDate) {
+		List<PageEntity> result = filterApproved(selectAllChildren(url,
+				startDate, endDate));
 		Collections.sort(result, PageHelper.PUBLISH_DATE_ASC);
 		return result;
 	}

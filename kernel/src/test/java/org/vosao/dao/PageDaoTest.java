@@ -21,13 +21,17 @@
 
 package org.vosao.dao;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.velocity.exception.ParseErrorException;
 import org.vosao.dao.tool.PageTool;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.enums.PageState;
+import org.vosao.utils.DateUtil;
+import org.vosao.utils.StrUtil;
 
 public class PageDaoTest extends AbstractDaoTest {
 
@@ -254,4 +258,27 @@ public class PageDaoTest extends AbstractDaoTest {
 		assertEquals(1, getDao().getPageDao().selectByStructureTemplate(3L).size());
 	}
 
+	private PageEntity addPage(String title, Date publishDate) {
+		PageEntity page = new PageEntity(title, "/" + title);
+		page.setPublishDate(publishDate);
+		page.setParentUrl("/");
+		page.setState(PageState.APPROVED);
+		return getDao().getPageDao().save(page);
+	}
+	
+	public void testGetByParentApprovedDate() {
+		try {
+			PageEntity page1 = addPage("test1", DateUtil.toDate("01.01.2010"));
+			PageEntity page2 = addPage("test2", DateUtil.toDate("10.01.2010"));
+			PageEntity page3 = addPage("test3", DateUtil.toDate("01.03.2010"));
+			Date start = DateUtil.toDate("01.01.2010");
+			Date end = DateUtil.toDate("01.02.2010");
+			List<PageEntity> list = getDao().getPageDao().getByParentApproved(
+					"/", start, end);
+			assertEquals(2, list.size());
+		}
+		catch (ParseException e) {
+		}
+	}
+	
 }

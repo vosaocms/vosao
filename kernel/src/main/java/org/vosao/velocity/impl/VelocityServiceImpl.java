@@ -40,6 +40,7 @@ import org.vosao.enums.UserRole;
 import org.vosao.i18n.Messages;
 import org.vosao.service.vo.CommentVO;
 import org.vosao.service.vo.UserVO;
+import org.vosao.utils.DateUtil;
 import org.vosao.utils.ListUtil;
 import org.vosao.velocity.PicasaVelocityService;
 import org.vosao.velocity.TagVelocityService;
@@ -238,6 +239,29 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 			picasaVelocityService = new PicasaVelocityServiceImpl(getBusiness());
 		}
 		return picasaVelocityService;
+	}
+
+	@Override
+	public List<PageEntity> findPageChildren(String path, Date startDate,
+			Date endDate) {
+		return getDao().getPageDao().getByParentApproved(path, startDate, 
+				endDate);
+	}
+
+	@Override
+	public List<PageEntity> findPageChildrenMonth(String path, int year,
+			int month) {
+		try {
+			Date startDate = DateUtil.toDate(String.format("01.%02d.%d", 
+					month, year));
+			Date endDate = DateUtil.toDate(String.format("01.%02d.%d", month + 1, 					
+					year));
+			return findPageChildren(path, startDate, endDate);
+		}
+		catch (Exception e) {
+			logger.error(e.getMessage());
+			return Collections.EMPTY_LIST;
+		}
 	}
 	
 }

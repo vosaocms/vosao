@@ -80,6 +80,28 @@ public interface VelocityService {
 
 	/**
 	 * Find approved last versions of children pages entity by parent page
+	 * friendlyURL and publish date in period between startDate end endDate.
+	 * @param path - firnedly url.
+	 * @param startDate - period start publish date (inclusive).
+	 * @param endDate - period end publish date (exclusive).
+	 * @return list of found pages.
+	 */
+	List<PageEntity> findPageChildren(final String path, 
+			final Date startDate, final Date endDate);
+
+	/**
+	 * Find approved last versions of children pages entity by parent page
+	 * friendlyURL and publish date in period adjusted by year and month.
+	 * @param path - firnedly url.
+	 * @param year - year of period.
+	 * @param month - month of period.
+	 * @return list of found pages.
+	 */
+	List<PageEntity> findPageChildrenMonth(final String path, 
+			final int year, final int month);
+
+	/**
+	 * Find approved last versions of children pages entity by parent page
 	 * friendlyURL. Ordered by sortIndex.
 	 * @param path - friendly url.
 	 * @return list of found pages.

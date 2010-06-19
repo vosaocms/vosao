@@ -61,6 +61,7 @@ public class AuthenticationFilter extends AbstractFilter implements Filter {
         String userEmail = (String)session.getAttribute(USER_SESSION_ATTR);
         UserEntity user = getDao().getUserDao().getByEmail(userEmail);
 		if (user == null) {
+			session.removeAttribute(USER_SESSION_ATTR);
 			ctx.setUser(null);
 			if (url.startsWith(CMS)) {
 				String originalUrl = httpRequest.getRequestURI() 

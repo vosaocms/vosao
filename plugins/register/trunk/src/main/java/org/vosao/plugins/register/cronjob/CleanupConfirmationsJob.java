@@ -21,11 +21,12 @@
 
 package org.vosao.plugins.register.cronjob;
 
+import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.joda.time.DateTime;
 import org.vosao.business.plugin.PluginCronJob;
 import org.vosao.plugins.register.dao.RegisterDao;
 import org.vosao.plugins.register.entity.RegisterConfigEntity;
@@ -48,18 +49,19 @@ public class CleanupConfirmationsJob implements PluginCronJob {
 	
 	@Override
 	public boolean isShowTime(Date date) {
-		DateTime dt = new DateTime(date);
+		Calendar cal = Calendar.getInstance();
 		// start at 01:00
-		return dt.hourOfDay().get() == 1 && dt.minuteOfHour().get() == 0;
+		return cal.get(Calendar.HOUR_OF_DAY) == 1 
+			&& cal.get(Calendar.MINUTE) == 0;
 	}
 
 	@Override
 	public void run() {
 		logger.info("Cleanup confirmations.");
-		DateTime dt = new DateTime();
-		dt = dt.minusDays(days);
+		Date dt = new Date();
+		dt = DateUtils.addDays(dt, -days);
 		for (RegistrationEntity reg : getRegisterDao().getRegistrationDao().select()) {
-			if (dt.isAfter(reg.getCreatedDate().getTime())) {
+			if (dt.after(reg.getCreatedDate())) {
 				getRegisterDao().getRegistrationDao().remove(reg.getId());
 			}
 		}

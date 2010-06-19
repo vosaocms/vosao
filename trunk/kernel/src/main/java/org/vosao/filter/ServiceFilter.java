@@ -46,8 +46,10 @@ public class ServiceFilter extends AbstractFilter implements Filter {
 			FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpSession session = httpRequest.getSession(true);
+		VosaoContext ctx = VosaoContext.getInstance();
         boolean backService = isLoggedIn(httpRequest) 
-        	&& !VosaoContext.getInstance().getUser().isSiteUser();
+        	&& ctx.getUser() != null 
+        	&& !ctx.getUser().isSiteUser();
 		enableFrontService(session);
         if (backService) {
         	enableBackService(session);

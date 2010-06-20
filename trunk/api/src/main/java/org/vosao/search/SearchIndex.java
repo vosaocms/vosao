@@ -19,37 +19,29 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.impl.mq.subscriber;
-
-import org.vosao.business.impl.mq.AbstractSubscriber;
-import org.vosao.business.mq.Message;
-import org.vosao.business.mq.message.SimpleMessage;
-import org.vosao.common.VosaoContext;
-import org.vosao.entity.PageEntity;
-import org.vosao.entity.helper.UserHelper;
+package org.vosao.search;
 
 /**
+ * Search index of all site pages for one language.
  * 
  * @author Alexander Oleynik
  *
  */
-public class IndexTaskSubscriber extends AbstractSubscriber {
+public interface SearchIndex {
 
-	public void onMessage(Message message) {
-		SimpleMessage msg = (SimpleMessage)message;
-		String id = msg.getMessage();
-		try {
-			VosaoContext.getInstance().setUser(UserHelper.ADMIN);
-			PageEntity page = getDao().getPageDao().getById(Long.valueOf(id));
-			if (page != null) {
-				getBusiness().getSearchEngine().updateIndex(page);
-				getBusiness().getSearchEngine().saveIndex();
-			}
-		}
-		catch(Exception e) {
-			logger.error(e.getMessage());
-			e.printStackTrace();
-		}
-	}
+	void updateIndex(Long pageId);
+
+	void removeFromIndex(Long pageId);
+
+	SearchResult search(final String query, int start, int count, int textSize);
 	
+	void saveIndex();
+	
+	/**
+	 * Reindex all site pages. 
+	 */
+	void reindex();
+	
+	String getLanguage();
+
 }

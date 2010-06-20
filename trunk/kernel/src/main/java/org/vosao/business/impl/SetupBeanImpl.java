@@ -70,7 +70,7 @@ public class SetupBeanImpl implements SetupBean {
 		initConfigs();
 		initForms();
 		initLanguages();
-		getBusiness().getSearchEngine().reindexInRequest();
+		getBusiness().getSearchEngine().reindex();
 	}
 	
 	private void initLanguages() {
@@ -126,25 +126,30 @@ public class SetupBeanImpl implements SetupBean {
 		List<PageEntity> roots = getDao().getPageDao().getByParent("");
 		if (roots.size() == 0) {
 			TemplateEntity template = getDao().getTemplateDao().getByUrl("simple");
-			addPage("Home page", "/", HOME_PAGE_FILE, template.getId(), 0);
+			addPage("Home page", "/", HOME_PAGE_FILE, template.getId(), 0, true, 
+					true);
 			getBusiness().getContentPermissionBusiness().setPermission(
 					"/", guests, ContentPermissionType.READ);
 	        addPage("Site user Login", "/login", LOGIN_PAGE_FILE, 
-	        		template.getId(), 0);
-	        addPage("Search", "/search", SEARCH_PAGE_FILE, template.getId(), 1);
+	        		template.getId(), 0, true, false);
+	        addPage("Search", "/search", SEARCH_PAGE_FILE, template.getId(), 1,
+	        		false, false);
 		}
 	}
 
 	private void addPage(String title, String url, String resource, 
-				Long templateId, Integer sortIndex) {
+				Long templateId, Integer sortIndex, boolean cached, 
+				boolean searchable) {
         String content = loadResource(resource);
-		PageEntity login = new PageEntity(title, url,	templateId);
-		login.setCreateUserEmail("admin@test.com");
-		login.setModUserEmail("admin@test.com");
-		login.setState(PageState.APPROVED);
-		login.setSortIndex(sortIndex);
-		getDao().getPageDao().save(login);
-		getDao().getPageDao().setContent(login.getId(), 
+		PageEntity page = new PageEntity(title, url,	templateId);
+		page.setCreateUserEmail("admin@test.com");
+		page.setModUserEmail("admin@test.com");
+		page.setState(PageState.APPROVED);
+		page.setSortIndex(sortIndex);
+		page.setCached(cached);
+		page.setSearchable(searchable);
+		getDao().getPageDao().save(page);
+		getDao().getPageDao().setContent(page.getId(), 
 				LanguageEntity.ENGLISH_CODE, content);
         log.info("Added " + title);
 	}

@@ -19,53 +19,40 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.mq;
+package org.vosao.business.impl.mq.subscriber;
+
+import java.util.Set;
+
+import org.vosao.business.impl.mq.AbstractSubscriber;
+import org.vosao.business.mq.Message;
+import org.vosao.business.mq.message.PageMessage;
+import org.vosao.common.VosaoContext;
+import org.vosao.entity.helper.UserHelper;
 
 /**
+ * Remove deleted pages from search index.
  * 
  * @author Alexander Oleynik
  *
  */
-public enum Topic {
-	
-	/**
-	 *  SimpleMessage: message -> user email
-	 */
-	LOGIN,
+public class IndexDeletedPages extends AbstractSubscriber {
 
-	/**
-	 *  SimpleMessage: message -> file url
-	 */
-	FILE_CHANGED,
-
-	/**
-	 *  ExportMessage
-	 */
-	EXPORT,
-	
-	/**
-	 *  ImportMessage
-	 */
-	IMPORT,
-
-	/**
-	 *  PageMessage
-	 */
-	PAGES_CHANGED,
-
-	/**
-	 *  PageMessage
-	 */
-	PAGES_DELETED,
-
-	/**
-	 * Full search reindex.
-	 */
-	REINDEX,
-	
-	/**
-	 * SimpleMessage: message -> mode
-	 */
-	SESSION_CLEAN;
+	public void onMessage(Message message) {
+		PageMessage msg = (PageMessage)message;
+		try {
+			VosaoContext.getInstance().setUser(UserHelper.ADMIN);
+			for (Set<Long> pages : msg.getPages().values()) {
+				for (Long pageId : pages) {
+					getBusiness().getSearchEngine()
+							.removeFromIndex(pageId);
+				}
+			}
+			getBusiness().getSearchEngine().saveIndex();
+		}
+		catch(Exception e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+	}
 	
 }

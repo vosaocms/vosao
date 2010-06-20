@@ -19,23 +19,22 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.search;
+package org.vosao.common;
 
-import org.vosao.entity.PageEntity;
 
-public interface SearchEngine {
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
+public class AppEngine {
 
-	void updateIndex(PageEntity page);
+	public static boolean isProduction() {
+		String value = System.getProperty("com.google.appengine.runtime.environment");
+		if (value != null && value.equals("Production")) {
+			return true;
+		}
+		return false;
+	}
 
-	void removeFromIndex(Long pageId);
-
-	SearchResult search(final String query, int start, int count,
-			String language, int textSize);
-	
-	/**
-	 * Start index creation procedure. Create index generator task.
-	 */
-	void reindex();
-	
-	void saveIndex();
 }

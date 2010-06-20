@@ -21,6 +21,7 @@
 
 package org.vosao.business;
 
+import org.vosao.business.mq.MessageQueue;
 import org.vosao.dao.Dao;
 import org.vosao.entity.UserEntity;
 import org.vosao.global.SystemService;
@@ -45,6 +46,8 @@ public interface Business {
 	UserEntity getUser();
 	
 	String getLanguage();
+	
+	MessageQueue getMessageQueue();
 
 	PageBusiness getPageBusiness();
 	void setPageBusiness(final PageBusiness bean);

@@ -34,7 +34,9 @@ import org.apache.commons.logging.LogFactory;
 import org.vosao.business.impl.mq.subscriber.ExportTaskSubscriber;
 import org.vosao.business.impl.mq.subscriber.FileChangedSubscriber;
 import org.vosao.business.impl.mq.subscriber.ImportTaskSubscriber;
-import org.vosao.business.impl.mq.subscriber.IndexTaskSubscriber;
+import org.vosao.business.impl.mq.subscriber.IndexChangedPages;
+import org.vosao.business.impl.mq.subscriber.IndexDeletedPages;
+import org.vosao.business.impl.mq.subscriber.Reindex;
 import org.vosao.business.impl.mq.subscriber.SessionCleanTaskSubscriber;
 import org.vosao.business.mq.Message;
 import org.vosao.business.mq.MessageQueue;
@@ -70,7 +72,9 @@ public class MessageQueueImpl implements MessageQueue {
 		subscribe(Topic.EXPORT.name(), new ExportTaskSubscriber());
 		subscribe(Topic.SESSION_CLEAN.name(), new SessionCleanTaskSubscriber());
 		subscribe(Topic.IMPORT.name(), new ImportTaskSubscriber());
-		subscribe(Topic.INDEX_PAGE.name(), new IndexTaskSubscriber());
+		subscribe(Topic.PAGES_DELETED.name(), new IndexDeletedPages());
+		subscribe(Topic.PAGES_CHANGED.name(), new IndexChangedPages());
+		subscribe(Topic.REINDEX.name(), new Reindex());
 	}
 
 	private SystemService getSystemService() {

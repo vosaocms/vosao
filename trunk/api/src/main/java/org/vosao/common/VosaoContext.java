@@ -31,6 +31,8 @@ import org.vosao.entity.UserEntity;
 import org.vosao.service.BackService;
 import org.vosao.service.FrontService;
 
+import com.google.appengine.api.utils.SystemProperty;
+
 /**
  * Because of GAE is single threaded we can store request scoped data in 
  * singleton and set it in filter.
@@ -85,14 +87,27 @@ public class VosaoContext {
 		this.user = user;
 	}
 	
-	
 	private static VosaoContext instance;
+	private static ThreadLocal<VosaoContext> threadInstance;
 	
 	public static VosaoContext getInstance() {
-		if (instance == null) {
-			instance = new VosaoContext();
+		if (AppEngine.isProduction()) {
+			if (instance == null) {
+				instance = new VosaoContext();
+			}
+			return instance;
 		}
-		return instance;
+		else {
+			if (threadInstance == null) {
+				threadInstance = new ThreadLocal<VosaoContext>() {
+					@Override
+					protected VosaoContext initialValue() {
+						return new VosaoContext();
+					}
+				};
+			}
+			return threadInstance.get();
+		}
 	}
 	
 	public int getRequestCount() {

@@ -126,8 +126,7 @@ public interface PageBusiness {
 	 * @param content
 	 * @param language
 	 */
-	void saveContent(PageEntity page, String language, String content, 
-			boolean oldSearchable, boolean searchable);
+	void saveContent(PageEntity page, String language, String content);
 	
 	/**
 	 * Get next sort index for new page.

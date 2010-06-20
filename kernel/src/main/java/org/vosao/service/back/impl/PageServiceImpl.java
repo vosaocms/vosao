@@ -169,7 +169,6 @@ public class PageServiceImpl extends AbstractServiceImpl
 		if (vo.get("commentsEnabled") != null) {
 			page.setCommentsEnabled(Boolean.valueOf(vo.get("commentsEnabled")));
 		}
-		boolean oldSearchable = page.isSearchable();
 		if (vo.get("searchable") != null) {
 			page.setSearchable(Boolean.valueOf(vo.get("searchable")));
 		}
@@ -241,7 +240,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 			getPageBusiness().save(page);
 			if (vo.containsKey("content")) {
 				getPageBusiness().saveContent(page, languageCode,
-						vo.get("content"), oldSearchable, page.isSearchable());
+						vo.get("content"));
 			}
 			return ServiceResponse.createSuccessResponse(page.getId()
 					.toString());
@@ -428,8 +427,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 					"access_denied"));
 		}
 		getPageBusiness().save(page);
-		getPageBusiness().saveContent(page, language, content,
-				page.isSearchable(), page.isSearchable());
+		getPageBusiness().saveContent(page, language, content);
 		return ServiceResponse.createSuccessResponse(
 				Messages.get("page.success_restore"));
 	}

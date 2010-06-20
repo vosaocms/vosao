@@ -19,23 +19,31 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.search;
+package org.vosao.business.impl.mq.subscriber;
 
-import org.vosao.entity.PageEntity;
+import org.vosao.business.impl.mq.AbstractSubscriber;
+import org.vosao.business.mq.Message;
+import org.vosao.common.VosaoContext;
+import org.vosao.entity.helper.UserHelper;
 
-public interface SearchEngine {
+/**
+ * Reindex all pages.
+ * 
+ * @author Alexander Oleynik
+ *
+ */
+public class Reindex extends AbstractSubscriber {
 
-	void updateIndex(PageEntity page);
-
-	void removeFromIndex(Long pageId);
-
-	SearchResult search(final String query, int start, int count,
-			String language, int textSize);
+	public void onMessage(Message message) {
+		try {
+			VosaoContext.getInstance().setUser(UserHelper.ADMIN);
+			getBusiness().getSearchEngine().reindex();
+			getBusiness().getSearchEngine().saveIndex();
+		}
+		catch(Exception e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+	}
 	
-	/**
-	 * Start index creation procedure. Create index generator task.
-	 */
-	void reindex();
-	
-	void saveIndex();
 }

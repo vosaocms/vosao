@@ -19,23 +19,45 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.search;
+package org.vosao.business.mq.message;
 
-import org.vosao.entity.PageEntity;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-public interface SearchEngine {
+import org.vosao.business.mq.AbstractMessage;
+import org.vosao.business.mq.Topic;
 
-	void updateIndex(PageEntity page);
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
+public class PageMessage extends AbstractMessage {
 
-	void removeFromIndex(Long pageId);
-
-	SearchResult search(final String query, int start, int count,
-			String language, int textSize);
+	private Map<String, Set<Long>> pages;
 	
-	/**
-	 * Start index creation procedure. Create index generator task.
-	 */
-	void reindex();
+	public PageMessage(Topic topic) {
+		super();
+		setTopic(topic.name());	
+	}
 	
-	void saveIndex();
+	public PageMessage(Topic topic, String pageURL, 
+			Long pageId) {
+		this(topic);
+		pages = new HashMap<String, Set<Long>>();
+		addPage(pageURL, pageId);
+	}
+
+	public void addPage(String url, Long id) {
+		if (!pages.containsKey(url)) {
+			pages.put(url, new HashSet<Long>());
+		}
+		pages.get(url).add(id);
+	}
+	
+	public Map<String, Set<Long>> getPages() {
+		return pages;
+	}
 }

@@ -36,17 +36,17 @@ public class Hit {
 		this.page = page;
 	}
 	
+	public Hit(PageEntity page, String aContent) {
+		super();
+		this.page = page;
+		content = aContent;
+	}
+
 	public String getContent() {
 		return content;
 	}
-	
+
 	public void setContent(String content) {
-		this.content = content;
-	}
-	
-	public Hit(PageEntity page, String content) {
-		super();
-		this.page = page;
 		this.content = content;
 	}
 	

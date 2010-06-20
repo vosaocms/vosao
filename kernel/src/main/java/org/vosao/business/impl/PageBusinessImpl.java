@@ -26,8 +26,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
@@ -50,6 +52,9 @@ import org.vosao.business.impl.pagefilter.HeadBeginPageFilter;
 import org.vosao.business.impl.pagefilter.HeadEndPageFilter;
 import org.vosao.business.impl.pagefilter.HtmlEndPageFilter;
 import org.vosao.business.impl.pagefilter.PageFilter;
+import org.vosao.business.mq.Topic;
+import org.vosao.business.mq.message.PageMessage;
+import org.vosao.business.mq.message.SimpleMessage;
 import org.vosao.business.page.PageRenderDecorator;
 import org.vosao.business.page.impl.SimplePageRenderDecorator;
 import org.vosao.business.page.impl.StructurePageRenderDecorator;
@@ -369,11 +374,13 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	@Override
 	public void remove(List<Long> ids) {
 		List<Long> removeIds = new ArrayList<Long>();
+		PageMessage message = new PageMessage(Topic.PAGES_DELETED);
 		for (Long id : ids) {
 			PageEntity page = getDao().getPageDao().getById(id);
 			if (page != null) {
 				if (canWritePage(page.getFriendlyURL())) {
 					removeIds.add(id);
+					message.addPage(page.getFriendlyURL(), id);
 				}
 			}
 		}
@@ -393,6 +400,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		}
 		getBusiness().getFolderBusiness().recursiveRemove(folderIds);
 		getDao().getPageDao().remove(removeIds);
+		getBusiness().getMessageQueue().publish(message);
 	}
 
 	@Override
@@ -417,6 +425,9 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 				getDao().getPageDao().removeVersion(id);
 				getBusiness().getSystemService().getPageCache().remove(
 						page.getFriendlyURL());
+				PageMessage message = new PageMessage(Topic.PAGES_DELETED,
+						page.getFriendlyURL(), id);
+				getBusiness().getMessageQueue().publish(message);
 			}
 		}
 	}
@@ -470,28 +481,13 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	}
 
 	@Override
-	public void saveContent(PageEntity page, String language, String content,
-			boolean oldSearchable, boolean searchable) {
+	public void saveContent(PageEntity page, String language, String content) {
 		ContentEntity contentEntity = getDao().getPageDao().setContent(
 				page.getId(), language, content);
 		getSystemService().getPageCache().remove(page.getFriendlyURL());
-		if (searchable) {
-			if (oldSearchable) {
-				getBusiness().getSearchEngine().updateIndex(contentEntity);
-			}
-			else {
-				getBusiness().getSearchEngine().updateIndex(page);
-			}
-		}
-		else {
-			if (oldSearchable) {
-				getBusiness().getSearchEngine().removeFromIndex(contentEntity);
-			}
-			else {
-				getBusiness().getSearchEngine().removeFromIndex(page);
-			}
-		}
-		getBusiness().getSearchEngine().saveIndex();
+		PageMessage message = new PageMessage(Topic.PAGES_CHANGED,
+				page.getFriendlyURL(), page.getId());
+		getBusiness().getMessageQueue().publish(message);
 	}
 
 	@Override
@@ -718,6 +714,9 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		getDao().getPageDao().save(page);
 		getBusiness().getSystemService().getPageCache().remove(
 				page.getFriendlyURL());
+		PageMessage message = new PageMessage(Topic.PAGES_CHANGED,
+				page.getFriendlyURL(), page.getId());
+		getBusiness().getMessageQueue().publish(message);
 	}
 
 }

@@ -46,6 +46,7 @@ import org.vosao.business.StructureTemplateBusiness;
 import org.vosao.business.TagBusiness;
 import org.vosao.business.TemplateBusiness;
 import org.vosao.business.UserBusiness;
+import org.vosao.business.mq.MessageQueue;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.dao.impl.DaoImpl;
@@ -95,6 +96,11 @@ public class BusinessImpl implements Business, Serializable {
 		return VosaoContext.getInstance().getUser();
 	}
 	
+	@Override
+	public MessageQueue getMessageQueue() {
+		return VosaoContext.getInstance().getMessageQueue();
+	}
+
 	@Override
 	public PageBusiness getPageBusiness() {
 		if (pageBusiness == null) {

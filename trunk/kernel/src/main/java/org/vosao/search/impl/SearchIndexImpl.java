@@ -50,7 +50,6 @@ public class SearchIndexImpl implements SearchIndex {
 			SearchIndexImpl.class);
 
 	private static final String INDEX_MOD_DATE = "IndexModDate";
-	private static final int SEARCH_TEXT_SIZE = 160;
 
 	private String language;
 	private Map<String, Set<Long>> index;
@@ -161,8 +160,8 @@ public class SearchIndexImpl implements SearchIndex {
 				if (content != null) {
 					String text = StrUtil.extractTextFromHTML(
 							content.getContent());
-					if (text.length() > SEARCH_TEXT_SIZE) {
-						text = text.substring(0, SEARCH_TEXT_SIZE);
+					if (text.length() > textSize) {
+						text = text.substring(0, textSize);
 					}
 					result.getHits().add(new Hit(page, text));
 				}

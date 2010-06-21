@@ -34,8 +34,9 @@ import org.vosao.service.FrontService;
 import com.google.appengine.api.utils.SystemProperty;
 
 /**
- * Because of GAE is single threaded we can store request scoped data in 
- * singleton and set it in filter.
+ * Though GAE is single threaded we can store request scoped data in 
+ * thread local variable (development enviroenmt jetty is still multithreaded)
+ * and set it in filter.
  * 
  * @author Alexander Oleynik
  */
@@ -87,27 +88,18 @@ public class VosaoContext {
 		this.user = user;
 	}
 	
-	private static VosaoContext instance;
 	private static ThreadLocal<VosaoContext> threadInstance;
 	
 	public static VosaoContext getInstance() {
-		if (AppEngine.isProduction()) {
-			if (instance == null) {
-				instance = new VosaoContext();
-			}
-			return instance;
+		if (threadInstance == null) {
+			threadInstance = new ThreadLocal<VosaoContext>() {
+				@Override
+				protected VosaoContext initialValue() {
+					return new VosaoContext();
+				}
+			};
 		}
-		else {
-			if (threadInstance == null) {
-				threadInstance = new ThreadLocal<VosaoContext>() {
-					@Override
-					protected VosaoContext initialValue() {
-						return new VosaoContext();
-					}
-				};
-			}
-			return threadInstance.get();
-		}
+		return threadInstance.get();
 	}
 	
 	public int getRequestCount() {

@@ -128,8 +128,26 @@ public class StrUtil {
 		return buf.toString();
 	}
 	
+	private static final String[] VELOCITY_PATTERNS = {"\\$\\{.*\\}",
+		"##.*$", 
+		"#for\\s*\\(.*", 
+		"#set\\s*\\(.*",
+		"\\$\\w+\\.\\w+\\(.*\\)", 
+		"\\$\\w+\\.\\w+",
+		"#if\\s*\\(.*\\)", 
+		"#end"};
+	
+	private static final String[] XML_PATTERNS = {"<\\!\\[CDATA\\[", "\\]\\]>"}; 
+	
 	public static String extractTextFromHTML(String html) {
-		return removeJavascript(html).replaceAll("<.*?>", "");
+		String result = removeJavascript(html).replaceAll("<.*?>", "");
+		for (String pattern : VELOCITY_PATTERNS) {
+			result = result.replaceAll(pattern, "");
+		}
+		for (String pattern : XML_PATTERNS) {
+			result = result.replaceAll(pattern, "");
+		}
+		return result;
 	}
 
 	public static List<Long> toLong(List<String> list) {

@@ -12,6 +12,15 @@
     <name>Vosao CMS java api</name>
     
     <dependencies>
+        
+        <!--unit test related dependencies-->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
 
         <!--servlet and jsp api -->
 

@@ -29,6 +29,26 @@ public class StrUtilTest extends TestCase {
 		String html = "<b>\nb\n</b>re <script type=\"text/javascript\">test \n\nvar x = 0; \nfunction f() {};\n</script>d";
 		String text = StrUtil.extractTextFromHTML(html);
 		assertEquals("\nb\nre d", text);
+		assertEquals("test", 
+				StrUtil.extractTextFromHTML("test${plugin.form.render()}"));
+		assertEquals("test", 
+				StrUtil.extractTextFromHTML("test## my velocity comment"));
+		assertEquals("test", 
+				StrUtil.extractTextFromHTML("test#for ($i in $pages)"));
+		assertEquals("test", 
+				StrUtil.extractTextFromHTML("test#set($i = 0)"));
+		assertEquals("test", 
+				StrUtil.extractTextFromHTML("test$page.friendlyURL"));
+		assertEquals("test", 
+				StrUtil.extractTextFromHTML("test$service.findContent(1, 2)"));
+		assertEquals("test", 
+				StrUtil.extractTextFromHTML("test#if ($d == 5)"));
+		assertEquals("test", 
+				StrUtil.extractTextFromHTML("test#end"));
+		assertEquals("test", 
+				StrUtil.extractTextFromHTML("test<![CDATA["));
+		assertEquals("test", 
+				StrUtil.extractTextFromHTML("test]]>"));
 	}
 	
 	public void testSplitByWord() {

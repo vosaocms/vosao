@@ -26,7 +26,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.vosao.business.mq.AbstractMessage;
 import org.vosao.business.mq.Topic;
 
 /**
@@ -34,19 +33,22 @@ import org.vosao.business.mq.Topic;
  * @author Alexander Oleynik
  *
  */
-public class PageMessage extends AbstractMessage {
+public class PageMessage extends SimpleMessage {
 
 	private Map<String, Set<Long>> pages;
 	
 	public PageMessage(Topic topic) {
-		super();
-		setTopic(topic.name());	
+		this(topic, null);
 	}
 	
+	public PageMessage(Topic topic, String message) {
+		super(topic, message);
+		pages = new HashMap<String, Set<Long>>();
+	}
+
 	public PageMessage(Topic topic, String pageURL, 
 			Long pageId) {
 		this(topic);
-		pages = new HashMap<String, Set<Long>>();
 		addPage(pageURL, pageId);
 	}
 

@@ -21,9 +21,12 @@
 
 package org.vosao.business.impl.mq.subscriber;
 
+import org.datanucleus.util.StringUtils;
 import org.vosao.business.impl.mq.AbstractSubscriber;
 import org.vosao.business.mq.Message;
+import org.vosao.business.mq.message.PageMessage;
 import org.vosao.common.VosaoContext;
+import org.vosao.entity.PageEntity;
 import org.vosao.entity.helper.UserHelper;
 
 /**
@@ -37,13 +40,24 @@ public class Reindex extends AbstractSubscriber {
 	public void onMessage(Message message) {
 		try {
 			VosaoContext.getInstance().setUser(UserHelper.ADMIN);
-			getBusiness().getSearchEngine().reindex();
-			getBusiness().getSearchEngine().saveIndex();
+			PageMessage m = (PageMessage)message; 
+			if (!StringUtils.isEmpty(m.getMessage()) 
+					&& m.getMessage().equals("save")) {
+				getBusiness().getSearchEngine().saveIndex();
+			}
+			if (StringUtils.isEmpty(m.getMessage())) {
+				for (String url : m.getPages().keySet()) {
+					for (Long id : m.getPages().get(url)) {
+						PageEntity page = getDao().getPageDao().getById(id);
+						getBusiness().getSearchEngine().updateIndex(page);
+					}
+				}
+			}
 		}
 		catch(Exception e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
 	}
-	
+
 }

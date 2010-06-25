@@ -138,6 +138,8 @@ public class StrUtil {
 		"#end"};
 	
 	private static final String[] XML_PATTERNS = {"<\\!\\[CDATA\\[", "\\]\\]>"}; 
+	private static final String[] HTML_PATTERNS = {"\\&gt;", "\\&lt;", "\\&nbsp;",
+		"[\\W&&[^ ]]"}; 
 	
 	public static String extractTextFromHTML(String html) {
 		String result = removeJavascript(html).replaceAll("<.*?>", "");
@@ -146,6 +148,9 @@ public class StrUtil {
 		}
 		for (String pattern : XML_PATTERNS) {
 			result = result.replaceAll(pattern, "");
+		}
+		for (String pattern : HTML_PATTERNS) {
+			result = result.replaceAll(pattern, " ");
 		}
 		return result;
 	}

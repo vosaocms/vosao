@@ -22,6 +22,7 @@
 package org.vosao.business.mq.message;
 
 import org.vosao.business.mq.AbstractMessage;
+import org.vosao.business.mq.Topic;
 
 /**
  * 
@@ -36,6 +37,10 @@ public class SimpleMessage extends AbstractMessage {
 		super();
 		setTopic(topic);
 		message = msg;
+	}
+
+	public SimpleMessage(Topic topic, String msg) {
+		this(topic.name(), msg);
 	}
 
 	public String getMessage() {

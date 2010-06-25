@@ -70,7 +70,6 @@ public class SetupBeanImpl implements SetupBean {
 		initConfigs();
 		initForms();
 		initLanguages();
-		getBusiness().getSearchEngine().reindex();
 	}
 	
 	private void initLanguages() {

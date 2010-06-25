@@ -53,7 +53,7 @@ public class FileServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse deleteFiles(List<String> fileIds) {
-		getDao().getFileDao().remove(StrUtil.toLong(fileIds));
+		getBusiness().getFileBusiness().remove(StrUtil.toLong(fileIds));
 		return new ServiceResponse("success", Messages.get(
 				"files.success_delete"));
 	}

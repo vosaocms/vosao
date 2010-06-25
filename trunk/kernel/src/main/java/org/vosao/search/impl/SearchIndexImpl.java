@@ -287,23 +287,15 @@ public class SearchIndexImpl implements SearchIndex {
 	}
 
 	private Map<String, Set<Long>> getIndex() {
+		if (index == null) {
+			index = new HashMap<String, Set<Long>>();
+		}
 		return index;
 	}
 
 	@Override
-	public void reindex() {
-		TreeItemDecorator<PageEntity> root = getBusiness().getPageBusiness()
-				.getTree();
-		index = new HashMap<String, Set<Long>>();
-		reindexPage(root);
-		saveIndex();
-	}
-
-	private void reindexPage(TreeItemDecorator<PageEntity> page) {
-		updateIndex(page.getEntity().getId());
-		for (TreeItemDecorator<PageEntity> child : page.getChildren()) {
-			reindexPage(child);
-		}
+	public void clear() {
+		getIndex().clear();
 	}
 	
 }

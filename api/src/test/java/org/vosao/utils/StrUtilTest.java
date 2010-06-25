@@ -26,9 +26,9 @@ import junit.framework.TestCase;
 public class StrUtilTest extends TestCase {
 
 	public void testExtrtactTextFromHTML() {
-		String html = "<b>\nb\n</b>re <script type=\"text/javascript\">test \n\nvar x = 0; \nfunction f() {};\n</script>d";
+		String html = "<b>\nb\n</b> re <script type=\"text/javascript\">test \n\nvar x = 0; \nfunction f() {};\n</script>d";
 		String text = StrUtil.extractTextFromHTML(html);
-		assertEquals("\nb\nre d", text);
+		assertEquals(text, " b  re d", text);
 		assertEquals("test", 
 				StrUtil.extractTextFromHTML("test${plugin.form.render()}"));
 		assertEquals("test", 
@@ -49,6 +49,10 @@ public class StrUtilTest extends TestCase {
 				StrUtil.extractTextFromHTML("test<![CDATA["));
 		assertEquals("test", 
 				StrUtil.extractTextFromHTML("test]]>"));
+		assertEquals("test ", 
+				StrUtil.extractTextFromHTML("test&nbsp;"));
+		assertEquals("test            ", 
+				StrUtil.extractTextFromHTML("test&nbsp;&nbsp;&gt;&lt;-*=/&|()"));
 	}
 	
 	public void testSplitByWord() {

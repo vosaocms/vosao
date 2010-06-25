@@ -59,7 +59,7 @@ public enum Topic {
 	PAGES_DELETED,
 
 	/**
-	 * Full search reindex.
+	 * Full search reindex. Receives PageMessage.
 	 */
 	REINDEX,
 	

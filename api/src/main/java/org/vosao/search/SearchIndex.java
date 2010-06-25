@@ -37,11 +37,7 @@ public interface SearchIndex {
 	
 	void saveIndex();
 	
-	/**
-	 * Reindex all site pages. 
-	 */
-	void reindex();
-	
 	String getLanguage();
 
+	void clear();
 }

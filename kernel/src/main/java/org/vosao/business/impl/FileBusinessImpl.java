@@ -158,5 +158,22 @@ public class FileBusinessImpl extends AbstractBusinessImpl
 			getSystemService().getFileCache().remove(filename);
 		}
 	}
+
+	@Override
+	public void remove(List<Long> ids) {
+		for (Long id : ids) {
+			FileEntity file = getDao().getFileDao().getById(id);
+			if (file != null) {
+				getSystemService().getFileCache().remove(getFilePath(file));
+			}
+		}
+		getDao().getFileDao().remove(ids);
+	}
+
+	@Override
+	public String getFilePath(FileEntity file) {
+		return getDao().getFolderDao().getFolderPath(file.getFolderId())
+				+ "/" +file.getFilename();
+	}
 	
 }

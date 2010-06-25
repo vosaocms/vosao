@@ -40,4 +40,8 @@ public interface FileBusiness {
 	 * @param filename - full file pathname
 	 */
 	void remove(String filename);
+	
+	void remove(List<Long> ids);
+	
+	String getFilePath(FileEntity file);
 }

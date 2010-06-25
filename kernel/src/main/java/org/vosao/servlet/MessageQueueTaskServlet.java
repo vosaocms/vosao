@@ -64,7 +64,6 @@ public class MessageQueueTaskServlet extends AbstractServlet {
 		try {
 			Message message = (Message)StreamUtil.toObject(
 					Base64.decode(request.getParameter("message")));
-			logger.info("MQ: " + topic + " " + message);
 			VosaoContext.getInstance().setUser(UserHelper.ADMIN);
 			for (TopicSubscriber subscriber : getMessageQueue()
 				.getSubscribers(topic)) {

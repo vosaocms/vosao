@@ -21,7 +21,6 @@
 
 package org.vosao.business.mq;
 
-import java.util.List;
 
 /**
  * 
@@ -32,10 +31,12 @@ public interface MessageQueue {
 	
 	void publish(Message message);
 
-	void subscribe(String topic, TopicSubscriber subscriber);
+	void subscribe(Topic topic, Class subscriber);
 
-	void unsubscribe(String topic, TopicSubscriber subscriber);
+	void subscribe(String topic, Class subscriber);
+
+	void unsubscribe(String topic, Class subscriber);
 	
-	List<TopicSubscriber> getSubscribers(String topic);
+	void execute(Message message);
 	
 }

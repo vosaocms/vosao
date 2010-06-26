@@ -56,19 +56,16 @@ public class MessageQueueTaskServlet extends AbstractServlet {
 
 	public void execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String topic = request.getParameter("topic");
-		if (topic == null) {
-			logger.error("Topic is null");
+		String msg = request.getParameter("message");
+		if (msg == null) {
+			logger.error("Message is null");
 			return;
 		}
 		try {
 			Message message = (Message)StreamUtil.toObject(
 					Base64.decode(request.getParameter("message")));
 			VosaoContext.getInstance().setUser(UserHelper.ADMIN);
-			for (TopicSubscriber subscriber : getMessageQueue()
-				.getSubscribers(topic)) {
-				subscriber.onMessage(message);
-			}
+			getMessageQueue().execute(message);
 		}
 		catch(Exception e) {
 			logger.error(e.getMessage());

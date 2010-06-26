@@ -43,6 +43,10 @@ public class SimpleMessage extends AbstractMessage {
 		this(topic.name(), msg);
 	}
 
+	public SimpleMessage(Topic topic) {
+		this(topic.name(), null);
+	}
+
 	public String getMessage() {
 		return message;
 	}

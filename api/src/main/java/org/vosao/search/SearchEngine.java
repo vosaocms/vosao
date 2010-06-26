@@ -21,11 +21,10 @@
 
 package org.vosao.search;
 
-import org.vosao.entity.PageEntity;
 
 public interface SearchEngine {
 
-	void updateIndex(PageEntity page);
+	void updateIndex(Long pageId);
 
 	void removeFromIndex(Long pageId);
 

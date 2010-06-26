@@ -32,6 +32,7 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.datanucleus.util.StringUtils;
 import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.common.VosaoContext;
@@ -65,6 +66,7 @@ public class SearchIndexImpl implements SearchIndex {
 		if (page == null) {
 			return;
 		}
+		refreshIndex();
 		List<PageEntity> versions = getDao().getPageDao().selectByUrl(
 				page.getFriendlyURL());
 		for (PageEntity version : versions) {
@@ -112,7 +114,7 @@ public class SearchIndexImpl implements SearchIndex {
 					.saveFile(getIndexFilename(), indexContent);
 			indexModDate = file.getLastModifiedTime();
 			getBusiness().getSystemService().getCache().getMemcache().put(
-					getIndexKey(), file.getLastModifiedTime());
+					getIndexKey(), indexModDate);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -140,7 +142,7 @@ public class SearchIndexImpl implements SearchIndex {
 			int textSize) {
 		try {
 		
-		checkIndex();
+		refreshIndex();
 		SearchResult result = new SearchResult();
 		List<Long> pages = new ArrayList<Long>(getPageIds(query));
 		//logger.info("found pages " + pages.toString());
@@ -217,19 +219,10 @@ public class SearchIndexImpl implements SearchIndex {
 		return INDEX_MOD_DATE + getLanguage();
 	}
 	
-	private void checkIndex() {
-		if (index == null) {
-			loadIndex();
-			return;
-		}
+	private void refreshIndex() {
 		Date date = (Date) getBusiness().getSystemService().getCache()
 				.getMemcache().get(getIndexKey());
-		if (date == null) {
-			getBusiness().getSystemService().getCache()
-					.getMemcache().put(getIndexKey(), indexModDate);
-			return;
-		}
-		if (!date.equals(indexModDate)) {
+		if (index == null || date == null || !date.equals(indexModDate)) {
 			loadIndex();
 		}
 	}
@@ -241,6 +234,7 @@ public class SearchIndexImpl implements SearchIndex {
 	private void loadIndex() {
 		try {
 			index = new HashMap<String, Set<Long>>();
+			indexModDate = null;
 			FileEntity file = getBusiness().getFileBusiness()
 					.findFile(getIndexFilename());
 			if (file == null) {
@@ -251,6 +245,12 @@ public class SearchIndexImpl implements SearchIndex {
 				String strIndex = StrUtil.unzipStringFromBytes(data);
 				indexFromString(strIndex);
 				indexModDate = file.getLastModifiedTime();
+				Date dt = (Date)getBusiness().getSystemService().getCache()
+						.getMemcache().get(getIndexKey());
+				if (dt == null || dt.before(indexModDate)) {
+					getBusiness().getSystemService().getCache().getMemcache()
+							.put(getIndexKey(), indexModDate);
+				}
 			}
 		}
 		catch (Exception e) {
@@ -259,6 +259,9 @@ public class SearchIndexImpl implements SearchIndex {
 	}
 
 	private void indexFromString(String data) {
+		if (StringUtils.isEmpty(data)) {
+			return;
+		}
 		for (String wordBuf : data.split("\\:")) {
 			//logger.info(wordBuf);
 			String[] wordStruc = wordBuf.split("\\=");

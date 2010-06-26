@@ -84,7 +84,7 @@ public class SearchIndexImpl implements SearchIndex {
 		if (content == null) {
 			return;
 		}
-		String data = StrUtil.extractTextFromHTML(content.toLowerCase());
+		String data = StrUtil.extractSearchTextFromHTML(content.toLowerCase());
 		String[] words = StrUtil.splitByWord(data);
 		for (String word : words) {
 			if (word.length() < 3) {
@@ -160,7 +160,7 @@ public class SearchIndexImpl implements SearchIndex {
 				ContentEntity content = getBusiness().getPageBusiness()
 						.getPageContent(page, language);
 				if (content != null) {
-					String text = StrUtil.extractTextFromHTML(
+					String text = StrUtil.extractSearchTextFromHTML(
 							content.getContent());
 					if (text.length() > textSize) {
 						text = text.substring(0, textSize);

@@ -25,34 +25,34 @@ import junit.framework.TestCase;
 
 public class StrUtilTest extends TestCase {
 
-	public void testExtrtactTextFromHTML() {
+	public void testExtrtactSearchTextFromHTML() {
 		String html = "<b>\nb\n</b> re <script type=\"text/javascript\">test \n\nvar x = 0; \nfunction f() {};\n</script>d";
-		String text = StrUtil.extractTextFromHTML(html);
+		String text = StrUtil.extractSearchTextFromHTML(html);
 		assertEquals(text, " b  re d", text);
 		assertEquals("test", 
-				StrUtil.extractTextFromHTML("test${plugin.form.render()}"));
+				StrUtil.extractSearchTextFromHTML("test${plugin.form.render()}"));
 		assertEquals("test", 
-				StrUtil.extractTextFromHTML("test## my velocity comment"));
+				StrUtil.extractSearchTextFromHTML("test## my velocity comment"));
 		assertEquals("test", 
-				StrUtil.extractTextFromHTML("test#for ($i in $pages)"));
+				StrUtil.extractSearchTextFromHTML("test#for ($i in $pages)"));
 		assertEquals("test", 
-				StrUtil.extractTextFromHTML("test#set($i = 0)"));
+				StrUtil.extractSearchTextFromHTML("test#set($i = 0)"));
 		assertEquals("test", 
-				StrUtil.extractTextFromHTML("test$page.friendlyURL"));
+				StrUtil.extractSearchTextFromHTML("test$page.friendlyURL"));
 		assertEquals("test", 
-				StrUtil.extractTextFromHTML("test$service.findContent(1, 2)"));
+				StrUtil.extractSearchTextFromHTML("test$service.findContent(1, 2)"));
 		assertEquals("test", 
-				StrUtil.extractTextFromHTML("test#if ($d == 5)"));
+				StrUtil.extractSearchTextFromHTML("test#if ($d == 5)"));
 		assertEquals("test", 
-				StrUtil.extractTextFromHTML("test#end"));
+				StrUtil.extractSearchTextFromHTML("test#end"));
 		assertEquals("test", 
-				StrUtil.extractTextFromHTML("test<![CDATA["));
+				StrUtil.extractSearchTextFromHTML("test<![CDATA["));
 		assertEquals("test", 
-				StrUtil.extractTextFromHTML("test]]>"));
+				StrUtil.extractSearchTextFromHTML("test]]>"));
 		assertEquals("test ", 
-				StrUtil.extractTextFromHTML("test&nbsp;"));
+				StrUtil.extractSearchTextFromHTML("test&nbsp;"));
 		assertEquals("test            ", 
-				StrUtil.extractTextFromHTML("test&nbsp;&nbsp;&gt;&lt;-*=/&|()"));
+				StrUtil.extractSearchTextFromHTML("test&nbsp;&nbsp;&gt;&lt;-*=/&|()"));
 	}
 	
 	public void testSplitByWord() {

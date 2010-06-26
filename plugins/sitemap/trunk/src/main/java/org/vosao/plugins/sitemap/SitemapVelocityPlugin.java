@@ -40,6 +40,7 @@ import org.vosao.business.vo.PluginPropertyVO;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PluginEntity;
+import org.vosao.enums.PageState;
 import org.vosao.utils.ParamUtil;
 import org.vosao.utils.StrUtil;
 import org.vosao.utils.StreamUtil;
@@ -109,7 +110,8 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 					break;
 				}
 			}
-			if (!excluded) {
+			if (!excluded && child.getEntity().getState().equals(
+					PageState.APPROVED)) {
 				children.add(child);
 				filterChildren(child, urls);
 			}

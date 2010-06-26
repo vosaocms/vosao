@@ -21,17 +21,18 @@
 
 package org.vosao.service.front;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.vosao.search.SearchResult;
 import org.vosao.service.AbstractService;
 
-
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public interface SearchService extends AbstractService {
 	
-	SearchResult search(final String query, int start, int count, int textSize,
-			HttpServletRequest request);
+	SearchResult search(final String query, int start, int count, int textSize);
 
-	SearchResult search(final String query, HttpServletRequest request);
+	SearchResult search(final String query);
 
 }

@@ -21,8 +21,13 @@
 
 package org.vosao.service.front.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.vosao.entity.LanguageEntity;
+import org.vosao.search.Hit;
 import org.vosao.search.SearchResult;
 import org.vosao.service.front.SearchService;
 import org.vosao.service.impl.AbstractServiceImpl;
@@ -34,18 +39,28 @@ public class SearchServiceImpl extends AbstractServiceImpl
 		implements SearchService {
 
 	@Override
-	public SearchResult search(String query, int start, int count, int textSize,
-			HttpServletRequest request) {
+	public SearchResult search(String query, int start, int count, int textSize) {
 		String language = getBusiness().getLanguage();
-		return getBusiness().getSearchEngine().search(query, start, count,
-				language, textSize);
+		SearchResult result = getBusiness().getSearchEngine().search(
+				query, start, count, language, textSize);
+		if (!language.equals(LanguageEntity.ENGLISH_CODE)) {
+			SearchResult enResult = getBusiness().getSearchEngine().search(
+					query, start, count, LanguageEntity.ENGLISH_CODE, 
+					textSize);
+			for (Hit hit : enResult.getHits()) {
+				hit.setLocalTitle(hit.getTitle());
+				hit.setUrl(hit.getUrl() + "?language=" 
+						+ LanguageEntity.ENGLISH_CODE);
+			}
+			result.setCount(result.getCount() + enResult.getCount());
+			result.getHits().addAll(enResult.getHits());
+		}
+		return result;
 	}
 
 	@Override
-	public SearchResult search(String query, HttpServletRequest request) {
-			String language = getBusiness().getLanguage();
-		return getBusiness().getSearchEngine().search(query, 0, -1,
-				language, 256);
+	public SearchResult search(String query) {
+		return search(query, 0, -1, 256);
 	}
 	
 }

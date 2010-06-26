@@ -20,6 +20,7 @@
 
 var searchPage = 0;
 var searchResult = null;
+var searchCount = 0;
 
 $(function() {
     try { 
@@ -51,29 +52,35 @@ function onSearch() {
     var pageSize = Number($('#pageSize').val());
     var start = searchPage * pageSize;
 	Vosao.jsonrpc.searchFrontService.search(function(r) {
-		searchResult = r;
-		var h = '';
-		if (r.count == 0) {
-			$('#searchCount').html('Nothing found.');
-            $('#searchResults, .searchPaginator').html('');
-			return;
-		}
-		jQuery.each(r.hits.list, function(i, hit) {
-		    h += '<div class="searchItem"><div class="searchTitle">' + hit.page.title
-		        + '</div><a href="' + hit.page.friendlyURL + '">' 
-		        + hit.content + '</a>'
-		        +'</div>';
-		});
-		$('#searchResults').html(h);
-		$('#searchCount').html('Found ' + r.count + ' results.');
-		showPaginator();
+		searchResult = r.hits.list;
+		searchCount = r.count;
+		showSearchResults();
 	}, query, start, pageSize, 256);
+}
+
+function showSearchResults() {
+	var h = '';
+	if (searchCount == 0) {
+		$('#searchCount').html('Nothing found.');
+        $('#searchResults, .searchPaginator').html('');
+		return;
+	}
+	jQuery.each(searchResult, function(i, hit) {
+	    h += '<div class="searchItem"><div class="searchTitle">' 
+		    + hit.localTitle
+	        + '</div><a href="' + hit.url + '">' 
+	        + hit.content + '</a>'
+	        +'</div>';
+	});
+	$('#searchResults').html(h);
+	$('#searchCount').html('Found ' + searchCount + ' results.');
+	showPaginator();
 }
 
 function showPaginator() {
     var pageSize = Number($('#pageSize').val());
     var query = $('#query').val();
-	var pagesCount = searchResult.count / pageSize;
+	var pagesCount = searchCount / pageSize;
 	var h = '';
     for (var i = 0; i < pagesCount; i++) {
         var href = 'href="/search?query=' + query + '&page=' + (i+1) + '"';

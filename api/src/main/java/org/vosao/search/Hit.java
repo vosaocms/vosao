@@ -21,24 +21,21 @@
 
 package org.vosao.search;
 
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.PageEntity;
 
 public class Hit {
 
-	private PageEntity page;
 	private String content;
-	
-	public PageEntity getPage() {
-		return page;
-	}
-	
-	public void setPage(PageEntity page) {
-		this.page = page;
-	}
+	private String title;
+	private String localTitle;
+	private String url;
 	
 	public Hit(PageEntity page, String aContent) {
 		super();
-		this.page = page;
+		title = page.getTitle();
+		localTitle = page.getLocalTitle(VosaoContext.getInstance().getLanguage());
+		url = page.getFriendlyURL();
 		content = aContent;
 	}
 
@@ -46,8 +43,28 @@ public class Hit {
 		return content;
 	}
 
-	public void setContent(String content) {
-		this.content = content;
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getLocalTitle() {
+		return localTitle;
+	}
+
+	public void setLocalTitle(String localTitle) {
+		this.localTitle = localTitle;
 	}
 	
 }

@@ -35,6 +35,7 @@ import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.search.Hit;
 import org.vosao.search.SearchEngine;
 import org.vosao.search.SearchIndex;
 import org.vosao.search.SearchResult;

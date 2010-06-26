@@ -69,14 +69,16 @@ public class SiteFilter extends AbstractFilter implements Filter {
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
         HttpServletResponse httpResponse = (HttpServletResponse)response;
         String url = httpRequest.getServletPath();
+        if (url.startsWith("/_ah/plugin")) {
+        	if (processPluginServlet(request, response)) {
+        		return;
+        	}
+        }
         if (isSkipUrl(url)) {
             chain.doFilter(request, response);
             return;
         }
         if (!isLoggedIn(httpRequest) && servedFromCache(url, httpResponse)) {
-        	return;
-        }
-        if (processPluginServlet(request, response)) {
         	return;
         }
         SeoUrlEntity seoUrl = getDao().getSeoUrlDao().getByFrom(url);

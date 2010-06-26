@@ -141,7 +141,7 @@ public class StrUtil {
 	private static final String[] HTML_PATTERNS = {"\\&gt;", "\\&lt;", "\\&nbsp;",
 		"[\\W&&[^ ]]"}; 
 	
-	public static String extractTextFromHTML(String html) {
+	public static String extractSearchTextFromHTML(String html) {
 		String result = removeJavascript(html).replaceAll("<.*?>", "");
 		for (String pattern : VELOCITY_PATTERNS) {
 			result = result.replaceAll(pattern, "");
@@ -153,6 +153,10 @@ public class StrUtil {
 			result = result.replaceAll(pattern, " ");
 		}
 		return result;
+	}
+
+	public static String extractTextFromHTML(String html) {
+		return removeJavascript(html).replaceAll("<.*?>", "");
 	}
 
 	public static List<Long> toLong(List<String> list) {

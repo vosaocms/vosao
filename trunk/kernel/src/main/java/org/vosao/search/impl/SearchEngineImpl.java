@@ -23,15 +23,14 @@ package org.vosao.search.impl;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
-import org.vosao.business.decorators.TreeItemDecorator;
+import org.vosao.business.mq.QueueSpeed;
 import org.vosao.business.mq.Topic;
+import org.vosao.business.mq.message.IndexMessage;
 import org.vosao.business.mq.message.PageMessage;
-import org.vosao.business.mq.message.SimpleMessage;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.entity.LanguageEntity;
@@ -51,8 +50,6 @@ public class SearchEngineImpl implements SearchEngine {
 	private static final Log logger = LogFactory.getLog(
 			SearchEngineImpl.class);
 
-	private static final int REINDEX_CHUNK = 20;
-	
 	private Map<String, SearchIndex> indexes;
 
 	private SearchIndex getSearchIndex(String language) {
@@ -71,25 +68,9 @@ public class SearchEngineImpl implements SearchEngine {
 			getSearchIndex(language.getCode()).clear();
 			getSearchIndex(language.getCode()).saveIndex();
 		}
-		sendReindexPage(getBusiness().getPageBusiness().getTree(), 
-				new PageMessage(Topic.REINDEX));
-		PageMessage saveMessage = new PageMessage(Topic.REINDEX, "save");
-		getBusiness().getMessageQueue().publish(saveMessage);
+		getBusiness().getMessageQueue().publish(new IndexMessage());
 	}
 	
-	private void sendReindexPage(TreeItemDecorator<PageEntity> page, 
-			PageMessage message) {
-		PageMessage msg = message;
-		if (msg.getPages().size() >= REINDEX_CHUNK) {
-			getBusiness().getMessageQueue().publish(msg);
-			msg = new PageMessage(Topic.REINDEX);
-		}
-		msg.addPage(page.getEntity().getFriendlyURL(), page.getEntity().getId());
-		for (TreeItemDecorator<PageEntity> child : page.getChildren()) {
-			sendReindexPage(child, msg);
-		}
-	}
-
 	@Override
 	public SearchResult search(String query, int start, int count,
 			String language, int textSize) {
@@ -97,9 +78,9 @@ public class SearchEngineImpl implements SearchEngine {
 	}
 
 	@Override
-	public void updateIndex(PageEntity page) {
+	public void updateIndex(Long pageId) {
 		for (LanguageEntity language : getDao().getLanguageDao().select()) {
-			getSearchIndex(language.getCode()).updateIndex(page.getId());
+			getSearchIndex(language.getCode()).updateIndex(pageId);
 		}
 	}
 

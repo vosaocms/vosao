@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.vosao.business.mq.QueueSpeed;
 import org.vosao.business.mq.Topic;
 
 /**
@@ -38,9 +39,14 @@ public class PageMessage extends SimpleMessage {
 	private Map<String, Set<Long>> pages;
 	
 	public PageMessage(Topic topic) {
-		this(topic, null);
+		this(topic, (String)null);
 	}
 	
+	public PageMessage(Topic topic, QueueSpeed speed) {
+		this(topic);
+		setSpeed(speed);
+	}
+
 	public PageMessage(Topic topic, String message) {
 		super(topic, message);
 		pages = new HashMap<String, Set<Long>>();

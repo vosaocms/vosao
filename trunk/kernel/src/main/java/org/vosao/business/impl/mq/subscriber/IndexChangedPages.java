@@ -46,7 +46,8 @@ public class IndexChangedPages extends AbstractSubscriber {
 				for (Long pageId : pages) {
 					PageEntity page = getDao().getPageDao().getById(pageId);
 					if (page != null) {
-						getBusiness().getSearchEngine().updateIndex(page);
+						getBusiness().getSearchEngine().updateIndex(
+								page.getId());
 					}
 				}
 			}

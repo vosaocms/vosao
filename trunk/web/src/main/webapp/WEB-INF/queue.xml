@@ -2,15 +2,15 @@
 
   <queue>
     <name>mq-high</name>
-    <rate>35/s</rate>
-  </queue>
-  <queue>
-    <name>mq-medium</name>
     <rate>10/s</rate>
   </queue>
   <queue>
-    <name>mq-low</name>
+    <name>mq-medium</name>
     <rate>1/s</rate>
+  </queue>
+  <queue>
+    <name>mq-low</name>
+    <rate>6/m</rate>
   </queue>
 
 </queue-entries>

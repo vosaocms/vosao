@@ -60,21 +60,21 @@ public class MessageQueueImpl implements MessageQueue {
 
 	private static final Log logger = LogFactory.getLog(MessageQueueImpl.class);
 	
-	private Map<String, List<TopicSubscriber>> subscribers = 
-		new HashMap<String, List<TopicSubscriber>>();
+	private Map<String, List<Class>> subscribers = 
+		new HashMap<String, List<Class>>();
 	
 	public MessageQueueImpl() {
 		registerSubscribers();
 	}
 	
 	private void registerSubscribers() {
-		subscribe(Topic.FILE_CHANGED.name(), new FileChangedSubscriber());
-		subscribe(Topic.EXPORT.name(), new ExportTaskSubscriber());
-		subscribe(Topic.SESSION_CLEAN.name(), new SessionCleanTaskSubscriber());
-		subscribe(Topic.IMPORT.name(), new ImportTaskSubscriber());
-		subscribe(Topic.PAGES_DELETED.name(), new IndexDeletedPages());
-		subscribe(Topic.PAGES_CHANGED.name(), new IndexChangedPages());
-		subscribe(Topic.REINDEX.name(), new Reindex());
+		subscribe(Topic.FILE_CHANGED, FileChangedSubscriber.class);
+		subscribe(Topic.EXPORT, ExportTaskSubscriber.class);
+		subscribe(Topic.SESSION_CLEAN, SessionCleanTaskSubscriber.class);
+		subscribe(Topic.IMPORT, ImportTaskSubscriber.class);
+		subscribe(Topic.PAGES_DELETED, IndexDeletedPages.class);
+		subscribe(Topic.PAGES_CHANGED, IndexChangedPages.class);
+		subscribe(Topic.REINDEX, Reindex.class);
 	}
 
 	private SystemService getSystemService() {
@@ -105,14 +105,18 @@ public class MessageQueueImpl implements MessageQueue {
 			return;
 		}
 		queue.add(url(MessageQueueTaskServlet.MQ_URL)
-				.param("topic", message.getTopic())
 				.param("message", Base64.encode(StreamUtil.toBytes(message))));
 	}
 
 	@Override
-	public void subscribe(String topic, TopicSubscriber subscriber) {
+	public void subscribe(Topic topic, Class subscriber) {
+		subscribe(topic.name(), subscriber);
+	}
+	
+	@Override
+	public void subscribe(String topic, Class subscriber) {
 		if (!subscribers.containsKey(topic)) {
-			subscribers.put(topic, new ArrayList<TopicSubscriber>());
+			subscribers.put(topic, new ArrayList<Class>());
 		}
 		if (!subscribers.get(topic).contains(subscriber)) {
 			subscribers.get(topic).add(subscriber);
@@ -120,7 +124,7 @@ public class MessageQueueImpl implements MessageQueue {
 	}
 
 	@Override
-	public void unsubscribe(String topic, TopicSubscriber subscriber) {
+	public void unsubscribe(String topic, Class subscriber) {
 		if (subscribers.containsKey(topic)) {
 			if (subscribers.get(topic).contains(subscriber)) {
 				subscribers.get(topic).remove(subscriber);
@@ -129,11 +133,22 @@ public class MessageQueueImpl implements MessageQueue {
 	}
 
 	@Override
-	public List<TopicSubscriber> getSubscribers(String topic) {
-		if (subscribers.containsKey(topic)) {
-			return Collections.unmodifiableList(subscribers.get(topic));
+	public void execute(Message message) {
+		if (subscribers.containsKey(message.getTopic())) {
+			for (Class subscriberClass : subscribers.get(message.getTopic())) {
+				try {
+					TopicSubscriber subscriber = (TopicSubscriber)
+							subscriberClass.newInstance();
+					subscriber.onMessage(message);
+				}
+				catch (IllegalAccessException e) {
+					logger.error(e.getMessage());
+				}
+				catch (InstantiationException e) {
+					logger.error(e.getMessage());
+				}
+			}
 		}
-		return Collections.EMPTY_LIST;
 	}
 
 }

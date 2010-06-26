@@ -19,16 +19,32 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business.mq;
+package org.vosao.business.mq.message;
+
+import org.vosao.business.mq.QueueSpeed;
+import org.vosao.business.mq.Topic;
 
 /**
- * Topic subscriber is thread safe. It's created onMessage called and 
- * garbage collected.
  * 
  * @author Alexander Oleynik
  *
  */
-public interface TopicSubscriber {
+public class IndexMessage extends SimpleMessage {
 
-	void onMessage(Message message);
+	private int number;
+
+	public IndexMessage(int aNumber) {
+		super(Topic.REINDEX);
+		setSpeed(QueueSpeed.LOW);
+		number = aNumber;
+	}
+
+	public IndexMessage() {
+		this(0);
+	}
+	
+	public int getNumber() {
+		return number;
+	}
+	
 }

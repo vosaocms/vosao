@@ -22,26 +22,20 @@
 package org.vosao.plugins.sitemap;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
-import org.datanucleus.util.StringUtils;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
 import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
-import org.vosao.business.vo.PluginPropertyVO;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PluginEntity;
+import org.vosao.entity.helper.PluginHelper;
+import org.vosao.entity.helper.PluginParameter;
 import org.vosao.enums.PageState;
-import org.vosao.utils.ParamUtil;
 import org.vosao.utils.StrUtil;
 import org.vosao.utils.StreamUtil;
 import org.vosao.velocity.plugin.AbstractVelocityPlugin;
@@ -58,16 +52,18 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 	private String renderSitemap(String templateUrl) {
 		try {
 			PluginEntity plugin = getDao().getPluginDao().getByName("sitemap");
+			SitemapConfig config = getConfig(plugin);
+			logger.info("config level " + config.getLevel());
 			TreeItemDecorator<PageEntity> root = getBusiness().getPageBusiness()
 					.getTree();
-			filterExcude(plugin, root);
+			filterExclude(root, config.getExclude());
 			String template = StreamUtil.getTextResource(
 				SitemapVelocityPlugin.class.getClassLoader(), 
 				templateUrl);
 			VelocityContext context = new VelocityContext();
 			getBusiness().getPageBusiness().addVelocityTools(context);
 			context.put("root", root);
-			context.put("config", getConfig(plugin));
+			context.put("config", config);
 			context.put("siteConfig", getDao().getConfigDao().getConfig());
 			context.put("languageCode", getBusiness().getLanguage());
 			return getBusiness().getSystemService().render(template, context);
@@ -82,24 +78,10 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 		return renderSitemap("org/vosao/plugins/sitemap/sitemap.vm");
 	}
 
-	private void filterExcude(PluginEntity plugin, 
-			TreeItemDecorator<PageEntity> root) {
-		if (!StringUtils.isEmpty(plugin.getConfigData())) {
-			try {
-				Document doc = DocumentHelper.parseText(plugin.getConfigData());
-				Element rootElement = doc.getRootElement();
-				String exclude = rootElement.elementText("exclude");
-				List<String> urls = StrUtil.fromCSV(exclude);
-				filterChildren(root, urls);
-			}
-			catch (DocumentException e) {
-				logger.error("Sitemap plugin config DocumentException" + e.getMessage());
-			}
-		}
-	}
-
-	private void filterChildren(TreeItemDecorator<PageEntity> page,
+	private void filterExclude(TreeItemDecorator<PageEntity> page,
 			List<String> urls) {
+		logger.info("filter children " + page.getEntity().getFriendlyURL());
+
 		List<TreeItemDecorator<PageEntity>> children = 
 			new ArrayList<TreeItemDecorator<PageEntity>>();
 		for (TreeItemDecorator<PageEntity> child : page.getChildren()) {
@@ -112,33 +94,33 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 			}
 			if (!excluded && child.getEntity().getState().equals(
 					PageState.APPROVED)) {
+
+				logger.info("child " + child.getEntity().getFriendlyURL() 
+						+ child.getEntity().getStateString());
+				
 				children.add(child);
-				filterChildren(child, urls);
+				filterExclude(child, urls);
 			}
 		}
 		page.setChildren(children);
 	}
 	
-	private Map<String, Object> getConfig(PluginEntity plugin) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		if (StringUtils.isEmpty(plugin.getConfigData())) {
-			Map<String, PluginPropertyVO> map = getBusiness().getPluginBusiness()
-					.getPropertiesMap(plugin);
-			PluginPropertyVO level = map.get("level");
-			if (level != null) {
-				result.put("level", ParamUtil.getInteger(
-						level.getDefaultValue(), 2));
-			}
-			return result;
+	private SitemapConfig getConfig(PluginEntity plugin) {
+		Map<String, PluginParameter> params = PluginHelper.parseParameters(
+				plugin);
+		SitemapConfig result = new SitemapConfig();
+		try {
+			result.setLevel(params.get("level").getValueInteger());
+		}
+		catch (Exception e) {
+			logger.error("level parameter: " + e.getMessage());
 		}
 		try {
-			Document doc = DocumentHelper.parseText(plugin.getConfigData());
-			Element root = doc.getRootElement();
-			result.put("level", ParamUtil.getInteger(root.elementText("level"), 
-					2));
+			result.setExclude(StrUtil.fromCSV(params.get("exclude")
+					.getValue()));
 		}
-		catch (DocumentException e) {
-			logger.error("Sitemap plugin config DocumentException" + e.getMessage());
+		catch (Exception e) {
+			logger.error("exclude parameter: " + e.getMessage());
 		}
 		return result;
 	}

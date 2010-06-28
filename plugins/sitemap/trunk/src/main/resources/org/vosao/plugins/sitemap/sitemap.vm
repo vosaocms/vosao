@@ -16,7 +16,6 @@
    </li>
 #end
 
-#set($current=1)
 <ul id="sitemap">
-    #renderSitemap($root $current)
+    #renderSitemap($root 1)
 </ul>

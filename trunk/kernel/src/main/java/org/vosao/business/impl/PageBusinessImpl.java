@@ -51,6 +51,7 @@ import org.vosao.business.impl.pagefilter.BodyBeginPageFilter;
 import org.vosao.business.impl.pagefilter.HeadBeginPageFilter;
 import org.vosao.business.impl.pagefilter.HeadEndPageFilter;
 import org.vosao.business.impl.pagefilter.HtmlEndPageFilter;
+import org.vosao.business.impl.pagefilter.MetaPageFilter;
 import org.vosao.business.impl.pagefilter.PageFilter;
 import org.vosao.business.mq.Topic;
 import org.vosao.business.mq.message.PageMessage;
@@ -96,6 +97,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			pageFilters.add(new HeadEndPageFilter(getBusiness()));
 			pageFilters.add(new HtmlEndPageFilter(getBusiness()));
 			pageFilters.add(new BodyBeginPageFilter(getBusiness()));
+			pageFilters.add(new MetaPageFilter());
 		}
 		return pageFilters;
 	}

@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -41,6 +42,18 @@ public class StrUtil {
 
 	private static Log logger = LogFactory.getLog(StrUtil.class);
 
+	public static final String DESCRIPTION_REGEX = 
+		"<?(meta|META)\\s.*?((content|CONTENT)=\"(.*?)\"\\s+(name|NAME)=\"(description|DESCRIPTION)\"|(name|NAME)=\"(description|DESCRIPTION)\"\\s+(content|CONTENT)=\"(.*?)\")\\s*/>";
+	public static final Pattern DESCRIPTION_PATTERN = Pattern.compile(DESCRIPTION_REGEX);	
+	
+	public static final String KEYWORDS_REGEX = 
+		"<?(meta|META)\\s.*?((content|CONTENT)=\"(.*?)\"\\s+(name|NAME)=\"(keywords|KEYWORDS)\"|(name|NAME)=\"(keywords|KEYWORDS)\"\\s+(content|CONTENT)=\"(.*?)\")\\s*/>";
+	public static final Pattern KEYWORDS_PATTERN = Pattern.compile(KEYWORDS_REGEX);	
+	
+	public static final String HEAD_CLOSE_REGEX = "</(head|HEAD)>";
+	public static final Pattern HEAD_CLOSE_PATTERN = Pattern.compile(HEAD_CLOSE_REGEX);
+	
+	
 	private static String _toCSV(Collection<String> list) {
 		StringBuffer result = new StringBuffer();
 		int count = 0;

@@ -61,4 +61,27 @@ public class StrUtilTest extends TestCase {
 		assertEquals(10, words.length);
 	}
 	
+	public void testReplaceDescriptionMeta() {
+		assertEquals("<html><head>hello</head></html>", 
+				"<html><head><meta  name=\"description\"  content=\"abc\" /></head></html>".replaceAll(
+						StrUtil.DESCRIPTION_REGEX, "hello"));
+		assertEquals("<html><head>hello</head></html>", 
+				"<html><head><meta content=\"abc\"  name=\"description\" /></head></html>".replaceAll(
+						StrUtil.DESCRIPTION_REGEX, "hello"));
+		assertEquals("<html><head>hello</head></html>", 
+				"<html><head><META  name=\"description\" content=\"abc\" /></head></html>".replaceAll(
+				StrUtil.DESCRIPTION_REGEX, "hello"));
+		assertEquals("<html><head>hello</head></html>", 
+				"<html><head><META NAME=\"description\" content=\"abc\" /></head></html>".replaceAll(
+						StrUtil.DESCRIPTION_REGEX, "hello"));
+		assertEquals("<html><head>hello</head></html>", 
+				"<html><head><META NAME=\"DESCRIPTION\" content=\"abc\" /></head></html>".replaceAll(
+						StrUtil.DESCRIPTION_REGEX, "hello"));
+	}
+	
+	public void testHeadCloseRegex() {
+		assertTrue(StrUtil.HEAD_CLOSE_PATTERN.matcher("<html><head>  </head></html>").find());
+		assertTrue(StrUtil.HEAD_CLOSE_PATTERN.matcher("<html><head>  </HEAD></html>").find());
+	}
+	
 }

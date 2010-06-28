@@ -24,6 +24,8 @@ package org.vosao.plugins.superfish;
 import java.util.Collections;
 import java.util.Map;
 
+import org.datanucleus.util.StringUtils;
+import org.dom4j.DocumentException;
 import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.PageEntity;
@@ -48,7 +50,7 @@ public class SuperfishBackService extends AbstractServicePlugin {
 		try {
 			boolean enabled = Boolean.valueOf(enabledStr);	
 			PluginEntity plugin = getDao().getPluginDao().getByName("superfish");
-			SuperfishConfig config = new SuperfishConfig(plugin.getConfigData());
+			SuperfishConfig config = SuperfishConfig.parse(plugin.getConfigData());
 			if (enabled) {
 				if (!config.getEnabledPages().keySet().contains(page)) {
 					config.getEnabledPages().put(page, index);
@@ -74,7 +76,7 @@ public class SuperfishBackService extends AbstractServicePlugin {
 			String page2, Integer index2) {
 		try {
 			PluginEntity plugin = getDao().getPluginDao().getByName("superfish");
-			SuperfishConfig config = new SuperfishConfig(plugin.getConfigData());
+			SuperfishConfig config = SuperfishConfig.parse(plugin.getConfigData());
 			if (config.getEnabledPages().containsKey(page1)) {
 				config.getEnabledPages().put(page1, index1);
 			}
@@ -92,11 +94,11 @@ public class SuperfishBackService extends AbstractServicePlugin {
 		}
 	}
 	
-	public TreeItemDecorator<PageEntity> getTree() {
+	public TreeItemDecorator<PageEntity> getTree() throws DocumentException {
 		TreeItemDecorator<PageEntity> root = getBusiness()
 				.getPageBusiness().getTree();
 		PluginEntity plugin = getDao().getPluginDao().getByName("superfish");
-		SuperfishConfig config = new SuperfishConfig(plugin.getConfigData());
+		SuperfishConfig config = SuperfishConfig.parse(plugin.getConfigData());
 		sortPages(root, config.getEnabledPages());
 		return root;
 	}
@@ -110,5 +112,25 @@ public class SuperfishBackService extends AbstractServicePlugin {
 				sortPages(child, enabledPages);
 			}
 		}
+	}
+	
+	public ServiceResponse showHomepage(boolean value) {
+		PluginEntity plugin = getDao().getPluginDao().getByName("superfish");
+		SuperfishConfig config = null;
+		try {
+			config = SuperfishConfig.parse(plugin.getConfigData());
+		}
+		catch (DocumentException e) {
+			config = new SuperfishConfig();
+		}
+	    config.setShowHomepage(value);
+		plugin.setConfigData(config.toXML());
+		getDao().getPluginDao().save(plugin);
+		return ServiceResponse.createSuccessResponse(Messages.get("success"));
+	}
+	
+	public SuperfishConfig getConfig() throws DocumentException {
+		PluginEntity plugin = getDao().getPluginDao().getByName("superfish");
+		return SuperfishConfig.parse(plugin.getConfigData());
 	}
 }

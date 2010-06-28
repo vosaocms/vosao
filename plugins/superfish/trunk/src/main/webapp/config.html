@@ -26,6 +26,7 @@
 
 var plugin = null;
 var enabledPages = null;
+var config = null;
 
 $(function(){
 	localize();
@@ -55,12 +56,13 @@ function treeview() {
         persist: "cookie",
         cookieId: "superfishTree"
     });
+    $('#showHomepage').click(onShowHomepage);
 }
 
 function renderPage(vo) {
     var pageUrl = encodeURIComponent(vo.entity.friendlyURL);
     var checked = '';
-    if ($.inArray(vo.entity.friendlyURL, enabledPages) != -1) {
+    if (enabledPages[vo.entity.friendlyURL] || enabledPages[vo.entity.friendlyURL] == 0) {
         checked = ' checked="checked"'
     }
     var html = '<li> \
@@ -81,16 +83,12 @@ function renderPage(vo) {
 }
 
 function loadPlugin() {
-	Vosao.jsonrpc.pluginService.getByName(function(r) {
-	    plugin = r;
-	    enabledPages = [];
-	    if (plugin.configData) {
-	        $.each(plugin.configData.split(','), function(i,value) {
-		        enabledPages.push(value.split(':')[0]);
-		    });
-	    }
+	Vosao.jsonrpc.superfishBackService.getConfig(function(r) {
+	    config = r;
+	    enabledPages = config.enabledPages.map;
+	    $('#showHomepage').each(function() {this.checked = config.showHomepage;});
 	    loadTree();		
-	}, 'superfish');
+	});
 }
 
 function enablePage(page, index, enabled) {
@@ -131,6 +129,13 @@ function moveDown(url) {
     }
 }
 
+function onShowHomepage() {
+	var show = $('#showHomepage:checked').size() > 0;
+	Vosao.jsonrpc.superfishBackService.showHomepage(function(r) {
+        Vosao.showServiceMessages(r);
+	}, show);
+}
+
 function localize() {
     document.title = messages['superfish.config'];
     $('#leftmenu a:eq(1)').text(messages.content);
@@ -146,6 +151,7 @@ function localize() {
     $('#rightmenu a:contains(support)').text(messages.support);
 
     $('a[href="#tab-1"]').text(messages['superfish.config']);
+    $('#tab-1 span').text(messages['superfish.show_homepage']);
 }
 
 </script>
@@ -157,15 +163,15 @@ function localize() {
 
     <div id="leftmenu">
         <a href="/cms">Vosao</a> CMS
-        <a href="/cms/pages.jsp">content</a>
-        <a href="/cms/templates.jsp">templates</a>
-        <a href="/cms/folders.jsp">resources</a>
-        <a href="/cms/config.jsp">configuration</a>
+        <a href="/cms/pages.vm">content</a>
+        <a href="/cms/templates.vm">templates</a>
+        <a href="/cms/folders.vm">resources</a>
+        <a href="/cms/config.vm">configuration</a>
         <a href="/cms/plugins">plugins</a>
-        <a href="/cms/plugins/config.jsp">plugins.config</a>
+        <a href="/cms/plugins/config.vm">plugins.config</a>
     </div>
     <div id="rightmenu">
-        <a href="/cms/profile.jsp">profile</a> 
+        <a href="/cms/profile.vm">profile</a> 
         | <a href="#" onclick="onLogout()">logout</a>
         |
         
@@ -200,7 +206,8 @@ $(function() {
         <li><a href="#tab-1">superfish.config</a></li>
     </ul>
     <div id="tab-1">
-        <div id="tree"></div>
+        <span>superfish.show_homepage</span><input type="checkbox" id="showHomepage" />
+        <div id="tree" style="margin-top: 20px;"></div>
     </div>
 </div>    
 <div class="messages"> </div>

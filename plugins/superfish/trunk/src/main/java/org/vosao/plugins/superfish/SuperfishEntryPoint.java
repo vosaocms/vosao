@@ -21,7 +21,9 @@
 
 package org.vosao.plugins.superfish;
 
+import org.datanucleus.util.StringUtils;
 import org.vosao.business.plugin.AbstractPluginEntryPoint;
+import org.vosao.entity.PluginEntity;
 import org.vosao.service.plugin.PluginServiceManager;
 
 /**
@@ -33,6 +35,15 @@ public class SuperfishEntryPoint extends AbstractPluginEntryPoint {
 
 	SuperfishBackServiceManager backServiceManager;
 	SuperfishVelocityPlugin velocityPlugin;
+	
+	@Override
+	public void init () {
+		PluginEntity plugin = getDao().getPluginDao().getByName("superfish");
+		if (StringUtils.isEmpty(plugin.getConfigData())) {
+			plugin.setConfigData((new SuperfishConfig()).toXML());
+			getDao().getPluginDao().save(plugin);	
+		}
+	}
 	
 	@Override
 	public PluginServiceManager getPluginBackService() {

@@ -21,13 +21,16 @@
 
 package org.vosao.plugins.superfish;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.datanucleus.util.StringUtils;
-import org.vosao.utils.StrUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 
 /**
  * 
@@ -36,33 +39,40 @@ import org.vosao.utils.StrUtil;
  */
 public class SuperfishConfig {
 
+	private static final Log logger = LogFactory.getLog(SuperfishConfig.class);
+	
 	private Map<String, Integer> enabledPages;
+	private boolean showHomepage;
 
 	public SuperfishConfig() {
 		enabledPages = new HashMap<String, Integer>();
+		showHomepage = true;
 	}
 	
-	public SuperfishConfig(String xml) {
-		this();
-		if (!StringUtils.isEmpty(xml)) {
-			for (String page : xml.split(",")) {
-				String[] items = page.split(":");
-				try {
-					enabledPages.put(items[0], Integer.valueOf(items[1]));
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+	public static SuperfishConfig parse(String xml) throws DocumentException {
+		SuperfishConfig config = new SuperfishConfig();
+		Document doc = DocumentHelper.parseText(xml);
+		Element root = doc.getRootElement();
+		config.setShowHomepage(Boolean.valueOf(root.elementText("showHomepage")));
+		for (Element e : (List<Element>)root.element("pages").elements()) {
+			String url = e.getText();
+			int index = Integer.valueOf(e.attributeValue("index"));
+			config.getEnabledPages().put(url, index);
 		}
+		return config;
 	}
 	
 	public String toXML() {
-		List<String> list = new ArrayList<String>();
-		for (String key : enabledPages.keySet()) {
-			list.add(key + ":" + enabledPages.get(key));
+		Document doc = DocumentHelper.createDocument();
+		Element root = doc.addElement("config");
+		root.addElement("showHomepage").setText(String.valueOf(isShowHomepage()));
+		Element pages = root.addElement("pages");
+		for (String url : enabledPages.keySet()) {
+			Element page = pages.addElement("page");
+			page.setText(url);
+			page.addAttribute("index", String.valueOf(enabledPages.get(url)));
 		}
-		return StrUtil.toCSV(list);
+		return doc.asXML();
 	}
 	
 	public Map<String, Integer> getEnabledPages() {
@@ -72,7 +82,13 @@ public class SuperfishConfig {
 	public void setEnabledPages(Map<String, Integer> enabledPages) {
 		this.enabledPages = enabledPages;
 	}
-	
-	
+
+	public boolean isShowHomepage() {
+		return showHomepage;
+	}
+
+	public void setShowHomepage(boolean showHomepage) {
+		this.showHomepage = showHomepage;
+	}
 	
 }

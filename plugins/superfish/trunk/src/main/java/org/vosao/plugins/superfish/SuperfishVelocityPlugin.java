@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.velocity.VelocityContext;
+import org.dom4j.DocumentException;
 import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.PageEntity;
@@ -46,9 +47,9 @@ public class SuperfishVelocityPlugin extends AbstractVelocityPlugin {
 	}
 	
 	public String render() {
+		PluginEntity plugin = getDao().getPluginDao().getByName("superfish");
 		try {
-			PluginEntity plugin = getDao().getPluginDao().getByName("superfish");
-			SuperfishConfig config = new SuperfishConfig(plugin.getConfigData());
+			SuperfishConfig config = SuperfishConfig.parse(plugin.getConfigData());
 			TreeItemDecorator<PageEntity> root = getBusiness().getPageBusiness()
 				.getTree();
 			filterEnabled(root, config.getEnabledPages());
@@ -56,8 +57,15 @@ public class SuperfishVelocityPlugin extends AbstractVelocityPlugin {
 				SuperfishVelocityPlugin.class.getClassLoader(), 
 				"org/vosao/plugins/superfish/menu.vm");
 			VelocityContext context = new VelocityContext();
-			context.put("pages", root.getChildren());
+			context.put("root", root);
+			context.put("config", config);
 			return getBusiness().getSystemService().render(template, context);
+		}
+		catch (DocumentException e) {
+			SuperfishConfig config = new SuperfishConfig();
+			plugin.setConfigData(config.toXML());
+			getDao().getPluginDao().save(plugin);
+			return e.getMessage() + " Default config restored. Try again.";
 		}
 		catch (Exception e) {
 			e.printStackTrace();

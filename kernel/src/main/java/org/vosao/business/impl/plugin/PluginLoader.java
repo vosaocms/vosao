@@ -99,7 +99,7 @@ public class PluginLoader {
 		PluginEntity p = getDao().getPluginDao().getByName(plugin.getName());
 		if (p != null) {
 			plugin.setConfigData(p.getConfigData());
-			getDao().getPluginDao().remove(p.getId());
+			uninstall(p);
 		}
 		getDao().getPluginDao().save(plugin);
 		String pluginBase = "/plugins/" + plugin.getName();
@@ -115,7 +115,8 @@ public class PluginLoader {
 					resourceList.add(loadClasspathResource(item, plugin));
 				}
 				if (!url.startsWith("WEB-INF")) {
-					fileCacheList.add(filePrefix + item.path);
+					String filePath = filePrefix + item.path;
+					fileCacheList.add(filePath);
 					String folderPath = pluginBase + "/" + FolderUtil.getFilePath(
 							item.path);
 					FolderEntity folder = getBusiness().getFolderBusiness()
@@ -126,6 +127,8 @@ public class PluginLoader {
 									FolderUtil.getFileExt(item.path)), 
 							new Date(), fileData.length);
 					getDao().getFileDao().save(file, fileData);
+					getBusiness().getSystemService().getFileCache().remove(
+							filePath);
 				}
 				if (url.startsWith("WEB-INF/lib") && url.endsWith(".jar")) {
 					resourceList.addAll(loadJarFile(item, plugin));

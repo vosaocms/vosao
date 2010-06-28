@@ -53,7 +53,6 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 		try {
 			PluginEntity plugin = getDao().getPluginDao().getByName("sitemap");
 			SitemapConfig config = getConfig(plugin);
-			logger.info("config level " + config.getLevel());
 			TreeItemDecorator<PageEntity> root = getBusiness().getPageBusiness()
 					.getTree();
 			filterExclude(root, config.getExclude());
@@ -80,8 +79,6 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 
 	private void filterExclude(TreeItemDecorator<PageEntity> page,
 			List<String> urls) {
-		logger.info("filter children " + page.getEntity().getFriendlyURL());
-
 		List<TreeItemDecorator<PageEntity>> children = 
 			new ArrayList<TreeItemDecorator<PageEntity>>();
 		for (TreeItemDecorator<PageEntity> child : page.getChildren()) {
@@ -94,10 +91,6 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 			}
 			if (!excluded && child.getEntity().getState().equals(
 					PageState.APPROVED)) {
-
-				logger.info("child " + child.getEntity().getFriendlyURL() 
-						+ child.getEntity().getStateString());
-				
 				children.add(child);
 				filterExclude(child, urls);
 			}
@@ -135,7 +128,7 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 		StringBuilder path = new StringBuilder("/");
 		PageEntity page = getBusiness().getPageBusiness().getByUrl(
 				path.toString());
-		b.append("<ul><li><a href=\"/\">")
+		b.append("<ul class=\"breadcrumbs\"><li><a href=\"/\">")
 				.append(page.getLocalTitle(ctx.getLanguage()))
 				.append("</a></li>");
 		if (!url.equals("/")) {

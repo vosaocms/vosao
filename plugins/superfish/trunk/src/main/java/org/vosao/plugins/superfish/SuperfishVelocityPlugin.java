@@ -47,6 +47,10 @@ public class SuperfishVelocityPlugin extends AbstractVelocityPlugin {
 	}
 	
 	public String render() {
+		return renderMenu()	+ "<script type=\"text/javascript\">$(function(){ $('ul.sf-menu').superfish(); });</script>";
+	}
+	
+	public String renderMenu() {
 		PluginEntity plugin = getDao().getPluginDao().getByName("superfish");
 		try {
 			SuperfishConfig config = SuperfishConfig.parse(plugin.getConfigData());

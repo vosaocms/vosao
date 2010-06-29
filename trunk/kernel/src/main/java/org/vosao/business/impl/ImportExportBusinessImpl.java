@@ -214,7 +214,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 		}
 	}
 
-	private static String[] skipFolder = { "page", "theme", "tmp" };
+	private static String[] skipFolder = { "page", "theme", "tmp", "plugins" };
 
 	private boolean isSkipFolder(String path) {
 		for (String s : skipFolder) {

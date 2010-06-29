@@ -170,6 +170,8 @@ public class PageExporterImpl extends AbstractExporter
 				page.isVelocityProcessing()));
 		pageElement.addElement("skipPostProcessing").setText(String.valueOf(
 				page.isSkipPostProcessing()));
+		pageElement.addElement("cached").setText(String.valueOf(
+				page.isCached()));
 		List<ContentEntity> contents = getDao().getPageDao().getContents(
 				page.getId()); 
 		for (ContentEntity content : contents) {
@@ -327,6 +329,9 @@ public class PageExporterImpl extends AbstractExporter
 			if (element.getName().equals("skipPostProcessing")) {
 				newPage.setSkipPostProcessing(XmlUtil.readBooleanText(element, 
 						false));
+			}
+			if (element.getName().equals("cached")) {
+				newPage.setCached(XmlUtil.readBooleanText(element, true));
 			}
 		}
 		PageEntity page = getDao().getPageDao().getByUrlVersion(url, 

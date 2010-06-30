@@ -41,6 +41,7 @@ import org.vosao.common.VosaoContext;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.SeoUrlEntity;
+import org.vosao.entity.UserEntity;
 import org.vosao.i18n.Messages;
 
 /**
@@ -103,17 +104,23 @@ public class SiteFilter extends AbstractFilter implements Filter {
     		httpResponse.sendRedirect("/");
     	}
     	catch (AccessDeniedException e) {
+			HttpSession session = httpRequest.getSession(true);
+            String userEmail = (String)session.getAttribute(
+            		AuthenticationFilter.USER_SESSION_ATTR);
+            UserEntity user = getDao().getUserDao().getByEmail(userEmail);
     		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
-    		if (StringUtils.isEmpty(config.getSiteUserLoginUrl())) {
+    		if (user != null) {
     			renderMessage(httpResponse, Messages.get("access_denied_page"));
+    			return;
     		}
-    		else {
-    			HttpSession session = httpRequest.getSession(true);
-    			session.setAttribute(AuthenticationFilter.ORIGINAL_VIEW_KEY, 
-    					httpRequest.getRequestURI());
-    			httpResponse.sendRedirect(httpRequest.getContextPath()
-    					+ config.getSiteUserLoginUrl());
+    		if (StringUtils.isEmpty(config.getSiteUserLoginUrl())) {
+    			renderMessage(httpResponse, Messages.get("login_not_configured"));
+    			return;
     		}
+   			session.setAttribute(AuthenticationFilter.ORIGINAL_VIEW_KEY, 
+   					httpRequest.getRequestURI());
+   			httpResponse.sendRedirect(httpRequest.getContextPath()
+   					+ config.getSiteUserLoginUrl());
     	}
     }
 

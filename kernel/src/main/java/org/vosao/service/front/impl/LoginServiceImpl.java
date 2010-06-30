@@ -74,6 +74,7 @@ public class LoginServiceImpl extends AbstractServiceImpl
 				user.getEmail());
 		String originalView = (String) session.getAttribute(
 				AuthenticationFilter.ORIGINAL_VIEW_KEY);
+		logger.info(originalView);
 		if (originalView != null) {
 			session.removeAttribute(AuthenticationFilter.ORIGINAL_VIEW_KEY);
 			if (originalView.equals("/login.vm")) {

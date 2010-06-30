@@ -42,8 +42,8 @@ public class PluginHeadFragment	implements ContentFragment {
 				if (!StringUtils.isEmpty(plugin.getPageHeader())) {
 					code.append(plugin.getPageHeader());
 				}
-				code.append(entryPoint.getHeadBeginInclude());
 			}
+			code.append(entryPoint.getHeadBeginInclude());
 		}
 		return code.toString();
 	}

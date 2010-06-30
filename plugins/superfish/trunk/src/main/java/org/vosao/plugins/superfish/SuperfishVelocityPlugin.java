@@ -42,15 +42,21 @@ import org.vosao.velocity.plugin.AbstractVelocityPlugin;
  */
 public class SuperfishVelocityPlugin extends AbstractVelocityPlugin {
 
-	public SuperfishVelocityPlugin(Business aBusiness) {
+	private SuperfishEntryPoint entryPoint;
+	
+	public SuperfishVelocityPlugin(SuperfishEntryPoint enrtyPoint,
+			Business aBusiness) {
+		this.entryPoint = enrtyPoint;
 		setBusiness(aBusiness);
 	}
 	
 	public String render() {
+		entryPoint.setHeadInclude(true);
 		return renderMenu()	+ "<script type=\"text/javascript\">$(function(){ $('ul.sf-menu').superfish(); });</script>";
 	}
 	
 	public String renderMenu() {
+		entryPoint.setHeadInclude(true);
 		PluginEntity plugin = getDao().getPluginDao().getByName("superfish");
 		try {
 			SuperfishConfig config = SuperfishConfig.parse(plugin.getConfigData());

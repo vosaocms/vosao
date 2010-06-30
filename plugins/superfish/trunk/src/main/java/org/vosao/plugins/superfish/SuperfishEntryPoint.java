@@ -33,8 +33,8 @@ import org.vosao.service.plugin.PluginServiceManager;
  */
 public class SuperfishEntryPoint extends AbstractPluginEntryPoint {
 
-	SuperfishBackServiceManager backServiceManager;
-	SuperfishVelocityPlugin velocityPlugin;
+	private SuperfishBackServiceManager backServiceManager;
+	private SuperfishVelocityPlugin velocityPlugin;
 	
 	@Override
 	public void init () {
@@ -57,7 +57,7 @@ public class SuperfishEntryPoint extends AbstractPluginEntryPoint {
 	@Override
 	public Object getPluginVelocityService() {
 		if (velocityPlugin == null) {
-			velocityPlugin = new SuperfishVelocityPlugin(getBusiness());
+			velocityPlugin = new SuperfishVelocityPlugin(this, getBusiness());
 		}
 		return velocityPlugin;
 	}
@@ -66,4 +66,5 @@ public class SuperfishEntryPoint extends AbstractPluginEntryPoint {
 	public String getBundleName() {
 		return "org.vosao.plugins.superfish.messages";
 	}
+
 }

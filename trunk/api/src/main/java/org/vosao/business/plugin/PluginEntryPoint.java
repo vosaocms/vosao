@@ -49,6 +49,10 @@ public interface PluginEntryPoint {
 	 */
 	String getHeadBeginInclude();
 	
+	boolean isHeadInclude();
+	
+	void setHeadInclude(boolean value);
+	
 	/**
 	 * Get message bundle class path. For example: org.vosao.resources.messages
 	 * @return bundle name.

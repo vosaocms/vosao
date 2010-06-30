@@ -35,12 +35,15 @@ public class PluginHeadFragment	implements ContentFragment {
 		StringBuffer code = new StringBuffer(); 
 		for (PluginEntity plugin : business.getDao().getPluginDao()
 				.selectEnabled()) {
-			if (!StringUtils.isEmpty(plugin.getPageHeader())) {
-				code.append(plugin.getPageHeader());
-			}
 			PluginEntryPoint entryPoint = business.getPluginBusiness()
 					.getEntryPoint(plugin);
-			code.append(entryPoint.getHeadBeginInclude());
+			if (entryPoint.isHeadInclude()) {
+				entryPoint.setHeadInclude(false);
+				if (!StringUtils.isEmpty(plugin.getPageHeader())) {
+					code.append(plugin.getPageHeader());
+				}
+				code.append(entryPoint.getHeadBeginInclude());
+			}
 		}
 		return code.toString();
 	}

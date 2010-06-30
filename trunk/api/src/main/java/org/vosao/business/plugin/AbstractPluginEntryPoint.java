@@ -20,6 +20,7 @@ public abstract class AbstractPluginEntryPoint implements PluginEntryPoint {
 	private BackService backService;
 	private Map<String, HttpServlet> servlets;
 	private List<PluginCronJob> jobs;
+	private boolean headInclude;
 	
 	public AbstractPluginEntryPoint() {
 		servlets = new HashMap<String, HttpServlet>();
@@ -97,6 +98,16 @@ public abstract class AbstractPluginEntryPoint implements PluginEntryPoint {
 	@Override
 	public String getBundleName() {
 		return null;
+	}
+
+	@Override
+	public boolean isHeadInclude() {
+		return headInclude;
+	}
+	
+	@Override
+	public void setHeadInclude(boolean value) {
+		headInclude = value;
 	}
 
 }

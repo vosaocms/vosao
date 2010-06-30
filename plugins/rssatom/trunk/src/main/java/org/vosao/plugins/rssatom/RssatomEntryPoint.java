@@ -64,6 +64,8 @@ public class RssatomEntryPoint extends AbstractPluginEntryPoint {
 			Element root = doc.addElement("plugin-config");
 			root.addElement("items").setText(String.valueOf(
 					rssatomConfig.getItems()));
+			root.addElement("itemSize").setText(String.valueOf(
+					rssatomConfig.getItemSize()));
 			root.addElement("pages").setText(rssatomConfig.getPages());
 			root.addElement("title").setText(rssatomConfig.getTitle());
 			try {

@@ -239,7 +239,6 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 			return null;
 		}
 		String[] tokens = request.getRequestURI().toString().split("/");
-		logger.info(Arrays.toString(tokens));
 		if (tokens.length < 4) {
 			return null;
 		}

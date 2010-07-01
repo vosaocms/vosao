@@ -1,0 +1,32 @@
+#versions {
+	float:right;
+	width:140px;
+	min-width:0;
+	padding: 15px 10px;
+}
+
+#auditData {
+	margin-top: 20px;
+	font-size: 0.8em;
+}
+
+#pageState, #pageCreateUser, #pageCreateDate, #pageModUser, #pageModDate {
+	font-weight: bold;
+	display: block;
+	margin-bottom: 10px;
+}
+
+#page-content {
+    margin: 10px 0;
+    clear: both;
+}
+
+.label {
+	margin: 20px 0 10px 0;
+}
+
+#tabs {
+	float: left;
+	width: 80%;
+}
+

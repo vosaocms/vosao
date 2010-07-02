@@ -36,6 +36,11 @@ import org.vosao.entity.PageEntity;
 import org.vosao.utils.EmailUtil;
 import org.vosao.utils.StrUtil;
 
+/**
+ * 
+ * @author Alexander Oleynik
+ *
+ */
 public class CommentBusinessImpl extends AbstractBusinessImpl 
 	implements CommentBusiness {
 
@@ -50,6 +55,8 @@ public class CommentBusinessImpl extends AbstractBusinessImpl
 		CommentEntity comment = new CommentEntity(name, encodedContent, 
 				new Date(), page.getFriendlyURL());
 		getDao().getCommentDao().save(comment);
+		getBusiness().getSystemService().getPageCache().remove(
+				page.getFriendlyURL());
 		List<String> toAddresses = StrUtil.fromCSV(config.getCommentsEmail());
 		if (toAddresses.size() == 0) {
 			toAddresses.add(config.getSiteEmail());

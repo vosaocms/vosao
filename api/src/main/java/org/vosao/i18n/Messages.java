@@ -45,7 +45,8 @@ public class Messages {
 
 	private static final Locale[] supportedLocales = {
 		Locale.ENGLISH, 
-		new Locale("ru")};
+		new Locale("ru"),
+		Locale.JAPANESE};
 	
 	private static Map<Locale, VosaoResourceBundle> bundles = 
 			new HashMap<Locale, VosaoResourceBundle>();

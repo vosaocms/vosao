@@ -24,6 +24,7 @@ var templateId = Vosao.getQueryParam('id');
 var template = '';
 var editMode = templateId != '';
 var autosaveTimer = '';
+var smallEditor = true;
     
 $(function(){
 	Vosao.initJSONRpc(loadData);
@@ -140,16 +141,17 @@ function onUpdate(cont) {
 }
 
 function onSize() {
-	var label = $('#sizeLink').text();
-	if (label == 'Big') {
-		$('#content').attr('cols','120');
-		$('#content').attr('rows','30');
-		$('#sizeLink').text('Small');
-	}
-	if (label == 'Small') {
+	if (!smallEditor) {
 		$('#content').attr('cols','80');
 		$('#content').attr('rows','20');
-		$('#sizeLink').text('Big');
+		$('#sizeLink').text(messages.big);
+		smallEditor = true;
+	}
+	else {
+		$('#content').attr('cols','120');
+		$('#content').attr('rows','30');
+		$('#sizeLink').text(messages.small);
+		smallEditor = false;
 	}
 }
 

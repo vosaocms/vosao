@@ -194,4 +194,13 @@
         <url-pattern>/_ah/appstats/*</url-pattern>
     </servlet-mapping-->
     
+    <security-constraint>
+    	<web-resource-collection>
+        	<url-pattern>/setup</url-pattern>
+    	</web-resource-collection>
+    	<auth-constraint>
+        	<role-name>admin</role-name>
+    	</auth-constraint>
+	</security-constraint>
+
 </web-app>

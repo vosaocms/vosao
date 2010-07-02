@@ -67,8 +67,7 @@ public class InitFilter extends AbstractFilter implements Filter {
         String url = httpRequest.getServletPath();
         if (url.equals(SETUP_URL)) {
             ConfigEntity config = getDao().getConfigDao().getConfig();
-            if (config == null || !SetupBeanImpl.VERSION.equals(
-            		config.getVersion())) {
+            if (config == null || config.getVersion() == null) {
             	SetupBean setupBean = getBusiness().getSetupBean();
             	setupBean.clear();
             	setupBean.setup();

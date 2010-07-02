@@ -1,0 +1,14 @@
+<vosao-plugin>
+    <name>sitemap</name>
+    <title>$sitemap.title</title>
+    <version>0.6</version>
+    <description>$sitemap.description</description>
+    <website>www.vosao.org</website>
+    <config>
+        <param name="level" title="$sitemap.level" type="Integer" value="2" />
+        <param name="exclude" title="$sitemap.exclude" type="String" value="" />
+    </config>
+    <entry-point-class>
+        org.vosao.plugins.sitemap.SitemapEntryPoint
+    </entry-point-class>
+</vosao-plugin>

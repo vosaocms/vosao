@@ -19,38 +19,56 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business;
+package org.vosao.update;
+
+import org.vosao.business.Business;
+import org.vosao.dao.Dao;
+import org.vosao.entity.PluginEntity;
+import org.vosao.entity.StructureTemplateEntity;
+import org.vosao.entity.UserEntity;
 
 /**
  * 
  * @author Alexander Oleynik
  *
  */
-public interface SetupBean {
-	
-	public static final String VERSION = "0.7";
-	public static final String FULLVERSION = "0.7";
+public class UpdateTask07 implements UpdateTask {
 
-	/**
-	 * Initial setup with default site.
-	 */
-	void setup();
+	private Business business;
 	
-	/**
-	 * Clear datastore before setup.
-	 */
-	void clear();
+	public UpdateTask07(Business aBusiness) {
+		business = aBusiness;
+	}
+	
+	private Dao getDao() {
+		return business.getDao();
+	}
+	
+	private Business getBusiness() {
+		return business;
+	}
 
-	/**
-	 * Clear sessions.
-	 */
-	void clearSessions();
+	@Override
+	public String getFromVersion() {
+		return "0.6";
+	}
 
-	/**
-	 * Clear file cache.
-	 */
-	void clearFileCache();
-	
-	void loadDefaultSite();
-	
+	@Override
+	public String getToVersion() {
+		return "0.7";
+	}
+
+	@Override
+	public String update() throws UpdateException {
+		updatePlugins();
+		return "Successfully updated to 0.7 version.";
+	}
+
+	private void updatePlugins() {
+		for (PluginEntity plugin : getDao().getPluginDao().select()) {
+			plugin.setDisabled(true);
+			getDao().getPluginDao().save(plugin);
+		}
+	}
+
 }

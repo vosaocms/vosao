@@ -38,7 +38,7 @@ $(function() {
 });
 
 function checkQuery() {
-    var query = decodeURI(Vosao.getQueryParam('query'));
+    var query = decodeURI(Vosao.getQueryParam('query')).replace('+', ' ');
     if (query) {
         $('#query').val(query);
         onSearch();

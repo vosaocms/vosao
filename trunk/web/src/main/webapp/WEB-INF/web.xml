@@ -155,6 +155,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>CacheResetServlet</servlet-name>
+        <servlet-class>org.vosao.servlet.CacheResetServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CacheResetServlet</servlet-name>
+        <url-pattern>/_ah/reset_cache</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>JSBundleServlet</servlet-name>
         <servlet-class>org.vosao.servlet.JSBundleServlet</servlet-class>
     </servlet>

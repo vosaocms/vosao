@@ -86,7 +86,7 @@ public class VosaoResourceBundle extends ResourceBundle {
 	private List<ResourceBundle> getResourceBundles() {
 		List<ResourceBundle> result = new ArrayList<ResourceBundle>();
 		for (PluginEntity plugin : getBusiness().getDao().getPluginDao()
-				.select()) {
+				.selectEnabled()) {
 			PluginEntryPoint entryPoint = getBusiness().getPluginBusiness()
 					.getEntryPoint(plugin);
 			if (entryPoint.getBundleName() != null) {

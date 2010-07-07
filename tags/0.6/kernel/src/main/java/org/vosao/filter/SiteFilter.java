@@ -39,6 +39,7 @@ import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.common.AccessDeniedException;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.ConfigEntity;
+import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.SeoUrlEntity;
 import org.vosao.entity.UserEntity;
@@ -126,7 +127,12 @@ public class SiteFilter extends AbstractFilter implements Filter {
 
 	private boolean servedFromCache(String url,	HttpServletResponse response) 
 			throws IOException {
-		String page = getSystemService().getPageCache().get(url);
+		String page = getSystemService().getPageCache().get(url,
+				getBusiness().getLanguage());
+		if (page == null) {
+			page = getSystemService().getPageCache().get(url,
+					LanguageEntity.ENGLISH_CODE);
+		}
 		if (page != null) {
 	    	response.setContentType("text/html");
 	    	response.setCharacterEncoding("UTF-8");
@@ -162,7 +168,8 @@ public class SiteFilter extends AbstractFilter implements Filter {
     	String content = getBusiness().getPageBusiness().render(page, language);
     	out.write(content);
     	if (!isLoggedIn(request) && page.isCached()) {
-    		getSystemService().getPageCache().put(page.getFriendlyURL(), content);
+    		getSystemService().getPageCache().put(page.getFriendlyURL(), 
+    				language, content);
     	}
     }
     

@@ -29,9 +29,9 @@ package org.vosao.global;
  */
 public interface PageCache {
 
-	void put(String url, String content);
+	void put(String url, String language, String content);
 	
-	String get(String url);
+	String get(String url, String language);
 	
 	void remove(String url);
 	

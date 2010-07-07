@@ -28,6 +28,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
+import org.vosao.entity.LanguageEntity;
 import org.vosao.global.CacheService;
 import org.vosao.global.PageCache;
 
@@ -60,8 +61,8 @@ public class PageCacheImpl implements PageCache {
 	
 	private static final Log logger = LogFactory.getLog(PageCacheImpl.class);
 
-	private String getPageKey(String url) {
-		return "page:" + url;
+	private String getPageKey(String url, String language) {
+		return "page:" + url + ":" + language;
 	}
 	
 	private CacheService getCache() {
@@ -74,9 +75,10 @@ public class PageCacheImpl implements PageCache {
 	}
 	
 	@Override
-	public String get(String url) {
+	public String get(String url, String language) {
 		try {
-			CacheItem item = (CacheItem)getCache().get(getPageKey(url));
+			CacheItem item = (CacheItem)getCache().get(getPageKey(url,
+					language));
 			if (item != null) {
 				if (getCache().getResetDate() == null 
 						|| item.getTimestamp().after(getCache()
@@ -92,13 +94,15 @@ public class PageCacheImpl implements PageCache {
 	}
 
 	@Override
-	public void put(String url, String content) {
-		getCache().put(getPageKey(url), new CacheItem(content));
+	public void put(String url, String language, String content) {
+		getCache().put(getPageKey(url, language), new CacheItem(content));
 	}
 
 	@Override
 	public void remove(String url) {
-		getCache().remove(getPageKey(url));		
+		for (LanguageEntity lang : getDao().getLanguageDao().select()) {
+			getCache().remove(getPageKey(url, lang.getCode()));		
+		}
 	}
 
 }

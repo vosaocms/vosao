@@ -35,4 +35,6 @@ public interface TemplateBusiness {
 	 * @return list of reference integrity check messages.
 	 */
 	List<String> remove(List<Long> ids);
+	
+	public TemplateEntity save(TemplateEntity template);
 }

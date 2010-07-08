@@ -22,7 +22,9 @@
 package org.vosao.business.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.vosao.business.TemplateBusiness;
 import org.vosao.entity.PageEntity;
@@ -79,6 +81,19 @@ public class TemplateBusinessImpl extends AbstractBusinessImpl
 			}
 		}	
 		return result;
+	}
+
+	@Override
+	public TemplateEntity save(TemplateEntity template) {
+		Set<String> pages = new HashSet<String>();
+		for (PageEntity page : getDao().getPageDao().selectByTemplate(
+				template.getId())) {
+			pages.add(page.getFriendlyURL());
+		}
+		for (String url : pages) {
+			getBusiness().getSystemService().getPageCache().remove(url);
+		}
+		return getDao().getTemplateDao().save(template);
 	}
 	
 }

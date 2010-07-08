@@ -45,7 +45,7 @@ public class TemplateServiceImpl extends AbstractServiceImpl
 		TemplateEntity template = getDao().getTemplateDao().getById(templateId);
 		if (template != null) {
 			template.setContent(content);
-			getDao().getTemplateDao().save(template);
+			getBusiness().getTemplateBusiness().save(template);
 			return ServiceResponse.createSuccessResponse(
 					Messages.get("template.success_save"));
 		}
@@ -96,7 +96,7 @@ public class TemplateServiceImpl extends AbstractServiceImpl
 		List<String> errors = getBusiness().getTemplateBusiness()
 			.validateBeforeUpdate(template);
 		if (errors.isEmpty()) {
-			getDao().getTemplateDao().save(template);
+			getBusiness().getTemplateBusiness().save(template);
 			return ServiceResponse.createSuccessResponse(template.getId()
 					.toString());
 		}

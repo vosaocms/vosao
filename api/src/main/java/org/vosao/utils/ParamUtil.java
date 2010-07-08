@@ -23,6 +23,8 @@ package org.vosao.utils;
 
 import java.util.Date;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import com.josephoconnell.html.HTMLInputFilter;
 
 /**
@@ -79,7 +81,7 @@ public class ParamUtil {
 	private static HTMLInputFilter xssFilter = new HTMLInputFilter();
 	
 	static public String filterXSS(String value) {
-		return xssFilter.filter(value);
+		return StringEscapeUtils.escapeHtml(xssFilter.filter(value));
 	}
 	
 }

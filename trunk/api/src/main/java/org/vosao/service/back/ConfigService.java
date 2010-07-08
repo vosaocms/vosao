@@ -28,6 +28,7 @@ import java.util.Map;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.service.AbstractService;
 import org.vosao.service.ServiceResponse;
+import org.vosao.service.vo.SiteStatVO;
 
 /**
  * @author Alexander Oleynik
@@ -71,4 +72,6 @@ public interface ConfigService extends AbstractService {
 	ServiceResponse startExportFolderTask(Long folderId);
 	
 	ServiceResponse loadDefaultSite();
+	
+	SiteStatVO getSiteStat();
 }

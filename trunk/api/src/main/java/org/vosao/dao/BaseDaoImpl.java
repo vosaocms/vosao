@@ -291,4 +291,14 @@ public class BaseDaoImpl<T extends BaseEntity>
 		return VosaoContext.getInstance().getUser() == null ? "guest" 
 				: VosaoContext.getInstance().getUser().getEmail();
 	}
+	
+	protected int count(Query query) {
+		return getDatastore().prepare(query).countEntities();
+	}
+
+	@Override
+	public int count() {
+		return count(newQuery());
+	}
+	
 }

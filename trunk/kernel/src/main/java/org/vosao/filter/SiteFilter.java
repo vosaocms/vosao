@@ -129,10 +129,6 @@ public class SiteFilter extends AbstractFilter implements Filter {
 			throws IOException {
 		String page = getSystemService().getPageCache().get(url,
 				getBusiness().getLanguage());
-		if (page == null) {
-			page = getSystemService().getPageCache().get(url,
-					LanguageEntity.ENGLISH_CODE);
-		}
 		if (page != null) {
 	    	response.setContentType("text/html");
 	    	response.setCharacterEncoding("UTF-8");

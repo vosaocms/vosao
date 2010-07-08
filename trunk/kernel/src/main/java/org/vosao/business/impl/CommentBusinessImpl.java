@@ -51,8 +51,7 @@ public class CommentBusinessImpl extends AbstractBusinessImpl
 			PageEntity page) {
 
 		ConfigEntity config = getDao().getConfigDao().getConfig();
-		String encodedContent = StringEscapeUtils.escapeHtml(content);
-		CommentEntity comment = new CommentEntity(name, encodedContent, 
+		CommentEntity comment = new CommentEntity(name, content, 
 				new Date(), page.getFriendlyURL());
 		getDao().getCommentDao().save(comment);
 		getBusiness().getSystemService().getPageCache().remove(

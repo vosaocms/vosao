@@ -88,9 +88,19 @@ public class CacheServiceImpl implements CacheService {
 	}
 
 	@Override
-	public Map getAll(Collection arg0) {
-		log.error("getAll(Collection arg0) not implemented");		
-		return null;
+	public Map getAll(Collection keys) {
+		Map result = new HashMap();
+		List memcacheKeys = new ArrayList();
+		for (Object key : keys) {
+			if (localCache.containsKey(key)) {
+				result.put(key, localCache.get(key));
+			}
+			else {
+				memcacheKeys.add(key);
+			}
+		}
+		result.putAll(cache.getAll(memcacheKeys));
+		return result;
 	}
 
 	@Override

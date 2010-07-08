@@ -146,11 +146,11 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>MessageQueueTask</servlet-name>
-        <servlet-class>org.vosao.servlet.MessageQueueTaskServlet</servlet-class>
+        <servlet-name>MessageQueueServlet</servlet-name>
+        <servlet-class>org.vosao.servlet.MessageQueueServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>MessageQueueTask</servlet-name>
+        <servlet-name>MessageQueueServlet</servlet-name>
         <url-pattern>/_ah/queue/mq</url-pattern>
     </servlet-mapping>
 

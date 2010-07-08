@@ -40,10 +40,15 @@ import org.vosao.business.imex.task.TaskTimeoutException;
 import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
 import org.vosao.business.impl.imex.ExporterFactoryImpl;
 import org.vosao.business.impl.imex.task.DaoTaskAdapterImpl;
+import org.vosao.business.mq.Topic;
+import org.vosao.business.mq.message.SimpleMessage;
+import org.vosao.common.RequestTimeoutException;
+import org.vosao.common.VfsNode;
 import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
+import org.vosao.utils.FolderUtil;
 
 public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 		ImportExportBusiness {
@@ -265,4 +270,58 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 		clearResourcesCache(result);
 	}
 
+	@Override
+	public void importUnzip(ZipInputStream in, String currentFile) 
+			throws IOException, RequestTimeoutException {
+		ZipEntry entry;
+		byte[] buffer = new byte[4096];
+		boolean skipping = currentFile != null;
+		if (!skipping) {
+			VfsNode.reset();
+		}
+		while ((entry = in.getNextEntry()) != null) {
+			if (skipping) {
+				if (entry.getName().equals(currentFile)) {
+					skipping = false;
+				} else {
+					continue;
+				}
+			}
+			if (getSystemService().getRequestCPUTimeSeconds() > 25) {
+				throw new RequestTimeoutException(entry.getName());
+			}
+			if (entry.isDirectory()) {
+				String name = FolderUtil.removeTrailingSlash(entry.getName());
+				VfsNode.createDirectory("/" + name);
+				checkTheme(name);
+			}
+			else {
+				ByteArrayOutputStream data = new ByteArrayOutputStream();
+				int len = 0;
+				while ((len = in.read(buffer)) > 0) {
+					data.write(buffer, 0, len);
+				}
+				VfsNode.createFile("/" + entry.getName(), data.toByteArray());
+			}
+		}
+		getBusiness().getMessageQueue().publish(new SimpleMessage(
+					Topic.IMPORT_FOLDER, "/"));
+		logger.info("Unzip finished.");
+	}
+
+	private void checkTheme(String path) {
+		if (path.startsWith("theme/")) {
+			String[] parts = path.split("/");
+			if (parts.length == 2) {
+				String url = parts[1];
+				TemplateEntity template = getDao().getTemplateDao()
+					.getByUrl(url);
+				if (template == null) {
+					template = new TemplateEntity(url, "", url);
+					getDao().getTemplateDao().save(template);
+				}
+			}
+		}
+	}
+	
 }

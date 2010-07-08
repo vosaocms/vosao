@@ -24,15 +24,17 @@ package org.vosao.business.impl.mq;
 import static com.google.appengine.api.labs.taskqueue.TaskOptions.Builder.url;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.datanucleus.util.StringUtils;
 import org.vosao.business.impl.mq.subscriber.ExportTaskSubscriber;
 import org.vosao.business.impl.mq.subscriber.FileChangedSubscriber;
+import org.vosao.business.impl.mq.subscriber.ImportFile;
+import org.vosao.business.impl.mq.subscriber.ImportFolder;
 import org.vosao.business.impl.mq.subscriber.ImportTaskSubscriber;
 import org.vosao.business.impl.mq.subscriber.IndexChangedPages;
 import org.vosao.business.impl.mq.subscriber.IndexDeletedPages;
@@ -45,7 +47,7 @@ import org.vosao.business.mq.Topic;
 import org.vosao.business.mq.TopicSubscriber;
 import org.vosao.common.VosaoContext;
 import org.vosao.global.SystemService;
-import org.vosao.servlet.MessageQueueTaskServlet;
+import org.vosao.servlet.MessageQueueServlet;
 import org.vosao.utils.StreamUtil;
 
 import com.google.appengine.api.labs.taskqueue.Queue;
@@ -75,6 +77,8 @@ public class MessageQueueImpl implements MessageQueue {
 		subscribe(Topic.PAGES_DELETED, IndexDeletedPages.class);
 		subscribe(Topic.PAGES_CHANGED, IndexChangedPages.class);
 		subscribe(Topic.REINDEX, Reindex.class);
+		subscribe(Topic.IMPORT_FILE, ImportFile.class);
+		subscribe(Topic.IMPORT_FOLDER, ImportFolder.class);
 	}
 
 	private SystemService getSystemService() {
@@ -104,7 +108,7 @@ public class MessageQueueImpl implements MessageQueue {
 			logger.error("Topic is null in message " + message);
 			return;
 		}
-		queue.add(url(MessageQueueTaskServlet.MQ_URL)
+		queue.add(url(MessageQueueServlet.MQ_URL)
 				.param("message", Base64.encode(StreamUtil.toBytes(message))));
 	}
 
@@ -147,6 +151,23 @@ public class MessageQueueImpl implements MessageQueue {
 				catch (InstantiationException e) {
 					logger.error(e.getMessage());
 				}
+			}
+		}
+		if (!StringUtils.isEmpty(message.getCommandClassName())) {
+			try {
+				TopicSubscriber subscriber = (TopicSubscriber)
+						this.getClass().getClassLoader().loadClass(
+								message.getCommandClassName()).newInstance();
+				subscriber.onMessage(message);
+			}
+			catch (ClassNotFoundException e) {
+				logger.error(e.getMessage());
+			}
+			catch (IllegalAccessException e) {
+				logger.error(e.getMessage());
+			}
+			catch (InstantiationException e) {
+				logger.error(e.getMessage());
 			}
 		}
 	}

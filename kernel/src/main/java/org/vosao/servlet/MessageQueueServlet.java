@@ -40,7 +40,7 @@ import com.google.appengine.repackaged.com.google.common.util.Base64;
  * @author Alexander Oleynik
  *
  */
-public class MessageQueueTaskServlet extends AbstractServlet {
+public class MessageQueueServlet extends AbstractServlet {
 
 	public static final String MQ_URL = "/_ah/queue/mq";
 	

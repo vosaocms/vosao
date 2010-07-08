@@ -203,68 +203,70 @@ public class SiteExporterImpl extends AbstractExporter
 	public boolean importSystemFile(ZipEntry entry, ByteArrayOutputStream data) 
 			throws DocumentException, DaoTaskException, 
 			UnsupportedEncodingException {
-		if (entry.getName().equals("_users.xml")) {
-			getUserExporter().readUsersFile(toXML(data));
+		return importSystemFile(entry.getName(), toXML(data));
+	}
+	
+	public boolean importSystemFile(String name, String xml) 
+			throws DocumentException, DaoTaskException, 
+			UnsupportedEncodingException {
+		if (name.equals("_users.xml")) {
+			getUserExporter().readUsersFile(xml);
 			return true;
 		}
-		if (entry.getName().equals("_groups.xml")) {
-			getGroupExporter().readGroupsFile(toXML(data));
+		if (name.equals("_groups.xml")) {
+			getGroupExporter().readGroupsFile(xml);
 			return true;
 		}
-		if (entry.getName().equals("_config.xml")) {
-			getConfigExporter().readConfigFile(toXML(data));
+		if (name.equals("_config.xml")) {
+			getConfigExporter().readConfigFile(xml);
 			return true;
 		}
-		if (entry.getName().equals("_structures.xml")) {
-			getStructureExporter().readStructuresFile(toXML(data));
+		if (name.equals("_structures.xml")) {
+			getStructureExporter().readStructuresFile(xml);
 			return true;
 		}
-		if (entry.getName().equals("_forms.xml")) {
-			getFormExporter().readFormsFile(toXML(data));
+		if (name.equals("_forms.xml")) {
+			getFormExporter().readFormsFile(xml);
 			return true;
 		}
-		if (entry.getName().equals("_messages.xml")) {
-			getMessagesExporter().readMessagesFile(toXML(data));
+		if (name.equals("_messages.xml")) {
+			getMessagesExporter().readMessagesFile(xml);
 			return true;
 		}
-		if (entry.getName().equals("_plugins.xml")) {
-			getPluginExporter().readPluginsFile(toXML(data));
+		if (name.equals("_plugins.xml")) {
+			getPluginExporter().readPluginsFile(xml);
 			return true;
 		}
-		if (entry.getName().equals("_tags.xml")) {
-			getTagExporter().read(toXML(data));
+		if (name.equals("_tags.xml")) {
+			getTagExporter().read(xml);
 			return true;
 		}
 		
-		if (entry.getName().endsWith("_folder.xml")) {
-			String folderPath = FolderUtil.getFilePath("/" + entry.getName());
-			getResourceExporter().readFolderFile(folderPath, toXML(data));
+		if (name.endsWith("_folder.xml")) {
+			String folderPath = FolderUtil.getFilePath("/" + name);
+			getResourceExporter().readFolderFile(folderPath, xml);
 			return true;
 		}
-		if (entry.getName().endsWith("_template.xml")) {
-			return getThemeExporter().readTemplateFile("/" + entry.getName(), 
-					toXML(data));
+		if (name.endsWith("_template.xml")) {
+			return getThemeExporter().readTemplateFile("/" + name, xml);
 		}
-		if (entry.getName().endsWith("_content.xml")) {
-			String folderPath = FolderUtil.getFilePath("/" + entry.getName());
-			return getPageExporter().readContentFile(folderPath, toXML(data));
+		if (name.endsWith("_content.xml")) {
+			String folderPath = FolderUtil.getFilePath("/" + name);
+			return getPageExporter().readContentFile(folderPath, xml);
 		}
-		if (entry.getName().endsWith("_comments.xml")) {
-			String folderPath = FolderUtil.getFilePath("/" + entry.getName());
-			return getPageExporter().readCommentsFile(folderPath, toXML(data));
+		if (name.endsWith("_comments.xml")) {
+			String folderPath = FolderUtil.getFilePath("/" + name);
+			return getPageExporter().readCommentsFile(folderPath, xml);
 		}
-		if (entry.getName().endsWith("_permissions.xml")) {
-			String folderPath = FolderUtil.getFilePath("/" + entry.getName());
-			return getPageExporter().readPermissionsFile(folderPath, toXML(
-					data));
+		if (name.endsWith("_permissions.xml")) {
+			String folderPath = FolderUtil.getFilePath("/" + name);
+			return getPageExporter().readPermissionsFile(folderPath, xml);
 		}
-		if (entry.getName().endsWith("_tag.xml")) {
-			String folderPath = FolderUtil.getFilePath("/" + entry.getName());
-			return getPageExporter().readPageTagFile(folderPath, toXML(
-					data));
+		if (name.endsWith("_tag.xml")) {
+			String folderPath = FolderUtil.getFilePath("/" + name);
+			return getPageExporter().readPageTagFile(folderPath, xml);
 		}
 		return false;
 	}
-	
-	
+
 }

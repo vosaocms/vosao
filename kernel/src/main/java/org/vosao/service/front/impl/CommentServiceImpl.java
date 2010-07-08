@@ -35,6 +35,7 @@ import org.vosao.service.ServiceResponse;
 import org.vosao.service.front.CommentService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.CommentVO;
+import org.vosao.utils.ParamUtil;
 import org.vosao.utils.RecaptchaUtil;
 
 /**
@@ -66,7 +67,8 @@ public class CommentServiceImpl extends AbstractServiceImpl
 		}
 		if (valid) {
         	try {
-        		addComment(name, comment, pageUrl);
+        		addComment(ParamUtil.filterXSS(name), 
+        				ParamUtil.filterXSS(comment), pageUrl);
                 return ServiceResponse.createSuccessResponse(
                 		Messages.get("comment_success_create"));
         	}

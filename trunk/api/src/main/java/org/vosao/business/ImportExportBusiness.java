@@ -30,6 +30,7 @@ import org.vosao.business.imex.ExporterFactory;
 import org.vosao.business.imex.task.DaoTaskAdapter;
 import org.vosao.business.imex.task.TaskTimeoutException;
 import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
+import org.vosao.common.RequestTimeoutException;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.TemplateEntity;
@@ -104,4 +105,7 @@ public interface ImportExportBusiness {
 	
 	DaoTaskAdapter getDaoTaskAdapter();
 	void setDaoTaskAdapter(DaoTaskAdapter daoTaskAdapter);
+	
+	void importUnzip(final ZipInputStream in, String currentFile) 
+		throws IOException, RequestTimeoutException;
 }

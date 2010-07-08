@@ -47,6 +47,16 @@ public enum Topic {
 	 *  ImportMessage
 	 */
 	IMPORT,
+	
+	/**
+	 * SimpleMessage
+	 */
+	IMPORT_FILE,
+	
+	/**
+	 * SimpleMessage
+	 */
+	IMPORT_FOLDER,
 
 	/**
 	 *  PageMessage

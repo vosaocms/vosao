@@ -37,6 +37,7 @@ import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.ConfigService;
 import org.vosao.service.impl.AbstractServiceImpl;
+import org.vosao.service.vo.SiteStatVO;
 import org.vosao.utils.StrUtil;
 import org.vosao.utils.StreamUtil;
 
@@ -212,6 +213,11 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 		getSetupBean().loadDefaultSite();
 		return ServiceResponse.createSuccessResponse(
 				Messages.get("success"));
+	}
+
+	@Override
+	public SiteStatVO getSiteStat() {
+		return new SiteStatVO();
 	}
 	
 }

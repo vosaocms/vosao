@@ -95,6 +95,7 @@
         <input id="resetButton" type="button" value="$messages.get("reset")" />
         <input id="loadDefaultSiteButton" type="button" value="$messages.get("config.load_default_site")" />
         <input id="cacheResetButton" type="button" value="$messages.get("config.cache_reset")" />
+        <input id="statButton" type="button" value="$messages.get("stat")" />
     </div>
   </form>
 </div>
@@ -141,3 +142,64 @@
   </form>
 </div>
 
+<div id="stat-dialog" style="display:none" title="$messages.get("stat")">
+    <div class="form-row">
+    	<label>$messages.get("pages"):</label>
+    	<span id="statPages"></span>
+    </div>
+    <div class="form-row">
+    	<label>$messages.get("stat.page_permissions"):</label>
+    	<span id="statPagePermissions"></span>
+    </div>
+    <div class="form-row">
+    	<label>$messages.get("structures"):</label>
+    	<span id="statStructures"></span>
+    </div>
+    <div class="form-row">
+    	<label>$messages.get("stat.structure_templates"):</label>
+    	<span id="statStructureTemplates"></span>
+    </div>
+    <div class="form-row">
+    	<label>$messages.get("templates"):</label>
+    	<span id="statTemplates"></span>
+    </div>
+    <div class="form-row">
+    	<label>$messages.get("folders"):</label>
+    	<span id="statFolders"></span>
+    </div>
+    <div class="form-row">
+    	<label>$messages.get("stat.folder_permissions"):</label>
+    	<span id="statFolderPermissions"></span>
+    </div>
+    <div class="form-row">
+    	<label>$messages.get("files"):</label>
+    	<span id="statFiles"></span>
+    </div>
+    <div class="form-row">
+    	<label>$messages.get("languages"):</label>
+    	<span id="statLanguages"></span>
+    </div>
+    <div class="form-row">
+    	<label>$messages.get("messages"):</label>
+    	<span id="statMessages"></span>
+    </div>
+    <div class="form-row">
+    	<label>$messages.get("users"):</label>
+    	<span id="statUsers"></span>
+    </div>
+    <div class="form-row">
+    	<label>$messages.get("groups"):</label>
+    	<span id="statGroups"></span>
+    </div>
+    <div class="form-row">
+    	<label>$messages.get("tags"):</label>
+    	<span id="statTags"></span>
+    </div>
+    <div class="form-row">
+    	<label><b>$messages.get("stat.total"):</b></label>
+    	<span id="statTotal" style="font-weight:bold;"></span>
+    </div>
+    <div class="buttons-dlg">
+        <input id="statOKButton" type="button" value="OK" />
+    </div>
+</div>

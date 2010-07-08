@@ -29,6 +29,7 @@ var exportType = null;
 $(function(){
     $("#import-dialog").dialog({ width: 400, autoOpen: false });
     $("#export-dialog").dialog({ width: 400, autoOpen: false });
+    $("#stat-dialog").dialog({ width: 400, autoOpen: false });
     $('#upload').ajaxForm(afterUpload);
     Vosao.initJSONRpc(loadData);
     $('#enableRecaptcha').click(toggleRecaptcha);
@@ -46,6 +47,8 @@ $(function(){
     $('ul.ui-tabs-nav li:nth-child(1)').addClass('ui-state-active')
 			.removeClass('ui-state-default');
     $('#enablePicasa').click(togglePicasa);
+    $('#statButton').click(onStat);
+    $('#statOKButton').click(onOKStat);
 });
 
 function loadData() {
@@ -221,4 +224,28 @@ function onLoadDefaultSite() {
 			Vosao.showServiceMessages(r);
 		});
 	}
+}
+
+function onStat() {
+	Vosao.jsonrpc.configService.getSiteStat(function(r) {
+		$('#statPages').text(r.pages);
+		$('#statPagePermissions').text(r.pagePermissions);
+		$('#statStructures').text(r.structures);
+		$('#statStructureTemplates').text(r.structureTemplates);
+		$('#statTemplates').text(r.templates);
+		$('#statFolders').text(r.folders);
+		$('#statFolderPermissions').text(r.folderPermissions);
+		$('#statFiles').text(r.files);
+		$('#statLanguages').text(r.languages);
+		$('#statMessages').text(r.messages);
+		$('#statUsers').text(r.users);
+		$('#statGroups').text(r.groups);
+		$('#statTags').text(r.tags);
+		$('#statTotal').text(r.total);
+		$('#stat-dialog').dialog('open');
+	});
+}
+
+function onOKStat() {
+	$('#stat-dialog').dialog('close');
 }

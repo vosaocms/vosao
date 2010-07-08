@@ -96,6 +96,7 @@ public class CommentBusinessImpl extends AbstractBusinessImpl
 	
 	@Override
 	public void disable(List<Long> ids) {
+		clearPageCache(ids);
 		if (isChangeGranted(ids)) {
 			getDao().getCommentDao().disable(ids);
 		}		
@@ -103,6 +104,7 @@ public class CommentBusinessImpl extends AbstractBusinessImpl
 
 	@Override
 	public void enable(List<Long> ids) {
+		clearPageCache(ids);
 		if (isChangeGranted(ids)) {
 			getDao().getCommentDao().enable(ids);
 		}		
@@ -110,9 +112,20 @@ public class CommentBusinessImpl extends AbstractBusinessImpl
 
 	@Override
 	public void remove(List<Long> ids) {
+		clearPageCache(ids);
 		if (isChangeGranted(ids)) {
 			getDao().getCommentDao().remove(ids);
 		}		
+	}
+
+	private void clearPageCache(List<Long> commentIds) {
+		for(Long id : commentIds) {
+			CommentEntity comment = getDao().getCommentDao().getById(id);
+			if (comment != null) {
+				getBusiness().getSystemService().getPageCache().remove(
+						comment.getPageUrl());
+			}
+		}
 	}
 
 	private ContentPermissionBusiness getContentPermissionBusiness() {

@@ -21,13 +21,11 @@
 
 package org.vosao.entity;
 
-import com.google.appengine.api.datastore.Entity;
-import static org.vosao.utils.EntityUtil.*;
 
 /**
  * @author Alexander Oleynik
  */
-public class GroupEntity extends BaseEntityImpl {
+public class GroupEntity extends BaseMapstoEntityImpl {
 
 	private static final long serialVersionUID = 3L;
 
@@ -41,18 +39,6 @@ public class GroupEntity extends BaseEntityImpl {
 		name = aName;
 	}
 	
-	@Override
-	public void load(Entity entity) {
-		super.load(entity);
-		name = getStringProperty(entity, "name");
-	}
-	
-	@Override
-	public void save(Entity entity) {
-		super.save(entity);
-		setProperty(entity, "name", name, true);
-	}
-
 	public String getName() {
 		return name;
 	}

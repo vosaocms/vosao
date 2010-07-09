@@ -21,6 +21,7 @@
 
 package org.vosao.dao;
 
+import org.mapsto.Mapsto;
 import org.vosao.dao.cache.EntityCache;
 import org.vosao.dao.cache.QueryCache;
 import org.vosao.global.SystemService;
@@ -28,6 +29,8 @@ import org.vosao.global.SystemService;
 public interface Dao {
 	
 	SystemService getSystemService();
+	
+	Mapsto getMapsto();
 
 	EntityCache getEntityCache();
 	void setEntityCache(EntityCache entityCache);

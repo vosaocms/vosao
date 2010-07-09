@@ -21,47 +21,45 @@
 
 package org.vosao.dao.impl;
 
-import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import org.vosao.dao.BaseDaoImpl;
+import org.mapsto.Filter;
+import org.mapsto.Query;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.UserGroupDao;
 import org.vosao.entity.UserGroupEntity;
-
-import com.google.appengine.api.datastore.Query;
 
 /**
  * @author Alexander Oleynik
  */
-public class UserGroupDaoImpl extends BaseDaoImpl<UserGroupEntity> 
+public class UserGroupDaoImpl extends BaseMapstoDaoImpl<UserGroupEntity> 
 		implements UserGroupDao {
 
 	public UserGroupDaoImpl() {
-		super(UserGroupEntity.class);
+		super("UserGroupEntity");
 	}
 
 	@Override
 	public List<UserGroupEntity> selectByUser(Long userId) {
-		Query q = newQuery();
-		q.addFilter("userId", EQUAL, userId);
-		return select(q, "selectByUser", params(userId));
+		Query<UserGroupEntity> q = newQuery();
+		q.addFilter("userId", Filter.EQUAL, userId);
+		return q.select();
 	}
 
 	@Override
 	public List<UserGroupEntity> selectByGroup(Long groupId) {
-		Query q = newQuery();
-		q.addFilter("groupId", EQUAL, groupId);
-		return select(q, "selectByGroup", params(groupId));
+		Query<UserGroupEntity> q = newQuery();
+		q.addFilter("groupId", Filter.EQUAL, groupId);
+		return q.select();
 	}
 
 	@Override
 	public UserGroupEntity getByUserGroup(Long groupId, Long userId) {
-		Query q = newQuery();
-		q.addFilter("userId", EQUAL, userId);
-		q.addFilter("groupId", EQUAL, groupId);
-		return selectOne(q, "getByUserGroup", params(groupId, userId));
+		Query<UserGroupEntity> q = newQuery();
+		q.addFilter("userId", Filter.EQUAL, userId);
+		q.addFilter("groupId", Filter.EQUAL, groupId);
+		return q.selectOne();
 	}
 
 	@Override

@@ -21,22 +21,17 @@
 
 package org.vosao.dao;
 
-import java.util.List;
+import org.mapsto.Table;
+import org.vosao.dao.cache.EntityCache;
+import org.vosao.dao.cache.QueryCache;
+import org.vosao.global.SystemService;
 
-import org.vosao.entity.UserEntity;
-import org.vosao.enums.UserRole;
+public interface BaseMapstoDao<T> extends Table<T> {
 
-/**
- * @author Alexander Oleynik
- */
-public interface UserDao extends BaseMapstoDao<UserEntity> {
+	EntityCache getEntityCache();
 
-	UserEntity getByEmail(final String email);
+	QueryCache getQueryCache(); 
 
-	List<UserEntity> getByRole(final UserRole role);
+	SystemService getSystemService();
 
-	List<UserEntity> selectByGroup(final Long groupId);
-	
-	UserEntity getByKey(final String key);
-	
 }

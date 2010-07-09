@@ -53,6 +53,10 @@ public class GroupVO {
 		return group.getId().toString();
 	}
 
+	public Long getIdLong() {
+		return group.getId();
+	}
+	
 	public String getName() {
 		return group.getName();
 	}

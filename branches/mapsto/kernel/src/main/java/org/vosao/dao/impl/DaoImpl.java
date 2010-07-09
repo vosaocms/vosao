@@ -23,6 +23,8 @@ package org.vosao.dao.impl;
 
 import java.io.Serializable;
 
+import org.mapsto.Mapsto;
+import org.mapsto.impl.MapstoImpl;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.CommentDao;
 import org.vosao.dao.ConfigDao;
@@ -61,6 +63,7 @@ public class DaoImpl implements Dao, Serializable {
 
 	private EntityCache entityCache;
 	private QueryCache queryCache;
+	private Mapsto mapsto;
 	
 	private PageDao pageDao;
 	private FileDao fileDao;
@@ -405,6 +408,17 @@ public class DaoImpl implements Dao, Serializable {
 	@Override
 	public void setFormDataDao(FormDataDao bean) {
 		formDataDao = bean;
+	}
+
+	@Override
+	public Mapsto getMapsto() {
+		if (mapsto == null) {
+			mapsto = new MapstoImpl();
+			mapsto.register(getUserDao(), 
+					getGroupDao(),
+					getUserGroupDao());
+		}
+		return mapsto;
 	}
 
 }

@@ -21,29 +21,28 @@
 
 package org.vosao.dao.impl;
 
-import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
-
+import org.mapsto.Filter;
+import org.mapsto.Query;
 import org.vosao.dao.BaseDaoImpl;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.GroupDao;
 import org.vosao.entity.GroupEntity;
-
-import com.google.appengine.api.datastore.Query;
 
 /**
  * @author Alexander Oleynik
  */
-public class GroupDaoImpl extends BaseDaoImpl<GroupEntity> 
+public class GroupDaoImpl extends BaseMapstoDaoImpl<GroupEntity> 
 		implements GroupDao {
 
 	public GroupDaoImpl() {
-		super(GroupEntity.class);
+		super("GroupEntity");
 	}
 
 	@Override
 	public GroupEntity getByName(String name) {
-		Query q = newQuery();
-		q.addFilter("name", EQUAL, name);
-		return selectOne(q, "getByName", params(name));
+		Query<GroupEntity> q = newQuery();
+		q.addFilter("name", Filter.EQUAL, name);
+		return q.selectOne();
 	}
 
 	@Override

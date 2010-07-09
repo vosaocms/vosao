@@ -24,6 +24,7 @@ package org.vosao.dao;
 import org.vosao.dao.tool.GroupTool;
 import org.vosao.dao.tool.UserTool;
 import org.vosao.entity.GroupEntity;
+import org.vosao.entity.UserEntity;
 import org.vosao.enums.UserRole;
 
 public class GroupDaoTest extends AbstractDaoTest {
@@ -51,6 +52,34 @@ public class GroupDaoTest extends AbstractDaoTest {
 				userTool.addUser("alex2", UserRole.USER).getId());
 		groupTool.addUserGroup(group2.getId(), 
 				userTool.addUser("alex3", UserRole.USER).getId());
+		assertEquals(2, getDao().getUserGroupDao().selectByGroup(
+				group1.getId()).size());
+		assertEquals(3, getDao().getUserGroupDao().selectByGroup(
+				group2.getId()).size());
+	}
+	
+	public void testGetByName() {
+		groupTool.addGroup("test");
+		GroupEntity group = getDao().getGroupDao().getByName("test");
+		assertNotNull(group);
+		assertEquals("test", group.getName());
+	}
+	
+	public void testGetByUserGroup() {
+		GroupEntity group1 = groupTool.addGroup("group1");
+		GroupEntity group2 = groupTool.addGroup("group2");
+		UserEntity user = userTool.addUser("roma", UserRole.USER); 
+		groupTool.addUserGroup(group1.getId(), user.getId());
+		groupTool.addUserGroup(group2.getId(), 
+				userTool.addUser("alex1", UserRole.USER).getId());
+		groupTool.addUserGroup(group2.getId(), 
+				userTool.addUser("alex2", UserRole.USER).getId());
+		groupTool.addUserGroup(group2.getId(), 
+				userTool.addUser("alex3", UserRole.USER).getId());
+		assertNotNull(getDao().getUserGroupDao().getByUserGroup(group1.getId(),
+				user.getId()));
+		assertNull(getDao().getUserGroupDao().getByUserGroup(group2.getId(), 
+				user.getId()));
 	}
 	
 }

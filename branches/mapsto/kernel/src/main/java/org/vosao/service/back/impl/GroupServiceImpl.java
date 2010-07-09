@@ -46,7 +46,7 @@ public class GroupServiceImpl extends AbstractServiceImpl
 		List<GroupVO> result = GroupVO.create(getDao().getGroupDao().select());
 		for (GroupVO group : result) {
 			group.setUsers(UserVO.create(getDao().getUserDao().selectByGroup(
-					Long.valueOf(group.getId()))));
+					group.getIdLong())));
 		}
 		return result;
 	}

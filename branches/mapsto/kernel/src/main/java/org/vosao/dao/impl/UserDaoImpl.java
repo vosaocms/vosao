@@ -24,34 +24,35 @@ package org.vosao.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mapsto.Query;
+import org.mapsto.impl.TableImpl;
+import static org.mapsto.Filter.*;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.BaseDaoImpl;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.UserDao;
 import org.vosao.dao.UserGroupDao;
 import org.vosao.entity.UserEntity;
 import org.vosao.entity.UserGroupEntity;
 import org.vosao.enums.UserRole;
 
-import com.google.appengine.api.datastore.Query;
-import static com.google.appengine.api.datastore.Query.FilterOperator.*;
-
-public class UserDaoImpl extends BaseDaoImpl<UserEntity> 
+public class UserDaoImpl extends BaseMapstoDaoImpl<UserEntity> 
 		implements UserDao {
 
 	public UserDaoImpl() {
-		super(UserEntity.class);
+		super("UserEntity");
 	}
 
 	public UserEntity getByEmail(final String email) {
-		Query q = newQuery();
+		Query<UserEntity> q = newQuery();
 		q.addFilter("email", EQUAL, email);
-		return selectOne(q, "getByEmail", params(email));
+		return q.selectOne();
 	}
 
 	public List<UserEntity> getByRole(final UserRole role) {
-		Query q = newQuery();
-		q.addFilter("role", EQUAL, role.name());
-		return select(q, "getByRole", params(role));
+		Query<UserEntity> q = newQuery();
+		q.addFilter("role", EQUAL, role);
+		return q.select();
 	}
 
 	@Override
@@ -77,9 +78,9 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity>
 		if (key == null) {
 			return null;
 		}
-		Query q = newQuery();
+		Query<UserEntity> q = newQuery();
 		q.addFilter("forgotPasswordKey", EQUAL, key);
-		return selectOne(q, "getByKey", params(key));
+		return q.selectOne();
 	}
 
 }

@@ -14,6 +14,15 @@
     </filter-mapping>    
 
     <filter>
+        <filter-name>MapstoFilter</filter-name>
+        <filter-class>org.vosao.filter.MapstoFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>MapstoFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>    
+
+    <filter>
         <filter-name>InitFilter</filter-name>
         <filter-class>org.vosao.filter.InitFilter</filter-class>
     </filter>

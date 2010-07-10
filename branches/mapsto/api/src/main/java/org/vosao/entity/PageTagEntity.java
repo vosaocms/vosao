@@ -33,7 +33,7 @@ import com.google.appengine.api.datastore.Entity;
 /**
  * @author Alexander Oleynik
  */
-public class PageTagEntity extends BaseEntityImpl {
+public class PageTagEntity extends BaseMapstoEntityImpl {
 
 	private static final long serialVersionUID = 1L;
 
@@ -44,20 +44,6 @@ public class PageTagEntity extends BaseEntityImpl {
 		tags = new ArrayList<Long>();
 	}
 	
-	@Override
-	public void load(Entity entity) {
-		super.load(entity);
-		pageURL = getStringProperty(entity, "pageURL");
-		tags = getListProperty(entity, "tags");
-	}
-	
-	@Override
-	public void save(Entity entity) {
-		super.save(entity);
-		setProperty(entity, "pageURL", pageURL, true);
-		setProperty(entity, "tags", tags);
-	}
-
 	public PageTagEntity(String aPageURL) {
 		this();
 		pageURL = aPageURL;

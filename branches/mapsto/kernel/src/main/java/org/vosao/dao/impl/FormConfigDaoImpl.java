@@ -23,15 +23,15 @@ package org.vosao.dao.impl;
 
 import java.util.List;
 
-import org.vosao.dao.BaseDaoImpl;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.FormConfigDao;
 import org.vosao.entity.FormConfigEntity;
 
-public class FormConfigDaoImpl extends BaseDaoImpl<FormConfigEntity> 
+public class FormConfigDaoImpl extends BaseMapstoDaoImpl<FormConfigEntity> 
 		implements FormConfigDao {
 
 	public FormConfigDaoImpl() {
-		super(FormConfigEntity.class);
+		super("FormConfigEntity");
 	}
 
 	@Override

@@ -32,7 +32,7 @@ import org.vosao.enums.FieldType;
 
 import com.google.appengine.api.datastore.Entity;
 
-public class FieldEntity extends BaseEntityImpl {
+public class FieldEntity extends BaseMapstoEntityImpl {
 
 	public static class Option {
 		private String value;
@@ -83,40 +83,6 @@ public class FieldEntity extends BaseEntityImpl {
 		this.fieldType = fieldType;
 		this.mandatory = optional;
 		this.defaultValue = defaultValue;
-	}
-
-	@Override
-	public void load(Entity entity) {
-		super.load(entity);
-		formId = getLongProperty(entity, "formId");
-		name = getStringProperty(entity, "name");
-		title = getStringProperty(entity, "title");
-		fieldType = FieldType.valueOf(getStringProperty(entity, "fieldType"));
-		mandatory = getBooleanProperty(entity, "mandatory", false);
-		values = getStringProperty(entity, "values");
-		defaultValue = getStringProperty(entity, "defaultValue");
-		height = getIntegerProperty(entity, "height", 1);
-		width = getIntegerProperty(entity, "width", 20);
-		index = getIntegerProperty(entity, "index", 0);
-		regex = getStringProperty(entity, "regex");
-		regexMessage = getStringProperty(entity, "regexMessage");
-	}
-	
-	@Override
-	public void save(Entity entity) {
-		super.save(entity);
-		setProperty(entity, "formId", formId, true);
-		setProperty(entity, "name", name, true);
-		setProperty(entity, "title", title, false);
-		setProperty(entity, "fieldType", fieldType.name(), false);
-		setProperty(entity, "mandatory", mandatory, false);
-		setProperty(entity, "values", values, false);
-		setProperty(entity, "defaultValue", defaultValue, false);
-		setProperty(entity, "height", height, false);
-		setProperty(entity, "width", width, false);
-		setProperty(entity, "index", index, false);
-		setProperty(entity, "regex", regex, false);
-		setProperty(entity, "regexMessage", regexMessage, false);
 	}
 
 	public FieldType getFieldType() {

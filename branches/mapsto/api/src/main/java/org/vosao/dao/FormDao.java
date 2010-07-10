@@ -23,7 +23,7 @@ package org.vosao.dao;
 
 import org.vosao.entity.FormEntity;
 
-public interface FormDao extends BaseDao<FormEntity> {
+public interface FormDao extends BaseMapstoDao<FormEntity> {
 
 	FormEntity getByName(final String name);
 

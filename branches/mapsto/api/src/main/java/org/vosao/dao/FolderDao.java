@@ -28,7 +28,7 @@ import org.vosao.entity.FolderEntity;
 /**
  * @author Alexander Oleynik
  */
-public interface FolderDao extends BaseDao<FolderEntity> {
+public interface FolderDao extends BaseMapstoDao<FolderEntity> {
 
 	FolderEntity getByPath(final String path);
 

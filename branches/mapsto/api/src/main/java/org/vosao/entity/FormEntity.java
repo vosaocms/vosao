@@ -29,7 +29,7 @@ import static org.vosao.utils.EntityUtil.*;
  * @author Alexander Oleynik
  *
  */
-public class FormEntity extends BaseEntityImpl {
+public class FormEntity extends BaseMapstoEntityImpl {
 
 	private static final long serialVersionUID = 2L;
 
@@ -55,34 +55,6 @@ public class FormEntity extends BaseEntityImpl {
 		letterSubject = aSubject;
 	}
 	
-	@Override
-	public void load(Entity entity) {
-		super.load(entity);
-		name = getStringProperty(entity, "name");
-		email = getStringProperty(entity, "email");
-		title = getStringProperty(entity, "title");
-		letterSubject = getStringProperty(entity, "letterSubject");
-		sendButtonTitle = getStringProperty(entity, "sendButtonTitle");
-		resetButtonTitle = getStringProperty(entity, "resetButtonTitle");
-		showResetButton = getBooleanProperty(entity, "showResetButton", false);
-		enableCaptcha = getBooleanProperty(entity, "enableCaptcha", false);
-		enableSave = getBooleanProperty(entity, "enableSave", false);
-	}
-	
-	@Override
-	public void save(Entity entity) {
-		super.save(entity);
-		setProperty(entity, "name", name, true);
-		setProperty(entity, "email", email, false);
-		setProperty(entity, "title", title, false);
-		setProperty(entity, "letterSubject", letterSubject, false);
-		setProperty(entity, "sendButtonTitle", sendButtonTitle, false);
-		setProperty(entity, "resetButtonTitle", resetButtonTitle, false);
-		setProperty(entity, "showResetButton", showResetButton, false);
-		setProperty(entity, "enableCaptcha", enableCaptcha, false);
-		setProperty(entity, "enableSave", enableSave, false);
-	}
-
 	public String getName() {
 		return name;
 	}

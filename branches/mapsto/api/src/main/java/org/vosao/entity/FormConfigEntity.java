@@ -25,7 +25,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
 import static org.vosao.utils.EntityUtil.*;
 
-public class FormConfigEntity extends BaseEntityImpl {
+public class FormConfigEntity extends BaseMapstoEntityImpl {
 
 	private static final long serialVersionUID = 2L;
 
@@ -40,20 +40,6 @@ public class FormConfigEntity extends BaseEntityImpl {
 		setLetterTemplate("");
 	}
 	
-	@Override
-	public void load(Entity entity) {
-		super.load(entity);
-		formTemplate = getTextProperty(entity, "formTemplate");
-		letterTemplate = getTextProperty(entity, "letterTemplate");
-	}
-	
-	@Override
-	public void save(Entity entity) {
-		super.save(entity);
-		setTextProperty(entity, "formTemplate", formTemplate);
-		setTextProperty(entity, "letterTemplate", letterTemplate);
-	}
-
 	public String getFormTemplate() {
 		return formTemplate;
 	}

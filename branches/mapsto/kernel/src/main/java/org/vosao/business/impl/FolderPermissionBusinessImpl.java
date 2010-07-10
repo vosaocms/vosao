@@ -48,6 +48,9 @@ public class FolderPermissionBusinessImpl extends AbstractBusinessImpl
 	public FolderPermissionEntity getGuestPermission(
 			final FolderEntity folder) {
 		GroupEntity guests = getDao().getGroupDao().getGuestsGroup();
+		if (guests == null) {
+			throw new NullPointerException("guests group not found");
+		}
 		return getGroupPermission(folder, guests.getId());
 	}
 

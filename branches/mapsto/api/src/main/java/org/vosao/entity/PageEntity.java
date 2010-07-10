@@ -50,7 +50,7 @@ import com.google.appengine.api.datastore.Entity;
 /**
  * @author Alexander Oleynik
  */
-public class PageEntity extends BaseEntityImpl {
+public class PageEntity extends BaseMapstoEntityImpl {
 
 	private static final long serialVersionUID = 9L;
 	
@@ -99,56 +99,6 @@ public class PageEntity extends BaseEntityImpl {
 		cached = true;
 	}
 	
-	@Override
-	public void load(Entity entity) {
-		super.load(entity);
-		title = getTextProperty(entity, "title");
-		friendlyURL = getStringProperty(entity, "friendlyURL");
-		parentUrl = getStringProperty(entity, "parentUrl");
-		template = getLongProperty(entity, "template");
-		publishDate = getDateProperty(entity, "publishDate");
-		commentsEnabled = getBooleanProperty(entity, "commentsEnabled", false);
-		version = getIntegerProperty(entity, "version", 1);
-		versionTitle = getStringProperty(entity, "versionTitle");
-		state = PageState.valueOf(getStringProperty(entity, "state"));
-		pageType = PageType.valueOf(getStringProperty(entity, "pageType"));
-		structureId = getLongProperty(entity, "structureId");
-		structureTemplateId = getLongProperty(entity, "structureTemplateId");
-		keywords = getTextProperty(entity, "keywords");
-		description = getTextProperty(entity, "description");
-		searchable = getBooleanProperty(entity, "searchable", true);
-		sortIndex = getIntegerProperty(entity, "sortIndex", 0);
-		velocityProcessing = getBooleanProperty(entity, "velocityProcessing", false);
-		headHtml = getTextProperty(entity, "headHtml");
-		skipPostProcessing = getBooleanProperty(entity, "skipPostProcessing", false);
-		cached = getBooleanProperty(entity, "cached", true);
-	}
-	
-	@Override
-	public void save(Entity entity) {
-		super.save(entity);
-		setTextProperty(entity, "title", title);
-		setProperty(entity, "friendlyURL", friendlyURL, true);
-		setProperty(entity, "parentUrl", parentUrl, true);
-		setProperty(entity, "template", template, true);
-		setProperty(entity, "publishDate", publishDate, true);
-		setProperty(entity, "commentsEnabled", commentsEnabled, false);
-		setProperty(entity, "version", version, true);
-		setProperty(entity, "versionTitle", versionTitle, false);
-		setProperty(entity, "state", state.name(), false);
-		setProperty(entity, "pageType", pageType.name(), false);
-		setProperty(entity, "structureId", structureId, true);
-		setProperty(entity, "structureTemplateId", structureTemplateId, true);
-		setTextProperty(entity, "keywords", keywords);
-		setTextProperty(entity, "description", description);
-		setProperty(entity, "searchable", searchable, false);
-		setProperty(entity, "sortIndex", sortIndex, false);
-		setProperty(entity, "velocityProcessing", velocityProcessing, false);
-		setTextProperty(entity, "headHtml", headHtml);
-		setProperty(entity, "skipPostProcessing", skipPostProcessing, false);
-		setProperty(entity, "cached", cached, false);
-	}
-
 	public PageEntity(String title, String friendlyURL, 
 			Long aTemplate, Date publish) {
 		this(title, friendlyURL, aTemplate);

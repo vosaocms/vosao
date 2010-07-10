@@ -21,37 +21,36 @@
 
 package org.vosao.dao.impl;
 
-import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.mapsto.Filter;
+import org.mapsto.Query;
 import org.vosao.dao.BaseDaoImpl;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.FolderDao;
 import org.vosao.entity.FolderEntity;
 
-import com.google.appengine.api.datastore.Query;
-
-public class FolderDaoImpl extends BaseDaoImpl<FolderEntity> 
+public class FolderDaoImpl extends BaseMapstoDaoImpl<FolderEntity> 
 		implements FolderDao {
 
 	public FolderDaoImpl() {
-		super(FolderEntity.class);
+		super("FolderEntity");
 	}
 
 	public List<FolderEntity> getByParent(final Long id) {
-		Query q = newQuery();
-		q.addFilter("parentId", EQUAL, id);
-		return select(q, "getByParent", params(id));
+		Query<FolderEntity> q = newQuery();
+		q.addFilter("parent", Filter.EQUAL, id);
+		return q.select("getByParent", params(id));
 	}
 	
 	public FolderEntity getByParentName(final Long parentId, 
 			final String name) {
-		Query q = newQuery();
-		q.addFilter("parentId", EQUAL, parentId);
-		q.addFilter("name", EQUAL, name);
-		return selectOne(q, "getByParentName", params(parentId, name));
+		Query<FolderEntity> q = newQuery();
+		q.addFilter("parent", Filter.EQUAL, parentId);
+		q.addFilter("name", Filter.EQUAL, name);
+		return q.selectOne("getByParentName", params(parentId, name));
 	}
 
 	@Override

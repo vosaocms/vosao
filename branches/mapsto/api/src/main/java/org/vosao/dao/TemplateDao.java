@@ -23,7 +23,7 @@ package org.vosao.dao;
 
 import org.vosao.entity.TemplateEntity;
 
-public interface TemplateDao extends BaseDao<TemplateEntity> {
+public interface TemplateDao extends BaseMapstoDao<TemplateEntity> {
 
 	TemplateEntity getByUrl(final String url);
 

@@ -23,41 +23,40 @@ package org.vosao.dao.impl;
 
 import java.util.List;
 
-import org.vosao.dao.BaseDaoImpl;
+import org.mapsto.Filter;
+import org.mapsto.Query;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.MessageDao;
 import org.vosao.entity.MessageEntity;
 
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.FilterOperator;
-
-public class MessageDaoImpl extends BaseDaoImpl<MessageEntity> 
+public class MessageDaoImpl extends BaseMapstoDaoImpl<MessageEntity> 
 		implements MessageDao {
 
 	public MessageDaoImpl() {
-		super(MessageEntity.class);
+		super("MessageEntity");
 	}
 
 	@Override
 	public List<MessageEntity> selectByCode(final String code) {
-		Query q = newQuery();
-		q.addFilter("code", FilterOperator.EQUAL, code);
-		return select(q, "selectByCode", params(code));
+		Query<MessageEntity> q = newQuery();
+		q.addFilter("code", Filter.EQUAL, code);
+		return q.select("selectByCode", params(code));
 	}
 	
 	@Override
 	public MessageEntity getByCode(final String code, 
 			final String languageCode) {
-		Query q = newQuery();
-		q.addFilter("code", FilterOperator.EQUAL, code);
-		q.addFilter("languageCode", FilterOperator.EQUAL, languageCode);
-		return selectOne(q, "getByCode", params(code, languageCode));
+		Query<MessageEntity> q = newQuery();
+		q.addFilter("code", Filter.EQUAL, code);
+		q.addFilter("languageCode", Filter.EQUAL, languageCode);
+		return q.selectOne("getByCode", params(code, languageCode));
 	}
 
 	@Override
 	public List<MessageEntity> select(final String languageCode) {
-		Query q = newQuery();
-		q.addFilter("languageCode", FilterOperator.EQUAL, languageCode);
-		return select(q, "select", params(languageCode));
+		Query<MessageEntity> q = newQuery();
+		q.addFilter("languageCode", Filter.EQUAL, languageCode);
+		return q.select("select", params(languageCode));
 	}
 
 }

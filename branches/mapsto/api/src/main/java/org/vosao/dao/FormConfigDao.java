@@ -23,7 +23,7 @@ package org.vosao.dao;
 
 import org.vosao.entity.FormConfigEntity;
 
-public interface FormConfigDao extends BaseDao<FormConfigEntity> {
+public interface FormConfigDao extends BaseMapstoDao<FormConfigEntity> {
 
 	FormConfigEntity getConfig();
 

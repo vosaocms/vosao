@@ -21,24 +21,23 @@
 
 package org.vosao.dao.impl;
 
-import org.vosao.dao.BaseDaoImpl;
+import org.mapsto.Filter;
+import org.mapsto.Query;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.TemplateDao;
 import org.vosao.entity.TemplateEntity;
 
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.FilterOperator;
-
-public class TemplateDaoImpl extends BaseDaoImpl<TemplateEntity> 
+public class TemplateDaoImpl extends BaseMapstoDaoImpl<TemplateEntity> 
 		implements TemplateDao {
 
 	public TemplateDaoImpl() {
-		super(TemplateEntity.class);
+		super("TemplateEntity");
 	}
 
 	public TemplateEntity getByUrl(final String url) {
-		Query q = newQuery();
-		q.addFilter("url", FilterOperator.EQUAL, url);
-		return selectOne(q, "getByUrl", params(url));
+		Query<TemplateEntity> q = newQuery();
+		q.addFilter("url", Filter.EQUAL, url);
+		return q.selectOne("getByUrl", params(url));
 	}
 	
 }

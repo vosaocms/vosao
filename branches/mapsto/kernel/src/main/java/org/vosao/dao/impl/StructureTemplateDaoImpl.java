@@ -23,42 +23,42 @@ package org.vosao.dao.impl;
 
 import java.util.List;
 
+import org.mapsto.Filter;
+import org.mapsto.Query;
 import org.vosao.dao.BaseDaoImpl;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.StructureTemplateDao;
 import org.vosao.entity.StructureTemplateEntity;
-
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.FilterOperator;
 
 /**
  * @author Alexander Oleynik
  */
 public class StructureTemplateDaoImpl 
-		extends BaseDaoImpl<StructureTemplateEntity> 
+		extends BaseMapstoDaoImpl<StructureTemplateEntity> 
 		implements StructureTemplateDao {
 
 	public StructureTemplateDaoImpl() {
-		super(StructureTemplateEntity.class);
+		super("StructureTemplateEntit");
 	}
 
 	@Override
 	public List<StructureTemplateEntity> selectByStructure(Long structureId) {
-		Query q = newQuery();
-		q.addFilter("structureId", FilterOperator.EQUAL, structureId);
-		return select(q, "selectByStructure", params(structureId));
+		Query<StructureTemplateEntity> q = newQuery();
+		q.addFilter("structureId", Filter.EQUAL, structureId);
+		return q.select("selectByStructure", params(structureId));
 	}
 
 	@Override
 	public StructureTemplateEntity getByName(String name) {
-		Query q = newQuery();
-		q.addFilter("name", FilterOperator.EQUAL, name);
-		return selectOne(q, "getByName", params(name));
+		Query<StructureTemplateEntity> q = newQuery();
+		q.addFilter("name", Filter.EQUAL, name);
+		return q.selectOne("getByName", params(name));
 	}
 
 	@Override
 	public StructureTemplateEntity getByTitle(String title) {
-		Query q = newQuery();
-		q.addFilter("title", FilterOperator.EQUAL, title);
-		return selectOne(q, "getByTitle", params(title));
+		Query<StructureTemplateEntity> q = newQuery();
+		q.addFilter("title", Filter.EQUAL, title);
+		return q.selectOne("getByTitle", params(title));
 	}
 }

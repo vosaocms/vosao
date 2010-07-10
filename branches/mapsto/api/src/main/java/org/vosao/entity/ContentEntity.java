@@ -32,7 +32,7 @@ import com.google.appengine.api.datastore.Entity;
 /**
  * @author Alexander Oleynik
  */
-public class ContentEntity extends BaseEntityImpl {
+public class ContentEntity extends BaseMapstoEntityImpl {
 
 	private static final long serialVersionUID = 8L;
 
@@ -45,24 +45,6 @@ public class ContentEntity extends BaseEntityImpl {
 		content = "";
 	}
 	
-	@Override
-	public void load(Entity entity) {
-		super.load(entity);
-		parentClass = getStringProperty(entity, "parentClass");
-		parentKey = getLongProperty(entity, "parentKey");
-		languageCode = getStringProperty(entity, "languageCode");
-		content = getTextProperty(entity, "content");
-	}
-	
-	@Override
-	public void save(Entity entity) {
-		super.save(entity);
-		setProperty(entity, "parentClass", parentClass, true);
-		setProperty(entity, "parentKey", parentKey, true);
-		setProperty(entity, "languageCode", languageCode, true);
-		setTextProperty(entity, "content", content);
-	}
-
 	public ContentEntity(String parentClass, Long parentKey, 
 			String languageCode, String content) {
 		this();

@@ -29,7 +29,7 @@ import com.google.appengine.api.datastore.Entity;
 /**
  * @author Alexander Oleynik
  */
-public class FolderPermissionEntity extends BaseEntityImpl {
+public class FolderPermissionEntity extends BaseMapstoEntityImpl {
 
 	private static final long serialVersionUID = 3L;
 
@@ -54,23 +54,6 @@ public class FolderPermissionEntity extends BaseEntityImpl {
 			Long aGroupId) {
 		this(aFolderId, perm);
 		groupId = aGroupId;
-	}
-
-	@Override
-	public void load(Entity entity) {
-		super.load(entity);
-		folderId = getLongProperty(entity, "folderId");
-		permission = FolderPermissionType.valueOf(getStringProperty(entity, 
-				"permission"));
-		groupId = getLongProperty(entity, "groupId");
-	}
-	
-	@Override
-	public void save(Entity entity) {
-		super.save(entity);
-		setProperty(entity, "folderId", folderId, true);
-		setProperty(entity, "permission", permission.name(), false);
-		setProperty(entity, "groupId", groupId, true);
 	}
 
 	public Long getFolderId() {

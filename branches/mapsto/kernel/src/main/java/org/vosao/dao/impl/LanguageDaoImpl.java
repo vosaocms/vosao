@@ -21,24 +21,23 @@
 
 package org.vosao.dao.impl;
 
-import org.vosao.dao.BaseDaoImpl;
+import org.mapsto.Filter;
+import org.mapsto.Query;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.LanguageDao;
 import org.vosao.entity.LanguageEntity;
 
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.FilterOperator;
-
-public class LanguageDaoImpl extends BaseDaoImpl<LanguageEntity> 
+public class LanguageDaoImpl extends BaseMapstoDaoImpl<LanguageEntity> 
 		implements LanguageDao {
 
 	public LanguageDaoImpl() {
-		super(LanguageEntity.class);
+		super("LanguageEntity");
 	}
 
 	public LanguageEntity getByCode(final String code) {
-		Query q = newQuery();
-		q.addFilter("code", FilterOperator.EQUAL, code);
-		return selectOne(q, "getByCode", params(code));
+		Query<LanguageEntity> q = newQuery();
+		q.addFilter("code", Filter.EQUAL, code);
+		return q.selectOne("getByCode", params(code));
 	}
 
 }

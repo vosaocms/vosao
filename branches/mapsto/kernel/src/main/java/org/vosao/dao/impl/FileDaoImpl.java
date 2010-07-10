@@ -21,23 +21,23 @@
 
 package org.vosao.dao.impl;
 
-import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
-
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.mapsto.Filter;
+import org.mapsto.Query;
 import org.vosao.dao.BaseDaoImpl;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.FileChunkDao;
 import org.vosao.dao.FileDao;
 import org.vosao.entity.FileEntity;
 
-import com.google.appengine.api.datastore.Query;
-
-public class FileDaoImpl extends BaseDaoImpl<FileEntity> 
+public class FileDaoImpl extends BaseMapstoDaoImpl<FileEntity> 
 		implements FileDao {
 
 	public FileDaoImpl() {
-		super(FileEntity.class);
+		super("FileEntity");
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class FileDaoImpl extends BaseDaoImpl<FileEntity>
 	}
 
 	@Override
-	public void remove(final List<Long> ids) {
+	public void remove(Collection<Long> ids) {
 		for (Long fileId : ids) {
 			remove(fileId);
 		}
@@ -58,17 +58,17 @@ public class FileDaoImpl extends BaseDaoImpl<FileEntity>
 
 	@Override
 	public List<FileEntity> getByFolder(Long folderId) {
-		Query q = newQuery();
-		q.addFilter("folderId", EQUAL, folderId);
-		return select(q, "getByFolder", params(folderId));
+		Query<FileEntity> q = newQuery();
+		q.addFilter("folderId", Filter.EQUAL, folderId);
+		return q.select("getByFolder", params(folderId));
 	}
 
 	@Override
 	public FileEntity getByName(Long folderId, String name) {
-		Query q = newQuery();
-		q.addFilter("folderId", EQUAL, folderId);
-		q.addFilter("filename", EQUAL, name);
-		return selectOne(q, "getByName", params(folderId, name));
+		Query<FileEntity> q = newQuery();
+		q.addFilter("folderId", Filter.EQUAL, folderId);
+		q.addFilter("filename", Filter.EQUAL, name);
+		return q.selectOne("getByName", params(folderId, name));
 	}
 
 	@Override

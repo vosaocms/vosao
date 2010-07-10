@@ -21,24 +21,23 @@
 
 package org.vosao.dao.impl;
 
-import org.vosao.dao.BaseDaoImpl;
+import org.mapsto.Filter;
+import org.mapsto.Query;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.SeoUrlDao;
 import org.vosao.entity.SeoUrlEntity;
 
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.FilterOperator;
-
-public class SeoUrlDaoImpl extends BaseDaoImpl<SeoUrlEntity> 
+public class SeoUrlDaoImpl extends BaseMapstoDaoImpl<SeoUrlEntity> 
 		implements SeoUrlDao {
 
 	public SeoUrlDaoImpl() {
-		super(SeoUrlEntity.class);
+		super("SeoUrlEntity");
 	}
 
 	public SeoUrlEntity getByFrom(final String from) {
-		Query q = newQuery();
-		q.addFilter("fromLink", FilterOperator.EQUAL, from);
-		return selectOne(q, "getByFrom", params(from));
+		Query<SeoUrlEntity> q = newQuery();
+		q.addFilter("fromLink", Filter.EQUAL, from);
+		return q.selectOne("getByFrom", params(from));
 	}
 
 }

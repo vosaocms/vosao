@@ -22,14 +22,18 @@
 package org.vosao.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.mapsto.Filter;
+import org.mapsto.Query;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.BaseDaoImpl;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.CommentDao;
 import org.vosao.dao.ContentDao;
 import org.vosao.dao.PageDao;
@@ -37,19 +41,16 @@ import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.helper.PageHelper;
 
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.FilterOperator;
-
 /**
  * @author Alexander Oleynik
  */
-public class PageDaoImpl extends BaseDaoImpl<PageEntity> 
+public class PageDaoImpl extends BaseMapstoDaoImpl<PageEntity> 
 		implements PageDao {
 
 	private static final String PAGE_CLASS_NAME = PageEntity.class.getName();
 
 	public PageDaoImpl() {
-		super(PageEntity.class);
+		super("PageEntity");
 	}
 
 	@Override
@@ -78,24 +79,23 @@ public class PageDaoImpl extends BaseDaoImpl<PageEntity>
 	}
 
 	public List<PageEntity> selectAllChildren(final String parentUrl) {
-		Query q = newQuery();
-		q.addFilter("parentUrl", FilterOperator.EQUAL, parentUrl);
-		return select(q, "selectAllChildren", params(parentUrl));
+		Query<PageEntity> q = newQuery();
+		q.addFilter("parentUrl", Filter.EQUAL, parentUrl);
+		return q.select("selectAllChildren", params(parentUrl));
 	}
 	
 	public List<PageEntity> selectAllChildren(final String parentUrl,
 			Date startDate, Date endDate) {
-		Query q = newQuery();
-		q.addFilter("parentUrl", FilterOperator.EQUAL, parentUrl);
-		q.addFilter("publishDate", FilterOperator.GREATER_THAN_OR_EQUAL, 
-				startDate);
-		q.addFilter("publishDate", FilterOperator.LESS_THAN, endDate);
-		return select(q, "selectAllChildrenDate", params(parentUrl, startDate,
+		Query<PageEntity> q = newQuery();
+		q.addFilter("parentUrl", Filter.EQUAL, parentUrl);
+		q.addFilter("publishDate", Filter.MORE_EQUAL, startDate);
+		q.addFilter("publishDate", Filter.LESS, endDate);
+		return q.select("selectAllChildrenDate", params(parentUrl, startDate,
 				endDate));
 	}
 
 	@Override
-	public void remove(List<Long> ids) {
+	public void remove(Collection<Long> ids) {
 		for (Long id : ids) {
 			remove(id);
 		}
@@ -183,19 +183,19 @@ public class PageDaoImpl extends BaseDaoImpl<PageEntity>
 	
 	@Override
 	public List<PageEntity> selectByUrl(final String url) {
-		Query q = newQuery();
-		q.addFilter("friendlyURL", FilterOperator.EQUAL, url);
-		List<PageEntity> result = select(q, "selectByUrl", params(url));
+		Query<PageEntity> q = newQuery();
+		q.addFilter("friendlyURL", Filter.EQUAL, url);
+		List<PageEntity> result = q.select("selectByUrl", params(url));
 		Collections.sort(result, PageHelper.VERSION_ASC);
 		return result;
 	}
 	
 	@Override
 	public PageEntity getByUrlVersion(final String url, final Integer version) {
-		Query q = newQuery();
-		q.addFilter("friendlyURL", FilterOperator.EQUAL, url);
-		q.addFilter("version", FilterOperator.EQUAL, version);
-		return selectOne(q, "getByUrlVersion", params(url, version));
+		Query<PageEntity> q = newQuery();
+		q.addFilter("friendlyURL", Filter.EQUAL, url);
+		q.addFilter("version", Filter.EQUAL, version);
+		return q.selectOne("getByUrlVersion", params(url, version));
 	}
 	
 	@Override
@@ -216,25 +216,25 @@ public class PageDaoImpl extends BaseDaoImpl<PageEntity>
 
 	@Override
 	public List<PageEntity> selectByTemplate(Long templateId) {
-		Query q = newQuery();
-		q.addFilter("template", FilterOperator.EQUAL, templateId);
-		return select(q, "selectByTemplate", params(templateId));
+		Query<PageEntity> q = newQuery();
+		q.addFilter("template", Filter.EQUAL, templateId);
+		return q.select("selectByTemplate", params(templateId));
 	}
 
 	@Override
 	public List<PageEntity> selectByStructure(Long structureId) {
-		Query q = newQuery();
-		q.addFilter("structureId", FilterOperator.EQUAL, structureId);
-		return select(q, "selectByStructure", params(structureId));
+		Query<PageEntity> q = newQuery();
+		q.addFilter("structureId", Filter.EQUAL, structureId);
+		return q.select("selectByStructure", params(structureId));
 	}
 
 	@Override
 	public List<PageEntity> selectByStructureTemplate(
 			Long structureTemplateId) {
-		Query q = newQuery();
-		q.addFilter("structureTemplateId", FilterOperator.EQUAL, 
+		Query<PageEntity> q = newQuery();
+		q.addFilter("structureTemplateId", Filter.EQUAL, 
 				structureTemplateId);
-		return select(q, "selectByStructureTemplate", 
+		return q.select("selectByStructureTemplate", 
 				params(structureTemplateId));
 	}
 

@@ -21,35 +21,33 @@
 
 package org.vosao.dao.impl;
 
-import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
-
 import java.util.List;
 
+import org.mapsto.Filter;
+import org.mapsto.Query;
 import org.vosao.dao.BaseDaoImpl;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.FormDataDao;
 import org.vosao.entity.FormDataEntity;
 import org.vosao.entity.FormEntity;
-
-import com.google.appengine.api.datastore.Query;
 
 /**
  * 
  * @author Alexander Oleynik
  *
  */
-public class FormDataDaoImpl extends BaseDaoImpl<FormDataEntity> 
+public class FormDataDaoImpl extends BaseMapstoDaoImpl<FormDataEntity> 
 		implements FormDataDao {
 
 	public FormDataDaoImpl() {
-		super(FormDataEntity.class);
+		super("FormDataEntity");
 	}
 
 	@Override
 	public List<FormDataEntity> getByForm(final FormEntity form) {
-		Query q = newQuery();
-		q.addFilter("formId", EQUAL, form.getId());
-		return select(q, "getByForm", params(form.getId()));
+		Query<FormDataEntity> q = newQuery();
+		q.addFilter("formId", Filter.EQUAL, form.getId());
+		return q.select("getByForm", params(form.getId()));
 	}
-	
 	
 }

@@ -26,7 +26,7 @@ import static org.vosao.utils.EntityUtil.*;
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Entity;
 
-public class PluginResourceEntity extends BaseEntityImpl {
+public class PluginResourceEntity extends BaseMapstoEntityImpl {
 	
 	private static final long serialVersionUID = 2L;
 
@@ -35,22 +35,6 @@ public class PluginResourceEntity extends BaseEntityImpl {
 	private String url;
 	
     public PluginResourceEntity() {
-    }
-
-    @Override
-    public void load(Entity entity) {
-    	super.load(entity);
-    	data = getBlobProperty(entity, "data");
-    	url = getStringProperty(entity, "url");
-    	pluginName = getStringProperty(entity, "pluginName");
-    }
-    
-    @Override
-    public void save(Entity entity) {
-    	super.save(entity);
-    	setProperty(entity, "data", data);
-    	setProperty(entity, "url", url, true);
-    	setProperty(entity, "pluginName", pluginName, true);
     }
 
     public PluginResourceEntity(String plugin, String anUrl, byte[] content) {

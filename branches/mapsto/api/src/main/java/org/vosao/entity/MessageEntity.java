@@ -27,7 +27,7 @@ import static org.vosao.utils.EntityUtil.*;
 /**
  * @author Alexander Oleynik
  */
-public class MessageEntity extends BaseEntityImpl {
+public class MessageEntity extends BaseMapstoEntityImpl {
 
 	private static final long serialVersionUID = 2L;
 
@@ -36,22 +36,6 @@ public class MessageEntity extends BaseEntityImpl {
 	private String value;
 
 	public MessageEntity() {
-	}
-
-	@Override
-	public void load(Entity entity) {
-		super.load(entity);
-		code = getStringProperty(entity, "code");
-		languageCode = getStringProperty(entity, "languageCode");
-		value = getStringProperty(entity, "value");
-	}
-	
-	@Override
-	public void save(Entity entity) {
-		super.save(entity);
-		setProperty(entity, "code", code, true);
-		setProperty(entity, "languageCode", languageCode, true);
-		setProperty(entity, "value", value, false);
 	}
 
 	public MessageEntity(final String code, final String languageCode, 

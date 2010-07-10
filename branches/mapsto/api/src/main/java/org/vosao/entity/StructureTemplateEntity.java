@@ -21,22 +21,14 @@
 
 package org.vosao.entity;
 
-import static org.vosao.utils.EntityUtil.getLongProperty;
-import static org.vosao.utils.EntityUtil.getStringProperty;
-import static org.vosao.utils.EntityUtil.getTextProperty;
-import static org.vosao.utils.EntityUtil.setProperty;
-import static org.vosao.utils.EntityUtil.setTextProperty;
-
 import org.vosao.enums.StructureTemplateType;
-
-import com.google.appengine.api.datastore.Entity;
 
 /**
  * 
  * @author Alexander Oleynik
  *
  */
-public class StructureTemplateEntity extends BaseEntityImpl {
+public class StructureTemplateEntity extends BaseMapstoEntityImpl {
 
 	private static final long serialVersionUID = 3L;
 
@@ -50,26 +42,6 @@ public class StructureTemplateEntity extends BaseEntityImpl {
 		type = StructureTemplateType.VELOCITY;
 	}
 	
-	@Override
-	public void load(Entity entity) {
-		super.load(entity);
-		title = getStringProperty(entity, "title");
-		name = getStringProperty(entity, "name");
-		structureId = getLongProperty(entity, "structureId");
-		type = StructureTemplateType.valueOf(getStringProperty(entity, "type"));
-		content = getTextProperty(entity, "content");
-	}
-	
-	@Override
-	public void save(Entity entity) {
-		super.save(entity);
-		setProperty(entity, "title", title, true);
-		setProperty(entity, "name", name, true);
-		setProperty(entity, "structureId", structureId, true);
-		setProperty(entity, "type", type.name(), false);
-		setTextProperty(entity, "content", content);
-	}
-
 	public StructureTemplateEntity(String name, String title, Long structureId, 
 			StructureTemplateType type, String content) {
 		this();

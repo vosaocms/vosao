@@ -28,7 +28,7 @@ import org.vosao.entity.PluginEntity;
 /**
  * @author Alexander Oleynik
  */
-public interface PluginDao extends BaseDao<PluginEntity> {
+public interface PluginDao extends BaseMapstoDao<PluginEntity> {
 
 	PluginEntity getByName(String name);
 	

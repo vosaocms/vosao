@@ -21,33 +21,33 @@
 
 package org.vosao.dao.impl;
 
-import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
-
 import java.util.Collections;
 import java.util.List;
 
+import org.mapsto.Filter;
+import org.mapsto.Query;
 import org.vosao.dao.BaseDaoImpl;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.CommentDao;
 import org.vosao.entity.CommentEntity;
 import org.vosao.entity.helper.CommentHelper;
 
-import com.google.appengine.api.datastore.Query;
 
 /**
  * @author Alexander Oleynik
  */
-public class CommentDaoImpl extends BaseDaoImpl<CommentEntity> 
+public class CommentDaoImpl extends BaseMapstoDaoImpl<CommentEntity> 
 		implements CommentDao {
 
 	public CommentDaoImpl() {
-		super(CommentEntity.class);
+		super("CommentEntity");
 	}
 
 	@Override
 	public List<CommentEntity> getByPage(final String pageUrl) {
-		Query q = newQuery();
-		q.addFilter("pageUrl", EQUAL, pageUrl);
-		List<CommentEntity> result = select(q, "getByPage", params(pageUrl));
+		Query<CommentEntity> q = newQuery();
+		q.addFilter("pageUrl", Filter.EQUAL, pageUrl);
+		List<CommentEntity> result = q.select("getByPage", params(pageUrl));
 		Collections.sort(result, new CommentHelper.PublishDateDesc());
 		return result;
 	}
@@ -80,10 +80,10 @@ public class CommentDaoImpl extends BaseDaoImpl<CommentEntity>
 
 	@Override
 	public List<CommentEntity> getByPage(String pageUrl, boolean disabled) {
-		Query q = newQuery();
-		q.addFilter("pageUrl", EQUAL, pageUrl);
-		q.addFilter("disabled", EQUAL, disabled);
-		List<CommentEntity> result = select(q, "getByPage", params(pageUrl, 
+		Query<CommentEntity> q = newQuery();
+		q.addFilter("pageUrl", Filter.EQUAL, pageUrl);
+		q.addFilter("disabled", Filter.EQUAL, disabled);
+		List<CommentEntity> result = q.select("getByPage", params(pageUrl, 
 				disabled));
 		Collections.sort(result, new CommentHelper.PublishDateDesc());
 		return result;
@@ -91,8 +91,8 @@ public class CommentDaoImpl extends BaseDaoImpl<CommentEntity>
 
 	@Override
 	public void removeByPage(String url) {
-		Query q = newQuery();
-		q.addFilter("pageUrl", EQUAL, url);
+		Query<CommentEntity> q = newQuery();
+		q.addFilter("pageUrl", Filter.EQUAL, url);
 		removeSelected(q);
 	}
 	

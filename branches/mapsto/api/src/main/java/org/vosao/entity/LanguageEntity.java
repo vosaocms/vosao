@@ -21,10 +21,8 @@
 
 package org.vosao.entity;
 
-import com.google.appengine.api.datastore.Entity;
-import static org.vosao.utils.EntityUtil.*;
 
-public class LanguageEntity extends BaseEntityImpl {
+public class LanguageEntity extends BaseMapstoEntityImpl {
 
 	private static final long serialVersionUID = 2L;
 
@@ -37,20 +35,6 @@ public class LanguageEntity extends BaseEntityImpl {
 	public LanguageEntity() {
 		code = "";
 		title = "";
-	}
-
-	@Override
-	public void load(Entity entity) {
-		super.load(entity);
-		code = getStringProperty(entity, "code");
-		title = getStringProperty(entity, "title");
-	}
-	
-	@Override
-	public void save(Entity entity) {
-		super.save(entity);
-		setProperty(entity, "code", code, true);
-		setProperty(entity, "title", title, false);
 	}
 
 	public LanguageEntity(final String code, final String title) {

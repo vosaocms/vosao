@@ -31,7 +31,7 @@ import org.vosao.entity.FormEntity;
  * @author Alexander Oleynik
  *
  */
-public interface FormDataDao extends BaseDao<FormDataEntity> {
+public interface FormDataDao extends BaseMapstoDao<FormDataEntity> {
 
 	List<FormDataEntity> getByForm(final FormEntity form);
 

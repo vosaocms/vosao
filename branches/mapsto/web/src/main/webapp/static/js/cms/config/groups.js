@@ -61,8 +61,8 @@ function loadGroups() {
         	}
         	var editLink = '<a href="#" onclick="onGroupEdit(' + group.id + ')">' 
                 + group.name + '</a>';
-        	var userGroupLink = '<a href="#" onclick="onEditUserGroup(\'' 
-                + group.id + '\')">' + users + '</a>';
+        	var userGroupLink = '<a href="#" onclick="onEditUserGroup(' 
+                + group.id + ')">' + users + '</a>';
             h += '<tr><td><input type="checkbox" value="' + group.id 
                 + '"/></td><td>' + editLink + '</td><td>' + userGroupLink 
                 + '</td></tr>';
@@ -81,7 +81,7 @@ function onAddGroup() {
 function onRemoveGroup() {
     var ids = [];
     $('#groups input:checked').each(function () {
-        ids.push(String(this.value));
+        ids.push(this.value);
     });
     if (ids.length == 0) {
     	Vosao.info(messages.nothing_selected);
@@ -123,7 +123,7 @@ function validateGroup(vo) {
 
 function onGroupSave() {
     var vo = {
-    	id : group != null ? String(group.id) : '',
+    	id : group != null ? group.id : null,
         name : $('#groupName').val()
     };
     var errors = validateGroup(vo);

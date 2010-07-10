@@ -21,20 +21,13 @@
 
 package org.vosao.entity;
 
-import static org.vosao.utils.EntityUtil.getLongProperty;
-import static org.vosao.utils.EntityUtil.getStringProperty;
-import static org.vosao.utils.EntityUtil.getListProperty;
-import static org.vosao.utils.EntityUtil.setProperty;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.appengine.api.datastore.Entity;
 
 /**
  * @author Alexander Oleynik
  */
-public class TagEntity extends BaseEntityImpl {
+public class TagEntity extends BaseMapstoEntityImpl {
 
 	private static final long serialVersionUID = 1L;
 
@@ -46,22 +39,6 @@ public class TagEntity extends BaseEntityImpl {
 		pages = new ArrayList<String>();
 	}
 	
-	@Override
-	public void load(Entity entity) {
-		super.load(entity);
-		parent = getLongProperty(entity, "parent");
-		name = getStringProperty(entity, "name");
-		pages = getListProperty(entity, "pages");
-	}
-	
-	@Override
-	public void save(Entity entity) {
-		super.save(entity);
-		setProperty(entity, "name", name, true);
-		setProperty(entity, "parent", parent, true);
-		setProperty(entity, "pages", pages);
-	}
-
 	public TagEntity(Long aParent, String aName) {
 		this();
 		name = aName;

@@ -42,6 +42,6 @@ public interface GroupService extends AbstractService {
 	
 	ServiceResponse save(final Map<String, String> vo); 
 
-	ServiceResponse setGroupUsers(final String groupId, final List<String> ids);
+	ServiceResponse setGroupUsers(final Long groupId, final List<String> ids);
 	
 }

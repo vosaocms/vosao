@@ -26,7 +26,7 @@ import org.vosao.entity.PageTagEntity;
 /**
  * @author Alexander Oleynik
  */
-public interface PageTagDao extends BaseDao<PageTagEntity> {
+public interface PageTagDao extends BaseMapstoDao<PageTagEntity> {
 
 	PageTagEntity getByURL(final String url);
 

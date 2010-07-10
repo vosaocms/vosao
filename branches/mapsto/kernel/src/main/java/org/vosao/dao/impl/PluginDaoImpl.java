@@ -23,32 +23,32 @@ package org.vosao.dao.impl;
 
 import java.util.List;
 
+import org.mapsto.Filter;
+import org.mapsto.Query;
 import org.vosao.dao.BaseDaoImpl;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.PluginDao;
 import org.vosao.entity.PluginEntity;
 
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.FilterOperator;
-
-public class PluginDaoImpl extends BaseDaoImpl<PluginEntity> 
+public class PluginDaoImpl extends BaseMapstoDaoImpl<PluginEntity> 
 		implements PluginDao {
 
 	public PluginDaoImpl() {
-		super(PluginEntity.class);
+		super("PluginEntity");
 	}
 
 	@Override
 	public PluginEntity getByName(final String name) {
-		Query q = newQuery();
-		q.addFilter("name", FilterOperator.EQUAL, name);
-		return selectOne(q, "getByName", params(name));
+		Query<PluginEntity> q = newQuery();
+		q.addFilter("name", Filter.EQUAL, name);
+		return q.selectOne("getByName", params(name));
 	}
 	
 	@Override
 	public List<PluginEntity> selectEnabled() {
-		Query q = newQuery();
-		q.addFilter("disabled", FilterOperator.EQUAL, false);
-		return select(q, "selectEnabled", params(false));
+		Query<PluginEntity> q = newQuery();
+		q.addFilter("disabled", Filter.EQUAL, false);
+		return q.select("selectEnabled", params(false));
 	}
 
 }

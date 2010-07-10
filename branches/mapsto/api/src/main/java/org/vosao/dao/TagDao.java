@@ -28,7 +28,7 @@ import org.vosao.entity.TagEntity;
 /**
  * @author Alexander Oleynik
  */
-public interface TagDao extends BaseDao<TagEntity> {
+public interface TagDao extends BaseMapstoDao<TagEntity> {
 
 	TagEntity getByName(final Long parent, final String name);
 

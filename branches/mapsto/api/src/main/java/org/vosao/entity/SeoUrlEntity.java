@@ -29,7 +29,7 @@ import com.google.appengine.api.datastore.Entity;
  * SEO Urls plugin link data.
  * @author Alexander Oleynik
  */
-public class SeoUrlEntity extends BaseEntityImpl {
+public class SeoUrlEntity extends BaseMapstoEntityImpl {
 
 	private static final long serialVersionUID = 2L;
 
@@ -39,20 +39,6 @@ public class SeoUrlEntity extends BaseEntityImpl {
 	public SeoUrlEntity() {
 	}
 	
-	@Override
-	public void load(Entity entity) {
-		super.load(entity);
-		fromLink = getStringProperty(entity, "fromLink");
-		toLink = getStringProperty(entity, "toLink");
-	}
-	
-	@Override
-	public void save(Entity entity) {
-		super.save(entity);
-		setProperty(entity, "fromLink", fromLink, true);
-		setProperty(entity, "toLink", toLink, false);
-	}
-
 	public SeoUrlEntity(String aFrom, String aTo) {
 		this();
 		fromLink = aFrom;

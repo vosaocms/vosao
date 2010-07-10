@@ -21,48 +21,47 @@
 
 package org.vosao.dao.impl;
 
-import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mapsto.Filter;
+import org.mapsto.Query;
 import org.vosao.dao.BaseDaoImpl;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.ContentPermissionDao;
 import org.vosao.entity.ContentPermissionEntity;
-
-import com.google.appengine.api.datastore.Query;
 
 /**
  * @author Alexander Oleynik
  */
 public class ContentPermissionDaoImpl extends 
-		BaseDaoImpl<ContentPermissionEntity> 
+		BaseMapstoDaoImpl<ContentPermissionEntity> 
 		implements ContentPermissionDao {
 
 	public ContentPermissionDaoImpl() {
-		super(ContentPermissionEntity.class);
+		super("ContentPermissionEntity");
 	}
 
 	@Override
 	public List<ContentPermissionEntity> selectByUrl(final String url) {
-		Query q = newQuery();
-		q.addFilter("url", EQUAL, url);
-		return select(q, "selectByUrl", params(url));
+		Query<ContentPermissionEntity> q = newQuery();
+		q.addFilter("url", Filter.EQUAL, url);
+		return q.select("selectByUrl", params(url));
 	}
 
 	@Override
 	public ContentPermissionEntity getByUrlGroup(final String url, 
 			final Long groupId) {
-		Query q = newQuery();
-		q.addFilter("url", EQUAL, url);
-		q.addFilter("groupId", EQUAL, groupId);
-		return selectOne(q, "getByUrlGroup", params(url, groupId));
+		Query<ContentPermissionEntity> q = newQuery();
+		q.addFilter("url", Filter.EQUAL, url);
+		q.addFilter("groupId", Filter.EQUAL, groupId);
+		return q.selectOne("getByUrlGroup", params(url, groupId));
 	}
 
 	private List<ContentPermissionEntity> selectByGroup(final Long groupId) {
-		Query q = newQuery();
-		q.addFilter("groupId", EQUAL, groupId);
-		return select(q, "selectByGroup", params(groupId));
+		Query<ContentPermissionEntity> q = newQuery();
+		q.addFilter("groupId", Filter.EQUAL, groupId);
+		return q.select("selectByGroup", params(groupId));
 	}
 		
 	@Override

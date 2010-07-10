@@ -21,26 +21,25 @@
 
 package org.vosao.dao.impl;
 
-import org.vosao.dao.BaseDaoImpl;
+import org.mapsto.Filter;
+import org.mapsto.Query;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.PluginResourceDao;
 import org.vosao.entity.PluginResourceEntity;
 
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.FilterOperator;
-
 public class PluginResourceDaoImpl extends 
-		BaseDaoImpl<PluginResourceEntity> implements PluginResourceDao {
+		BaseMapstoDaoImpl<PluginResourceEntity> implements PluginResourceDao {
 
 	public PluginResourceDaoImpl() {
-		super(PluginResourceEntity.class);
+		super("PluginResourceEntity");
 	}
 
 	@Override
 	public PluginResourceEntity getByUrl(String plugin, String url) {
-		Query q = newQuery();
-		q.addFilter("url", FilterOperator.EQUAL, url);
-		q.addFilter("pluginName", FilterOperator.EQUAL, plugin);
-		return selectOne(q, "getByUrl", params(url));
+		Query<PluginResourceEntity> q = newQuery();
+		q.addFilter("url", Filter.EQUAL, url);
+		q.addFilter("pluginName", Filter.EQUAL, plugin);
+		return q.selectOne("getByUrl", params(url));
 	}
 
 }

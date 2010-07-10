@@ -24,14 +24,15 @@ package org.vosao.dao.impl;
 import java.util.List;
 
 import org.vosao.dao.BaseDaoImpl;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.ConfigDao;
 import org.vosao.entity.ConfigEntity;
 
-public class ConfigDaoImpl extends BaseDaoImpl<ConfigEntity> 
+public class ConfigDaoImpl extends BaseMapstoDaoImpl<ConfigEntity> 
 		implements ConfigDao {
 
 	public ConfigDaoImpl() {
-		super(ConfigEntity.class);
+		super("ConfigEntity");
 	}
 
 	@Override

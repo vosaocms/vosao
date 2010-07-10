@@ -64,8 +64,8 @@ public class ContextFilter extends AbstractFilter implements Filter {
     	if (ctx.getBackService() == null) {
         	ctx.setBackService(new BackServiceImpl());
     	}
-    	ctx.getBusiness().getDao().getMapsto().clear();
+    	ctx.getBusiness().getDao().getMapsto().clearJournal();
     	chain.doFilter(request, response);
-    	ctx.getBusiness().getDao().getMapsto().clear();
+    	ctx.getBusiness().getDao().getMapsto().clearJournal();
     }
 }

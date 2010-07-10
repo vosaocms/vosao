@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.vosao.entity.FileEntity;
 
-public interface FileDao extends BaseDao<FileEntity> {
+public interface FileDao extends BaseMapstoDao<FileEntity> {
 
 	List<FileEntity> getByFolder(final Long folderId);
 

@@ -26,7 +26,7 @@ import org.vosao.entity.StructureEntity;
 /**
  * @author Alexander Oleynik
  */
-public interface StructureDao extends BaseDao<StructureEntity> {
+public interface StructureDao extends BaseMapstoDao<StructureEntity> {
 
 	StructureEntity getByTitle(final String title);
 	

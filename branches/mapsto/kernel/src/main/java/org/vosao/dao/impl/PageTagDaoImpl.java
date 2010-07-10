@@ -21,26 +21,24 @@
 
 package org.vosao.dao.impl;
 
-import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
-
-import org.vosao.dao.BaseDaoImpl;
+import org.mapsto.Filter;
+import org.mapsto.Query;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.PageTagDao;
 import org.vosao.entity.PageTagEntity;
 
-import com.google.appengine.api.datastore.Query;
-
-public class PageTagDaoImpl extends BaseDaoImpl<PageTagEntity> 
+public class PageTagDaoImpl extends BaseMapstoDaoImpl<PageTagEntity> 
 		implements PageTagDao {
 
 	public PageTagDaoImpl() {
-		super(PageTagEntity.class);
+		super("PageTagEntity");
 	}
 
 	@Override
 	public PageTagEntity getByURL(final String url) {
-		Query q = newQuery();
-		q.addFilter("pageURL", EQUAL, url);
-		return selectOne(q, "getByURL", params(url));
+		Query<PageTagEntity> q = newQuery();
+		q.addFilter("pageURL", Filter.EQUAL, url);
+		return q.selectOne("getByURL", params(url));
 	}
 
 }

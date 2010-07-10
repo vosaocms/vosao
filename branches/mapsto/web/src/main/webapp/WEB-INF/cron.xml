@@ -10,4 +10,10 @@
     <description>Session clean from datastore</description>
     <schedule>every day 01:00</schedule>
   </cron>
+
+  <cron>
+    <url>/_ah/cron/mapsto</url>
+    <description>Mapsto dirsty cache flush</description>
+    <schedule>every 1 minutes</schedule>
+  </cron>
 </cronentries>

@@ -21,13 +21,8 @@
 
 package org.vosao.entity;
 
-import static org.vosao.utils.EntityUtil.*;
 
-import java.util.Date;
-
-import com.google.appengine.api.datastore.Entity;
-
-public class ConfigEntity extends BaseEntityImpl {
+public class ConfigEntity extends BaseMapstoEntityImpl {
 
 	private static final long serialVersionUID = 2L;
 
@@ -48,44 +43,6 @@ public class ConfigEntity extends BaseEntityImpl {
 
 	public ConfigEntity() {
 		commentsTemplate = "";
-	}
-
-	@Override
-	public void load(Entity entity) {
-		super.load(entity);
-		googleAnalyticsId = getStringProperty(entity, "googleAnalyticsId");
-		siteEmail = getStringProperty(entity, "siteEmail");
-		siteDomain = getStringProperty(entity, "siteDomain");
-		editExt = getStringProperty(entity, "editExt");
-		enableRecaptcha = getBooleanProperty(entity, "enableRecaptcha", false);
-		recaptchaPrivateKey = getStringProperty(entity, "recaptchaPrivateKey");
-		recaptchaPublicKey = getStringProperty(entity, "recaptchaPublicKey");
-		commentsEmail = getStringProperty(entity, "commentsEmail");
-		commentsTemplate = getTextProperty(entity, "commentsTemplate");
-		version = getStringProperty(entity, "version");
-		siteUserLoginUrl = getStringProperty(entity, "siteUserLoginUrl");
-		enablePicasa = getBooleanProperty(entity, "enablePicasa", false);
-		picasaUser = getStringProperty(entity, "picasaUser");
-		picasaPassword = getStringProperty(entity, "picasaPassword");
-	}
-	
-	@Override
-	public void save(Entity entity) {
-		super.save(entity);
-		setProperty(entity, "googleAnalyticsId", googleAnalyticsId, false);
-		setProperty(entity, "siteEmail", siteEmail, false);
-		setProperty(entity, "siteDomain", siteDomain, false);
-		setProperty(entity, "editExt", editExt, false);
-		setProperty(entity, "enableRecaptcha", enableRecaptcha, false);
-		setProperty(entity, "recaptchaPrivateKey", recaptchaPrivateKey, false);
-		setProperty(entity, "recaptchaPublicKey", recaptchaPublicKey, false);
-		setProperty(entity, "commentsEmail", commentsEmail, false);
-		setTextProperty(entity, "commentsTemplate", commentsTemplate);
-		setProperty(entity, "version", version, false);
-		setProperty(entity, "siteUserLoginUrl", siteUserLoginUrl, false);
-		setProperty(entity, "enablePicasa", enablePicasa, false);
-		setProperty(entity, "picasaUser", picasaUser, false);
-		setProperty(entity, "picasaPassword", picasaPassword, false);
 	}
 
 	public String getGoogleAnalyticsId() {

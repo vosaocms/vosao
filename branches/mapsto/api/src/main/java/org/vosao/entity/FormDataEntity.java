@@ -39,7 +39,7 @@ import com.google.appengine.api.datastore.Entity;
  * @author Alexander Oleynik
  *
  */
-public class FormDataEntity extends BaseEntityImpl {
+public class FormDataEntity extends BaseMapstoEntityImpl {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -58,22 +58,6 @@ public class FormDataEntity extends BaseEntityImpl {
 		this.formId = formId;
 		this.data = data;
 	}
-
-    @Override
-    public void load(Entity entity) {
-    	super.load(entity);
-    	formId = getLongProperty(entity, "formId");
-    	data = getTextProperty(entity, "data");
-    	ipAddress = getStringProperty(entity, "ipAddress");
-    }
-    
-    @Override
-    public void save(Entity entity) {
-    	super.save(entity);
-    	setProperty(entity, "formId", formId, true);
-    	setTextProperty(entity, "data", data);
-    	setProperty(entity, "ipAddress", ipAddress, false);
-    }
 
 	public Long getFormId() {
 		return formId;

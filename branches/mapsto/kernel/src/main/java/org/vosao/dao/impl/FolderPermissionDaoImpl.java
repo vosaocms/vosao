@@ -21,48 +21,47 @@
 
 package org.vosao.dao.impl;
 
-import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mapsto.Filter;
+import org.mapsto.Query;
 import org.vosao.dao.BaseDaoImpl;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.FolderPermissionDao;
 import org.vosao.entity.FolderPermissionEntity;
-
-import com.google.appengine.api.datastore.Query;
 
 /**
  * @author Alexander Oleynik
  */
 public class FolderPermissionDaoImpl 
-		extends BaseDaoImpl<FolderPermissionEntity> 
+		extends BaseMapstoDaoImpl<FolderPermissionEntity> 
 		implements FolderPermissionDao {
 
 	public FolderPermissionDaoImpl() {
-		super(FolderPermissionEntity.class);
+		super("FolderPermissionEntity");
 	}
 
 	@Override
 	public List<FolderPermissionEntity> selectByFolder(final Long folderId) {
-		Query q = newQuery();
-		q.addFilter("folderId", EQUAL, folderId);
-		return select(q, "selectByFolder", params(folderId));
+		Query<FolderPermissionEntity> q = newQuery();
+		q.addFilter("folderId", Filter.EQUAL, folderId);
+		return q.select("selectByFolder", params(folderId));
 	}
 
 	@Override
 	public FolderPermissionEntity getByFolderGroup(final Long folderId, 
 			final Long groupId) {
-		Query q = newQuery();
-		q.addFilter("folderId", EQUAL, folderId);
-		q.addFilter("groupId", EQUAL, groupId);
-		return selectOne(q, "getByFolderGroup", params(folderId, groupId));
+		Query<FolderPermissionEntity> q = newQuery();
+		q.addFilter("folderId", Filter.EQUAL, folderId);
+		q.addFilter("groupId", Filter.EQUAL, groupId);
+		return q.selectOne("getByFolderGroup", params(folderId, groupId));
 	}
 
 	private List<FolderPermissionEntity> selectByGroup(final Long groupId) {
-		Query q = newQuery();
-		q.addFilter("groupId", EQUAL, groupId);
-		return select(q, "selectByGroup", params(groupId));
+		Query<FolderPermissionEntity> q = newQuery();
+		q.addFilter("groupId", Filter.EQUAL, groupId);
+		return q.select("selectByGroup", params(groupId));
 	}
 
 	@Override

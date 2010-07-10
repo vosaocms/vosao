@@ -28,7 +28,7 @@ import static org.vosao.utils.EntityUtil.*;
 
 import com.google.appengine.api.datastore.Entity;
 
-public class FileEntity extends BaseEntityImpl {
+public class FileEntity extends BaseMapstoEntityImpl {
 
 	private static final long serialVersionUID = 5L;
 
@@ -45,28 +45,6 @@ public class FileEntity extends BaseEntityImpl {
 	public FileEntity() {
 	}
 	
-	@Override
-	public void load(Entity entity) {
-		super.load(entity);
-		title = getStringProperty(entity, "title");
-		filename = getStringProperty(entity, "filename");
-		folderId = getLongProperty(entity, "folderId");
-		mimeType = getStringProperty(entity, "mimeType");
-		lastModifiedTime = getDateProperty(entity, "lastModifiedTime");
-		size = getIntegerProperty(entity, "size", 0);
-	}
-	
-	@Override
-	public void save(Entity entity) {
-		super.save(entity);
-		setProperty(entity, "title", title, false);
-		setProperty(entity, "filename", filename, true);
-		setProperty(entity, "folderId", folderId, true);
-		setProperty(entity, "mimeType", mimeType, false);
-		setProperty(entity, "lastModifiedTime", lastModifiedTime, false);
-		setProperty(entity, "size", size, false);
-	}
-
 	public FileEntity(String aTitle, String aName, Long aFolderId,
 			String aMimeType, Date aMdttime, int aSize) {
 		this();

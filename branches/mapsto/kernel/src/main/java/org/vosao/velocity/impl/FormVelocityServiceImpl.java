@@ -36,6 +36,7 @@ import org.vosao.entity.FormConfigEntity;
 import org.vosao.entity.FormDataEntity;
 import org.vosao.entity.FormEntity;
 import org.vosao.entity.helper.EntityHelper;
+import org.vosao.entity.helper.EntityMapstoHelper;
 import org.vosao.global.SystemService;
 import org.vosao.i18n.Messages;
 import org.vosao.velocity.FormVelocityService;
@@ -103,7 +104,7 @@ public class FormVelocityServiceImpl implements FormVelocityService {
 		if (formName != null) {
 			List<FormDataEntity> result = getDao().getFormDataDao().getByForm(
 					form);
-			Collections.sort(result, EntityHelper.MOD_DATE_DESC);
+			Collections.sort(result, EntityMapstoHelper.MOD_DATE_DESC);
 			return result;
 		}
 		return Collections.EMPTY_LIST;

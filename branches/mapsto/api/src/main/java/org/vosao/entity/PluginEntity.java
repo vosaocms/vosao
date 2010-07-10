@@ -29,7 +29,7 @@ import static org.vosao.utils.EntityUtil.setTextProperty;
 
 import com.google.appengine.api.datastore.Entity;
 
-public class PluginEntity extends BaseEntityImpl {
+public class PluginEntity extends BaseMapstoEntityImpl {
 	
 	private static final long serialVersionUID = 3L;
 
@@ -52,38 +52,6 @@ public class PluginEntity extends BaseEntityImpl {
 		disabled = false;
     }
     
-	@Override
-	public void load(Entity entity) {
-		super.load(entity);
-		name = getStringProperty(entity, "name");
-		title = getStringProperty(entity, "title");
-		description = getStringProperty(entity, "description");
-		website = getStringProperty(entity, "website");
-		configStructure = getTextProperty(entity, "configStructure");
-		configData = getTextProperty(entity, "configData");
-		entryPointClass = getStringProperty(entity, "entryPointClass");
-		configURL = getStringProperty(entity, "configURL");
-		pageHeader = getTextProperty(entity, "pageHeader");
-		version = getStringProperty(entity, "version");
-		disabled = getBooleanProperty(entity, "disabled", true);
-	}
-	
-	@Override
-	public void save(Entity entity) {
-		super.save(entity);
-		setProperty(entity, "name", name, true);
-		setProperty(entity, "title", title, false);
-		setProperty(entity, "description", description, false);
-		setProperty(entity, "website", website, false);
-		setTextProperty(entity, "configStructure", configStructure);
-		setTextProperty(entity, "configData", configData);
-		setProperty(entity, "entryPointClass", entryPointClass, false);
-		setProperty(entity, "configURL", configURL, false);
-		setTextProperty(entity, "pageHeader", pageHeader);
-		setProperty(entity, "version", version, false);
-		setProperty(entity, "disabled", disabled, true);
-	}
-
 	public PluginEntity(String name, String title, String configStructure,
     		String configData) {
 		this();

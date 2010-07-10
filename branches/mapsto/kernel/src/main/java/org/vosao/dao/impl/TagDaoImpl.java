@@ -21,36 +21,35 @@
 
 package org.vosao.dao.impl;
 
-import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
-
 import java.util.List;
 
+import org.mapsto.Filter;
+import org.mapsto.Query;
 import org.vosao.dao.BaseDaoImpl;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.TagDao;
 import org.vosao.entity.TagEntity;
 
-import com.google.appengine.api.datastore.Query;
-
-public class TagDaoImpl extends BaseDaoImpl<TagEntity> 
+public class TagDaoImpl extends BaseMapstoDaoImpl<TagEntity> 
 		implements TagDao {
 
 	public TagDaoImpl() {
-		super(TagEntity.class);
+		super("TagEntity");
 	}
 
 	@Override
 	public TagEntity getByName(final Long parent, final String name) {
-		Query q = newQuery();
-		q.addFilter("parent", EQUAL, parent);
-		q.addFilter("name", EQUAL, name);
-		return selectOne(q, "getByName", params(parent, name));
+		Query<TagEntity> q = newQuery();
+		q.addFilter("parent", Filter.EQUAL, parent);
+		q.addFilter("name", Filter.EQUAL, name);
+		return q.selectOne("getByName", params(parent, name));
 	}
 
 	@Override
 	public List<TagEntity> selectByParent(final Long parent) {
-		Query q = newQuery();
-		q.addFilter("parent", EQUAL, parent);
-		return select(q, "selectByParent", params(parent));
+		Query<TagEntity> q = newQuery();
+		q.addFilter("parent", Filter.EQUAL, parent);
+		return q.select("selectByParent", params(parent));
 	}
 
 }

@@ -47,8 +47,8 @@ public class UserVO {
 		return result;
 	}
 
-	public String getId() {
-		return user.getId().toString();
+	public Long getId() {
+		return user.getId();
 	}
 
 	public String getName() {

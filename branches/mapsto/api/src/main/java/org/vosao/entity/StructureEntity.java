@@ -36,7 +36,7 @@ import static org.vosao.utils.EntityUtil.*;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
 
-public class StructureEntity extends BaseEntityImpl {
+public class StructureEntity extends BaseMapstoEntityImpl {
 
 	private static final long serialVersionUID = 2L;
 
@@ -47,20 +47,6 @@ public class StructureEntity extends BaseEntityImpl {
 		content = "";
 	}
 	
-	@Override
-	public void load(Entity entity) {
-		super.load(entity);
-		title = getStringProperty(entity, "title");
-		content = getTextProperty(entity, "content");
-	}
-	
-	@Override
-	public void save(Entity entity) {
-		super.save(entity);
-		setProperty(entity, "title", title, true);
-		setTextProperty(entity, "content", content);
-	}
-
 	public StructureEntity(String title, String content) {
 		this();
 		this.title = title;

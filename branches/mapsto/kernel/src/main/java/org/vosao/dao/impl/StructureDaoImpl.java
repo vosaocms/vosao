@@ -21,26 +21,27 @@
 
 package org.vosao.dao.impl;
 
+import java.util.Collection;
 import java.util.List;
 
+import org.mapsto.Filter;
+import org.mapsto.Query;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.BaseDaoImpl;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.StructureDao;
 import org.vosao.dao.StructureTemplateDao;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.helper.StructureTemplateHelper;
 
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.FilterOperator;
-
 /**
  * @author Alexander Oleynik
  */
-public class StructureDaoImpl extends BaseDaoImpl<StructureEntity> 
+public class StructureDaoImpl extends BaseMapstoDaoImpl<StructureEntity> 
 		implements StructureDao {
 
 	public StructureDaoImpl() {
-		super(StructureEntity.class);
+		super("StructureEntity");
 	}
 
 	public StructureTemplateDao getStructureTemplateDao() {
@@ -50,9 +51,9 @@ public class StructureDaoImpl extends BaseDaoImpl<StructureEntity>
 	
 	@Override
 	public StructureEntity getByTitle(String title) {
-		Query q = newQuery();
-		q.addFilter("title", FilterOperator.EQUAL, title);
-		return selectOne(q, "getByTitle", params(title));
+		Query<StructureEntity> q = newQuery();
+		q.addFilter("title", Filter.EQUAL, title);
+		return q.selectOne("getByTitle", params(title));
 	}
 	
 	@Override
@@ -64,7 +65,7 @@ public class StructureDaoImpl extends BaseDaoImpl<StructureEntity>
 	}
 
 	@Override
-	public void remove(List<Long> ids) {
+	public void remove(Collection<Long> ids) {
 		for (Long id : ids) {
 			remove(id);
 		}

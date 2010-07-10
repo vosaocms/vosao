@@ -46,7 +46,7 @@ public class GroupServiceImpl extends AbstractServiceImpl
 		List<GroupVO> result = GroupVO.create(getDao().getGroupDao().select());
 		for (GroupVO group : result) {
 			group.setUsers(UserVO.create(getDao().getUserDao().selectByGroup(
-					group.getIdLong())));
+					group.getId())));
 		}
 		return result;
 	}
@@ -98,8 +98,7 @@ public class GroupServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public ServiceResponse setGroupUsers(String groupId, List<String> ids) {
-		Long id = Long.valueOf(groupId);
+	public ServiceResponse setGroupUsers(Long id, List<String> ids) {
 		GroupEntity group = getDao().getGroupDao().getById(id);
 		if (group != null) {
 			List<UserGroupEntity> userGroups = getDao().getUserGroupDao()

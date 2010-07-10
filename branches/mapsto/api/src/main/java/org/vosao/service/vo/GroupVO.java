@@ -49,14 +49,10 @@ public class GroupVO {
 		return result;
 	}
 
-	public String getId() {
-		return group.getId().toString();
-	}
-
-	public Long getIdLong() {
+	public Long getId() {
 		return group.getId();
 	}
-	
+
 	public String getName() {
 		return group.getName();
 	}

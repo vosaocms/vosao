@@ -416,7 +416,29 @@ public class DaoImpl implements Dao, Serializable {
 			mapsto = new MapstoImpl();
 			mapsto.register(getUserDao(), 
 					getGroupDao(),
-					getUserGroupDao());
+					getUserGroupDao(),
+					getTagDao(),
+					getLanguageDao(),
+					getCommentDao(),
+					getConfigDao(),
+					getContentDao(),
+					getContentPermissionDao(),
+					getFieldDao(),
+					getFormConfigDao(),
+					getFormDao(),
+					getFormDataDao(),
+					getFolderDao(),
+					getFolderPermissionDao(),
+					getFileDao(),
+					getMessageDao(),
+					getPageDao(),
+					getPageTagDao(),
+					getStructureDao(),
+					getStructureTemplateDao(),
+					getTemplateDao(),
+					getSeoUrlDao(),
+					getPluginDao(),
+					getPluginResourceDao());
 		}
 		return mapsto;
 	}

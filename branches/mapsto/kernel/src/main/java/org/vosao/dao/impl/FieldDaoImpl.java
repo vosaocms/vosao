@@ -24,37 +24,36 @@ package org.vosao.dao.impl;
 import java.util.Collections;
 import java.util.List;
 
-import org.vosao.dao.BaseDaoImpl;
+import org.mapsto.Filter;
+import org.mapsto.Query;
+import org.vosao.dao.BaseMapstoDaoImpl;
 import org.vosao.dao.FieldDao;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormEntity;
 import org.vosao.entity.helper.FieldHelper;
 
-import com.google.appengine.api.datastore.Query;
-import static com.google.appengine.api.datastore.Query.FilterOperator.*;
-
-public class FieldDaoImpl extends BaseDaoImpl<FieldEntity> 
+public class FieldDaoImpl extends BaseMapstoDaoImpl<FieldEntity> 
 		implements FieldDao {
 
 	public FieldDaoImpl() {
-		super(FieldEntity.class);
+		super("FieldEntity");
 	}
 
 	@Override
 	public List<FieldEntity> getByForm(final FormEntity form) {
-		Query q = newQuery();
-		q.addFilter("formId", EQUAL, form.getId());
-		List<FieldEntity> result = select(q, "getByForm", params(form.getId()));
+		Query<FieldEntity> q = newQuery();
+		q.addFilter("formId", Filter.EQUAL, form.getId());
+		List<FieldEntity> result = q.select("getByForm", params(form.getId()));
 		Collections.sort(result, new FieldHelper.IndexAsc());
 		return result;
 	}
 	
 	@Override
 	public FieldEntity getByName(final FormEntity form, final String name) {
-		Query q = newQuery();
-		q.addFilter("formId", EQUAL, form.getId());
-		q.addFilter("name", EQUAL, name);
-		return selectOne(q, "getByName", params(form.getId(), name));
+		Query<FieldEntity> q = newQuery();
+		q.addFilter("formId", Filter.EQUAL, form.getId());
+		q.addFilter("name", Filter.EQUAL, name);
+		return q.selectOne("getByName", params(form.getId(), name));
 	}
 	
 }

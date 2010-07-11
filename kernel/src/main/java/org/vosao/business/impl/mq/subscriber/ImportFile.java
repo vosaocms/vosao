@@ -24,6 +24,7 @@ package org.vosao.business.impl.mq.subscriber;
 import java.io.UnsupportedEncodingException;
 
 import org.dom4j.DocumentException;
+import org.vosao.business.impl.ImportExportBusinessImpl;
 import org.vosao.business.impl.mq.AbstractSubscriber;
 import org.vosao.business.mq.Message;
 import org.vosao.business.mq.message.SimpleMessage;
@@ -42,6 +43,10 @@ public class ImportFile extends AbstractSubscriber {
 		try {
 			SimpleMessage msg = (SimpleMessage)message;
 			String path = msg.getMessage();
+			if (ImportExportBusinessImpl.isGlobalSequenceImportFile(
+					path.substring(1))) {
+				return;
+			}
 			VfsNode node = VfsNode.find(path);
 			if (node == null) {
 				logger.error("VFS node not found " + path);

@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.vosao.business.vo.StructureFieldVO;
+import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.LanguageEntity;
@@ -40,6 +41,7 @@ import org.vosao.entity.TemplateEntity;
 public class PageRequestVO {
 
     private PageEntity page;
+    private ConfigEntity config;
     private List<PageVO> versions;
     private List<TemplateEntity> templates;
     private List<LanguageEntity> languages;
@@ -168,6 +170,14 @@ public class PageRequestVO {
 
 	public void setTags(List<TagEntity> tags) {
 		this.tags = tags;
+	}
+
+	public ConfigEntity getConfig() {
+		return config;
+	}
+
+	public void setConfig(ConfigEntity config) {
+		this.config = config;
 	}   
     
 }

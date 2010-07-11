@@ -301,7 +301,20 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 				while ((len = in.read(buffer)) > 0) {
 					data.write(buffer, 0, len);
 				}
-				VfsNode.createFile("/" + entry.getName(), data.toByteArray());
+				if (isGlobalSequenceImportFile(entry.getName())) {
+					try {
+						getSiteExporter().importSystemFile(entry, data);
+					}
+					catch (DaoTaskException e) {
+						e.printStackTrace();
+					}
+					catch (DocumentException e) {
+						e.printStackTrace();
+					}
+				}
+				else {
+					VfsNode.createFile("/" + entry.getName(), data.toByteArray());
+				}
 			}
 		}
 		getBusiness().getMessageQueue().publish(new SimpleMessage(
@@ -322,6 +335,18 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 				}
 			}
 		}
+	}
+	
+	private static final String[] FILES_TO_IMPORT = {"_structures.xml",
+		"_tags.xml"};
+	
+	public static boolean isGlobalSequenceImportFile(String name) {
+		for (String file : FILES_TO_IMPORT) {
+			if (file.equals(name)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

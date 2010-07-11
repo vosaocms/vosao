@@ -60,8 +60,9 @@ public class ImportTaskSubscriber extends AbstractSubscriber {
 				doImport1(msg);
 			}
 			if (ext.equals("vz")) {
-				//doImport2(msg);
-				doImport3(msg);
+				doImport2(msg);
+				// TODO Parallel import
+				//doImport3(msg);
 			}
 		}
 		catch (IOException e) {

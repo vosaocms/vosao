@@ -96,6 +96,9 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 		if (vo.get("picasaPassword") != null) {
 			config.setPicasaPassword(vo.get("picasaPassword"));
 		}
+		if (vo.get("enableCkeditor") != null) {
+			config.setEnableCkeditor(Boolean.valueOf(vo.get("enableCkeditor")));
+		}
 		List<String> errors = getBusiness().getConfigBusiness()
 				.validateBeforeUpdate(config);
 		if (errors.isEmpty()) {

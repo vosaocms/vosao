@@ -67,6 +67,15 @@ $(function(){
 function loadData() {
 	Vosao.jsonrpc.pageService.getPageRequest(function(r) {
 		pageRequest = r;
+		editTextarea = !pageRequest.config.enableCkeditor;
+		if (editTextarea) {
+			$('#editorButtons').html('<a href="#" onclick="onEditCKEditor()">'
+					+ messages['page.edit_ckeditor'] + '</a>');
+		}
+		else {
+			$('#editorButtons').html('<a href="#" onclick="onEditTextarea()">'
+				+ messages['page.edit_textarea'] + '</a>');
+		}
 		page = pageRequest.page;
 		loadLanguages();
 		loadPage();
@@ -201,8 +210,15 @@ function getEditorContent() {
 					+ '</' + field.name + '>\n';
 			}
 			if (field.type == 'TEXTAREA') {
+				var text = '';
+				if (editTextarea) {
+					text = $('#field' + field.name).val();
+				}
+				else {
+					text = contentEditors[field.name].getData();
+				}
 				xml += '<' + field.name + '><![CDATA['
-					+ contentEditors[field.name].getData().replace(']]>', ']]]')  
+					+ text.replace(']]>', ']]]')  
 					+ ']]></' + field.name + '>\n';
 			}
 		});
@@ -231,9 +247,16 @@ function setEditorContent(data) {
 				});
 			}
 			if (field.type == 'TEXTAREA') {
-				$(domData).find(field.name).each(function() {
-					contentEditors[field.name].setData($(this).text());					
-				});
+				if (editTextarea) {
+					$(domData).find(field.name).each(function() {
+						$('#field' + field.name).val($(this).text());					
+					});
+				}
+				else {
+					$(domData).find(field.name).each(function() {
+						contentEditors[field.name].setData($(this).text());					
+					});
+				}
 			}
 		});
 	}
@@ -291,10 +314,6 @@ function loadContents() {
 			}
 		}
 		$('#language').val(currentLanguage);
-		if (page.simple) {
-			$('#editorButtons').html('<a href="#" onclick="onEditTextarea()">'
-				+ messages['page.edit_textarea'] + '</a>');
-		}
 		setEditorContent(contents[currentLanguage]);
 		$('#titleLocal').val(getTitle());
 	} else {
@@ -362,7 +381,7 @@ function showContentEditor() {
 				h += '<input id="field' + field.name + '" size="30"/>';
 			}
 			if (field.type == 'TEXTAREA') {
-				h += '<textarea id="field' + field.name + '"></textarea>';
+				h += '<textarea cols="80" rows="20" id="field' + field.name + '"></textarea>';
 			}
 			if (field.type == 'DATE') {
 				h += '<input id="field' + field.name + '" class="datepicker" size="8" />';
@@ -378,7 +397,8 @@ function showContentEditor() {
 		$('#page-content').css('float','left');
 	    $(".datepicker").datepicker({dateFormat:'dd.mm.yy'});
 		contentEditors = [];
-		$.each(pageRequest.structureFields.list, function(i, field) {
+		if (!editTextarea) {
+		  $.each(pageRequest.structureFields.list, function(i, field) {
 			if (field.type == 'TEXTAREA') {
 				if (contentEditors[field.name] == undefined) {
 					var ckeditor = CKEDITOR.replace('field' + field.name, {
@@ -390,7 +410,8 @@ function showContentEditor() {
 					contentEditors[field.name] = ckeditor;
 				}
 			}
-		});
+		  });
+		}
 	}
 }
 

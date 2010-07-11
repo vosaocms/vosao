@@ -330,6 +330,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 		try {
 			PageRequestVO result = new PageRequestVO();
 			result.setPage(getPage(id));
+			result.setConfig(getDao().getConfigDao().getConfig());
 			String permUrl = parentUrl;
 			if (result.getPage() != null) {
 				String url = result.getPage().getFriendlyURL();

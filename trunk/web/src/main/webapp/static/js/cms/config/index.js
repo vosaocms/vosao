@@ -121,6 +121,7 @@ function initFormFields() {
     $('#editExt').val(config.editExt);
     $('#siteUserLoginUrl').val(config.siteUserLoginUrl);
     $('#enablePicasa').each(function () {this.checked = config.enablePicasa});
+    $('#enableCkeditor').each(function () {this.checked = config.enableCkeditor});
     $('#picasaUser').val(config.picasaUser);
     $('#picasaPassword').val(config.picasaPassword);
     togglePicasa();
@@ -135,6 +136,7 @@ function onSave() {
         recaptchaPublicKey : $('#recaptchaPublicKey').val(),
         recaptchaPrivateKey : $('#recaptchaPrivateKey').val(),
         enablePicasa : String($('#enablePicasa:checked').size() > 0),
+        enableCkeditor : String($('#enableCkeditor:checked').size() > 0),
         picasaUser : $('#picasaUser').val(),
         picasaPassword : $('#picasaPassword').val(),
         editExt : $('#editExt').val(),

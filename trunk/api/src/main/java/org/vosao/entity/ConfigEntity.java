@@ -45,9 +45,11 @@ public class ConfigEntity extends BaseEntityImpl {
 	private boolean enablePicasa;
 	private String picasaUser;
 	private String picasaPassword;
+	private boolean enableCkeditor;
 
 	public ConfigEntity() {
 		commentsTemplate = "";
+		enableCkeditor = true;
 	}
 
 	@Override
@@ -67,6 +69,7 @@ public class ConfigEntity extends BaseEntityImpl {
 		enablePicasa = getBooleanProperty(entity, "enablePicasa", false);
 		picasaUser = getStringProperty(entity, "picasaUser");
 		picasaPassword = getStringProperty(entity, "picasaPassword");
+		enableCkeditor = getBooleanProperty(entity, "enableCkeditor", true);
 	}
 	
 	@Override
@@ -86,6 +89,7 @@ public class ConfigEntity extends BaseEntityImpl {
 		setProperty(entity, "enablePicasa", enablePicasa, false);
 		setProperty(entity, "picasaUser", picasaUser, false);
 		setProperty(entity, "picasaPassword", picasaPassword, false);
+		setProperty(entity, "enableCkeditor", enableCkeditor, false);
 	}
 
 	public String getGoogleAnalyticsId() {
@@ -198,6 +202,14 @@ public class ConfigEntity extends BaseEntityImpl {
 
 	public void setPicasaPassword(String picasaPassword) {
 		this.picasaPassword = picasaPassword;
+	}
+
+	public boolean isEnableCkeditor() {
+		return enableCkeditor;
+	}
+
+	public void setEnableCkeditor(boolean value) {
+		this.enableCkeditor = value;
 	}
 	
 }

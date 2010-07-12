@@ -19,9 +19,9 @@
  email: vosao.dev@gmail.com
 *#
 
-#set ($query = "?id=" + $params.get("id"))
+#set ($query = "?id=" + $esc.html($params.get("id")))
 #if ($params.exists('parent'))
-    #set ($query = $query + "&parent=" + $params.get('parent')) 
+    #set ($query = $query + "&parent=" + $esc.html($params.get('parent'))) 
 #end 
 
 <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">

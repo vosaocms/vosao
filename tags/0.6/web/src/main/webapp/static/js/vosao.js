@@ -74,7 +74,7 @@ Vosao.getQueryParam = function(param) {
     var result =  window.location.search.match(
         new RegExp("(\\?|&)" + param + "(\\[\\])?=([^&]*)")
     );
-    return result ? result[3] : '';
+    return Vosao.escapeHtml(result ? result[3] : '');
 };
 
 Vosao.selectTabFromQueryParam = function(tab) {
@@ -106,7 +106,7 @@ Vosao.jsonrpcInitError = null;
 Vosao.createJSONRpc = function() {
 	Vosao.jsonrpc = new JSONRpcClient(function(result, e) {
 		if (e) {
-			Vosao.jsonrpcInitError = messages['vosao.error_jsonrpc'] + ' ' + e 
+			Vosao.jsonrpcInitError = "JSON-RPC init error " + e 
 				+ ' ' + e.message;
 		}
 		else {
@@ -157,7 +157,7 @@ Vosao.initJSONRpcSystem = function(func) {
 
 Vosao.serviceFailed = function(e) {
 	if (e != null) {
-		alert(messages['vosao.cant_connect'] + ' ' + e + ' '+ e.message);
+		alert('JSON-RPC connection failed ' + e + ' '+ e.message);
 		return true;
 	}
 	return false;

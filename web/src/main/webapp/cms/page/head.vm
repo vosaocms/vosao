@@ -27,12 +27,12 @@
 <script type="text/javascript" src="/static/ckeditor/ckeditor.js"></script>
   
 #if ($params.get("id"))
-    $vosao.setSessionAttribute("imageUploadPageId", $params.get("id"))
+    $vosao.setSessionAttribute("imageUploadPageId", $esc.html($params.get("id")))
 #end
   
 <script type="text/javascript">
-var pageId = "$!params.get("id")"; 
-var pageParentUrl = decodeURIComponent("$!params.get("parent")");
+var pageId = Vosao.getQueryParam("id"); 
+var pageParentUrl = decodeURIComponent(Vosao.getQueryParam("parent"));
 </script>
 
 <script type="text/javascript" src="/static/js/cms/page/version.js"></script>

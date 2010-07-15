@@ -1,3 +1,7 @@
+#filesDiv {
+	overflow: scroll;
+}
+
 a.album {
 	float: left;
 	width: 72px;

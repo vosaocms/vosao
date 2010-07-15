@@ -34,7 +34,14 @@ $(function(){
     	browserMode = Vosao.getQueryParam('mode');
     }
     window.scrollbars.visible = true;
+    adjustFilesDivHeight();
+    $(window).resize(adjustFilesDivHeight);
 });
+
+function adjustFilesDivHeight() {
+	$('#filesDiv').css('height', ($(window).height() - 120) + 'px');
+	$('#filesDiv').css('width', ($(window).width() - 400) + 'px');
+}
 
 function loadData() {
 	loadFolderTree();

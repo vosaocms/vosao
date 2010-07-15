@@ -106,7 +106,7 @@ Vosao.jsonrpcInitError = null;
 Vosao.createJSONRpc = function() {
 	Vosao.jsonrpc = new JSONRpcClient(function(result, e) {
 		if (e) {
-			Vosao.jsonrpcInitError = messages['vosao.error_jsonrpc'] + ' ' + e 
+			Vosao.jsonrpcInitError = "Error during JSON-RPC initialization " + e 
 				+ ' ' + e.message;
 		}
 		else {
@@ -157,7 +157,7 @@ Vosao.initJSONRpcSystem = function(func) {
 
 Vosao.serviceFailed = function(e) {
 	if (e != null) {
-		alert(messages['vosao.cant_connect'] + ' ' + e + ' '+ e.message);
+		alert("JSON-RPC service fail " + e + ' ' + e.message);
 		return true;
 	}
 	return false;

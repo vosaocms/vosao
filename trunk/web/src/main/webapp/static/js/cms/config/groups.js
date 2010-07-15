@@ -34,6 +34,7 @@ $(function(){
     $('#userGroupForm').submit(function() {onUserGroupSave(); return false;});
     $('#userGroupCancelDlgButton').click(onUserGroupCancel);
     $('ul.ui-tabs-nav li:nth-child(6)').addClass('ui-state-active')
+    		.addClass('ui-tabs-selected')
 			.removeClass('ui-state-default');
 });
 

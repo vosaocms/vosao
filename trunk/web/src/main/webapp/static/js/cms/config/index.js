@@ -45,6 +45,7 @@ $(function(){
     $('#exportForm').submit(function() {onStartExport(); return false;});
     $('#exportCancelButton').click(onExportCancel);
     $('ul.ui-tabs-nav li:nth-child(1)').addClass('ui-state-active')
+    		.addClass('ui-tabs-selected')
 			.removeClass('ui-state-default');
     $('#enablePicasa').click(togglePicasa);
     $('#statButton').click(onStat);

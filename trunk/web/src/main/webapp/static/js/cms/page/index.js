@@ -50,6 +50,7 @@ $(function(){
     $('#pageCancelButton').click(onPageCancel);
     $('#approveButton').click(onPageApprove);
     $('ul.ui-tabs-nav li:nth-child(1)').addClass('ui-state-active')
+    		.addClass('ui-tabs-selected')
     		.removeClass('ui-state-default');
     $('#metadata').click(function() {
     	$('#meta').toggle();

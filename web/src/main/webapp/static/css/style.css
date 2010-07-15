@@ -285,6 +285,7 @@ a.button span.ui-icon {
     background-color: #F5F8F9;
     color: #2E6E9E;
     font-weight: bold;
+    line-height: 28px;
 }
 .tag img {
     position: relative;

@@ -32,6 +32,7 @@ $(function(){
     $('#tagCancelDlgButton').click(onTagCancel);
     $('#tagDeleteDlgButton').click(onTagDelete);
     $('ul.ui-tabs-nav li:nth-child(7)').addClass('ui-state-active')
+    		.addClass('ui-tabs-selected')
 			.removeClass('ui-state-default');
 });
 

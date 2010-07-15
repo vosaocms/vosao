@@ -77,6 +77,16 @@ function loadData() {
 		    loadFiles();
 	        $('.filesTab').show();
 	        $('.childrenTab').show();
+	        if (folder.root) {
+	        	$('#saveButton').attr('disabled', 'disabled');
+	        	$('#title').attr('disabled', 'disabled');
+	        	$('#name').attr('disabled', 'disabled');
+	        }
+	        else {
+	        	$('#saveButton').removeAttr('disabled');
+	        	$('#title').removeAttr('disabled');
+	        	$('#name').removeAttr('disabled');
+	        }
 	    }
 	}, folderId, folderParentId);
 }

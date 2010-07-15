@@ -34,6 +34,7 @@ $(function(){
     $('#addLanguageButton').click(onAddLanguage);
     $('#removeLanguageButton').click(onRemoveLanguage);
     $('ul.ui-tabs-nav li:nth-child(3)').addClass('ui-state-active')
+    		.addClass('ui-tabs-selected')
 			.removeClass('ui-state-default');
 });
 

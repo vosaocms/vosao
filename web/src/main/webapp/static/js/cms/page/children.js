@@ -41,7 +41,9 @@ $(function(){
     initVersionDialog();
     $('#addChildButton').click(onAddChild);
     $('#deleteChildButton').click(onDelete);
-    $('ul.ui-tabs-nav li:nth-child(3)').addClass('ui-state-active')
+    $('ul.ui-tabs-nav li:nth-child(3)')
+    		.addClass('ui-state-active')
+    		.addClass('ui-tabs-selected')
     		.removeClass('ui-state-default');
 });
 

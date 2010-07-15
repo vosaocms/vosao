@@ -58,6 +58,7 @@ $(function(){
     $('#restoreButton').click(onRestore);
     $('#contentCancelButton').click(onPageCancel);
     $('ul.ui-tabs-nav li:nth-child(2)').addClass('ui-state-active')
+    		.addClass('ui-tabs-selected')
     		.removeClass('ui-state-default');
     $('#restoreForm').submit(function() {onRestoreSave(); return false;});
     $('#restoreCancelButton').click(onRestoreCancel);

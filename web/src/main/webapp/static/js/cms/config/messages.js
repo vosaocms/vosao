@@ -29,6 +29,7 @@ $(function(){
     $('#messageForm').submit(function() {onMessageSave(); return false;});
     $('#cancelMessageDlgButton').click(onMessageCancel);
     $('ul.ui-tabs-nav li:nth-child(4)').addClass('ui-state-active')
+    		.addClass('ui-tabs-selected')
 			.removeClass('ui-state-default');
 });
 

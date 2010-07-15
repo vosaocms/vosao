@@ -31,6 +31,7 @@ $(function(){
     $('#userCancelDlgButton').click(onUserCancel);
     $('#userDisableDlgButton').click(onUserDisable);
     $('ul.ui-tabs-nav li:nth-child(5)').addClass('ui-state-active')
+    		.addClass('ui-tabs-selected')
 			.removeClass('ui-state-default');
 });
 

@@ -44,10 +44,12 @@
     </div>
     <div class="browser-files">
         <div id="currentFolder"></div>
+        <div id="filesDiv">
         <ul id="files">
             <img src="/static/images/ajax-loader.gif" />
         </ul>
         <div class="clear"> </div>
+        </div>
     </div>
     <div class="clear"> </div>
 </div>

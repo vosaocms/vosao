@@ -104,7 +104,7 @@ public class PageDaoImpl extends BaseDaoImpl<PageEntity>
 	@Override
 	public List<PageEntity> getByParent(final String url) {
 		List<PageEntity> result = filterLatestVersion(selectAllChildren(url));
-		Collections.sort(result, PageHelper.PUBLISH_DATE_ASC);
+		Collections.sort(result, PageHelper.PUBLISH_DATE);
 		return result;
 	}
 
@@ -201,7 +201,7 @@ public class PageDaoImpl extends BaseDaoImpl<PageEntity>
 	@Override
 	public List<PageEntity> getByParentApproved(final String url) {
 		List<PageEntity> result = filterApproved(selectAllChildren(url));
-		Collections.sort(result, PageHelper.PUBLISH_DATE_ASC);
+		Collections.sort(result, PageHelper.PUBLISH_DATE);
 		return result;
 	}
 
@@ -210,7 +210,7 @@ public class PageDaoImpl extends BaseDaoImpl<PageEntity>
 			Date startDate, Date endDate) {
 		List<PageEntity> result = filterApproved(selectAllChildren(url,
 				startDate, endDate));
-		Collections.sort(result, PageHelper.PUBLISH_DATE_ASC);
+		Collections.sort(result, PageHelper.PUBLISH_DATE);
 		return result;
 	}
 

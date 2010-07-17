@@ -31,6 +31,7 @@ import org.vosao.common.AbstractServiceBeanImpl;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PageTagEntity;
 import org.vosao.entity.TagEntity;
+import org.vosao.entity.helper.PageHelper;
 import org.vosao.utils.ListUtil;
 import org.vosao.velocity.TagVelocityService;
 
@@ -68,6 +69,7 @@ public class TagVelocityServiceImpl extends AbstractServiceBeanImpl implements
 				}
 			}
 		}
+		Collections.sort(result, PageHelper.PUBLISH_DATE);
 		return result;
 	}
 
@@ -84,7 +86,9 @@ public class TagVelocityServiceImpl extends AbstractServiceBeanImpl implements
 	public List<PageEntity> getPagesByPath(String tagPath) {
 		TagEntity tag = getBusiness().getTagBusiness().getByPath(tagPath);
 		if (tag != null) {
-			return getPagesById(tag.getId());
+			List<PageEntity> result = getPagesById(tag.getId());
+			Collections.sort(result, PageHelper.PUBLISH_DATE);
+			return result;
 		}
 		return Collections.EMPTY_LIST;
 	}

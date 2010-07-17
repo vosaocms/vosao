@@ -23,7 +23,7 @@ public class PageHelper {
 		}
 	}
 	
-	public static Comparator<PageEntity> PUBLISH_DATE_ASC = new PublishDateDesc();
+	public static Comparator<PageEntity> PUBLISH_DATE = new PublishDateDesc();
 	
 	private static class VersionAsc implements Comparator<PageEntity> {
 		@Override

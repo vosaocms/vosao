@@ -55,14 +55,16 @@ public interface TagVelocityService {
 	List<PageEntity> getPagesById(Long tagId, int index, int count);
 
 	/**
-	 * Get pages of tag selected by tag path in tags tree.
+	 * Get pages of tag selected by tag path in tags tree. Pages of all 
+	 * children tags are also included.
 	 * @param tagPath - path to tag like URL. Path starts with /.
 	 * @return pages by tag.
 	 */
 	List<PageEntity> getPagesByPath(String tagPath);
 
 	/**
-	 * Get pages of tag selected by tag path in tags tree.
+	 * Get pages of tag selected by tag path in tags tree. Pages of all 
+	 * children tags are also included.
 	 * @param tagPath - path to tag like URL. Path starts with /.
 	 * @param index - starting index.
 	 * @param count - batch size.

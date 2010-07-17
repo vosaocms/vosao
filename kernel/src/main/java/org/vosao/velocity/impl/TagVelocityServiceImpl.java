@@ -23,7 +23,9 @@ package org.vosao.velocity.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.vosao.business.Business;
 import org.vosao.business.decorators.TreeItemDecorator;
@@ -86,11 +88,20 @@ public class TagVelocityServiceImpl extends AbstractServiceBeanImpl implements
 	public List<PageEntity> getPagesByPath(String tagPath) {
 		TagEntity tag = getBusiness().getTagBusiness().getByPath(tagPath);
 		if (tag != null) {
-			List<PageEntity> result = getPagesById(tag.getId());
+			List<PageEntity> result = new ArrayList<PageEntity>(
+					getPagesByTag(tag.getId()));
 			Collections.sort(result, PageHelper.PUBLISH_DATE);
 			return result;
 		}
 		return Collections.EMPTY_LIST;
+	}
+	
+	private Set<PageEntity> getPagesByTag(long tagId) {
+		Set<PageEntity> result = new HashSet<PageEntity>(getPagesById(tagId));
+		for (TagEntity tag : getDao().getTagDao().selectByParent(tagId)) {
+			result.addAll(getPagesByTag(tag.getId()));
+		}
+		return result;
 	}
 
 	@Override

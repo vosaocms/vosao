@@ -85,15 +85,26 @@ public class TagVelocityServiceImpl extends AbstractServiceBeanImpl implements
 	}
 
 	@Override
-	public List<PageEntity> getPagesByPath(String tagPath) {
-		TagEntity tag = getBusiness().getTagBusiness().getByPath(tagPath);
-		if (tag != null) {
-			List<PageEntity> result = new ArrayList<PageEntity>(
-					getPagesByTag(tag.getId()));
-			Collections.sort(result, PageHelper.PUBLISH_DATE);
-			return result;
+	public List<PageEntity> getPagesByPath(String tagPaths) {
+		String[] paths = tagPaths.replace(" ", "").split(",");
+		if (paths.length == 0) {
+			return Collections.EMPTY_LIST;
 		}
-		return Collections.EMPTY_LIST;
+		Set<PageEntity> pages = null;
+		for (String tagPath : paths) {
+			TagEntity tag = getBusiness().getTagBusiness().getByPath(tagPath);
+			if (tag != null) {
+				if (pages == null) {
+					pages = getPagesByTag(tag.getId());
+				}
+				else {
+					pages.retainAll(getPagesByTag(tag.getId()));
+				}
+			}
+		}
+		List<PageEntity> result = new ArrayList<PageEntity>(pages);
+		Collections.sort(result, PageHelper.PUBLISH_DATE);
+		return result;
 	}
 	
 	private Set<PageEntity> getPagesByTag(long tagId) {

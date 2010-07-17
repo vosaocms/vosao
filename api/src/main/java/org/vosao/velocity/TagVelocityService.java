@@ -57,10 +57,10 @@ public interface TagVelocityService {
 	/**
 	 * Get pages of tag selected by tag path in tags tree. Pages of all 
 	 * children tags are also included.
-	 * @param tagPath - path to tag like URL. Path starts with /.
-	 * @return pages by tag.
+	 * @param tagPaths - comma delimited list of tag paths. Path starts with /.
+	 * @return pages by tags.
 	 */
-	List<PageEntity> getPagesByPath(String tagPath);
+	List<PageEntity> getPagesByPath(String tagPaths);
 
 	/**
 	 * Get pages of tag selected by tag path in tags tree. Pages of all 

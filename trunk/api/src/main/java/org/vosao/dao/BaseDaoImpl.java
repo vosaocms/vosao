@@ -162,7 +162,10 @@ public class BaseDaoImpl<T extends BaseEntity>
 		getQueryCache().removeQueries(clazz);
 		PreparedQuery p = getDatastore().prepare(q);
 		List<Key> keys = new ArrayList<Key>();
-		int limit = p.countEntities() > 0 ? p.countEntities() : 1;
+		int limit = p.countEntities();
+		if (limit == 0) {
+			limit = 1;
+		}
 		List<Entity> list = p.asList(withLimit(limit));
 		int count = 0;
 		for (Entity entity : list) {

@@ -19,22 +19,32 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.global;
+package org.vosao.dao;
 
+import java.util.List;
+
+import org.vosao.entity.PageDependencyEntity;
 
 /**
- * 
  * @author Alexander Oleynik
- *
  */
-public interface PageCache {
+public interface PageDependencyDao extends BaseDao<PageDependencyEntity> {
 
-	void put(String url, String language, String content);
+	/**
+	 * Get dependencies by page URL.
+	 * @param pageUrl - page friendlyURL.
+	 * @return found PageDependencys.
+	 */
+	List<PageDependencyEntity> selectByPage(final String pageUrl);
 	
-	String get(String url, String language);
-	
-	void remove(String url);
-	
-	boolean contains(String url);
+	/**
+	 * Get dependencies by dependency URL.
+	 * @param pageUrl - dependency page friendlyURL.
+	 * @return found PageDependencys.
+	 */
+	List<PageDependencyEntity> selectByDependency(final String pageUrl);
+
+	PageDependencyEntity getByPageAndDependency(String pageUrl, 
+			String dependency);
 	
 }

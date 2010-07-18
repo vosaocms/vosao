@@ -44,7 +44,9 @@ public class FolderUtil {
         	return new String[]{};
         }
 		String[] chain = path.split("/");
-		return Arrays.copyOfRange(chain, 1, chain.length);
+		return chain.length > 0 ? 
+				Arrays.copyOfRange(chain, 1, chain.length)
+				: new String[]{};
 	}
 	
 	public static String[] getPathChain(final ZipEntry entry) 

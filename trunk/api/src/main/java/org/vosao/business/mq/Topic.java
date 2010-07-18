@@ -68,6 +68,8 @@ public enum Topic {
 	 */
 	PAGES_DELETED,
 
+	PAGE_CACHE_CLEAR,
+	
 	/**
 	 * Full search reindex. Receives IndexMessage.
 	 */

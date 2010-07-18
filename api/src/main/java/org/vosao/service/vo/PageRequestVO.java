@@ -54,6 +54,7 @@ public class PageRequestVO {
     private List<StructureEntity> structures;
     private List<StructureFieldVO> structureFields;
     private List<TagEntity> tags;
+    private String dependencies;
 	
     public PageRequestVO() {
     	versions = Collections.EMPTY_LIST;
@@ -178,6 +179,14 @@ public class PageRequestVO {
 
 	public void setConfig(ConfigEntity config) {
 		this.config = config;
+	}
+
+	public String getDependencies() {
+		return dependencies;
+	}
+
+	public void setDependencies(String dependencies) {
+		this.dependencies = dependencies;
 	}   
     
 }

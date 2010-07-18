@@ -32,6 +32,7 @@ import org.vosao.entity.FormEntity;
 import org.vosao.entity.GroupEntity;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.MessageEntity;
+import org.vosao.entity.PageDependencyEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PluginEntity;
 import org.vosao.entity.SeoUrlEntity;
@@ -106,5 +107,7 @@ public interface DaoTaskAdapter {
 	void seoUrlSave(SeoUrlEntity entity) throws DaoTaskException;
 
 	void tagSave(TagEntity entity) throws DaoTaskException;
+
+	void pageDependencySave(PageDependencyEntity entity) throws DaoTaskException;
 
 }

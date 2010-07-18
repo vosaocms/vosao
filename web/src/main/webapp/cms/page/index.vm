@@ -80,6 +80,10 @@
     <label>$messages.get("page.cache_enabled")</label>
     <input id="cached" type="checkbox" />
 </div>
+<div id="dependenciesDiv" class="form-row">
+    <label>$messages.get("cache_dependencies")</label>
+    <input id="dependencies" type="text" class="form-title" size="60" />
+</div>
 
 <div class="form-row">
     <label>$messages.get("page.type")</label>

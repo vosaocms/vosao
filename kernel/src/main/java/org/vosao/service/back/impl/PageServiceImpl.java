@@ -23,6 +23,8 @@ package org.vosao.service.back.impl;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -37,6 +39,7 @@ import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.ContentPermissionEntity;
+import org.vosao.entity.PageDependencyEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PageTagEntity;
 import org.vosao.entity.StructureEntity;
@@ -235,6 +238,9 @@ public class PageServiceImpl extends AbstractServiceImpl
 		if (vo.get("headHtml") != null) {
 			page.setHeadHtml(vo.get("headHtml"));
 		}
+		if (vo.get("dependencies") != null) {
+			savePageDependencies(page.getFriendlyURL(), vo.get("dependencies"));
+		}
 		List<String> errors = getPageBusiness().validateBeforeUpdate(page);
 		if (errors.isEmpty()) {
 			getPageBusiness().save(page);
@@ -349,6 +355,8 @@ public class PageServiceImpl extends AbstractServiceImpl
 						result.setStructureFields(structure.getFields());
 					}
 				}
+				result.setDependencies(getDependencies(result.getPage()
+						.getFriendlyURL()));
 			}
 			result.setTemplates(getTemplateService().getTemplates());
 			result.setLanguages(getLanguageService().select());
@@ -631,6 +639,43 @@ public class PageServiceImpl extends AbstractServiceImpl
 	public ServiceResponse resetCache(String url) {
 		getBusiness().getSystemService().getPageCache().remove(url);
 		return ServiceResponse.createSuccessResponse(Messages.get("success"));
+	}
+
+	private String getDependencies(String url) {
+		StringBuilder s = new StringBuilder();
+		int count = 0;
+		for (PageDependencyEntity dep : getDao().getPageDependencyDao()
+				.selectByPage(url)) {
+			if (count++ > 0) {
+				s.append(",");
+			}
+			s.append(dep.getDependency());
+		}
+		return s.toString();
+	}
+	
+	private void savePageDependencies(String url, String dependencies) {
+		List<String> deps = Arrays.asList(dependencies.replace(" ", "")
+				.split(","));
+		List<String> alreadyExist = new ArrayList<String>();
+		for (PageDependencyEntity entity : getDao().getPageDependencyDao()
+				.selectByPage(url)) {
+			if (!deps.contains(entity.getDependency())) {
+				getDao().getPageDependencyDao().remove(entity.getId());
+			}
+			else {
+				alreadyExist.add(entity.getDependency());
+			}
+		}
+		for (String dependency : deps) {
+			if (!StringUtils.isEmpty(dependency)
+					&& !alreadyExist.contains(dependency)) {
+				PageDependencyEntity entity = new PageDependencyEntity(
+						dependency, url);
+				
+				getDao().getPageDependencyDao().save(entity);
+			}
+		}
 	}
 
 

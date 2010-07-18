@@ -7,6 +7,7 @@ import org.vosao.business.imex.FolderExporter;
 import org.vosao.business.imex.FormExporter;
 import org.vosao.business.imex.GroupExporter;
 import org.vosao.business.imex.MessagesExporter;
+import org.vosao.business.imex.PageDependencyExporter;
 import org.vosao.business.imex.PageExporter;
 import org.vosao.business.imex.PagePermissionExporter;
 import org.vosao.business.imex.PluginExporter;
@@ -40,6 +41,7 @@ public class ExporterFactoryImpl extends AbstractServiceBeanImpl
 	private UserExporter userExporter;
 	private SeoUrlExporter seoUrlExporter;
 	private TagExporter tagExporter;
+	private PageDependencyExporter pageDependencyExporter;
 	
 	public ExporterFactoryImpl(Business aBusiness, 
 			DaoTaskAdapter aDaoTaskAdapter) {
@@ -156,5 +158,13 @@ public class ExporterFactoryImpl extends AbstractServiceBeanImpl
 		}
 		return tagExporter;
 	}
-	
+
+	@Override
+	public PageDependencyExporter getPageDependencyExporter() {
+		if (pageDependencyExporter == null) {
+			pageDependencyExporter = new PageDependencyExporterImpl(this);
+		}
+		return pageDependencyExporter;
+	}
+
 }

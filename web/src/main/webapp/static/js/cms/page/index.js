@@ -56,6 +56,7 @@ $(function(){
     	$('#meta').toggle();
     });
     $('#addTag').click(onAddTag);
+    $('#cached').click(function() { $('#dependenciesDiv').toggle(); });
 });
 
 function loadData() {
@@ -155,6 +156,13 @@ function initPageForm() {
 		$('#keywords').val(page.keywords);
 		$('#description').val(page.description);
 		$('#headHtml').val(page.headHtml);
+		$('#dependencies').val(pageRequest.dependencies);
+		if (page.cached) {
+			$('#dependenciesDiv').show();
+		}
+		else {
+			$('#dependenciesDiv').hide();
+		}
 		$('.contentTab').show();
 		$('.childrenTab').show();
 		$('.commentsTab').show();
@@ -185,6 +193,8 @@ function initPageForm() {
 		$('#keywords').val('');
 		$('#description').val('');
 		$('#headHtml').val('');
+		$('#dependencies').val('');
+		$('#dependenciesDiv').hide();
 		$('.contentTab').hide();
 		$('.childrenTab').hide();
 		$('.commentsTab').hide();
@@ -213,6 +223,7 @@ function onPageUpdate() {
 		structureTemplateId: $('#structureTemplate').val(),
 		keywords: $('#keywords').val(),
 		description: $('#description').val(),
+		dependencies: $('#dependencies').val(),
 		headHtml: $('#headHtml').val()
 	});
 	$.cookie("page_template", pageVO.map.template, {path:'/', expires: 10});

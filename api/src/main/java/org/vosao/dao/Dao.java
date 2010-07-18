@@ -113,4 +113,6 @@ public interface Dao {
 	FormDataDao getFormDataDao();
 	void setFormDataDao(final FormDataDao bean);
 
+	PageDependencyDao getPageDependencyDao();
+	void setPageDependencyDao(final PageDependencyDao bean);
 }

@@ -105,4 +105,14 @@ public class PageCacheImpl implements PageCache {
 		}
 	}
 
+	@Override
+	public boolean contains(String url) {
+		for (LanguageEntity lang : getDao().getLanguageDao().select()) {
+			if (getCache().containsKey(getPageKey(url, lang.getCode()))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }

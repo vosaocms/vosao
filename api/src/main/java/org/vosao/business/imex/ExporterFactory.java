@@ -36,4 +36,7 @@ public interface ExporterFactory extends AbstractServiceBean {
 	SeoUrlExporter getSeoUrlExporter();
 
 	TagExporter getTagExporter();
+	
+	PageDependencyExporter getPageDependencyExporter();
+
 }

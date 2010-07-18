@@ -37,6 +37,7 @@ import org.vosao.business.imex.FolderExporter;
 import org.vosao.business.imex.FormExporter;
 import org.vosao.business.imex.GroupExporter;
 import org.vosao.business.imex.MessagesExporter;
+import org.vosao.business.imex.PageDependencyExporter;
 import org.vosao.business.imex.PageExporter;
 import org.vosao.business.imex.PluginExporter;
 import org.vosao.business.imex.ResourceExporter;
@@ -94,6 +95,9 @@ public class SiteExporterImpl extends AbstractExporter
 		}
 		if (!out.isSkip("_tags.xml")) {
 			saveFile(out, "_tags.xml", getTagExporter().createXML());
+		}
+		if (!out.isSkip("_dependencies.xml")) {
+			saveFile(out, "_dependencies.xml", getPageDependencyExporter().createXML());
 		}
 		TreeItemDecorator<FolderEntity> page = getBusiness().getFolderBusiness()
 				.findFolderByPath(getBusiness().getFolderBusiness().getTree(), 
@@ -195,6 +199,10 @@ public class SiteExporterImpl extends AbstractExporter
 		return getExporterFactory().getTagExporter();
 	}
 
+	private PageDependencyExporter getPageDependencyExporter() {
+		return getExporterFactory().getPageDependencyExporter();
+	}
+
 	private String toXML(ByteArrayOutputStream data) 
 			throws UnsupportedEncodingException {
 		return data.toString("UTF-8");
@@ -239,6 +247,10 @@ public class SiteExporterImpl extends AbstractExporter
 		}
 		if (name.equals("_tags.xml")) {
 			getTagExporter().read(xml);
+			return true;
+		}
+		if (name.equals("_dependencies.xml")) {
+			getPageDependencyExporter().readFile(xml);
 			return true;
 		}
 		

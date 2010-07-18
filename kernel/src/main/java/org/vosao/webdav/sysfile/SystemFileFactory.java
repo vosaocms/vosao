@@ -27,6 +27,7 @@ import java.util.List;
 import org.vosao.business.Business;
 import org.vosao.common.AbstractServiceBeanImpl;
 import org.vosao.webdav.sysfile.global.ConfigFileFactory;
+import org.vosao.webdav.sysfile.global.DependenciesFileFactory;
 import org.vosao.webdav.sysfile.global.FormsFileFactory;
 import org.vosao.webdav.sysfile.global.GroupsFileFactory;
 import org.vosao.webdav.sysfile.global.MessagesFileFactory;
@@ -70,6 +71,7 @@ public class SystemFileFactory extends AbstractServiceBeanImpl {
 			factories.add(new CommentsFileFactory(getBusiness()));
 			factories.add(new PagePermissionsFileFactory(getBusiness()));
 			factories.add(new TagFileFactory(getBusiness()));
+			factories.add(new DependenciesFileFactory(getBusiness()));
 		}
 		return factories;
 	}

@@ -37,6 +37,7 @@ import org.vosao.entity.FormEntity;
 import org.vosao.entity.GroupEntity;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.MessageEntity;
+import org.vosao.entity.PageDependencyEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PluginEntity;
 import org.vosao.entity.SeoUrlEntity;
@@ -434,6 +435,27 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 	@Override
 	public void nextFile() {
 		fileCounter++;
+	}
+
+	@Override
+	public void pageDependencySave(PageDependencyEntity entity)
+			throws DaoTaskException {
+		if (isSkip()) {
+			if (entity.getId() == null) {
+				PageDependencyEntity found = getDao().getPageDependencyDao()
+					.getByPageAndDependency(entity.getPage(), 
+							entity.getDependency());
+				
+				if (found == null) {
+					throw new DaoTaskException("PageDependency not found while " 
+						+ "skipping save operation. " + entity.getPage());
+				}
+				entity.setId(found.getId());
+			}
+		}
+		else {
+			getDao().getPageDependencyDao().save(entity);
+		}
 	}
 
 }

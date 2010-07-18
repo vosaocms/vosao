@@ -26,7 +26,7 @@ import org.vosao.entity.TagEntity;
 public class TagBusinessTest extends AbstractBusinessTest {
 
 	private TagEntity addTag(Long parent, String name) {
-		return getDao().getTagDao().save(new TagEntity(parent, name));
+		return getDao().getTagDao().save(new TagEntity(parent, name, name));
 	}
 	
 	public void testGetByPath() {

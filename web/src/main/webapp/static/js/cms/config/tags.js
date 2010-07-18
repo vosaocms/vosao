@@ -34,6 +34,7 @@ $(function(){
     $('ul.ui-tabs-nav li:nth-child(7)').addClass('ui-state-active')
     		.addClass('ui-tabs-selected')
 			.removeClass('ui-state-default');
+    $('#title').change(onTitleChange);
 });
 
 function loadData() {
@@ -94,10 +95,12 @@ function onTagEdit(id) {
 function initTagForm() {
 	if (tag == null) {
         $('#tagName').val('');
+        $('#title').val('');
         $('#pages').html('');
 	}
 	else {
         $('#tagName').val(tag.name);
+        $('#title').val(tag.title);
         loadPages();
 	}
     $('#tag-dialog .messages').html('');
@@ -111,6 +114,7 @@ function loadPages() {
 }
 
 function showPages() {
+    $('#pages').html('');
 	if (pages.length > 0) {
 		var h = '';
 		$.each(pages, function(i, value) {
@@ -123,7 +127,7 @@ function showPages() {
 
 function validateTag(vo) {
     var errors = [];
-    if (vo.email == '') {
+    if (vo.name == '') {
         errors.push(messages['config.tag_is_empty']);
     }
     return errors;
@@ -133,7 +137,8 @@ function onTagSave() {
     var vo = {
     	id : tag != null ? String(tag.id) : '',
     	parent : parentId == null ? '' : String(parentId),
-        name : $('#tagName').val()
+        name : $('#tagName').val(),
+        title : $('#title').val()
     };
     var errors = validateTag(vo);
     if (errors.length == 0) {
@@ -144,7 +149,7 @@ function onTagSave() {
                 loadTags();
             }
             else {
-                tagErrors(r.messages.list);
+                tagError(r.message);
             }
         }, Vosao.javaMap(vo));
     }
@@ -182,5 +187,16 @@ function onPageRemove(i) {
 			pages.splice(i,1);
 			showPages();
 		}, pages[i].friendlyURL, tag.id);
+	}
+}
+
+function onTitleChange() {
+	if (tag != null) {
+		return;
+	}
+	var name = $("#tagName").val();
+	var title = $("#title").val();
+	if (name == '') {
+		$("#tagName").val(Vosao.urlFromTitle(title));
 	}
 }

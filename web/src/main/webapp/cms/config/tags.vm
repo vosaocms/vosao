@@ -47,6 +47,10 @@
   <form id="tagForm">
     <div class="messages"> </div>
     <div class="form-row">
+        <label>$messages.get("title")</label>
+        <input id="title" type="text"/>
+    </div>
+    <div class="form-row">
         <label>$messages.get("config.tag_name")</label>
         <input id="tagName" type="text"/>
     </div>

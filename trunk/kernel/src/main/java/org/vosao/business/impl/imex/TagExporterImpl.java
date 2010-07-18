@@ -57,6 +57,7 @@ public class TagExporterImpl extends AbstractExporter
 	private void createTagXML(Element element, TagEntity tag) {
 		Element tagElement = element.addElement("tag");
 		tagElement.addElement("name").setText(tag.getName());
+		tagElement.addElement("title").setText(tag.getTitle());
 		List<TagEntity> list = getDao().getTagDao().selectByParent(tag.getId());
 		for (TagEntity child : list) {
 			createTagXML(tagElement, child);
@@ -69,9 +70,11 @@ public class TagExporterImpl extends AbstractExporter
             Element element = i.next();
             if (element.getName().equals("tag")) {
             	String name = element.elementText("name");
+            	String title = element.elementText("title") != null ?
+            			element.elementText("title") : name;
             	TagEntity tag = getDao().getTagDao().getByName(parent, name);
             	if (tag == null) {
-            		tag = new TagEntity(parent, name);
+            		tag = new TagEntity(parent, name, title);
             	}
             	tag.setName(name);
             	getDaoTaskAdapter().tagSave(tag);

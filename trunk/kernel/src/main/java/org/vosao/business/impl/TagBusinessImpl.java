@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.vosao.business.TagBusiness;
@@ -41,6 +42,8 @@ import org.vosao.i18n.Messages;
 public class TagBusinessImpl extends AbstractBusinessImpl 
 	implements TagBusiness {
 
+	private static final Pattern TAG_NAME_DISALLOWED = Pattern.compile("[/ ]"); 
+	
 	@Override
 	public List<TreeItemDecorator<TagEntity>> getTree() {
 		List<TreeItemDecorator<TagEntity>> result = 
@@ -70,6 +73,9 @@ public class TagBusinessImpl extends AbstractBusinessImpl
 
 	@Override
 	public String validateBeforeSave(TagEntity tag) {
+		if (StringUtils.isEmpty(tag.getTitle())) {
+			return Messages.get("title_is_empty");
+		}
 		if (StringUtils.isEmpty(tag.getName())) {
 			return Messages.get("name_is_empty");
 		}
@@ -87,7 +93,7 @@ public class TagBusinessImpl extends AbstractBusinessImpl
 				}	
 			}
 		}
-		if (tag.getName().indexOf('/') != -1) {
+		if (TAG_NAME_DISALLOWED.matcher(tag.getName()).find()) {
 			return Messages.get("tag_wrong_symbol");
 		}
 		return null;

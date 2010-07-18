@@ -40,6 +40,7 @@ public class TagEntity extends BaseEntityImpl {
 
 	private Long parent;
 	private String name;
+	private String title;
 	private List<String> pages;
 	
 	public TagEntity() {
@@ -51,6 +52,7 @@ public class TagEntity extends BaseEntityImpl {
 		super.load(entity);
 		parent = getLongProperty(entity, "parent");
 		name = getStringProperty(entity, "name");
+		title = getStringProperty(entity, "title");
 		pages = getListProperty(entity, "pages");
 	}
 	
@@ -58,13 +60,15 @@ public class TagEntity extends BaseEntityImpl {
 	public void save(Entity entity) {
 		super.save(entity);
 		setProperty(entity, "name", name, true);
+		setProperty(entity, "title", title, false);
 		setProperty(entity, "parent", parent, true);
 		setProperty(entity, "pages", pages);
 	}
 
-	public TagEntity(Long aParent, String aName) {
+	public TagEntity(Long aParent, String aName, String aTitle) {
 		this();
 		name = aName;
+		title = aTitle;
 		parent = aParent;
 	}
 	
@@ -90,6 +94,14 @@ public class TagEntity extends BaseEntityImpl {
 
 	public void setPages(List<String> pages) {
 		this.pages = pages;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 }

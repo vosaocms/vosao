@@ -70,6 +70,7 @@ public class TagServiceImpl extends AbstractServiceImpl
 			tag.setParent(Long.valueOf(vo.get("parent")));
 		}
 		tag.setName(vo.get("name"));
+		tag.setTitle(vo.get("title"));
 		String error = getBusiness().getTagBusiness().validateBeforeSave(tag);
 		if (error == null) {
 			getDao().getTagDao().save(tag);

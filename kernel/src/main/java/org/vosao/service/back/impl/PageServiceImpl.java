@@ -615,27 +615,6 @@ public class PageServiceImpl extends AbstractServiceImpl
 	}
 	
 	@Override
-	public ServiceResponse addPage(Map<String, String> vo) {
-		PageEntity page = new PageEntity();
-		page.setSortIndex(getBusiness().getPageBusiness().getNextSortIndex(
-					vo.get("friendlyURL")));
-		page.setFriendlyURL(vo.get("friendlyURL"));
-		TemplateEntity template = getDao().getTemplateDao().select().get(0);
-		page.setTemplate(template.getId());
-		page.setTitleValue(vo.get("titles"));
-		List<String> errors = getBusiness().getPageBusiness()
-			.validateBeforeUpdate(page);
-		if (errors.isEmpty()) {
-			getPageBusiness().save(page);
-			return ServiceResponse.createSuccessResponse(page.getId().toString());
-		}
-		else {
-			return ServiceResponse.createErrorResponse(
-					Messages.get("errors_occured"), errors);
-		}
-	}
-
-	@Override
 	public ServiceResponse resetCache(String url) {
 		getBusiness().getSystemService().getPageCache().remove(url);
 		return ServiceResponse.createSuccessResponse(Messages.get("success"));

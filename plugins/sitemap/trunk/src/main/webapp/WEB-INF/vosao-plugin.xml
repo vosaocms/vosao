@@ -1,7 +1,7 @@
 <vosao-plugin>
     <name>sitemap</name>
     <title>$sitemap.title</title>
-    <version>0.6</version>
+    <version>0.7</version>
     <description>$sitemap.description</description>
     <website>www.vosao.org</website>
     <config>

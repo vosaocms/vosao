@@ -20,6 +20,8 @@
  */
 
 var parentURL = null;
+var root = null;
+var page = null;
 
 $(function() {
     $("#page-dialog").dialog({ width: 400, autoOpen: false });
@@ -36,6 +38,7 @@ function loadData() {
 
 function loadTree() {
 	Vosao.jsonrpc.pageService.getTree(function(r) {
+		root = r;
 		$('#pages-tree').html(renderPage(r));
 		$("#pages-tree").treeview({
 			animated: "fast",
@@ -44,24 +47,53 @@ function loadTree() {
 			persist: "cookie",
 			cookieId: "pageTree"
 		});
+		$('.content-link').each(function () {
+			$(this).mouseover(function(event) {
+				$('.page_edit').hide()
+				$(event.target).siblings('.page_edit').show()			
+			});
+		});
 	});
 }
 
 function renderPage(vo) {
 	var pageUrl = encodeURIComponent(vo.entity.friendlyURL);
 	var p = vo.entity.hasPublishedVersion ? 'published' : 'unpublished';
-	var published = messages[p];
-	var html = '<li> <img src="/static/images/'+ p +'.png" title="' + published 
-			+ '" width="16px" />' 
-			+ ' <a href="page/content.vm?id=' + vo.entity.id + '">'
-			+ vo.entity.title
-			+ '</a> <a title="' + messages['add_child'] 
+	var published_msg = messages[p];
+	var published_link = ' <img src="/static/images/'+ p +'.png" title="' 
+		+ published_msg + '" width="16px" />';
+	if (!vo.entity.hasPublishedVersion) {
+		published_link = ' <a href="#" onclick="onPagePublish(' 
+			+ vo.entity.id + ')">'
+			+ '<img src="/static/images/'+ p +'.png" title="' 
+			+ published_msg + '" width="16px" /></a>';
+	}
+	var html = '<li> ' + published_link
+	
+			+ ' <a href="page/content.vm?id=' + vo.entity.id + '" title="'
+			+ messages['page.edit_content'] + '" class="content-link">'
+			+ vo.entity.title + '</a> '
+			
+			+ '<span class="page_edit" style="display:none">'
+			
+			+ '<a title="' + messages['add_child'] 
 			+ '" href="#" onclick="onPageAdd(\'' + vo.entity.friendlyURL
 			+ '\')"><img src="/static/images/add.png"/></a> '
+			
 			+ '<a title="' + messages['remove'] 
 			+ '" href="#" onclick="onPageRemove(\'' 
 			+ vo.entity.friendlyURL + '\')">'
-			+ '<img src="/static/images/02_x.png" /></a>';
+			+ '<img src="/static/images/02_x.png" /></a> '
+			
+			+ '<a href="page/index.vm?id=' + vo.entity.id + '" title="'
+			+ messages['page.edit_properties'] + '">'
+			+ '<img src="/static/images/pencil.png" /></a> '
+			
+			+ '<a href="#" onclick="onChangeTitle(' + vo.entity.id + ')" title="'
+			+ messages['page.edit_url_title'] + '">'
+			+ '<img src="/static/images/globe.png" /></a>'
+			
+			+ '</span>';
 	if (vo.children.list.length > 0) {
 		html += '<ul>';
 		$.each(vo.children.list, function(n, value) {
@@ -90,12 +122,15 @@ function onPageRemove(url) {
 }
 
 function onPageAdd(parent) {
+	$('#ui-dialog-title-page-dialog').text(messages['pages.new_page']);
 	parentURL = parent == '/' ? '' : parent;
 	$('#page-dialog').dialog('open');
 	$('#parentURL').html(parentURL + '/');
 	$('#title').val('');
 	$('#url').val('');
+	$('#url').removeAttr('disabled');
 	$('#title').focus();
+	page = null;
 }
 
 function onPageCancel() {
@@ -131,14 +166,15 @@ function validate(vo) {
 
 function onSave() {
 	var vo = {
+		id : page == null ? '' : String(page.id),
 		title : $('#title').val(),
 		url : $('#url').val(),
-		friendlyURL : parentURL + '/' + $('#url').val(),
+		friendlyUrl : parentURL + '/' + $('#url').val(),
 		titles : 'en' + $('#title').val()
 	};
 	var error = validate(vo);
 	if (!error) {
-		Vosao.jsonrpc.pageService.addPage(function(r) {
+		Vosao.jsonrpc.pageService.savePage(function(r) {
 			if (r.result == 'success') {
 				Vosao.info(messages['pages.success_created']);
 				$('#page-dialog').dialog('close');
@@ -156,4 +192,46 @@ function onSave() {
 
 function showError(msg) {
 	Vosao.errorMessage('#pageMessages', msg);
+}
+
+function onPagePublish(id) {
+	if (confirm(messages['are_you_sure'])) {
+		Vosao.jsonrpc.pageService.approve(function(r) {
+			Vosao.showServiceMessages(r);
+			loadData();
+		}, id);
+	}
+}
+
+function findPage(id) {
+	return findChildPage(root, id);
+}
+
+function findChildPage(page, id) {
+	if (page.entity.id == id) {
+		return page;
+	}
+	var result = null;
+	if (page.children.list.length > 0) {
+		$.each(page.children.list, function(i,value) {
+			var res = findChildPage(value, id);
+			if (res != null) {
+				result = res;
+			}
+		});
+	}
+	return result;
+}
+
+function onChangeTitle(id) {
+	var pageItem = findPage(id);
+	page = pageItem.entity;
+	$('#ui-dialog-title-page-dialog').text(messages['pages.change_page']);
+	parentURL = page.parentUrl == '/' ? '' : page.parentUrl;
+	$('#page-dialog').dialog('open');
+	$('#parentURL').html(parentURL + '/');
+	$('#title').val(page.title);
+	$('#url').val(page.pageFriendlyURL);
+	$('#url').attr('disabled', pageItem.children.list.length > 0);
+	$('#title').focus();
 }

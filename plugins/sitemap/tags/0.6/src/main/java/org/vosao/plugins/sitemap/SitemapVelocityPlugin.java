@@ -79,6 +79,9 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 
 	private void filterExclude(TreeItemDecorator<PageEntity> page,
 			List<String> urls) {
+		if (urls == null) {
+			return;
+		}
 		List<TreeItemDecorator<PageEntity>> children = 
 			new ArrayList<TreeItemDecorator<PageEntity>>();
 		for (TreeItemDecorator<PageEntity> child : page.getChildren()) {

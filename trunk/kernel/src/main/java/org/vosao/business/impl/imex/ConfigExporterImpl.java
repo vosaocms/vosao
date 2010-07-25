@@ -52,7 +52,7 @@ public class ConfigExporterImpl extends AbstractExporter
 	}		
 	
 	private void createConfigXML(Element configElement) {
-		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
+		ConfigEntity config = getConfig();
 		configElement.addElement("google-analytics").setText(notNull(
 				config.getGoogleAnalyticsId()));
 		configElement.addElement("email").setText(notNull(
@@ -76,6 +76,7 @@ public class ConfigExporterImpl extends AbstractExporter
 		configElement.addElement("siteUserLoginUrl").setText(notNull(
 				config.getSiteUserLoginUrl()));
 		createLanguagesXML(configElement);
+		createAttributesXML(configElement);
 	}
 
 	private void createLanguagesXML(Element configElement) {
@@ -88,8 +89,19 @@ public class ConfigExporterImpl extends AbstractExporter
 		}
 	}
 	
+	private void createAttributesXML(Element configElement) {
+		Element attributesElement = configElement.addElement("attributes");
+		ConfigEntity config = getConfig();
+		for (String name : config.getAttributes().keySet()) {
+			Element attributeElem = attributesElement.addElement("attribute");
+			attributeElem.addElement("name").setText(name);
+			attributeElem.addElement("value").setText(config.getAttributes()
+					.get(name));
+		}
+	}
+
 	public void readConfigs(Element configElement) throws DaoTaskException {
-		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
+		ConfigEntity config = getConfig();
 		for (Iterator<Element> i = configElement.elementIterator(); i.hasNext(); ) {
             Element element = i.next();
             if (element.getName().equals("google-analytics")) {
@@ -118,6 +130,9 @@ public class ConfigExporterImpl extends AbstractExporter
             }
             if (element.getName().equals("languages")) {
             	readLanguages(element);
+            }
+            if (element.getName().equals("attributes")) {
+            	readAttributes(element);
             }
             if (element.getName().equals("enableRecaptcha")) {
             	config.setEnableRecaptcha(XmlUtil.readBooleanText(
@@ -149,6 +164,25 @@ public class ConfigExporterImpl extends AbstractExporter
 		}
 	}
 	
+	private ConfigEntity getConfig() {
+		return getDao().getConfigDao().getConfig();
+	}
+	
+	public void readAttributes(Element attributesElement) 
+			throws DaoTaskException {
+		ConfigEntity config = getConfig();
+		for (Iterator<Element> i = attributesElement.elementIterator(); 
+				i.hasNext(); ) {
+            Element element = i.next();
+            if (element.getName().equals("attribute")) {
+            	String name = element.elementText("name");
+            	String value = element.elementText("value");
+            	config.setAttribute(name, value);
+            }
+		}
+    	getDaoTaskAdapter().configSave(config);
+	}
+
 	/**
 	 * Parse and import data from _config.xml file.
 	 * @param xml - _config.xml content.

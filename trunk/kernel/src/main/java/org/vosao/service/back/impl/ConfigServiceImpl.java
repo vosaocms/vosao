@@ -222,5 +222,25 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 	public SiteStatVO getSiteStat() {
 		return new SiteStatVO();
 	}
+
+	@Override
+	public ServiceResponse saveAttribute(String name, String value) {
+		ConfigEntity config = getDao().getConfigDao().getConfig();
+		config.setAttribute(name, value);
+		getDao().getConfigDao().save(config);
+		return ServiceResponse.createSuccessResponse(
+				Messages.get("success"));
+	}
+
+	@Override
+	public ServiceResponse removeAttributes(List<String> names) {
+		ConfigEntity config = getDao().getConfigDao().getConfig();
+		for (String name : names) {
+			config.getAttributes().remove(name);
+		}
+		getDao().getConfigDao().save(config);
+		return ServiceResponse.createSuccessResponse(
+				Messages.get("success"));
+	}
 	
 }

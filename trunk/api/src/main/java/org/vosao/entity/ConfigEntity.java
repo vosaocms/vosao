@@ -24,6 +24,8 @@ package org.vosao.entity;
 import static org.vosao.utils.EntityUtil.*;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.appengine.api.datastore.Entity;
 
@@ -46,10 +48,12 @@ public class ConfigEntity extends BaseEntityImpl {
 	private String picasaUser;
 	private String picasaPassword;
 	private boolean enableCkeditor;
+	private Map<String, String> attributes;
 
 	public ConfigEntity() {
 		commentsTemplate = "";
 		enableCkeditor = true;
+		attributes = new HashMap<String, String>();
 	}
 
 	@Override
@@ -70,6 +74,7 @@ public class ConfigEntity extends BaseEntityImpl {
 		picasaUser = getStringProperty(entity, "picasaUser");
 		picasaPassword = getStringProperty(entity, "picasaPassword");
 		enableCkeditor = getBooleanProperty(entity, "enableCkeditor", true);
+		attributes = getMapProperty(entity, "attributes");
 	}
 	
 	@Override
@@ -90,6 +95,7 @@ public class ConfigEntity extends BaseEntityImpl {
 		setProperty(entity, "picasaUser", picasaUser, false);
 		setProperty(entity, "picasaPassword", picasaPassword, false);
 		setProperty(entity, "enableCkeditor", enableCkeditor, false);
+		setProperty(entity, "attributes", attributes);
 	}
 
 	public String getGoogleAnalyticsId() {
@@ -211,5 +217,16 @@ public class ConfigEntity extends BaseEntityImpl {
 	public void setEnableCkeditor(boolean value) {
 		this.enableCkeditor = value;
 	}
-	
+
+	public Map<String, String> getAttributes() {
+		return attributes;
+	}
+
+    public void setAttribute(String name, String value) {
+    	attributes.put(name, value);
+    }
+    
+    public String getAttribute(String name) {
+    	return attributes.get(name);
+    }
 }

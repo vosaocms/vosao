@@ -83,6 +83,12 @@ public class RssatomServlet extends HttpServlet {
 		VelocityContext context = new VelocityContext();
 		getBusiness().getPageBusiness().addVelocityTools(context);
 		context.put("config", config);
+		context.put("service", getBusiness().getPageBusiness()
+				.getVelocityService());
+		context.put("plugin", getBusiness().getPageBusiness()
+				.getVelocityPluginService().getPlugins());
+		context.put("messages", getBusiness().getMessageBusiness().getBundle(
+				getBusiness().getLanguage()));
 		context.put("rssatomConfig", rssatomConfig);
 		context.put("pages", getPages(plugin, rssatomConfig));
 		context.put("rss", new RssTool(getBusiness()));

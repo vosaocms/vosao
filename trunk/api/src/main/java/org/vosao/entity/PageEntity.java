@@ -78,6 +78,7 @@ public class PageEntity extends BaseEntityImpl {
 	private String headHtml;
 	private boolean skipPostProcessing;
 	private boolean cached;
+	private String contentType;
 
 	// not persisted
 	private Map<String, String> titles;
@@ -122,6 +123,7 @@ public class PageEntity extends BaseEntityImpl {
 		headHtml = getTextProperty(entity, "headHtml");
 		skipPostProcessing = getBooleanProperty(entity, "skipPostProcessing", false);
 		cached = getBooleanProperty(entity, "cached", true);
+		contentType = getStringProperty(entity, "contentType");
 	}
 	
 	@Override
@@ -147,6 +149,7 @@ public class PageEntity extends BaseEntityImpl {
 		setTextProperty(entity, "headHtml", headHtml);
 		setProperty(entity, "skipPostProcessing", skipPostProcessing, false);
 		setProperty(entity, "cached", cached, false);
+		setProperty(entity, "contentType", contentType, false);
 	}
 
 	public PageEntity(String title, String friendlyURL, 
@@ -468,5 +471,13 @@ public class PageEntity extends BaseEntityImpl {
 
 	public void setCached(boolean cached) {
 		this.cached = cached;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 }

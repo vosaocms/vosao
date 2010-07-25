@@ -43,6 +43,7 @@ import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.SeoUrlEntity;
 import org.vosao.entity.UserEntity;
+import org.vosao.global.PageCacheItem;
 import org.vosao.i18n.Messages;
 
 /**
@@ -127,13 +128,13 @@ public class SiteFilter extends AbstractFilter implements Filter {
 
 	private boolean servedFromCache(String url,	HttpServletResponse response) 
 			throws IOException {
-		String page = getSystemService().getPageCache().get(url,
+		PageCacheItem page = getSystemService().getPageCache().get(url,
 				getBusiness().getLanguage());
 		if (page != null) {
-	    	response.setContentType("text/html");
+	    	response.setContentType(page.getContentType());
 	    	response.setCharacterEncoding("UTF-8");
 	    	Writer out = response.getWriter();
-	    	out.write(page);
+	    	out.write(page.getContent());
 			return true;
 		}
 		return false;
@@ -157,7 +158,9 @@ public class SiteFilter extends AbstractFilter implements Filter {
     private void renderPage(HttpServletRequest request, 
     		HttpServletResponse response, final PageEntity page) 
     		throws IOException {
-    	response.setContentType("text/html");
+    	String contentType = StringUtils.isEmpty(page.getContentType()) ?
+    			"text/html" : page.getContentType();
+    	response.setContentType(contentType);
     	response.setCharacterEncoding("UTF-8");
     	Writer out = response.getWriter();
     	String language = getBusiness().getLanguage();
@@ -165,7 +168,7 @@ public class SiteFilter extends AbstractFilter implements Filter {
     	out.write(content);
     	if (!isLoggedIn(request) && page.isCached()) {
     		getSystemService().getPageCache().put(page.getFriendlyURL(),
-    				language, content);
+    				language, content, contentType);
     	}
     }
     

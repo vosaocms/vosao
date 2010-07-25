@@ -241,6 +241,9 @@ public class PageServiceImpl extends AbstractServiceImpl
 		if (vo.get("dependencies") != null) {
 			savePageDependencies(page.getFriendlyURL(), vo.get("dependencies"));
 		}
+		if (vo.get("contentType") != null) {
+			page.setContentType(vo.get("contentType"));
+		}
 		List<String> errors = getPageBusiness().validateBeforeUpdate(page);
 		if (errors.isEmpty()) {
 			getPageBusiness().save(page);

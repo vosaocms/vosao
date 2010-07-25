@@ -1,7 +1,7 @@
 <vosao-plugin>
     <name>register</name>
     <title>$register.title</title>
-    <version>0.6</version>
+    <version>0.7</version>
     <description>$register.description</description>
     <website>www.vosao.org</website>
     <plugin-config-url>config.html</plugin-config-url>

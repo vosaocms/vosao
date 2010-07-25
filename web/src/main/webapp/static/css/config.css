@@ -15,6 +15,6 @@ label {
 	width: 10em;
 }
 
-#stat-dialog label {
+#stat-dialog label, #attribute-dialog label {
 	height: 20px;
 }

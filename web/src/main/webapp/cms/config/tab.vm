@@ -41,4 +41,7 @@
     <li class="ui-corner-top ui-state-default">
         <a href="tags.vm">$messages.get("tags")</a>
     </li>
+    <li class="ui-corner-top ui-state-default">
+        <a href="attributes.vm">$messages.get("attributes")</a>
+    </li>
 </ul>

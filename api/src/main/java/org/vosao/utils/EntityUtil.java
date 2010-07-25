@@ -24,11 +24,14 @@ package org.vosao.utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.datanucleus.query.expression.CastExpression;
 
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Entity;
@@ -142,6 +145,17 @@ public class EntityUtil {
 		return new ArrayList();
 	}
 
+	public static <K,T> Map<K,T> getMapProperty(Entity entity, String name) {
+		Object p = entity.getProperty(name);
+		if (p == null) {
+			return new HashMap<K,T>();
+		}
+		if (p instanceof Blob) {
+			return (Map<K,T>) StreamUtil.toObject(((Blob)p).getBytes());
+		}
+		return new HashMap<K,T>();
+	}
+
 	public static void setProperty(Entity entity, String name,
 			Integer value, boolean indexed) {
 		if (indexed) {
@@ -213,11 +227,20 @@ public class EntityUtil {
 
 	public static void setProperty(Entity entity, String name, List value) {
 		if (value == null) {
-			entity.setProperty(name, null);
+			entity.setUnindexedProperty(name, null);
 		}
 		else {
-			entity.setProperty(name, value);
+			entity.setUnindexedProperty(name, value);
 		}
 	}
 	
+	public static void setProperty(Entity entity, String name, Map value) {
+		if (value == null) {
+			entity.setUnindexedProperty(name, null);
+		}
+		else {
+			entity.setUnindexedProperty(name, 
+					new Blob(StreamUtil.toBytes(value)));
+		}
+	}
 }

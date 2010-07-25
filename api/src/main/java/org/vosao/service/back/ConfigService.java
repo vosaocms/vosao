@@ -74,4 +74,9 @@ public interface ConfigService extends AbstractService {
 	ServiceResponse loadDefaultSite();
 	
 	SiteStatVO getSiteStat();
+	
+	ServiceResponse saveAttribute(String name, String value);
+	
+	ServiceResponse removeAttributes(List<String> names);
+	
 }

@@ -270,6 +270,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		return getTree(getDao().getPageDao().select());
 	}
 
+	@Override
 	public VelocityPluginService getVelocityPluginService() {
 		if (velocityPluginService == null) {
 			velocityPluginService = new VelocityPluginServiceImpl(getBusiness());

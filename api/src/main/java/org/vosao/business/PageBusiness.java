@@ -31,6 +31,7 @@ import org.vosao.entity.ContentEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.StructureTemplateEntity;
 import org.vosao.entity.UserEntity;
+import org.vosao.velocity.VelocityPluginService;
 import org.vosao.velocity.VelocityService;
 
 
@@ -161,6 +162,8 @@ public interface PageBusiness {
 	void moveBefore(PageEntity page, PageEntity refPage);
 
 	VelocityService getVelocityService();
+
+	VelocityPluginService getVelocityPluginService();
 
 	/**
 	 * Remove page by URL with all subpages and page resouces.

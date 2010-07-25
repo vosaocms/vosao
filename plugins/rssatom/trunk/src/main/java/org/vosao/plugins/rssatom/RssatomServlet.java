@@ -97,7 +97,7 @@ public class RssatomServlet extends HttpServlet {
 		for (String pageURL : rssatomConfig.getPagesList()) {
 			addPages(getBusiness().getPageBusiness().getByUrl(pageURL), result);
 		}
-		Collections.sort(result, PageHelper.PUBLISH_DATE_ASC);
+		Collections.sort(result, PageHelper.PUBLISH_DATE);
 		return ListUtil.slice(result, 0, rssatomConfig.getItems());
 	}
 	

@@ -161,4 +161,8 @@ public class PageVO {
 	public List<String> getAncestorsURL() {
 		return page.getAncestorsURL();
 	}
+	
+	public String getContentType() {
+		return page.getContentType();
+	}
 }

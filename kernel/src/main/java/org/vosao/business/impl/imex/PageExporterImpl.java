@@ -172,6 +172,8 @@ public class PageExporterImpl extends AbstractExporter
 				page.isSkipPostProcessing()));
 		pageElement.addElement("cached").setText(String.valueOf(
 				page.isCached()));
+		pageElement.addElement("contentType").setText(XmlUtil.notNull(
+				page.getContentType()));
 		List<ContentEntity> contents = getDao().getPageDao().getContents(
 				page.getId()); 
 		for (ContentEntity content : contents) {
@@ -332,6 +334,9 @@ public class PageExporterImpl extends AbstractExporter
 			}
 			if (element.getName().equals("cached")) {
 				newPage.setCached(XmlUtil.readBooleanText(element, true));
+			}
+			if (element.getName().equals("contentType")) {
+				newPage.setContentType(element.getText());
 			}
 		}
 		PageEntity page = getDao().getPageDao().getByUrlVersion(url, 

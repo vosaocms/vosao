@@ -157,6 +157,7 @@ function initPageForm() {
 		$('#description').val(page.description);
 		$('#headHtml').val(page.headHtml);
 		$('#dependencies').val(pageRequest.dependencies);
+		$('#contentType').val(page.contentType);
 		if (page.cached) {
 			$('#dependenciesDiv').show();
 		}
@@ -194,6 +195,7 @@ function initPageForm() {
 		$('#description').val('');
 		$('#headHtml').val('');
 		$('#dependencies').val('');
+		$('#contentType').val('');
 		$('#dependenciesDiv').hide();
 		$('.contentTab').hide();
 		$('.childrenTab').hide();
@@ -224,6 +226,7 @@ function onPageUpdate() {
 		keywords: $('#keywords').val(),
 		description: $('#description').val(),
 		dependencies: $('#dependencies').val(),
+		contentType: $('#contentType').val(),
 		headHtml: $('#headHtml').val()
 	});
 	$.cookie("page_template", pageVO.map.template, {path:'/', expires: 10});

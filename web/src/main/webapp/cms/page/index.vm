@@ -105,6 +105,12 @@
 </div>
 
 <div class="form-row">
+    <label>$messages.get("tags")</label>
+    <a id="addTag" href="#">$messages.get("add_tag")</a>
+    <span id="tags"></span>
+</div>
+
+<div class="form-row">
     <a id="metadata" href="#">$messages.get("page.metadata")</a>
 </div>
 <div id="meta" style="display:none">
@@ -120,12 +126,10 @@
     <label>$messages.get("page.head_content")</label>
     <textarea id="headHtml" rows="5" cols="80"></textarea>
 </div>
-</div>
-
 <div class="form-row">
-    <label>$messages.get("tags")</label>
-    <a id="addTag" href="#">$messages.get("add_tag")</a>
-    <span id="tags"></span>
+    <label>$messages.get("content_type")</label>
+    <input id="contentType" type="text" class="form-title" />
+</div>
 </div>
 
 <div class="buttons">

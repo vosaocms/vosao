@@ -22,6 +22,7 @@
 var parentURL = null;
 var root = null;
 var page = null;
+var showTitle = $.cookie("pages.showTitle") != 'names';
 
 $(function() {
     $("#page-dialog").dialog({ width: 400, autoOpen: false });
@@ -29,6 +30,7 @@ $(function() {
 	$('#cancelDlgButton').click(onPageCancel);
     $('#pageForm').submit(function() {onSave(); return false;});
     $('#title').change(onTitleChange);
+    renderShowTitle();
 });
 
 function loadData() {
@@ -58,6 +60,10 @@ function loadTree() {
 
 function renderPage(vo) {
 	var pageUrl = encodeURIComponent(vo.entity.friendlyURL);
+	var title = showTitle ? vo.entity.title : vo.entity.pageFriendlyURL;
+	if (!title) {
+		title = '/';
+	}
 	var p = vo.entity.hasPublishedVersion ? 'published' : 'unpublished';
 	var published_msg = messages[p];
 	var published_link = ' <img src="/static/images/'+ p +'.png" title="' 
@@ -72,7 +78,7 @@ function renderPage(vo) {
 	
 			+ ' <a href="page/content.vm?id=' + vo.entity.id + '" title="'
 			+ messages['page.edit_content'] + '" class="content-link">'
-			+ vo.entity.title + '</a> '
+			+ title + '</a> '
 			
 			+ '<span class="page_edit" style="display:none">'
 			
@@ -234,4 +240,27 @@ function onChangeTitle(id) {
 	$('#url').val(page.pageFriendlyURL);
 	$('#url').attr('disabled', pageItem.children.list.length > 0);
 	$('#title').focus();
+}
+
+function onShowTitle(flag) {
+	showTitle = flag;
+	renderShowTitle();
+	if (showTitle) {
+		$.cookie("pages.showTitle", 'titles', {path:'/', expires: 10});
+	}
+	else {
+		$.cookie("pages.showTitle", 'names', {path:'/', expires: 10});
+	}
+	loadData();
+}
+
+function renderShowTitle() {
+	if (showTitle) {
+		$('#showTitleDiv').html('<a href="#" onclick="onShowTitle(false)">'
+				+ messages.show_names + '</a>');
+	}
+	else {
+		$('#showTitleDiv').html('<a href="#" onclick="onShowTitle(true)">'
+				+ messages.show_titles + '</a>');
+	}
 }

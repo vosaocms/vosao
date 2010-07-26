@@ -41,6 +41,7 @@
         <!-- div class="outline-link">
             <a href="outline.vm">Outline editor</a>
         </div-->
+        <div id="showTitleDiv"><a href="#">$messages.show_names</a></div>
         <ul id="pages-tree"><img src="/static/images/ajax-loader.gif" /></ul>
     </div>
 </div>

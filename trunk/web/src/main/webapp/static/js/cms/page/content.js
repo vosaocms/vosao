@@ -70,14 +70,17 @@ function loadData() {
 		pageRequest = r;
 		editTextarea = !pageRequest.config.enableCkeditor 
 				|| pageRequest.page.wikiProcessing;
-		
+		var wikiHelp = pageRequest.page.wikiProcessing ? 
+				' <a href="http://en.wikipedia.org/wiki/Help:Wiki_markup" '
+				+ 'target="blank">Wiki syntax</a>'
+				: '';
 		if (editTextarea) {
 			$('#editorButtons').html('<a href="#" onclick="onEditCKEditor()">'
-					+ messages['page.edit_ckeditor'] + '</a>');
+					+ messages['page.edit_ckeditor'] + '</a>' + wikiHelp);
 		}
 		else {
 			$('#editorButtons').html('<a href="#" onclick="onEditTextarea()">'
-				+ messages['page.edit_textarea'] + '</a>');
+				+ messages['page.edit_textarea'] + '</a>' + wikiHelp);
 		}
 		page = pageRequest.page;
 		loadLanguages();

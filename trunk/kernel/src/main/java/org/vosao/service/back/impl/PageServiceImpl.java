@@ -244,6 +244,10 @@ public class PageServiceImpl extends AbstractServiceImpl
 		if (vo.get("contentType") != null) {
 			page.setContentType(vo.get("contentType"));
 		}
+		if (vo.get("wikiProcessing") != null) {
+			page.setWikiProcessing(Boolean.valueOf(vo
+					.get("wikiProcessing")));
+		}
 		List<String> errors = getPageBusiness().validateBeforeUpdate(page);
 		if (errors.isEmpty()) {
 			getPageBusiness().save(page);

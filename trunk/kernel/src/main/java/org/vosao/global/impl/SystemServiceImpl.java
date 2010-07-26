@@ -37,7 +37,9 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.vosao.bliki.VosaoWikiModel;
 import org.vosao.common.VosaoContext;
+import org.vosao.entity.PageEntity;
 import org.vosao.global.CacheService;
 import org.vosao.global.FileCache;
 import org.vosao.global.PageCache;
@@ -183,6 +185,20 @@ public class SystemServiceImpl implements SystemService, Serializable {
 
 	public void setPageCache(PageCache pageCache) {
 		this.pageCache = pageCache;
+	}
+
+	@Override
+	public String renderWiki(String template, PageEntity page) {
+		try {
+			VosaoWikiModel wikiModel = new VosaoWikiModel(page);
+			return wikiModel.render(template);
+		} catch (ParseErrorException e) {
+			return e.toString();
+		} catch (MethodInvocationException e) {
+			return e.toString();
+		} catch (ResourceNotFoundException e) {
+			return e.toString();
+		}
 	}
 
 }

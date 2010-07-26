@@ -25,6 +25,7 @@ import javax.xml.transform.Transformer;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.vosao.entity.PageEntity;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.labs.taskqueue.Queue;
@@ -69,5 +70,13 @@ public interface SystemService {
 	 * @return request seconds.
 	 */
 	long getRequestCPUTimeSeconds();
+	
+	/**
+	 * Render wiki text. 
+	 * @param template - template to render.
+	 * @param page - page to use.
+	 * @return rendered html.
+	 */
+	String renderWiki(String template, PageEntity page);
 	
 }

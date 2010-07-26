@@ -73,6 +73,10 @@
     <input id="velocityProcessing" type="checkbox" />
 </div>
 <div class="form-row">
+    <label>$messages.get("page.wiki_processing")</label>
+    <input id="wikiProcessing" type="checkbox" />
+</div>
+<div class="form-row">
     <label>$messages.get("page.skip_postprocessing")</label>
     <input id="skipPostProcessing" type="checkbox" />
 </div>

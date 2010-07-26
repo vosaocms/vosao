@@ -68,7 +68,9 @@ $(function(){
 function loadData() {
 	Vosao.jsonrpc.pageService.getPageRequest(function(r) {
 		pageRequest = r;
-		editTextarea = !pageRequest.config.enableCkeditor;
+		editTextarea = !pageRequest.config.enableCkeditor 
+				|| pageRequest.page.wikiProcessing;
+		
 		if (editTextarea) {
 			$('#editorButtons').html('<a href="#" onclick="onEditCKEditor()">'
 					+ messages['page.edit_ckeditor'] + '</a>');

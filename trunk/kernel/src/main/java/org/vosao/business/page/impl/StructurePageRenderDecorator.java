@@ -96,6 +96,7 @@ public class StructurePageRenderDecorator extends AbstractPageRenderDecorator {
 			return;
 		}
 		prepareVelocityContent(contentMap);
+		prepareWikiContent(contentMap);
 		if (structureTemplate == null) {
 			setContent(Messages.get("structureTemplate.not_selected"));
 			return;
@@ -142,6 +143,15 @@ public class StructurePageRenderDecorator extends AbstractPageRenderDecorator {
 			for (String key : contentMap.keySet()) {
 				contentMap.put(key, getSystemService().render(contentMap.get(key), 
 					context));
+			}
+		}
+	}
+
+	private void prepareWikiContent(Map<String, String> contentMap) {
+		if (isWikiProcessing()) {
+			for (String key : contentMap.keySet()) {
+				contentMap.put(key, getSystemService().renderWiki(
+						contentMap.get(key), getPage()));
 			}
 		}
 	}

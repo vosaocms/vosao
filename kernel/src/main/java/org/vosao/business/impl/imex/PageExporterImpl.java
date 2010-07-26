@@ -174,6 +174,8 @@ public class PageExporterImpl extends AbstractExporter
 				page.isCached()));
 		pageElement.addElement("contentType").setText(XmlUtil.notNull(
 				page.getContentType()));
+		pageElement.addElement("wikiProcessing").setText(String.valueOf(
+				page.isWikiProcessing()));
 		List<ContentEntity> contents = getDao().getPageDao().getContents(
 				page.getId()); 
 		for (ContentEntity content : contents) {
@@ -337,6 +339,10 @@ public class PageExporterImpl extends AbstractExporter
 			}
 			if (element.getName().equals("contentType")) {
 				newPage.setContentType(element.getText());
+			}
+			if (element.getName().equals("wikiProcessing")) {
+				newPage.setWikiProcessing(XmlUtil.readBooleanText(element, 
+						false));
 			}
 		}
 		PageEntity page = getDao().getPageDao().getByUrlVersion(url, 

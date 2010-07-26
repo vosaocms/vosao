@@ -75,6 +75,7 @@ public class PageEntity extends BaseEntityImpl {
 	private boolean searchable;
 	private Integer sortIndex;
 	private boolean velocityProcessing;
+	private boolean wikiProcessing;
 	private String headHtml;
 	private boolean skipPostProcessing;
 	private boolean cached;
@@ -96,6 +97,7 @@ public class PageEntity extends BaseEntityImpl {
 		searchable = true;
 		sortIndex = 0;
 		velocityProcessing = false;
+		wikiProcessing = false;
 		skipPostProcessing = false;
 		cached = true;
 	}
@@ -124,6 +126,7 @@ public class PageEntity extends BaseEntityImpl {
 		skipPostProcessing = getBooleanProperty(entity, "skipPostProcessing", false);
 		cached = getBooleanProperty(entity, "cached", true);
 		contentType = getStringProperty(entity, "contentType");
+		wikiProcessing = getBooleanProperty(entity, "wikiProcessing", false);
 	}
 	
 	@Override
@@ -150,6 +153,7 @@ public class PageEntity extends BaseEntityImpl {
 		setProperty(entity, "skipPostProcessing", skipPostProcessing, false);
 		setProperty(entity, "cached", cached, false);
 		setProperty(entity, "contentType", contentType, false);
+		setProperty(entity, "wikiProcessing", wikiProcessing, false);
 	}
 
 	public PageEntity(String title, String friendlyURL, 
@@ -479,5 +483,13 @@ public class PageEntity extends BaseEntityImpl {
 
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
+	}
+
+	public boolean isWikiProcessing() {
+		return wikiProcessing;
+	}
+
+	public void setWikiProcessing(boolean wikiProcessing) {
+		this.wikiProcessing = wikiProcessing;
 	}
 }

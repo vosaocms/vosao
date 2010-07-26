@@ -165,4 +165,9 @@ public class PageVO {
 	public String getContentType() {
 		return page.getContentType();
 	}
+	
+	public boolean isWikiProcessing() {
+		return page.isWikiProcessing();
+	}
+
 }

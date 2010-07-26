@@ -203,4 +203,10 @@ public abstract class AbstractPageRenderDecorator implements PageRenderDecorator
 	public List<String> getAncestorsURL() {
 		return page.getAncestorsURL();
 	}
+	
+	@Override
+	public boolean isWikiProcessing() {
+		return page.isWikiProcessing();
+	}
+
 }

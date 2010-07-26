@@ -140,6 +140,9 @@ function initPageForm() {
 		$('#velocityProcessing').each(function() {
 			this.checked = page.velocityProcessing;
 		});
+		$('#wikiProcessing').each(function() {
+			this.checked = page.wikiProcessing;
+		});
 		$('#skipPostProcessing').each(function() {
 			this.checked = page.skipPostProcessing;
 		});
@@ -179,7 +182,8 @@ function initPageForm() {
 		$('#parentFriendlyUrl').html(pageParentUrl + urlEnd);
 		$('#pageType').val('SIMPLE');
 		$('#publishDate').val(Vosao.formatDate(new Date()));
-		$('#commentsEnabled, #velocityProcessing, #skipPostProcessing, #cached')
+		$('#commentsEnabled, #velocityProcessing, #skipPostProcessing, #cached'
+			+ ', #wikiProcessing')
 			.each(function() {
 				this.checked = false;
 			});
@@ -216,6 +220,7 @@ function onPageUpdate() {
 		commentsEnabled : String($('#commentsEnabled:checked').size() > 0),
 		searchable : String($('#searchable:checked').size() > 0),
 		velocityProcessing : String($('#velocityProcessing:checked').size() > 0),
+		wikiProcessing : String($('#wikiProcessing:checked').size() > 0),
 		skipPostProcessing : String($('#skipPostProcessing:checked').size() > 0),
 		cached : String($('#cached:checked').size() > 0),
 		template : $('#templates option:selected').val(),

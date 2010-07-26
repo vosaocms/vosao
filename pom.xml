@@ -65,6 +65,16 @@
             <id>datanucleus</id>
             <url>http://www.datanucleus.org/downloads/maven2</url>
         </repository>
+        <repository>
+            <id>info-bliki-repository</id>
+            <url>http://gwtwiki.googlecode.com/svn/maven-repository/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
     </repositories>
     
     <modules>

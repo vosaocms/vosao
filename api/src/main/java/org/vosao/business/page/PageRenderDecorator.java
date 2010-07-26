@@ -143,5 +143,7 @@ public interface PageRenderDecorator {
 	boolean isSkipPostProcessing();
 	
 	List<String> getAncestorsURL();
-	
+
+	boolean isWikiProcessing();
+
 }

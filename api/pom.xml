@@ -183,6 +183,14 @@
             <artifactId>gdata-photos-meta</artifactId>
             <version>2.0</version>
         </dependency>
+        
+        <!-- Bliki wiki engine -->
+
+		<dependency>
+            <groupId>info.bliki.wiki</groupId>
+            <artifactId>bliki-core</artifactId>
+            <version>3.0.14</version>
+        </dependency>
 
     </dependencies>
 

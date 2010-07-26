@@ -59,16 +59,18 @@ public class SimplePageRenderDecorator extends AbstractPageRenderDecorator {
 			setContent(msg);
 			return;
 		}
+		String resultContent = contentEntity.getContent();
 		if (isVelocityProcessing()) {
 			VelocityContext context = getPageBusiness().createContext(
 					getLanguageCode());
 			context.put("page", getPage());
-			setContent(getSystemService().render(
-					contentEntity.getContent(), context));
+			resultContent = getSystemService().render(resultContent, context);
 		}
-		else {
-			setContent(contentEntity.getContent());
+		if (isWikiProcessing()) {
+			resultContent = getSystemService().renderWiki(resultContent, 
+					getPage());
 		}
+		setContent(resultContent);
 	}
 
 }

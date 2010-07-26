@@ -266,7 +266,9 @@ function onPageTypeChange() {
 	}
 	if ($('#pageType').val() == 'STRUCTURED') {
 		$('#structuredControls').show();
-		$('#structure').val(page.structureId);
+		if (page != null) {
+			$('#structure').val(page.structureId);
+		}
 		onStructureChange();
 	}
 }
@@ -333,7 +335,9 @@ function onStructureChange() {
 				+ '</option>';
 		});
 		$('#structureTemplate').html(h);
-		$('#structureTemplate').val(page.structureTemplateId);
+		if (page != null) {
+			$('#structureTemplate').val(page.structureTemplateId);
+		}
 	}, structureId)
 }
 

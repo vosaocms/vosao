@@ -240,7 +240,9 @@ function setEditorContent(data) {
 	}
 	if (page.structured) {
 		var domData = $.xmlDOM(data, function(error) {
-			Vosao.error(messages['page.parsing_error'] + ' ' + error);
+			if (data) {
+				Vosao.error(messages['page.parsing_error'] + ' ' + error);
+			}
 		});
 		$.each(pageRequest.structureFields.list, function(i, field) {
 			if (field.type == 'TEXT' || field.type == 'DATE' 

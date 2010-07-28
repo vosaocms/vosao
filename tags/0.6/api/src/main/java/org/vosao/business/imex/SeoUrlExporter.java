@@ -40,6 +40,6 @@ public interface SeoUrlExporter {
 	 * @throws DocumentException
 	 * @throws DaoTaskException
 	 */
-	void readFile(String xml) throws DocumentException, 
+	void read(String xml) throws DocumentException, 
 			DaoTaskException;
 }

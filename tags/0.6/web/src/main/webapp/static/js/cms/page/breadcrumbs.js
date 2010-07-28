@@ -28,6 +28,11 @@ function breadcrumbsShow() {
 	if (editMode) {
 		path = pageRequest.page.friendlyURL;
 	}
+	else {
+		if (path == '/') {
+			return;
+		}
+	}
 	var h = '';
 	var pages = path.substr(1).split('/');
 	if (pages.length > 0) {

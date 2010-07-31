@@ -113,11 +113,19 @@ public class Messages {
 			}
 		}
 		StringBuffer result = new StringBuffer();
-		result.append("locale = '").append(ctx.getLocale().toString())
+		result.append("var locale = '").append(ctx.getLocale().toString())
 				.append("';\n");
-		result.append("locale_language = '")
+		result.append("var locale_language = '")
 			.append(ctx.getLocale().getLanguage()).append("';\n");
-		result.append("messages = {\n");
+		result.append(
+				"function messages(key) {\n" 
+			  + "  if (_messages[key] == 'undefined') {\n"
+			  + "    return '__' + key + '__';\n"
+			  + "  } else {\n"
+			  + "    return _messages[key];\n"
+			  + "  }\n"
+			  + "}\n");
+		result.append("var _messages = {\n");
 		int i = 0;
 		for (String key : messages.keySet()) {
 			if (i++ > 0) {

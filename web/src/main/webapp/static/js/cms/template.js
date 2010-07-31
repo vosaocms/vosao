@@ -125,7 +125,7 @@ function onUpdate(cont) {
 	});
 	Vosao.jsonrpc.templateService.saveTemplate(function (r) {
 		if (r.result == 'success') {
-			Vosao.info(messages['template.success_save']);
+			Vosao.info(messages('template.success_save'));
 			if (!cont) {
 				location.href = '/cms/templates.vm';
 			}
@@ -144,13 +144,13 @@ function onSize() {
 	if (!smallEditor) {
 		$('#content').attr('cols','80');
 		$('#content').attr('rows','20');
-		$('#sizeLink').text(messages.big);
+		$('#sizeLink').text(messages('big'));
 		smallEditor = true;
 	}
 	else {
 		$('#content').attr('cols','120');
 		$('#content').attr('rows','30');
-		$('#sizeLink').text(messages.small);
+		$('#sizeLink').text(messages('small'));
 		smallEditor = false;
 	}
 }
@@ -164,13 +164,13 @@ function onWrap() {
 		$('#contentDiv').html('<textarea id="content" cols="' + cols
 				+'" rows="' + rows + '"></textarea>');
 		$('#content').val(text);
-		$('#wrapLink').text(' ' + messages['unwrap']);
+		$('#wrapLink').text(' ' + messages('unwrap'));
 	}
 	if (wrap == undefined) {
 		$('#contentDiv').html('<textarea id="content" cols="' + cols
 				+'" rows="' + rows + '" wrap="off"></textarea>');
 		$('#content').val(text);
-		$('#wrapLink').text(' ' + messages['wrap']);
+		$('#wrapLink').text(' ' + messages('wrap'));
 	}
 }
 

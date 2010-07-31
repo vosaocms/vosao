@@ -81,8 +81,8 @@ function loadFields() {
 }
 
 function showFields() {
-	var h = '<table class="form-table"><tr><th></th><th>' + messages.title 
-		+ '</th><th>' + messages.name + '</th><th>' + messages.type 
+	var h = '<table class="form-table"><tr><th></th><th>' + messages('title') 
+		+ '</th><th>' + messages('name') + '</th><th>' + messages('type') 
 		+ '</th><th></th></tr>';
 	$.each(fields, function(i, field) {
 		h += 
@@ -241,18 +241,18 @@ function createFieldVO() {
 function validateField(fieldVO) {
 	var errors = new Array();
 	if (fieldVO.map.name == '') {
-		errors.push(messages.name_is_empty);
+		errors.push(messages('name_is_empty'));
 	}
 	if (fieldVO.map.title == '') {
-		errors.push(messages.title_is_empty);
+		errors.push(messages('title_is_empty'));
 	}
 	var height = Number(fieldVO.map.height);
 	if (fieldVO.map.fieldType == 'TEXT' && height <= 0) {
-		errors.push(messages['form.height_zero_error']);
+		errors.push(messages('form.height_zero_error'));
 	}
 	var width = Number(fieldVO.map.width);
 	if (fieldVO.map.fieldType == 'TEXT' && width <= 0) {
-		errors.push(messages['form.width_zero_error']);
+		errors.push(messages('form.width_zero_error'));
 	}
 	return errors;
 }
@@ -289,13 +289,13 @@ function onDeleteFields() {
 		ids.push(this.value);
 	});
 	if (ids.length == 0) {
-		Vosao.info(messages.nothing_selected);
+		Vosao.info(messages('nothing_selected'));
 		return;
 	}
-	if (confirm(messages.are_you_sure)) {
+	if (confirm(messages('are_you_sure'))) {
 		Vosao.jsonrpc.fieldService.remove(function(r) {
 			if (r.result == 'success') {
-			    Vosao.info(ids.length + ' ' + messages['form.success_fields_delete'] 
+			    Vosao.info(ids.length + ' ' + messages('form.success_fields_delete') 
 			        + '.');
 			    loadFields();
 			}
@@ -373,7 +373,7 @@ function onUpdate() {
 				formId = r.message;
 				editMode = true;
 				loadData();
-				Vosao.info(messages['form.success_create']);
+				Vosao.info(messages('form.success_create'));
 			}
 			else {
 				location.href = '/cms/plugins/forms.vm';
@@ -488,8 +488,8 @@ function loadFormData() {
 }
 
 function showFormData() {
-	var h = '<table class="form-table"><tr><th></th><th>' + messages.ip_address 
-		+ '</th><th>' + messages.date + '</th></tr>';	
+	var h = '<table class="form-table"><tr><th></th><th>' + messages('ip_address') 
+		+ '</th><th>' + messages('date') + '</th></tr>';	
 	$.each(formData, function(i, value) {
 		h += '<tr><td><input type="checkbox" name="item' + i + '" value="' 
 			+ value.id + '"/></td><td>' + value.ipAddress + '</td>'
@@ -506,13 +506,13 @@ function onDeleteData() {
 		ids.push(this.value);
 	});
 	if (ids.length == 0) {
-		Vosao.info(messages.nothing_selected);
+		Vosao.info(messages('nothing_selected'));
 		return;
 	}
-	if (confirm(messages.are_you_sure)) {
+	if (confirm(messages('are_you_sure'))) {
 		Vosao.jsonrpc.formService.removeData(function(r) {
 			if (r.result == 'success') {
-				Vosao.info(ids.length + ' ' + messages['form.success_records_delete'] 
+				Vosao.info(ids.length + ' ' + messages('form.success_records_delete') 
 				    + '.');
 				loadData();
 			}
@@ -526,8 +526,8 @@ function onDeleteData() {
 function onShowFormData(i) {
 	formDataIndex = i;
 	var data = formData[i];
-	var h = '<table class="form-table"><tr><th>' + messages.name 
-		+ '</th><th>' + messages.value + '</th></tr>';
+	var h = '<table class="form-table"><tr><th>' + messages('name') 
+		+ '</th><th>' + messages('value') + '</th></tr>';
 	$.each(data.values.map, function(key,value) {
 		var v = value;
 		if (v.indexOf('/file/form') == 0) {
@@ -543,7 +543,7 @@ function onShowFormData(i) {
 }
 
 function onFormDataSend() {
-	if (confirm(messages.are_you_sure)) {
+	if (confirm(messages('are_you_sure'))) {
 		Vosao.jsonrpc.formService.sendFormLetter(function(r) {
 			Vosao.showServiceMessages(r);
 		}, formData[formDataIndex].id);

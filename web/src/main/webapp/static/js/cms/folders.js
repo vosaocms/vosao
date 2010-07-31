@@ -40,7 +40,7 @@ function loadTree() {
 
 function renderFolder(vo) {
     var html = '<li><a href="folder.vm?id=' + vo.entity.id + '">' 
-        + vo.entity.title + '</a> <a title="' + messages['add_child'] 
+        + vo.entity.title + '</a> <a title="' + messages('add_child') 
         + '" href="folder.vm?parent=' 
         + vo.entity.id + '">+</a>';
     if (vo.children.list.length > 0) {

@@ -165,7 +165,7 @@ function loadTree() {
 function renderPage(vo) {
 	var pageUrl = vo.entity.friendlyURL;
 	var p = vo.entity.hasPublishedVersion ? 'published' : 'unpublished';
-	var published = messages[p];
+	var published = messages(p);
 	var html = '<li> <img src="/static/images/'+ p +'.png" title="' + published 
 			+ '" width="16px" />' 
 			+ ' <a href="#" onclick="onPageSelected(\'' + pageUrl + '\')">'
@@ -190,7 +190,7 @@ function loadConfig() {
 			loadAlbums();
 		}
 		else {
-			$('#albums').html(messages['picasa_not_enabled']);
+			$('#albums').html(messages('picasa_not_enabled'));
 		}
 	});
 }

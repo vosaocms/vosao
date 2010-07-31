@@ -131,7 +131,7 @@ function onUpdate(cont) {
 	});
 	Vosao.jsonrpc.structureTemplateService.save(function (r) {
 		if (r.result == 'success') {
-			Vosao.info(messages['structureTemplate.success_save']);
+			Vosao.info(messages('structureTemplate.success_save'));
 			if (!cont) {
 				onCancel();
 			}

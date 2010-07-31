@@ -81,10 +81,10 @@ function afterUpload(data) {
     var result = s[1];
     var msg = s[2]; 
     if (result == 'success') {
-        msg = messages['config.saved_for_import'];
+        msg = messages('config.saved_for_import');
     }
     else {
-        msg = messages.error + ". " + msg;
+        msg = messages('error') + ". " + msg;
     }   
     $("#import-dialog").dialog("close");
     $("#afterUpload-dialog .message").text(msg);
@@ -166,7 +166,7 @@ function onStartExport() {
     Vosao.jsonrpc.configService.startExportTask(function(r) {
     	if (r.result == 'success') {
     		exportFilename = r.message;
-    	    Vosao.infoMessage('#exportInfo', messages.creating_export_file);
+    	    Vosao.infoMessage('#exportInfo', messages('creating_export_file'));
             exportTimer = setInterval(checkExport, 10 * 1000);
             clockTimer = setInterval(showClock, 1000);
     	}
@@ -193,8 +193,8 @@ function showClock() {
 }
 
 function onReset() {
-	if (confirm(messages['config.reset_warning1'])) {
-		if (confirm(messages['config.reset_warning2'])) {
+	if (confirm(messages('config.reset_warning1'))) {
+		if (confirm(messages('config.reset_warning2'))) {
 			Vosao.jsonrpc.configService.reset(function(r) {
 				Vosao.showServiceMessages(r);
 				if (r.result == 'success') {
@@ -206,7 +206,7 @@ function onReset() {
 }
 
 function onReindex() {
-	if (confirm(messages.are_you_sure)) {
+	if (confirm(messages('are_you_sure'))) {
 		Vosao.jsonrpc.configService.reindex(function(r) {
 			Vosao.showServiceMessages(r);
 		});
@@ -214,7 +214,7 @@ function onReindex() {
 }
 
 function onCacheReset() {
-	if (confirm(messages.are_you_sure)) {
+	if (confirm(messages('are_you_sure'))) {
 		Vosao.jsonrpc.configService.cacheReset(function(r) {
 			Vosao.showServiceMessages(r);
 		});
@@ -222,7 +222,7 @@ function onCacheReset() {
 }
 
 function onLoadDefaultSite() {
-	if (confirm(messages.are_you_sure)) {
+	if (confirm(messages('are_you_sure'))) {
 		Vosao.jsonrpc.configService.loadDefaultSite(function(r) {
 			Vosao.showServiceMessages(r);
 		});

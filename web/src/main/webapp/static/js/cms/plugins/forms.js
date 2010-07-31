@@ -40,8 +40,8 @@ function loadData() {
     
 function loadForms() {
 	Vosao.jsonrpc.formService.select(function (r) {
-        var html = '<table class="form-table"><tr><th></th><th>' + messages.title
-        	+ '</th><th>' + messages.name + '</th><th>' + messages.email 
+        var html = '<table class="form-table"><tr><th></th><th>' + messages('title')
+        	+ '</th><th>' + messages('name') + '</th><th>' + messages('email') 
         	+ '</th></tr>';
         $.each(r.list, function(i, form) {
             html += '<tr><td><input type="checkbox" value="' + form.id
@@ -64,10 +64,10 @@ function onDelete() {
         ids.push(this.value);
     });
     if (ids.length == 0) {
-    	Vosao.info(messages.nothing_selected);
+    	Vosao.info(messages('nothing_selected'));
         return;
     }
-    if (confirm(messages.are_you_sure)) {
+    if (confirm(messages('are_you_sure'))) {
     	Vosao.jsonrpc.formService.deleteForm(function (r) {
     		Vosao.showServiceMessages(r);
             loadForms();

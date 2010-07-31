@@ -55,7 +55,7 @@ function onSave() {
         pass = $('#password1').val();
     }
     else {
-    	Vosao.error(messages['profile.password_dont_match']);
+    	Vosao.error(messages('profile.password_dont_match'));
         return;
     }
     var vo = {

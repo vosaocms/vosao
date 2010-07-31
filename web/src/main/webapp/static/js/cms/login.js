@@ -36,14 +36,14 @@ $(function() {
     $('#forgotForm').submit(function() {
     	var email = $('#email').val();
     	if (!email) {
-    		Vosao.error(messages.email_is_empty);
+    		Vosao.error(messages('email_is_empty'));
     		return false;
     	}
     	$('#loading').show();
     	Vosao.jsonrpc.loginFrontService.forgotPassword(function(r) {
     		$('#loading').hide();
     		if (r.result == 'success') {
-    	    	Vosao.info(messages['login.password_letter_success']);
+    	    	Vosao.info(messages('login.password_letter_success'));
     		}
     		else {
     			Vosao.error(e.message);
@@ -63,14 +63,14 @@ function onLogin() {
 	var email = $('#loginEmail').val();
 	var password = $('#loginPassword').val();
 	if (email == '') {
-		Vosao.errorMessage('#login-messages', messages['email_is_empty']);
+		Vosao.errorMessage('#login-messages', messages('email_is_empty'));
 	} else {
 		Vosao.jsonrpc.loginFrontService.login(function(r, e) {
 			if (Vosao.serviceFailed(e))
 				return;
 			if (r.result == 'success') {
 				Vosao.infoMessage('#login-messages',
-						messages['success_logging_in']);
+						messages('success_logging_in'));
 				document.location.href = r.message;
 			} else {
 				Vosao.errorMessage('#login-messages', r.message);

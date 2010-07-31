@@ -123,7 +123,7 @@ function onUpdate(cont) {
 	});
 	Vosao.jsonrpc.structureService.save(function (r) {
 		if (r.result == 'success') {
-			Vosao.info(messages['structure.success_save']);
+			Vosao.info(messages('structure.success_save'));
 			if (!cont) {
 				location.href = '/cms/structures.vm';
 			}
@@ -167,17 +167,17 @@ function loadFields() {
 }
 
 function getFieldType(type) {
-	if (type == 'TEXT') return messages['text'];
-	if (type == 'TEXTAREA') return messages['text_area'];
-	if (type == 'RESOURCE') return messages['resource_link'];
-	if (type == 'DATE') return messages['date'];
+	if (type == 'TEXT') return messages('text');
+	if (type == 'TEXTAREA') return messages('text_area');
+	if (type == 'RESOURCE') return messages('resource_link');
+	if (type == 'DATE') return messages('date');
 	return 'Unknown';
 }
 
 function showFields() {
-	var h = '<table class="form-table"><tr><th>' + messages['title'] 
-	    + '</th><th>' + messages['structure.tag_name'] + '</th><th>'  
-	    + messages['type'] + '</th><th></th></tr>';
+	var h = '<table class="form-table"><tr><th>' + messages('title') 
+	    + '</th><th>' + messages('structure.tag_name') + '</th><th>'  
+	    + messages('type') + '</th><th></th></tr>';
 	$.each(fields, function(i, field) {
 		h += '<tr><td>' + field.title + '</td>'
 		    + '<td>' + field.name + '</td>'
@@ -192,7 +192,7 @@ function showFields() {
 }
 
 function onFieldRemove(i) {
-    if (confirm(messages['are_you_sure'])) {
+    if (confirm(messages('are_you_sure'))) {
     	fields.splice(i, 1);
     	showFields();
     }
@@ -201,24 +201,24 @@ function onFieldRemove(i) {
 function validateField(field) {
 	var valid = true;
 	if (field.name == '') {
-		Vosao.error(messages['structure.field_tag_name_empty']);
+		Vosao.error(messages('structure.field_tag_name_empty'));
 		valid = false;
 	}
 	else {
 		$(fields, function(i,value) {
 			if (value.name == field.name) {
-				Vosao.error(messages['structure.field_exists']);
+				Vosao.error(messages('structure.field_exists'));
 				valid = false;
 			}
 		});
 	}
 	if (!Vosao.isValidIdentifier(field.name)) {
-		Vosao.error(messages['structure.field_tag_name'] + ' ' + field.name 
-			+ ' ' + messages['structure.must_valid_identifier']);
+		Vosao.error(messages('structure.field_tag_name') + ' ' + field.name 
+			+ ' ' + messages('structure.must_valid_identifier'));
 		valid = false;
 	}
 	if (field.title == '') {
-		Vosao.error(messages['structure.field_title_empty']);
+		Vosao.error(messages('structure.field_title_empty'));
 		valid = false;
 	}
 	return valid;
@@ -236,7 +236,7 @@ function onAddField() {
 		showFields();
 		$('#fieldTitle').val('').focus();
 		$('#fieldName').val('');
-		Vosao.info(messages['structure.field_success_add']);
+		Vosao.info(messages('structure.field_success_add'));
 	}
 }
 
@@ -293,9 +293,9 @@ function loadTemplates() {
 
 function showTemplates() {
 	var h = '<table class="form-table"><tr><th></th>'
-		+ '<th>' + messages.title + '</th>'
-		+ '<th>' + messages.name + '</th>'
-		+ '<th>' + messages.type + '</th></tr>';
+		+ '<th>' + messages('title') + '</th>'
+		+ '<th>' + messages('name') + '</th>'
+		+ '<th>' + messages('type') + '</th></tr>';
 	$.each(templates, function(i, template) {
 		h += '<tr><td><input type="checkbox" value="' + template.id + '"></td>'
 			+ '<td><a href="structureTemplate.vm?id=' + template.id + '">'
@@ -323,10 +323,10 @@ function onDeleteTemplate() {
         ids.push(this.value);
     });
     if (ids.length == 0) {
-    	Vosao.info(messages['nothing_selected']);
+    	Vosao.info(messages('nothing_selected'));
         return;
     }
-    if (confirm(messages['are_you_sure'])) {
+    if (confirm(messages('are_you_sure'))) {
     	Vosao.jsonrpc.structureTemplateService.remove(function(r) {
     		Vosao.showServiceMessages(r);
             loadTemplates();

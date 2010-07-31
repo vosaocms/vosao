@@ -87,8 +87,8 @@ function callLoadChildren() {
 
 function loadChildren() {
 	children = pageRequest.children.list;
-    var html = '<table class="form-table"><tr><th></th><th>' + messages.title 
-    	+ '</th><th>' + messages['page.friendly_url'] + '</th><th></th></tr>';
+    var html = '<table class="form-table"><tr><th></th><th>' + messages('title') 
+    	+ '</th><th>' + messages('page.friendly_url') + '</th><th></th></tr>';
     $.each(children, function (n, value) {
         html += '<tr><td><input type="checkbox" value="' + value.id 
         + '"/></td><td><a href="/cms/page/content.vm?id=' + value.id 
@@ -111,10 +111,10 @@ function onDelete() {
 		ids.push(this.value);
 	});
 	if (ids.length == 0) {
-		Vosao.info(messages.nothing_selected);
+		Vosao.info(messages('nothing_selected'));
 		return;
 	}
-	if (confirm(messages.are_you_sure)) {
+	if (confirm(messages('are_you_sure'))) {
 		Vosao.jsonrpc.pageService.deletePages(function(r) {
 			Vosao.showServiceMessages(r);
 			callLoadChildren();

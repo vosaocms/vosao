@@ -77,7 +77,7 @@ public class SeoUrlsExporterImpl extends AbstractExporter
 	 * @throws DocumentException
 	 * @throws DaoTaskException
 	 */
-	public void readFile(String xml) throws DocumentException, 
+	public void read(String xml) throws DocumentException, 
 			DaoTaskException {
 		Document doc = DocumentHelper.parseText(xml);
 		read(doc.getRootElement());

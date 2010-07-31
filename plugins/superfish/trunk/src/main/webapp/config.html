@@ -137,21 +137,21 @@ function onShowHomepage() {
 }
 
 function localize() {
-    document.title = messages['superfish.config'];
-    $('#leftmenu a:eq(1)').text(messages.content);
-    $('#leftmenu a:eq(2)').text(messages.templates);
-    $('#leftmenu a:eq(3)').text(messages.resources);
-    $('#leftmenu a:eq(4)').text(messages.configuration);
-    $('#leftmenu a:eq(5)').text(messages.plugins);
-    $('#leftmenu a:eq(6)').text(messages['plugins.config']);
+    document.title = messages('superfish.config');
+    $('#leftmenu a:eq(1)').text(messages('content'));
+    $('#leftmenu a:eq(2)').text(messages('templates'));
+    $('#leftmenu a:eq(3)').text(messages('resources'));
+    $('#leftmenu a:eq(4)').text(messages('configuration'));
+    $('#leftmenu a:eq(5)').text(messages('plugins'));
+    $('#leftmenu a:eq(6)').text(messages('plugins.config'));
 
-    $('#rightmenu a:eq(0)').text(messages.profile);
-    $('#rightmenu a:eq(1)').text(messages.logout);
-    $('#languageSelect').text(messages.language);
-    $('#rightmenu a:contains(support)').text(messages.support);
+    $('#rightmenu a:eq(0)').text(messages('profile'));
+    $('#rightmenu a:eq(1)').text(messages('logout'));
+    $('#languageSelect').text(messages('language'));
+    $('#rightmenu a:contains(support)').text(messages('support'));
 
-    $('a[href="#tab-1"]').text(messages['superfish.config']);
-    $('#tab-1 span').text(messages['superfish.show_homepage']);
+    $('a[href="#tab-1"]').text(messages('superfish.config'));
+    $('#tab-1 span').text(messages('superfish.show_homepage'));
 }
 
 </script>

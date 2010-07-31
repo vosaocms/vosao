@@ -78,11 +78,11 @@ function loadPage() {
 
 function loadComments() {
 	var r = pageRequest.comments;
-    var html = '<table class="form-table"><tr><th></th><th>' + messages.state 
-    	+ '</th><th>' + messages.name +'</th><th>' + messages.content 
+    var html = '<table class="form-table"><tr><th></th><th>' + messages('state') 
+    	+ '</th><th>' + messages('name') +'</th><th>' + messages('content') 
     	+ '</th></tr>';
     $.each(r.list, function (n, value) {
-        var status = value.disabled ? messages.disabled : messages.enabled;
+        var status = value.disabled ? messages('disabled') : messages('enabled');
         html += '<tr><td><input type="checkbox" value="' + value.id 
         + '"/></td><td>' + status + '</a></td><td>' + value.name
         + '</td><td>' + value.content + '</td></tr>';
@@ -97,7 +97,7 @@ function onEnableComments() {
 		ids.push(this.value);
 	});
 	if (ids.length == 0) {
-		Vosao.info(messages.nothing_selected);
+		Vosao.info(messages('nothing_selected'));
 		return;
 	}
 	Vosao.jsonrpc.commentService.enableComments(function(r) {
@@ -112,7 +112,7 @@ function onDisableComments() {
 		ids.push(this.value);
 	});
 	if (ids.length == 0) {
-		Vosao.info(messages.nothing_selected);
+		Vosao.info(messages('nothing_selected'));
 		return;
 	}
 	Vosao.jsonrpc.commentService.disableComments(function(r) {
@@ -127,10 +127,10 @@ function onDeleteComments() {
 		ids.push(this.value);
 	});
 	if (ids.length == 0) {
-		Vosao.info(messages.nothing_selected);
+		Vosao.info(messages('nothing_selected'));
 		return;
 	}
-	if (confirm(messages.are_you_sure)) {
+	if (confirm(messages('are_you_sure'))) {
 		Vosao.jsonrpc.commentService.deleteComments(function(r) {
 			Vosao.showServiceMessages(r);
 			loadData();

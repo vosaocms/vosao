@@ -71,7 +71,7 @@ function renderTags(list) {
 
 function renderTag(vo) {
 	var html = '<li><a href="#" onclick="onTagEdit(' + vo.entity.id + ')">' 
-        + vo.entity.name + '</a> <a title="' + messages.add_child + '" href="#" onclick="onAddTag(' 
+        + vo.entity.name + '</a> <a title="' + messages('add_child') + '" href="#" onclick="onAddTag(' 
         + vo.entity.id + ')">+</a>';
     if (vo.children.list.length > 0) {
         html += '<ul>';
@@ -128,7 +128,7 @@ function showPages() {
 function validateTag(vo) {
     var errors = [];
     if (vo.name == '') {
-        errors.push(messages['config.tag_is_empty']);
+        errors.push(messages('config.tag_is_empty'));
     }
     return errors;
 }
@@ -171,7 +171,7 @@ function tagErrors(errors) {
 }
 
 function onTagDelete() {
-	if (confirm(messages.are_you_sure)) {
+	if (confirm(messages('are_you_sure'))) {
 		Vosao.jsonrpc.tagService.remove(function(r) {
 			Vosao.showServiceMessages(r);
 			$('#tag-dialog').dialog('close');
@@ -181,7 +181,7 @@ function onTagDelete() {
 }
 
 function onPageRemove(i) {
-	if (confirm(messages.are_you_sure)) {
+	if (confirm(messages('are_you_sure'))) {
 		Vosao.jsonrpc.tagService.removeTag(function (r) {
 			Vosao.showServiceMessages(r);
 			pages.splice(i,1);

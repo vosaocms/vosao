@@ -53,10 +53,10 @@ function onRemoveUser() {
         ids.push(String(this.value));
     });
     if (ids.length == 0) {
-    	Vosao.info(messages.nothing_selected);
+    	Vosao.info(messages('nothing_selected'));
         return;
     }
-    if (confirm(messages.are_you_sure)) {
+    if (confirm(messages('are_you_sure'))) {
     	Vosao.jsonrpc.userService.remove(function (r) {
     		Vosao.info(r.message);
             loadUsers();
@@ -66,11 +66,11 @@ function onRemoveUser() {
 
 function loadUsers() {
 	Vosao.jsonrpc.userService.select(function (r) {
-        var h = '<table class="form-table"><tr><th></th><th>' + messages.name 
-        	+ '</th><th>' + messages.email + '</th><th>' + messages.role 
-        	+ '</th><th>' + messages.access + '</th></tr>';
+        var h = '<table class="form-table"><tr><th></th><th>' + messages('name') 
+        	+ '</th><th>' + messages('email') + '</th><th>' + messages('role') 
+        	+ '</th><th>' + messages('access') + '</th></tr>';
         $.each(r.list, function (i, user) {
-            var disabled = user.disabled ? messages.disabled : messages.enabled;
+            var disabled = user.disabled ? messages('disabled') : messages('enabled');
         	h += '<tr><td><input type="checkbox" value="' + user.id 
                 + '"/></td><td>' + user.name + '</td><td>\
                 <a href="#" onclick="onUserEdit(' + user.id + ')">' 
@@ -84,9 +84,9 @@ function loadUsers() {
 }
 
 function getRole(role) {
-    if (role == 'ADMIN') return messages.administrator;
-    if (role == 'USER') return messages.user;
-    if (role == 'SITE_USER') return messages.site_user;
+    if (role == 'ADMIN') return messages('administrator');
+    if (role == 'USER') return messages('user');
+    if (role == 'SITE_USER') return messages('site_user');
 }
 
 function onUserEdit(id) {
@@ -110,8 +110,8 @@ function initUserForm() {
         $('#userEmail').val(user.email);
         $('#userEmail').attr('disabled', true);
         $('#userRole').val(user.roleString);
-        $('#userDisableDlgButton').val(user.disabled ? messages.enable : 
-    		messages.disable).show();
+        $('#userDisableDlgButton').val(user.disabled ? messages('enable') : 
+    		messages('disable')).show();
 	}
     $('#userPassword1').val('');
     $('#userPassword2').val('');
@@ -121,10 +121,10 @@ function initUserForm() {
 function validateUser(vo) {
     var errors = [];
     if (vo.email == '') {
-        errors.push(messages.email_is_empty);
+        errors.push(messages('email_is_empty'));
     }
     if (vo.password1 != vo.password2) {
-        errors.push(messages['config.passwords_dont_match']);
+        errors.push(messages('config.passwords_dont_match'));
     }
     return errors;
 }

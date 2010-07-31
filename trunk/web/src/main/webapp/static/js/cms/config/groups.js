@@ -47,13 +47,13 @@ function loadData() {
 function loadGroups() {
 	Vosao.jsonrpc.groupService.select(function (r) {
     	groups = Vosao.idMap(r.list);
-        var h = '<table class="form-table"><tr><th></th><th>' + messages.name 
-        	+ '</th><th>' + messages.users + '</th></tr>';
+        var h = '<table class="form-table"><tr><th></th><th>' + messages('name') 
+        	+ '</th><th>' + messages('users') + '</th></tr>';
         $.each(r.list, function (i, group) {
         	if (group.name == 'guests') {
         		return;
         	}
-        	var users = messages.add_users;
+        	var users = messages('add_users');
         	if (group.users.list.length > 0) {
         		users = '';
         		$.each(group.users.list, function (i, user) {
@@ -85,10 +85,10 @@ function onRemoveGroup() {
         ids.push(String(this.value));
     });
     if (ids.length == 0) {
-    	Vosao.info(messages.nothing_selected);
+    	Vosao.info(messages('nothing_selected'));
         return;
     }
-    if (confirm(messages.are_you_sure)) {
+    if (confirm(messages('are_you_sure'))) {
     	Vosao.jsonrpc.groupService.remove(function (r) {
     		Vosao.info(r.message);
             loadGroups();
@@ -117,7 +117,7 @@ function initGroupForm() {
 function validateGroup(vo) {
     var errors = [];
     if (vo.name == '') {
-        errors.push(messages.name_is_empty);
+        errors.push(messages('name_is_empty'));
     }
     return errors;
 }

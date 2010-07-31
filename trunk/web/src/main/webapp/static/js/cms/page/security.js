@@ -101,19 +101,19 @@ function loadLanguages() {
  
 function getPermissionName(perm) {
 	if (perm == 'DENIED') {
-		return messages.denied;
+		return messages('denied');
 	}
 	if (perm == 'READ') {
-		return messages.read;
+		return messages('read');
 	}
 	if (perm == 'WRITE') {
-		return messages.read_write;
+		return messages('read_write');
 	}
 	if (perm == 'PUBLISH') {
-		return messages.read_write_publish;
+		return messages('read_write_publish');
 	}
 	if (perm == 'ADMIN') {
-		return messages.read_write_publish_grant;
+		return messages('read_write_publish_grant');
 	}
 }
 
@@ -128,8 +128,8 @@ function loadPermissions() {
 	var r = pageRequest.permissions;
 	permissions = Vosao.idMap(r.list);
 	var h = '<table class="form-table"><tr><th></th><th>'
-		+ messages.group + '</th><th>' + messages.permission + '</th><th>'
-		+ messages.languages + '</th></tr>';
+		+ messages('group') + '</th><th>' + messages('permission') + '</th><th>'
+		+ messages('languages') + '</th></tr>';
 	$.each(permissions, function(i,value) {
 		var checkbox = '';
 		var editLink = value.group.name;
@@ -138,7 +138,7 @@ function loadPermissions() {
 			editLink = '<a href="#" onclick="onPermissionEdit(' + value.id 
 				+ ')"> ' + value.group.name + '</a>';
 		}
-		var l = value.allLanguages ? messages.all_languages : value.languages;
+		var l = value.allLanguages ? messages('all_languages') : value.languages;
 		h += '<tr><td>' + checkbox + '</td><td>' + editLink + '</td><td>'
 			+ getPermissionName(value.permission) + '</td><td>' + l 
 			+ '</td></tr>';
@@ -158,7 +158,7 @@ function loadGroups() {
 }
 
 function setPermissionLanguages() {
-	var h = '<fieldset><legend>' + messages.languages + '</legend>';
+	var h = '<fieldset><legend>' + messages('languages') + '</legend>';
 	$.each(languages, function(i,value) {
 		h += '<input type="checkbox" value="' + value.code + '" /> ' + value.title 
 			+ '<br />';
@@ -233,10 +233,10 @@ function onDeletePermission() {
 		ids.push(this.value);
 	});
 	if (ids.length == 0) {
-		Vosao.info(messages.nothing_selected);
+		Vosao.info(messages('nothing_selected'));
 		return;
 	}
-	if (confirm(messages.are_you_sure)) {
+	if (confirm(messages('are_you_sure'))) {
 		Vosao.jsonrpc.contentPermissionService.remove(function(r) {
 			Vosao.showServiceMessages(r);
 			callLoadPermissions();

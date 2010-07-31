@@ -22,12 +22,12 @@
 // Vosao namespace should exists.
 
 if (Vosao == undefined) {
-	alert(messages['vosao.namespace_error']);
+	alert(messages('vosao.namespace_error'));
 }
 
 Vosao.backServiceFailed = function(e) {
 	if (e != null) {
-		Vosao.error(messages['vosao.cant_connect'] + ' ' + e + ' ' + e.message 
+		Vosao.error(messages('vosao.cant_connect') + ' ' + e + ' ' + e.message 
 			+ ' ' + e.code + ' ' + e.msg);
 		return true;
 	}

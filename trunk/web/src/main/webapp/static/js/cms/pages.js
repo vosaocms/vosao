@@ -65,7 +65,7 @@ function renderPage(vo) {
 		title = '/';
 	}
 	var p = vo.entity.hasPublishedVersion ? 'published' : 'unpublished';
-	var published_msg = messages[p];
+	var published_msg = messages(p);
 	var published_link = ' <img src="/static/images/'+ p +'.png" title="' 
 		+ published_msg + '" width="16px" />';
 	if (!vo.entity.hasPublishedVersion) {
@@ -77,26 +77,26 @@ function renderPage(vo) {
 	var html = '<li> ' + published_link
 	
 			+ ' <a href="page/content.vm?id=' + vo.entity.id + '" title="'
-			+ messages['page.edit_content'] + '" class="content-link">'
+			+ messages('page.edit_content') + '" class="content-link">'
 			+ title + '</a> '
 			
 			+ '<span class="page_edit" style="display:none">'
 			
-			+ '<a title="' + messages['add_child'] 
+			+ '<a title="' + messages('add_child') 
 			+ '" href="#" onclick="onPageAdd(\'' + vo.entity.friendlyURL
 			+ '\')"><img src="/static/images/add.png"/></a> '
 			
-			+ '<a title="' + messages['remove'] 
+			+ '<a title="' + messages('remove') 
 			+ '" href="#" onclick="onPageRemove(\'' 
 			+ vo.entity.friendlyURL + '\')">'
 			+ '<img src="/static/images/02_x.png" /></a> '
 			
 			+ '<a href="page/index.vm?id=' + vo.entity.id + '" title="'
-			+ messages['page.edit_properties'] + '">'
+			+ messages('page.edit_properties') + '">'
 			+ '<img src="/static/images/pencil.png" /></a> '
 			
 			+ '<a href="#" onclick="onChangeTitle(' + vo.entity.id + ')" title="'
-			+ messages['page.edit_url_title'] + '">'
+			+ messages('page.edit_url_title') + '">'
 			+ '<img src="/static/images/globe.png" /></a>'
 			
 			+ '</span>';
@@ -119,7 +119,7 @@ function loadUser() {
 }
 
 function onPageRemove(url) {
-	if (confirm(messages['are_you_sure'])) {
+	if (confirm(messages('are_you_sure'))) {
 		Vosao.jsonrpc.pageService.remove(function(r) {
 			Vosao.showServiceMessages(r);
 			loadData();
@@ -128,7 +128,7 @@ function onPageRemove(url) {
 }
 
 function onPageAdd(parent) {
-	$('#ui-dialog-title-page-dialog').text(messages['pages.new_page']);
+	$('#ui-dialog-title-page-dialog').text(messages('pages.new_page'));
 	parentURL = parent == '/' ? '' : parent;
 	$('#page-dialog').dialog('open');
 	$('#parentURL').html(parentURL + '/');
@@ -153,19 +153,19 @@ function onTitleChange() {
 
 function validate(vo) {
 	if (vo.title == '') {
-		return messages['title_is_empty'];
+		return messages('title_is_empty');
 	}
 	else {
 		if (vo.title.indexOf(',') != -1) {
-			return messages['pages.coma_not_allowed'];
+			return messages('pages.coma_not_allowed');
 		}
 	}
 	if (vo.url == '') {
-		return messages['pages.url_is_empty'];
+		return messages('pages.url_is_empty');
 	}
 	else {
 		if (vo.url.indexOf('/') != -1) {
-			return messages['pages.slash_not_allowed'];
+			return messages('pages.slash_not_allowed');
 		}
 	}
 }
@@ -182,7 +182,7 @@ function onSave() {
 	if (!error) {
 		Vosao.jsonrpc.pageService.savePage(function(r) {
 			if (r.result == 'success') {
-				Vosao.info(messages['pages.success_created']);
+				Vosao.info(messages('pages.success_created'));
 				$('#page-dialog').dialog('close');
 				loadData();
 			}
@@ -201,7 +201,7 @@ function showError(msg) {
 }
 
 function onPagePublish(id) {
-	if (confirm(messages['are_you_sure'])) {
+	if (confirm(messages('are_you_sure'))) {
 		Vosao.jsonrpc.pageService.approve(function(r) {
 			Vosao.showServiceMessages(r);
 			loadData();
@@ -232,7 +232,7 @@ function findChildPage(page, id) {
 function onChangeTitle(id) {
 	var pageItem = findPage(id);
 	page = pageItem.entity;
-	$('#ui-dialog-title-page-dialog').text(messages['pages.change_page']);
+	$('#ui-dialog-title-page-dialog').text(messages('pages.change_page'));
 	parentURL = page.parentUrl == '/' ? '' : page.parentUrl;
 	$('#page-dialog').dialog('open');
 	$('#parentURL').html(parentURL + '/');
@@ -257,10 +257,10 @@ function onShowTitle(flag) {
 function renderShowTitle() {
 	if (showTitle) {
 		$('#showTitleDiv').html('<a href="#" onclick="onShowTitle(false)">'
-				+ messages.show_names + '</a>');
+				+ messages('show_names') + '</a>');
 	}
 	else {
 		$('#showTitleDiv').html('<a href="#" onclick="onShowTitle(true)">'
-				+ messages.show_titles + '</a>');
+				+ messages('show_titles') + '</a>');
 	}
 }

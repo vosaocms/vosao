@@ -76,11 +76,11 @@ function loadData() {
 				: '';
 		if (editTextarea) {
 			$('#editorButtons').html('<a href="#" onclick="onEditCKEditor()">'
-					+ messages['page.edit_ckeditor'] + '</a>' + wikiHelp);
+					+ messages('page.edit_ckeditor') + '</a>' + wikiHelp);
 		}
 		else {
 			$('#editorButtons').html('<a href="#" onclick="onEditTextarea()">'
-				+ messages['page.edit_textarea'] + '</a>' + wikiHelp);
+				+ messages('page.edit_textarea') + '</a>' + wikiHelp);
 		}
 		page = pageRequest.page;
 		loadLanguages();
@@ -125,8 +125,8 @@ function loadLanguages() {
 function initPageForm() {
 	var urlEnd = pageParentUrl == '/' ? '' : '/';
 	if (page != null) {
-		$('#pageState').html(page.stateString == 'EDIT' ? messages.edit : 
-				messages.approved);
+		$('#pageState').html(page.stateString == 'EDIT' ? messages('edit') : 
+				messages('approved'));
 		$('#pageCreateDate').html(page.createDateString);
 		$('#pageModDate').html(page.modDateString);
 		$('#pageCreateUser').html(page.createUserEmail);
@@ -140,7 +140,7 @@ function initPageForm() {
 		showContentEditor();
 	} else {
 		$('#titleLocal').val('');
-		$('#pageState').html(messages.edit);
+		$('#pageState').html(messages('edit'));
 		$('#pageCreateUser').html('');
 		$('#pageCreateDate').html('');
 		$('#pageModUser').html('');
@@ -164,7 +164,7 @@ function onPageUpdate(continueFlag) {
 	});
 	Vosao.jsonrpc.pageService.savePage(function(r) {
 		if (r.result == 'success') {
-			Vosao.info(messages['page.success_save']);
+			Vosao.info(messages('page.success_save'));
 			if (!continueFlag) {
 				location.href = '/cms/pages.vm';
 			}
@@ -244,7 +244,7 @@ function setEditorContent(data) {
 	if (page.structured) {
 		var domData = $.xmlDOM(data, function(error) {
 			if (data) {
-				Vosao.error(messages['page.parsing_error'] + ' ' + error);
+				Vosao.error(messages('page.parsing_error') + ' ' + error);
 			}
 		});
 		$.each(pageRequest.structureFields.list, function(i, field) {
@@ -294,7 +294,7 @@ function onPageCancel() {
 
 function onLanguageChange() {
 	if (!isContentChanged()
-			|| confirm(messages.are_you_sure_changes_lost)) {
+			|| confirm(messages('are_you_sure_changes_lost'))) {
 		currentLanguage = $('#language').val();
 		if (contents[currentLanguage] == undefined) {
 			contents[currentLanguage] = '';
@@ -397,7 +397,7 @@ function showContentEditor() {
 			if (field.type == 'RESOURCE') {
 				h += '<input id="field' + field.name + '" size="60"/> '
 					+ '<a href="#" onclick="browseResources(\'field' + field.name 
-					+ '\')">' + messages.browse + '</a>';
+					+ '\')">' + messages('browse') + '</a>';
 			}
 			h += '</div>';
 		});
@@ -478,7 +478,7 @@ function onRestoreSave() {
 function onEditTextarea() {
 	editTextarea = true;
 	$('#editorButtons').html('<a href="#" onclick="onEditCKEditor()">'
-		+ messages['page.edit_ckeditor'] + '</a>');
+		+ messages('page.edit_ckeditor') + '</a>');
 	showContentEditor();
 	setEditorContent(contents[currentLanguage]);
 }
@@ -486,7 +486,7 @@ function onEditTextarea() {
 function onEditCKEditor() {
 	editTextarea = false;
 	$('#editorButtons').html('<a href="#" onclick="onEditTextarea()">'
-		+ messages['page.edit_textarea'] + '</a>');
+		+ messages('page.edit_textarea') + '</a>');
 	showContentEditor();
 	setEditorContent(contents[currentLanguage]);
 }

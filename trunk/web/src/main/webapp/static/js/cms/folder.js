@@ -123,11 +123,11 @@ function afterUpload(data) {
     var result = s[1];
     var msg = s[2]; 
     if (result == 'success') {
-    	Vosao.info(messages['folder.file_success_upload']);
+    	Vosao.info(messages('folder.file_success_upload'));
         callLoadFiles();
     }
     else {
-    	Vosao.error(messages['folder.error_during_upload'] + ' ' + msg);
+    	Vosao.error(messages('folder.error_during_upload') + ' ' + msg);
     }
     $("#file-upload").dialog("close");
 }
@@ -142,15 +142,15 @@ function callLoadFiles() {
 function loadFiles() {
     files = folderRequest.files;
     var h = '<table class="form-table"><tr><th></th><th>' 
-    	+ messages['title'] + '</th><th>' + messages['filename'] + '</th><th>'
-    	+ messages['mimetype'] + '</th><th>' + messages['size'] + '</th></tr>';
+    	+ messages('title') + '</th><th>' + messages('filename') + '</th><th>'
+    	+ messages('mimetype') + '</th><th>' + messages('size') + '</th></tr>';
     $.each(files.list, function(i, file) { 
         h += '<tr>\
 <td><input type="checkbox" name="item' + i + '" value="' + file.id + '"/></td>\
 <td><a href="/cms/file.vm?id=' + file.id + '">' + file.title + '</a></td>\
 <td>' + file.filename + '</td>\
 <td>' + file.mimeType + '</td>\
-<td>' + file.size + ' ' + messages['bytes'] + '</td></tr>';
+<td>' + file.size + ' ' + messages('bytes') + '</td></tr>';
     });
     h += '</table>';   
     $('#filesTable').html(h);
@@ -168,17 +168,17 @@ function getCheckedFilesIds() {
 function onDeleteFiles() {
     var ids = Vosao.javaList(getCheckedFilesIds());
     if (ids.list.length == 0) {
-    	Vosao.info(messages['nothing_selected']);
+    	Vosao.info(messages('nothing_selected'));
         return;
     }
-    if (confirm(messages['are_you_sure'])) {
+    if (confirm(messages('are_you_sure'))) {
     	Vosao.jsonrpc.fileService.deleteFiles(function (r) {
             if (r.result == "success") {
                 callLoadFiles();
-                Vosao.info(messages['folder.files_success_delete']);
+                Vosao.info(messages('folder.files_success_delete'));
             }
             else {
-            	Vosao.error(messages['folder.error_deleting_files'] + ' ' 
+            	Vosao.error(messages('folder.error_deleting_files') + ' ' 
             			+ r.messsage);
             }
         }, ids);
@@ -212,7 +212,7 @@ function loadChildren() {
 		return;
 	}
 	var html = '<table class="form-table"><tr><th></th><th>' 
-		+ messages['title'] + '</th><th>' + messages['name'] + '</th></tr>';
+		+ messages('title') + '</th><th>' + messages('name') + '</th></tr>';
     $.each(folderRequest.children.list, function (i, child) {
         html += '<tr><td><input type="checkbox" value="' + child.id
             + '"/></td><td><a href="/cms/folder.vm?id=' + child.id 
@@ -231,7 +231,7 @@ function onUpdate() {
     });
     Vosao.jsonrpc.folderService.saveFolder(function (r) {
         if (r.result == 'success') {
-        	Vosao.info(messages['folder.success_save']);
+        	Vosao.info(messages('folder.success_save'));
             if (folderId == '') {
             	folderId = r.message;
             	editMode = true;
@@ -261,7 +261,7 @@ function onExport() {
     Vosao.jsonrpc.configService.startExportFolderTask(function(r) {
     	if (r.result == 'success') {
     		exportFilename = r.message;
-    	    Vosao.infoMessage('#exportInfo', messages['creating_export_file']);
+    	    Vosao.infoMessage('#exportInfo', messages('creating_export_file'));
             exportTimer = setInterval(checkExport, 10 * 1000);
             clockTimer = setInterval(showClock, 1000);
     	}
@@ -284,7 +284,7 @@ function checkExport() {
 }
 
 function showClock() {
-	$('#timer').html(clockSeconds++ + ' ' + messages['sec'] + '.');
+	$('#timer').html(clockSeconds++ + ' ' + messages('sec') + '.');
 }
 
 function onAddChild() {
@@ -302,17 +302,17 @@ function getParentFolderIds() {
 function onDelete() {
     var ids = Vosao.javaList(getParentFolderIds());
     if (ids.list.length == 0) {
-    	Vosao.info(messages['nothing_selected']);
+    	Vosao.info(messages('nothing_selected'));
         return;
     }
-    if (confirm(messages['are_you_sure'])) {
+    if (confirm(messages('are_you_sure'))) {
     	Vosao.jsonrpc.folderService.deleteFolder(function (r) {
             if (r.result == "success") {
                 callLoadChildren();
-                Vosao.info(messages['folder.success_delete']);
+                Vosao.info(messages('folder.success_delete'));
             }
             else {
-            	Vosao.error(messages['folder.error_deleting'] + ' ' 
+            	Vosao.error(messages('folder.error_deleting') + ' ' 
             			+ r.messsage);
             }
         }, ids);
@@ -323,23 +323,23 @@ function onDelete() {
 
 function getPermissionName(perm) {
 	if (perm == 'DENIED') {
-		return messages['denied'];
+		return messages('denied');
 	}
 	if (perm == 'READ') {
-		return messages['read'];
+		return messages('read');
 	}
 	if (perm == 'WRITE') {
-		return messages['read_write'];
+		return messages('read_write');
 	}
 	if (perm == 'ADMIN') {
-		return messages['read_write_grant'];
+		return messages('read_write_grant');
 	}
 }
 
 function loadPermissions(r) {
 	permissions = Vosao.idMap(r.list);
-	var h = '<table class="form-table"><tr><th></th><th>' + messages['group'] 
-	    + '</th><th>' + messages['permission'] + '</th></tr>';
+	var h = '<table class="form-table"><tr><th></th><th>' + messages('group') 
+	    + '</th><th>' + messages('permission') + '</th></tr>';
 	$.each(permissions, function(i,value) {
 		var checkbox = '';
 		var editLink = value.group.name;
@@ -421,10 +421,10 @@ function onDeletePermission() {
 		ids.push(this.value);
 	});
 	if (ids.length == 0) {
-		Vosao.info(messages['nothing_selected']);
+		Vosao.info(messages('nothing_selected'));
 		return;
 	}
-	if (confirm(messages['are_you_sure'])) {
+	if (confirm(messages('are_you_sure'))) {
 		Vosao.jsonrpc.folderPermissionService.remove(function(r) {
 			Vosao.showServiceMessages(r);
 			callLoadPermissions();

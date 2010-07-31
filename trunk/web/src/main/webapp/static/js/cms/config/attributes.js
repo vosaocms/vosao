@@ -48,7 +48,7 @@ function loadConfig() {
 
 function showAttributes() {
     var h = '<table class="form-table"><tr><th></th><th>' 
-    	+ messages.name + '</th><th>' + messages.value + '</th></tr>';
+    	+ messages('name') + '</th><th>' + messages('value') + '</th></tr>';
     $.each(config.attributes.map, function (name, value) {
         h += '<tr><td><input type="checkbox" value="' + name + '"/></td>'
             + '<td><a href="#" onclick="onEdit(\'' + name + '\')">' 
@@ -87,10 +87,10 @@ function onRemove() {
     	ids.push(this.value);
     });
     if (ids.length == 0) {
-    	Vosao.info(messages.nothing_selected);
+    	Vosao.info(messages('nothing_selected'));
         return;
     }
-    if (confirm(messages.are_you_sure)) {
+    if (confirm(messages('are_you_sure'))) {
     	Vosao.jsonrpc.configService.removeAttributes(function (r) {
     		Vosao.info(r.message);
             loadData();

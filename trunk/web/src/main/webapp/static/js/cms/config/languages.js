@@ -61,10 +61,10 @@ function onRemoveLanguage() {
         ids.push(this.value);
     });
     if (ids.length == 0) {
-    	Vosao.info(messages.nothing_selected);
+    	Vosao.info(messages('nothing_selected'));
         return;
     }
-    if (confirm(messages.are_you_sure)) {
+    if (confirm(messages('are_you_sure'))) {
     	Vosao.jsonrpc.languageService.remove(function (r) {
     		Vosao.info(r.message);
             loadLanguages();
@@ -87,10 +87,10 @@ function languageErrors(errors) {
 function languageValidate(vo) {
     var errors = [];
 	if (vo.code == '') {
-	    errors.push(messages['config.code_is_empty']);
+	    errors.push(messages('config.code_is_empty'));
 	}
     if (vo.title == '') {
-        errors.push(messages.title_is_empty);
+        errors.push(messages('title_is_empty'));
     }
     return errors;
 }
@@ -126,7 +126,7 @@ function loadLanguages() {
 	Vosao.jsonrpc.languageService.select(function (r) {
         languages = r.list;
         var h = '<table class="form-table"><tr><th></th><th>' 
-        	+ messages.code + '</th><th>' + messages.title + '</th></tr>';
+        	+ messages('code') + '</th><th>' + messages('title') + '</th></tr>';
         $.each(r.list, function (i, lang) {
             h += '<tr><td><input type="checkbox" value="' + lang.id 
                 + '"/></td><td>' + lang.code + '</td><td>\

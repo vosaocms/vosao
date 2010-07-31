@@ -21,6 +21,8 @@
 
 package org.vosao.plugins.register;
 
+import org.vosao.business.mq.Topic;
+import org.vosao.business.mq.message.SimpleMessage;
 import org.vosao.business.plugin.AbstractPluginEntryPoint;
 import org.vosao.plugins.register.cronjob.CleanupConfirmationsJob;
 import org.vosao.plugins.register.dao.RegisterDao;
@@ -43,6 +45,15 @@ public class RegisterEntryPoint extends AbstractPluginEntryPoint {
 				getRegisterBackServiceManager().getRegisterBackService()));
 		getJobs().add(new CleanupConfirmationsJob(
 				getRegisterDao()));
+	}
+	@Override
+	public void uninstall() {
+		getBusiness().getMessageQueue().publish(new SimpleMessage(
+				Topic.ENTITY_REMOVE, 
+				getRegisterDao().getRegisterConfigDao().getKind()));
+		getBusiness().getMessageQueue().publish(new SimpleMessage(
+				Topic.ENTITY_REMOVE, 
+				getRegisterDao().getRegistrationDao().getKind()));
 	}
 	
 	@Override

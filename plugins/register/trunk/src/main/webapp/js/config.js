@@ -202,8 +202,8 @@ function localize() {
 	$('input[value=save]').val(messages('save'));
 	$('input[value=cancel]').val(messages('cancel'));
 	
-	$('#tab-2 div:eq(0) span').html(messages('register.registration_form'));
+	$('#tab-2 > div:eq(0) span').html(messages('register.registration_form'));
 	$('#tab-2 a').text(messages('restore'));
-	$('#tab-2 div:eq(1) span').html(messages('register.confirm_user_letter'));
-	$('#tab-2 div:eq(2) span').html(messages('register.confirm_admin_letter'));
+	$('#tab-2 > div:eq(1) span').html(messages('register.confirm_user_letter'));
+	$('#tab-2 > div:eq(2) span').html(messages('register.confirm_admin_letter'));
 }

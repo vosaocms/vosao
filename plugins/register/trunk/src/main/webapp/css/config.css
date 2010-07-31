@@ -2,3 +2,7 @@ label {
 	width: 250px;
 	height: 32px;
 }
+
+#tab-2 .form-row {
+	margin-bottom: 20px;
+}

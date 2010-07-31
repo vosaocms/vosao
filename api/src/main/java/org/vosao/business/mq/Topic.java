@@ -78,6 +78,11 @@ public enum Topic {
 	/**
 	 * SimpleMessage: message -> mode
 	 */
-	SESSION_CLEAN;
+	SESSION_CLEAN,
+	
+	/**
+	 * SimpleMessage: message -> entity name
+	 */
+	ENTITY_REMOVE;
 	
 }

@@ -22,6 +22,7 @@
 package org.vosao.business.mq.message;
 
 import org.vosao.business.mq.AbstractMessage;
+import org.vosao.business.mq.QueueSpeed;
 import org.vosao.business.mq.Topic;
 
 /**
@@ -41,6 +42,11 @@ public class SimpleMessage extends AbstractMessage {
 
 	public SimpleMessage(Topic topic, String msg) {
 		this(topic.name(), msg);
+	}
+
+	public SimpleMessage(Topic topic, String msg, QueueSpeed speed) {
+		this(topic.name(), msg);
+		setSpeed(speed);
 	}
 
 	public SimpleMessage(Topic topic) {

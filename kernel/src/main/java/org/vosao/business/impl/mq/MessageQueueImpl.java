@@ -31,6 +31,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
+import org.vosao.business.impl.mq.subscriber.EntityRemove;
 import org.vosao.business.impl.mq.subscriber.ExportTaskSubscriber;
 import org.vosao.business.impl.mq.subscriber.FileChangedSubscriber;
 import org.vosao.business.impl.mq.subscriber.ImportFile;
@@ -87,6 +88,8 @@ public class MessageQueueImpl implements MessageQueue {
 		subscribe(Topic.REINDEX, Reindex.class);
 		subscribe(Topic.IMPORT_FILE, ImportFile.class);
 		subscribe(Topic.IMPORT_FOLDER, ImportFolder.class);
+		
+		subscribe(Topic.ENTITY_REMOVE, EntityRemove.class);
 	}
 
 	private SystemService getSystemService() {

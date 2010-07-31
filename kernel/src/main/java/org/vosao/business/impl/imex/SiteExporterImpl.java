@@ -41,6 +41,7 @@ import org.vosao.business.imex.PageDependencyExporter;
 import org.vosao.business.imex.PageExporter;
 import org.vosao.business.imex.PluginExporter;
 import org.vosao.business.imex.ResourceExporter;
+import org.vosao.business.imex.SeoUrlExporter;
 import org.vosao.business.imex.SiteExporter;
 import org.vosao.business.imex.StructureExporter;
 import org.vosao.business.imex.TagExporter;
@@ -95,6 +96,9 @@ public class SiteExporterImpl extends AbstractExporter
 		}
 		if (!out.isSkip("_tags.xml")) {
 			saveFile(out, "_tags.xml", getTagExporter().createXML());
+		}
+		if (!out.isSkip("_seourls.xml")) {
+			saveFile(out, "_seourls.xml", getSeoUrlExporter().createXML());
 		}
 		if (!out.isSkip("_dependencies.xml")) {
 			saveFile(out, "_dependencies.xml", getPageDependencyExporter().createXML());
@@ -199,6 +203,10 @@ public class SiteExporterImpl extends AbstractExporter
 		return getExporterFactory().getTagExporter();
 	}
 
+	private SeoUrlExporter getSeoUrlExporter() {
+		return getExporterFactory().getSeoUrlExporter();
+	}
+
 	private PageDependencyExporter getPageDependencyExporter() {
 		return getExporterFactory().getPageDependencyExporter();
 	}
@@ -247,6 +255,10 @@ public class SiteExporterImpl extends AbstractExporter
 		}
 		if (name.equals("_tags.xml")) {
 			getTagExporter().read(xml);
+			return true;
+		}
+		if (name.equals("_seourls.xml")) {
+			getSeoUrlExporter().read(xml);
 			return true;
 		}
 		if (name.equals("_dependencies.xml")) {

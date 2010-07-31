@@ -120,6 +120,7 @@ public class RegisterFrontServiceImpl extends AbstractRegisterService
 	private void sendConfirmEmail(String template, VelocityContext context,
 			String fromAddress, String toAddress) throws PluginException {
 		String letter = getBusiness().getSystemService().render(template, context);
+		letter = letter.replace("\n", "<br/>");
 		String error = EmailUtil.sendEmail(letter, "Confirm registration", 
 				fromAddress, "", toAddress);
 		if (error != null) {

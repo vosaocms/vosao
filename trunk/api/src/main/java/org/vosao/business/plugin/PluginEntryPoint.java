@@ -17,6 +17,11 @@ public interface PluginEntryPoint {
 	 */
 	public void init();
 	
+	/**
+	 * Plugin uninstall callback. Called before uninstall process.
+	 */
+	public void uninstall();
+	
 	Business getBusiness();
 	void setBusiness(Business bean);
 

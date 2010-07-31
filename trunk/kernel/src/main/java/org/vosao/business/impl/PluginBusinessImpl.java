@@ -112,6 +112,7 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 
 	@Override
 	public void uninstall(PluginEntity plugin) {
+		getEntryPoint(plugin).uninstall();
 		getPluginLoader().uninstall(plugin);
 		resetPlugin(plugin);
 	}

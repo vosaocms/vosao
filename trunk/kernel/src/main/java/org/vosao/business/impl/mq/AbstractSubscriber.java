@@ -25,7 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.business.mq.MessageQueue;
-import org.vosao.business.mq.TopicSubscriber;
+import org.vosao.business.mq.Subscriber;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.global.SystemService;
@@ -35,7 +35,7 @@ import org.vosao.global.SystemService;
  * @author Alexander Oleynik
  *
  */
-public abstract class AbstractSubscriber implements TopicSubscriber {
+public abstract class AbstractSubscriber implements Subscriber {
 
 	protected static final Log logger = LogFactory.getLog(AbstractSubscriber.class);
 

@@ -120,4 +120,5 @@ public interface PluginBusiness {
 	
 	ClassLoader getClassLoader(PluginEntity plugin);
 
+	Class loadClass(String name);
 }

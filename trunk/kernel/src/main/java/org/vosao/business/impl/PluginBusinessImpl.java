@@ -285,4 +285,18 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 		return getPluginClassLoaderFactory().getClassLoader(plugin.getName());
 	}
 
+	@Override
+	public Class loadClass(String name) {
+		List<PluginEntity> plugins = getDao().getPluginDao().selectEnabled();
+		for (PluginEntity plugin : plugins) {
+			ClassLoader classLoader = getClassLoader(plugin);
+			try {
+				return classLoader.loadClass(name);
+			}
+			catch (ClassNotFoundException e) {
+			}
+		}
+		return null;
+	}
+
 }

@@ -445,16 +445,16 @@ function getTitle() {
 
 function getTitles() {
 	if (!editMode) {
-		return 'en' + $('#title').val();
+		return '{en:"' + $('#title').val() +'"}';
 	}
 	titles[currentLanguage] = $('#titleLocal').val();
-	var result = '';
+	var result = '{';
 	var count = 0;
 	$.each(titles, function(lang, value) {
 		var coma = count++ == 0 ? '' : ',';
-		result += coma + lang + value;
+		result += coma + lang + ':"' + value + '"';
 	});
-	return result;
+	return result + '}';
 }
 
 function onRestore() {

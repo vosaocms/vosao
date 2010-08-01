@@ -35,10 +35,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONObject;
 import org.vosao.enums.PageState;
 import org.vosao.enums.PageType;
 import org.vosao.utils.DateUtil;
@@ -46,6 +48,7 @@ import org.vosao.utils.FolderUtil;
 import org.vosao.utils.UrlUtil;
 
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.repackaged.org.json.JSONException;
 
 /**
  * @author Alexander Oleynik
@@ -378,27 +381,25 @@ public class PageEntity extends BaseEntityImpl {
 	}
 	
 	private void parseTitle() {
-		if (title == null) {
-			titles = new HashMap<String, String>();
-		}
-		else {
-			for (String s : getTitleValue().split(",")) {
-				titles.put(s.substring(0, 2), s.substring(2)); 
+		titles = new HashMap<String, String>();
+		if (title != null) {
+			try {
+				JSONObject obj = new JSONObject(getTitleValue());
+				Iterator<String> it = obj.keys();
+				while (it.hasNext()) {
+					String key = it.next();
+					titles.put(key, obj.getString(key));
+				}
+			} catch (org.json.JSONException e) {
+				logger.error("Page title parsing problem: " + getTitleValue());
 			}
 		}
 	}
 	
 	private void packTitle() {
 		if (titles != null) {
-			StringBuffer s = new StringBuffer();
-			int count = 0;
-			for (String lang : titles.keySet()) {
-				if (count++ > 0) {
-					s.append(",");
-				}
-				s.append(lang).append(titles.get(lang));
-			}
-			setTitleValue(s.toString());
+			JSONObject obj = new JSONObject(titles);
+			setTitleValue(obj.toString());
 		}
 	}
 

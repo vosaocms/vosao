@@ -28,7 +28,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
@@ -189,4 +191,24 @@ public class StrUtil {
 		return data.split("[ ,.:?!~#\n\t]+");
 	}
 	
+	/**
+	 * Unpack title from old csv format: enTitle1,ruTitle2
+	 * @param data - data to unpack.
+	 * @return - result map.
+	 */
+	public static Map<String, String> unpack06Title(String data) {
+		Map<String, String> result = new HashMap<String, String>();
+		if (StringUtils.isEmpty(data)) {
+			return result;
+		}
+		String[] items = data.split(",");
+		for (String item : items) {
+			if (item.length() > 2) {
+				String key = item.substring(0, 2);
+				String value = item.substring(2);
+				result.put(key, value);
+			}
+		}
+		return result;
+	}
 }

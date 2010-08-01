@@ -343,7 +343,7 @@ function onStructureChange() {
 
 function getTitles() {
 	if (!editMode) {
-		return 'en' + $('#title').val();
+		return '{en:"' + $('#title').val() + '"}';
 	}
 }
 

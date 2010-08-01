@@ -44,6 +44,11 @@ public class SimpleMessage extends AbstractMessage {
 		this(topic.name(), msg);
 	}
 
+	public SimpleMessage(Class clazz) {
+		this("simple.command", "");
+		setCommandClassName(clazz.getName());
+	}
+
 	public SimpleMessage(Topic topic, String msg, QueueSpeed speed) {
 		this(topic.name(), msg);
 		setSpeed(speed);

@@ -176,7 +176,7 @@ function onSave() {
 		title : $('#title').val(),
 		url : $('#url').val(),
 		friendlyUrl : parentURL + '/' + $('#url').val(),
-		titles : 'en' + $('#title').val()
+		titles : '{en:"' + $('#title').val() + '"}'
 	};
 	var error = validate(vo);
 	if (!error) {

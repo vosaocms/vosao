@@ -31,6 +31,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.datanucleus.util.StringUtils;
+import org.vosao.business.Business;
 import org.vosao.business.impl.mq.subscriber.EntityRemove;
 import org.vosao.business.impl.mq.subscriber.ExportTaskSubscriber;
 import org.vosao.business.impl.mq.subscriber.FileChangedSubscriber;
@@ -46,7 +47,7 @@ import org.vosao.business.mq.Message;
 import org.vosao.business.mq.MessageQueue;
 import org.vosao.business.mq.QueueSpeed;
 import org.vosao.business.mq.Topic;
-import org.vosao.business.mq.TopicSubscriber;
+import org.vosao.business.mq.Subscriber;
 import org.vosao.common.VosaoContext;
 import org.vosao.global.SystemService;
 import org.vosao.servlet.MessageQueueServlet;
@@ -152,7 +153,7 @@ public class MessageQueueImpl implements MessageQueue {
 		if (subscribers.containsKey(message.getTopic())) {
 			for (Class subscriberClass : subscribers.get(message.getTopic())) {
 				try {
-					TopicSubscriber subscriber = (TopicSubscriber)
+					Subscriber subscriber = (Subscriber)
 							subscriberClass.newInstance();
 					subscriber.onMessage(message);
 				}
@@ -166,13 +167,15 @@ public class MessageQueueImpl implements MessageQueue {
 		}
 		if (!StringUtils.isEmpty(message.getCommandClassName())) {
 			try {
-				TopicSubscriber subscriber = (TopicSubscriber)
-						this.getClass().getClassLoader().loadClass(
-								message.getCommandClassName()).newInstance();
-				subscriber.onMessage(message);
-			}
-			catch (ClassNotFoundException e) {
-				logger.error(e.getMessage());
+				Class clazz = loadClass(message.getCommandClassName());
+				if (clazz != null) {
+					Subscriber subscriber = (Subscriber)clazz.newInstance();
+					subscriber.onMessage(message);
+				}
+				else {
+					logger.error("Command class not found: " 
+							+ message.getCommandClassName());
+				}
 			}
 			catch (IllegalAccessException e) {
 				logger.error(e.getMessage());
@@ -181,6 +184,19 @@ public class MessageQueueImpl implements MessageQueue {
 				logger.error(e.getMessage());
 			}
 		}
+	}
+	
+	private Class loadClass(String name) {
+		try {
+			return this.getClass().getClassLoader().loadClass(name);
+		}
+		catch (ClassNotFoundException e) {
+		}
+		return getBusiness().getPluginBusiness().loadClass(name);
+	}
+	
+	private Business getBusiness() {
+		return VosaoContext.getInstance().getBusiness();
 	}
 
 }

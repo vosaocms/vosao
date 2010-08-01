@@ -30,6 +30,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.json.JSONObject;
 import org.vosao.business.imex.PageExporter;
 import org.vosao.business.imex.PagePermissionExporter;
 import org.vosao.business.imex.ResourceExporter;
@@ -46,6 +47,7 @@ import org.vosao.entity.TemplateEntity;
 import org.vosao.enums.PageState;
 import org.vosao.enums.PageType;
 import org.vosao.utils.DateUtil;
+import org.vosao.utils.StrUtil;
 import org.vosao.utils.XmlUtil;
 
 public class PageExporterImpl extends AbstractExporter 
@@ -106,16 +108,18 @@ public class PageExporterImpl extends AbstractExporter
 	}
 
 	private static String packTitle(PageEntity page) {
-		StringBuffer b = new StringBuffer("<title>");
-		b.append(page.getTitleValue()).append("</title>");
-		return b.toString();
+		return page.getTitleValue();
 	}
 
-	private static String unpackTitle(String xml) {
-		if (!xml.startsWith("<title>")) {
-			return "en" + xml;
+	private static String unpackTitle(String data) {
+		if (data.startsWith("{")) {
+			return data;
 		}
-		return xml.replace("<title>", "").replace("</title>", "");
+		if (data.startsWith("<title>")) {
+			String old = data.replace("<title>", "").replace("</title>", "");
+			return (new JSONObject(StrUtil.unpack06Title(old))).toString();
+		}
+		return "{en:'" + data + "'}";
 	}
 	
 	private void createPageDetailsXML(PageEntity page, Element pageElement) {

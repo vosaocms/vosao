@@ -22,13 +22,13 @@
 package org.vosao.business.mq;
 
 /**
- * Topic subscriber is thread safe. It's created onMessage called and 
+ * Subscriber is thread safe. It's created then onMessage called and 
  * garbage collected.
  * 
  * @author Alexander Oleynik
  *
  */
-public interface TopicSubscriber {
+public interface Subscriber {
 
 	void onMessage(Message message);
 }

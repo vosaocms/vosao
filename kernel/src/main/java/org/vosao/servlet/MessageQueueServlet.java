@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.vosao.business.mq.Message;
-import org.vosao.business.mq.TopicSubscriber;
+import org.vosao.business.mq.Subscriber;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.helper.UserHelper;
 import org.vosao.utils.StreamUtil;

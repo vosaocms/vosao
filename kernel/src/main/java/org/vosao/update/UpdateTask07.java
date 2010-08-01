@@ -22,10 +22,19 @@
 package org.vosao.update;
 
 import org.vosao.business.Business;
+import org.vosao.business.impl.mq.AbstractSubscriber;
+import org.vosao.business.mq.Message;
+import org.vosao.business.mq.Topic;
+import org.vosao.business.mq.message.SimpleMessage;
 import org.vosao.dao.Dao;
+import org.vosao.entity.PageEntity;
 import org.vosao.entity.PluginEntity;
 import org.vosao.entity.StructureTemplateEntity;
 import org.vosao.entity.UserEntity;
+import org.vosao.update.verion_0_7.PageTitleUpdate;
+
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Query;
 
 /**
  * 
@@ -61,6 +70,7 @@ public class UpdateTask07 implements UpdateTask {
 	@Override
 	public String update() throws UpdateException {
 		updatePlugins();
+		updatePages();
 		return "Successfully updated to 0.7 version.";
 	}
 
@@ -71,4 +81,9 @@ public class UpdateTask07 implements UpdateTask {
 		}
 	}
 
+	private void updatePages() {
+		Message msg = new SimpleMessage(PageTitleUpdate.class);
+		getBusiness().getMessageQueue().publish(msg);
+	}
+	
 }

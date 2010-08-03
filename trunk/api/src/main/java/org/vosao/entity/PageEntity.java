@@ -233,6 +233,10 @@ public class PageEntity extends BaseEntityImpl {
 		return DateUtil.toString(publishDate);
 	}
 
+	public String getPublishTimeString() {
+		return DateUtil.timeToString(publishDate);
+	}
+
 	public void setPublishDate(Date publishDate) {
 		this.publishDate = publishDate;
 	}

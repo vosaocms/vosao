@@ -131,6 +131,7 @@ function initPageForm() {
 	    }
 		$('#pageType').val(page.pageTypeString);
 		$('#publishDate').val(page.publishDateString);
+		$('#publishTime').val(page.publishTimeString);
 		$('#commentsEnabled').each(function() {
 			this.checked = page.commentsEnabled;
 		});
@@ -182,6 +183,7 @@ function initPageForm() {
 		$('#parentFriendlyUrl').html(pageParentUrl + urlEnd);
 		$('#pageType').val('SIMPLE');
 		$('#publishDate').val(Vosao.formatDate(new Date()));
+		$('#publishTime').val(Vosao.formatTime(new Date()));
 		$('#commentsEnabled, #velocityProcessing, #skipPostProcessing, #cached'
 			+ ', #wikiProcessing')
 			.each(function() {
@@ -211,12 +213,17 @@ function initPageForm() {
 	onPageTypeChange();
 }
 
+function getPublishDatetime() {
+	return Vosao.strip($('#publishDate').val()) 
+		+ ' ' + Vosao.strip($('#publishTime').val()) + ':00';	
+}
+
 function onPageUpdate() {
 	var pageVO = Vosao.javaMap( {
 		id : pageId,
 		titles : getTitles(),
 		friendlyUrl : $('#parentFriendlyUrl').text() + $('#friendlyUrl').val(),
-		publishDate : $('#publishDate').val(),
+		publishDate : getPublishDatetime(),
 		commentsEnabled : String($('#commentsEnabled:checked').size() > 0),
 		searchable : String($('#searchable:checked').size() > 0),
 		velocityProcessing : String($('#velocityProcessing:checked').size() > 0),

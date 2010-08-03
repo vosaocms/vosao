@@ -168,7 +168,8 @@ public class PageDaoImpl extends BaseDaoImpl<PageEntity>
 	private List<PageEntity> filterApproved(List<PageEntity> list) {
 		Map<String, PageEntity> pages = new HashMap<String, PageEntity>();
 		for (PageEntity page : list) {
-			if (page.isApproved()) {
+			if (page.isApproved() 
+					&& page.getPublishDate().before(new Date())) {
 				String key = page.getFriendlyURL();
 				if (!pages.containsKey(key)
 					|| pages.get(key).getVersion() < page.getVersion()) {

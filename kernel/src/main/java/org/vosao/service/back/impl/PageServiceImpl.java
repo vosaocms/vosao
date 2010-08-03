@@ -206,7 +206,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 		}
 		if (vo.get("publishDate") != null) {
 			try {
-				page.setPublishDate(DateUtil.toDate(vo.get("publishDate")));
+				page.setPublishDate(DateUtil.dateTimeToDate(vo.get("publishDate")));
 			} catch (ParseException e) {
 				return ServiceResponse
 						.createErrorResponse(Messages.get(

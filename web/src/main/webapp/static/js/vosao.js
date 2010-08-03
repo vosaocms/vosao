@@ -55,6 +55,10 @@ Vosao.formatDate = function(date) {
 	return $.datepicker.formatDate('dd.mm.yy', date);
 };
 
+Vosao.formatTime = function(date) {
+	return $.datepicker.formatDate('HH:MM', date);
+};
+
 Vosao.identifier_regex = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
 
 Vosao.isValidIdentifier = function(s) {

@@ -58,7 +58,8 @@
 </div>
 <div class="form-row">
     <label>$messages.get("page.publication_date")</label>
-    <input id="publishDate" type="text" class="datepicker" size="8"/>
+    <input id="publishDate" type="text" class="datepicker" size="9"/>
+    <input id="publishTime" type="text" size="5"/>
 </div>
 <div class="form-row">
     <label>$messages.get("enable_comments")</label>

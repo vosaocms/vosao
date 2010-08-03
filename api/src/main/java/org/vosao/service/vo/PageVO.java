@@ -87,7 +87,11 @@ public class PageVO {
 	}
 	
 	public String getPublishDateString() {
-		return DateUtil.toString(page.getPublishDate());
+		return page.getPublishDateString();
+	}
+
+	public String getPublishTimeString() {
+		return page.getPublishTimeString();
 	}
 
 	public boolean isCommentEnabled() {

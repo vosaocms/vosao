@@ -129,7 +129,7 @@ public class PageExporterImpl extends AbstractExporter
 				page.isCommentsEnabled()));
 		if (page.getPublishDate() != null) {
 			pageElement.addAttribute("publishDate", 
-				DateUtil.toString(page.getPublishDate()));
+				DateUtil.dateTimeToString(page.getPublishDate()));
 		}
 		TemplateEntity template = getDao().getTemplateDao().getById(
 				page.getTemplate());
@@ -240,12 +240,18 @@ public class PageExporterImpl extends AbstractExporter
 		Date publishDate = new Date();
 		if (pageElement.attributeValue("publishDate") != null) {
 			try {
-				publishDate = DateUtil.toDate(pageElement
+				publishDate = DateUtil.dateTimeToDate(pageElement
 						.attributeValue("publishDate"));
 			} catch (ParseException e) {
-				logger.error("Wrong date format "
-						+ pageElement.attributeValue("publishDate") + " "
-						+ title);
+				try {
+					publishDate = DateUtil.toDate(pageElement
+						.attributeValue("publishDate"));
+				}
+				catch (ParseException e2) {
+					logger.error("Wrong date format "
+							+ pageElement.attributeValue("publishDate") + " "
+							+ title);
+				}
 			}
 		}
 		TemplateEntity template = getDao().getTemplateDao().getByUrl(themeUrl);

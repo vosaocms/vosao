@@ -720,9 +720,63 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		getDao().getPageDao().save(page);
 		getBusiness().getSystemService().getPageCache().remove(
 				page.getFriendlyURL());
+		
 		PageMessage message = new PageMessage(Topic.PAGES_CHANGED,
 				page.getFriendlyURL(), page.getId());
+		
 		getBusiness().getMessageQueue().publish(message);
+	}
+
+	@Override
+	public PageEntity getPageDefaultSettings(String url) {
+		String defaultUrl = url + (url.equals("/") ? "_default" : "/_default");
+		List<PageEntity> pages = getDao().getPageDao().selectByUrl(defaultUrl);
+		if (pages.size() == 0) {
+			PageEntity page = new PageEntity();
+			page.setFriendlyURL(defaultUrl);
+			page.setTitle("Children default settings");
+			getDao().getPageDao().save(page);
+			return page;
+		}
+		return pages.get(0);		
+	}
+
+	@Override
+	public void setDefaultValues(PageEntity page) {
+		PageEntity defaultPage = getPageDefaultSettings(
+				page.getParentFriendlyURL());
+		
+		page.setCached(defaultPage.isCached());
+		page.setCommentsEnabled(defaultPage.isCommentsEnabled());
+		page.setContentType(defaultPage.getContentType());
+		page.setDescription(defaultPage.getDescription());
+		page.setHeadHtml(defaultPage.getHeadHtml());
+		page.setKeywords(defaultPage.getKeywords());
+		page.setPageType(defaultPage.getPageType());
+		page.setSearchable(defaultPage.isSearchable());
+		page.setSkipPostProcessing(defaultPage.isSkipPostProcessing());
+		page.setStructureId(defaultPage.getStructureId());
+		page.setStructureTemplateId(defaultPage.getStructureTemplateId());
+		page.setTemplate(defaultPage.getTemplate());
+		page.setVelocityProcessing(defaultPage.isVelocityProcessing());
+		page.setWikiProcessing(defaultPage.isWikiProcessing());
+		page.setTitleValue(defaultPage.getTitleValue());
+	}
+
+	@Override
+	public void updateDefaultContent(PageEntity page) {
+		PageEntity defaultPage = getPageDefaultSettings(
+				page.getParentFriendlyURL());
+		
+		List<ContentEntity> contents = getDao().getPageDao().getContents(
+				defaultPage.getId());
+		
+		if (contents.size() > 0) {
+			for (ContentEntity content : contents) {
+				getDao().getPageDao().setContent(page.getId(), 
+						content.getLanguageCode(), content.getContent());
+			}
+		}
 	}
 
 }

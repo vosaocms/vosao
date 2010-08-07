@@ -42,6 +42,9 @@ public abstract class BaseEntityImpl implements BaseEntity {
 		if (id != null && id > 0) {
 			key = KeyFactory.createKey(getKind(getClass()), id);
 		}
+		else {
+			key = null;
+		}
 	}
 
 	@Override

@@ -192,4 +192,23 @@ public interface PageBusiness {
 	
 	void addVelocityTools(VelocityContext context);
 
+	/**
+	 * Find or create default child page for given parent page url. Every page has default 
+	 * settings page for children with url "/_default".
+	 * @param url - parent page url.
+	 * @return - found or created default page.
+	 */
+	PageEntity getPageDefaultSettings(String url);
+	
+	/**
+	 * Set default values from parent default page.
+	 * @param page - page to set default values from parent.
+	 */
+	void setDefaultValues(PageEntity page);
+	
+	/**
+	 * Create/update page content to parent default content.
+	 * @param page - page to set/update content.
+	 */
+	void updateDefaultContent(PageEntity page);
 }	

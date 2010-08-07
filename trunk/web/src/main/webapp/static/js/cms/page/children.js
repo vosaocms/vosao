@@ -41,6 +41,7 @@ $(function(){
     initVersionDialog();
     $('#addChildButton').click(onAddChild);
     $('#deleteChildButton').click(onDelete);
+    $('#defaultSettingsButton').click(onDefaultSettings);
     $('ul.ui-tabs-nav li:nth-child(3)')
     		.addClass('ui-state-active')
     		.addClass('ui-tabs-selected')
@@ -164,4 +165,10 @@ function swapPages(i, j) {
 	var tmp = children[j];
 	children[j] = children[i];
 	children[i] = tmp;
+}
+
+function onDefaultSettings() {
+	Vosao.jsonrpc.pageService.getPageDefaultSettings(function(r) {
+		location.href = "/cms/page/index.vm?id=" + r.id;
+	}, page.friendlyURL);
 }

@@ -31,6 +31,7 @@ var editMode = pageId != '';
 var pageRequest = null;
 var currentLanguage = '';
 var structureTemplates = null;
+var isDefault = false;
     
 $(function(){
     $("#tag-dialog").dialog({ width: 400, autoOpen: false });
@@ -70,6 +71,15 @@ function loadData() {
 	}, pageId, pageParentUrl);
 }
 
+function checkDefault() {
+	if (page != null && page.friendlyURL.endsWith('/_default')) {
+		isDefault = true;
+		$('.securityTab, .commentsTab, .childrenTab, #approveOnPageSaveDiv'
+			+ ', #pagePreview, #versions, #tagsDiv').hide();
+		$('#title, #friendlyUrl').attr('disabled', true);
+	}
+}
+
 function callLoadPage() {
 	Vosao.jsonrpc.pageService.getPageRequest(function(r) {
 		pageRequest = r;
@@ -102,7 +112,7 @@ function loadTemplates() {
             + value.title + '</option>';
     });
     $('#templates').html(html);
-    if (page != null) {
+    if (page.id != null) {
         $('#templates').val(page.template);
     }
     else {
@@ -112,104 +122,79 @@ function loadTemplates() {
 
 function initPageForm() {
 	var urlEnd = pageParentUrl == '/' ? '' : '/';
-	if (page != null) {
-		$('#title').val(page.title);
-		$('#titleDiv').hide();
-		if (page.parentUrl == '' || page.parentUrl == null) {
-			$('#friendlyUrl').hide();
-			$('#friendlyUrl').val('');
-			$('#parentFriendlyUrl').html('/');
-		} else {
-			$('#friendlyUrl').show();
-			$('#friendlyUrl').val(page.pageFriendlyURL);
-			$('#parentFriendlyUrl').html(page.parentFriendlyURL + urlEnd);
-		}
-	    if (pageRequest.children.list.length > 0) {
-	     	$('#parentFriendlyUrl').hide();
-	       	$('#friendlyUrl').hide();
-	       	$('#friendlyUrlSpan').html(page.friendlyURL);
-	    }
-		$('#pageType').val(page.pageTypeString);
-		$('#publishDate').val(page.publishDateString);
-		$('#publishTime').val(page.publishTimeString);
-		$('#commentsEnabled').each(function() {
-			this.checked = page.commentsEnabled;
-		});
-		$('#searchable').each(function() {
-			this.checked = page.searchable;
-		});
-		$('#velocityProcessing').each(function() {
-			this.checked = page.velocityProcessing;
-		});
-		$('#wikiProcessing').each(function() {
-			this.checked = page.wikiProcessing;
-		});
-		$('#skipPostProcessing').each(function() {
-			this.checked = page.skipPostProcessing;
-		});
-		$('#cached').each(function() {
-			this.checked = page.cached;
-		});
-		$('#templates').val(page.template);
-		$('#pageState').html(page.stateString == 'EDIT' ? 
-				messages('edit') : messages('approved'));
-		$('#pageCreateDate').html(page.createDateTimeString);
-		$('#pageModDate').html(page.modDateTimeString);
-		$('#pageCreateUser').html(page.createUserEmail);
-		$('#pageModUser').html(page.modUserEmail);
-		$('#keywords').val(page.keywords);
-		$('#description').val(page.description);
-		$('#headHtml').val(page.headHtml);
-		$('#dependencies').val(pageRequest.dependencies);
-		$('#contentType').val(page.contentType);
-		if (page.cached) {
-			$('#dependenciesDiv').show();
-		}
-		else {
-			$('#dependenciesDiv').hide();
-		}
+	$('#title').val(page.title);
+	$('#titleDiv').hide();
+	if (page.parentUrl == '' || page.parentUrl == null) {
+		$('#friendlyUrl').hide();
+		$('#friendlyUrl').val('');
+		$('#parentFriendlyUrl').html('/');
+	} else {
+		$('#friendlyUrl').show();
+		$('#friendlyUrl').val(page.pageFriendlyURL);
+		$('#parentFriendlyUrl').html(page.parentFriendlyURL + urlEnd);
+	}
+    if (pageRequest.children.list.length > 0) {
+     	$('#parentFriendlyUrl').hide();
+       	$('#friendlyUrl').hide();
+       	$('#friendlyUrlSpan').html(page.friendlyURL);
+    }
+	$('#pageType').val(page.pageTypeString);
+	$('#publishDate').val(page.publishDateString);
+	$('#publishTime').val(page.publishTimeString);
+	$('#commentsEnabled').each(function() {
+		this.checked = page.commentsEnabled;
+	});
+	$('#searchable').each(function() {
+		this.checked = page.searchable;
+	});
+	$('#velocityProcessing').each(function() {
+		this.checked = page.velocityProcessing;
+	});
+	$('#wikiProcessing').each(function() {
+		this.checked = page.wikiProcessing;
+	});
+	$('#skipPostProcessing').each(function() {
+		this.checked = page.skipPostProcessing;
+	});
+	$('#cached').each(function() {
+		this.checked = page.cached;
+	});
+	$('#templates').val(page.template);
+	$('#pageState').html(page.stateString == 'EDIT' ? 
+			messages('edit') : messages('approved'));
+	$('#pageCreateDate').html(page.createDateTimeString);
+	$('#pageModDate').html(page.modDateTimeString);
+	$('#pageCreateUser').html(page.createUserEmail);
+	$('#pageModUser').html(page.modUserEmail);
+	$('#keywords').val(page.keywords);
+	$('#description').val(page.description);
+	$('#headHtml').val(page.headHtml);
+	$('#dependencies').val(pageRequest.dependencies);
+	$('#contentType').val(page.contentType);
+	if (page.cached) {
+		$('#dependenciesDiv').show();
+	}
+	else {
+		$('#dependenciesDiv').hide();
+	}
+	if (page.id != null) {
 		$('.contentTab').show();
 		$('.childrenTab').show();
 		$('.commentsTab').show();
 		$('.securityTab').show();
 		$('#pagePreview').show();
 		$('#versions').show();
+		$('#tagsDiv').show();
 	} else {
-		$('#title').val('');
-		$('#titleDiv').show();
-		$('#titleLocal').val('');
-		$('#friendlyUrl').show();
-		$('#friendlyUrl').val('');
-		$('#parentFriendlyUrl').html(pageParentUrl + urlEnd);
-		$('#pageType').val('SIMPLE');
-		$('#publishDate').val(Vosao.formatDate(new Date()));
-		$('#publishTime').val(Vosao.formatTime(new Date()));
-		$('#commentsEnabled, #velocityProcessing, #skipPostProcessing, #cached'
-			+ ', #wikiProcessing')
-			.each(function() {
-				this.checked = false;
-			});
-		$('#searchable').each(function() {
-			this.checked = true;
-		});
-		$('#pageState').html(messages('edit'));
-		$('#pageCreateUser').html('');
-		$('#pageCreateDate').html('');
-		$('#pageModUser').html('');
-		$('#pageModDate').html('');
-		$('#keywords').val('');
-		$('#description').val('');
-		$('#headHtml').val('');
-		$('#dependencies').val('');
-		$('#contentType').val('');
-		$('#dependenciesDiv').hide();
 		$('.contentTab').hide();
 		$('.childrenTab').hide();
 		$('.commentsTab').hide();
 		$('.securityTab').hide();
 		$('#pagePreview').hide();
 		$('#versions').hide();
+		$('#tagsDiv').hide();
 	}
+	checkDefault();
 	onPageTypeChange();
 }
 
@@ -319,6 +304,7 @@ function loadPagePermission() {
    	else {
    		$('.securityTab').hide();
    	}
+   	checkDefault();
 }
 
 function loadStructures() {

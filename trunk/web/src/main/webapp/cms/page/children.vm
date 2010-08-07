@@ -37,6 +37,7 @@
     <div class="buttons">
         <input id="addChildButton" type="button" value="$messages.get("add_child_page")" />
         <input id="deleteChildButton" type="button" value="$messages.get("delete_pages")" />
+        <input id="defaultSettingsButton" type="button" value="$messages.get("default_settings")" />
     </div>    
 </div>
 

@@ -191,5 +191,9 @@ String.prototype.ltrim = function() {
 String.prototype.rtrim = function() {
 	return this.replace(/\s+$/,"");
 }
-
-
+String.prototype.startsWith = function(str) {
+	return (this.match("^"+str)==str)
+}
+String.prototype.endsWith = function(str) { 
+	return (this.match(str+"$")==str)
+}

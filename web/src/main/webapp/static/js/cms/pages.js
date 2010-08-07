@@ -175,8 +175,7 @@ function onSave() {
 		id : page == null ? '' : String(page.id),
 		title : $('#title').val(),
 		url : $('#url').val(),
-		friendlyUrl : parentURL + '/' + $('#url').val(),
-		titles : '{en:"' + $('#title').val() + '"}'
+		friendlyUrl : parentURL + '/' + $('#url').val()
 	};
 	var error = validate(vo);
 	if (!error) {

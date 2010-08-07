@@ -39,6 +39,7 @@ var pageRequest = null;
 var contentEditors = null;
 var browseId = '';
 var editTextarea = false;
+var isDefault = false;
     
 $(function(){
     $("#restore-dialog").dialog({ width: 400, autoOpen: false });
@@ -138,6 +139,7 @@ function initPageForm() {
 		$('#pagePreview').show();
 		$('#versions').show();
 		showContentEditor();
+		checkDefault();
 	} else {
 		$('#titleLocal').val('');
 		$('#pageState').html(messages('edit'));
@@ -307,7 +309,7 @@ function onLanguageChange() {
 }
 
 function loadContents() {
-	if (editMode) {
+	if (pageRequest.contents != null) {
 		var r = pageRequest.contents;
 		contents = [];
 		$.each(r.list, function(i, value) {
@@ -364,6 +366,7 @@ function loadPagePermission() {
    	else {
    		$('.securityTab').hide();
    	}
+   	checkDefault();
 }
 
 function showContentEditor() {
@@ -496,5 +499,14 @@ function onResetCache() {
 		Vosao.jsonrpc.pageService.resetCache(function(r) {
 			Vosao.showServiceMessages(r);
 		}, page.friendlyURL);
+	}
+}
+
+function checkDefault() {
+	if (page.friendlyURL.endsWith('/_default')) {
+		isDefault = true;
+		$('.securityTab, .commentsTab, .childrenTab, #approveOnContentSaveDiv'
+			+ ', #contentPreviewButton, #versions, #resetCacheButton, #restoreButton'
+			+ ', #approveButton').hide();
 	}
 }

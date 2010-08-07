@@ -100,4 +100,7 @@ public interface PageService extends AbstractService {
 			final String type);
 	
 	ServiceResponse resetCache(String url);
+	
+	PageEntity getPageDefaultSettings(final String url);
+
 }

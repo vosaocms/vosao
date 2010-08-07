@@ -497,4 +497,11 @@ public class PageEntity extends BaseEntityImpl {
 	public void setWikiProcessing(boolean wikiProcessing) {
 		this.wikiProcessing = wikiProcessing;
 	}
+	
+	public boolean isForInternalUse() {
+		if (getFriendlyURL() != null) {
+			return getFriendlyURL().endsWith("/_default");
+		}
+		return false;
+	}
 }

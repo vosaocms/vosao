@@ -124,6 +124,9 @@ public class PageServiceImpl extends AbstractServiceImpl
 		Map<String, PageEntity> pageMap = new HashMap<String, PageEntity>();
 		Map<String, Boolean> published = new HashMap<String, Boolean>();
 		for (PageEntity page : pages) {
+			if (page.isForInternalUse()) {
+				continue;
+			}
 			if (pageMap.containsKey(page.getFriendlyURL())) {
 				if (pageMap.get(page.getFriendlyURL()).getVersion() < page
 						.getVersion()) {
@@ -166,8 +169,13 @@ public class PageServiceImpl extends AbstractServiceImpl
 		}
 		if (page == null) {
 			page = new PageEntity();
+			page.setFriendlyURL(vo.get("friendlyUrl"));
 			page.setSortIndex(getPageBusiness().getNextSortIndex(
 					vo.get("friendlyUrl")));
+			getPageBusiness().setDefaultValues(page);
+		}
+		if (vo.get("friendlyUrl") != null) {
+			page.setFriendlyURL(vo.get("friendlyUrl"));
 		}
 		if (vo.get("commentsEnabled") != null) {
 			page.setCommentsEnabled(Boolean.valueOf(vo.get("commentsEnabled")));
@@ -185,9 +193,6 @@ public class PageServiceImpl extends AbstractServiceImpl
 		}
 		if (vo.get("cached") != null) {
 			page.setCached(Boolean.valueOf(vo.get("cached")));
-		}
-		if (vo.get("friendlyUrl") != null) {
-			page.setFriendlyURL(vo.get("friendlyUrl"));
 		}
 		String languageCode = vo.get("languageCode");
 		ContentPermissionEntity perm = getBusiness()
@@ -218,6 +223,9 @@ public class PageServiceImpl extends AbstractServiceImpl
 		}
 		if (vo.get("titles") != null) {
 			page.setTitleValue(vo.get("titles"));
+		}
+		if (vo.get("title") != null) {
+			page.setTitle(vo.get("title"));
 		}
 		if (vo.get("pageType") != null) {
 			page.setPageType(PageType.valueOf(vo.get("pageType")));
@@ -250,7 +258,12 @@ public class PageServiceImpl extends AbstractServiceImpl
 		}
 		List<String> errors = getPageBusiness().validateBeforeUpdate(page);
 		if (errors.isEmpty()) {
+			boolean isNew = page.isNew();
 			getPageBusiness().save(page);
+			if (isNew && !vo.containsKey("content") 
+					&& !page.isForInternalUse()) {
+				getPageBusiness().updateDefaultContent(page);
+			}
 			if (vo.containsKey("content")) {
 				getPageBusiness().saveContent(page, languageCode,
 						vo.get("content"));
@@ -353,17 +366,39 @@ public class PageServiceImpl extends AbstractServiceImpl
 				result.setContents(getContents(id));
 				result.setPermissions(getContentPermissionService()
 						.selectByUrl(url));
+				
 				result.setTags(getPageTags(url));
 				permUrl = result.getPage().getFriendlyURL();
 				if (result.getPage().isStructured()) {
 					StructureEntity structure = getDao().getStructureDao()
 							.getById(result.getPage().getStructureId());
+					
 					if (structure != null) {
 						result.setStructureFields(structure.getFields());
 					}
 				}
 				result.setDependencies(getDependencies(result.getPage()
 						.getFriendlyURL()));
+			}
+			else {
+				result.setPage(getPageBusiness().getPageDefaultSettings(
+						parentUrl));
+				result.getPage().setId(null);
+				result.getPage().setFriendlyURL("");
+				result.getPage().setParentFriendlyURL(parentUrl);
+				result.setChildren(Collections.EMPTY_LIST);
+				result.setVersions(Collections.EMPTY_LIST);
+				result.setComments(Collections.EMPTY_LIST);
+				result.setPermissions(Collections.EMPTY_LIST);				
+				result.setTags(Collections.EMPTY_LIST);				
+			}
+			if (result.getContents() == null 
+					|| result.getContents().size() == 0) {
+				PageEntity defaultPage = getPageBusiness()
+						.getPageDefaultSettings(parentUrl);
+
+				result.setContents(getDao().getPageDao().getContents(
+						defaultPage.getId()));
 			}
 			result.setTemplates(getTemplateService().getTemplates());
 			result.setLanguages(getLanguageService().select());
@@ -662,6 +697,11 @@ public class PageServiceImpl extends AbstractServiceImpl
 				getDao().getPageDependencyDao().save(entity);
 			}
 		}
+	}
+
+	@Override
+	public PageEntity getPageDefaultSettings(String url) {
+		return getPageBusiness().getPageDefaultSettings(url);
 	}
 
 

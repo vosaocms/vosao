@@ -54,7 +54,7 @@
         <label>$messages.get("user_email")</label>
         <input id="userEmail" type="text"/>
     </div>
-    <div>
+    <div class="form-row">
         <label>$messages.get("user_role")</label>
         <select id="userRole">
             <option value="SITE_USER">$messages.get("site_user")</option>
@@ -70,6 +70,10 @@
         <label>$messages.get("retype_password")</label>
         <input id="userPassword2" type="password"/>
     </div>
+    <div class="form-row">
+         <label>$messages.get("profile.timezone")</label>
+         <select id="timezone"></select>
+    </div>    
     <div class="buttons-dlg">
         <input id="userSaveDlgButton" type="submit" value="$messages.get("save")" />
         <input id="userDisableDlgButton" type="button" value="$messages.get("disable")" />

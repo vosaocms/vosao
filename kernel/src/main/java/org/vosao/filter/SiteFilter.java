@@ -23,9 +23,12 @@ package org.vosao.filter;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -39,7 +42,6 @@ import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.common.AccessDeniedException;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.ConfigEntity;
-import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.SeoUrlEntity;
 import org.vosao.entity.UserEntity;
@@ -51,7 +53,7 @@ import org.vosao.i18n.Messages;
  */
 public class SiteFilter extends AbstractFilter implements Filter {
     
-    public static final String[] SKIP_URLS = {
+    private static final String[] SKIP_URLS = {
 		"/_ah",
 		"/cms",
 		"/static",
@@ -63,12 +65,35 @@ public class SiteFilter extends AbstractFilter implements Filter {
 		"/favicon.ico",
 		"/i18n.js"};
     
+    private List<String> skipURLs;
+    
     public SiteFilter() {
     	super();
     }
   
+    @Override
+    public void init(FilterConfig config) {
+    	skipURLs = new ArrayList<String>();
+    	for (String url : SKIP_URLS) {
+    		skipURLs.add(url);
+    	}
+    	String skipURLParam = config.getInitParameter("skipURL");
+    	if (!StringUtils.isEmpty(skipURLParam)) {
+    		String[] urls = skipURLParam.split(",");
+    		for (String url : urls) {
+    			skipURLs.add(url);
+    		}
+    	}
+    }
+    
+    @Override
+    public void destroy() {
+    	
+    }
+    
     public void doFilter(ServletRequest request, ServletResponse response, 
     		FilterChain chain) throws IOException, ServletException {
+    	VosaoContext.getInstance().setSkipURLs(skipURLs);
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
         HttpServletResponse httpResponse = (HttpServletResponse)response;
         String url = httpRequest.getServletPath();
@@ -77,7 +102,7 @@ public class SiteFilter extends AbstractFilter implements Filter {
         		return;
         	}
         }
-        if (isSkipUrl(url)) {
+        if (VosaoContext.getInstance().isSkipUrl(url)) {
             chain.doFilter(request, response);
             return;
         }
@@ -144,15 +169,6 @@ public class SiteFilter extends AbstractFilter implements Filter {
     		throws IOException {
     	renderMessage(httpResponse, Messages.get("not_approved_page", 
     			SetupBeanImpl.FULLVERSION));
-    }
-
-	public static boolean isSkipUrl(final String url) {
-    	for (String u : SKIP_URLS) {
-    		if (url.startsWith(u)) {
-    			return true;
-    		}
-    	}
-    	return false;
     }
 
     private void renderPage(HttpServletRequest request, 

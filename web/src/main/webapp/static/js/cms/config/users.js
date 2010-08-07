@@ -23,7 +23,7 @@ var user = null;
 var users = null;
 
 $(function(){
-    $("#user-dialog").dialog({ width: 560, autoOpen: false });
+    $("#user-dialog").dialog({ width: 500, autoOpen: false });
     Vosao.initJSONRpc(loadData);
     $('#addUserButton').click(onAddUser);
     $('#removeUserButton').click(onRemoveUser);
@@ -36,7 +36,11 @@ $(function(){
 });
 
 function loadData() {
-	loadUsers();
+	Vosao.jsonrpc.userService.getTimezones(function (r) {
+        timezones = r.list;
+        showTimezones();
+        loadUsers();
+    });
 }
 
 // User 
@@ -110,6 +114,7 @@ function initUserForm() {
         $('#userEmail').val(user.email);
         $('#userEmail').attr('disabled', true);
         $('#userRole').val(user.roleString);
+        $('#timezone').val(user.timezone);
         $('#userDisableDlgButton').val(user.disabled ? messages('enable') : 
     		messages('disable')).show();
 	}
@@ -135,6 +140,7 @@ function onUserSave() {
         name : $('#userName').val(),
         email : $('#userEmail').val(),
         role : $('#userRole').val(),
+        timezone : $('#timezone').val(),
         password : $('#userPassword1').val(),
         password1 : $('#userPassword1').val(),
         password2 : $('#userPassword2').val()
@@ -175,4 +181,12 @@ function onUserDisable() {
         Vosao.showServiceMessages(r);
         loadUsers();
 	}, user.id, !user.disabled);
+}
+
+function showTimezones() {
+	var h = '';
+	$.each(timezones, function(i, value) {
+		h += '<option value="' + value + '">' + value + '</option>';
+	});
+	$('#timezone').html(h);
 }

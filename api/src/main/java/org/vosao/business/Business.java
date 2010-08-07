@@ -21,6 +21,8 @@
 
 package org.vosao.business;
 
+import java.util.TimeZone;
+
 import org.vosao.business.mq.MessageQueue;
 import org.vosao.dao.Dao;
 import org.vosao.entity.UserEntity;
@@ -44,6 +46,7 @@ public interface Business {
 	void setSearchEngine(SearchEngine bean);
 
 	UserEntity getUser();
+	TimeZone getTimeZone();
 	
 	String getLanguage();
 	

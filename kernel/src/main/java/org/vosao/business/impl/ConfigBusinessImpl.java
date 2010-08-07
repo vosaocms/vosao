@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.vosao.business.ConfigBusiness;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.filter.SiteFilter;
 import org.vosao.i18n.Messages;
@@ -70,7 +71,7 @@ public class ConfigBusinessImpl extends AbstractBusinessImpl
 		if (StringUtils.isEmpty(entity.getSiteEmail())) {
 			errors.add(Messages.get("config.site_email_is_empty"));
 		}
-		if (SiteFilter.isSkipUrl(entity.getSiteUserLoginUrl())) {
+		if (VosaoContext.getInstance().isSkipUrl(entity.getSiteUserLoginUrl())) {
 			errors.add(entity.getSiteUserLoginUrl() 
 					+ Messages.get("config.url_reserved"));
 		}

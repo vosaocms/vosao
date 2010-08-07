@@ -49,6 +49,11 @@
             <input id="password2" type="password" />
         </div>
 
+        <div class="form-row">
+            <label>$messages.get("profile.timezone")</label>
+            <select id="timezone"></select>
+        </div>
+
         <div class="buttons">
             <input id="saveButton" type="button" value="$messages.get("save")" />
         </div>

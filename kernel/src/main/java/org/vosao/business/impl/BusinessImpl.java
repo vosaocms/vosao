@@ -22,6 +22,7 @@
 package org.vosao.business.impl;
 
 import java.io.Serializable;
+import java.util.TimeZone;
 
 import org.vosao.business.Business;
 import org.vosao.business.CommentBusiness;
@@ -427,6 +428,14 @@ public class BusinessImpl implements Business, Serializable {
 	@Override
 	public void setFormDataBusiness(FormDataBusiness bean) {
 		formDataBusiness = bean;
+	}
+
+	@Override
+	public TimeZone getTimeZone() {
+		if (getUser() != null) { 
+			return TimeZone.getTimeZone(getUser().getTimezone());
+		}
+		return TimeZone.getDefault();
 	}
 
 }

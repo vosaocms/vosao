@@ -22,17 +22,23 @@
 package org.vosao.service.back.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.datanucleus.util.StringUtils;
 import org.vosao.common.BCrypt;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.UserRole;
 import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.UserService;
 import org.vosao.service.impl.AbstractServiceImpl;
+import org.vosao.service.vo.CodeVO;
 import org.vosao.service.vo.UserVO;
 import org.vosao.utils.ParamUtil;
 
@@ -91,6 +97,9 @@ public class UserServiceImpl extends AbstractServiceImpl
 		if (!StringUtils.isEmpty(vo.get("role"))) {
 			user.setRole(UserRole.valueOf(vo.get("role")));
 		}
+		if (!StringUtils.isEmpty(vo.get("timezone"))) {
+			user.setTimezone(vo.get("timezone"));
+		}
 		if (!StringUtils.isEmpty(vo.get("disabled"))) {
 			user.setDisabled(ParamUtil.getBoolean(vo.get("disabled"), false));
 		}
@@ -128,6 +137,17 @@ public class UserServiceImpl extends AbstractServiceImpl
 		user.setDisabled(disable);
 		getDao().getUserDao().save(user);
 		return ServiceResponse.createSuccessResponse(Messages.get("success"));
+	}
+
+	@Override
+	public List<String> getTimezones() {
+		List<String> result = new ArrayList<String>();
+		String[] ids = TimeZone.getAvailableIDs();
+		Arrays.sort(ids);
+		for (String id : ids) {
+			result.add(id);
+		}
+		return result;
 	}
 
 

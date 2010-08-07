@@ -20,12 +20,21 @@
  */
 
 var user = null;
+var timezones = null;
 
 $(function(){
 	$("#tabs").tabs();
-	Vosao.initJSONRpc(loadUser);
+	Vosao.initJSONRpc(loadData);
     $('#saveButton').click(onSave);
 });
+
+function loadData() {
+	Vosao.jsonrpc.userService.getTimezones(function (r) {
+        timezones = r.list;
+        showTimezones();
+        loadUser();
+    });
+}
 
 function loadUser() {
 	Vosao.jsonrpc.userService.getLoggedIn(function (r) {
@@ -34,6 +43,7 @@ function loadUser() {
         $('#email').val(user.email);
         $('#password1').val('');
         $('#password2').val('');
+        $('#timezone').val(user.timezone);
     });
 }
 
@@ -60,7 +70,8 @@ function onSave() {
     }
     var vo = {
      	id : String(user.id),
-        name : $('#name').val(),   
+        name : $('#name').val(),
+        timezone : $('#timezone').val(),
         password : pass   
     };
     Vosao.jsonrpc.userService.save(function (r) {
@@ -68,3 +79,10 @@ function onSave() {
     }, Vosao.javaMap(vo));
 }
 
+function showTimezones() {
+	var h = '';
+	$.each(timezones, function(i, value) {
+		h += '<option value="' + value + '">' + value + '</option>';
+	});
+	$('#timezone').html(h);
+}

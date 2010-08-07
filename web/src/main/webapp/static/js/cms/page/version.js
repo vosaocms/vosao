@@ -128,8 +128,8 @@ function onVersionSelect(version) {
 function showAuditInfo() {
 	$('#pageState').html(page.stateString == 'EDIT' ? 
 			messages('edit') : messages('approved'));
-	$('#pageCreateDate').html(page.createDateString);
-	$('#pageModDate').html(page.modDateString);
+	$('#pageCreateDate').html(page.createDateTimeString);
+	$('#pageModDate').html(page.modDateTimeString);
 	$('#pageCreateUser').html(page.createUserEmail);
 	$('#pageModUser').html(page.modUserEmail);
 }

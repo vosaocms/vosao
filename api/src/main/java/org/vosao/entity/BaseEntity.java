@@ -49,4 +49,9 @@ public interface BaseEntity extends Serializable {
 	String getCreateDateString();
 	
 	String getModDateString();
+
+	String getCreateDateTimeString();
+	
+	String getModDateTimeString();
+
 }

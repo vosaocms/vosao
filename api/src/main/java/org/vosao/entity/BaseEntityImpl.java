@@ -149,4 +149,13 @@ public abstract class BaseEntityImpl implements BaseEntity {
 		return DateUtil.toString(createDate);
 	}
 	
+	@Override
+	public String getModDateTimeString() {
+		return DateUtil.dateTimeToString(modDate);
+	}
+
+	@Override
+	public String getCreateDateTimeString() {
+		return DateUtil.dateTimeToString(createDate);
+	}
 }

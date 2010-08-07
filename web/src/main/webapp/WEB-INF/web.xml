@@ -70,6 +70,10 @@
     <filter>
         <filter-name>SiteFilter</filter-name>
         <filter-class>org.vosao.filter.SiteFilter</filter-class>
+        <!-- init-param>
+        	<param-name>skipURL</param-name>
+        	<param-value>/api,/service</param-value>
+        </init-param-->
     </filter>
     <filter-mapping>
         <filter-name>SiteFilter</filter-name>

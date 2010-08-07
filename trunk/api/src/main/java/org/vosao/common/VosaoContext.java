@@ -21,6 +21,7 @@
 
 package org.vosao.common;
 
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,6 +53,7 @@ public class VosaoContext {
 	private FrontService frontService;
 	private BackService backService;
 	private MessageQueue messageQueue;
+	private List<String> skipURLs;
 	
 	private VosaoContext() {
 		requestCount = 0;
@@ -141,5 +143,22 @@ public class VosaoContext {
 	public void setMessageQueue(MessageQueue messageQueue) {
 		this.messageQueue = messageQueue;
 	}
+
+	public List<String> getSkipURLs() {
+		return skipURLs;
+	}
+
+	public void setSkipURLs(List<String> skipURLs) {
+		this.skipURLs = skipURLs;
+	}
 	
+	public boolean isSkipUrl(final String url) {
+    	for (String u : skipURLs) {
+    		if (url.startsWith(u)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+
 }

@@ -19,37 +19,20 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service.back;
+package org.vosao.velocity;
 
-import java.util.List;
-import java.util.Map;
+import java.util.TimeZone;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.vosao.entity.UserEntity;
-import org.vosao.service.AbstractService;
-import org.vosao.service.ServiceResponse;
-import org.vosao.service.vo.CodeVO;
-import org.vosao.service.vo.UserVO;
+import org.apache.velocity.tools.generic.DateTool;
 
 /**
  * @author Alexander Oleynik
  */
-public interface UserService extends AbstractService {
-	
-	List<UserVO> select();
+public class MyDateTool extends DateTool {
 
-	ServiceResponse remove(final List<String> ids);
-
-	UserEntity getById(final Long id);
+	public MyDateTool(TimeZone tz) {
+		super();
+		setTimeZone(tz);
+	}
 	
-	ServiceResponse save(final Map<String, String> vo); 
-	
-	UserEntity getLoggedIn();
-	
-	List<UserVO> selectByGroup(final String groupId);
-	
-	ServiceResponse disable(final Long userId, boolean disable);
-	
-	List<String> getTimezones();
 }

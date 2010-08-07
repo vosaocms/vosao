@@ -19,37 +19,28 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service.back;
-
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.vosao.entity.UserEntity;
-import org.vosao.service.AbstractService;
-import org.vosao.service.ServiceResponse;
-import org.vosao.service.vo.CodeVO;
-import org.vosao.service.vo.UserVO;
+package org.vosao.service.vo;
 
 /**
+ * Value object to be returned from services.
  * @author Alexander Oleynik
  */
-public interface UserService extends AbstractService {
-	
-	List<UserVO> select();
+public class CodeVO {
 
-	ServiceResponse remove(final List<String> ids);
+    private String code;
+    private String value;
 
-	UserEntity getById(final Long id);
-	
-	ServiceResponse save(final Map<String, String> vo); 
-	
-	UserEntity getLoggedIn();
-	
-	List<UserVO> selectByGroup(final String groupId);
-	
-	ServiceResponse disable(final Long userId, boolean disable);
-	
-	List<String> getTimezones();
+	public CodeVO(final String code, final String value) {
+		this.code = code;
+		this.value = value;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
 }

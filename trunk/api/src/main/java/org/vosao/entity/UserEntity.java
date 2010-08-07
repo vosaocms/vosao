@@ -21,6 +21,8 @@
 
 package org.vosao.entity;
 
+import java.util.TimeZone;
+
 import org.vosao.enums.UserRole;
 import static org.vosao.utils.EntityUtil.*;
 
@@ -39,10 +41,12 @@ public class UserEntity extends BaseEntityImpl {
 	private UserRole role;
 	private String forgotPasswordKey;
 	private boolean disabled;
+	private String timezone;
 	
 	public UserEntity() {
 		role = UserRole.USER;
 		disabled = false;
+		timezone = TimeZone.getDefault().getID();
 	}
 	
 	@Override
@@ -54,6 +58,7 @@ public class UserEntity extends BaseEntityImpl {
 		role = UserRole.valueOf(getStringProperty(entity, "role"));
 		forgotPasswordKey = getStringProperty(entity, "forgotPasswordKey");
 		disabled = getBooleanProperty(entity, "disabled", false);
+		timezone = getStringProperty(entity, "timezone");
 	}
 	
 	@Override
@@ -65,6 +70,7 @@ public class UserEntity extends BaseEntityImpl {
 		setProperty(entity, "role", role.name(), true);
 		setProperty(entity, "forgotPasswordKey", forgotPasswordKey, true);
 		setProperty(entity, "disabled", disabled, false);
+		setProperty(entity, "timezone", timezone, false);
 	}
 
 	public UserEntity(String aName, String aPassword,
@@ -154,6 +160,14 @@ public class UserEntity extends BaseEntityImpl {
 
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
+	}
+
+	public String getTimezone() {
+		return timezone;
+	}
+
+	public void setTimezone(String timezone) {
+		this.timezone = timezone;
 	}
 	
 }

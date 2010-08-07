@@ -30,6 +30,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
@@ -74,6 +75,7 @@ import org.vosao.enums.PageState;
 import org.vosao.filter.SiteFilter;
 import org.vosao.i18n.Messages;
 import org.vosao.utils.UrlUtil;
+import org.vosao.velocity.MyDateTool;
 import org.vosao.velocity.VelocityPluginService;
 import org.vosao.velocity.VelocityService;
 import org.vosao.velocity.impl.VelocityPluginServiceImpl;
@@ -204,14 +206,15 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		context.put("plugin", getVelocityPluginService().getPlugins());
 		context.put("messages", getBusiness().getMessageBusiness().getBundle(
 				languageCode));
-		context.put("user", VosaoContext.getInstance().getUser());
+		context.put("user", getBusiness().getUser());
 		context.put("request", VosaoContext.getInstance().getRequest());
+		context.put("timezone", getBusiness().getTimeZone());
 		return context;
 	}
-	
+
 	@Override
 	public void addVelocityTools(VelocityContext context) {
-		context.put("date", new DateTool());
+		context.put("date", new MyDateTool(getBusiness().getTimeZone()));
 		context.put("esc", new EscapeTool());
 		context.put("link", new LinkTool());
 		context.put("list", new ListTool());
@@ -251,7 +254,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			errors.add(Messages.get("url_is_empty"));
 		}
 		else {
-			if (SiteFilter.isSkipUrl(page.getFriendlyURL())) {
+			if (VosaoContext.getInstance().isSkipUrl(page.getFriendlyURL())) {
 				errors.add(Messages.get("url_reserved"));
 			}
 		}

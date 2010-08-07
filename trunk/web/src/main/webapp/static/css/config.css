@@ -18,3 +18,7 @@ label {
 #stat-dialog label, #attribute-dialog label {
 	height: 20px;
 }
+
+#user-dialog label {
+	width: 150px;
+}

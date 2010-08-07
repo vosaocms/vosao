@@ -21,16 +21,20 @@
 
 package org.vosao.utils;
 
+import java.text.DateFormat;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
+
+import org.vosao.common.VosaoContext;
 
 public class DateUtil {
 
 	private static final Format formatter = new SimpleDateFormat("dd.MM.yyyy");
-	private static final Format dateTimeFormatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-	private static final Format timeFormatter = new SimpleDateFormat("HH:mm");
+	private static final DateFormat dateTimeFormatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+	private static final DateFormat timeFormatter = new SimpleDateFormat("HH:mm");
 	private static final Format headerFormatter = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z");
 	
 	public static String toString(final Date date) {
@@ -39,14 +43,29 @@ public class DateUtil {
 	}
 	
 	public static String dateTimeToString(final Date date) {
+		TimeZone tz = TimeZone.getTimeZone(VosaoContext.getInstance()
+				.getBusiness().getUser().getTimezone());
+		if (!tz.equals(dateTimeFormatter.getTimeZone())) {
+			dateTimeFormatter.setTimeZone(tz);
+		}
 		return dateTimeFormatter.format(date);
 	}
 	
 	public static String timeToString(final Date date) {
+		TimeZone tz = TimeZone.getTimeZone(VosaoContext.getInstance()
+				.getBusiness().getUser().getTimezone());
+		if (!tz.equals(timeFormatter.getTimeZone())) {
+			timeFormatter.setTimeZone(tz);
+		}
 		return timeFormatter.format(date);
 	}
 
 	public static Date dateTimeToDate(final String str) throws ParseException {
+		TimeZone tz = TimeZone.getTimeZone(VosaoContext.getInstance()
+				.getBusiness().getUser().getTimezone());
+		if (!tz.equals(dateTimeFormatter.getTimeZone())) {
+			dateTimeFormatter.setTimeZone(tz);
+		}
 		return (Date)dateTimeFormatter.parseObject(str);
 	}
 

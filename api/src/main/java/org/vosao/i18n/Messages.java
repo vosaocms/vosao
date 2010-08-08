@@ -44,7 +44,8 @@ public class Messages {
 	public static final String LOCALE_KEY = "locale";
 
 	private static final Locale[] supportedLocales = {
-		Locale.ENGLISH, 
+		Locale.ENGLISH,
+		Locale.GERMAN,
 		new Locale("ru"),
 		Locale.JAPANESE};
 	

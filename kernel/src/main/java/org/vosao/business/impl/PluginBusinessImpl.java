@@ -218,6 +218,9 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 				plugins.put(plugin.getName(), entryPoint);
 				pluginTimestamps.put(plugin.getName(), plugin);
 			}
+			catch (ClassNotFoundException e) {
+				logger.error("Class not found " + e.getMessage());
+			}
 			catch (Exception e) {
 				e.printStackTrace();
 			}

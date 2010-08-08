@@ -28,6 +28,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.entity.PluginEntity;
@@ -45,15 +46,25 @@ public class PluginHelper {
 			PluginEntity plugin) {
 		Map<String, PluginParameter> result = 
 			new HashMap<String, PluginParameter>();
+		Document dataDoc = null;
+		try {
+			dataDoc = DocumentHelper.parseText(plugin.getConfigData());
+		}
+		catch (DocumentException e) {
+		}
 		try {
 			Document configDoc = DocumentHelper.parseText(
 					plugin.getConfigStructure());
-			Document dataDoc = DocumentHelper.parseText(plugin.getConfigData());
 			for (Element element : (List<Element>)configDoc.getRootElement()
 					.elements()) {
 				PluginParameter param = new PluginParameter(element);
-				param.setValue(dataDoc.getRootElement().elementText(
+				try {
+					param.setValue(dataDoc.getRootElement().elementText(
 						param.getName()));
+				}
+				catch (Exception e) {
+					logger.error(e.getMessage());
+				}
 				result.put(param.getName(), param);
 			}
 		}

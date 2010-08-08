@@ -28,10 +28,12 @@
 
 var page = null;
 var pageRequest = null;
+var parentURL = null;
 var children = null;
 var editMode = pageId != '';
     
 $(function(){
+    $("#page-dialog").dialog({ width: 400, autoOpen: false });
     Vosao.initJSONRpc(loadData);
     // hover states on the link buttons
     $('a.button').hover(
@@ -46,6 +48,10 @@ $(function(){
     		.addClass('ui-state-active')
     		.addClass('ui-tabs-selected')
     		.removeClass('ui-state-default');
+	$('#cancelDlgButton').click(onPageCancel);
+    $('#pageForm').submit(function() {onSave(); return false;});
+    $('#title').change(onTitleChange);
+
 });
 
 function loadData() {
@@ -103,7 +109,13 @@ function loadChildren() {
 }
 
 function onAddChild() {
-	location.href = '/cms/page/index.vm?parent=' + encodeURIComponent(page.friendlyURL);
+	$('#ui-dialog-title-page-dialog').text(messages('pages.new_page'));
+	parentURL = page.friendlyURL == '/' ? '' : page.friendlyURL;
+	$('#page-dialog').dialog('open');
+	$('#parentURL').html(parentURL + '/');
+	$('#title').val('');
+	$('#url').val('');
+	$('#title').focus();
 }
 
 function onDelete() {
@@ -171,4 +183,64 @@ function onDefaultSettings() {
 	Vosao.jsonrpc.pageService.getPageDefaultSettings(function(r) {
 		location.href = "/cms/page/index.vm?id=" + r.id;
 	}, page.friendlyURL);
+}
+
+function onPageCancel() {
+	$('#page-dialog').dialog('close');
+}
+
+function onTitleChange() {
+	var url = $("#url").val();
+	var title = $("#title").val();
+	if (url == '') {
+		$("#url").val(Vosao.urlFromTitle(title));
+	}
+}
+
+function validate(vo) {
+	if (vo.title == '') {
+		return messages('title_is_empty');
+	}
+	else {
+		if (vo.title.indexOf(',') != -1) {
+			return messages('pages.coma_not_allowed');
+		}
+	}
+	if (vo.url == '') {
+		return messages('pages.url_is_empty');
+	}
+	else {
+		if (vo.url.indexOf('/') != -1) {
+			return messages('pages.slash_not_allowed');
+		}
+	}
+}
+
+function onSave() {
+	var vo = {
+		id : '',
+		title : $('#title').val(),
+		url : $('#url').val(),
+		friendlyUrl : parentURL + '/' + $('#url').val()
+	};
+	var error = validate(vo);
+	if (!error) {
+		Vosao.jsonrpc.pageService.savePage(function(r) {
+			if (r.result == 'success') {
+				Vosao.info(messages('pages.success_created'));
+				$('#page-dialog').dialog('close');
+				location.href = '/cms/page/content.vm?id=' + r.message;
+			}
+			else {
+				showError(r.message);
+			}
+		}, Vosao.javaMap(vo));
+	}
+	else {
+		showError(error);
+	}
+}
+
+function showError(msg) {
+	Vosao.errorMessage('#pageMessages', msg);
 }

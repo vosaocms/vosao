@@ -25,14 +25,7 @@ $(function() {
 
 function breadcrumbsShow() {
 	var path = pageParentUrl;
-	if (editMode) {
-		path = pageRequest.page.friendlyURL;
-	}
-	else {
-		if (path == '/') {
-			return;
-		}
-	}
+	path = pageRequest.page.friendlyURL;
 	var h = '';
 	var pages = path.substr(1).split('/');
 	if (pages.length > 0) {

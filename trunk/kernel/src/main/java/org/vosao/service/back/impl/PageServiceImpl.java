@@ -158,7 +158,11 @@ public class PageServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public PageEntity getPageByUrl(String url) {
-		return getPageBusiness().getByUrl(url);
+		List<PageEntity> result = getPageBusiness().selectByUrl(url);
+		if (result.size() > 0) {
+			return result.get(0);
+		}
+		return null;
 	}
 
 	@Override

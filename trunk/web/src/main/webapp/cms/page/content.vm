@@ -40,8 +40,14 @@
     <div style="float:right">
         <input id="autosave" type="checkbox"> $messages.get("autosave")</input>
     </div>
-    <div>
-        $messages.get("page.select_language"): 
+	<div id="friendlyUrlDiv" class="form-row">
+    	<label>$messages.get("page.friendly_url")</label>
+    	<span id="parentFriendlyUrl"></span>
+    	<input id="friendlyUrl" type="text" />
+    	<span id="friendlyUrlSpan"></span>
+	</div>
+    <div class="form-row">
+        <label>$messages.get("page.select_language"):</label> 
         <select id="language"></select>
     </div>
     <div class="form-row" style="margin-top:10px;">

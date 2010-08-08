@@ -21,7 +21,10 @@
 
 #parse('/cms/page/head.vm')
   
-#set ($head6 = '<script type="text/javascript" src="/static/js/cms/page/children.js"></script>')
+#define ( $head6 )
+  <script type="text/javascript" src="/static/js/cms/page/children.js"></script>
+  <link rel="stylesheet" href="/static/css/children.css" type="text/css" />
+#end
 
 #parse('/cms/page/versionsBox.vm')
 
@@ -45,3 +48,20 @@
 
 #parse('/cms/page/versionDialog.vm')
 
+<div id="page-dialog" style="display:none" title="$messages.get("pages.new_page")">
+  <form id="pageForm">
+    <div class="form-row">
+        <label>$messages.get("pages.page_title")</label>
+        <input id="title"/>
+    </div>
+    <div class="form-row">
+        <label>$messages.get("pages.page_url")</label>
+        <span id="parentURL"></span> <input id="url"/>
+    </div>
+    <div id="pageMessages"></div>
+    <div class="buttons-dlg">
+        <input id="saveDlgButton" type="submit" value="$messages.get("save")" />
+        <input id="cancelDlgButton" type="button" value="$messages.get("cancel")" />
+    </div>
+  </form>  
+</div>

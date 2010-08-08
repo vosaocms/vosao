@@ -100,7 +100,7 @@ function callLoadPage() {
 }
 
 function loadPage() {
-	pageId = String(page.id);
+	pageId = page.id == null ? '' : String(page.id);
 	pageParentUrl = page.parentUrl;
 	loadVersions();
 	loadTitles();
@@ -125,40 +125,49 @@ function loadLanguages() {
 
 function initPageForm() {
 	var urlEnd = pageParentUrl == '/' ? '' : '/';
-	if (page != null) {
-		$('#pageState').html(page.stateString == 'EDIT' ? messages('edit') : 
-				messages('approved'));
-		$('#pageCreateDate').html(page.createDateTimeString);
-		$('#pageModDate').html(page.modDateTimeString);
-		$('#pageCreateUser').html(page.createUserEmail);
-		$('#pageModUser').html(page.modUserEmail);
-		$('.contentTab').show();
+	if (page.parentUrl == '' || page.parentUrl == null) {
+		$('#friendlyUrl').hide();
+		$('#friendlyUrl').val('');
+		$('#parentFriendlyUrl').html('/');
+	} else {
+		$('#friendlyUrl').show();
+		$('#friendlyUrl').val(page.pageFriendlyURL);
+		$('#parentFriendlyUrl').html(page.parentFriendlyURL + urlEnd);
+	}
+    if (pageRequest.children.list.length > 0) {
+     	$('#parentFriendlyUrl').hide();
+       	$('#friendlyUrl').hide();
+       	$('#friendlyUrlSpan').html(page.friendlyURL);
+    }
+	$('#pageState').html(page.stateString == 'EDIT' ? messages('edit') : 
+			messages('approved'));
+	$('#pageCreateDate').html(page.createDateTimeString);
+	$('#pageModDate').html(page.modDateTimeString);
+	$('#pageCreateUser').html(page.createUserEmail);
+	$('#pageModUser').html(page.modUserEmail);
+	if (page.id != null) {
+		$('.pageTab').show();
 		$('.childrenTab').show();
 		$('.commentsTab').show();
 		$('.securityTab').show();
 		$('#pagePreview').show();
 		$('#versions').show();
-		showContentEditor();
-		checkDefault();
 	} else {
-		$('#titleLocal').val('');
-		$('#pageState').html(messages('edit'));
-		$('#pageCreateUser').html('');
-		$('#pageCreateDate').html('');
-		$('#pageModUser').html('');
-		$('#pageModDate').html('');
-		$('.contentTab').hide();
+		$('.pageTab').hide();
 		$('.childrenTab').hide();
 		$('.commentsTab').hide();
 		$('.securityTab').hide();
 		$('#pagePreview').hide();
 		$('#versions').hide();
 	}
+	showContentEditor();
+	checkDefault();
 }
 
 function onPageUpdate(continueFlag) {
 	var pageVO = Vosao.javaMap( {
 		id : pageId,
+		friendlyUrl : $('#parentFriendlyUrl').text() + $('#friendlyUrl').val(),
 		titles : getTitles(),
 		content : getEditorContent(),
 		approve : String($('#approveOnPageSave:checked, #approveOnContentSave:checked').size() > 0),
@@ -507,6 +516,6 @@ function checkDefault() {
 		isDefault = true;
 		$('.securityTab, .commentsTab, .childrenTab, #approveOnContentSaveDiv'
 			+ ', #contentPreviewButton, #versions, #resetCacheButton, #restoreButton'
-			+ ', #approveButton').hide();
+			+ ', #approveButton, #friendlyUrlDiv').hide();
 	}
 }

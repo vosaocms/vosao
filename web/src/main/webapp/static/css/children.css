@@ -1,0 +1,12 @@
+#page-dialog label {
+	height: 0;
+	float: none;
+}
+
+#page-dialog .form-row {
+    margin: 10px 0;
+}
+
+#showTitleDiv {
+	margin-bottom: 20px;
+}

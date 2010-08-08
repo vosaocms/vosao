@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.apache.commons.lang.StringUtils;
 import org.vosao.common.VosaoContext;
 
 public class DateUtil {
@@ -42,9 +43,15 @@ public class DateUtil {
 		return formatter.format(date);
 	}
 	
+	public static TimeZone getTimeZone() {
+		return VosaoContext.getInstance().getBusiness().getTimeZone();
+	}
+	
 	public static String dateTimeToString(final Date date) {
-		TimeZone tz = TimeZone.getTimeZone(VosaoContext.getInstance()
-				.getBusiness().getUser().getTimezone());
+		if (date == null) {
+			return "null";
+		}
+		TimeZone tz = getTimeZone();
 		if (!tz.equals(dateTimeFormatter.getTimeZone())) {
 			dateTimeFormatter.setTimeZone(tz);
 		}
@@ -52,8 +59,10 @@ public class DateUtil {
 	}
 	
 	public static String timeToString(final Date date) {
-		TimeZone tz = TimeZone.getTimeZone(VosaoContext.getInstance()
-				.getBusiness().getUser().getTimezone());
+		if (date == null) {
+			return "null";
+		}
+		TimeZone tz = getTimeZone();
 		if (!tz.equals(timeFormatter.getTimeZone())) {
 			timeFormatter.setTimeZone(tz);
 		}
@@ -61,8 +70,7 @@ public class DateUtil {
 	}
 
 	public static Date dateTimeToDate(final String str) throws ParseException {
-		TimeZone tz = TimeZone.getTimeZone(VosaoContext.getInstance()
-				.getBusiness().getUser().getTimezone());
+		TimeZone tz = getTimeZone();
 		if (!tz.equals(dateTimeFormatter.getTimeZone())) {
 			dateTimeFormatter.setTimeZone(tz);
 		}

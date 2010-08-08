@@ -24,6 +24,7 @@ package org.vosao.business.impl;
 import java.io.Serializable;
 import java.util.TimeZone;
 
+import org.apache.commons.lang.StringUtils;
 import org.vosao.business.Business;
 import org.vosao.business.CommentBusiness;
 import org.vosao.business.ConfigBusiness;
@@ -432,7 +433,8 @@ public class BusinessImpl implements Business, Serializable {
 
 	@Override
 	public TimeZone getTimeZone() {
-		if (getUser() != null) { 
+		if (getUser() != null 
+				&& !StringUtils.isEmpty(getUser().getTimezone())) {
 			return TimeZone.getTimeZone(getUser().getTimezone());
 		}
 		return TimeZone.getDefault();

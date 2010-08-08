@@ -32,6 +32,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
+import org.vosao.common.BCrypt;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.UserEntity;
 
@@ -58,6 +60,7 @@ public class AuthenticationFilter extends AbstractFilter implements Filter {
 		HttpSession session = httpRequest.getSession();
         String url = httpRequest.getServletPath();
         VosaoContext ctx = VosaoContext.getInstance();
+        autoLogin(httpRequest);
         String userEmail = (String)session.getAttribute(USER_SESSION_ATTR);
         UserEntity user = getDao().getUserDao().getByEmail(userEmail);
 		if (user == null) {
@@ -83,4 +86,23 @@ public class AuthenticationFilter extends AbstractFilter implements Filter {
 		chain.doFilter(request, response);
 	}
 
+	private void autoLogin(HttpServletRequest request) {
+		String email = request.getParameter("login_email");
+		if (StringUtils.isEmpty(email)) {
+			return;
+		}
+		String password = request.getParameter("login_password");
+		if (StringUtils.isEmpty(password)) {
+			return;
+		}
+		UserEntity user = getDao().getUserDao().getByEmail(email);
+		if (user == null || user.isDisabled()) {
+			return;
+		}
+		if (!BCrypt.checkpw(password, user.getPassword())) {
+			return;
+		}
+		HttpSession session = request.getSession();
+		session.setAttribute(USER_SESSION_ATTR, user.getEmail());
+	}
 }

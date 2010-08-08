@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.vosao.business.Business;
 import org.vosao.business.mq.MessageQueue;
@@ -44,6 +45,7 @@ import com.google.appengine.api.utils.SystemProperty;
 public class VosaoContext {
 
 	private HttpServletRequest request;
+	private HttpServletResponse response;
 	private int requestCount;
 	private long startTime;
 	
@@ -160,5 +162,13 @@ public class VosaoContext {
     	}
     	return false;
     }
+
+	public HttpServletResponse getResponse() {
+		return response;
+	}
+
+	public void setResponse(HttpServletResponse response) {
+		this.response = response;
+	}
 
 }

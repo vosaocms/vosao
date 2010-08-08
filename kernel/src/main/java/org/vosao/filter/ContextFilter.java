@@ -29,6 +29,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.vosao.business.impl.BusinessImpl;
 import org.vosao.business.impl.mq.MessageQueueImpl;
@@ -52,6 +53,7 @@ public class ContextFilter extends AbstractFilter implements Filter {
     		FilterChain chain) throws IOException, ServletException {
     	VosaoContext ctx = VosaoContext.getInstance();
     	ctx.setRequest((HttpServletRequest)request);
+    	ctx.setResponse((HttpServletResponse)response);
     	if (ctx.getMessageQueue() == null) {
         	ctx.setMessageQueue(new MessageQueueImpl());
     	}

@@ -208,6 +208,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 				languageCode));
 		context.put("user", getBusiness().getUser());
 		context.put("request", VosaoContext.getInstance().getRequest());
+		context.put("response", VosaoContext.getInstance().getResponse());
 		context.put("timezone", getBusiness().getTimeZone());
 		return context;
 	}

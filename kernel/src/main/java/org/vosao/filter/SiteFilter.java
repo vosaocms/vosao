@@ -111,7 +111,9 @@ public class SiteFilter extends AbstractFilter implements Filter {
         }
         SeoUrlEntity seoUrl = getDao().getSeoUrlDao().getByFrom(url);
         if (seoUrl != null) {
-            httpResponse.sendRedirect(seoUrl.getToLink());
+        	httpResponse.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+        	httpResponse.setHeader("Location", seoUrl.getToLink());
+        	httpResponse.setHeader("Connection", "close");
             return;
         }
     	try {

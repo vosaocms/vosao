@@ -29,6 +29,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.imex.task.TaskTimeoutException;
 import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
@@ -122,8 +123,8 @@ public class ExportTaskSubscriber extends AbstractSubscriber {
 			logger.info("Added new export task "
 					+ zipOutStreamTaskAdapter.getCurrentFile());
 		} catch (Exception e) {
-			logger.error(e.getMessage());
-			e.printStackTrace();
+			logger.error(e.toString() + " " + e.getMessage() + "\n"
+					+ ExceptionUtils.getFullStackTrace(e));
 		}
 	}
 

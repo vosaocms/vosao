@@ -24,6 +24,7 @@ package org.vosao.business.impl.imex;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -57,7 +58,11 @@ public class TagExporterImpl extends AbstractExporter
 	private void createTagXML(Element element, TagEntity tag) {
 		Element tagElement = element.addElement("tag");
 		tagElement.addElement("name").setText(tag.getName());
-		tagElement.addElement("title").setText(tag.getTitle());
+		String title = tag.getTitle();
+		if (StringUtils.isEmpty(title)) {
+			title = tag.getName();
+		}
+		tagElement.addElement("title").setText(title);
 		List<TagEntity> list = getDao().getTagDao().selectByParent(tag.getId());
 		for (TagEntity child : list) {
 			createTagXML(tagElement, child);

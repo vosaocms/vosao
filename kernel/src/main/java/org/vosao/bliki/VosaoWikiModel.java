@@ -7,6 +7,8 @@ import info.bliki.wiki.model.ImageFormat;
 import info.bliki.wiki.model.WikiModel;
 import info.bliki.wiki.tags.WPATag;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
@@ -18,6 +20,9 @@ import org.vosao.entity.TemplateEntity;
  * 
  */
 public class VosaoWikiModel extends WikiModel {
+	
+	private static final Log logger = LogFactory.getLog(VosaoWikiModel.class);
+	
 	final PageEntity page;
 
 	public VosaoWikiModel(PageEntity page) {
@@ -52,9 +57,13 @@ public class VosaoWikiModel extends WikiModel {
 			String topicDescription, String cssClass, boolean parseRecursive) {
 		String hrefLink;
 		if (topic.length() > 0) {
-			String encodedtopic = encodeTitleToUrl(topic, true);
-			hrefLink = fExternalWikiBaseURL.replace("${title}",
-					encodedtopic.toLowerCase());
+			String encodedtopic = encodeTitleToUrl(topic, true).toLowerCase();
+			if (encodedtopic.startsWith("/")) {
+				hrefLink = encodedtopic;
+			}
+			else {
+				hrefLink = fExternalWikiBaseURL.replace("${title}", encodedtopic);
+			}
 		} else {
 			if (hashSection != null) {
 				hrefLink = "";

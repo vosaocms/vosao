@@ -29,7 +29,9 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.plugin.AbstractPluginEntryPoint;
 import org.vosao.entity.PluginEntity;
+import org.vosao.utils.ParamUtil;
 import org.vosao.utils.StreamUtil;
+import org.vosao.utils.XmlUtil;
 
 /**
  * 
@@ -59,33 +61,40 @@ public class RssatomEntryPoint extends AbstractPluginEntryPoint {
 	private void checkConfig() {
 		PluginEntity plugin = getPlugin();
 		if (StringUtils.isEmpty(plugin.getConfigData())) {
-			RssatomConfig rssatomConfig = new RssatomConfig(plugin);
-			Document doc = DocumentHelper.createDocument();
-			Element root = doc.addElement("plugin-config");
-			root.addElement("items").setText(String.valueOf(
+			try {
+				RssatomConfig rssatomConfig = new RssatomConfig(plugin);
+				Document doc = DocumentHelper.createDocument();
+				Element root = doc.addElement("plugin-config");
+				root.addElement("items").setText(String.valueOf(
 					rssatomConfig.getItems()));
-			root.addElement("itemSize").setText(String.valueOf(
+				root.addElement("itemSize").setText(String.valueOf(
 					rssatomConfig.getItemSize()));
-			root.addElement("pages").setText(rssatomConfig.getPages());
-			root.addElement("title").setText(rssatomConfig.getTitle());
-			try {
-				root.addElement("rssTemplate").setText(
-					StreamUtil.getTextResource(this.getClass().getClassLoader(),
+				root.addElement("pages").setText(XmlUtil.notNull(
+						rssatomConfig.getPages()));
+				root.addElement("title").setText(XmlUtil.notNull(
+						rssatomConfig.getTitle()));
+				try {
+					root.addElement("rssTemplate").setText(
+						StreamUtil.getTextResource(this.getClass().getClassLoader(),
 							"org/vosao/plugins/rssatom/rss-template.vm"));
-			}
-			catch (IOException e) {
-				root.addElement("rssTemplate").setText(e.getMessage());
-			}
-			try {
-				root.addElement("atomTemplate").setText(
-					StreamUtil.getTextResource(this.getClass().getClassLoader(),
+				}
+				catch (IOException e) {
+					root.addElement("rssTemplate").setText(e.getMessage());
+				}
+				try {
+					root.addElement("atomTemplate").setText(
+						StreamUtil.getTextResource(this.getClass().getClassLoader(),
 							"org/vosao/plugins/rssatom/atom-template.vm"));
+				}
+				catch (IOException e) {
+					root.addElement("atomTemplate").setText(e.getMessage());
+				}
+				plugin.setConfigData(doc.asXML());
+				getDao().getPluginDao().save(plugin);
 			}
-			catch (IOException e) {
-				root.addElement("atomTemplate").setText(e.getMessage());
+			catch (Exception e) {
+				
 			}
-			plugin.setConfigData(doc.asXML());
-			getDao().getPluginDao().save(plugin);
 		}
 	}
 	

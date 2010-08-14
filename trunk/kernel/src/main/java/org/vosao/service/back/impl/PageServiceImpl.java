@@ -283,7 +283,12 @@ public class PageServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public List<PageVO> getChildren(String url) {
-		List<PageEntity> pages = getPageBusiness().getByParent(url);
+		List<PageEntity> pages = new ArrayList<PageEntity>();
+		for (PageEntity page : getPageBusiness().getByParent(url)) {
+			if (!page.isForInternalUse()) {
+				pages.add(page);
+			}
+		}
 		Collections.sort(pages, PageHelper.SORT_INDEX_ASC);
 		return PageVO.create(pages);
 	}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>${rssatomConfig.title}</title>
+  <subtitle>${rssatomConfig.title}</subtitle>
+  <link href="http://${config.siteDomain}/"/>
+  <updated>${date.get("yyyy-M-d'T'H:m:sZ")}</updated>
+  <author>
+    <name>Webmaster</name>
+    <email>${config.siteEmail}</email>
+  </author>
+  <id>urn:uuid:${rss.getUUID()}</id>
+#foreach ($page in $pages)
+  <entry>
+    <title>$page.title</title>
+    <link href="http://${config.siteDomain}${page.friendlyURL}"/>
+    <id>urn:uuid:${rss.getUUID($page)}</id>
+    <updated>${date.format("yyyy-M-d'T'H:m:sZ", $page.modDate)}</updated>
+    <summary>${rss.getDescription($page)}</summary>
+  </entry>
+#end      
+</feed>

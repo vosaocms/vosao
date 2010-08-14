@@ -1,0 +1,144 @@
+<html> 
+<head> 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+
+    <link rel="stylesheet" href="/static/css/jquery-ui/redmond/jquery-ui.css" type="text/css" />
+
+    <script src="/i18n.js" language="javascript"></script>
+    <script src="/static/js/jquery.js" language="javascript"></script>
+    <script src="/static/js/jquery.cookie.js" language="javascript"></script>
+    <script src="/static/js/jquery-ui.js" language="javascript"></script>
+    <script src="/static/js/jsonrpc.js" language="javascript"></script>
+    <script src="/static/js/vosao.js" language="javascript"></script>
+    <script src="/static/js/cms.js" language="javascript"></script>
+    <script src="/static/js/back-services.js" language="javascript"></script>
+ 
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
+ 
+    <script src="js/config.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="css/config.css" type="text/css" />
+
+    <title>register.plugin_config</title>
+   
+</head>  
+<body> 
+
+<div id="topbar">
+
+    <div id="leftmenu">
+        <a href="/cms">Vosao</a> CMS
+        <a href="/cms/pages.vm">content</a>
+        <a href="/cms/templates.vm">templates</a>
+        <a href="/cms/folders.vm">resources</a>
+        <a href="/cms/config.vm">configuration</a>
+        <a href="/cms/plugins">plugins</a>
+        <a href="/cms/plugins/config.vm">plugins.config</a>
+    </div>
+    <div id="rightmenu">
+        <a href="/cms/profile.vm">profile</a> 
+        | <a href="#" onclick="onLogout()">logout</a>
+        |
+        
+<script type="text/javascript">
+$(function() {
+    $('#languageSelect').click(function() {
+        $('#languageDiv').show();
+        setTimeout(function() {
+            $('#languageDiv').hide();
+        }, 5000);
+    });
+});
+
+</script>
+
+<a id="languageSelect" href="#">language</a>
+<div id="languageDiv">
+    <a href="#" onclick="Vosao.changeLanguage('en')">English</a>
+    <a href="#" onclick="Vosao.changeLanguage('ru')">Русский</a>
+</div>        
+        
+        | <a href="http://code.google.com/p/vosao/issues/list">support</a>    
+    </div>
+    <span class="clear">&#160;</span>
+</div>
+
+<div id="wrapper">
+
+<div id="tabs">
+
+<ul>
+    <li><a href="#tab-1">register.tab1</a></li>
+    <li><a href="#tab-2">templates</a></li>
+    <li><a href="#tab-3">register.tab3</a></li>
+</ul>
+
+<form id="configForm">
+
+<div id="tab-1">
+    <div class="form-row">
+        <label>register.admin_email</label>
+        <input id="adminEmail" type="text" />
+    </div>
+    <div class="form-row">
+        <label>register.send_confirm_admin</label>
+        <input id="sendConfirmAdmin" type="checkbox" />
+    </div>
+    <div class="form-row">
+        <label>register.send_confirm_user</label>
+        <input id="sendConfirmUser" type="checkbox" />
+    </div>
+    <div class="form-row">
+        <label>register.clear_days</label>
+        <input id="clearDays" type="text" />
+    </div>
+    <div class="form-row">
+        <label>register.enable_captcha</label>
+        <input id="captcha" type="checkbox" />
+    </div>
+    <div class="buttons">
+        <input id="saveButton" type="submit" value="save" />
+        <input id="cancelButton" type="button" value="cancel" />
+    </div>
+</div>
+
+<div id="tab-2">
+    <div class="form-row">
+        <div><span>register.registration_form</span> 
+            <a href="#" onclick="onFormTemplateRestore()">restore</a>
+        </div>
+        <textarea id="registerFormTemplate" rows="10" cols="80"></textarea>
+    </div>
+    <div class="form-row">
+        <div><span>register.confirm_user_letter</span>
+            <a href="#" onclick="onConfirmUserLetterRestore()">restore</a>
+        </div>
+        <textarea id="confirmUserTemplate" rows="10" cols="80"></textarea>
+    </div>
+    <div class="form-row">
+        <div><span>register.confirm_admin_letter</span>
+            <a href="#" onclick="onConfirmAdminLetterRestore()">restore</a>
+        </div>
+        <textarea id="confirmAdminTemplate" rows="10" cols="80"></textarea>
+    </div>
+    <div class="buttons">
+        <input id="saveTemplateButton" type="submit" value="save" />
+        <input id="cancelTemplateButton" type="button" value="cancel" />
+    </div>
+</div>
+
+</form>
+
+<div id="tab-3">
+    <div id="registrations"></div>
+</div>
+
+</div>    
+<div class="messages"> </div>
+
+</div>
+ 
+</body> 
+ 
+</html> 

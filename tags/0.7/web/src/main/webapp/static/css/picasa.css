@@ -1,0 +1,78 @@
+a.album {
+	float: left;
+	width: 72px;
+	height: 104px;
+	display: block;
+	cursor: pointer;
+	margin: 10px;
+	color: #444;
+	padding: 4px 4px 0 4px;
+	overflow: hidden;
+}
+a.album:hover {
+	background-color: #e7f0f4;
+	color: #E17009;
+}
+	
+.album p {
+	text-align: center;
+}
+
+.album img {
+	margin: 4px 4px 0 4px;
+}
+
+.picasa-hr {
+	height: 1px;
+	background-color: #8f8f8f;
+	border: 0;
+	margin-top: 10px;
+}
+
+.photo {
+    width: 160px;
+    height: 200px;
+    float: left;
+    margin: 5px 10px;
+}
+.photo a {
+    width: 160px;
+    height: 190px;
+    display: block;
+    cursor: pointer;
+    margin: 10px;
+    color: #444;
+    border: 1px solid silver;
+}
+.photo a:hover {
+    color: #E17009;
+} 
+.photo p {
+ 	text-align: center;
+}
+.photo a img {
+    margin: 6px auto auto;
+    display: block;
+}
+.photo img.remove {
+	margin: 18px 145px;
+	position: absolute;
+	cursor: pointer;
+}
+
+.album-name {
+	margin-top: 10px;
+	font-weight: bold;
+}
+
+#deleteAlbumLink {
+    font-weight: normal;
+}
+
+#albumDetails {
+	display: none;
+}
+
+#albumForm label {
+	height: 20px;
+}

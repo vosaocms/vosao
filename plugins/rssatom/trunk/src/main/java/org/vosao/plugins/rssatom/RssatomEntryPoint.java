@@ -30,6 +30,7 @@ import org.dom4j.Element;
 import org.vosao.business.plugin.AbstractPluginEntryPoint;
 import org.vosao.entity.PluginEntity;
 import org.vosao.utils.StreamUtil;
+import org.vosao.utils.XmlUtil;
 
 /**
  * 
@@ -66,8 +67,10 @@ public class RssatomEntryPoint extends AbstractPluginEntryPoint {
 					rssatomConfig.getItems()));
 			root.addElement("itemSize").setText(String.valueOf(
 					rssatomConfig.getItemSize()));
-			root.addElement("pages").setText(rssatomConfig.getPages());
-			root.addElement("title").setText(rssatomConfig.getTitle());
+			root.addElement("pages").setText(XmlUtil.notNull(
+					rssatomConfig.getPages()));
+			root.addElement("title").setText(XmlUtil.notNull(
+					rssatomConfig.getTitle()));
 			try {
 				root.addElement("rssTemplate").setText(
 					StreamUtil.getTextResource(this.getClass().getClassLoader(),

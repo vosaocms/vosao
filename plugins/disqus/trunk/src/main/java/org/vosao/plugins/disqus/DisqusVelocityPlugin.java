@@ -45,7 +45,6 @@ public class DisqusVelocityPlugin extends AbstractVelocityPlugin {
 		try {
 			PluginEntity plugin = getDao().getPluginDao().getByName("disqus");
 			Map<String, String> config = getConfig(plugin);
-			logger.info(config.get("embedCode") + "\n\n" + config.get("countCode"));
 			return config.get("embedCode") + "\n\n" + config.get("countCode"); 
 		}
 		catch (Exception e) {

@@ -21,9 +21,12 @@
 
 package org.vosao.dao.tool;
 
+import java.text.ParseException;
+
 import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
 import org.vosao.enums.PageState;
+import org.vosao.utils.DateUtil;
 
 public class PageTool {
 
@@ -46,6 +49,12 @@ public class PageTool {
 			PageState state) {
 		PageEntity page = new PageEntity(title, url);
 		page.setState(state);
+		try {
+			page.setPublishDate(DateUtil.toDate("01.01.2010"));
+		}
+		catch (ParseException e) {
+			e.printStackTrace();
+		}
 		dao.getPageDao().save(page);
 		return page;
 	}

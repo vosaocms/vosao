@@ -24,7 +24,7 @@ package org.vosao.update.verion_0_7;
 import java.util.List;
 import java.util.Map;
 
-import org.datanucleus.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.vosao.business.impl.mq.AbstractSubscriber;
 import org.vosao.business.mq.Message;
 import org.vosao.business.mq.message.SimpleMessage;

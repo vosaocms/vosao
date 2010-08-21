@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.datanucleus.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.ContentPermissionEntity;
 import org.vosao.entity.GroupEntity;

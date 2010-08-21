@@ -21,7 +21,7 @@
 
 package org.vosao.business.impl.pagefilter;
 
-import org.datanucleus.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.vosao.entity.PageEntity;
 import org.vosao.utils.StrUtil;
 

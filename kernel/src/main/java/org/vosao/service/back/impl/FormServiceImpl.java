@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.datanucleus.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.entity.FormConfigEntity;
 import org.vosao.entity.FormDataEntity;

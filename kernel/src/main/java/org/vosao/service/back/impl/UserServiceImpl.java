@@ -23,22 +23,18 @@ package org.vosao.service.back.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.datanucleus.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.vosao.common.BCrypt;
-import org.vosao.common.VosaoContext;
 import org.vosao.entity.UserEntity;
 import org.vosao.enums.UserRole;
 import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.UserService;
 import org.vosao.service.impl.AbstractServiceImpl;
-import org.vosao.service.vo.CodeVO;
 import org.vosao.service.vo.UserVO;
 import org.vosao.utils.ParamUtil;
 

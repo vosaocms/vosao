@@ -24,7 +24,7 @@ package org.vosao.service.back.impl;
 import java.util.List;
 import java.util.Map;
 
-import org.datanucleus.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;

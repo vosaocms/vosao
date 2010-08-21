@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.vosao</groupId>
         <artifactId>vosaocms</artifactId>
-        <version>0.7</version>
+        <version>0.8</version>
     </parent>    
     <artifactId>vosao-kernel</artifactId>
     <packaging>jar</packaging>
@@ -16,7 +16,7 @@
         <dependency>
             <groupId>org.vosao</groupId>
             <artifactId>vosao-api</artifactId>
-            <version>0.7</version>
+            <version>0.8</version>
         </dependency>
 
         <!--unit test related dependencies-->
@@ -31,26 +31,26 @@
         <dependency>
             <groupId>com.google.appengine</groupId>
             <artifactId>appengine-testing</artifactId>
-            <version>1.3.5</version>
+            <version>1.3.6</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.google.appengine</groupId>
             <artifactId>appengine-api-stubs</artifactId>
-            <version>1.3.5</version>
+            <version>1.3.6</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.google.appengine</groupId>
             <artifactId>appengine-local-runtime</artifactId>
-            <version>1.3.5</version>
+            <version>1.3.6</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.google.appengine</groupId>
             <artifactId>appengine-tools-api</artifactId>
-            <version>1.3.5</version>
+            <version>1.3.6</version>
             <scope>test</scope>
         </dependency>
 
@@ -74,7 +74,7 @@
         <dependency>
             <groupId>com.google.appengine</groupId>
             <artifactId>all</artifactId>
-            <version>1.3.5</version>
+            <version>1.3.6</version>
             <type>pom</type>
         </dependency>
         

@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.datanucleus.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.vosao.business.vo.StructureFieldVO;
 import org.vosao.entity.StructureEntity;
 import org.vosao.i18n.Messages;

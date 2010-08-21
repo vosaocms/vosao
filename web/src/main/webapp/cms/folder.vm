@@ -99,17 +99,17 @@
 </div>
 
 <div id="file-upload" title="$messages.get("folder.upload_file")" style="display:none">
-<form id="upload" action="/cms/upload" method="post" enctype="multipart/form-data">
-    $messages.get("file_upload"):
-    <input type="hidden" name="fileType" value="resource" />
-    <input type="hidden" name="folderId" />
-    <input type="file" name="uploadFile" />
-    <div class="buttons-dlg">
-        <input type="submit" value="$messages.get("send")" />
-        <input id="fileUploadCancelButton" type="button" 
-            value="$messages.get("cancel")" />
-    </div>
-</form>
+	<form id="upload" action="/cms/upload" method="post" enctype="multipart/form-data">
+    	$messages.get("file_upload"):
+    	<input type="hidden" name="fileType" value="resource" />
+    	<input type="hidden" name="folderId" />
+    	<input type="file" name="uploadFile" multiple="true" />
+	    <div class="buttons-dlg">
+    	    <input type="submit" value="$messages.get("send")" />
+        	<input id="fileUploadCancelButton" type="button" 
+            	value="$messages.get("cancel")" />
+    	</div>
+	</form>
 </div>
 
 <div id="permission-dialog" style="display:none" title="$messages.get("permission_details")">

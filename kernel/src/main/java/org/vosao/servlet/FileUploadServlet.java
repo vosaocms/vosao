@@ -24,8 +24,10 @@ package org.vosao.servlet;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -56,6 +58,12 @@ import org.vosao.utils.StreamUtil;
  * @author Aleksandr Oleynik
  */
 public class FileUploadServlet extends AbstractServlet {
+	
+	private static class UploadItem {
+		public FileItemStream item;
+		public byte[] data;
+	}
+	
 	private static final long serialVersionUID = 6098745782027999297L;
 
 	private static final long MAX_SIZE = 10000000;
@@ -76,13 +84,14 @@ public class FileUploadServlet extends AbstractServlet {
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+		//logger.info("File upload...");
 		HttpSession session = request.getSession(true);
 		ServletFileUpload upload = new ServletFileUpload();
 		upload.setFileSizeMax(MAX_SIZE);
 		upload.setHeaderEncoding("UTF-8");
 		String message = null;
 		Map<String, String> parameters = new HashMap<String, String>();
+		List<UploadItem> uploadItems = new ArrayList<UploadItem>();
 		try {
 			FileItemIterator iter;
 			try {
@@ -105,11 +114,16 @@ public class FileUploadServlet extends AbstractServlet {
 						parameters.put(item.getFieldName(), 
 								Streams.asString(stream, "UTF-8"));
 					} else {
-						imageFileItem = item;
-						fileData = StreamUtil.readFileStream(stream);
+						UploadItem uploadItem = new UploadItem();
+						uploadItem.item = item;
+						uploadItem.data = StreamUtil.readFileStream(stream);
+						uploadItems.add(uploadItem);
 					}
 				}
-				message = processFile(imageFileItem, fileData, parameters);
+				//logger.info(parameters.toString());
+				for (UploadItem item : uploadItems) {
+					message = processFile(item.item, item.data, parameters);
+				}
 			} catch (FileUploadException e) {
 				logger.error(Messages.get("request_parsing_error"));
 				throw new UploadException(Messages.get("request_parsing_error"));

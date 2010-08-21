@@ -25,7 +25,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
-import org.datanucleus.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.FolderEntity;
 import org.vosao.i18n.Messages;

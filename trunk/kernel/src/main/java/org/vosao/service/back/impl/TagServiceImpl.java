@@ -25,10 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.datanucleus.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.entity.PageEntity;
-import org.vosao.entity.PageTagEntity;
 import org.vosao.entity.TagEntity;
 import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;

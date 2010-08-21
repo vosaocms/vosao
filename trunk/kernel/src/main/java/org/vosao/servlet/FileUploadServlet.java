@@ -21,8 +21,6 @@
 
 package org.vosao.servlet;
 
-import static com.google.appengine.api.labs.taskqueue.TaskOptions.Builder.url;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -40,7 +38,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.io.FilenameUtils;
-import org.datanucleus.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.vosao.business.mq.message.ImportMessage;
 import org.vosao.common.UploadException;
 import org.vosao.entity.FileEntity;
@@ -50,8 +48,6 @@ import org.vosao.i18n.Messages;
 import org.vosao.utils.FolderUtil;
 import org.vosao.utils.MimeType;
 import org.vosao.utils.StreamUtil;
-
-import com.google.appengine.api.labs.taskqueue.Queue;
 
 /**
  * Servlet for uploading images into database.

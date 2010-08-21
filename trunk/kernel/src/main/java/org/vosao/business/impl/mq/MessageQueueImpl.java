@@ -28,9 +28,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.datanucleus.util.StringUtils;
 import org.vosao.business.Business;
 import org.vosao.business.impl.mq.subscriber.EntityRemove;
 import org.vosao.business.impl.mq.subscriber.ExportTaskSubscriber;

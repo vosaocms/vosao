@@ -53,6 +53,7 @@ import org.vosao.business.mq.MessageQueue;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.dao.impl.DaoImpl;
+import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.global.SystemService;
 import org.vosao.global.impl.SystemServiceImpl;
@@ -437,6 +438,10 @@ public class BusinessImpl implements Business, Serializable {
 		if (getUser() != null 
 				&& !StringUtils.isEmpty(getUser().getTimezone())) {
 			return TimeZone.getTimeZone(getUser().getTimezone());
+		}
+		ConfigEntity config = getDao().getConfigDao().getConfig();
+		if (!StringUtils.isEmpty(config.getDefaultTimezone())) {
+			return TimeZone.getTimeZone(config.getDefaultTimezone());
 		}
 		return TimeZone.getDefault();
 	}

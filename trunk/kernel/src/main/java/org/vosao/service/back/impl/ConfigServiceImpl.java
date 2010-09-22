@@ -100,6 +100,9 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 		if (vo.get("enableCkeditor") != null) {
 			config.setEnableCkeditor(Boolean.valueOf(vo.get("enableCkeditor")));
 		}
+		if (vo.get("defaultTimezone") != null) {
+			config.setDefaultTimezone(vo.get("defaultTimezone"));
+		}
 		List<String> errors = getBusiness().getConfigBusiness()
 				.validateBeforeUpdate(config);
 		if (errors.isEmpty()) {

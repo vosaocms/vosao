@@ -26,6 +26,7 @@ var clockTimer = null;
 var clockSeconds = 0;
 var exportFilename = null;
 var exportType = null;
+var timezones = null;
 
 $(function(){
     $("#import-dialog").dialog({ width: 400, autoOpen: false });
@@ -55,6 +56,23 @@ $(function(){
 
 function loadData() {
     loadConfig();
+    loadTimezones();
+}
+
+function loadTimezones() {
+	Vosao.jsonrpc.userService.getTimezones(function (r) {
+        timezones = r.list;
+        showTimezones();
+    });
+}
+
+function showTimezones() {
+	var h = '';
+	$.each(timezones, function(i, value) {
+		h += '<option value="' + value + '">' + value + '</option>';
+	});
+	$('#timezone').html(h);
+    $('#timezone').val(config.defaultTimezone);
 }
 
 function toggleRecaptcha() {
@@ -142,6 +160,7 @@ function onSave() {
         picasaUser : $('#picasaUser').val(),
         picasaPassword : $('#picasaPassword').val(),
         editExt : $('#editExt').val(),
+        defaultTimezone : $('#timezone').val(),
         siteUserLoginUrl : $('#siteUserLoginUrl').val()        
     });
     Vosao.jsonrpc.configService.saveConfig(function(r) {

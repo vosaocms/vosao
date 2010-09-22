@@ -79,6 +79,10 @@
         <input id="enableCkeditor" type="checkbox" />
     </div>
     <div class="form-row">
+         <label>$messages.get("profile.timezone")</label>
+         <select id="timezone"></select>
+    </div>    
+    <div class="form-row">
         <label>$messages.get("config.enable_picasa")</label>
         <input id="enablePicasa" type="checkbox" />
     </div>

@@ -103,4 +103,8 @@ public interface PageDao extends BaseDao<PageEntity> {
 	
 	void removeVersion(Long id);
 	
+	List<PageEntity> getCurrentHourPublishedPages();
+
+	List<PageEntity> getCurrentHourUnpublishedPages();
+	
 }

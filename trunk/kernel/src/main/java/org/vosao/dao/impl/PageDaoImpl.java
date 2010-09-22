@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.BaseDaoImpl;
 import org.vosao.dao.CommentDao;
@@ -243,4 +244,31 @@ public class PageDaoImpl extends BaseDaoImpl<PageEntity>
 	private CommentDao getCommentDao() {
 		return VosaoContext.getInstance().getBusiness().getDao().getCommentDao();
 	}
+
+	@Override
+	public List<PageEntity> getCurrentHourPublishedPages() {
+		Date endDate = new Date();
+		Date startDate = DateUtils.addHours(endDate, -1);
+		Query q = newQuery();
+		q.addFilter("publishDate", FilterOperator.GREATER_THAN_OR_EQUAL, 
+				startDate);
+		q.addFilter("publishDate", FilterOperator.LESS_THAN_OR_EQUAL, 
+				endDate);
+		return select(q, "getCurrentHourPublishedPages", 
+				params(startDate, endDate));
+	}
+	
+	@Override
+	public List<PageEntity> getCurrentHourUnpublishedPages() {
+		Date endDate = new Date();
+		Date startDate = DateUtils.addHours(endDate, -1);
+		Query q = newQuery();
+		q.addFilter("endPublishDate", FilterOperator.GREATER_THAN_OR_EQUAL, 
+				startDate);
+		q.addFilter("endPublishDate", FilterOperator.LESS_THAN_OR_EQUAL, 
+				endDate);
+		return select(q, "getCurrentHourUnpublishedPages", 
+				params(startDate, endDate));
+	}
+	
 }

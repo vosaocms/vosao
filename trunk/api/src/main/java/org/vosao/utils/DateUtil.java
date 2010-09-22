@@ -50,7 +50,7 @@ public class DateUtil {
 	
 	public static String dateTimeToString(final Date date) {
 		if (date == null) {
-			return "null";
+			return "";
 		}
 		TimeZone tz = getTimeZone();
 		if (!tz.equals(dateTimeFormatter.getTimeZone())) {
@@ -61,7 +61,7 @@ public class DateUtil {
 	
 	public static String timeToString(final Date date) {
 		if (date == null) {
-			return "null";
+			return "";
 		}
 		TimeZone tz = getTimeZone();
 		if (!tz.equals(timeFormatter.getTimeZone())) {

@@ -132,6 +132,10 @@ public class PageExporterImpl extends AbstractExporter
 			pageElement.addAttribute("publishDate", 
 				DateUtil.dateTimeToString(page.getPublishDate()));
 		}
+		if (page.getEndPublishDate() != null) {
+			pageElement.addAttribute("endPublishDate", 
+				DateUtil.dateTimeToString(page.getEndPublishDate()));
+		}
 		TemplateEntity template = getDao().getTemplateDao().getById(
 				page.getTemplate());
 		if (template != null) {
@@ -239,6 +243,7 @@ public class PageExporterImpl extends AbstractExporter
 		String themeUrl = pageElement.attributeValue("theme");
 		String commentsEnabled = pageElement.attributeValue("commentsEnabled");
 		Date publishDate = new Date();
+		Date endPublishDate = null;
 		if (pageElement.attributeValue("publishDate") != null) {
 			try {
 				publishDate = DateUtil.dateTimeToDate(pageElement
@@ -255,6 +260,16 @@ public class PageExporterImpl extends AbstractExporter
 				}
 			}
 		}
+		if (pageElement.attributeValue("endPublishDate") != null) {
+			try {
+				endPublishDate = DateUtil.dateTimeToDate(pageElement
+						.attributeValue("endPublishDate"));
+			} catch (ParseException e) {
+				logger.error("Wrong date format "
+						+ pageElement.attributeValue("endPublishDate") + " "
+						+ title);
+			}
+		}
 		TemplateEntity template = getDao().getTemplateDao().getByUrl(themeUrl);
 		Long templateId = null;
 		if (template != null) {
@@ -265,6 +280,7 @@ public class PageExporterImpl extends AbstractExporter
 		newPage.setFriendlyURL(url);
 		newPage.setTemplate(templateId);
 		newPage.setPublishDate(publishDate);
+		newPage.setEndPublishDate(endPublishDate);
 		if (commentsEnabled != null) {
 			newPage.setCommentsEnabled(Boolean.valueOf(commentsEnabled));
 		}

@@ -216,7 +216,23 @@ public class PageServiceImpl extends AbstractServiceImpl
 		}
 		if (vo.get("publishDate") != null) {
 			try {
-				page.setPublishDate(DateUtil.dateTimeToDate(vo.get("publishDate")));
+				page.setPublishDate(DateUtil.dateTimeToDate(
+						vo.get("publishDate")));
+			} catch (ParseException e) {
+				return ServiceResponse
+						.createErrorResponse(Messages.get(
+								"date_wrong_format"));
+			}
+		}
+		if (vo.get("endPublishDate") != null) {
+			try {
+				if (!StringUtils.isEmpty(vo.get("endPublishDate"))) {
+					page.setEndPublishDate(DateUtil.dateTimeToDate(
+						vo.get("endPublishDate")));
+				}
+				else if (page.getEndPublishDate() != null) {
+					page.setEndPublishDate(null);
+				}
 			} catch (ParseException e) {
 				return ServiceResponse
 						.createErrorResponse(Messages.get(

@@ -71,6 +71,8 @@ public enum Topic {
 
 	PAGE_CACHE_CLEAR,
 	
+	PAGE_PUBLISH_CRON,
+	
 	/**
 	 * Full search reindex. Receives IndexMessage.
 	 */

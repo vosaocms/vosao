@@ -67,6 +67,7 @@ public class PageEntity extends BaseEntityImpl {
 	private String parentUrl;
 	private Long template;
 	private Date publishDate;
+	private Date endPublishDate;
 	private boolean commentsEnabled;
 	private Integer version;
 	private String versionTitle;
@@ -114,6 +115,7 @@ public class PageEntity extends BaseEntityImpl {
 		parentUrl = getStringProperty(entity, "parentUrl");
 		template = getLongProperty(entity, "template");
 		publishDate = getDateProperty(entity, "publishDate");
+		endPublishDate = getDateProperty(entity, "endPublishDate");
 		commentsEnabled = getBooleanProperty(entity, "commentsEnabled", false);
 		version = getIntegerProperty(entity, "version", 1);
 		versionTitle = getStringProperty(entity, "versionTitle");
@@ -141,6 +143,7 @@ public class PageEntity extends BaseEntityImpl {
 		setProperty(entity, "parentUrl", parentUrl, true);
 		setProperty(entity, "template", template, true);
 		setProperty(entity, "publishDate", publishDate, true);
+		setProperty(entity, "endPublishDate", endPublishDate, true);
 		setProperty(entity, "commentsEnabled", commentsEnabled, false);
 		setProperty(entity, "version", version, true);
 		setProperty(entity, "versionTitle", versionTitle, false);
@@ -236,6 +239,14 @@ public class PageEntity extends BaseEntityImpl {
 
 	public String getPublishTimeString() {
 		return DateUtil.timeToString(publishDate);
+	}
+
+	public String getEndPublishDateString() {
+		return DateUtil.toString(endPublishDate);
+	}
+
+	public String getEndPublishTimeString() {
+		return DateUtil.timeToString(endPublishDate);
 	}
 
 	public void setPublishDate(Date publishDate) {
@@ -504,5 +515,13 @@ public class PageEntity extends BaseEntityImpl {
 			return getFriendlyURL().endsWith("/_default");
 		}
 		return false;
+	}
+
+	public Date getEndPublishDate() {
+		return endPublishDate;
+	}
+
+	public void setEndPublishDate(Date endPublishDate) {
+		this.endPublishDate = endPublishDate;
 	}
 }

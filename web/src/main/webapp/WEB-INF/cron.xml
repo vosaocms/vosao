@@ -10,4 +10,9 @@
     <description>Session clean from datastore</description>
     <schedule>every day 01:00</schedule>
   </cron>
+  <cron>
+    <url>/_ah/cron/page_publish</url>
+    <description>Page cache reset for freshly published pages</description>
+    <schedule>every 1 minute</schedule>
+  </cron>
 </cronentries>

@@ -26,6 +26,7 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.velocity.exception.ParseErrorException;
 import org.vosao.dao.tool.PageTool;
 import org.vosao.entity.ContentEntity;
@@ -282,4 +283,14 @@ public class PageDaoTest extends AbstractDaoTest {
 		}
 	}
 	
+	public void testGetCurrentHourPublishedPages() throws ParseException {
+		Date dt = DateUtils.addMinutes(new Date(), -15);
+		Date dt2 = DateUtils.addHours(new Date(), 1);
+		Date dt3 = DateUtils.addMinutes(new Date(), -30);
+		PageEntity page1 = addPage("test1", dt);
+		PageEntity page2 = addPage("test2", dt2);
+		PageEntity page3 = addPage("test3", dt3);
+		List<PageEntity> list = getDao().getPageDao().getCurrentHourPublishedPages();
+		assertEquals(2, list.size());
+	}
 }

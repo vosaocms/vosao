@@ -42,6 +42,7 @@ import org.vosao.business.impl.mq.subscriber.ImportTaskSubscriber;
 import org.vosao.business.impl.mq.subscriber.IndexChangedPages;
 import org.vosao.business.impl.mq.subscriber.IndexDeletedPages;
 import org.vosao.business.impl.mq.subscriber.PageCacheClear;
+import org.vosao.business.impl.mq.subscriber.PagePublishCron;
 import org.vosao.business.impl.mq.subscriber.Reindex;
 import org.vosao.business.impl.mq.subscriber.SessionCleanTaskSubscriber;
 import org.vosao.business.mq.Message;
@@ -92,6 +93,7 @@ public class MessageQueueImpl implements MessageQueue {
 		subscribe(Topic.IMPORT_FOLDER, ImportFolder.class);
 		
 		subscribe(Topic.ENTITY_REMOVE, EntityRemove.class);
+		subscribe(Topic.PAGE_PUBLISH_CRON, PagePublishCron.class);
 	}
 
 	private SystemService getSystemService() {

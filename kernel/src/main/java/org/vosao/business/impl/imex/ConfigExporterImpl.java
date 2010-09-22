@@ -76,6 +76,10 @@ public class ConfigExporterImpl extends AbstractExporter
 				config.getVersion()));
 		configElement.addElement("siteUserLoginUrl").setText(notNull(
 				config.getSiteUserLoginUrl()));
+		configElement.addElement("enableCkeditor").setText(
+				String.valueOf(config.isEnableCkeditor()));
+		configElement.addElement("defaultTimezone").setText(notNull(
+				config.getDefaultTimezone()));
 		createLanguagesXML(configElement);
 		createAttributesXML(configElement);
 	}
@@ -141,6 +145,13 @@ public class ConfigExporterImpl extends AbstractExporter
             }
             if (element.getName().equals("siteUserLoginUrl")) {
             	config.setSiteUserLoginUrl(element.getText());
+            }
+            if (element.getName().equals("enableCkeditor")) {
+            	config.setEnableCkeditor(XmlUtil.readBooleanText(
+            			element, false));
+            }
+            if (element.getName().equals("defaultTimezone")) {
+            	config.setDefaultTimezone(element.getText());
             }
 		}
 		getDaoTaskAdapter().configSave(config);

@@ -142,6 +142,8 @@ function initPageForm() {
 	$('#pageType').val(page.pageTypeString);
 	$('#publishDate').val(page.publishDateString);
 	$('#publishTime').val(page.publishTimeString);
+	$('#endPublishDate').val(page.endPublishDateString);
+	$('#endPublishTime').val(page.endPublishTimeString);
 	$('#commentsEnabled').each(function() {
 		this.checked = page.commentsEnabled;
 	});
@@ -204,12 +206,21 @@ function getPublishDatetime() {
 		+ ' ' + Vosao.strip($('#publishTime').val()) + ':00';	
 }
 
+function getEndPublishDatetime() {
+	if ($('#endPublishDate').val()) {
+		return Vosao.strip($('#endPublishDate').val()) 
+			+ ' ' + Vosao.strip($('#endPublishTime').val()) + ':00';
+	}
+	return '';
+}
+
 function onPageUpdate() {
 	var pageVO = Vosao.javaMap( {
 		id : pageId,
 		titles : getTitles(),
 		friendlyUrl : $('#parentFriendlyUrl').text() + $('#friendlyUrl').val(),
 		publishDate : getPublishDatetime(),
+		endPublishDate : getEndPublishDatetime(),
 		commentsEnabled : String($('#commentsEnabled:checked').size() > 0),
 		searchable : String($('#searchable:checked').size() > 0),
 		velocityProcessing : String($('#velocityProcessing:checked').size() > 0),

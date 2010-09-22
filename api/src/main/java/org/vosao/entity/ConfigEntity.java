@@ -50,6 +50,7 @@ public class ConfigEntity extends BaseEntityImpl {
 	private String picasaPassword;
 	private boolean enableCkeditor;
 	private Map<String, String> attributes;
+	private String defaultTimezone;
 
 	public ConfigEntity() {
 		commentsTemplate = "";
@@ -76,6 +77,7 @@ public class ConfigEntity extends BaseEntityImpl {
 		picasaPassword = getStringProperty(entity, "picasaPassword");
 		enableCkeditor = getBooleanProperty(entity, "enableCkeditor", true);
 		attributes = getMapProperty(entity, "attributes");
+		defaultTimezone = getStringProperty(entity, "defaultTimezone");
 	}
 	
 	@Override
@@ -97,6 +99,7 @@ public class ConfigEntity extends BaseEntityImpl {
 		setProperty(entity, "picasaPassword", picasaPassword, false);
 		setProperty(entity, "enableCkeditor", enableCkeditor, false);
 		setProperty(entity, "attributes", attributes);
+		setProperty(entity, "defaultTimezone", defaultTimezone, false);
 	}
 
 	public String getGoogleAnalyticsId() {
@@ -230,4 +233,12 @@ public class ConfigEntity extends BaseEntityImpl {
     public String getAttribute(String name) {
     	return attributes.get(name);
     }
+
+	public String getDefaultTimezone() {
+		return defaultTimezone;
+	}
+
+	public void setDefaultTimezone(String defaultTimezone) {
+		this.defaultTimezone = defaultTimezone;
+	}
 }

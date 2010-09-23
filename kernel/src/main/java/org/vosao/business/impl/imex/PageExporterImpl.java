@@ -187,6 +187,8 @@ public class PageExporterImpl extends AbstractExporter
 				page.getContentType()));
 		pageElement.addElement("wikiProcessing").setText(String.valueOf(
 				page.isWikiProcessing()));
+		pageElement.addElement("enableCkeditor").setText(String.valueOf(
+				page.isEnableCkeditor()));
 		List<ContentEntity> contents = getDao().getPageDao().getContents(
 				page.getId()); 
 		for (ContentEntity content : contents) {
@@ -372,6 +374,10 @@ public class PageExporterImpl extends AbstractExporter
 			if (element.getName().equals("wikiProcessing")) {
 				newPage.setWikiProcessing(XmlUtil.readBooleanText(element, 
 						false));
+			}
+			if (element.getName().equals("enableCkeditor")) {
+				newPage.setEnableCkeditor(XmlUtil.readBooleanText(element, 
+						true));
 			}
 		}
 		PageEntity page = getDao().getPageDao().getByUrlVersion(url, 

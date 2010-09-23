@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.vosao.business.Business;
 import org.vosao.business.mq.MessageQueue;
+import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.service.BackService;
 import org.vosao.service.FrontService;
@@ -52,6 +53,7 @@ public class VosaoContext {
 	
 	private Locale locale;
 	private UserEntity user;
+	private ConfigEntity config;
 	private Business business;
 	private FrontService frontService;
 	private BackService backService;
@@ -94,7 +96,7 @@ public class VosaoContext {
 	}
 	
 	private static ThreadLocal<VosaoContext> threadInstance;
-	
+ 
 	public static VosaoContext getInstance() {
 		if (threadInstance == null) {
 			threadInstance = new ThreadLocal<VosaoContext>() {
@@ -170,6 +172,20 @@ public class VosaoContext {
 
 	public void setResponse(HttpServletResponse response) {
 		this.response = response;
+	}
+
+	public ConfigEntity getConfig() {
+		if (config == null) {
+			config = getBusiness().getDao().getConfigDao().getConfig();
+			if (config == null) {
+				config = new ConfigEntity();
+			}
+		}
+		return config;
+	}
+
+	public void setConfig(ConfigEntity config) {
+		this.config = config;
 	}
 
 }

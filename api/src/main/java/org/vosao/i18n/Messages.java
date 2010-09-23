@@ -33,6 +33,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.vosao.common.VosaoContext;
+import org.vosao.dao.Dao;
+import org.vosao.entity.ConfigEntity;
 
 /**
  * Message bundle helper class for creatng localized messages from Java code.
@@ -90,6 +92,10 @@ public class Messages {
 		return pattern;
 	}
 	
+	private static Dao getDao() {
+		return VosaoContext.getInstance().getBusiness().getDao();
+	}
+	
 	/**
 	 * Generate JavaScript JSON message bundle for JavaScript messages 
 	 * localization.
@@ -114,11 +120,14 @@ public class Messages {
 			catch (MissingResourceException e) {
 			}
 		}
+		ConfigEntity config = VosaoContext.getInstance().getConfig();
 		StringBuffer result = new StringBuffer();
 		result.append("var locale = '").append(ctx.getLocale().toString())
 				.append("';\n");
 		result.append("var locale_language = '")
 			.append(ctx.getLocale().getLanguage()).append("';\n");
+		result.append("var default_language = '")
+			.append(config.getDefaultLanguage()).append("';\n");
 		result.append(
 				"function messages(key) {\n" 
 			  + "  if (_messages[key] == 'undefined') {\n"

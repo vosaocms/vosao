@@ -41,6 +41,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 import org.vosao.common.UploadException;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FormEntity;
 import org.vosao.i18n.Messages;
@@ -131,7 +132,7 @@ public class FormSendServlet extends AbstractServlet {
 		if (form == null) {
 			throw new UploadException(Messages.get("form.not_found", formName));
 		}
-		ConfigEntity config = getDao().getConfigDao().getConfig();
+		ConfigEntity config = VosaoContext.getInstance().getConfig();
 		String challenge = parameters.get("recaptcha_challenge_field");
 		String response = parameters.get("recaptcha_response_field");
 		if (form.isEnableCaptcha() && config.isEnableRecaptcha()) {

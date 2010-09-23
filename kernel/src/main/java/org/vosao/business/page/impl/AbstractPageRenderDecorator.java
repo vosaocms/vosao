@@ -31,6 +31,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.page.PageRenderDecorator;
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
 import org.vosao.global.SystemService;
@@ -171,7 +172,7 @@ public abstract class AbstractPageRenderDecorator implements PageRenderDecorator
 	
 	public String getComments() {
 		if (isCommentsEnabled()) {
-			String commentsTemplate = getDao().getConfigDao().getConfig()
+			String commentsTemplate = VosaoContext.getInstance().getConfig()
 				.getCommentsTemplate();
 			if (StringUtils.isEmpty(commentsTemplate)) {
 				logger.error(Messages.get("config.comments_template_is_empty"));

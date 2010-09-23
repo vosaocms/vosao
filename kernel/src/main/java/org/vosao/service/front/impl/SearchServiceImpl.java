@@ -22,12 +22,8 @@
 
 package org.vosao.service.front.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.vosao.entity.LanguageEntity;
+import org.vosao.common.VosaoContext;
+import org.vosao.entity.ConfigEntity;
 import org.vosao.search.Hit;
 import org.vosao.search.SearchResult;
 import org.vosao.service.front.SearchService;
@@ -44,14 +40,15 @@ public class SearchServiceImpl extends AbstractServiceImpl
 		String language = getBusiness().getLanguage();
 		SearchResult result = getBusiness().getSearchEngine().search(
 				query, start, count, language, textSize);
-		if (!language.equals(LanguageEntity.ENGLISH_CODE)) {
+		ConfigEntity config = VosaoContext.getInstance().getConfig();
+		if (!language.equals(config.getDefaultLanguage())) {
 			SearchResult enResult = getBusiness().getSearchEngine().search(
-					query, start, count, LanguageEntity.ENGLISH_CODE, 
+					query, start, count, config.getDefaultLanguage(), 
 					textSize);
 			for (Hit hit : enResult.getHits()) {
 				hit.setLocalTitle(hit.getTitle());
 				hit.setUrl(hit.getUrl() + "?language=" 
-						+ LanguageEntity.ENGLISH_CODE);
+						+ config.getDefaultLanguage());
 			}
 			result.setCount(result.getCount() + enResult.getCount());
 			result.getHits().addAll(enResult.getHits());

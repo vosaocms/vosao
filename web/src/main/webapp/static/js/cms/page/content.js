@@ -458,7 +458,7 @@ function getTitle() {
 
 function getTitles() {
 	if (!editMode) {
-		return '{en:"' + $('#title').val() +'"}';
+		return '{' + Vosao.ENGLISH_CODE + ':"' + $('#title').val() +'"}';
 	}
 	titles[currentLanguage] = $('#titleLocal').val();
 	var result = '{';

@@ -28,6 +28,7 @@ import java.net.URL;
 import java.util.List;
 
 import org.vosao.business.PicasaBusiness;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.i18n.Messages;
 import org.vosao.utils.FolderUtil;
@@ -59,7 +60,7 @@ public class PicasaBusinessImpl extends AbstractBusinessImpl
 	public PicasawebService getPicasawebService() {
 		if (picasawebService == null) {
 			picasawebService = new PicasawebService("vosao-cms");
-			ConfigEntity config = getDao().getConfigDao().getConfig();
+			ConfigEntity config = VosaoContext.getInstance().getConfig();
 			if (config.isEnablePicasa()) {
 				try {
 					picasawebService.setUserCredentials(config.getPicasaUser(),
@@ -74,7 +75,7 @@ public class PicasaBusinessImpl extends AbstractBusinessImpl
 	}
 	
 	private String getUsername() {
-		return getDao().getConfigDao().getConfig().getPicasaUser();
+		return VosaoContext.getInstance().getConfig().getPicasaUser();
 	}
 
 	private String getPicasaURL() {

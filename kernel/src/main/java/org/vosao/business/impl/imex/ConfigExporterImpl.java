@@ -32,6 +32,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.imex.ConfigExporter;
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.LanguageEntity;
@@ -80,6 +81,8 @@ public class ConfigExporterImpl extends AbstractExporter
 				String.valueOf(config.isEnableCkeditor()));
 		configElement.addElement("defaultTimezone").setText(notNull(
 				config.getDefaultTimezone()));
+		configElement.addElement("defaultLanguage").setText(notNull(
+				config.getDefaultLanguage()));
 		createLanguagesXML(configElement);
 		createAttributesXML(configElement);
 	}
@@ -153,6 +156,9 @@ public class ConfigExporterImpl extends AbstractExporter
             if (element.getName().equals("defaultTimezone")) {
             	config.setDefaultTimezone(element.getText());
             }
+            if (element.getName().equals("defaultLanguage")) {
+            	config.setDefaultLanguage(element.getText());
+            }
 		}
 		getDaoTaskAdapter().configSave(config);
 	}
@@ -177,7 +183,7 @@ public class ConfigExporterImpl extends AbstractExporter
 	}
 	
 	private ConfigEntity getConfig() {
-		return getDao().getConfigDao().getConfig();
+		return VosaoContext.getInstance().getConfig();
 	}
 	
 	public void readAttributes(Element attributesElement) 

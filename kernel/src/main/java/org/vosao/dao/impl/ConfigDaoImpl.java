@@ -24,6 +24,7 @@ package org.vosao.dao.impl;
 
 import java.util.List;
 
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.BaseDaoImpl;
 import org.vosao.dao.ConfigDao;
 import org.vosao.entity.ConfigEntity;
@@ -45,4 +46,10 @@ public class ConfigDaoImpl extends BaseDaoImpl<ConfigEntity>
 		return new ConfigEntity();
 	}
 
+	@Override
+	public ConfigEntity save(ConfigEntity entity) {
+		VosaoContext.getInstance().setConfig(entity);
+		return super.save(entity);
+	}
+	
 }

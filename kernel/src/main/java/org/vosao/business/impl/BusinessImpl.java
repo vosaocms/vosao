@@ -439,7 +439,7 @@ public class BusinessImpl implements Business, Serializable {
 				&& !StringUtils.isEmpty(getUser().getTimezone())) {
 			return TimeZone.getTimeZone(getUser().getTimezone());
 		}
-		ConfigEntity config = getDao().getConfigDao().getConfig();
+		ConfigEntity config = VosaoContext.getInstance().getConfig();
 		if (!StringUtils.isEmpty(config.getDefaultTimezone())) {
 			return TimeZone.getTimeZone(config.getDefaultTimezone());
 		}

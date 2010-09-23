@@ -42,6 +42,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
+import org.vosao.common.VosaoContext;
 import org.vosao.enums.PageState;
 import org.vosao.enums.PageType;
 import org.vosao.utils.DateUtil;
@@ -373,18 +374,22 @@ public class PageEntity extends BaseEntityImpl {
 	}
 
 	public String getTitle() {
-		return getLocalTitle("en");
+		return getLocalTitle(VosaoContext.getInstance().getConfig()
+				.getDefaultLanguage());
 	}
 
 	public void setTitle(String title) {
-		setLocalTitle(title, "en");
+		setLocalTitle(title, VosaoContext.getInstance().getConfig()
+				.getDefaultLanguage());
 	}
 
 	public String getLocalTitle(String lang) {
 		parseTitle();
-		if (!"en".equals(lang)) {
+		if (!VosaoContext.getInstance().getConfig()
+				.getDefaultLanguage().equals(lang)) {
 			if (StringUtils.isEmpty(titles.get(lang))) {
-				return titles.get("en");
+				return titles.get(VosaoContext.getInstance().getConfig()
+						.getDefaultLanguage());
 			}
 		}
 		return titles.get(lang);
@@ -420,6 +425,7 @@ public class PageEntity extends BaseEntityImpl {
 	}
 
 	public Map<String, String> getTitles() {
+		parseTitle();
 		return titles;
 	}
 

@@ -51,7 +51,7 @@ public class CommentBusinessImpl extends AbstractBusinessImpl
 	public CommentEntity addComment(String name, String content, 
 			PageEntity page) {
 
-		ConfigEntity config = getDao().getConfigDao().getConfig();
+		ConfigEntity config = VosaoContext.getInstance().getConfig();
 		CommentEntity comment = new CommentEntity(name, content, 
 				new Date(), page.getFriendlyURL());
 		getDao().getCommentDao().save(comment);
@@ -73,7 +73,7 @@ public class CommentBusinessImpl extends AbstractBusinessImpl
 	}
 	
 	private String createCommentLetter(CommentEntity comment, PageEntity page) {
-		ConfigEntity config = getDao().getConfigDao().getConfig();
+		ConfigEntity config = VosaoContext.getInstance().getConfig();
 		StringBuffer b = new StringBuffer();
 		b.append("<p>New comment was added to page ")
 		    .append(config.getSiteDomain()).append(page.getFriendlyURL())

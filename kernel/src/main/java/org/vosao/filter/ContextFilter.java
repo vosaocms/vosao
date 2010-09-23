@@ -55,6 +55,7 @@ public class ContextFilter extends AbstractFilter implements Filter {
     	VosaoContext ctx = VosaoContext.getInstance();
     	ctx.setRequest((HttpServletRequest)request);
     	ctx.setResponse((HttpServletResponse)response);
+    	ctx.setConfig(null);
     	if (ctx.getMessageQueue() == null) {
         	ctx.setMessageQueue(new MessageQueueImpl());
     	}

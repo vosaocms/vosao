@@ -22,12 +22,7 @@
 
 package org.vosao.entity;
 
-import static org.vosao.utils.EntityUtil.getBooleanProperty;
-import static org.vosao.utils.EntityUtil.getMapProperty;
-import static org.vosao.utils.EntityUtil.getStringProperty;
-import static org.vosao.utils.EntityUtil.getTextProperty;
-import static org.vosao.utils.EntityUtil.setProperty;
-import static org.vosao.utils.EntityUtil.setTextProperty;
+import static org.vosao.utils.EntityUtil.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,11 +50,13 @@ public class ConfigEntity extends BaseEntityImpl {
 	private boolean enableCkeditor;
 	private Map<String, String> attributes;
 	private String defaultTimezone;
+	private String defaultLanguage;
 
 	public ConfigEntity() {
 		commentsTemplate = "";
 		enableCkeditor = true;
 		attributes = new HashMap<String, String>();
+		defaultLanguage = "en";
 	}
 
 	@Override
@@ -82,6 +79,7 @@ public class ConfigEntity extends BaseEntityImpl {
 		enableCkeditor = getBooleanProperty(entity, "enableCkeditor", true);
 		attributes = getMapProperty(entity, "attributes");
 		defaultTimezone = getStringProperty(entity, "defaultTimezone");
+		defaultLanguage = getStringProperty(entity, "defaultLanguage", "en");
 	}
 	
 	@Override
@@ -104,6 +102,7 @@ public class ConfigEntity extends BaseEntityImpl {
 		setProperty(entity, "enableCkeditor", enableCkeditor, false);
 		setProperty(entity, "attributes", attributes);
 		setProperty(entity, "defaultTimezone", defaultTimezone, false);
+		setProperty(entity, "defaultLanguage", defaultLanguage, false);
 	}
 
 	public String getGoogleAnalyticsId() {
@@ -244,5 +243,13 @@ public class ConfigEntity extends BaseEntityImpl {
 
 	public void setDefaultTimezone(String defaultTimezone) {
 		this.defaultTimezone = defaultTimezone;
+	}
+
+	public String getDefaultLanguage() {
+		return defaultLanguage;
+	}
+
+	public void setDefaultLanguage(String defaultLanguage) {
+		this.defaultLanguage = defaultLanguage;
 	}
 }

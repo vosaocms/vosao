@@ -98,7 +98,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 	public void configSave(ConfigEntity entity) throws DaoTaskException {
 		if (isSkip()) {
 			if (entity.getId() == null) {
-				ConfigEntity config = getDao().getConfigDao().getConfig();
+				ConfigEntity config = VosaoContext.getInstance().getConfig();
 				entity.setId(config.getId());
 			}
 		}

@@ -103,6 +103,9 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 		if (vo.get("defaultTimezone") != null) {
 			config.setDefaultTimezone(vo.get("defaultTimezone"));
 		}
+		if (vo.get("defaultLanguage") != null) {
+			config.setDefaultLanguage(vo.get("defaultLanguage"));
+		}
 		List<String> errors = getBusiness().getConfigBusiness()
 				.validateBeforeUpdate(config);
 		if (errors.isEmpty()) {

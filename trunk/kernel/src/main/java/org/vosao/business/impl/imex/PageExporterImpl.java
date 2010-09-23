@@ -35,8 +35,10 @@ import org.json.JSONObject;
 import org.vosao.business.imex.PageExporter;
 import org.vosao.business.imex.PagePermissionExporter;
 import org.vosao.business.imex.ResourceExporter;
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.CommentEntity;
+import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
@@ -386,13 +388,14 @@ public class PageExporterImpl extends AbstractExporter
 	
 	private void readContents(Element pageElement, PageEntity page) 
 			throws DaoTaskException {
+		ConfigEntity config = VosaoContext.getInstance().getConfig();
 		for (Iterator<Element> i = pageElement.elementIterator(); i.hasNext();) {
 			Element element = i.next();
 			if (element.getName().equals("content")) {
 				String content = element.getText();
 				String language = element.attributeValue("language");
 				if (language == null) {
-					language = LanguageEntity.ENGLISH_CODE;
+					language = config.getDefaultLanguage();
 				}
 				getDaoTaskAdapter().setPageContent(page.getId(), language, 
 						content);

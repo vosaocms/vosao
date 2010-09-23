@@ -83,6 +83,10 @@
          <select id="timezone"></select>
     </div>    
     <div class="form-row">
+        <label>$messages.get("page.select_language"):</label> 
+        <select id="language"></select>
+    </div>
+    <div class="form-row">
         <label>$messages.get("config.enable_picasa")</label>
         <input id="enablePicasa" type="checkbox" />
     </div>

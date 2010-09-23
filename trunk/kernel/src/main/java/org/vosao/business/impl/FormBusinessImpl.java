@@ -36,6 +36,7 @@ import org.vosao.business.FileBusiness;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.FormBusiness;
 import org.vosao.common.UploadException;
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.FormDao;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.FieldEntity;
@@ -153,7 +154,7 @@ public class FormBusinessImpl extends AbstractBusinessImpl
 	@Override
 	public String sendEmail(FormDataEntity formData) {
 		FormEntity form = getFormDao().getById(formData.getFormId());
-		ConfigEntity config = getDao().getConfigDao().getConfig();
+		ConfigEntity config = VosaoContext.getInstance().getConfig();
 		FormConfigEntity formConfig = getDao().getFormConfigDao().getConfig();
 		VelocityContext context = new VelocityContext();
 		List<FieldEntity> fields = getDao().getFieldDao().getByForm(form);

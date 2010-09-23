@@ -79,14 +79,19 @@ public class EntityUtil {
 	}
 
 	public static String getStringProperty(Entity entity, String name) {
+		return getStringProperty(entity, name, null);
+	}
+
+	public static String getStringProperty(Entity entity, String name,
+			String defaultValue) {
 		Object p = entity.getProperty(name);
 		if (p == null) {
-			return null;
+			return defaultValue;
 		}
 		if (p instanceof String) {
 			return (String) p;
 		}
-		return null;
+		return defaultValue;
 	}
 
 	public static String getTextProperty(Entity entity, String name) {

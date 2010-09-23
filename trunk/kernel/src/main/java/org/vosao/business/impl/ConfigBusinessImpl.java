@@ -37,7 +37,7 @@ public class ConfigBusinessImpl extends AbstractBusinessImpl
 
 	@Override
 	public ConfigEntity getConfig() {
-		return getDao().getConfigDao().getConfig();
+		return VosaoContext.getInstance().getConfig();
 	}
 
 	@Override

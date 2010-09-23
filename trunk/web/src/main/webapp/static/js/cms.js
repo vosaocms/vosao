@@ -37,7 +37,7 @@ if (Vosao == undefined) {
  */
 Vosao.AUTOSAVE_TIMEOUT = 60;
 
-Vosao.ENGLISH_CODE = 'en';
+Vosao.ENGLISH_CODE = default_language;
 
 //************************** Utility functions *********************************
 

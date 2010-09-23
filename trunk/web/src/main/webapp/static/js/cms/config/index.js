@@ -27,6 +27,7 @@ var clockSeconds = 0;
 var exportFilename = null;
 var exportType = null;
 var timezones = null;
+var languages = null;
 
 $(function(){
     $("#import-dialog").dialog({ width: 400, autoOpen: false });
@@ -57,12 +58,20 @@ $(function(){
 function loadData() {
     loadConfig();
     loadTimezones();
+    loadLanguages();
 }
 
 function loadTimezones() {
 	Vosao.jsonrpc.userService.getTimezones(function (r) {
         timezones = r.list;
         showTimezones();
+    });
+}
+
+function loadLanguages() {
+	Vosao.jsonrpc.languageService.select(function (r) {
+        languages = r.list;
+        showLanguages();
     });
 }
 
@@ -73,6 +82,16 @@ function showTimezones() {
 	});
 	$('#timezone').html(h);
     $('#timezone').val(config.defaultTimezone);
+}
+
+function showLanguages() {
+	var h = '';
+	$.each(languages, function(i, value) {
+		h += '<option value="' + value.code + '" ' + '>' 
+			+ value.title + '</option>';
+	});
+	$('#language').html(h);
+    $('#language').val(config.defaultLanguage);
 }
 
 function toggleRecaptcha() {
@@ -161,6 +180,7 @@ function onSave() {
         picasaPassword : $('#picasaPassword').val(),
         editExt : $('#editExt').val(),
         defaultTimezone : $('#timezone').val(),
+        defaultLanguage : $('#language').val(),
         siteUserLoginUrl : $('#siteUserLoginUrl').val()        
     });
     Vosao.jsonrpc.configService.saveConfig(function(r) {

@@ -94,7 +94,7 @@ public class UserBusinessImpl extends AbstractBusinessImpl
 			logger.error(e.getMessage());
 			return;
 		}
-		ConfigEntity config = getDao().getConfigDao().getConfig();
+		ConfigEntity config = VosaoContext.getInstance().getConfig();
 		VelocityContext context = new VelocityContext();
 		context.put("user", user);
 		context.put("config", config);

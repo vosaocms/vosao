@@ -70,8 +70,9 @@ $(function(){
 function loadData() {
 	Vosao.jsonrpc.pageService.getPageRequest(function(r) {
 		pageRequest = r;
+		page = pageRequest.page;
 		editTextarea = !pageRequest.config.enableCkeditor 
-				|| pageRequest.page.wikiProcessing;
+				|| pageRequest.page.wikiProcessing || !page.enableCkeditor;
 		var wikiHelp = pageRequest.page.wikiProcessing ? 
 				' <a href="http://en.wikipedia.org/wiki/Help:Wiki_markup" '
 				+ 'target="blank">Wiki syntax</a>'
@@ -84,7 +85,6 @@ function loadData() {
 			$('#editorButtons').html('<a href="#" onclick="onEditTextarea()">'
 				+ messages('page.edit_textarea') + '</a>' + wikiHelp);
 		}
-		page = pageRequest.page;
 		loadLanguages();
 		loadPage();
 		breadcrumbsShow();

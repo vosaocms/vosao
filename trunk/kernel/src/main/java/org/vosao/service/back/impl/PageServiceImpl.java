@@ -274,8 +274,10 @@ public class PageServiceImpl extends AbstractServiceImpl
 			page.setContentType(vo.get("contentType"));
 		}
 		if (vo.get("wikiProcessing") != null) {
-			page.setWikiProcessing(Boolean.valueOf(vo
-					.get("wikiProcessing")));
+			page.setWikiProcessing(Boolean.valueOf(vo.get("wikiProcessing")));
+		}
+		if (vo.get("enableCkeditor") != null) {
+			page.setEnableCkeditor(Boolean.valueOf(vo.get("enableCkeditor")));
 		}
 		List<String> errors = getPageBusiness().validateBeforeUpdate(page);
 		if (errors.isEmpty()) {
@@ -382,10 +384,6 @@ public class PageServiceImpl extends AbstractServiceImpl
 		try {
 			PageRequestVO result = new PageRequestVO();
 			result.setPage(getPage(id));
-			
-			logger.info("title: " + result.getPage().getTitleValue());
-			logger.info("titles: " + result.getPage().getTitles().toString());
-			
 			result.setConfig(VosaoContext.getInstance().getConfig());
 			String permUrl = parentUrl;
 			if (result.getPage() != null) {

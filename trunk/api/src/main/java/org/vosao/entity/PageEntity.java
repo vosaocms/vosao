@@ -86,6 +86,7 @@ public class PageEntity extends BaseEntityImpl {
 	private boolean skipPostProcessing;
 	private boolean cached;
 	private String contentType;
+	private boolean enableCkeditor;
 
 	// not persisted
 	private Map<String, String> titles;
@@ -106,6 +107,7 @@ public class PageEntity extends BaseEntityImpl {
 		wikiProcessing = false;
 		skipPostProcessing = false;
 		cached = true;
+		enableCkeditor = true;
 	}
 	
 	@Override
@@ -134,6 +136,7 @@ public class PageEntity extends BaseEntityImpl {
 		cached = getBooleanProperty(entity, "cached", true);
 		contentType = getStringProperty(entity, "contentType");
 		wikiProcessing = getBooleanProperty(entity, "wikiProcessing", false);
+		enableCkeditor = getBooleanProperty(entity, "enableCkeditor", true);
 	}
 	
 	@Override
@@ -162,6 +165,7 @@ public class PageEntity extends BaseEntityImpl {
 		setProperty(entity, "cached", cached, false);
 		setProperty(entity, "contentType", contentType, false);
 		setProperty(entity, "wikiProcessing", wikiProcessing, false);
+		setProperty(entity, "enableCkeditor", enableCkeditor, false);
 	}
 
 	public PageEntity(String title, String friendlyURL, 
@@ -529,5 +533,13 @@ public class PageEntity extends BaseEntityImpl {
 
 	public void setEndPublishDate(Date endPublishDate) {
 		this.endPublishDate = endPublishDate;
+	}
+
+	public boolean isEnableCkeditor() {
+		return enableCkeditor;
+	}
+
+	public void setEnableCkeditor(boolean value) {
+		this.enableCkeditor = value;
 	}
 }

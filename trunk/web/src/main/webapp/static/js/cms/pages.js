@@ -56,6 +56,14 @@ function loadTree() {
 				$(event.target).siblings('.page_edit').show()			
 			});
 		});
+		$('#pages-tree li').each(function () {
+			$(this).hover(function(event) {
+				$('.page_edit').hide();
+				$('> .page_edit', event.target).show();			
+			}, function(event) {
+				//$('> .page_edit', event.target).hide();			
+			});
+		});
 	});
 }
 

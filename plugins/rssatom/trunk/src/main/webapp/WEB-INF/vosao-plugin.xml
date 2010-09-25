@@ -1,7 +1,7 @@
 <vosao-plugin>
     <name>rssatom</name>
     <title>$rssatom.title</title>
-    <version>0.7</version>
+    <version>0.8</version>
     <description>$rssatom.description</description>
     <website>www.vosao.org</website>
     <config>

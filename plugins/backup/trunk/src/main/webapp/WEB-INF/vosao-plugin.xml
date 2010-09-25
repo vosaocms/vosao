@@ -1,7 +1,7 @@
 <vosao-plugin>
     <name>backup</name>
     <title>$backup.title</title>
-    <version>0.7</version>
+    <version>0.8</version>
     <description>$backup.description</description>
     <website>www.vosao.org</website>
     <config>

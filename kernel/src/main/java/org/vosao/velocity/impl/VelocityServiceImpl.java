@@ -264,5 +264,32 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 			return Collections.EMPTY_LIST;
 		}
 	}
+
+	@Override
+	public List<PageEntity> findPageChildren(List<String> paths) {
+		List<PageEntity> result = new ArrayList<PageEntity>();
+		for (String path: paths) {
+			result.addAll(findPageChildren(path));
+		}	
+		Collections.sort(result, PageHelper.PUBLISH_DATE);
+		return result;
+	}
+
+	@Override
+	public List<PageEntity> findPageChildren(List<String> paths, int start,
+			int count) {
+		return ListUtil.slice(findPageChildren(paths), start, count);
+	}
+
+	@Override
+	public List<PageEntity> findPageChildrenMonth(List<String> paths, int year,
+			int month) {
+		List<PageEntity> result = new ArrayList<PageEntity>();
+		for (String path: paths) {
+			result.addAll(findPageChildrenMonth(path, year, month));
+		}
+		Collections.sort(result, PageHelper.PUBLISH_DATE);
+		return result;
+	}
 	
 }

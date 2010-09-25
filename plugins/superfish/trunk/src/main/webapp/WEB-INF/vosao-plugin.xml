@@ -1,7 +1,7 @@
 <vosao-plugin>
     <name>superfish</name>
     <title>$superfish.title</title>
-    <version>0.7</version>
+    <version>0.8</version>
     <description>$superfish.description</description>
     <website>www.vosao.org</website>
     <entry-point-class>

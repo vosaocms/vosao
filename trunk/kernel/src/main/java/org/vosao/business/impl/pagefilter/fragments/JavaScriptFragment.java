@@ -24,18 +24,23 @@ package org.vosao.business.impl.pagefilter.fragments;
 
 import org.vosao.business.Business;
 import org.vosao.business.impl.pagefilter.ContentFragment;
+import org.vosao.common.VosaoContext;
+import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.PageEntity;
 
 public class JavaScriptFragment	implements ContentFragment {
 
 	@Override
 	public String get(Business business, PageEntity page) {
+		ConfigEntity config = VosaoContext.getInstance().getConfig();
 		StringBuffer code = new StringBuffer( 
 		    "<script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js\" type=\"text/javascript\"></script>\n"
 		    +  "<script src=\"/static/js/jquery.form.js\" type=\"text/javascript\"></script>\n"
             +  "<script src=\"/static/js/jsonrpc.js\" type=\"text/javascript\"></script>\n"
-            +  "<script src=\"/static/js/vosao.js\" type=\"text/javascript\"></script>\n"
-            +  "<script src=\"http://api.recaptcha.net/js/recaptcha_ajax.js\" type=\"text/javascript\" ></script>\n");
+            +  "<script src=\"/static/js/vosao.js\" type=\"text/javascript\"></script>\n");
+		if (config.isEnableRecaptcha()) {
+            code.append("<script src=\"http://api.recaptcha.net/js/recaptcha_ajax.js\" type=\"text/javascript\" ></script>\n");
+		}
 		return code.toString();
 	}
 

@@ -11,9 +11,9 @@
 
 #if ($field.fieldType == 'TEXT')
     #if ($field.height > 1) 
-<textarea name="$field.name" rows="$field.height" cols="$field.width">$field.defaultValue</textarea>
+<textarea name="$field.name" rows="$field.height" cols="$field.width">$!field.defaultValue</textarea>
     #else
-<input type="text" name="$field.name" value="$field.defaultValue" 
+<input type="text" name="$field.name" value="$!field.defaultValue" 
     size="$field.width" />
     #end
 

@@ -165,7 +165,11 @@ public class StructurePageRenderDecorator extends AbstractPageRenderDecorator {
 		Document doc = DocumentHelper.parseText(xml);
 		for (StructureFieldVO field : fields) {
 				String fieldContent = doc.getRootElement().elementText(
-						field.getName()).replace("]]]", "]]>");
+						field.getName());
+				if (fieldContent == null) {
+					continue;
+				}
+				fieldContent = fieldContent.replace("]]]", "]]>");
 				result.put(field.getName(), fieldContent);
 		}
 		return result;

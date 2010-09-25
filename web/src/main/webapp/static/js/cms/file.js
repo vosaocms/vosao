@@ -93,6 +93,7 @@ function loadFile() {
 
 function initFormFields() {
 	if (editMode) {
+		$('#filename').html(file.name);
 		$('#title').val(file.title);
 		$('#name').val(file.name);
 		$('#fileEditDiv').show();
@@ -112,6 +113,7 @@ function initFormFields() {
 			$('#imageContent').html('');
 		}
 	} else {
+		$('#filename').html('');
 		$('#title').val('');
 		$('#name').val('');
 		$('#fileEditDiv').hide();

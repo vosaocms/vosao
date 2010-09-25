@@ -50,6 +50,14 @@ public interface VelocityService {
 	List<PageEntity> findPageChildren(final String path);
 
 	/**
+	 * Find approved last versions of children pages entity by parent pages
+	 * friendlyURL. Ordered by publishDate.
+	 * @param paths - friendly urls.
+	 * @return list of found pages.
+	 */
+	List<PageEntity> findPageChildren(final List<String> paths);
+
+	/**
 	 * Find approved last versions of children pages entity by parent page
 	 * friendlyURL. Ordered by publishDate.
 	 * @param path - friendly url.
@@ -70,9 +78,20 @@ public interface VelocityService {
 			final int count);
 
 	/**
+	 * Find approved last versions of children pages entity by parent pages
+	 * friendlyURL. Ordered by publishDate.
+	 * @param paths - friendly urls.
+	 * @param start - start page index. 0 - based.
+	 * @param count - maximum list size.
+	 * @return list of found pages.
+	 */
+	List<PageEntity> findPageChildren(final List<String> paths, final int start, 
+			final int count);
+
+	/**
 	 * Find approved last versions of children pages entity by parent page
 	 * friendlyURL and publish date.
-	 * @param path - firnedly url.
+	 * @param path - friendly url.
 	 * @param publishDate - publishDate.
 	 * @return list of found pages.
 	 */
@@ -82,7 +101,7 @@ public interface VelocityService {
 	/**
 	 * Find approved last versions of children pages entity by parent page
 	 * friendlyURL and publish date in period between startDate end endDate.
-	 * @param path - firnedly url.
+	 * @param path - friendly url.
 	 * @param startDate - period start publish date (inclusive).
 	 * @param endDate - period end publish date (exclusive).
 	 * @return list of found pages.
@@ -93,12 +112,23 @@ public interface VelocityService {
 	/**
 	 * Find approved last versions of children pages entity by parent page
 	 * friendlyURL and publish date in period adjusted by year and month.
-	 * @param path - firnedly url.
+	 * @param path - friendly url.
 	 * @param year - year of period.
 	 * @param month - month of period.
 	 * @return list of found pages.
 	 */
 	List<PageEntity> findPageChildrenMonth(final String path, 
+			final int year, final int month);
+
+	/**
+	 * Find approved last versions of children pages entity by parent pages
+	 * friendlyURL and publish date in period adjusted by year and month.
+	 * @param paths - friendly urls.
+	 * @param year - year of period.
+	 * @param month - month of period.
+	 * @return list of found pages.
+	 */
+	List<PageEntity> findPageChildrenMonth(final List<String> paths, 
 			final int year, final int month);
 
 	/**

@@ -58,7 +58,7 @@
     <div class="form-row">
         <label>$messages.get("user_role")</label>
         <select id="userRole">
-            <option value="SITE_USER">$messages.get("site_user")</option>
+            <option value="SITE_USER" selected="selected">$messages.get("site_user")</option>
             <option value="USER">$messages.get("user")</option>
             <option value="ADMIN">$messages.get("administrator")</option>
         </select>

@@ -50,7 +50,8 @@ public class Messages {
 		Locale.ENGLISH,
 		Locale.GERMAN,
 		new Locale("ru"),
-		Locale.JAPANESE};
+		Locale.JAPANESE,
+		Locale.CHINESE};
 	
 	private static Map<Locale, VosaoResourceBundle> bundles = 
 			new HashMap<Locale, VosaoResourceBundle>();

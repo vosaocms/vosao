@@ -26,4 +26,5 @@
     <a href="#" onclick="Vosao.changeLanguage('de')">Deutsch</a>
     <a href="#" onclick="Vosao.changeLanguage('ru')">Русский</a>
     <a href="#" onclick="Vosao.changeLanguage('ja')">日本語</a>
+    <a href="#" onclick="Vosao.changeLanguage('zh')">Chinese</a>
 </div>

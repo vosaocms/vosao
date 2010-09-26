@@ -20,19 +20,48 @@
  * email: vosao.dev@gmail.com
  */
 
+/**
+ * Vosao CMS. Simple CMS for Google App Engine.
+ * 
+ * Copyright (C) 2009-2010 Vosao development team.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * email: vosao.dev@gmail.com
+ */
+
 package org.vosao.bliki;
 
 import info.bliki.htmlcleaner.ContentToken;
+import info.bliki.htmlcleaner.TagNode;
 import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.WikipediaParser;
+import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.ImageFormat;
 import info.bliki.wiki.model.WikiModel;
 import info.bliki.wiki.tags.WPATag;
+import info.bliki.wiki.tags.extension.ChartTag;
+
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
+import org.vosao.entity.ContentEntity;
+import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 
@@ -46,6 +75,15 @@ public class VosaoWikiModel extends WikiModel {
 	private static final Log logger = LogFactory.getLog(VosaoWikiModel.class);
 	
 	final PageEntity page;
+
+	static {
+		// allow style attributes in tags like div and span. 
+		// May be a security risk cause of Cross Site Scripting XSS.
+		TagNode.addAllowedAttribute("style");
+		// Add &lt;chart&gt; tag for Google Chart API
+		// See http://code.google.com/p/gwtwiki/wiki/TagExtensions
+		Configuration.DEFAULT_CONFIGURATION.addTokenTag("chart", new ChartTag());
+	}
 
 	public VosaoWikiModel(PageEntity page) {
 		super("", "");
@@ -119,7 +157,43 @@ public class VosaoWikiModel extends WikiModel {
 	private Dao getDao() {
 		return VosaoContext.getInstance().getBusiness().getDao();
 	}
-	
+
+	/**
+	 * Get the raw text of the MediaWiki template. 
+	 * 
+	 * See: http://en.wikipedia.org/wiki/Help:Template
+	 */
+	@Override
+	public String getRawWikiContent(String namespace, String articleName, 
+			Map<String, String> templateParameters) {
+		String result = super.getRawWikiContent(namespace, articleName, 
+				templateParameters);
+		if (result != null) {
+			// found magic word template
+			return result;
+		}
+		String encodedtopic = encodeTitleToUrl(articleName, true).toLowerCase();
+		if (isTemplateNamespace(namespace)) {
+			String name;
+			if (encodedtopic.startsWith("/")) {
+				name = encodedtopic;
+			} else {
+				name = fExternalWikiBaseURL.replace("${title}", encodedtopic);
+			}
+
+			PageEntity page = getDao().getPageDao().getByUrl(name);
+			if (page != null) {
+				String languageCode = LanguageEntity.ENGLISH_CODE;
+				ContentEntity content = getDao().getContentDao().getByLanguage(
+						PageEntity.class.getName(), page.getId(), languageCode);
+				if (content != null) {
+					return content.getContent();
+				}
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * Check if the given namespace is an image namespace.
 	 * 
@@ -179,6 +253,15 @@ public class VosaoWikiModel extends WikiModel {
 
 			appendInternalImageLink(imageSrc, imageSrc, imageFormat);
 		}
+	}
+
+	/**
+	 * Activate the rendering of &lt;math&gt; tags 
+	 * through the <a href="http://www.mathtran.org">MathTran.org</a> service
+	 */
+	@Override
+	public boolean isMathtranRenderer() {
+		return true;
 	}
 
 }

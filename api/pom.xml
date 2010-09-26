@@ -189,7 +189,7 @@
 		<dependency>
             <groupId>info.bliki.wiki</groupId>
             <artifactId>bliki-core</artifactId>
-            <version>3.0.14</version>
+            <version>3.0.15</version>
         </dependency>
 
     </dependencies>

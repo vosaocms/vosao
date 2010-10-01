@@ -39,6 +39,7 @@ import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.MessageEntity;
 import org.vosao.entity.PageDependencyEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.PageTagEntity;
 import org.vosao.entity.PluginEntity;
 import org.vosao.entity.SeoUrlEntity;
 import org.vosao.entity.StructureEntity;
@@ -55,6 +56,8 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 
 	private static final Log logger = LogFactory.getLog(DaoTaskAdapterImpl.class);
 
+	private static final int TASK_DURATION = 20;
+	
 	private int current;
 	private int start;
 	private String currentFile;
@@ -84,7 +87,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 
 	private boolean isSkip() throws DaoTaskException {
 		current++;
-		if (getDao().getSystemService().getRequestCPUTimeSeconds() > 25) {
+		if (getDao().getSystemService().getRequestCPUTimeSeconds() > TASK_DURATION) {
 			throw new DaoTaskTimeoutException();
 		}
 		if (current < start) {
@@ -455,6 +458,24 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 		}
 		else {
 			getDao().getPageDependencyDao().save(entity);
+		}
+	}
+
+	@Override
+	public void pageTagSave(PageTagEntity entity) throws DaoTaskException {
+		if (isSkip()) {
+			if (entity.getId() == null) {
+				PageTagEntity found = getDao().getPageTagDao().getByURL(
+						entity.getPageURL());
+				if (found == null) {
+					throw new DaoTaskException("Page Tag not found while " 
+						+ "skipping save operation. " + entity.getPageURL());
+				}
+				entity.setId(found.getId());
+			}
+		}
+		else {
+			getDao().getPageTagDao().save(entity);
 		}
 	}
 

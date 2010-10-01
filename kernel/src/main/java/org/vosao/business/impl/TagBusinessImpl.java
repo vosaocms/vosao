@@ -133,7 +133,6 @@ public class TagBusinessImpl extends AbstractBusinessImpl
 	public TagEntity getByPath(String tagPath) {
 		int start = tagPath.startsWith("/") ? 1 : 0;
 		String[] names = tagPath.substring(start).split("/");
-		logger.info(names.toString());
 		Long parent = null;
 		TagEntity tag = null;
 		for (String name : names) {

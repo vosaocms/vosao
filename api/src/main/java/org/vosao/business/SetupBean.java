@@ -29,7 +29,7 @@ package org.vosao.business;
 public interface SetupBean {
 	
 	public static final String VERSION = "0.7";
-	public static final String FULLVERSION = "0.7";
+	public static final String FULLVERSION = "0.7.1";
 
 	/**
 	 * Initial setup with default site.

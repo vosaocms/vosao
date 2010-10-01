@@ -37,6 +37,8 @@ public class ZipOutStreamTaskAdapterImpl implements ZipOutStreamTaskAdapter {
 	protected static final Log logger = LogFactory
 			.getLog(ZipOutStreamTaskAdapterImpl.class);
 
+	private static final int TASK_DURATION = 20;
+	
 	private Business business;
 	private ByteArrayOutputStream outData;
 	private ZipOutputStream outStream;
@@ -110,7 +112,7 @@ public class ZipOutStreamTaskAdapterImpl implements ZipOutStreamTaskAdapter {
 	}
 
 	private void checkTimeout() throws TaskTimeoutException {
-		if (business.getSystemService().getRequestCPUTimeSeconds() > 25) {
+		if (business.getSystemService().getRequestCPUTimeSeconds() > TASK_DURATION) {
 			throw new TaskTimeoutException();
 		}
 	}

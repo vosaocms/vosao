@@ -21,14 +21,18 @@
 
 package org.vosao.business.impl.imex;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.business.imex.ExporterFactory;
 import org.vosao.business.imex.TagExporter;
 import org.vosao.dao.DaoTaskException;
@@ -44,27 +48,53 @@ public class TagExporterImpl extends AbstractExporter
 		super(factory);
 	}
 	
+	private List<TreeItemDecorator<TagEntity>> getTagTreeRoots() {
+		List<TagEntity> tags = getDao().getTagDao().select();
+		Map<Long, TreeItemDecorator<TagEntity>> buf = 
+			new HashMap<Long, TreeItemDecorator<TagEntity>>();
+		for (TagEntity tag : tags) {
+			buf.put(tag.getId(), new TreeItemDecorator<TagEntity>(tag, 
+					null));
+		}
+		List<TreeItemDecorator<TagEntity>> roots = 
+			new ArrayList<TreeItemDecorator<TagEntity>>();
+		for (Long id : buf.keySet()) {
+			TreeItemDecorator<TagEntity> tag = buf.get(id);
+			if (tag.getEntity().getParent() == null) {
+				roots.add(tag);
+			}
+			else {
+				TreeItemDecorator<TagEntity> parent = buf.get(
+						tag.getEntity().getParent());
+				if (parent != null) {
+					parent.getChildren().add(tag);
+					tag.setParent(parent);
+				}
+			}
+		}
+		return roots;
+	}
+	
 	@Override
 	public String createXML() {
 		Document doc = DocumentHelper.createDocument();
 		Element element = doc.addElement("tags");
-		List<TagEntity> list = getDao().getTagDao().selectByParent(null);
-		for (TagEntity tag : list) {
+		List<TreeItemDecorator<TagEntity>> list = getTagTreeRoots();
+		for (TreeItemDecorator<TagEntity> tag : list) {
 			createTagXML(element, tag);
 		}
 		return doc.asXML();
 	}
 
-	private void createTagXML(Element element, TagEntity tag) {
+	private void createTagXML(Element element, TreeItemDecorator<TagEntity> tag) {
 		Element tagElement = element.addElement("tag");
-		tagElement.addElement("name").setText(tag.getName());
-		String title = tag.getTitle();
+		tagElement.addElement("name").setText(tag.getEntity().getName());
+		String title = tag.getEntity().getTitle();
 		if (StringUtils.isEmpty(title)) {
-			title = tag.getName();
+			title = tag.getEntity().getName();
 		}
 		tagElement.addElement("title").setText(title);
-		List<TagEntity> list = getDao().getTagDao().selectByParent(tag.getId());
-		for (TagEntity child : list) {
+		for (TreeItemDecorator<TagEntity> child : tag.getChildren()) {
 			createTagXML(tagElement, child);
 		}
 	}

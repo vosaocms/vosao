@@ -287,7 +287,7 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 					continue;
 				}
 			}
-			if (getSystemService().getRequestCPUTimeSeconds() > 25) {
+			if (getSystemService().getRequestCPUTimeSeconds() > 20) {
 				throw new RequestTimeoutException(entry.getName());
 			}
 			if (entry.isDirectory()) {

@@ -72,6 +72,6 @@ public interface PageExporter {
 			throws DocumentException;
 
 	boolean readPageTagFile(String folderPath, String xml) 
-			throws DocumentException;
+			throws DocumentException, DaoTaskException;
 	
 }

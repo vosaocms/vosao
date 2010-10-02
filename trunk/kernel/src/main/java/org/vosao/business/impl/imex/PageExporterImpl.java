@@ -511,7 +511,7 @@ public class PageExporterImpl extends AbstractExporter
 
 	@Override
 	public boolean readPageTagFile(String folderPath, String xml)
-			throws DocumentException {
+			throws DocumentException, DaoTaskException {
 		String pageURL = getPageURL(folderPath);
 		if (pageURL == null) {
 			return false;
@@ -521,23 +521,31 @@ public class PageExporterImpl extends AbstractExporter
 		return true;
 	}
 	
-	private void readTags(Element tagsElement, String pageURL) {
+	private void readTags(Element tagsElement, String pageURL) 
+			throws DaoTaskException {
 		for (Iterator<Element> i = tagsElement.elementIterator(); i.hasNext();) {
 			Element element = i.next();
 			if (element.getName().equals("tag")) {
-				readTag(element, pageURL);
+				String path = element.elementText("name");
+				TagEntity tag = getBusiness().getTagBusiness().getByPath(path);
+				if(tag != null) {
+					PageTagEntity pageTag = getDao().getPageTagDao().getByURL(pageURL);
+					if (pageTag == null) {
+						pageTag = new PageTagEntity(pageURL);
+					}
+					if (!pageTag.getTags().contains(tag.getId())) {
+						pageTag.getTags().add(tag.getId());
+					}
+					getDaoTaskAdapter().pageTagSave(pageTag);
+					if (!tag.getPages().contains(pageURL)) {
+						tag.getPages().add(pageURL);
+						getDaoTaskAdapter().tagSave(tag);
+					}
+				}
+				else {
+					logger.error("Tag not found " + path);
+				}			
 			}
-		}
-	}
-	
-	private void readTag(Element tagElement, String pageURL) {
-		String path = tagElement.elementText("name");
-		TagEntity tag = getBusiness().getTagBusiness().getByPath(path);
-		if (tag != null) {
-			getBusiness().getTagBusiness().addTag(pageURL, tag);
-		}
-		else {
-			logger.error("Tag not found " + path);
 		}
 	}
 	

@@ -43,6 +43,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 import org.vosao.common.VosaoContext;
+import org.vosao.entity.field.PageAttributesField;
 import org.vosao.enums.PageState;
 import org.vosao.enums.PageType;
 import org.vosao.utils.DateUtil;
@@ -87,6 +88,7 @@ public class PageEntity extends BaseEntityImpl {
 	private boolean cached;
 	private String contentType;
 	private boolean enableCkeditor;
+	private String attributes;
 
 	// not persisted
 	private Map<String, String> titles;
@@ -137,6 +139,7 @@ public class PageEntity extends BaseEntityImpl {
 		contentType = getStringProperty(entity, "contentType");
 		wikiProcessing = getBooleanProperty(entity, "wikiProcessing", false);
 		enableCkeditor = getBooleanProperty(entity, "enableCkeditor", true);
+		attributes = getStringProperty(entity, "attributes");
 	}
 	
 	@Override
@@ -166,6 +169,7 @@ public class PageEntity extends BaseEntityImpl {
 		setProperty(entity, "contentType", contentType, false);
 		setProperty(entity, "wikiProcessing", wikiProcessing, false);
 		setProperty(entity, "enableCkeditor", enableCkeditor, false);
+		setProperty(entity, "attributes", attributes, false);
 	}
 
 	public PageEntity(String title, String friendlyURL, 
@@ -542,4 +546,27 @@ public class PageEntity extends BaseEntityImpl {
 	public void setEnableCkeditor(boolean value) {
 		this.enableCkeditor = value;
 	}
+
+	public String getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(String attributes) {
+		this.attributes = attributes;
+	}
+	
+	private PageAttributesField attribute;
+	
+	public PageAttributesField getAttribute() {
+		if (attribute == null) {
+			attribute = new PageAttributesField(getAttributes());
+		}
+		return attribute;
+	}
+	
+	public void setAttribute(String name, String language, String value) {
+		getAttribute().set(name, language, value);
+		setAttributes(getAttribute().asJSON());
+	}
+	
 }

@@ -76,6 +76,9 @@ public class VosaoContext {
 	}
 	
 	public String getLanguage() {
+		if (locale == null) {
+			return getConfig().getDefaultLanguage();
+		}
 		return locale.getLanguage();
 	}
 

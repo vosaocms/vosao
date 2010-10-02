@@ -44,6 +44,9 @@
     <li class="securityTab ui-corner-top ui-state-default">
         <a id="resources" href="#">$messages.get("resources")</a>
     </li>
+    <li class="securityTab ui-corner-top ui-state-default">
+        <a id="attributes" href="#">$messages.get("attributes")</a>
+    </li>
 </ul>
 
 <script type="text/javascript">

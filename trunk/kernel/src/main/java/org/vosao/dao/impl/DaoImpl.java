@@ -41,6 +41,7 @@ import org.vosao.dao.FormDataDao;
 import org.vosao.dao.GroupDao;
 import org.vosao.dao.LanguageDao;
 import org.vosao.dao.MessageDao;
+import org.vosao.dao.PageAttributeDao;
 import org.vosao.dao.PageDao;
 import org.vosao.dao.PageDependencyDao;
 import org.vosao.dao.PageTagDao;
@@ -91,6 +92,7 @@ public class DaoImpl implements Dao, Serializable {
 	private PageTagDao pageTagDao;
 	private FormDataDao formDataDao;
 	private PageDependencyDao pageDependencyDao;
+	private PageAttributeDao pageAttributeDao;
 
 	@Override
 	public SystemService getSystemService() {
@@ -421,6 +423,19 @@ public class DaoImpl implements Dao, Serializable {
 	@Override
 	public void setPageDependencyDao(PageDependencyDao bean) {
 		pageDependencyDao = bean;
+	}
+
+	@Override
+	public PageAttributeDao getPageAttributeDao() {
+		if (pageAttributeDao == null) {
+			pageAttributeDao = new PageAttributeDaoImpl();
+		}
+		return pageAttributeDao;
+	}
+
+	@Override
+	public void setPageAttributeDao(PageAttributeDao bean) {
+		pageAttributeDao = bean;
 	}
 
 }

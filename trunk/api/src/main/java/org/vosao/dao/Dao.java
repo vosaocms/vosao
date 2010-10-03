@@ -116,4 +116,8 @@ public interface Dao {
 
 	PageDependencyDao getPageDependencyDao();
 	void setPageDependencyDao(final PageDependencyDao bean);
+	
+	PageAttributeDao getPageAttributeDao();
+	void setPageAttributeDao(final PageAttributeDao bean);
+
 }

@@ -119,4 +119,6 @@ public interface Business {
 	FormDataBusiness getFormDataBusiness();
 	void setFormDataBusiness(final FormDataBusiness bean);
 
+	PageAttributeBusiness getPageAttributeBusiness();
+	void setPageAttributeBusiness(final PageAttributeBusiness bean);
 }

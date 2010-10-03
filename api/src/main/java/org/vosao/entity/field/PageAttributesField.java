@@ -22,7 +22,9 @@
 
 package org.vosao.entity.field;
 
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -34,7 +36,7 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 import org.vosao.common.VosaoContext;
 
-public class PageAttributesField implements Map<String, String> {
+public class PageAttributesField implements Map<String, String>, Serializable {
 
 	protected static final Log logger = LogFactory.getLog(
 			PageAttributesField.class);
@@ -96,8 +98,7 @@ public class PageAttributesField implements Map<String, String> {
 
 	@Override
 	public Set<java.util.Map.Entry<String, String>> entrySet() {
-		// Not implemented
-		return null;
+		return Collections.EMPTY_SET;
 	}
 
 	@Override

@@ -43,6 +43,7 @@ import org.vosao.service.back.FormService;
 import org.vosao.service.back.GroupService;
 import org.vosao.service.back.LanguageService;
 import org.vosao.service.back.MessageService;
+import org.vosao.service.back.PageAttributeService;
 import org.vosao.service.back.PageService;
 import org.vosao.service.back.PicasaService;
 import org.vosao.service.back.PluginService;
@@ -63,6 +64,7 @@ import org.vosao.service.back.impl.FormServiceImpl;
 import org.vosao.service.back.impl.GroupServiceImpl;
 import org.vosao.service.back.impl.LanguageServiceImpl;
 import org.vosao.service.back.impl.MessageServiceImpl;
+import org.vosao.service.back.impl.PageAttributeServiceImpl;
 import org.vosao.service.back.impl.PageServiceImpl;
 import org.vosao.service.back.impl.PicasaServiceImpl;
 import org.vosao.service.back.impl.PluginServiceImpl;
@@ -98,6 +100,7 @@ public class BackServiceImpl implements BackService, Serializable {
 	private PluginService pluginService;
 	private TagService tagService;
 	private PicasaService picasaService;
+	private PageAttributeService pageAttributeService;
 	
 	@Override
 	public void register(JSONRPCBridge bridge) {
@@ -124,6 +127,7 @@ public class BackServiceImpl implements BackService, Serializable {
 		bridge.registerObject("pluginService", getPluginService());
 		bridge.registerObject("tagService", getTagService());
 		bridge.registerObject("picasaService", getPicasaService());
+		bridge.registerObject("pageAttributeService", getPageAttributeService());
 		registerPluginServices(bridge);
 	}
 	
@@ -149,6 +153,7 @@ public class BackServiceImpl implements BackService, Serializable {
 		bridge.unregisterObject("pluginService");
 		bridge.unregisterObject("tagService");
 		bridge.unregisterObject("picasaService");
+		bridge.unregisterObject("pageAttributeService");
 		unregisterPluginServices(bridge);
 	}
 
@@ -455,6 +460,19 @@ public class BackServiceImpl implements BackService, Serializable {
 
 	private Dao getDao() {
 		return getBusiness().getDao();
+	}
+
+	@Override
+	public PageAttributeService getPageAttributeService() {
+		if (pageAttributeService == null) {
+			pageAttributeService = new PageAttributeServiceImpl();
+		}
+		return pageAttributeService;
+	}
+
+	@Override
+	public void setPageAttributeService(PageAttributeService bean) {
+		pageAttributeService = bean;		
 	}
 	
 }

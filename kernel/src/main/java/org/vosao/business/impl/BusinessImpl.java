@@ -39,6 +39,7 @@ import org.vosao.business.FormDataBusiness;
 import org.vosao.business.GroupBusiness;
 import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.MessageBusiness;
+import org.vosao.business.PageAttributeBusiness;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.PicasaBusiness;
 import org.vosao.business.PluginBusiness;
@@ -92,6 +93,7 @@ public class BusinessImpl implements Business, Serializable {
 	private TagBusiness tagBusiness;
 	private PicasaBusiness picasaBusiness;
 	private FormDataBusiness formDataBusiness;
+	private PageAttributeBusiness pageAttributeBusiness;
 
 	private SetupBean setupBean;
 
@@ -444,6 +446,19 @@ public class BusinessImpl implements Business, Serializable {
 			return TimeZone.getTimeZone(config.getDefaultTimezone());
 		}
 		return TimeZone.getDefault();
+	}
+
+	@Override
+	public PageAttributeBusiness getPageAttributeBusiness() {
+		if (pageAttributeBusiness == null) {
+			pageAttributeBusiness = new PageAttributeBusinessImpl();
+		}
+		return pageAttributeBusiness;
+	}
+
+	@Override
+	public void setPageAttributeBusiness(PageAttributeBusiness bean) {
+		pageAttributeBusiness = bean;
 	}
 
 }

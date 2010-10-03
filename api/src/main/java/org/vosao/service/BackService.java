@@ -34,6 +34,7 @@ import org.vosao.service.back.FormService;
 import org.vosao.service.back.GroupService;
 import org.vosao.service.back.LanguageService;
 import org.vosao.service.back.MessageService;
+import org.vosao.service.back.PageAttributeService;
 import org.vosao.service.back.PageService;
 import org.vosao.service.back.PicasaService;
 import org.vosao.service.back.PluginService;
@@ -108,4 +109,7 @@ public interface BackService {
 
 	PicasaService getPicasaService();
 	void setPicasaService(PicasaService bean);
+
+	PageAttributeService getPageAttributeService();
+	void setPageAttributeService(PageAttributeService bean);
 }

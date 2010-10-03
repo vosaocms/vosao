@@ -30,6 +30,7 @@
 var pageRequest = null;
 var page = null;
 var editMode = pageId != '';
+var attributes = null;
     
 $(function(){
     Vosao.initJSONRpc(loadData);
@@ -39,10 +40,10 @@ $(function(){
        	function() { $(this).removeClass('ui-state-hover'); }
     ); 
     initVersionDialog();
-    $('#addButton').click(onEnableComments);
+    //$('#addButton').click(onEnableComments);
     // to be continued...
-    $('#deleteButton').click(onDeleteComments);
-    $('ul.ui-tabs-nav li:nth-child(4)').addClass('ui-state-active')
+    //$('#deleteButton').click(onDeleteComments);
+    $('ul.ui-tabs-nav li:nth-child(7)').addClass('ui-state-active')
     		.addClass('ui-tabs-selected')
     		.removeClass('ui-state-default');
 });
@@ -70,74 +71,12 @@ function loadPage() {
 		pageId = String(page.id);
 		pageParentUrl = page.parentUrl;
 		loadVersions();
-		loadComments();
 		showAuditInfo();
+		loadAttributes();
 	} else {
 		pages['1'] = page;
 	}
 	loadPagePermission();
-}
-
-function loadComments() {
-	var r = pageRequest.comments;
-    var html = '<table class="form-table"><tr><th></th><th>' + messages('state') 
-    	+ '</th><th>' + messages('name') +'</th><th>' + messages('content') 
-    	+ '</th></tr>';
-    $.each(r.list, function (n, value) {
-        var status = value.disabled ? messages('disabled') : messages('enabled');
-        html += '<tr><td><input type="checkbox" value="' + value.id 
-        + '"/></td><td>' + status + '</a></td><td>' + value.name
-        + '</td><td>' + value.content + '</td></tr>';
-    });
-    $('#comments').html(html + '</table>');
-    $('#comments tr:even').addClass('even'); 
-}
-
-function onEnableComments() {
-	var ids = [];
-	$('#comments input:checked').each(function() {
-		ids.push(this.value);
-	});
-	if (ids.length == 0) {
-		Vosao.info(messages('nothing_selected'));
-		return;
-	}
-	Vosao.jsonrpc.commentService.enableComments(function(r) {
-		Vosao.showServiceMessages(r);
-		loadData();
-	}, Vosao.javaList(ids));
-}
-
-function onDisableComments() {
-	var ids = [];
-	$('#comments input:checked').each(function() {
-		ids.push(this.value);
-	});
-	if (ids.length == 0) {
-		Vosao.info(messages('nothing_selected'));
-		return;
-	}
-	Vosao.jsonrpc.commentService.disableComments(function(r) {
-		Vosao.showServiceMessages(r);
-		loadData();
-	}, Vosao.javaList(ids));
-}
-
-function onDeleteComments() {
-	var ids = [];
-	$('#comments input:checked').each(function() {
-		ids.push(this.value);
-	});
-	if (ids.length == 0) {
-		Vosao.info(messages('nothing_selected'));
-		return;
-	}
-	if (confirm(messages('are_you_sure'))) {
-		Vosao.jsonrpc.commentService.deleteComments(function(r) {
-			Vosao.showServiceMessages(r);
-			loadData();
-		}, Vosao.javaList(ids));
-	}
 }
 
 function loadPagePermission() {
@@ -158,4 +97,15 @@ function loadPagePermission() {
    	else {
    		$('.securityTab').hide();
    	}
+}
+
+function loadAttributes() {
+	Vosao.jsonrpc.pageAttributeService.getByPage(function(r) {
+		attributes = r.list;
+		showAttributes();
+	}, page.friendlyURL);
+}
+
+function showAttributes() {
+	// TODO
 }

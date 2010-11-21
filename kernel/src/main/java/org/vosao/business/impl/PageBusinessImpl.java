@@ -388,6 +388,9 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 			PageEntity page = getDao().getPageDao().getById(id);
 			if (page != null) {
 				if (canWritePage(page.getFriendlyURL())) {
+					if (isLastRootPageVersion(page)) {
+						continue;
+					}
 					removeIds.add(id);
 					message.addPage(page.getFriendlyURL(), id);
 				}
@@ -410,6 +413,14 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		getBusiness().getFolderBusiness().recursiveRemove(folderIds);
 		getDao().getPageDao().remove(removeIds);
 		getBusiness().getMessageQueue().publish(message);
+	}
+
+	private boolean isLastRootPageVersion(PageEntity page) {
+		if (page.isRoot()) {
+			List<PageEntity> versions = getDao().getPageDao().selectByUrl("/");
+			return versions.size() == 1;
+		}
+		return false;
 	}
 
 	@Override

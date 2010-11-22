@@ -46,3 +46,53 @@
 </div>
 
 #parse('/cms/page/versionDialog.vm')
+
+<div id="attribute-dialog" style="display:none" title="$messages.attribute">
+  <form id="attributeForm">
+    <div class="form-row">
+        <label>$messages.get("name")</label>
+        <input id="name" type="text"/>
+    </div>
+    <div class="form-row">
+        <label>$messages.get("title")</label>
+        <input id="title" type="text"/>
+    </div>
+    <div class="form-row">
+        <label>$messages.get("default_value")</label>
+        <input id="defaultValue" type="text" size="40"/>
+    </div>
+    <div class="form-row">
+        <label>$messages.get("inherited")</label>
+        <input type="checkbox" id="inherited" />
+    </div>
+    <div class="buttons-dlg">
+        <input id="saveButton" type="submit" value="$messages.get("save")" />
+        <input id="cancelButton" type="button" value="$messages.get("cancel")" />
+    </div>
+  </form>
+</div>
+
+<div id="attrValue-dialog" style="display:none" title="$messages.attribute">
+  <form id="attrValueForm">
+    <div class="form-row">
+        <label>$messages.get("name")</label>
+        <span id="attrName" />
+    </div>
+    <div class="form-row">
+        <label>$messages.get("language")</label>
+        <select id="language"/>
+    </div>
+    <div class="form-row">
+        <label>$messages.get("value")</label>
+        <input id="value" type="text"/>
+    </div>
+    <div class="form-row">
+        <label>$messages.get("inherited")</label>
+        <input type="checkbox" id="attrInherited" />
+    </div>
+    <div class="buttons-dlg">
+        <input id="saveValueButton" type="submit" value="$messages.get("save")" />
+        <input id="cancelValueButton" type="button" value="$messages.get("cancel")" />
+    </div>
+  </form>
+</div>

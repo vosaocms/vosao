@@ -36,11 +36,11 @@ public class PageAttributeBusinessImpl extends AbstractBusinessImpl
 
 	@Override
 	public List<PageAttributeEntity> getByPage(String pageUrl) {
+		if (pageUrl.equals("/")) {
+			return getDao().getPageAttributeDao().getByPage("/");
+		}
 		List<PageAttributeEntity> result = getDao().getPageAttributeDao()
 				.getByPageInherited("/");  
-		if (pageUrl.equals("/")) {
-			return result;
-		}
 		String[] paths = FolderUtil.getPathChain(pageUrl);
 		String url = "";
 		for (String path : paths) {

@@ -23,9 +23,11 @@
 package org.vosao.service.back;
 
 import java.util.List;
+import java.util.Map;
 
 import org.vosao.entity.PageAttributeEntity;
 import org.vosao.service.AbstractService;
+import org.vosao.service.ServiceResponse;
 
 /**
  * @author Alexander Oleynik
@@ -33,5 +35,7 @@ import org.vosao.service.AbstractService;
 public interface PageAttributeService extends AbstractService {
 	
 	List<PageAttributeEntity> getByPage(final String pageUrl);
+
+	ServiceResponse save(Map<String, String> vo);
 	
 }

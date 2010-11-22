@@ -23,8 +23,11 @@
 package org.vosao.service.back.impl;
 
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.vosao.entity.PageAttributeEntity;
+import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.PageAttributeService;
 import org.vosao.service.impl.AbstractServiceImpl;
 
@@ -37,6 +40,26 @@ public class PageAttributeServiceImpl extends AbstractServiceImpl
 	@Override
 	public List<PageAttributeEntity> getByPage(String pageUrl) {
 		return getBusiness().getPageAttributeBusiness().getByPage(pageUrl);
+	}
+
+	@Override
+	public ServiceResponse save(Map<String, String> vo) {
+		PageAttributeEntity attr;
+		if (StringUtils.isEmpty(vo.get("id"))) {
+			attr = new PageAttributeEntity();
+		}
+		else {
+			attr = getDao().getPageAttributeDao().getById(Long.valueOf(
+					vo.get("id")));
+		}
+		attr.setPageUrl(vo.get("url"));
+		attr.setName(vo.get("name"));
+		attr.setTitle(vo.get("title"));
+		attr.setDefaultValue(vo.get("defaultValue"));
+		attr.setInherited(Boolean.valueOf(vo.get("inherited")));
+		// TODO add validation
+		getDao().getPageAttributeDao().save(attr);
+		return ServiceResponse.createSuccessResponse("Success");
 	}
 
 }

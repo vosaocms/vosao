@@ -279,6 +279,9 @@ public class PageServiceImpl extends AbstractServiceImpl
 		if (vo.get("enableCkeditor") != null) {
 			page.setEnableCkeditor(Boolean.valueOf(vo.get("enableCkeditor")));
 		}
+		if (vo.get("attributes") != null) {
+			page.setAttributes(vo.get("attributes"));
+		}
 		List<String> errors = getPageBusiness().validateBeforeUpdate(page);
 		if (errors.isEmpty()) {
 			boolean isNew = page.isNew();

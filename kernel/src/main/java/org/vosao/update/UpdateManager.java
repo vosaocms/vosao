@@ -50,6 +50,7 @@ public class UpdateManager {
 		tasks.add(new UpdateTask05(business));
 		tasks.add(new UpdateTask06(business));
 		tasks.add(new UpdateTask07(business));
+		tasks.add(new UpdateTask08(business));
 	}
 	
 	public String update() throws UpdateException {

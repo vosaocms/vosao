@@ -33,7 +33,7 @@ var editMode = pageId != '';
 var attributes = null;
 var attrDef = null;
 // attribute values map
-var attrValues = null;
+var attrValues = {};
 var languages = null;
     
 $(function(){
@@ -53,8 +53,8 @@ $(function(){
     $('#cancelValueButton').click(function() {
     	$("#attrValue-dialog").dialog('close');
     });
-    $('#attributeForm').submit(function() {onSave(); return false});
-    $('#attrValueForm').submit(function() {onSaveValue(); return false});
+    $('#attributeForm').submit(function() {onSave(); return false;});
+    $('#attrValueForm').submit(function() {onSaveValue(); return false;});
     $('#deleteButton').click(onDelete);
     $('#language').change(onLanguageChange);
     $('ul.ui-tabs-nav li:nth-child(7)').addClass('ui-state-active')
@@ -87,7 +87,7 @@ function loadPage() {
 		loadVersions();
 		loadLanguages();
 		showAuditInfo();
-		attrValues = page.attributes ? eval(page.attributes) : {};
+		attrValues = page.attributes ? eval('(' + page.attributes + ')') : {};
 		loadAttributes();
 	} else {
 		pages['1'] = page;
@@ -196,10 +196,48 @@ function onEditValue(name) {
 	$('#value').val(getAttributeValue(name, $('#language').val()));
 }
 
+function checkPageAttrValue(name, lang) {
+	if (attrValues[name] == undefined) {
+		attrValues[name] = {};
+	}
+	if (attrValues[name][lang] == undefined) {
+		attrValues[name][lang] = ''; 
+	}
+}
+
+function setPageAttrValue(name, lang, value) {
+	checkPageAttrValue(name, lang);
+	attrValues[name][lang] = value;
+}
+
+function getPageAttrValue(name, lang) {
+	checkPageAttrValue(name, lang);
+	return attrValues[name][lang];
+}
+
 function onLanguageChange() {
-	alert('TODO');
+	var name = $('#attrName').text();
+	var lang = $('#language').val();
+	$('#value').val(getPageAttrValue(name, lang));
 }
 
 function onSaveValue() {
-	alert('TODO');
+	var name = $('#attrName').text();
+	var lang = $('#language').val();
+	var value = $('#value').val();
+	setPageAttrValue(name, lang, value);
+	var vo = {
+		id: String(page.id),
+		attributes: toJSON(attrValues).json
+	};
+	Vosao.jsonrpc.pageService.savePage(function(r) {
+		if (r.result == 'success') {
+			$("#attrValue-dialog").dialog('close');
+			Vosao.info(messages('success'));
+			loadData();
+		}
+		else {
+			Vosao.showServiceMessages(r);
+		}
+	}, Vosao.javaMap(vo));
 }

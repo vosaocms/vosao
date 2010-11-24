@@ -20,19 +20,23 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.business;
+package org.vosao.dao.tool;
 
-import java.util.List;
-
+import org.vosao.dao.Dao;
 import org.vosao.entity.PageAttributeEntity;
 
-public interface PageAttributeBusiness {
+public class PageAttributeTool {
+
+	private Dao dao;
 	
-	/**
-	 * Get all page attributes definitions including inherited from parent pages.
-	 * @param pageUrl - page friendly URL.
-	 * @return list of found page attributes definitions.
-	 */
-	List<PageAttributeEntity> getByPage(final String pageUrl);
+	public PageAttributeTool(Dao aDao) {
+		dao = aDao;
+	}
+	
+	public PageAttributeEntity addPageAttribute(String url, String name, 
+			boolean inherited, String defaultValue) {
+		return dao.getPageAttributeDao().save(new PageAttributeEntity(
+				url, name, name, defaultValue, inherited));
+	}
 	
 }

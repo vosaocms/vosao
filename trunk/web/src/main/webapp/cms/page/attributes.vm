@@ -87,7 +87,7 @@
         <input id="value" type="text"/>
     </div>
     <div class="form-row">
-        <label>$messages.get("inherited")</label>
+        <label>$messages.get("page.apply_children")</label>
         <input type="checkbox" id="attrInherited" />
     </div>
     <div class="buttons-dlg">

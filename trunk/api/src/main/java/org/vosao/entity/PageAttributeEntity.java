@@ -41,6 +41,10 @@ public class PageAttributeEntity extends BaseEntityImpl {
 	private String defaultValue;
 	private boolean inherited;
 
+	public String toString() {
+		return "PageAttributeEntity(" + pageUrl + ", " + name + ", inherited: " + inherited + ")";
+	}
+	
 	public PageAttributeEntity() {
 	}
 	

@@ -24,7 +24,6 @@ package org.vosao.dao.impl;
 
 import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.vosao.dao.BaseDaoImpl;
@@ -60,7 +59,7 @@ public class PageAttributeDaoImpl extends BaseDaoImpl<PageAttributeEntity>
 		if (inherited != null) {
 			q.addFilter("inherited", EQUAL, inherited);
 		}
-		return select(q, "getByPage", params(pageUrl));
+		return select(q, "getByPage", params(pageUrl, inherited));
 	}
 
 	@Override

@@ -735,5 +735,16 @@ public class PageServiceImpl extends AbstractServiceImpl
 		return getPageBusiness().getPageDefaultSettings(url);
 	}
 
+	@Override
+	public ServiceResponse saveAttributes(Long id, String attributes) {
+		PageEntity page = getDao().getPageDao().getById(id);
+		if (page == null) {
+			return ServiceResponse.createErrorResponse(Messages.get("page.not_found"));
+		}
+		page.setAttributes(attributes);
+		getDao().getPageDao().save(page);
+		return ServiceResponse.createSuccessResponse(Messages.get("success"));
+	}
+
 
 }

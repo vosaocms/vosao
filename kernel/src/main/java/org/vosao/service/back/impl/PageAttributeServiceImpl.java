@@ -22,14 +22,18 @@
 
 package org.vosao.service.back.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.vosao.entity.PageAttributeEntity;
+import org.vosao.entity.PageEntity;
+import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.PageAttributeService;
 import org.vosao.service.impl.AbstractServiceImpl;
+import org.vosao.utils.StrUtil;
 
 /**
  * @author Alexander Oleynik
@@ -60,6 +64,21 @@ public class PageAttributeServiceImpl extends AbstractServiceImpl
 		// TODO add validation
 		getDao().getPageAttributeDao().save(attr);
 		return ServiceResponse.createSuccessResponse("Success");
+	}
+
+	@Override
+	public ServiceResponse remove(List<String> ids, Long pageId) {
+		PageEntity page = getDao().getPageDao().getById(pageId);
+		List<PageAttributeEntity> attrs = getDao().getPageAttributeDao()
+				.getById(StrUtil.toLong(ids));
+		List<Long> removeIds = new ArrayList<Long>();
+		for (PageAttributeEntity attr : attrs) {
+               			if (attr.getPageUrl().equals(page.getFriendlyURL())) {
+				removeIds.add(attr.getId());
+			}
+		}
+		getDao().getPageAttributeDao().remove(removeIds);		
+		return ServiceResponse.createSuccessResponse(Messages.get("success"));
 	}
 
 }

@@ -30,9 +30,9 @@
 var pageRequest = null;
 var page = null;
 var editMode = pageId != '';
-var attributes = null;
 var attrDef = null;
-// attribute values map
+var attributes = null;
+var attributesMap = {};
 var attrValues = {};
 var languages = null;
     
@@ -140,8 +140,9 @@ function showAttributes() {
     	+ '</th><th>' + messages('value') +'</th><th>' + messages('inherited') 
     	+ '</th></tr>';
     $.each(attributes, function (n, value) {
+    	attributesMap[value.name] = value;
     	var inherited = value.inherited ? messages('inherited') : '';
-    	html += '<tr><td><input type="checkbox" value="' + value.id 
+    	html += '<tr><td><input type="checkbox" value="' + value.id	
     		+ '"/></td><td><a href="#" onclick="onEditValue(\'' + value.name 
     		+ '\')">' + value.name + '</a></td><td>' 
     		+ getAttributeValue(value.name, Vosao.ENGLISH_CODE)
@@ -158,7 +159,20 @@ function onAdd() {
 }
 
 function onDelete() {
-	alert('TODO');
+	var ids = [];
+	$('#attributes input:checked').each(function() {
+		ids.push(this.value);
+	});
+	if (ids.length == 0) {
+		Vosao.info(messages('nothing_selected'));
+		return;
+	}
+	if (confirm(messages('are_you_sure'))) {
+		Vosao.jsonrpc.pageAttributeService.remove(function(r) {
+			Vosao.showServiceMessages(r);
+			loadData();
+		}, Vosao.javaList(ids), page.id);
+	}
 }
 
 function onSave() {
@@ -174,7 +188,7 @@ function onSave() {
 		if (r.result == 'success') {
 			Vosao.info(messages('page.success_save'));
 			$("#attribute-dialog").dialog('close');
-			callLoadPage();
+			loadData();
 			onEditValue(attrDefVO.map.name);
 		} else {
 			Vosao.showServiceMessages(r);
@@ -193,7 +207,14 @@ function onEditValue(name) {
 	$("#attrValue-dialog").dialog('open');
 	$('#attrName').html(name);
 	$('#attrInherited').each(function() {this.checked = false;});
-	$('#value').val(getAttributeValue(name, $('#language').val()));
+	var value = getAttributeValue(name, $('#language').val());
+	if (!value && attributesMap[name].defaultValue) {
+		if (confirm(messages('page.use_default_value'))) {
+			value = attributesMap[name].defaultValue;
+		}
+	}
+	$('#value').val(value);
+	$('#language').val(Vosao.ENGLISH_CODE);
 }
 
 function checkPageAttrValue(name, lang) {
@@ -218,7 +239,13 @@ function getPageAttrValue(name, lang) {
 function onLanguageChange() {
 	var name = $('#attrName').text();
 	var lang = $('#language').val();
-	$('#value').val(getPageAttrValue(name, lang));
+	var value = getPageAttrValue(name, lang);
+	if (!value && attributesMap[name].defaultValue) {
+		if (confirm(messages('page.use_default_value'))) {
+			value = attributesMap[name].defaultValue;
+		}
+	}
+	$('#value').val(value);
 }
 
 function onSaveValue() {
@@ -226,11 +253,7 @@ function onSaveValue() {
 	var lang = $('#language').val();
 	var value = $('#value').val();
 	setPageAttrValue(name, lang, value);
-	var vo = {
-		id: String(page.id),
-		attributes: toJSON(attrValues).json
-	};
-	Vosao.jsonrpc.pageService.savePage(function(r) {
+	Vosao.jsonrpc.pageService.saveAttributes(function(r) {
 		if (r.result == 'success') {
 			$("#attrValue-dialog").dialog('close');
 			Vosao.info(messages('success'));
@@ -239,5 +262,5 @@ function onSaveValue() {
 		else {
 			Vosao.showServiceMessages(r);
 		}
-	}, Vosao.javaMap(vo));
+	}, page.id, toJSON(attrValues).json);
 }

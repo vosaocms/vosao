@@ -38,4 +38,5 @@ public interface PageAttributeService extends AbstractService {
 
 	ServiceResponse save(Map<String, String> vo);
 	
+	ServiceResponse remove(List<String> ids, Long pageId);
 }

@@ -41,4 +41,7 @@ public interface PageAttributeDao extends BaseDao<PageAttributeEntity> {
 	List<PageAttributeEntity> getByPageInherited(final String pageUrl);
 
 	void removeByPage(final String url);
+	
+	PageAttributeEntity getByPageName(final String pageUrl, final String name);
+
 }

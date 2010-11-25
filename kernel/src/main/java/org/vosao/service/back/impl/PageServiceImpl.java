@@ -736,13 +736,14 @@ public class PageServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public ServiceResponse saveAttributes(Long id, String attributes) {
+	public ServiceResponse saveAttribute(Long id, String name, String value, 
+			String language, boolean applyToChildren) {
 		PageEntity page = getDao().getPageDao().getById(id);
 		if (page == null) {
 			return ServiceResponse.createErrorResponse(Messages.get("page.not_found"));
 		}
-		page.setAttributes(attributes);
-		getDao().getPageDao().save(page);
+		getBusiness().getPageAttributeBusiness().setAttribute(page, name, 
+				language, value, applyToChildren);
 		return ServiceResponse.createSuccessResponse(Messages.get("success"));
 	}
 

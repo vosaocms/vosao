@@ -25,7 +25,9 @@ package org.vosao.business.impl;
 import java.util.List;
 
 import org.vosao.business.PageAttributeBusiness;
+import org.vosao.business.page.impl.PageSetAttributeMessage;
 import org.vosao.entity.PageAttributeEntity;
+import org.vosao.entity.PageEntity;
 import org.vosao.utils.FolderUtil;
 
 /**
@@ -55,6 +57,43 @@ public class PageAttributeBusinessImpl extends AbstractBusinessImpl
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public PageAttributeEntity getByPage(String pageUrl, String name) {
+		PageAttributeEntity result = getDao().getPageAttributeDao()
+				.getByPageName("/", name);
+		if (result != null) {
+			return result;
+		}
+		String[] paths = FolderUtil.getPathChain(pageUrl);
+		String url = "";
+		for (String path : paths) {
+			url = url + "/" + path;
+			result = getDao().getPageAttributeDao().getByPageName(url, name);
+			if (result != null) {
+				return result;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public void setAttribute(PageEntity page, String name, String language,
+			String value, boolean applyToChildren) {
+		PageAttributeEntity attribute = getByPage(page.getFriendlyURL(), name);
+		if (attribute == null) {
+			logger.error("Attribute definition: " + name
+					+ " not found for page " + page.getFriendlyURL());
+			return;
+		}
+		page.setAttribute(name, language, value);
+		getDao().getPageDao().save(page);
+		if (applyToChildren && attribute.isInherited()) {
+			getBusiness().getMessageQueue().publish(
+					new PageSetAttributeMessage(page.getFriendlyURL(), name, 
+							language, value));
+		}
 	}
 
 	

@@ -68,5 +68,13 @@ public class PageAttributeDaoImpl extends BaseDaoImpl<PageAttributeEntity>
 		q.addFilter("pageUrl", EQUAL, url);
 		removeSelected(q);
 	}
+
+	@Override
+	public PageAttributeEntity getByPageName(String pageUrl, String name) {
+		Query q = newQuery();
+		q.addFilter("pageUrl", EQUAL, pageUrl);
+		q.addFilter("name", EQUAL, name);
+		return selectOne(q, "getByPageName", params(pageUrl, name));
+	}
 	
 }

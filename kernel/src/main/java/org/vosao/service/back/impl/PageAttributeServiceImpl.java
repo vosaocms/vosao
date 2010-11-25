@@ -73,7 +73,7 @@ public class PageAttributeServiceImpl extends AbstractServiceImpl
 				.getById(StrUtil.toLong(ids));
 		List<Long> removeIds = new ArrayList<Long>();
 		for (PageAttributeEntity attr : attrs) {
-               			if (attr.getPageUrl().equals(page.getFriendlyURL())) {
+            if (attr.getPageUrl().equals(page.getFriendlyURL())) {
 				removeIds.add(attr.getId());
 			}
 		}

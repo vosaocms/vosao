@@ -45,7 +45,8 @@ public interface PageService extends AbstractService {
 
 	ServiceResponse savePage(final Map<String, String> vo);
 	
-	ServiceResponse saveAttributes(Long id, String attributes);
+	ServiceResponse saveAttribute(Long id, String name, String value, 
+			String language, boolean applyToChildren);
 	
 	List<PageVO> getChildren(final String url);
 	

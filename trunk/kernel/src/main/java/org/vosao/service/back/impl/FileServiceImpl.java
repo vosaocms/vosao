@@ -108,8 +108,10 @@ public class FileServiceImpl extends AbstractServiceImpl
 			vo.setTextFile(getBusiness().getConfigBusiness().isTextFileExt(ext));
 			vo.setImageFile(getBusiness().getConfigBusiness()
 					.isImageFileExt(ext));
-			vo.setContent(new String(getDao().getFileDao().getFileContent(file), 
-					"UTF-8"));
+			if (vo.isTextFile()) {
+				vo.setContent(new String(getDao().getFileDao()
+						.getFileContent(file), "UTF-8"));
+			}
 			return vo;
 		}
 		catch (Exception e) {

@@ -239,6 +239,7 @@ public class SearchIndexImpl implements SearchIndex {
 			FileEntity file = getBusiness().getFileBusiness()
 					.findFile(getIndexFilename());
 			if (file == null) {
+				logger.error("Search index not found. " + getIndexFilename());
 				return;
 			}
 			byte[] data = getDao().getFileDao().getFileContent(file);
@@ -252,6 +253,9 @@ public class SearchIndexImpl implements SearchIndex {
 					getBusiness().getSystemService().getCache().getMemcache()
 							.put(getIndexKey(), indexModDate);
 				}
+			}
+			else {
+				logger.error("Search index is empty. " + getIndexFilename());
 			}
 		}
 		catch (Exception e) {

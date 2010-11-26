@@ -27,18 +27,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.tools.generic.AlternatorTool;
 import org.apache.velocity.tools.generic.ComparisonDateTool;
-import org.apache.velocity.tools.generic.DateTool;
-import org.apache.velocity.tools.generic.EscapeTool;
 import org.apache.velocity.tools.generic.IteratorTool;
 import org.apache.velocity.tools.generic.ListTool;
 import org.apache.velocity.tools.generic.MathTool;
@@ -57,7 +52,6 @@ import org.vosao.business.impl.pagefilter.MetaPageFilter;
 import org.vosao.business.impl.pagefilter.PageFilter;
 import org.vosao.business.mq.Topic;
 import org.vosao.business.mq.message.PageMessage;
-import org.vosao.business.mq.message.SimpleMessage;
 import org.vosao.business.page.PageRenderDecorator;
 import org.vosao.business.page.impl.SimplePageRenderDecorator;
 import org.vosao.business.page.impl.StructurePageRenderDecorator;
@@ -73,10 +67,10 @@ import org.vosao.entity.TemplateEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.entity.helper.PageHelper;
 import org.vosao.enums.PageState;
-import org.vosao.filter.SiteFilter;
 import org.vosao.i18n.Messages;
 import org.vosao.utils.UrlUtil;
 import org.vosao.velocity.MyDateTool;
+import org.vosao.velocity.MyEscTool;
 import org.vosao.velocity.VelocityPluginService;
 import org.vosao.velocity.VelocityService;
 import org.vosao.velocity.impl.VelocityPluginServiceImpl;
@@ -217,7 +211,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	@Override
 	public void addVelocityTools(VelocityContext context) {
 		context.put("date", new MyDateTool(getBusiness().getTimeZone()));
-		context.put("esc", new EscapeTool());
+		context.put("esc", new MyEscTool());
 		context.put("link", new LinkTool());
 		context.put("list", new ListTool());
 		context.put("number", new NumberTool());

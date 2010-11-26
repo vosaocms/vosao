@@ -169,15 +169,22 @@ Vosao.serviceFailed = function(e) {
 };
 
 Vosao.changeLanguage = function(lang) {
-    var url = location.href.replace('#','');
+    var url = location.href.replace('#', '');
     var langIndex = url.indexOf('language=');
     var sign = location.search.indexOf('?') == -1 ? '?' : '&';
-	if (langIndex > 0) {
-    	url = url.substr(0, langIndex) + (url.length > langIndex + 11 ?  
-    			url.substr(langIndex + 11) : '');
-    	sign = '';
+    if (langIndex > 0) {
+        var langAfter = url.substr(langIndex+1);
+        var langAndIndex = langAfter.indexOf('&');
+        url = url.substr(0, langIndex) + 'language=' + lang;
+        if(langAndIndex > 0) {
+            url = url + langAfter.substr(langAndIndex+1);
+        }
+        if(url.indexOf('&') < 0) {
+            sign = '';
+        }
+    } else {
+        url = url + sign + 'language=' + lang;
     }
-    var url = url + sign + 'language=' + lang;
     location.href = url;
 };
 

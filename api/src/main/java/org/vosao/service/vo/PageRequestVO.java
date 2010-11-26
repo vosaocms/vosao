@@ -56,6 +56,7 @@ public class PageRequestVO {
     private List<StructureFieldVO> structureFields;
     private List<TagEntity> tags;
     private String dependencies;
+    private Long folderId;
 	
     public PageRequestVO() {
     	versions = Collections.EMPTY_LIST;
@@ -188,6 +189,14 @@ public class PageRequestVO {
 
 	public void setDependencies(String dependencies) {
 		this.dependencies = dependencies;
+	}
+
+	public Long getFolderId() {
+		return folderId;
+	}
+
+	public void setFolderId(Long folderId) {
+		this.folderId = folderId;
 	}
 
 }

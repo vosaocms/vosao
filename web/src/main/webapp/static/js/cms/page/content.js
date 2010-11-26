@@ -65,6 +65,13 @@ $(function(){
     $('#restoreForm').submit(function() {onRestoreSave(); return false;});
     $('#restoreCancelButton').click(onRestoreCancel);
     $('#resetCacheButton').click(onResetCache);
+    
+    $("#file-upload").dialog({ width: 400, autoOpen: false });
+    $('#upload').ajaxForm({
+    	beforeSubmit: beforeUpload,
+    	success: afterUpload
+    });
+    $('#fileUploadCancelButton').click(onFileUploadCancel);
 });
 
 function loadData() {
@@ -108,8 +115,6 @@ function loadPage() {
 	initPageForm();
 	loadPagePermission();
 	loadContents();
-	$.cookie('fileBrowserPath', '/page' + page.friendlyURL, 
-			{path:'/', expires: 10});
 }
 
 function loadLanguages() {
@@ -410,7 +415,10 @@ function showContentEditor() {
 			if (field.type == 'RESOURCE') {
 				h += '<input id="field' + field.name + '" size="60"/> '
 					+ '<a href="#" onclick="browseResources(\'field' + field.name 
-					+ '\')">' + messages('browse') + '</a>';
+					+ '\')">' + messages('browse') + '</a>'
+					+ ' <a href="#" onclick="uploadResources(\'field' + field.name
+					+ '\')">' 
+					+ messages('upload') + '</a>';
 			}
 			h += '</div>';
 		});
@@ -438,6 +446,8 @@ function showContentEditor() {
 
 function browseResources(id) {
 	browseId = id;
+	$.cookie('fileBrowserPath', '/page' + page.friendlyURL, 
+			{path:'/', expires: 10});
 	window.open('/cms/fileBrowser.vm?mode=page');
 }
 
@@ -519,4 +529,32 @@ function checkDefault() {
 			+ ', #contentPreviewButton, #versions, #resetCacheButton, #restoreButton'
 			+ ', #approveButton, #friendlyUrlDiv').hide();
 	}
+}
+
+function uploadResources(field) {
+	browseId = field;
+	$('#file-upload input[name=folderId]').val(pageRequest.folderId);
+    $("#file-upload").dialog("open");
+}
+function onFileUploadCancel() {
+	$("#file-upload").dialog("close");
+}
+
+function afterUpload(data) {
+    var s = data.split('::');
+    var result = s[1];
+    var msg = s[2]; 
+    if (result == 'success') {
+    	Vosao.info(messages('folder.file_success_upload'));
+    }
+    else {
+    	Vosao.error(messages('folder.error_during_upload') + ' ' + msg);
+    }
+    $("#file-upload").dialog("close");
+}
+
+function beforeUpload(arr, form, options) {
+	var fname = Vosao.getFileName($('#file-upload input[name=uploadFile]').val());
+	var path = '/file/page' + page.friendlyURL + '/' + fname;
+	$('#' + browseId).val(path);
 }

@@ -22,7 +22,10 @@
 
 #parse('/cms/page/head.vm')
 
-#set ($head6 = '<script type="text/javascript" src="/static/js/cms/page/content.js"></script>')
+#define ($head6)
+  <script src="/static/js/jquery.form.js" language="javascript"></script>
+  <script type="text/javascript" src="/static/js/cms/page/content.js"></script>
+#end
     
 #parse('/cms/page/versionsBox.vm')
 
@@ -101,5 +104,19 @@
         <input id="restoreCancelButton" type="button" value="$messages.get("cancel")" />
     </div>
   </form>
+</div>
+
+<div id="file-upload" title="$messages.get("folder.upload_file")" style="display:none">
+    <form id="upload" action="/cms/upload" method="post" enctype="multipart/form-data">
+        $messages.get("file_upload"):
+        <input type="hidden" name="fileType" value="resource" />
+        <input type="hidden" name="folderId" />
+        <input type="file" name="uploadFile" multiple="true" />
+        <div class="buttons-dlg">
+            <input type="submit" value="$messages.get("send")" />
+            <input id="fileUploadCancelButton" type="button" 
+                value="$messages.get("cancel")" />
+        </div>
+    </form>
 </div>
 

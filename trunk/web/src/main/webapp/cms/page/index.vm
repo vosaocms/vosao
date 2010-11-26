@@ -54,6 +54,10 @@
     <span id="friendlyUrlSpan"></span>
 </div>
 <div class="form-row">
+    <label>$messages.get("restful")</label>
+    <input id="restful" type="checkbox" />
+</div>
+<div class="form-row">
     <label>$messages.get("template")</label>
     <select id="templates"></select>
 </div>

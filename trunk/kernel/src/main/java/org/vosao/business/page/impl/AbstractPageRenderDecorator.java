@@ -179,7 +179,7 @@ public abstract class AbstractPageRenderDecorator implements PageRenderDecorator
 				return Messages.get("config.comments_template_is_empty");
 			}
 			VelocityContext context = getPageBusiness().createContext(
-					getLanguageCode());
+					getLanguageCode(), getPage());
 			context.put("page", getPage());
 			return getSystemService().render(commentsTemplate, context);
 		}
@@ -209,6 +209,11 @@ public abstract class AbstractPageRenderDecorator implements PageRenderDecorator
 	@Override
 	public boolean isWikiProcessing() {
 		return page.isWikiProcessing();
+	}
+
+	@Override
+	public boolean isRestful() {
+		return page.isRestful();
 	}
 
 }

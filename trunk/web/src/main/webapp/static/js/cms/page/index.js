@@ -165,6 +165,9 @@ function initPageForm() {
 	$('#cached').each(function() {
 		this.checked = page.cached;
 	});
+	$('#restful').each(function() {
+		this.checked = page.restful;
+	});
 	$('#templates').val(page.template);
 	$('#pageState').html(page.stateString == 'EDIT' ? 
 			messages('edit') : messages('approved'));
@@ -231,6 +234,7 @@ function onPageUpdate() {
 		enableCkeditor : String($('#enableCkeditor:checked').size() > 0),
 		skipPostProcessing : String($('#skipPostProcessing:checked').size() > 0),
 		cached : String($('#cached:checked').size() > 0),
+		restful : String($('#restful:checked').size() > 0),
 		template : $('#templates option:selected').val(),
 		approve : String($('#approveOnPageSave:checked, #approveOnContentSave:checked').size() > 0),
 		pageType: $('#pageType').val(),

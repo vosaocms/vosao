@@ -100,7 +100,7 @@ public interface PageBusiness {
 	 */
 	String render(final PageEntity page, final String languageCode);
 	
-	VelocityContext createContext(final String languageCode);
+	VelocityContext createContext(final String languageCode, PageEntity page);
 	
 	PageRenderDecorator createPageRenderDecorator(final PageEntity page,
 			final String languageCode);
@@ -215,4 +215,6 @@ public interface PageBusiness {
 	void updateDefaultContent(PageEntity page);
 	
 	FolderEntity getPageFolder(String pageURL);
+	
+	PageEntity getRestPage(String url);
 }	

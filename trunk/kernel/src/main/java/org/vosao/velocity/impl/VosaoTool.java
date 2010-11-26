@@ -25,9 +25,13 @@ package org.vosao.velocity.impl;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vosao.business.SetupBean;
 import org.vosao.common.VosaoContext;
+import org.vosao.entity.PageEntity;
 import org.vosao.entity.UserEntity;
+import org.vosao.utils.FolderUtil;
 import org.vosao.utils.StrUtil;
 
 /**
@@ -37,6 +41,10 @@ import org.vosao.utils.StrUtil;
  */
 public class VosaoTool {
 
+	private static final Log logger = LogFactory.getLog(VosaoTool.class);
+	
+	private PageEntity page;
+	
 	public VosaoTool() {
 	}
 	
@@ -72,5 +80,28 @@ public class VosaoTool {
 	public void setSessionAttribute(String name, Object value) {
 		VosaoContext.getInstance().getRequest().getSession().setAttribute(
 				name, value);
+	}
+	
+	public String getRestParam(int index) {
+		if (index < 1) {
+			throw new IllegalArgumentException();
+		}
+		if (page != null) {
+			String url = VosaoContext.getInstance().getRequest().getServletPath();
+			String paramsUrl = url.substring(page.getFriendlyURL().length(), 
+					url.length());
+			String[] params = FolderUtil.getPathChain(paramsUrl);
+			if (index <= params.length) {
+				return params[index - 1];
+			}
+		}
+		else {
+			logger.info("Page is null");
+		}
+		return null;
+	}
+
+	public void setPage(PageEntity page) {
+		this.page = page;
 	}
 }

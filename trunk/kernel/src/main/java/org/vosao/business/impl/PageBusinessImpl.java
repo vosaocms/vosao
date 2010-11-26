@@ -149,7 +149,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		if (page.getTemplate() != null) {
 			TemplateEntity template = getDao().getTemplateDao().getById(
 					page.getTemplate());
-			VelocityContext context = createContext(languageCode);
+			VelocityContext context = createContext(languageCode, page);
 			context.put("page", createPageRenderDecorator(page, languageCode));
 			return pagePostProcess(getSystemService()
 					.render(template.getContent(), context), page);
@@ -190,7 +190,8 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	}
 
 	@Override
-	public VelocityContext createContext(final String languageCode) {
+	public VelocityContext createContext(final String languageCode,
+			PageEntity page) {
 		LanguageEntity language = getDao().getLanguageDao().getByCode(
 				languageCode);
 		VelocityContext context = new VelocityContext();
@@ -207,6 +208,9 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		context.put("request", VosaoContext.getInstance().getRequest());
 		context.put("response", VosaoContext.getInstance().getResponse());
 		context.put("timezone", getBusiness().getTimeZone());
+		VosaoTool vosaoTool = new VosaoTool();
+		vosaoTool.setPage(page);
+		context.put("vosao", vosaoTool);
 		return context;
 	}
 
@@ -224,7 +228,6 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		context.put("comparisonDate", new ComparisonDateTool());
 		context.put("iterator", new IteratorTool());
 		context.put("parser", new ValueParser());
-		context.put("vosao", new VosaoTool());
 	}
 	
 	private String pagePostProcess(final String content, 
@@ -794,6 +797,33 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	public FolderEntity getPageFolder(String pageURL) {
 		return getBusiness().getFolderBusiness().createFolder(
 				"/page"	+ pageURL);
+	}
+
+	@Override
+	public PageEntity getRestPage(String url) {
+		PageEntity result;
+		String base = url;
+		while (base.length() > 0) {
+			int slash = base.lastIndexOf("/");
+			if (slash == 0) {
+				break;
+			}
+			base = base.substring(0, slash);
+			result = getDao().getPageDao().getByUrl(base);
+			if (result != null) {
+				if (result.isRestful()) {
+					return result;
+				}
+				else {
+					return null;
+				}
+			}
+		}
+		result = getDao().getPageDao().getByUrl("/");
+		if (result != null && result.isRestful()) {
+			return result;
+		}
+		return null;
 	}
 
 }

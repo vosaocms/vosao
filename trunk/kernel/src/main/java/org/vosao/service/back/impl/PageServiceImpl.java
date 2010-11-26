@@ -280,6 +280,9 @@ public class PageServiceImpl extends AbstractServiceImpl
 		if (vo.get("enableCkeditor") != null) {
 			page.setEnableCkeditor(Boolean.valueOf(vo.get("enableCkeditor")));
 		}
+		if (vo.get("restful") != null) {
+			page.setRestful(Boolean.valueOf(vo.get("restful")));
+		}
 		if (vo.get("attributes") != null) {
 			page.setAttributes(vo.get("attributes"));
 		}

@@ -146,5 +146,7 @@ public interface PageRenderDecorator {
 	List<String> getAncestorsURL();
 
 	boolean isWikiProcessing();
+	
+	boolean isRestful();
 
 }

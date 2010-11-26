@@ -63,7 +63,7 @@ public class SimplePageRenderDecorator extends AbstractPageRenderDecorator {
 		String resultContent = contentEntity.getContent();
 		if (isVelocityProcessing()) {
 			VelocityContext context = getPageBusiness().createContext(
-					getLanguageCode());
+					getLanguageCode(), getPage());
 			context.put("page", getPage());
 			resultContent = getSystemService().render(resultContent, context);
 		}

@@ -89,6 +89,7 @@ public class PageEntity extends BaseEntityImpl {
 	private String contentType;
 	private boolean enableCkeditor;
 	private String attributes;
+	private boolean restful;
 
 	// not persisted
 	private Map<String, String> titles;
@@ -140,6 +141,7 @@ public class PageEntity extends BaseEntityImpl {
 		wikiProcessing = getBooleanProperty(entity, "wikiProcessing", false);
 		enableCkeditor = getBooleanProperty(entity, "enableCkeditor", true);
 		attributes = getStringProperty(entity, "attributes");
+		restful = getBooleanProperty(entity, "restful", false);
 	}
 	
 	@Override
@@ -170,6 +172,7 @@ public class PageEntity extends BaseEntityImpl {
 		setProperty(entity, "wikiProcessing", wikiProcessing, false);
 		setProperty(entity, "enableCkeditor", enableCkeditor, false);
 		setProperty(entity, "attributes", attributes, false);
+		setProperty(entity, "restful", restful, false);
 	}
 
 	public PageEntity(String title, String friendlyURL, 
@@ -569,4 +572,11 @@ public class PageEntity extends BaseEntityImpl {
 		setAttributes(getAttribute().asJSON());
 	}
 	
+	public boolean isRestful() {
+		return restful;
+	}
+
+	public void setRestful(boolean restful) {
+		this.restful = restful;
+	}
 }

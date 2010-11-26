@@ -124,7 +124,7 @@ public class SiteFilter extends AbstractFilter implements Filter {
     		}
     		PageEntity page = getPage(url, httpRequest);
     		if (page != null) {
-    			renderPage(httpRequest, httpResponse, page);
+    			renderPage(httpRequest, httpResponse, page, url);
     			return;
     		}
     		if (url.equals("/")) {
@@ -175,7 +175,7 @@ public class SiteFilter extends AbstractFilter implements Filter {
     }
 
     private void renderPage(HttpServletRequest request, 
-    		HttpServletResponse response, final PageEntity page) 
+    		HttpServletResponse response, final PageEntity page, String url) 
     		throws IOException {
     	String contentType = StringUtils.isEmpty(page.getContentType()) ?
     			"text/html" : page.getContentType();
@@ -186,8 +186,8 @@ public class SiteFilter extends AbstractFilter implements Filter {
     	String content = getBusiness().getPageBusiness().render(page, language);
     	out.write(content);
     	if (!isLoggedIn(request) && page.isCached()) {
-    		getSystemService().getPageCache().put(page.getFriendlyURL(),
-    				language, content, contentType);
+    		getSystemService().getPageCache().put(url, language, content, 
+    				contentType);
     	}
     }
     
@@ -210,6 +210,9 @@ public class SiteFilter extends AbstractFilter implements Filter {
     	}
     	if (version == null) {
             page = getDao().getPageDao().getByUrl(url);
+            if (page == null) {
+            	page = getBusiness().getPageBusiness().getRestPage(url);
+            }
     	}
     	else {
             page = getDao().getPageDao().getByUrlVersion(url, version);

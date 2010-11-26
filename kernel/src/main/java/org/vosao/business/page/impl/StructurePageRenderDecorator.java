@@ -104,7 +104,7 @@ public class StructurePageRenderDecorator extends AbstractPageRenderDecorator {
 		}
 		if (structureTemplate.isVelocity()) {
 			VelocityContext context = getPageBusiness().createContext(
-				getLanguageCode()); 
+				getLanguageCode(), getPage()); 
 			context.put("content", contentMap);
 			context.put("page", this);
 			setContent(getSystemService().render(structureTemplate.getContent(), 
@@ -139,7 +139,7 @@ public class StructurePageRenderDecorator extends AbstractPageRenderDecorator {
 	private void prepareVelocityContent(Map<String, String> contentMap) {
 		if (isVelocityProcessing()) {
 			VelocityContext context = getPageBusiness().createContext(
-				getLanguageCode());
+				getLanguageCode(), getPage());
 			context.put("page", getPage());
 			for (String key : contentMap.keySet()) {
 				contentMap.put(key, getSystemService().render(contentMap.get(key), 

@@ -52,6 +52,14 @@ Vosao.getFileExt = function(filename) {
 	return filename.substring(filename.lastIndexOf('.') + 1, filename.length);
 };
 
+Vosao.getFileName = function(path) {
+	var slash = path.lastIndexOf('\\');
+	if (slash == -1) {
+		slash = path.lastIndexOf('/');
+	}	
+	return slash == -1 ? path : path.substring(slash + 1, path.length);
+};
+
 Vosao.formatDate = function(date) {
 	return $.datepicker.formatDate('dd.mm.yy', date);
 };

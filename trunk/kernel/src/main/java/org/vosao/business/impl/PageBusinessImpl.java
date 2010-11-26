@@ -728,6 +728,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	@Override
 	public void save(PageEntity page) {
 		getDao().getPageDao().save(page);
+		getPageFolder(page.getFriendlyURL());
 		getBusiness().getSystemService().getPageCache().remove(
 				page.getFriendlyURL());
 		
@@ -787,6 +788,12 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 						content.getLanguageCode(), content.getContent());
 			}
 		}
+	}
+
+	@Override
+	public FolderEntity getPageFolder(String pageURL) {
+		return getBusiness().getFolderBusiness().createFolder(
+				"/page"	+ pageURL);
 	}
 
 }

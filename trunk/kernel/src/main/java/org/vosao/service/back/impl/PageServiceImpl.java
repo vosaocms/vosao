@@ -40,6 +40,7 @@ import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.ContentEntity;
 import org.vosao.entity.ContentPermissionEntity;
+import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PageDependencyEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PageTagEntity;
@@ -386,11 +387,12 @@ public class PageServiceImpl extends AbstractServiceImpl
 	public PageRequestVO getPageRequest(final Long id, final String parentUrl) {
 		try {
 			PageRequestVO result = new PageRequestVO();
-			result.setPage(getPage(id));
+			PageEntity page = getPage(id);
+			result.setPage(page);
 			result.setConfig(VosaoContext.getInstance().getConfig());
 			String permUrl = parentUrl;
-			if (result.getPage() != null) {
-				String url = result.getPage().getFriendlyURL();
+			if (page != null) {
+				String url = page.getFriendlyURL();
 				result.setVersions(getPageVersions(url));
 				result.setChildren(getChildren(url));
 				result.setComments(getCommentService().getByPage(url));
@@ -399,17 +401,19 @@ public class PageServiceImpl extends AbstractServiceImpl
 						.selectByUrl(url));
 				
 				result.setTags(getPageTags(url));
-				permUrl = result.getPage().getFriendlyURL();
-				if (result.getPage().isStructured()) {
+				permUrl = page.getFriendlyURL();
+				if (page.isStructured()) {
 					StructureEntity structure = getDao().getStructureDao()
-							.getById(result.getPage().getStructureId());
+							.getById(page.getStructureId());
 					
 					if (structure != null) {
 						result.setStructureFields(structure.getFields());
 					}
 				}
-				result.setDependencies(getDependencies(result.getPage()
-						.getFriendlyURL()));
+				result.setDependencies(getDependencies(page.getFriendlyURL()));
+				FolderEntity folder = getBusiness().getPageBusiness()
+						.getPageFolder(page.getFriendlyURL());
+				result.setFolderId(folder != null ? folder.getId() : null);
 			}
 			else {
 				result.setPage(getPageBusiness().getPageDefaultSettings(

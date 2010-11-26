@@ -28,6 +28,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -196,6 +197,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		ConfigEntity configEntity = getBusiness().getConfigBusiness().getConfig();
 		addVelocityTools(context);
 		context.put("language", language);
+		context.put("locale", new Locale(language.getCode()));
 		context.put("config", configEntity);
 		context.put("service", getVelocityService());
 		context.put("plugin", getVelocityPluginService().getPlugins());

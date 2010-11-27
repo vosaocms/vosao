@@ -63,11 +63,23 @@ public class LanguageFilter extends AbstractFilter implements Filter {
     	}
     	if (httpRequest.getParameter("language") != null) {
     		String languageCode = httpRequest.getParameter("language");
-   			Locale locale = new Locale(languageCode);
+   			Locale locale = getLocale(languageCode);
+   			logger.info("Locale " + locale.getDisplayName());
    			ctx.setLocale(locale);
        		session.setAttribute(Messages.LOCALE_KEY, locale);
     	}
         chain.doFilter(request, response);
+    }
+    
+    private Locale getLocale(String language) {
+    	int undescore = language.indexOf("_");
+    	if (undescore != -1) {
+    		String[] codes = language.split("_");
+    		if (codes.length > 1) {
+        		return new Locale(codes[0], codes[1]);
+    		}
+    	}
+    	return new Locale(language);
     }
     
 }

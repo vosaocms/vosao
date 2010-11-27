@@ -201,6 +201,7 @@ function localize() {
 	$('#tab-1 div:eq(2) label').text(messages('register.send_confirm_user'));
 	$('#tab-1 div:eq(3) label').text(messages('register.clear_days'));
 	$('#tab-1 div:eq(4) label').text(messages('register.enable_captcha'));
+	$('#tab-1 div:eq(5) label').text(messages('register.confirm_page_url'));
 
 	$('input[value=save]').val(messages('save'));
 	$('input[value=cancel]').val(messages('cancel'));

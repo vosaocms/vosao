@@ -59,6 +59,7 @@ public class SearchIndexImpl implements SearchIndex {
 
 	public SearchIndexImpl(String aLanguage) {
 		language = aLanguage;
+		loadIndex();
 	}
 	
 	@Override

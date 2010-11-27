@@ -75,6 +75,10 @@
         <input id="siteUserLoginUrl" type="text"/>
     </div>
     <div class="form-row">
+        <label>$messages.get("config.404_url")</label>
+        <input id="site404Url" type="text"/>
+    </div>
+    <div class="form-row">
         <label>$messages.get("config.enable_ckeditor")</label>
         <input id="enableCkeditor" type="checkbox" />
     </div>

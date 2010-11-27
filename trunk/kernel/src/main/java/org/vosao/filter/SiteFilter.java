@@ -94,7 +94,8 @@ public class SiteFilter extends AbstractFilter implements Filter {
     
     public void doFilter(ServletRequest request, ServletResponse response, 
     		FilterChain chain) throws IOException, ServletException {
-    	VosaoContext.getInstance().setSkipURLs(skipURLs);
+    	VosaoContext ctx = VosaoContext.getInstance();
+    	ctx.setSkipURLs(skipURLs);
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
         HttpServletResponse httpResponse = (HttpServletResponse)response;
         String url = httpRequest.getServletPath();
@@ -103,7 +104,7 @@ public class SiteFilter extends AbstractFilter implements Filter {
         		return;
         	}
         }
-        if (VosaoContext.getInstance().isSkipUrl(url)) {
+        if (ctx.isSkipUrl(url)) {
             chain.doFilter(request, response);
             return;
         }
@@ -131,6 +132,14 @@ public class SiteFilter extends AbstractFilter implements Filter {
     			showNoApprovedContent(httpResponse);
     			return;
     		}
+    		ConfigEntity config = ctx.getConfig();
+    		if (!StringUtils.isEmpty(config.getSite404Url())) {
+        		page = getPage(config.getSite404Url(), httpRequest);
+        		if (page != null) {
+        			renderPage(httpRequest, httpResponse, page, url);
+        			return;
+        		}
+    		}
     		httpResponse.sendRedirect("/");
     	}
     	catch (AccessDeniedException e) {
@@ -138,7 +147,7 @@ public class SiteFilter extends AbstractFilter implements Filter {
             String userEmail = (String)session.getAttribute(
             		AuthenticationFilter.USER_SESSION_ATTR);
             UserEntity user = getDao().getUserDao().getByEmail(userEmail);
-    		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
+    		ConfigEntity config = ctx.getConfig();
     		if (user != null) {
     			renderMessage(httpResponse, Messages.get("access_denied_page"));
     			return;

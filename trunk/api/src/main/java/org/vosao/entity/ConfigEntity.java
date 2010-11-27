@@ -25,7 +25,12 @@ package org.vosao.entity;
 import static org.vosao.utils.EntityUtil.*;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.json.JSONObject;
 
 import com.google.appengine.api.datastore.Entity;
 
@@ -48,14 +53,14 @@ public class ConfigEntity extends BaseEntityImpl {
 	private String picasaUser;
 	private String picasaPassword;
 	private boolean enableCkeditor;
-	private Map<String, String> attributes;
+	private String attributesJSON;
 	private String defaultTimezone;
 	private String defaultLanguage;
+	private String site404Url;
 
 	public ConfigEntity() {
 		commentsTemplate = "";
 		enableCkeditor = true;
-		attributes = new HashMap<String, String>();
 		defaultLanguage = "en";
 	}
 
@@ -77,9 +82,10 @@ public class ConfigEntity extends BaseEntityImpl {
 		picasaUser = getStringProperty(entity, "picasaUser");
 		picasaPassword = getStringProperty(entity, "picasaPassword");
 		enableCkeditor = getBooleanProperty(entity, "enableCkeditor", true);
-		attributes = getMapProperty(entity, "attributes");
+		attributesJSON = getStringProperty(entity, "attributesJSON");
 		defaultTimezone = getStringProperty(entity, "defaultTimezone");
 		defaultLanguage = getStringProperty(entity, "defaultLanguage", "en");
+		site404Url = getStringProperty(entity, "site404Url");
 	}
 	
 	@Override
@@ -100,9 +106,10 @@ public class ConfigEntity extends BaseEntityImpl {
 		setProperty(entity, "picasaUser", picasaUser, false);
 		setProperty(entity, "picasaPassword", picasaPassword, false);
 		setProperty(entity, "enableCkeditor", enableCkeditor, false);
-		setProperty(entity, "attributes", attributes);
+		setProperty(entity, "attributesJSON", attributesJSON, false);
 		setProperty(entity, "defaultTimezone", defaultTimezone, false);
 		setProperty(entity, "defaultLanguage", defaultLanguage, false);
+		setProperty(entity, "site404Url", site404Url, false);
 	}
 
 	public String getGoogleAnalyticsId() {
@@ -225,19 +232,64 @@ public class ConfigEntity extends BaseEntityImpl {
 		this.enableCkeditor = value;
 	}
 
-	public Map<String, String> getAttributes() {
-		return attributes;
+	public String getAttributesJSON() {
+		return attributesJSON;
 	}
 
+    public void setAttributesJSON(String value) {
+    	attributesJSON = value;
+    }
+
+    private Map<String, String> attributes;
+	
+    public Map<String, String> getAttributes() {
+    	if (attributes == null) {
+    		attributes = new HashMap<String, String>();
+    		parseAttributes();
+    	}
+    	return attributes;
+    }
+
+    private void parseAttributes() {
+		if (StringUtils.isEmpty(attributesJSON)) {
+			return;
+		}
+		try {
+			JSONObject obj = new JSONObject(attributesJSON);
+			Iterator<String> attributeIter = obj.keys();
+			while (attributeIter.hasNext()) {
+				String attrName = attributeIter.next();
+				getAttributes().put(attrName, obj.getString(attrName));
+			}
+		} catch (org.json.JSONException e) {
+			logger.error("Config atributes parsing problem: " + attributes);
+		}
+    }
+
+    private void updateAttributes() {
+    	attributesJSON = new JSONObject(getAttributes()).toString();
+    }
+    
     public void setAttribute(String name, String value) {
-    	attributes.put(name, value);
+    	getAttributes().put(name, value);
+    	updateAttributes();
     }
     
     public String getAttribute(String name) {
-    	return attributes.get(name);
+    	return getAttributes().get(name);
+    }
+    
+    public void removeAttribute(String name) {
+    	getAttributes().remove(name);
+        updateAttributes();	
     }
 
-	public String getDefaultTimezone() {
+    public void removeAttributes(List<String> names) {
+    	for (String name : names) getAttributes().remove(name);
+        updateAttributes();	
+    }
+
+    public String getDefaultTimezone() {
 		return defaultTimezone;
 	}
 
@@ -251,5 +303,13 @@ public class ConfigEntity extends BaseEntityImpl {
 
 	public void setDefaultLanguage(String defaultLanguage) {
 		this.defaultLanguage = defaultLanguage;
+	}
+
+	public String getSite404Url() {
+		return site404Url;
+	}
+
+	public void setSite404Url(String site404Url) {
+		this.site404Url = site404Url;
 	}
 }

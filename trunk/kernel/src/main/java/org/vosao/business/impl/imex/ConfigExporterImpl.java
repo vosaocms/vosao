@@ -79,12 +79,15 @@ public class ConfigExporterImpl extends AbstractExporter
 				config.getSiteUserLoginUrl()));
 		configElement.addElement("enableCkeditor").setText(
 				String.valueOf(config.isEnableCkeditor()));
+		configElement.addElement("attributes").setText(notNull(
+				config.getAttributesJSON()));
 		configElement.addElement("defaultTimezone").setText(notNull(
 				config.getDefaultTimezone()));
 		configElement.addElement("defaultLanguage").setText(notNull(
 				config.getDefaultLanguage()));
+		configElement.addElement("site404Url").setText(notNull(
+				config.getSite404Url()));
 		createLanguagesXML(configElement);
-		createAttributesXML(configElement);
 	}
 
 	private void createLanguagesXML(Element configElement) {
@@ -97,17 +100,6 @@ public class ConfigExporterImpl extends AbstractExporter
 		}
 	}
 	
-	private void createAttributesXML(Element configElement) {
-		Element attributesElement = configElement.addElement("attributes");
-		ConfigEntity config = getConfig();
-		for (String name : config.getAttributes().keySet()) {
-			Element attributeElem = attributesElement.addElement("attribute");
-			attributeElem.addElement("name").setText(name);
-			attributeElem.addElement("value").setText(config.getAttributes()
-					.get(name));
-		}
-	}
-
 	public void readConfigs(Element configElement) throws DaoTaskException {
 		ConfigEntity config = getConfig();
 		for (Iterator<Element> i = configElement.elementIterator(); i.hasNext(); ) {
@@ -140,7 +132,7 @@ public class ConfigExporterImpl extends AbstractExporter
             	readLanguages(element);
             }
             if (element.getName().equals("attributes")) {
-            	readAttributes(element);
+            	config.setAttributesJSON(element.getText());
             }
             if (element.getName().equals("enableRecaptcha")) {
             	config.setEnableRecaptcha(XmlUtil.readBooleanText(
@@ -158,6 +150,9 @@ public class ConfigExporterImpl extends AbstractExporter
             }
             if (element.getName().equals("defaultLanguage")) {
             	config.setDefaultLanguage(element.getText());
+            }
+            if (element.getName().equals("site404Url")) {
+            	config.setSite404Url(element.getText());
             }
 		}
 		getDaoTaskAdapter().configSave(config);
@@ -186,21 +181,6 @@ public class ConfigExporterImpl extends AbstractExporter
 		return VosaoContext.getInstance().getConfig();
 	}
 	
-	public void readAttributes(Element attributesElement) 
-			throws DaoTaskException {
-		ConfigEntity config = getConfig();
-		for (Iterator<Element> i = attributesElement.elementIterator(); 
-				i.hasNext(); ) {
-            Element element = i.next();
-            if (element.getName().equals("attribute")) {
-            	String name = element.elementText("name");
-            	String value = element.elementText("value");
-            	config.setAttribute(name, value);
-            }
-		}
-    	getDaoTaskAdapter().configSave(config);
-	}
-
 	/**
 	 * Parse and import data from _config.xml file.
 	 * @param xml - _config.xml content.

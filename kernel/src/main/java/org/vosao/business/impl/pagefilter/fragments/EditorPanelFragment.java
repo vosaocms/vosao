@@ -37,7 +37,7 @@ public class EditorPanelFragment implements ContentFragment {
 				"<div id=\"editor-panel\"" 
 				+	"style=\"border-bottom: 1px solid #a5c4d5;"
 				+ "padding: 4px; position: fixed; left: 0; top: 0; width: 100%;"
-				+ "background-color: white; z-index: 1;\">"
+				+ "background-color: white; opacity:0.2; z-index: 1;\">"
 				+ "<div style=\"float:left\">"
 				+ "<a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms/index.vm\">Vosao</a> CMS"
 				+ "<a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms/page/content.vm?id=");
@@ -53,7 +53,13 @@ public class EditorPanelFragment implements ContentFragment {
 				+ " | <a href=\"#\" onclick=\"$('#editor-panel').hide()\">Hide</a> "
 				+ "</div>"
 				+ "<span style=\"clear:both\">&#160;</span>"
-				+ "</div>");
+				+ "</div>"
+				+ "<script type=\"text/javascript\">"
+				+ " $(function() {" 
+				+ "   $('#editor-panel').hover(function(){ $('#editor-panel').css('opacity','1.0'); }, "
+				+ "      function(){ $('#editor-panel').css('opacity','0.1'); });"
+				+ " });"
+				+ "</script>");
 			return code.toString();
 		}
 		return "";

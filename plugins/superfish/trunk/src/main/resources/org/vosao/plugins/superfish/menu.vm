@@ -1,7 +1,7 @@
 #macro( superfishMenu $treeItem)
   <li>
     #if ($treeItem.entity.localTitle)
-    <a href="$treeItem.entity.friendlyURL">$treeItem.entity.localTitle</a>
+    <a href="$treeItem.entity.friendlyURL">$treeItem.entity.getLocalTitle($language.code)</a>
     #else
     <a href="$treeItem.entity.friendlyURL">$treeItem.entity.title</a>
     #end
@@ -19,7 +19,7 @@
     #if($config.showHomepage)
     <li>
       #if($root.entity.localTitle)
-      <a href="/">$root.entity.localTitle</a>
+      <a href="/">$root.entity.getLocalTitle($language.code)</a>
       #else
       <a href="/">$root.entity.title</a>
       #end     

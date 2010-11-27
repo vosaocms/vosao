@@ -88,6 +88,9 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 		if (vo.get("siteUserLoginUrl") != null) {
 			config.setSiteUserLoginUrl(vo.get("siteUserLoginUrl"));
 		}
+		if (vo.get("site404Url") != null) {
+			config.setSite404Url(vo.get("site404Url"));
+		}
 		if (vo.get("enablePicasa") != null) {
 			config.setEnablePicasa(Boolean.valueOf(vo.get("enablePicasa")));
 		}
@@ -242,9 +245,7 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 	@Override
 	public ServiceResponse removeAttributes(List<String> names) {
 		ConfigEntity config = getDao().getConfigDao().getConfig();
-		for (String name : names) {
-			config.getAttributes().remove(name);
-		}
+		config.removeAttributes(names);
 		getDao().getConfigDao().save(config);
 		return ServiceResponse.createSuccessResponse(
 				Messages.get("success"));

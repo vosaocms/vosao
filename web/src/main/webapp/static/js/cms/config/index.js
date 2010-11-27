@@ -159,6 +159,7 @@ function initFormFields() {
     toggleRecaptcha();
     $('#editExt').val(config.editExt);
     $('#siteUserLoginUrl').val(config.siteUserLoginUrl);
+    $('#site404Url').val(config.site404Url);
     $('#enablePicasa').each(function () {this.checked = config.enablePicasa});
     $('#enableCkeditor').each(function () {this.checked = config.enableCkeditor});
     $('#picasaUser').val(config.picasaUser);
@@ -181,7 +182,8 @@ function onSave() {
         editExt : $('#editExt').val(),
         defaultTimezone : $('#timezone').val(),
         defaultLanguage : $('#language').val(),
-        siteUserLoginUrl : $('#siteUserLoginUrl').val()        
+        siteUserLoginUrl : $('#siteUserLoginUrl').val(),        
+        site404Url : $('#site404Url').val()        
     });
     Vosao.jsonrpc.configService.saveConfig(function(r) {
     	Vosao.showServiceMessages(r);

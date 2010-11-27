@@ -22,9 +22,15 @@
 
 package org.vosao.update;
 
+import java.util.Map;
+
 import org.vosao.business.Business;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PluginEntity;
+
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.repackaged.org.json.JSONObject;
 
 /**
  * 
@@ -60,9 +66,28 @@ public class UpdateTask08 implements UpdateTask {
 	@Override
 	public String update() throws UpdateException {
 		updatePlugins();
+		updateConfig();
 		return "Successfully updated to 0.8 version.";
 	}
 
+	private static final String ATTRIBUTES = "attributes";
+	
+	private void updateConfig() {
+		Query query = new Query("ConfigEntity");
+		for (Entity e : getBusiness().getSystemService().getDatastore()
+				.prepare(query).asIterable()) {
+			String attributes = convertAttributes(
+					(Map<String, String>)e.getProperty(ATTRIBUTES));
+			e.removeProperty(ATTRIBUTES);
+			e.setProperty(ATTRIBUTES, attributes);
+			getBusiness().getSystemService().getDatastore().put(e);
+		}
+	}
+
+	private String convertAttributes(Map<String, String> attributes) {
+		return new JSONObject(attributes).toString();
+	}
+	
 	private void updatePlugins() {
 		for (PluginEntity plugin : getDao().getPluginDao().select()) {
 			plugin.setDisabled(true);

@@ -29,7 +29,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.vosao.plugins.register.dao.RegisterDao;
+import org.vosao.plugins.register.entity.RegisterConfigEntity;
 import org.vosao.plugins.register.entity.RegistrationEntity;
 import org.vosao.plugins.register.service.RegisterBackService;
 
@@ -49,10 +51,22 @@ public class ConfirmServlet extends HttpServlet {
 		String sessionKey = request.getParameter("id");
 		RegistrationEntity reg = getRegisterDao().getRegistrationDao()
 				.getBySessionKey(sessionKey);
+		boolean error = true;
 		if (reg != null) {
 			getRegisterBackService().confirmRegistration(reg.getId());
+			error = false;
 		}
-		response.sendRedirect("/");		
+		RegisterConfigEntity config = registerDao.getRegisterConfigDao()
+				.getConfig();
+		String url = "/";
+		if (!StringUtils.isEmpty(config.getConfirmPageUrl())) {
+			if (!error) {
+				url = config.getConfirmPageUrl() + "?status=ok&userEmail=" 
+					+ reg.getEmail();
+			}
+			url = config.getConfirmPageUrl() + "?status=error";
+		}
+		response.sendRedirect(url);		
 	}
 
 	public RegisterDao getRegisterDao() {

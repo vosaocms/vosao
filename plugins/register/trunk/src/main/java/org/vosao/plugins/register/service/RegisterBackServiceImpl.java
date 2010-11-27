@@ -99,6 +99,7 @@ public class RegisterBackServiceImpl extends AbstractRegisterService
 		config.setRegisterFormTemplate(vo.get("registerFormTemplate"));
 		config.setConfirmUserTemplate(vo.get("confirmUserTemplate"));
 		config.setConfirmAdminTemplate(vo.get("confirmAdminTemplate"));
+		config.setConfirmPageUrl(vo.get("confirmPageUrl"));
 		config.setCaptcha(Boolean.valueOf(vo.get("captcha")));
 		getRegisterDao().getRegisterConfigDao().save(config);
 		return ServiceResponse.createSuccessResponse(

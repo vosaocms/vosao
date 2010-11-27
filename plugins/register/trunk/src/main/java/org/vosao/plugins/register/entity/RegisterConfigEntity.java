@@ -38,6 +38,7 @@ public class RegisterConfigEntity extends BaseEntityImpl {
 	private String confirmUserTemplate;
 	private String confirmAdminTemplate;
 	private boolean captcha;
+	private String confirmPageUrl;
 
 	public RegisterConfigEntity() {
 		registerFormTemplate = "";
@@ -57,6 +58,7 @@ public class RegisterConfigEntity extends BaseEntityImpl {
 		confirmUserTemplate = getTextProperty(entity, "confirmUserTemplate");
 		confirmAdminTemplate = getTextProperty(entity, "confirmAdminTemplate");
 		captcha = getBooleanProperty(entity, "captcha", false);
+		confirmPageUrl = getTextProperty(entity, "confirmPageUrl");
 	}
 	
 	@Override
@@ -70,6 +72,7 @@ public class RegisterConfigEntity extends BaseEntityImpl {
 		setTextProperty(entity, "confirmUserTemplate", confirmUserTemplate);
 		setTextProperty(entity, "confirmAdminTemplate", confirmAdminTemplate);
 		setProperty(entity, "captcha", captcha, false);
+		setTextProperty(entity, "confirmPageUrl", confirmPageUrl);
 	}
 
 	public String getAdminEmail() {
@@ -134,6 +137,14 @@ public class RegisterConfigEntity extends BaseEntityImpl {
 
 	public void setCaptcha(boolean captcha) {
 		this.captcha = captcha;
+	}
+
+	public String getConfirmPageUrl() {
+		return confirmPageUrl;
+	}
+
+	public void setConfirmPageUrl(String confirmPageUrl) {
+		this.confirmPageUrl = confirmPageUrl;
 	}
 
 }

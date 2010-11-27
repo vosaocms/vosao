@@ -54,6 +54,7 @@ function showConfig() {
 	$('#confirmUserTemplate').val(config.confirmUserTemplate);
 	$('#confirmAdminTemplate').val(config.confirmAdminTemplate);
 	$('#captcha').each(function() {this.checked = config.captcha});
+	$('#confirmPageUrl').val(config.confirmPageUrl);
 }
 
 function validate(vo) {
@@ -82,6 +83,7 @@ function onSave() {
 		clearDays : $('#clearDays').val(),
 		registerFormTemplate : $('#registerFormTemplate').val(),
 		confirmUserTemplate : $('#confirmUserTemplate').val(),
+		confirmPageUrl : $('#confirmPageUrl').val(),
 		captcha : String($('#captcha:checked').size() > 0),
 		confirmAdminTemplate : $('#confirmAdminTemplate').val()		
 	};

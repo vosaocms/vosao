@@ -63,4 +63,8 @@ public class PhotoVO {
 		return result;
 	}
 	
+	public PhotoEntry photo() {
+		return photo;
+	}
+	
 }

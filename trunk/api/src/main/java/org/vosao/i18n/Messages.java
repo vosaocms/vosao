@@ -51,7 +51,7 @@ public class Messages {
 		Locale.GERMAN,
 		new Locale("ru"),
 		Locale.JAPANESE,
-		Locale.CHINESE,
+		Locale.TRADITIONAL_CHINESE,
 		Locale.SIMPLIFIED_CHINESE};
 	
 	private static Map<Locale, VosaoResourceBundle> bundles = 

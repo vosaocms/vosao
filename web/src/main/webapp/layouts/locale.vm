@@ -26,6 +26,6 @@
     <a href="#" onclick="Vosao.changeLanguage('de')">Deutsch</a>
     <a href="#" onclick="Vosao.changeLanguage('ru')">Русский</a>
     <a href="#" onclick="Vosao.changeLanguage('ja')">日本語</a>
-    <a href="#" onclick="Vosao.changeLanguage('zh')">簡體字</a>
-    <a href="#" onclick="Vosao.changeLanguage('zh_CN')">简体字</a>
+    <a href="#" onclick="Vosao.changeLanguage('zh_TW')">中文(繁體)</a>
+    <a href="#" onclick="Vosao.changeLanguage('zh_CN')">中文(简体)</a>
 </div>

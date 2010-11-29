@@ -27,6 +27,7 @@ import java.util.Map;
 import org.vosao.business.Business;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PluginEntity;
+import org.vosao.utils.EntityUtil;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Query;
@@ -71,15 +72,16 @@ public class UpdateTask08 implements UpdateTask {
 	}
 
 	private static final String ATTRIBUTES = "attributes";
+	private static final String ATTRIBUTES_JSON = "attributesJSON";
 	
 	private void updateConfig() {
 		Query query = new Query("ConfigEntity");
 		for (Entity e : getBusiness().getSystemService().getDatastore()
 				.prepare(query).asIterable()) {
-			String attributes = convertAttributes(
-					(Map<String, String>)e.getProperty(ATTRIBUTES));
+			Map<String, String> map = EntityUtil.getMapProperty(e, ATTRIBUTES);
+			String attributes = convertAttributes(map);
 			e.removeProperty(ATTRIBUTES);
-			e.setProperty(ATTRIBUTES, attributes);
+			e.setProperty(ATTRIBUTES_JSON, attributes);
 			getBusiness().getSystemService().getDatastore().put(e);
 		}
 	}

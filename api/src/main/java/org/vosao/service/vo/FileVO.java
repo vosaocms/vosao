@@ -23,6 +23,7 @@
 package org.vosao.service.vo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.vosao.entity.FieldEntity;
@@ -94,6 +95,10 @@ public class FileVO {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public Date getModDate() {
+		return file.getLastModifiedTime();
 	}
 	
 }

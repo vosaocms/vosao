@@ -66,7 +66,7 @@ public class UpdateManager {
 				datastore.put(config);
 			}
 		}
-		getDao().getConfigDao().clearCache();
+		business.getSystemService().getCache().clear();
 		return result.toString();
 	}
 	

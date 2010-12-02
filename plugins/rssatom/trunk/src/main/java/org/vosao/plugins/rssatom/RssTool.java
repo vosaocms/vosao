@@ -38,6 +38,8 @@ import org.vosao.utils.StrUtil;
  */
 public class RssTool {
 
+	private final String PAGE_TEMPLATE = "$page.content";
+	
 	private Business business;
 	
 	public RssTool(Business aBusiness) {
@@ -54,12 +56,11 @@ public class RssTool {
 	
 	public String getDescription(PageEntity page) {
 		RssatomConfig rssatomConfig = new RssatomConfig(getPlugin());
-		String content = getBusiness().getPageBusiness().getPageContent(page, 
-				getBusiness().getLanguage()).getContent(); 
-		if (StringUtils.isEmpty(content)) {
-			return "";
-		}
-		content = StrUtil.extractTextFromHTML(content);
+		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
+		String lang = StringUtils.isEmpty(config.getDefaultLanguage()) ? 
+				"en" : config.getDefaultLanguage();
+		String content = StrUtil.extractTextFromHTML(
+				getBusiness().getPageBusiness().render(page, PAGE_TEMPLATE, lang));
 		if (StringUtils.isEmpty(content)) {
 			return "";
 		}
@@ -67,7 +68,7 @@ public class RssTool {
 				rssatomConfig.getItemSize() : content.length();
 		return content.substring(0, end - 1);
 	}
-	
+
 	public String getUUID(PageEntity page) {
 		return (new UUID(page.getCreateDate().getTime(), 
 				page.getModDate().getTime())).toString();

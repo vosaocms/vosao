@@ -172,7 +172,9 @@ public class StrUtil {
 	}
 
 	public static String extractTextFromHTML(String html) {
-		return removeJavascript(html).replaceAll("<.*?>", "");
+		return removeJavascript(html).replaceAll("<.*?>", "")
+			.replaceAll("&#160;", "")
+			.replaceAll("&nbsp;", "");
 	}
 
 	public static List<Long> toLong(List<String> list) {

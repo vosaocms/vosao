@@ -14,7 +14,7 @@
     <title>$page.title</title>
     <link href="http://${config.siteDomain}${page.friendlyURL}"/>
     <id>urn:uuid:${rss.getUUID($page)}</id>
-    <updated>${date.format("yyyy-M-d'T'H:m:sZ", $page.modDate)}</updated>
+    <updated>${date.format("yyyy-M-d'T'H:m:sZ", $page.publishDate)}</updated>
     <summary>${rss.getDescription($page)}</summary>
   </entry>
 #end      

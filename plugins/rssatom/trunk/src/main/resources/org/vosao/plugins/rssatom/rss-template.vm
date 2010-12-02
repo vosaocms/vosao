@@ -5,8 +5,8 @@
       <link>http://${config.siteDomain}</link>
       <description>${rssatomConfig.title}</description>
       <language>en-us</language>
-      <pubDate>${date.long}</pubDate>
-      <lastBuildDate>${date.long}</lastBuildDate>
+      <pubDate>${date.format("EEE, dd MMM yyyy HH:mm:ss Z", $date)}</pubDate>
+      <lastBuildDate>${date.format("EEE, dd MMM yyyy HH:mm:ss Z", $date)}</lastBuildDate>
       <docs>http://blogs.law.harvard.edu/tech/rss</docs>
       <generator>Vosao CMS</generator>
       <managingEditor>${config.siteEmail}</managingEditor>
@@ -16,7 +16,7 @@
          <title>${page.title}</title>
          <link>http://${config.siteDomain}${page.friendlyURL}</link>
          <description>${rss.getDescription($page)}</description>
-         <pubDate>${date.format('long', $page.publishDate)}</pubDate>
+         <pubDate>${date.format("EEE, dd MMM yyyy HH:mm:ss Z", $page.publishDate)}</pubDate>
          <guid>http://${config.siteDomain}${page.friendlyURL}</guid>
       </item>
 #end      

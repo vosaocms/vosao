@@ -95,11 +95,23 @@ public interface PageBusiness {
 	/**
 	 * Render page with page bound template. With applied postProcessing and 
 	 * using PageRenderDecorator.
-	 * @param page - page to render
+	 * @param page - page to render.
+	 * @param languageCode - language code.
 	 * @return rendered html.
 	 */
 	String render(final PageEntity page, final String languageCode);
 	
+	/**
+	 * Render page using provided template. With applied postProcessing and 
+	 * using PageRenderDecorator.
+	 * @param page - page to render.
+	 * @param template - page template.
+	 * @param languageCode - language code.
+	 * @return rendered html.
+	 */
+	String render(final PageEntity page, final String tempate, 
+			final String languageCode);
+
 	VelocityContext createContext(final String languageCode, PageEntity page);
 	
 	PageRenderDecorator createPageRenderDecorator(final PageEntity page,

@@ -144,15 +144,21 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 		}
 	}
 	
+	@Override 
+	public String render(PageEntity page, String template, 
+			String languageCode) {
+		VelocityContext context = createContext(languageCode, page);
+		context.put("page", createPageRenderDecorator(page, languageCode));
+		return pagePostProcess(getSystemService().render(template, context), 
+				page);
+	}
+	
 	@Override
 	public String render(PageEntity page, String languageCode) {
 		if (page.getTemplate() != null) {
 			TemplateEntity template = getDao().getTemplateDao().getById(
 					page.getTemplate());
-			VelocityContext context = createContext(languageCode, page);
-			context.put("page", createPageRenderDecorator(page, languageCode));
-			return pagePostProcess(getSystemService()
-					.render(template.getContent(), context), page);
+			return render(page, template.getContent(), languageCode);
 		}
 		else {
 			ContentEntity content = getPageContent(page, languageCode);

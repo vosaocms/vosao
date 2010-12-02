@@ -110,9 +110,12 @@ public class RssatomServlet extends HttpServlet {
 	
 	private void addPages(PageEntity page, List<PageEntity> result) {
 		if (page != null) {
-			result.add(page);
 			for (PageEntity child : getBusiness().getPageBusiness()
 					.getByParent(page.getFriendlyURL())) {
+				if (child.isForInternalUse()) {
+					continue;
+				}
+				result.add(child);
 				addPages(child, result);
 			}
 		}

@@ -579,4 +579,18 @@ public class PageEntity extends BaseEntityImpl {
 	public void setRestful(boolean restful) {
 		this.restful = restful;
 	}
+	
+	public boolean isPublished() {
+		return isPublished(new Date());
+	}
+	
+	public boolean isPublished(Date date) {
+		if (getPublishDate() == null) {
+			return true;
+		}
+		if (getEndPublishDate() == null) {
+			return getPublishDate().before(date);
+		}
+		return getPublishDate().before(date) && getEndPublishDate().after(date);
+	}
 }

@@ -171,7 +171,7 @@ public class PageDaoImpl extends BaseDaoImpl<PageEntity>
 		Map<String, PageEntity> pages = new HashMap<String, PageEntity>();
 		for (PageEntity page : list) {
 			if (page.isApproved() && !page.isForInternalUse()
-					&& page.getPublishDate().before(new Date())) {
+					&& page.isPublished()) {
 				String key = page.getFriendlyURL();
 				if (!pages.containsKey(key)
 					|| pages.get(key).getVersion() < page.getVersion()) {

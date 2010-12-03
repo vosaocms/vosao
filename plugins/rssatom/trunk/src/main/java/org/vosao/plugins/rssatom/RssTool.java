@@ -59,6 +59,7 @@ public class RssTool {
 		ConfigEntity config = getBusiness().getConfigBusiness().getConfig();
 		String lang = StringUtils.isEmpty(config.getDefaultLanguage()) ? 
 				"en" : config.getDefaultLanguage();
+		page.setSkipPostProcessing(true);
 		String content = StrUtil.extractTextFromHTML(
 				getBusiness().getPageBusiness().render(page, PAGE_TEMPLATE, lang));
 		if (StringUtils.isEmpty(content)) {

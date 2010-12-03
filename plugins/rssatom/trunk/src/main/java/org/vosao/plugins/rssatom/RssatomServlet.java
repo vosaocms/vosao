@@ -25,6 +25,7 @@ package org.vosao.plugins.rssatom;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -112,7 +113,7 @@ public class RssatomServlet extends HttpServlet {
 		if (page != null) {
 			for (PageEntity child : getBusiness().getPageBusiness()
 					.getByParent(page.getFriendlyURL())) {
-				if (child.isForInternalUse()) {
+				if (child.isForInternalUse() || !child.isPublished()) {
 					continue;
 				}
 				result.add(child);
@@ -120,5 +121,7 @@ public class RssatomServlet extends HttpServlet {
 			}
 		}
 	}
+	
+	
 	
 }

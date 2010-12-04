@@ -32,8 +32,8 @@ import java.util.MissingResourceException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.vosao.business.Business;
 import org.vosao.common.VosaoContext;
-import org.vosao.dao.Dao;
 import org.vosao.entity.ConfigEntity;
 
 /**
@@ -94,8 +94,8 @@ public class Messages {
 		return pattern;
 	}
 	
-	private static Dao getDao() {
-		return VosaoContext.getInstance().getBusiness().getDao();
+	private static Business getBusiness() {
+		return VosaoContext.getInstance().getBusiness();
 	}
 	
 	/**
@@ -129,7 +129,7 @@ public class Messages {
 		result.append("var locale_language = '")
 			.append(ctx.getLocale().getLanguage()).append("';\n");
 		result.append("var default_language = '")
-			.append(config.getDefaultLanguage()).append("';\n");
+			.append(getBusiness().getDefaultLanguage()).append("';\n");
 		result.append(
 				"function messages(key) {\n" 
 			  + "  if (_messages[key] == 'undefined') {\n"

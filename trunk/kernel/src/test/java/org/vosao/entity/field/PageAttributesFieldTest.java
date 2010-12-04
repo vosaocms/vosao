@@ -22,16 +22,17 @@
 
 package org.vosao.entity.field;
 
-import junit.framework.TestCase;
-
 import org.vosao.common.VosaoContext;
+import org.vosao.dao.AbstractDaoTest;
 import org.vosao.entity.ConfigEntity;
 
-public class PageAttributesFieldTest extends TestCase {
+public class PageAttributesFieldTest extends AbstractDaoTest {
 
 	@Override
-	public void setUp() {
+	public void setUp() throws Exception {
+		super.setUp();
 		VosaoContext.getInstance().setConfig(new ConfigEntity());
+		VosaoContext.getInstance().getConfig().setDefaultLanguage("en");
 	}
 	
 	public void testParse() {

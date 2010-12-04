@@ -292,11 +292,10 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	public ContentEntity getPageContent(PageEntity page, String languageCode) {
 		ContentEntity content = getDao().getContentDao().getByLanguage(
 				PageEntity.class.getName(), page.getId(), languageCode);
-		if (content == null) {
-			ConfigEntity config = VosaoContext.getInstance().getConfig();
+		if (content == null || content.getContent().isEmpty()) {
 			content = getDao().getContentDao().getByLanguage(
 					PageEntity.class.getName(), page.getId(), 
-					config.getDefaultLanguage());
+					getBusiness().getDefaultLanguage());
 		}
 		if (content == null) {
 			logger.error("No content found for page " + page.getTitle());

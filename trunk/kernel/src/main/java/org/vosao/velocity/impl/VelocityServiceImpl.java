@@ -228,7 +228,7 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 			}
 			return getBusiness().getPageBusiness()
 				.createStructuredPageRenderDecorator(page, 
-						VosaoContext.getInstance().getLanguage(),
+						getBusiness().getLanguage(),
 						template).getContent();
 		}
 		return Messages.get("approved_content_not_found");

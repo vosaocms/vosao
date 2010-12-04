@@ -34,6 +34,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
+import org.vosao.business.Business;
 import org.vosao.common.VosaoContext;
 
 public class PageAttributesField implements Map<String, String>, Serializable {
@@ -101,16 +102,19 @@ public class PageAttributesField implements Map<String, String>, Serializable {
 		return Collections.EMPTY_SET;
 	}
 
+	private static Business getBusiness() {
+		return VosaoContext.getInstance().getBusiness();
+	}
+	
 	@Override
 	public String get(Object key) {
 		if (data.containsKey(key)) {
-			VosaoContext ctx = VosaoContext.getInstance();
-			if (data.get(key).containsKey(ctx.getLanguage())) {
-				return data.get(key).get(ctx.getLanguage());
+			if (data.get(key).containsKey(getBusiness().getLanguage())) {
+				return data.get(key).get(getBusiness().getLanguage());
 			}
-			if (data.get(key).containsKey(ctx.getConfig()
-					.getDefaultLanguage())) {
-				return data.get(key).get(ctx.getConfig().getDefaultLanguage());
+			String defaultLanguage = getBusiness().getDefaultLanguage();
+			if (data.get(key).containsKey(defaultLanguage)) {
+				return data.get(key).get(defaultLanguage);
 			}
 		}
 		return null;

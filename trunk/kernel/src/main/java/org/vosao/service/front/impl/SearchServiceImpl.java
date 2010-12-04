@@ -38,17 +38,15 @@ public class SearchServiceImpl extends AbstractServiceImpl
 	@Override
 	public SearchResult search(String query, int start, int count, int textSize) {
 		String language = getBusiness().getLanguage();
+		String defaultLanguage = getBusiness().getDefaultLanguage();
 		SearchResult result = getBusiness().getSearchEngine().search(
 				query, start, count, language, textSize);
-		ConfigEntity config = VosaoContext.getInstance().getConfig();
-		if (!language.equals(config.getDefaultLanguage())) {
+		if (!language.equals(defaultLanguage)) {
 			SearchResult enResult = getBusiness().getSearchEngine().search(
-					query, start, count, config.getDefaultLanguage(), 
-					textSize);
+					query, start, count, defaultLanguage, textSize);
 			for (Hit hit : enResult.getHits()) {
 				hit.setLocalTitle(hit.getTitle());
-				hit.setUrl(hit.getUrl() + "?language=" 
-						+ config.getDefaultLanguage());
+				hit.setUrl(hit.getUrl() + "?language=" + defaultLanguage);
 			}
 			result.setCount(result.getCount() + enResult.getCount());
 			result.getHits().addAll(enResult.getHits());

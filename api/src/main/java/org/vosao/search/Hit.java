@@ -35,7 +35,8 @@ public class Hit {
 	public Hit(PageEntity page, String aContent) {
 		super();
 		title = page.getTitle();
-		localTitle = page.getLocalTitle(VosaoContext.getInstance().getLanguage());
+		localTitle = page.getLocalTitle(VosaoContext.getInstance().getBusiness()
+				.getLanguage());
 		url = page.getFriendlyURL();
 		content = aContent;
 	}

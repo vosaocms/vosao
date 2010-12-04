@@ -23,6 +23,7 @@
 package org.vosao.business.impl;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
@@ -55,6 +56,7 @@ import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.dao.impl.DaoImpl;
 import org.vosao.entity.ConfigEntity;
+import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.global.SystemService;
 import org.vosao.global.impl.SystemServiceImpl;
@@ -221,11 +223,6 @@ public class BusinessImpl implements Business, Serializable {
 	@Override
 	public void setSystemService(SystemService bean) {
 		systemService = bean;
-	}
-
-	@Override
-	public String getLanguage() {
-		return VosaoContext.getInstance().getLanguage();
 	}
 
 	@Override
@@ -461,4 +458,29 @@ public class BusinessImpl implements Business, Serializable {
 		pageAttributeBusiness = bean;
 	}
 
+	@Override
+	public String getLanguage() {
+    	String localeLanguage = VosaoContext.getInstance().getLanguage();
+    	LanguageEntity language = getDao().getLanguageDao().getByCode(
+    			localeLanguage);
+    	if (language == null) {
+    		localeLanguage = getDefaultLanguage();
+    	}
+		return localeLanguage; 
+	}
+
+	@Override
+	public String getDefaultLanguage() {
+   		LanguageEntity language = getDao().getLanguageDao().getByCode(
+    			VosaoContext.getInstance().getConfig().getDefaultLanguage());
+   		if (language == null) {
+   			List<LanguageEntity> langs = getDao().getLanguageDao().select();
+   			if (langs.isEmpty()) {
+   				return LanguageEntity.ENGLISH_CODE;
+   			}
+   			language = langs.get(0);
+   		}
+		return language.getCode();
+	}
+	
 }

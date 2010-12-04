@@ -49,7 +49,15 @@ public interface Business {
 	UserEntity getUser();
 	TimeZone getTimeZone();
 	
+	/**
+	 * Get current langauge for rendering page's content. It can be different 
+	 * from current locale language as site languages set can not include current
+	 * locale language. 
+	 * @return language code.
+	 */
 	String getLanguage();
+	
+	String getDefaultLanguage();
 	
 	MessageQueue getMessageQueue();
 

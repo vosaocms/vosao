@@ -1,0 +1,14 @@
+<vosao-plugin>
+    <name>superfish</name>
+    <title>$superfish.title</title>
+    <version>0.8</version>
+    <description>$superfish.description</description>
+    <website>www.vosao.org</website>
+    <entry-point-class>
+        org.vosao.plugins.superfish.SuperfishEntryPoint
+    </entry-point-class>
+    <plugin-config-url>config.html</plugin-config-url>
+    <header-javascript>js/hoverIntent.js</header-javascript>
+    <header-javascript>js/superfish.js</header-javascript>
+    <header-css>css/superfish.css</header-css>
+</vosao-plugin>

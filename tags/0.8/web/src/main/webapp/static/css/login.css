@@ -1,0 +1,36 @@
+#content {
+	margin: 0 auto;
+	width: 700px;
+    margin-top: 100px;
+}
+
+#memo {
+	float: left;
+	width: 300px;
+}
+#memo p {
+    margin-bottom: 10px;
+}
+
+#login-form {
+	float: right;
+	border: 1px solid #a5c4d5;
+	padding: 10px 20px;
+	background: url('../images/login-bg.png') repeat-x 0 0;
+}
+#login-form label {
+	width: 150px;
+}
+
+#login-form h3, #login-form h4 {
+	text-align: center;
+    margin: 10px 0;
+}
+
+.version {
+	position: fixed;
+	bottom: 5px;
+	font-size: 12px;
+	width: 700px;
+	text-align: center;
+}

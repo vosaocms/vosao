@@ -1,0 +1,42 @@
+#*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2010 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*#
+
+#set ($title = $messages.get("page"))
+
+#define ( $head1 )
+
+<link rel="stylesheet" href="/static/css/page.css" type="text/css" />
+<script type="text/javascript" src="/static/ckeditor/ckeditor.js"></script>
+  
+#if ($params.get("id"))
+    $vosao.setSessionAttribute("imageUploadPageId", $params.get("id"))
+#end
+  
+<script type="text/javascript">
+var pageId = Vosao.getQueryParam('id'); 
+var pageParentUrl = decodeURIComponent(Vosao.getQueryParam('parent'));
+</script>
+
+<script type="text/javascript" src="/static/js/cms/page/version.js"></script>
+<script type="text/javascript" src="/static/js/cms/page/breadcrumbs.js"></script>
+
+#end 

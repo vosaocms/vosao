@@ -1,0 +1,177 @@
+#*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2010 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*#
+
+#parse('/cms/page/head.vm')
+
+#define ( $head2 )
+
+<script src="/static/js/jquery.treeview.pack.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/static/css/jquery.treeview.css" type="text/css" />
+<script type="text/javascript" src="/static/js/cms/page/index.js"></script>
+
+#end
+    
+#parse('/cms/page/versionsBox.vm')
+
+#parse('/cms/page/breadcrumbs.vm')
+
+<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all"
+    style="margin-top: 14px;">
+
+#parse('/cms/page/tab.vm')
+
+<div id="tab-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+
+<form id="pageForm">
+
+<div id="titleDiv" class="form-row">
+    <label>$messages.get("title")</label>
+    <input id="title" type="text" class="form-title" size="40" />
+</div>
+<div class="form-row">
+    <label>$messages.get("page.friendly_url")</label>
+    <span id="parentFriendlyUrl"></span>
+    <input id="friendlyUrl" type="text" />
+    <span id="friendlyUrlSpan"></span>
+</div>
+<div class="form-row">
+    <label>$messages.get("restful")</label>
+    <input id="restful" type="checkbox" />
+</div>
+<div class="form-row">
+    <label>$messages.get("template")</label>
+    <select id="templates"></select>
+</div>
+<div class="form-row">
+    <label>$messages.get("page.publication_date")</label>
+    <input id="publishDate" type="text" class="datepicker" size="9"/>
+    <input id="publishTime" type="text" size="5"/>
+    -
+    <input id="endPublishDate" type="text" class="datepicker" size="9"/>
+    <input id="endPublishTime" type="text" size="5"/>
+</div>
+<div class="form-row">
+    <label>$messages.get("enable_comments")</label>
+    <input id="commentsEnabled" type="checkbox" />
+</div>
+<div class="form-row">
+    <label>$messages.get("page.include_search")</label>
+    <input id="searchable" type="checkbox" />
+</div>
+<div class="form-row">
+    <label>$messages.get("page.velocity_processing")</label>
+    <input id="velocityProcessing" type="checkbox" />
+</div>
+<div class="form-row">
+    <label>$messages.get("page.wiki_processing")</label>
+    <input id="wikiProcessing" type="checkbox" />
+</div>
+<div class="form-row">
+    <label>$messages.get("config.enable_ckeditor")</label>
+    <input id="enableCkeditor" type="checkbox" />
+</div>
+<div class="form-row">
+    <label>$messages.get("page.skip_postprocessing")</label>
+    <input id="skipPostProcessing" type="checkbox" />
+</div>
+<div class="form-row">
+    <label>$messages.get("page.cache_enabled")</label>
+    <input id="cached" type="checkbox" />
+</div>
+<div id="dependenciesDiv" class="form-row">
+    <label>$messages.get("cache_dependencies")</label>
+    <input id="dependencies" type="text" class="form-title" size="60" />
+</div>
+
+<div class="form-row">
+    <label>$messages.get("page.type")</label>
+    <select id="pageType">
+        <option value="SIMPLE">$messages.get("simple")</option>
+        <option value="STRUCTURED">$messages.get("structured")</option>
+    </select>
+</div>
+
+<div id="structuredControls">
+<div class="form-row">
+    <label>$messages.get("structure")</label>
+    <select id="structure"></select>
+</div>
+<div class="form-row">
+    <label>$messages.get("page.structure_template")</label>
+    <select id="structureTemplate"></select>
+</div>
+</div>
+
+<div id="tagsDiv" class="form-row">
+    <label>$messages.get("tags")</label>
+    <a id="addTag" href="#">$messages.get("add_tag")</a>
+    <span id="tags"></span>
+</div>
+
+<div class="form-row">
+    <a id="metadata" href="#">$messages.get("page.metadata")</a>
+</div>
+<div id="meta" style="display:none">
+<div class="form-row">
+    <label>$messages.get("page.meta_keywords")</label>
+    <textarea id="keywords" rows="5" cols="80"></textarea>
+</div>
+<div class="form-row">
+    <label>$messages.get("page.meta_description")</label>
+    <textarea id="description" rows="5" cols="80"></textarea>
+</div>
+<div class="form-row">
+    <label>$messages.get("page.head_content")</label>
+    <textarea id="headHtml" rows="5" cols="80"></textarea>
+</div>
+<div class="form-row">
+    <label>$messages.get("content_type")</label>
+    <input id="contentType" type="text" class="form-title" />
+</div>
+</div>
+
+<div class="buttons">
+    <div id="approveOnPageSaveDiv" class="checkboxes">
+        <input id="approveOnPageSave" type="checkbox"> 
+            $messages.get("page.approve_save")
+    </div> 
+    <input id="pageSaveButton" type="submit" 
+        value="$messages.get("save")" />
+    <input id="pagePreview" type="button" 
+        value="$messages.get("preview")" />
+    <input id="pageCancelButton" type="button" 
+        value="$messages.get("cancel")" />
+</div>    
+
+</form>
+
+</div>
+
+</div>
+
+#parse('/cms/page/versionDialog.vm')
+
+<div id="tag-dialog" style="display:none" title="$messages.get("select_tag")">
+    <ul id="tagTree"></ul>
+</div>
+
+

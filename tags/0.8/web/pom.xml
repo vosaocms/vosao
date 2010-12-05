@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.vosao</groupId>
+		<artifactId>vosaocms</artifactId>
+		<version>0.8</version>
+	</parent>
+	<artifactId>vosao-web</artifactId>
+	<packaging>war</packaging>
+	<name>Vosao CMS web module</name> 
+
+	<dependencies>
+
+        <dependency>
+            <groupId>org.vosao</groupId>
+            <artifactId>vosao-kernel</artifactId>
+            <version>0.8</version>
+            <type>jar</type>
+        </dependency>
+
+	</dependencies>
+
+	<properties>
+		<project_charset>UTF-8</project_charset>
+	</properties>
+
+	<!-- Build Settings -->
+	<build>
+		<finalName>vosaocms</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<webResources>
+						<resource>
+							<directory>src/main/webresources</directory>
+							<filtering>true</filtering>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>

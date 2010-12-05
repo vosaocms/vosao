@@ -37,6 +37,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.Business;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.PluginEntity;
@@ -90,7 +91,7 @@ public class RssatomServlet extends HttpServlet {
 		context.put("plugin", getBusiness().getPageBusiness()
 				.getVelocityPluginService().getPlugins());
 		context.put("messages", getBusiness().getMessageBusiness().getBundle(
-				getBusiness().getLanguage()));
+				VosaoContext.getInstance().getLanguage()));
 		context.put("rssatomConfig", rssatomConfig);
 		context.put("pages", getPages(plugin, rssatomConfig));
 		context.put("rss", new RssTool(getBusiness()));

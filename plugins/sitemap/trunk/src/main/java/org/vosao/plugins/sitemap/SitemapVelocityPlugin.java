@@ -127,13 +127,13 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 	}
 	
 	public String renderBreadcrumbs(String url) {
-		VosaoContext ctx = VosaoContext.getInstance();
+		String language = getBusiness().getLanguage();
 		StringBuilder b = new StringBuilder();
 		StringBuilder path = new StringBuilder("/");
 		PageEntity page = getBusiness().getPageBusiness().getByUrl(
 				path.toString());
 		b.append("<ul class=\"breadcrumbs\"><li><a href=\"/\">")
-				.append(page.getLocalTitle(ctx.getLanguage()))
+				.append(page.getLocalTitle(language))
 				.append("</a></li>");
 		if (!url.equals("/")) {
 			path.deleteCharAt(0);
@@ -142,11 +142,11 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 				b.append("<li>");
 				page = getBusiness().getPageBusiness().getByUrl(path.toString());
 				if (path.toString().equals(url)) {
-					b.append(page.getLocalTitle(ctx.getLanguage()));
+					b.append(page.getLocalTitle(language));
 				}
 				else {
 					b.append("<a href=\"").append(path).append("\">")
-						.append(page.getLocalTitle(ctx.getLanguage()))
+						.append(page.getLocalTitle(language))
 						.append("</a>");
 				}
 				b.append("</li>");

@@ -1,0 +1,14 @@
+<vosao-plugin>
+    <name>disqus</name>
+    <title>$disqus.title</title>
+    <version>0.8</version>
+    <description>$disqus.description</description>
+    <website>www.vosao.org</website>
+    <config>
+        <param name="embedCode" title="$disqus.embed_code" type="Text" />
+        <param name="countCode" title="$disqus.count_code" type="Text" />
+    </config>
+    <entry-point-class>
+        org.vosao.plugins.disqus.DisqusEntryPoint
+    </entry-point-class>
+</vosao-plugin>

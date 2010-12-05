@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.field.PageAttributesField;
 
 public interface PageRenderDecorator {
 
@@ -147,6 +148,18 @@ public interface PageRenderDecorator {
 
 	boolean isWikiProcessing();
 	
+	boolean isForInternalUse();
+	
+	Date getEndPublishDate();
+	
+	boolean isEnableCkeditor();
+	
+	PageAttributesField getAttribute();
+	
 	boolean isRestful();
+
+	boolean isPublished();
+	
+	boolean isPublished(Date date);
 
 }

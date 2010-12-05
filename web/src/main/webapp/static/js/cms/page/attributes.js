@@ -37,8 +37,8 @@ var attrValues = {};
 var languages = null;
     
 $(function(){
-    $("#attribute-dialog").dialog({ width: 400, autoOpen: false });
-    $("#attrValue-dialog").dialog({ width: 400, autoOpen: false });
+    $("#attribute-dialog").dialog({ width: 430, autoOpen: false });
+    $("#attrValue-dialog").dialog({ width: 430, autoOpen: false });
     Vosao.initJSONRpc(loadData);
     // hover states on the link buttons
     $('a.button').hover(

@@ -34,9 +34,9 @@ import org.vosao.business.page.PageRenderDecorator;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.field.PageAttributesField;
 import org.vosao.global.SystemService;
 import org.vosao.i18n.Messages;
-import org.vosao.utils.DateUtil;
 
 public abstract class AbstractPageRenderDecorator implements PageRenderDecorator {
 
@@ -210,10 +210,40 @@ public abstract class AbstractPageRenderDecorator implements PageRenderDecorator
 	public boolean isWikiProcessing() {
 		return page.isWikiProcessing();
 	}
-
+	
+	@Override
+	public boolean isForInternalUse() {
+		return page.isForInternalUse();
+	}
+	
 	@Override
 	public boolean isRestful() {
 		return page.isRestful();
 	}
 
+	@Override
+	public Date getEndPublishDate() {
+		return page.getEndPublishDate();
+	}
+
+	@Override
+	public boolean isEnableCkeditor() {
+		return page.isEnableCkeditor();
+	}
+
+	@Override
+	public PageAttributesField getAttribute() {
+		return page.getAttribute();
+	}
+	
+	@Override
+	public boolean isPublished() {
+		return page.isPublished();
+	}
+
+	@Override
+	public boolean isPublished(Date date) {
+		return page.isPublished(date);
+	}	
+	
 }

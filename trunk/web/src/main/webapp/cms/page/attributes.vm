@@ -59,7 +59,7 @@
     </div>
     <div class="form-row">
         <label>$messages.get("default_value")</label>
-        <input id="defaultValue" type="text" size="40"/>
+        <input id="defaultValue" type="text"/>
     </div>
     <div class="form-row">
         <label>$messages.get("inherited")</label>

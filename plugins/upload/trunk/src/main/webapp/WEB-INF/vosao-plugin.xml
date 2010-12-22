@@ -1,0 +1,17 @@
+<vosao-plugin>
+    <name>upload</name>
+    <title>$upload.title</title>
+    <version>0.8</version>
+    <description>$upload.description</description>
+    <website>www.vosao.org</website>
+    <config>
+        <param name="folder" title="$upload.folder" type="String" value="/upload" />
+        <param name="secret_key" title="$upload.secret_key" type="String" />
+        <param name="use_key" title="$upload.use_key" type="Boolean" value="false" />
+        <param name="subscriber_class" title="$upload.subscriber_class" type="String" />
+        <param name="max_size" title="$upload.max_size" type="Integer" value="1000"/>
+    </config>
+    <entry-point-class>
+        org.vosao.plugins.upload.UploadEntryPoint
+    </entry-point-class>
+</vosao-plugin>

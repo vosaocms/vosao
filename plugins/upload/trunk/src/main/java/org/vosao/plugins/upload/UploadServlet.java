@@ -104,6 +104,7 @@ public class UploadServlet extends HttpServlet {
 			message = StringUtils.isEmpty(e.getMessage()) ? 
 					ExceptionUtils.getStackTrace(e) : e.getMessage();
 		}
+		logger.info(message);
 		response.getWriter().write(createMessage(code, message));
 		response.setStatus(200);
 	}
@@ -112,8 +113,8 @@ public class UploadServlet extends HttpServlet {
 		if (!uploadConfig.isUseKey()) {
 			return true;
 		}
-		return DigestUtils.shaHex(item.challenge + uploadConfig.getSecretKey())
-				.equals(item.verify);		
+		return DigestUtils.shaHex(item.challenge + uploadConfig.getSecretKey()
+				+ DigestUtils.shaHex(item.byteData)).equals(item.verify);		
 	}
 	
 	private void saveFile(Item item) throws IOException {

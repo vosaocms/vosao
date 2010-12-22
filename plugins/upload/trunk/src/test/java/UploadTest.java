@@ -34,6 +34,7 @@ import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
+import org.apache.commons.io.FileUtils;
 
 public class UploadTest extends TestCase {
 
@@ -48,8 +49,9 @@ public class UploadTest extends TestCase {
 		return UUID.randomUUID().toString();
 	}
 
-	private static String generateVerify(String challenge, String key) {
-		return DigestUtils.shaHex(challenge + key);
+	private static String generateVerify(String challenge, String key, 
+			byte[] data) {
+		return DigestUtils.shaHex(challenge + key + DigestUtils.shaHex(data));
 	}
 	
 	private static String sendRequest(String challenge) throws HttpException, 
@@ -57,9 +59,13 @@ public class UploadTest extends TestCase {
 		HttpClient client = new HttpClient();
 		PostMethod method = new PostMethod(URL);
 		method.setParameter("filename", "test1.txt");
-		method.setParameter("data", "Hello World!");
+		String textFile = "Hello World!";
+		method.setParameter("data", textFile);
 		method.setParameter("challenge", challenge);
-		method.setParameter("verify", generateVerify(challenge, KEY));
+		
+		method.setParameter("verify", generateVerify(challenge, KEY, 
+				textFile.getBytes("UTF-8")));
+
 		Integer status = client.executeMethod(method);
 		String response = method.getResponseBodyAsString();
 		method.releaseConnection();
@@ -71,10 +77,11 @@ public class UploadTest extends TestCase {
 		HttpClient client = new HttpClient();
 		PostMethod method = new PostMethod(URL);
 		File file = new File("/home/oleynik/images/soprano.jpg");
+		byte[] data = FileUtils.readFileToByteArray(file);
 		Part[] parts = { 
 				new StringPart("filename","soprano.jpg"),
 				new StringPart("challenge",challenge),
-				new StringPart("verify", generateVerify(challenge, KEY)),
+				new StringPart("verify", generateVerify(challenge, KEY, data)),
 				new FilePart("data", file)
 		};
 		method.setRequestEntity(new MultipartRequestEntity(parts, method.getParams()));
@@ -88,11 +95,11 @@ public class UploadTest extends TestCase {
 	public void testOK() {
 	}
 	
-	public void tesPost() throws HttpException, IOException {
+	public void testPost() throws HttpException, IOException {
 		log("Start upload test: " + URL);
 		String challenge = generateChallenge();
 		log("challenge: " + challenge);
-		//log("Result of request 1: " + sendRequest(challenge));
+		log("Result of request 1: " + sendRequest(challenge));
 		log("Result of request 2: " + sendMultipartRequest(challenge));
 	}
 	

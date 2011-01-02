@@ -109,4 +109,14 @@
         </plugins>
     </reporting>
     
+    <properties>
+      <gae.application.id>vosaocms</gae.application.id>
+      <gae.application.version>vosao-0-8</gae.application.version>
+      <vosao.version>0.8</vosao.version>
+      <vosao.version.full>0.8</vosao.version.full>
+      <vosao.admin.username>admin</vosao.admin.username>
+      <vosao.admin.email>admin@test.com</vosao.admin.email>
+      <vosao.admin.password>admin</vosao.admin.password>
+    </properties>
+    
 </project>

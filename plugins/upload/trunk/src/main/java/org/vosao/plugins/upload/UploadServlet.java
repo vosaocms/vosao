@@ -43,6 +43,8 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
+import org.vosao.business.mq.Topic;
+import org.vosao.business.mq.message.SimpleMessage;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.entity.helper.UserHelper;
@@ -122,8 +124,13 @@ public class UploadServlet extends HttpServlet {
 		if (!isValidSignnature(item)) {
 			throw new IOException("Invalid signature verification.");
 		}
-		getBusiness().getFileBusiness().saveFile(uploadConfig.getFolder() + "/" 
-				+ item.filename, item.byteData);
+		String file = uploadConfig.getFolder() + "/" + item.filename;
+		getBusiness().getFileBusiness().saveFile(file, item.byteData);
+		if (StringUtils.isNotEmpty(uploadConfig.getSubscriberClass())) {
+			SimpleMessage msg = new SimpleMessage(Topic.IMPORT_FILE, file);
+			msg.setCommandClassName(uploadConfig.getSubscriberClass());
+			getBusiness().getMessageQueue().publish(msg);
+		}
 	}
 	
 	private void logRequest(Item item) {

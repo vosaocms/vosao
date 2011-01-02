@@ -200,6 +200,7 @@
 
     <!-- Build Settings -->
     <build>
+        <sourceDirectory>target/filtered-sources/java</sourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -210,6 +211,13 @@
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+        <resource>
+          <directory>src/main/java</directory>
+          <filtering>true</filtering>
+          <targetPath>../filtered-sources/java</targetPath>
+        </resource>
+      </resources>
     </build>
     
 </project>

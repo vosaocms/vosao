@@ -36,7 +36,8 @@ public class SearchServiceImpl extends AbstractServiceImpl
 		implements SearchService {
 
 	@Override
-	public SearchResult search(String query, int start, int count, int textSize) {
+	public SearchResult search(String text, int start, int count, int textSize) {
+		String query = text.toLowerCase();
 		String language = getBusiness().getLanguage();
 		String defaultLanguage = getBusiness().getDefaultLanguage();
 		SearchResult result = getBusiness().getSearchEngine().search(

@@ -154,7 +154,9 @@ function showAttributes() {
 
 function onAdd() {
 	$('#name').val('');
-	$('#value').val('');
+	$('#title').val('');
+	$('#defaultValue').val('');
+	$('#inherited').each(function() { this.checked = false;} );
 	$("#attribute-dialog").dialog('open');
 }
 
@@ -191,7 +193,12 @@ function onSave() {
 			loadData();
 			attrDefVO.inherited = $('#inherited:checked').size() > 0;
 			attributesMap[attrDefVO.name] = attrDefVO;
-			onEditValue(attrDefVO.name);
+			if (attrDefVO.inherited && attrDefVO.defaultValue) {
+				loadData();	
+			}
+			else {
+				onEditValue(attrDefVO.name);
+			}
 		} else {
 			Vosao.showServiceMessages(r);
 		}

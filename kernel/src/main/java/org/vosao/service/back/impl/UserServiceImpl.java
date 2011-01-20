@@ -85,7 +85,7 @@ public class UserServiceImpl extends AbstractServiceImpl
 		}
 		user.setName(vo.get("name"));
 		if (!StringUtils.isEmpty(vo.get("email"))) {
-			user.setEmail(vo.get("email"));
+			user.setEmail(vo.get("email").toLowerCase());
 		}
 		if (!StringUtils.isEmpty(vo.get("password"))) {
 			user.setPassword(BCrypt.hashpw(vo.get("password"), 

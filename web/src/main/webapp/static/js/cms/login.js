@@ -50,7 +50,7 @@ $(function() {
     			Vosao.error(e.message);
     		}
 			$('#forgot-dialog').dialog('close');
-    	}, email);
+    	}, email.toLowerCase());
     	return false;
     });
     

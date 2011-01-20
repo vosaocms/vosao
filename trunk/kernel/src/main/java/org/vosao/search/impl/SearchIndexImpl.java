@@ -35,7 +35,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
-import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.entity.ContentEntity;
@@ -43,7 +42,6 @@ import org.vosao.entity.FileEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.search.Hit;
 import org.vosao.search.SearchIndex;
-import org.vosao.search.SearchResult;
 import org.vosao.utils.StrUtil;
 
 public class SearchIndexImpl implements SearchIndex {
@@ -88,6 +86,7 @@ public class SearchIndexImpl implements SearchIndex {
 		}
 		String data = StrUtil.extractSearchTextFromHTML(content.toLowerCase());
 		String[] words = StrUtil.splitByWord(data);
+		//logger.info(Arrays.asList(words));
 		for (String word : words) {
 			if (word.length() < 3) {
 				continue;
@@ -140,24 +139,14 @@ public class SearchIndexImpl implements SearchIndex {
 	}
 
 	@Override
-	public SearchResult search(String query, int start, int count,
-			int textSize) {
+	public List<Hit> search(String query, int textSize) {
 		try {
 		
 		refreshIndex();
-		SearchResult result = new SearchResult();
+		List<Hit> result = new ArrayList<Hit>();
 		List<Long> pages = new ArrayList<Long>(getPageIds(query));
-		//logger.info("found pages " + pages.toString());
-		int startIndex = start < pages.size() ? start : pages.size();
-		int endIndex = startIndex + count;
-		if (count == -1) {
-			endIndex = pages.size();
-		}
-		if (endIndex > pages.size()) {
-			endIndex = pages.size();
-		}
-		for (int i = startIndex; i < endIndex; i++) {
-			PageEntity page = getDao().getPageDao().getById(pages.get(i));
+		for (Long pageId : pages) {
+			PageEntity page = getDao().getPageDao().getById(pageId);
 			if (page != null) {
 				ContentEntity content = getBusiness().getPageBusiness()
 						.getPageContent(page, language);
@@ -167,20 +156,19 @@ public class SearchIndexImpl implements SearchIndex {
 					if (text.length() > textSize) {
 						text = text.substring(0, textSize);
 					}
-					result.getHits().add(new Hit(page, text));
+					result.add(new Hit(page, text, language));
 				}
 			}
 			else {
-				logger.error("Page not found " + pages.get(i) + ". Rebuild index.");
+				logger.error("Page not found " + pageId + ". Rebuild index.");
 			}
 		}	
-		result.setCount(pages.size());
 		return result;
 		
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			return new SearchResult();
+			return Collections.EMPTY_LIST;
 		}
 	}
 

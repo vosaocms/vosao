@@ -22,7 +22,9 @@
 
 package org.vosao.search.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -40,6 +42,7 @@ import org.vosao.search.Hit;
 import org.vosao.search.SearchEngine;
 import org.vosao.search.SearchIndex;
 import org.vosao.search.SearchResult;
+import org.vosao.utils.ListUtil;
 
 /**
  *  
@@ -76,7 +79,28 @@ public class SearchEngineImpl implements SearchEngine {
 	@Override
 	public SearchResult search(String query, int start, int count,
 			String language, int textSize) {
-		return getSearchIndex(language).search(query, start, count, textSize);
+		// Search in language index first for all results
+		List<Hit> hits = getSearchIndex(language).search(query, textSize);
+		// Search in all other languages for all results
+		for (LanguageEntity lang : getDao().getLanguageDao().select()) {
+			if (!lang.getCode().equals(language)) {
+				hits.addAll(getSearchIndex(lang.getCode()).search(query, 
+						textSize));
+			}
+		}
+		// paginate result and return
+		SearchResult result = new SearchResult();
+		result.setCount(hits.size());
+		int startIndex = start < hits.size() ? start : hits.size();
+		int endIndex = startIndex + count;
+		if (count == -1) {
+			endIndex = hits.size();
+		}
+		if (endIndex > hits.size()) {
+			endIndex = hits.size();
+		}
+		result.setHits(ListUtil.slice(hits, startIndex, count));
+		return result;
 	}
 
 	@Override

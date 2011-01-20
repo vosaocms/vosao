@@ -22,6 +22,8 @@
 
 package org.vosao.search;
 
+import java.util.List;
+
 /**
  * Search index of all site pages for one language.
  * 
@@ -34,7 +36,7 @@ public interface SearchIndex {
 
 	void removeFromIndex(Long pageId);
 
-	SearchResult search(final String query, int start, int count, int textSize);
+	List<Hit> search(final String query, int textSize);
 	
 	void saveIndex();
 	

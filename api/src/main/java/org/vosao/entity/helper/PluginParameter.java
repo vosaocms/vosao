@@ -24,6 +24,7 @@ package org.vosao.entity.helper;
 
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
 import org.dom4j.Element;
 import org.vosao.enums.PluginConfigParameterType;
 import org.vosao.utils.ParamUtil;
@@ -97,4 +98,9 @@ public class PluginParameter {
 		return ParamUtil.getDate(value, getDefaultValueDate());
 	}
 
+	public String getValueString() {
+		return StringUtils.isEmpty(value) ? defaultValue : value;
+	}
+	
+	
 }

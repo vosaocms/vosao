@@ -22,13 +22,19 @@
 
 package org.vosao.utils;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import junit.framework.TestCase;
 
 public class StrUtilTest extends TestCase {
 
+	private static final Log logger = LogFactory.getLog(StrUtilTest.class);
+	
 	public void testExtrtactSearchTextFromHTML() {
 		String html = "<b>\nb\n</b> re <script type=\"text/javascript\">test \n\nvar x = 0; \nfunction f() {};\n</script>d";
 		String text = StrUtil.extractSearchTextFromHTML(html);
+		//logger.info("$" + text + "-");
 		assertEquals(text, " b  re d", text);
 		assertEquals("test", 
 				StrUtil.extractSearchTextFromHTML("test${plugin.form.render()}"));
@@ -51,9 +57,11 @@ public class StrUtilTest extends TestCase {
 		assertEquals("test", 
 				StrUtil.extractSearchTextFromHTML("test]]>"));
 		assertEquals("test ", 
-				StrUtil.extractSearchTextFromHTML("test&nbsp;"));
+				StrUtil.extractSearchTextFromHTML("test&nbsp;</p>"));
 		assertEquals("test            ", 
 				StrUtil.extractSearchTextFromHTML("test&nbsp;&nbsp;&gt;&lt;-*=/&|()"));
+		assertEquals("привет ", 
+				StrUtil.extractSearchTextFromHTML("привет&nbsp;"));
 	}
 	
 	public void testSplitByWord() {

@@ -32,12 +32,11 @@ public class Hit {
 	private String localTitle;
 	private String url;
 	
-	public Hit(PageEntity page, String aContent) {
+	public Hit(PageEntity page, String aContent, String language) {
 		super();
 		title = page.getTitle();
-		localTitle = page.getLocalTitle(VosaoContext.getInstance().getBusiness()
-				.getLanguage());
-		url = page.getFriendlyURL();
+		localTitle = page.getLocalTitle(language);
+		url = page.getFriendlyURL() + "?lanaguge=" + language;
 		content = aContent;
 	}
 

@@ -155,7 +155,7 @@ public class StrUtil {
 	
 	private static final String[] XML_PATTERNS = {"<\\!\\[CDATA\\[", "\\]\\]>"}; 
 	private static final String[] HTML_PATTERNS = {"\\&gt;", "\\&lt;", "\\&nbsp;",
-		"[\\W&&[^ ]]"}; 
+		"[\\n.,`~@#$%\\^\\&*\\(\\)\\[\\]\\-\\=\\/\\|]"}; 
 	
 	public static String extractSearchTextFromHTML(String html) {
 		String result = removeJavascript(html).replaceAll("<.*?>", "");

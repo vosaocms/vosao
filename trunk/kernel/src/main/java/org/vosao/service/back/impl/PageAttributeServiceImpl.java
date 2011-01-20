@@ -63,7 +63,13 @@ public class PageAttributeServiceImpl extends AbstractServiceImpl
 		attr.setTitle(vo.get("title"));
 		attr.setDefaultValue(vo.get("defaultValue"));
 		attr.setInherited(Boolean.valueOf(vo.get("inherited")));
-		// TODO add validation
+		// validating
+		List<String> errors = getBusiness().getPageAttributeBusiness()
+				.validateBeforeUpdate(attr);
+		if (!errors.isEmpty()) {
+			return ServiceResponse.createErrorResponse(Messages.get("error"),
+					errors);
+		}
 		getDao().getPageAttributeDao().save(attr);
 		// set default value to all children
 		if (attr.isInherited() 
@@ -76,7 +82,7 @@ public class PageAttributeServiceImpl extends AbstractServiceImpl
 					attr.getName(), config.getDefaultLanguage(), 
 					attr.getDefaultValue(), true);
 		}
-		return ServiceResponse.createSuccessResponse("Success");
+		return ServiceResponse.createSuccessResponse(Messages.get("success"));
 	}
 
 	@Override

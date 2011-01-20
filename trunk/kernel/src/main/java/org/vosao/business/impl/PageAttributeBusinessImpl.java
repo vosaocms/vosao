@@ -22,12 +22,16 @@
 
 package org.vosao.business.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.vosao.business.PageAttributeBusiness;
 import org.vosao.business.page.impl.PageSetAttributeMessage;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.PageAttributeEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.i18n.Messages;
 import org.vosao.utils.FolderUtil;
 
 /**
@@ -94,6 +98,25 @@ public class PageAttributeBusinessImpl extends AbstractBusinessImpl
 					new PageSetAttributeMessage(page.getFriendlyURL(), name, 
 							language, value));
 		}
+	}
+
+	@Override
+	public List<String> validateBeforeUpdate(PageAttributeEntity entity) {
+		List<String> errors = new ArrayList<String>();
+		if (StringUtils.isEmpty(entity.getName())) {
+			errors.add(Messages.get("name_is_empty"));
+		}
+		if (StringUtils.isEmpty(entity.getTitle())) {
+			errors.add(Messages.get("title_is_empty"));
+		}
+		if (entity.isNew()) {
+			PageAttributeEntity found = getDao().getPageAttributeDao()
+					.getByPageName(entity.getPageUrl(), entity.getName());
+			if (found != null ) {
+				errors.add(Messages.get("attribute_already_exists"));
+			}
+		}
+		return errors;
 	}
 
 	

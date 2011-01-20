@@ -46,5 +46,7 @@ public interface PageAttributeBusiness {
 
 	void setAttribute(PageEntity page, String name, String language,
 			String value, boolean applyToChildren);
+
+	List<String> validateBeforeUpdate(PageAttributeEntity entity); 
 	
 }

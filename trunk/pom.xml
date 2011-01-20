@@ -117,6 +117,8 @@
       <vosao.admin.username>admin</vosao.admin.username>
       <vosao.admin.email>admin@test.com</vosao.admin.email>
       <vosao.admin.password>admin</vosao.admin.password>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
     
 </project>

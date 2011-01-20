@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.vosao.common.VosaoContext;
+import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.PageAttributeEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.i18n.Messages;
@@ -63,6 +65,17 @@ public class PageAttributeServiceImpl extends AbstractServiceImpl
 		attr.setInherited(Boolean.valueOf(vo.get("inherited")));
 		// TODO add validation
 		getDao().getPageAttributeDao().save(attr);
+		// set default value to all children
+		if (attr.isInherited() 
+				&& StringUtils.isNotEmpty(attr.getDefaultValue())) {
+			
+			PageEntity page = getDao().getPageDao().getByUrl(attr.getPageUrl());
+			ConfigEntity config = VosaoContext.getInstance().getConfig();
+
+			getBusiness().getPageAttributeBusiness().setAttribute(page, 
+					attr.getName(), config.getDefaultLanguage(), 
+					attr.getDefaultValue(), true);
+		}
 		return ServiceResponse.createSuccessResponse("Success");
 	}
 

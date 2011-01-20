@@ -1,1 +1,1 @@
-mvn -Dappname=vosaocms install -o
+mvn install -o

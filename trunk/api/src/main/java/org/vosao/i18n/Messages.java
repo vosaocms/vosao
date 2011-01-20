@@ -50,6 +50,7 @@ public class Messages {
 		Locale.ENGLISH,
 		Locale.GERMAN,
 		new Locale("ru"),
+		new Locale("tr"),
 		Locale.JAPANESE,
 		Locale.TRADITIONAL_CHINESE,
 		Locale.SIMPLIFIED_CHINESE};

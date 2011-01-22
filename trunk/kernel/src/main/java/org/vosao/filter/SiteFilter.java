@@ -138,10 +138,9 @@ public class SiteFilter extends AbstractFilter implements Filter {
         		page = getPage(config.getSite404Url(), httpRequest);
         		if (page != null) {
         			renderPage(httpRequest, httpResponse, page, url);
-        			return;
         		}
     		}
-    		httpResponse.sendRedirect("/");
+    		httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
     	}
     	catch (AccessDeniedException e) {
 			HttpSession session = httpRequest.getSession(true);

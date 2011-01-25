@@ -22,6 +22,10 @@
 
 package org.vosao.dao.cache;
 
+import java.util.List;
+
+import org.vosao.entity.BaseEntity;
+
 /**
  * 
  * @author Alexander Oleynik
@@ -29,11 +33,11 @@ package org.vosao.dao.cache;
  */
 public interface QueryCache {
 
-	void putQuery(Class clazz, String query, Object[] params, Object value);
+	void putQuery(Class clazz, String query, Object[] params, 
+			List<BaseEntity> list);
 
-	Object getQuery(Class clazz, String query, Object[] params);
+	List<BaseEntity> getQuery(Class clazz, String query, Object[] params);
 	
 	void removeQueries(Class clazz);
 	
-	CacheStat getStat();
 }

@@ -87,6 +87,7 @@ public class BaseDaoImpl<T extends BaseEntity>
 			return model;
 		}
 		try {
+			getDao().getDaoStat().incGetCalls();
 			model = createModel(getDatastore().get(getKey(id)));
 			getEntityCache().putEntity(clazz, id, model);
 			return model;
@@ -114,6 +115,7 @@ public class BaseDaoImpl<T extends BaseEntity>
 				}
 			}
 		}
+		getDao().getDaoStat().incGetCalls();
 		List<T> models = createModels(getDatastore().get(keys).values());
 		for (T model : models) {
 			getEntityCache().putEntity(clazz, model.getId(), model);
@@ -161,6 +163,7 @@ public class BaseDaoImpl<T extends BaseEntity>
 
 	protected void removeSelected(Query q) {
 		getQueryCache().removeQueries(clazz);
+		getDao().getDaoStat().incQueryCalls();
 		PreparedQuery p = getDatastore().prepare(q);
 		List<Key> keys = new ArrayList<Key>();
 		int limit = p.countEntities();
@@ -187,6 +190,7 @@ public class BaseDaoImpl<T extends BaseEntity>
 		Entity entity = null;
 		if (model.getId() != null) {
 			try {
+				getDao().getDaoStat().incGetCalls();
 				entity = getDatastore().get(getKey(model.getId()));
 				getEntityCache().removeEntity(clazz, model.getId());
 			}
@@ -213,10 +217,12 @@ public class BaseDaoImpl<T extends BaseEntity>
 				clazz.getName(), null);
 		if (result == null) {
 			Query q = newQuery();
+			getDao().getDaoStat().incQueryCalls();
 			PreparedQuery p = getDatastore().prepare(q);
 			int limit = p.countEntities() > 0 ? p.countEntities() : 1;
 			result = createModels(p.asList(withLimit(limit)));
-			getQueryCache().putQuery(clazz, clazz.getName(), null, result);
+			getQueryCache().putQuery(clazz, clazz.getName(), null, 
+					(List<BaseEntity>)result);
 		}
 		return result;
 	}
@@ -247,16 +253,19 @@ public class BaseDaoImpl<T extends BaseEntity>
 		List<T> result = (List<T>) getQueryCache().getQuery(clazz, queryId, 
 				params);
 		if (result == null) {
+			getDao().getDaoStat().incQueryCalls();
 			PreparedQuery p = getDatastore().prepare(query);
 			int limit = p.countEntities() > 0 ? p.countEntities() : 1;
 			result = createModels(p.asList(withLimit(limit)));
-			getQueryCache().putQuery(clazz, queryId, params, result);			
+			getQueryCache().putQuery(clazz, queryId, params, 
+					(List<BaseEntity>)result);			
 		}
 		return result;
 	}
 
 	protected List<T> selectNotCache(Query query, String queryId, 
 			Object[] params) {
+		getDao().getDaoStat().incQueryCalls();
 		PreparedQuery p = getDatastore().prepare(query);
 		int limit = p.countEntities() > 0 ? p.countEntities() : 1;
 		return createModels(p.asList(withLimit(limit)));
@@ -297,6 +306,7 @@ public class BaseDaoImpl<T extends BaseEntity>
 	}
 	
 	protected int count(Query query) {
+		getDao().getDaoStat().incQueryCalls();
 		return getDatastore().prepare(query).countEntities();
 	}
 

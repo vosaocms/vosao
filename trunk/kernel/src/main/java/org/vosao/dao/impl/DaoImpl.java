@@ -30,6 +30,7 @@ import org.vosao.dao.ConfigDao;
 import org.vosao.dao.ContentDao;
 import org.vosao.dao.ContentPermissionDao;
 import org.vosao.dao.Dao;
+import org.vosao.dao.DaoStat;
 import org.vosao.dao.FieldDao;
 import org.vosao.dao.FileChunkDao;
 import org.vosao.dao.FileDao;
@@ -93,6 +94,7 @@ public class DaoImpl implements Dao, Serializable {
 	private FormDataDao formDataDao;
 	private PageDependencyDao pageDependencyDao;
 	private PageAttributeDao pageAttributeDao;
+	private DaoStat daoStat;
 
 	@Override
 	public SystemService getSystemService() {
@@ -329,7 +331,7 @@ public class DaoImpl implements Dao, Serializable {
 	
 	public QueryCache getQueryCache() {
 		if (queryCache == null) {
-			queryCache = new QueryCacheImpl();
+			queryCache = new QueryCacheImpl(getEntityCache());
 		}
 		return queryCache;
 	}
@@ -436,6 +438,14 @@ public class DaoImpl implements Dao, Serializable {
 	@Override
 	public void setPageAttributeDao(PageAttributeDao bean) {
 		pageAttributeDao = bean;
+	}
+
+	@Override
+	public DaoStat getDaoStat() {
+		if (daoStat == null) {
+			daoStat = new DaoStat();
+		}
+		return daoStat;
 	}
 
 }

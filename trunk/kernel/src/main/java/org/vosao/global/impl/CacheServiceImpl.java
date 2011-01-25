@@ -207,8 +207,14 @@ public class CacheServiceImpl implements CacheService {
 	}
 
 	@Override
-	public void putAll(Map arg0) {
-		log.error("putAll(Map arg0) not implemented");		
+	public void putAll(Map map) {
+		localCache.putAll(map);
+		try {
+			cache.putAll(map);
+		}
+		catch (Exception e) {
+			log.error(e.getMessage());
+		}
 	}
 
 	@Override

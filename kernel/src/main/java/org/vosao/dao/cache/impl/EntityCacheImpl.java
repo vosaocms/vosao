@@ -23,13 +23,19 @@
 package org.vosao.dao.cache.impl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.common.VosaoContext;
-import org.vosao.dao.cache.CacheStat;
+import org.vosao.dao.DaoStat;
 import org.vosao.dao.cache.EntityCache;
+import org.vosao.entity.BaseEntity;
 import org.vosao.global.CacheService;
 import org.vosao.global.SystemService;
 
@@ -43,12 +49,11 @@ public class EntityCacheImpl implements EntityCache, Serializable {
 	protected static final Log logger = LogFactory.getLog(
 			EntityCacheImpl.class);
 	
-	private long calls;
-	private long hits;
-	
+	private static DaoStat getDaoStat() {
+		return VosaoContext.getInstance().getBusiness().getDao().getDaoStat();
+	}
+
 	public EntityCacheImpl() {
-		calls = 0;
-		hits = 0;
 	}
 	
 	private String getEntityKey(Class clazz, Object id) {
@@ -58,16 +63,45 @@ public class EntityCacheImpl implements EntityCache, Serializable {
 	@Override
 	public Object getEntity(Class clazz, Object id) {
 		try {
-			calls++;
 			CacheItem item = (CacheItem)getCache().get(getEntityKey(clazz, id));
 			if (item != null) {
 				Date globalResetDate = getCache().getResetDate();
 				if (globalResetDate == null 
 						|| item.getTimestamp().after(globalResetDate)) {
-					hits++;
+					getDaoStat().incEntityCacheHits();
 					return item.getData();
 				}
 			}
+		}
+		catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return null;
+	}
+
+	@Override
+	public Map<Long, BaseEntity> getEntities(Class clazz, List<Long> ids) {
+		try {
+			List<String> keys = new ArrayList<String>(); 
+			Map<Long, BaseEntity> result = new HashMap<Long, BaseEntity>();
+			for (Long id : ids) {
+				keys.add(getEntityKey(clazz, id));
+				result.put(id, null);
+			}
+			Map items = getCache().getAll(keys);
+			for (CacheItem item : (Collection<CacheItem>)items.values()) {
+				if (item != null) {
+					Date globalResetDate = getCache().getResetDate();
+					if (globalResetDate == null 
+							|| item.getTimestamp().after(globalResetDate)) {
+						getDaoStat().incEntityCacheHits();
+						BaseEntity entity = (BaseEntity)item.getData();
+						result.put(entity.getId(), entity);
+					}
+					
+				}
+			}
+			return result;
 		}
 		catch (Exception e) {
 			logger.error(e.getMessage());
@@ -82,6 +116,15 @@ public class EntityCacheImpl implements EntityCache, Serializable {
 	}
 
 	@Override
+	public void putEntities(Class clazz, List<BaseEntity> list) {
+		Map<String, CacheItem> map = new HashMap<String, CacheItem>(); 
+		for (BaseEntity entity : list) {
+			map.put(getEntityKey(clazz, entity.getId()), new CacheItem(entity));
+		}
+		getCache().putAll(map);
+	}
+
+	@Override
 	public void removeEntity(Class clazz, Object id) {
 		getCache().remove(getEntityKey(clazz, id));
 	}
@@ -92,11 +135,6 @@ public class EntityCacheImpl implements EntityCache, Serializable {
 
 	private CacheService getCache() {
 		return getSystemService().getCache();
-	}
-
-	@Override
-	public CacheStat getStat() {
-		return new CacheStat(calls, hits);
 	}
 
 }

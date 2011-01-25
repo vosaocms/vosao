@@ -29,7 +29,8 @@ import org.vosao.global.SystemService;
 public interface Dao {
 	
 	SystemService getSystemService();
-
+	DaoStat getDaoStat();
+	
 	EntityCache getEntityCache();
 	void setEntityCache(EntityCache entityCache);
 	

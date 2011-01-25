@@ -35,8 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.SetupBean;
-import org.vosao.business.impl.SetupBeanImpl;
-import org.vosao.dao.cache.CacheStat;
+import org.vosao.dao.DaoStat;
 import org.vosao.dao.cache.EntityCache;
 import org.vosao.dao.cache.QueryCache;
 import org.vosao.entity.ConfigEntity;
@@ -54,8 +53,7 @@ public class InitFilter extends AbstractFilter implements Filter {
     
     private int localHits;
     private int cacheHits;
-    private CacheStat entityStat;
-    private CacheStat queryStat;    
+    private DaoStat daoStat;
     
     public InitFilter() {
     	super();
@@ -87,25 +85,27 @@ public class InitFilter extends AbstractFilter implements Filter {
     private void startProfile() {
         localHits = getBusiness().getSystemService().getCache().getLocalHits();
         cacheHits = getBusiness().getSystemService().getCache().getCacheHits();
-        entityStat = getDao().getEntityCache().getStat();
-        queryStat = getDao().getQueryCache().getStat();
+        daoStat = getDao().getDaoStat().clone();
     }
     
     private void endProfile(String url) {
         logger.info(url);
         logger.info("local cache hits: " + (
-                getBusiness().getSystemService().getCache().getLocalHits() - localHits));
-        CacheStat entity = getDao().getEntityCache().getStat();
-        CacheStat query = getDao().getQueryCache().getStat();
+                getBusiness().getSystemService().getCache().getLocalHits() 
+                - localHits));
+        DaoStat daoStat2 = getDao().getDaoStat();
         logger.info("memcache hits: " + (
-        		getBusiness().getSystemService().getCache().getCacheHits() - cacheHits));
-        logger.info("dao calls: " + (entity.getCalls() - entityStat.getCalls() + 
-        		query.getCalls() - queryStat.getCalls()));
-    }
-    
-    private String logCacheStat() {
-        return "<p>Entity cache: " + getEntityCache().getStat() +
-                " Query cache: " + getQueryCache().getStat() + "</p>";
+        		getBusiness().getSystemService().getCache().getCacheHits() 
+        		- cacheHits));
+        logger.info("dao get calls: " 
+        		+ (daoStat2.getGetCalls() - daoStat.getGetCalls()) 
+        		+ " ,dao query calls: " 
+        		+ (daoStat2.getQueryCalls() - daoStat.getQueryCalls()) 
+        		+ " ,entity cache hits: "
+        		+ (daoStat2.getEntityCacheHits() - daoStat.getEntityCacheHits())
+        		+ " ,query cache hits: "
+        		+ (daoStat2.getQueryCacheHits() - daoStat.getQueryCacheHits())
+        );
     }
     
     private EntityCache getEntityCache() {

@@ -23,27 +23,39 @@
 package org.vosao.dao.cache.impl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.common.VosaoContext;
-import org.vosao.dao.cache.CacheStat;
+import org.vosao.dao.DaoStat;
+import org.vosao.dao.cache.EntityCache;
 import org.vosao.dao.cache.QueryCache;
+import org.vosao.entity.BaseEntity;
 import org.vosao.global.CacheService;
 import org.vosao.global.SystemService;
+import org.vosao.utils.EntityUtil;
+
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.KeyFactory;
 
 public class QueryCacheImpl implements QueryCache, Serializable {
 
 	protected static final Log logger = LogFactory.getLog(
 			QueryCacheImpl.class);
 
-	private long calls;
-	private long hits;
+	private static DaoStat getDaoStat() {
+		return VosaoContext.getInstance().getBusiness().getDao().getDaoStat();
+	}
+
+	private EntityCache entityCache;
 	
-	public QueryCacheImpl() {
-		calls = 0;
-		hits = 0;
+	public QueryCacheImpl(EntityCache anEntityCache) {
+		entityCache = anEntityCache;
 	}
 
 	public SystemService getSystemService() {
@@ -54,6 +66,10 @@ public class QueryCacheImpl implements QueryCache, Serializable {
 		return getSystemService().getCache();
 	}
 
+	private EntityCache getEntityCache() {
+		return entityCache;
+	}
+	
 	private String getQueryKey(Class clazz, String query, Object[] params) {
 		StringBuffer result = new StringBuffer(clazz.getName());
 		result.append(query);
@@ -74,9 +90,9 @@ public class QueryCacheImpl implements QueryCache, Serializable {
 	}
 	
 	@Override
-	public Object getQuery(Class clazz, String query, Object[] params) {
+	public List<BaseEntity> getQuery(Class clazz, String query, 
+			Object[] params) {
 		try {
-			calls++;
 			CacheItem item = (CacheItem)getCache().get(getQueryKey(clazz, query, 
 					params));
 			if (item != null) {
@@ -86,23 +102,58 @@ public class QueryCacheImpl implements QueryCache, Serializable {
 					Date classResetDate = getClassResetDate(clazz);
 					if (classResetDate == null
 							|| item.getTimestamp().after(classResetDate)) {
-						hits++;
-						return item.getData();
+						getDaoStat().incQueryCacheHits();
+						List<Long> ids = (List<Long>)item.getData();
+						Map<Long, BaseEntity> cached = getEntityCache()
+								.getEntities(clazz, ids);
+						for (Long id : cached.keySet()) {
+							if (cached.get(id) == null) {
+								cached.put(id, loadEntity(clazz, id));
+							}
+							else {
+								getDaoStat().incEntityCacheHits();
+							}
+						}
+						List<BaseEntity> result = new ArrayList<BaseEntity>(
+								cached.values());
+						
+						return result;
 					}
 				}
 			}
 		}
 		catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		return null; 
 	}
 
+	private BaseEntity loadEntity(Class clazz, Long id) {
+		try {
+			getDaoStat().incGetCalls();
+			Entity entity = getSystemService().getDatastore().get(
+					KeyFactory.createKey(EntityUtil.getKind(clazz), id));
+			
+			BaseEntity model = (BaseEntity)clazz.newInstance();
+			model.load(entity);
+			return model;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	@Override
 	public void putQuery(Class clazz, String query, Object[] params, 
-			Object value) {
+			List<BaseEntity> list) {
 		String key = getQueryKey(clazz, query, params);
-		getCache().put(key, new CacheItem(value));
+		List<Long> ids = new ArrayList<Long>();
+		for (BaseEntity entity : list) {
+			ids.add(entity.getId());
+		}
+		getCache().put(key, new CacheItem(ids));
+		getEntityCache().putEntities(clazz, list);
 	}
 
 	@Override
@@ -110,9 +161,4 @@ public class QueryCacheImpl implements QueryCache, Serializable {
 		getCache().put(getClassResetdateKey(clazz), new Date());
 	}
 
-	@Override
-	public CacheStat getStat() {
-		return new CacheStat(calls, hits);
-	}
-	
 }

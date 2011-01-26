@@ -25,6 +25,7 @@ package org.vosao.dao.cache.impl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +42,7 @@ import org.vosao.global.SystemService;
 import org.vosao.utils.EntityUtil;
 
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
 public class QueryCacheImpl implements QueryCache, Serializable {
@@ -102,22 +104,7 @@ public class QueryCacheImpl implements QueryCache, Serializable {
 					Date classResetDate = getClassResetDate(clazz);
 					if (classResetDate == null
 							|| item.getTimestamp().after(classResetDate)) {
-						getDaoStat().incQueryCacheHits();
-						List<Long> ids = (List<Long>)item.getData();
-						Map<Long, BaseEntity> cached = getEntityCache()
-								.getEntities(clazz, ids);
-						for (Long id : cached.keySet()) {
-							if (cached.get(id) == null) {
-								cached.put(id, loadEntity(clazz, id));
-							}
-							else {
-								getDaoStat().incEntityCacheHits();
-							}
-						}
-						List<BaseEntity> result = new ArrayList<BaseEntity>(
-								cached.values());
-						
-						return result;
+						return getCachedQueryResult(clazz, item);
 					}
 				}
 			}
@@ -128,15 +115,39 @@ public class QueryCacheImpl implements QueryCache, Serializable {
 		return null; 
 	}
 
-	private BaseEntity loadEntity(Class clazz, Long id) {
+	private List<BaseEntity> getCachedQueryResult(Class clazz, CacheItem item) {
+		getDaoStat().incQueryCacheHits();
+		List<Long> ids = (List<Long>)item.getData();
+		Map<Long, BaseEntity> cached = getEntityCache().getEntities(clazz, ids);
+		List<Key> toLoadKeys = new ArrayList<Key>();
+		for (Long id : cached.keySet()) {
+			if (cached.get(id) == null) {
+				toLoadKeys.add(KeyFactory.createKey(EntityUtil.getKind(clazz), 
+						id));
+			}
+			else {
+				getDaoStat().incEntityCacheHits();
+			}
+		}
+		cached.putAll(loadEntities(clazz, toLoadKeys));
+		List<BaseEntity> result = new ArrayList<BaseEntity>();
+		for (Long id : ids) {
+			result.add(cached.get(id));
+		}
+		return result;
+	}
+	
+	private Map<Long, BaseEntity> loadEntities(Class clazz, List<Key> keys) {
 		try {
 			getDaoStat().incGetCalls();
-			Entity entity = getSystemService().getDatastore().get(
-					KeyFactory.createKey(EntityUtil.getKind(clazz), id));
-			
-			BaseEntity model = (BaseEntity)clazz.newInstance();
-			model.load(entity);
-			return model;
+			Map<Key, Entity> loaded = getSystemService().getDatastore().get(keys);
+			Map<Long, BaseEntity> result = new HashMap<Long, BaseEntity>();
+			for (Key key : loaded.keySet()) {
+				BaseEntity model = (BaseEntity)clazz.newInstance();
+				model.load(loaded.get(key));
+				result.put(model.getId(), model);
+			}
+			return result;
 		}
 		catch (Exception e) {
 			e.printStackTrace();

@@ -97,6 +97,7 @@ public class RssatomServlet extends HttpServlet {
 		context.put("rss", new RssTool(getBusiness()));
 		String feed = getBusiness().getSystemService().render(template, 
 				context);
+    	response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(feed);
 	}
 

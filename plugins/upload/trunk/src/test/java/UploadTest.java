@@ -95,7 +95,7 @@ public class UploadTest extends TestCase {
 	public void testOK() {
 	}
 	
-	public void testPost() throws HttpException, IOException {
+	public void mtestPost() throws HttpException, IOException {
 		log("Start upload test: " + URL);
 		String challenge = generateChallenge();
 		log("challenge: " + challenge);

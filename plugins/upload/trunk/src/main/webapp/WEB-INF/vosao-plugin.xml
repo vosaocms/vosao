@@ -1,7 +1,7 @@
 <vosao-plugin>
     <name>upload</name>
     <title>$upload.title</title>
-    <version>0.8</version>
+    <version>0.9</version>
     <description>$upload.description</description>
     <website>www.vosao.org</website>
     <config>

@@ -50,6 +50,7 @@ public class EditorPanelFragment implements ContentFragment {
 				+ VosaoContext.getInstance().getUser().getEmail()
 				+ " | <a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms/profile.vm\">Profile</a>" 
 				+ " | <a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"http://code.google.com/p/vosao/issues/list\">Support</a>"
+				+ " | <a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/_ah/logout\">Logout</a>"
 				+ " | <a href=\"#\" onclick=\"$('#editor-panel').hide()\">Hide</a> "
 				+ "</div>"
 				+ "<span style=\"clear:both\">&#160;</span>"

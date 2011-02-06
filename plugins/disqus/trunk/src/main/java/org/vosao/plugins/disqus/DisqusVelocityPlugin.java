@@ -70,4 +70,15 @@ public class DisqusVelocityPlugin extends AbstractVelocityPlugin {
 		return result;
 	}
 	
+	public String renderCounter() {
+		try {
+			PluginEntity plugin = getDao().getPluginDao().getByName("disqus");
+			Map<String, String> config = getConfig(plugin);
+			return config.get("countCode"); 
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
+	}
 }

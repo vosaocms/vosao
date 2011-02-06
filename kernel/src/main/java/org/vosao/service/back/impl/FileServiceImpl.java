@@ -23,6 +23,7 @@
 package org.vosao.service.back.impl;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
+import org.vosao.entity.helper.FileHelper;
 import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.FileService;
@@ -49,7 +51,9 @@ public class FileServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public List<FileEntity> getByFolder(Long folderId) {
-		return getDao().getFileDao().getByFolder(folderId);
+		List<FileEntity> result = getDao().getFileDao().getByFolder(folderId);
+		Collections.sort(result, new FileHelper.NameAsc());
+		return result;
 	}
 
 	@Override

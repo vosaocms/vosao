@@ -62,4 +62,7 @@ public class AlbumVO {
 		return result;
 	}
 	
+	public AlbumEntry album() {
+		return album;
+	}
 }

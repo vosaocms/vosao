@@ -168,6 +168,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>org.vosao.servlet.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/_ah/logout</url-pattern>
+    </servlet-mapping>
+    <servlet>
+    
         <servlet-name>JSBundleServlet</servlet-name>
         <servlet-class>org.vosao.servlet.JSBundleServlet</servlet-class>
     </servlet>

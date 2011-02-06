@@ -23,6 +23,8 @@
 package org.vosao.business.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -240,6 +242,15 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 				newChildren.add(filteredChild);
 			}
 		}
+		Collections.sort(newChildren, 
+				new Comparator<TreeItemDecorator<FolderEntity>>() {
+			@Override
+			public int compare(TreeItemDecorator<FolderEntity> o1,
+					TreeItemDecorator<FolderEntity> o2) {
+				return o1.getEntity().getName().compareToIgnoreCase(
+						o2.getEntity().getName());
+			}
+		});
 		root.setChildren(newChildren);
 		return root;
 	}

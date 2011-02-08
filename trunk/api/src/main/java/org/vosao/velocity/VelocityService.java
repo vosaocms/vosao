@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.vosao.entity.PageEntity;
 import org.vosao.service.vo.CommentVO;
+import org.vosao.service.vo.FileVO;
 import org.vosao.service.vo.UserVO;
 
 /**
@@ -217,5 +218,19 @@ public interface VelocityService {
 	 * @return - rendered content.
 	 */
 	String renderStructureContent(String path, String structureTemplateName);
+	
+	/**
+	 * Get all page's resources.
+	 * @param url - page friendly url.
+	 * @return - list of page's file resources.
+	 */
+	List<FileVO> getPageResources(String url);
+
+	/**
+	 * Get all resources by folder path.
+	 * @param path - folder path.
+	 * @return - list of file resources.
+	 */
+	List<FileVO> getResources(String path);
 	
 }

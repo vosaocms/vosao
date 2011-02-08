@@ -27,11 +27,16 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.print.attribute.standard.MediaSize.Engineering;
+
 import org.vosao.business.Business;
+import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.business.page.impl.StructurePageRenderDecorator;
 import org.vosao.business.vo.StructureFieldVO;
 import org.vosao.common.AbstractServiceBeanImpl;
 import org.vosao.common.VosaoContext;
+import org.vosao.entity.FileEntity;
+import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.StructureTemplateEntity;
@@ -40,6 +45,7 @@ import org.vosao.entity.helper.PageHelper;
 import org.vosao.enums.UserRole;
 import org.vosao.i18n.Messages;
 import org.vosao.service.vo.CommentVO;
+import org.vosao.service.vo.FileVO;
 import org.vosao.service.vo.UserVO;
 import org.vosao.utils.DateUtil;
 import org.vosao.utils.ListUtil;
@@ -289,6 +295,26 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 			result.addAll(findPageChildrenMonth(path, year, month));
 		}
 		Collections.sort(result, PageHelper.PUBLISH_DATE);
+		return result;
+	}
+
+	@Override
+	public List<FileVO> getPageResources(String url) {
+		return getResources("/page" + url);
+	}
+
+	@Override
+	public List<FileVO> getResources(String path) {
+		FolderEntity folder = getBusiness().getFolderBusiness().getByPath(path);
+		if (folder == null) {
+			return Collections.EMPTY_LIST;
+		}
+		List<FileVO> result = new ArrayList<FileVO>();
+		for (FileEntity file : getDao().getFileDao().getByFolder(
+				folder.getId())) {
+			result.add(VosaoContext.getInstance().getBackService()
+					.getFileService().getFile(file.getId()));
+		}
 		return result;
 	}
 	

@@ -42,6 +42,9 @@ public class JavaScriptFragment	implements ContentFragment {
 		if (config.isEnableRecaptcha()) {
             code.append("<script src=\"http://api.recaptcha.net/js/recaptcha_ajax.js\" type=\"text/javascript\" ></script>\n");
 		}
+		if (VosaoContext.getInstance().getUser() != null) {
+			code.append("<script src=\"/static/js/jquery.cookie.js\" type=\"text/javascript\"></script>\n");
+		}
 		return code.toString();
 	}
 

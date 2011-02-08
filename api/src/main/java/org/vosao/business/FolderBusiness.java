@@ -45,6 +45,7 @@ public interface FolderBusiness {
 	 */
 	List<FolderEntity> getByParent(final Long id);
 
+	FolderEntity getByPath(final String path);
 	
 	TreeItemDecorator<FolderEntity> getTree(final List<FolderEntity> list);
 

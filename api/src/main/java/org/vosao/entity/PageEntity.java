@@ -406,6 +406,10 @@ public class PageEntity extends BaseEntityImpl {
 		return titles.get(lang);
 	}
 
+	public String getLocalTitle() {
+		return getLocalTitle(VosaoContext.getInstance().getLanguage());
+	}
+	
 	public void setLocalTitle(String title, String lang) {
 		parseTitle();
 		titles.put(lang, title);

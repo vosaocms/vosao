@@ -29,8 +29,8 @@ public interface SearchEngine {
 
 	void removeFromIndex(Long pageId);
 
-	SearchResult search(final String query, int start, int count,
-			String language, int textSize);
+	SearchResult search(SearchResultFilter filter, String query, int start, 
+			int count, String language, int textSize);
 	
 	/**
 	 * Start index creation procedure. Create index generator task.

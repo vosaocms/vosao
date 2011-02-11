@@ -20,27 +20,36 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.search;
+package org.vosao.service.front.impl;
 
+import java.util.Collections;
 import java.util.List;
 
+import org.vosao.entity.PageEntity;
+import org.vosao.search.SearchResultFilter;
+
 /**
- * Search index of all site pages for one language.
- * 
  * @author Alexander Oleynik
- *
  */
-public interface SearchIndex {
+public class SectionSearchFilter implements SearchResultFilter {
 
-	void updateIndex(Long pageId);
-
-	void removeFromIndex(Long pageId);
-
-	List<Hit> search(SearchResultFilter filter, String query, int textSize);
+	private List<String> sections;
 	
-	void saveIndex();
-	
-	String getLanguage();
+	public SectionSearchFilter(List<String> sections) {
+		this.sections = sections != null ? sections : Collections.EMPTY_LIST;
+	}
 
-	void clear();
+	@Override
+	public boolean check(PageEntity page) {
+		if (page == null) {
+			return false;
+		}
+		for (String url : sections) {
+			if (page.getFriendlyURL().startsWith(url)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }

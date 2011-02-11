@@ -42,6 +42,7 @@ import org.vosao.entity.FileEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.search.Hit;
 import org.vosao.search.SearchIndex;
+import org.vosao.search.SearchResultFilter;
 import org.vosao.utils.StrUtil;
 
 public class SearchIndexImpl implements SearchIndex {
@@ -139,7 +140,8 @@ public class SearchIndexImpl implements SearchIndex {
 	}
 
 	@Override
-	public List<Hit> search(String query, int textSize) {
+	public List<Hit> search(SearchResultFilter filter, String query, 
+			int textSize) {
 		try {
 		
 		refreshIndex();
@@ -148,6 +150,9 @@ public class SearchIndexImpl implements SearchIndex {
 		for (Long pageId : pages) {
 			PageEntity page = getDao().getPageDao().getById(pageId);
 			if (page != null) {
+				if (filter != null && !filter.check(page)) {
+					continue;
+				}
 				ContentEntity content = getBusiness().getPageBusiness()
 						.getPageContent(page, language);
 				if (content != null) {

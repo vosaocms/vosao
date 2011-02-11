@@ -62,9 +62,13 @@ function loadAlbums() {
 function showAlbums() {
 	var h = '';
 	$.each(albums, function(i,value) {
+		var c = '';
+		$.each(value.categories.list, function(j, category) {
+			c += category + ' ';
+		});
 		h += '<a class="album" onclick="onAlbumSelect(' + i + ')">'
 			+ '<img src="/static/images/Photos.png" /><p>' 
-			+ value.title + '</p></a>';
+			+ value.title + ' ' + c + '</p></a>';
 	});
 	$('#albums').html(h);
 }
@@ -86,12 +90,16 @@ function showPhotos() {
 	$('#albumDetails').show();
 	var h = '';
 	$.each(photos, function(i,value) {
+		var c = '';
+		$.each(value.categories.list, function(j, category) {
+			c += category + ' ';
+		});
 		h += '<div class="photo">'
 			+ '<img class="remove" src="/static/images/02_x.png" onclick="onPhotoRemove(' 
 			+ i + ');" />'
 			+ '<a onclick="onPhotoSelect(' + i + ')">'
 			+ '<img src="' + value.thumbnailURL + '" />'
-			+ '<p>' + value.title + '</p></a></div>';
+			+ '<p>' + value.title + '<br/>' + c + '</p></a></div>';
 	});
 	$('#photos').html(h);
 }

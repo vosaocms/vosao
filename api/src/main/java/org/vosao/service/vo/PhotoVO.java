@@ -25,6 +25,7 @@ package org.vosao.service.vo;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gdata.data.Category;
 import com.google.gdata.data.photos.PhotoEntry;
 
 /**
@@ -33,7 +34,15 @@ import com.google.gdata.data.photos.PhotoEntry;
  */
 public class PhotoVO {
 
-    private PhotoEntry photo;
+	public static List<PhotoVO> create(List<PhotoEntry> photos) {
+		List<PhotoVO> result = new ArrayList<PhotoVO>();
+		for (PhotoEntry photo : photos) {
+			result.add(new PhotoVO(photo));
+		}
+		return result;
+	}
+
+	private PhotoEntry photo;
 
 	public PhotoVO(final PhotoEntry entry) {
 		photo = entry;
@@ -54,17 +63,13 @@ public class PhotoVO {
 	public String getURL() {
 		return photo.getMediaContents().get(0).getUrl();
 	}
-
-	public static List<PhotoVO> create(List<PhotoEntry> photos) {
-		List<PhotoVO> result = new ArrayList<PhotoVO>();
-		for (PhotoEntry photo : photos) {
-			result.add(new PhotoVO(photo));
-		}
-		return result;
-	}
 	
 	public PhotoEntry photo() {
 		return photo;
 	}
 	
+	public List<String> getCategories() {
+		return photo.getMediaKeywords().getKeywords();
+	}
+
 }

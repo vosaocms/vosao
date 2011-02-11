@@ -20,27 +20,52 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.search;
+package org.vosao.update;
 
-import java.util.List;
+import org.vosao.business.Business;
+import org.vosao.dao.Dao;
+import org.vosao.entity.PluginEntity;
 
 /**
- * Search index of all site pages for one language.
- * 
  * @author Alexander Oleynik
- *
  */
-public interface SearchIndex {
+public class UpdateTask09 implements UpdateTask {
 
-	void updateIndex(Long pageId);
-
-	void removeFromIndex(Long pageId);
-
-	List<Hit> search(SearchResultFilter filter, String query, int textSize);
+	private Business business;
 	
-	void saveIndex();
+	public UpdateTask09(Business aBusiness) {
+		business = aBusiness;
+	}
 	
-	String getLanguage();
+	private Dao getDao() {
+		return business.getDao();
+	}
+	
+	private Business getBusiness() {
+		return business;
+	}
 
-	void clear();
+	@Override
+	public String getFromVersion() {
+		return "0.8";
+	}
+
+	@Override
+	public String getToVersion() {
+		return "0.9";
+	}
+
+	@Override
+	public String update() throws UpdateException {
+		updatePlugins();
+		return "Successfully updated to 0.9 version.";
+	}
+
+	private void updatePlugins() {
+		for (PluginEntity plugin : getDao().getPluginDao().select()) {
+			plugin.setDisabled(true);
+			getDao().getPluginDao().save(plugin);
+		}
+	}
+
 }

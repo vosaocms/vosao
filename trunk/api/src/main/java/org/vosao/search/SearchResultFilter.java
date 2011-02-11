@@ -22,25 +22,13 @@
 
 package org.vosao.search;
 
-import java.util.List;
+import org.vosao.entity.PageEntity;
 
 /**
- * Search index of all site pages for one language.
- * 
  * @author Alexander Oleynik
- *
  */
-public interface SearchIndex {
+public interface SearchResultFilter {
 
-	void updateIndex(Long pageId);
-
-	void removeFromIndex(Long pageId);
-
-	List<Hit> search(SearchResultFilter filter, String query, int textSize);
+	boolean check(PageEntity page);
 	
-	void saveIndex();
-	
-	String getLanguage();
-
-	void clear();
 }

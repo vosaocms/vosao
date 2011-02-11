@@ -42,6 +42,7 @@ import org.vosao.search.Hit;
 import org.vosao.search.SearchEngine;
 import org.vosao.search.SearchIndex;
 import org.vosao.search.SearchResult;
+import org.vosao.search.SearchResultFilter;
 import org.vosao.utils.ListUtil;
 
 /**
@@ -77,14 +78,14 @@ public class SearchEngineImpl implements SearchEngine {
 	}
 	
 	@Override
-	public SearchResult search(String query, int start, int count,
-			String language, int textSize) {
+	public SearchResult search(SearchResultFilter filter, String query, 
+			int start, int count, String language, int textSize) {
 		// Search in language index first for all results
-		List<Hit> hits = getSearchIndex(language).search(query, textSize);
+		List<Hit> hits = getSearchIndex(language).search(filter, query, textSize);
 		// Search in all other languages for all results
 		for (LanguageEntity lang : getDao().getLanguageDao().select()) {
 			if (!lang.getCode().equals(language)) {
-				hits.addAll(getSearchIndex(lang.getCode()).search(query, 
+				hits.addAll(getSearchIndex(lang.getCode()).search(filter, query, 
 						textSize));
 			}
 		}

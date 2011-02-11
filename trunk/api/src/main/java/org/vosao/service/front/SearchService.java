@@ -22,18 +22,25 @@
 
 package org.vosao.service.front;
 
+import java.util.List;
+
 import org.vosao.search.SearchResult;
 import org.vosao.service.AbstractService;
 
 /**
- * 
  * @author Alexander Oleynik
- *
  */
 public interface SearchService extends AbstractService {
 	
-	SearchResult search(final String query, int start, int count, int textSize);
+	static final int DEFAULT_TEXT_SIZE = 256;
+	
+	SearchResult search(String query, int start, int count, int textSize);
 
-	SearchResult search(final String query);
+	SearchResult search(String query);
+
+	SearchResult searchFilter(List<String> sections, String query, int start, 
+			int count, int textSize);
+
+	SearchResult searchFilter(List<String> sections, String query);
 
 }

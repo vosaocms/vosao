@@ -22,8 +22,11 @@
 
 package org.vosao.service.front.impl;
 
-import org.vosao.common.VosaoContext;
-import org.vosao.entity.ConfigEntity;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.vosao.search.Hit;
 import org.vosao.search.SearchResult;
 import org.vosao.service.front.SearchService;
@@ -36,15 +39,20 @@ public class SearchServiceImpl extends AbstractServiceImpl
 		implements SearchService {
 
 	@Override
-	public SearchResult search(String text, int start, int count, int textSize) {
+	public SearchResult searchFilter(List<String> sections, String text, int start, 
+			int count, int textSize) {
 		String query = text.toLowerCase();
 		String language = getBusiness().getLanguage();
 		String defaultLanguage = getBusiness().getDefaultLanguage();
 		SearchResult result = getBusiness().getSearchEngine().search(
+				new SectionSearchFilter(sections),
 				query, start, count, language, textSize);
+		
 		if (!language.equals(defaultLanguage)) {
 			SearchResult enResult = getBusiness().getSearchEngine().search(
+					new SectionSearchFilter(sections),
 					query, start, count, defaultLanguage, textSize);
+			
 			for (Hit hit : enResult.getHits()) {
 				hit.setLocalTitle(hit.getTitle());
 				hit.setUrl(hit.getUrl() + "?language=" + defaultLanguage);
@@ -57,7 +65,18 @@ public class SearchServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public SearchResult search(String query) {
-		return search(query, 0, -1, 256);
+		return search(query, 0, -1, DEFAULT_TEXT_SIZE);
+	}
+
+	@Override
+	public SearchResult search(String query, int start,
+			int count, int textSize) {
+		return searchFilter(Arrays.asList("/"), query, start, count, textSize);
+	}
+
+	@Override
+	public SearchResult searchFilter(List<String> sections, String query) {
+		return searchFilter(sections, query, 0, -1, DEFAULT_TEXT_SIZE);
 	}
 	
 }

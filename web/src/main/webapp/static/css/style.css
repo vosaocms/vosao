@@ -317,3 +317,7 @@ a.button span.ui-icon {
 .red {
 	color: red;
 }
+
+.cke_dialog_body label {
+    float:none;
+}

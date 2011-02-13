@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.entity.PluginEntity;
@@ -60,19 +61,28 @@ public class RssatomConfig {
 		Map<String, PluginParameter> params = PluginHelper.parseParameters(
 				plugin);
 		try {
-			items = params.get("items").getValueInteger();
+			int newItems = params.get("items").getValueInteger();
+			if (newItems > 0) {
+				items = newItems;
+			}
 		}
 		catch (Exception e) {
 			logger.error("items parameter: " + e.getMessage());
 		}
 		try {
-			itemSize = params.get("itemSize").getValueInteger();
+			int newItemSize = params.get("itemSize").getValueInteger();
+			if (newItemSize > 0) {
+				itemSize = newItemSize;
+			}
 		}
 		catch (Exception e) {
 			logger.error("itemSize parameter: " + e.getMessage());
 		}
 		try {
-			pages = params.get("pages").getValue();
+			String newPages = params.get("pages").getValue();
+			if (StringUtils.isNotEmpty(newPages)) {
+				pages = newPages;
+			}
 		}
 		catch (Exception e) {
 			logger.error("pages parameter: " + e.getMessage());

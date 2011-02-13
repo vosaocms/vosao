@@ -200,13 +200,15 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 	}
 	
 	@Override
-	public ServiceResponse startExportThemeTask(List<String> ids) {
+	public ServiceResponse startExportThemeTask(List<String> ids,
+			List<String> structureIds) {
 		String filename = ExportTaskSubscriber.getExportFilename(
 				ExportTaskSubscriber.TYPE_PARAM_THEME);
 		getMessageQueue().publish(new ExportMessage.Builder()
 				.setFilename(filename)
 				.setExportType(ExportTaskSubscriber.TYPE_PARAM_THEME)
-				.setIds(StrUtil.toLong(ids)).create());
+				.setIds(StrUtil.toLong(ids))
+				.setStructureIds(StrUtil.toLong(ids)).create());
 		return ServiceResponse.createSuccessResponse(filename);
 	}
 

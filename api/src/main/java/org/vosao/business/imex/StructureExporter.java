@@ -22,9 +22,15 @@
 
 package org.vosao.business.imex;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
+import org.vosao.business.imex.task.TaskTimeoutException;
+import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
 import org.vosao.dao.DaoTaskException;
+import org.vosao.entity.StructureEntity;
 
 /**
  * @author Alexander Oleynik
@@ -44,4 +50,9 @@ public interface StructureExporter {
 	 */
 	void readStructuresFile(String xml) throws DocumentException, 
 			DaoTaskException;
+	
+	void exportStructures(ZipOutStreamTaskAdapter out, 
+			List<StructureEntity> structures) 
+	throws IOException, TaskTimeoutException;
+
 }

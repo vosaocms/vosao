@@ -42,11 +42,12 @@ public class ExportMessage extends AbstractMessage {
 		private int fileCounter;
 		private String exportType;
 		private List<Long> ids;
+		private List<Long> structureIds;
 		private Long folderId;
 
 		public ExportMessage create() {
 			return new ExportMessage(filename, currentFile, fileCounter,
-					exportType, ids, folderId);
+					exportType, ids, folderId, structureIds);
 		}
 
 		public Builder setFilename(String filename) {
@@ -74,6 +75,11 @@ public class ExportMessage extends AbstractMessage {
 			return this;
 		}
 
+		public Builder setStructureIds(List<Long> ids) {
+			this.structureIds = ids;
+			return this;
+		}
+
 		public Builder setFolderId(Long folderId) {
 			this.folderId = folderId;
 			return this;
@@ -87,10 +93,12 @@ public class ExportMessage extends AbstractMessage {
 	private int fileCounter;
 	private String exportType;
 	private List<Long> ids;
+	private List<Long> structureIds;
 	private Long folderId;
 	
 	private ExportMessage(String filename, String currentFile, int fileCounter,
-			String exportType, List<Long> ids, Long folderId) {
+			String exportType, List<Long> ids, Long folderId, 
+			List<Long> structureIds) {
 		super();
 		setTopic(Topic.EXPORT.name());
 		setSpeed(QueueSpeed.LOW);
@@ -100,6 +108,7 @@ public class ExportMessage extends AbstractMessage {
 		this.exportType = exportType;
 		this.ids = ids;
 		this.folderId = folderId;
+		this.structureIds = structureIds;
 	}
 
 	public String getFilename() {
@@ -124,6 +133,10 @@ public class ExportMessage extends AbstractMessage {
 
 	public Long getFolderId() {
 		return folderId;
+	}
+
+	public List<Long> getStructureIds() {
+		return structureIds;
 	}
 	
 }

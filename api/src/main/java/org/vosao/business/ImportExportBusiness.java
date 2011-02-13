@@ -34,6 +34,7 @@ import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
 import org.vosao.common.RequestTimeoutException;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FolderEntity;
+import org.vosao.entity.StructureEntity;
 import org.vosao.entity.TemplateEntity;
 
 public interface ImportExportBusiness {
@@ -47,7 +48,8 @@ public interface ImportExportBusiness {
 	 * @throws IOException
 	 */
 	void createTemplateExportFile(final ZipOutStreamTaskAdapter zip, 
-			final List<TemplateEntity> list) throws IOException, 
+			final List<TemplateEntity> list, 
+			final List<StructureEntity> structures) throws IOException, 
 			TaskTimeoutException;
 
 	/**

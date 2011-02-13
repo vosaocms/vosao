@@ -75,3 +75,13 @@
   </form>
 </div>
 
+<div id="structures-dialog" style="display:none" title="$messages.get("export_structures")">
+  <form id="structuresForm">
+    <p>$messages.get("templates.structures_info")</p>
+    <div id="structures"></div>    
+    <div class="buttons-dlg">
+        <input type="submit" value="$messages.get("export")" />
+        <input id="structuresCancelButton" type="button" value="$messages.get("cancel")" />
+    </div>
+  </form>
+</div>

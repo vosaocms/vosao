@@ -85,4 +85,6 @@ public interface PluginEntryPoint {
 	 * @return bundle name.
 	 */
 	String getBundleName();
+	
+	Map<String,String> getRewriteRules();
 }

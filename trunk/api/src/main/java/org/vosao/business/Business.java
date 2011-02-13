@@ -129,4 +129,7 @@ public interface Business {
 
 	PageAttributeBusiness getPageAttributeBusiness();
 	void setPageAttributeBusiness(final PageAttributeBusiness bean);
+	
+	RewriteUrlBusiness getRewriteUrlBusiness();
+	void setRewriteUrlBusiness(RewriteUrlBusiness bean);
 }

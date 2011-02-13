@@ -43,7 +43,6 @@ import org.vosao.business.impl.SetupBeanImpl;
 import org.vosao.common.AccessDeniedException;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.ConfigEntity;
-import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.SeoUrlEntity;
 import org.vosao.entity.UserEntity;

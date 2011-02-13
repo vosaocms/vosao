@@ -24,7 +24,6 @@ package org.vosao.business.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -38,7 +37,6 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.vosao.business.Business;
 import org.vosao.business.PluginBusiness;
 import org.vosao.business.impl.plugin.PluginClassLoaderFactoryImpl;
 import org.vosao.business.impl.plugin.PluginLoader;
@@ -113,6 +111,9 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 
 	@Override
 	public void uninstall(PluginEntity plugin) {
+		getBusiness().getRewriteUrlBusiness().removeRules(
+				getEntryPoint(plugin).getRewriteRules());
+		
 		getEntryPoint(plugin).uninstall();
 		getPluginLoader().uninstall(plugin);
 		resetPlugin(plugin);
@@ -218,6 +219,8 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 				entryPoint.init();
 				plugins.put(plugin.getName(), entryPoint);
 				pluginTimestamps.put(plugin.getName(), plugin);
+				getBusiness().getRewriteUrlBusiness().addRules(
+						entryPoint.getRewriteRules());
 			}
 			catch (ClassNotFoundException e) {
 				logger.error("Class not found " + e.getMessage());

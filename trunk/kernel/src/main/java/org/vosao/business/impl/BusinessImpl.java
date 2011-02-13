@@ -45,6 +45,7 @@ import org.vosao.business.PageBusiness;
 import org.vosao.business.PicasaBusiness;
 import org.vosao.business.PluginBusiness;
 import org.vosao.business.PluginResourceBusiness;
+import org.vosao.business.RewriteUrlBusiness;
 import org.vosao.business.SetupBean;
 import org.vosao.business.StructureBusiness;
 import org.vosao.business.StructureTemplateBusiness;
@@ -96,6 +97,7 @@ public class BusinessImpl implements Business, Serializable {
 	private PicasaBusiness picasaBusiness;
 	private FormDataBusiness formDataBusiness;
 	private PageAttributeBusiness pageAttributeBusiness;
+	private RewriteUrlBusiness rewriteUrlBusiness;
 
 	private SetupBean setupBean;
 
@@ -482,5 +484,18 @@ public class BusinessImpl implements Business, Serializable {
    		}
 		return language.getCode();
 	}
-	
+
+	@Override
+	public RewriteUrlBusiness getRewriteUrlBusiness() {
+		if (rewriteUrlBusiness == null) {
+			rewriteUrlBusiness = new RewriteUrlBusinessImpl();
+		}
+		return rewriteUrlBusiness;
+	}
+
+	@Override
+	public void setRewriteUrlBusiness(RewriteUrlBusiness bean) {
+		rewriteUrlBusiness = bean;
+	}
+
 }

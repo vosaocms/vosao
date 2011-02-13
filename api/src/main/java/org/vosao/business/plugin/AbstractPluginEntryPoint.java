@@ -23,6 +23,7 @@
 package org.vosao.business.plugin;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -136,4 +137,8 @@ public abstract class AbstractPluginEntryPoint implements PluginEntryPoint {
 		headInclude = value;
 	}
 
+	@Override
+	public Map<String,String> getRewriteRules() {
+		return Collections.EMPTY_MAP;
+	}
 }

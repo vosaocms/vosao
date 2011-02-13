@@ -41,6 +41,7 @@ import org.vosao.business.mq.message.ExportMessage;
 import org.vosao.business.mq.message.ExportMessage.Builder;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.FolderEntity;
+import org.vosao.entity.StructureEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.entity.helper.UserHelper;
 
@@ -83,8 +84,12 @@ public class ExportTaskSubscriber extends AbstractSubscriber {
 	        if (msg.getExportType().equals(TYPE_PARAM_THEME)) {
 	        	List<TemplateEntity> templates = getDao().getTemplateDao()
 	        			.getById(msg.getIds());
+	        	
+	        	List<StructureEntity> structures = getDao().getStructureDao()
+	        		.getById(msg.getStructureIds());
+	        	
 	        	getImportExportBusiness().createTemplateExportFile(
-	        			zipOutStreamTaskAdapter, templates);
+	        			zipOutStreamTaskAdapter, templates, structures);
 	        }
 	        if (msg.getExportType().equals(TYPE_PARAM_FOLDER)) {
 	        	FolderEntity folder = getDao().getFolderDao().getById(

@@ -111,14 +111,6 @@ public class SiteExporterImpl extends AbstractExporter
 			getResourceExporter().addResourcesFromFolder(out, page, "page/");
 		}
 	}
-
-	private void saveFile(final ZipOutStreamTaskAdapter out, String name, 
-			String content) throws IOException, TaskTimeoutException {
-		out.putNextEntry(new ZipEntry(name));
-		out.write(content.getBytes("UTF-8"));
-		out.closeEntry();
-		out.nextFile();
-	}
 	
 	public void readSiteContent(final ZipEntry entry, final String xml)
 			throws DocumentException, DaoTaskException {

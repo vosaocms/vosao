@@ -35,6 +35,7 @@ import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.business.imex.ExporterFactory;
 import org.vosao.business.imex.ResourceExporter;
 import org.vosao.business.imex.SiteExporter;
+import org.vosao.business.imex.StructureExporter;
 import org.vosao.business.imex.ThemeExporter;
 import org.vosao.business.imex.task.DaoTaskAdapter;
 import org.vosao.business.imex.task.TaskTimeoutException;
@@ -48,6 +49,7 @@ import org.vosao.common.VfsNode;
 import org.vosao.dao.Dao;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FolderEntity;
+import org.vosao.entity.StructureEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.utils.FolderUtil;
 
@@ -69,6 +71,10 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 		return getExporterFactory().getThemeExporter();
 	}
 
+	private StructureExporter getStructureExporter() {
+		return getExporterFactory().getStructureExporter();
+	}
+
 	private ResourceExporter getResourceExporter() {
 		return getExporterFactory().getResourceExporter();
 	}
@@ -79,9 +85,11 @@ public class ImportExportBusinessImpl extends AbstractBusinessImpl implements
 
 	@Override
 	public void createTemplateExportFile(final ZipOutStreamTaskAdapter zip,
-			final List<TemplateEntity> list)
-			throws IOException, TaskTimeoutException {
+			final List<TemplateEntity> list, 
+			final List<StructureEntity> structures)	throws IOException, 
+				TaskTimeoutException {
 		getThemeExporter().exportThemes(zip, list);
+		getStructureExporter().exportStructures(zip, structures);
 	}
 
 	public void importZip(ZipInputStream in) throws IOException,

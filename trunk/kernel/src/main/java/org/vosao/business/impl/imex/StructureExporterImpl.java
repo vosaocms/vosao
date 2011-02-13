@@ -22,6 +22,7 @@
 
 package org.vosao.business.impl.imex;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,6 +31,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.vosao.business.imex.StructureExporter;
+import org.vosao.business.imex.task.TaskTimeoutException;
+import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.StructureTemplateEntity;
@@ -87,6 +90,7 @@ public class StructureExporterImpl extends AbstractExporter
 		templateElement.addElement("content").setText(template.getContent());
 	}	
 	
+	@Override
 	public void readStructures(Element structuresElement) 
 			throws DaoTaskException {
 		for (Iterator<Element> i = structuresElement.elementIterator(); 
@@ -136,9 +140,17 @@ public class StructureExporterImpl extends AbstractExporter
 	 * @throws DocumentException
 	 * @throws DaoTaskException
 	 */
+	@Override
 	public void readStructuresFile(String xml) throws DocumentException, 
 			DaoTaskException {
 		Document doc = DocumentHelper.parseText(xml);
 		readStructures(doc.getRootElement());
+	}
+
+	@Override
+	public void exportStructures(ZipOutStreamTaskAdapter out,
+			List<StructureEntity> structures) throws IOException,
+			TaskTimeoutException {
+		saveFile(out, "_structures.xml", createStructuresXML());
 	}
 }

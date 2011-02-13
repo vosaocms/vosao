@@ -28,8 +28,9 @@ var exportFilename = null;
 $(function(){
     $("#import-dialog").dialog({ width: 400, autoOpen: false });
     $("#export-dialog").dialog({ width: 400, autoOpen: false });
+    $("#structures-dialog").dialog({ width: 400, autoOpen: false });
     $('#upload').ajaxForm(afterUpload);
-    Vosao.initJSONRpc(loadTemplates);
+    Vosao.initJSONRpc(initData);
     $("#tabs").tabs();
     $('#addButton').click(onAdd);
     $('#deleteButton').click(onDelete);
@@ -38,7 +39,16 @@ $(function(){
     $('#importButton').click(onImport);
     $('#importCancelButton').click(onImportCancel);
     $('#okButton').click(onAfterUploadOk);
+    $('#structuresForm').submit(function() {onStartExport(); return false;});
+    $('#structuresCancelButton').click(function() {
+    	$("#structures-dialog").dialog("close");
+    });
 });
+
+function initData() {
+	loadTemplates();
+	loadStructures();
+}
 
 function afterUpload(data) {
     var s = data.split('::');
@@ -81,6 +91,19 @@ function loadTemplates() {
     });
 }
 
+function loadStructures() {
+	Vosao.jsonrpc.structureService.select(function(r) {
+        var html = '<table class="form-table"><tr><th></th><th>'
+        	+ messages('title') + '</th></tr>';
+        $.each(r.list, function (n, value) {
+            html += '<tr><td><input type="checkbox" value="' + value.id 
+                + '" /></td><td>' + value.title + '</td></tr>';
+        });
+        $('#structures').html(html + '</table>');
+        $('#structures tr:even').addClass('even');
+	});
+}
+
 function onAdd() {
 	location.href = '/cms/template.vm';
 }
@@ -103,9 +126,15 @@ function onDelete() {
 }
 
 function onExport() {
+    $('#structures input:checked').each(function() { this.checked = false; });
+	$("#structures-dialog").dialog("open");
+}
+
+function onStartExport() {
 	clockSeconds = 0;
 	showClock();
 	var ids = [];
+	var structureIds = [];
     $('#templates input:checked').each(function () {
         ids.push(this.value);
     });
@@ -113,6 +142,9 @@ function onExport() {
     	Vosao.info(messages('nothing_selected'));
         return;
     }
+    $('#structures input:checked').each(function () {
+        structureIds.push(this.value);
+    });
     $("#export-dialog").dialog("open");
     Vosao.jsonrpc.configService.startExportThemeTask(function(r) {
     	if (r.result == 'success') {
@@ -127,7 +159,7 @@ function onExport() {
     	else {
     		Vosao.showServiceMessages(r);
     	}
-    }, Vosao.javaList(ids));
+    }, Vosao.javaList(ids), Vosao.javaList(structureIds));
 }
 
 function checkExport() {

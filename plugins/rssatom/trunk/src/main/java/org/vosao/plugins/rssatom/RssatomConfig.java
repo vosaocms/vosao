@@ -48,6 +48,7 @@ public class RssatomConfig {
 	private String title;
 	private String rssTemplate;
 	private String atomTemplate;
+	private String rewriteUrl;
 
 	private RssatomConfig() {
 		items = 10;
@@ -105,6 +106,12 @@ public class RssatomConfig {
 		catch (Exception e) {
 			logger.error("atomTemplate parameter: " + e.getMessage());
 		}
+		try {
+			rewriteUrl = params.get("rewriteUrl").getValue();
+		}
+		catch (Exception e) {
+			logger.error("rewriteUrl parameter: " + e.getMessage());
+		}
 	}
 
 	public int getItems() {
@@ -157,6 +164,14 @@ public class RssatomConfig {
 
 	public void setItemSize(int itemSize) {
 		this.itemSize = itemSize;
+	}
+
+	public String getRewriteUrl() {
+		return rewriteUrl;
+	}
+
+	public void setRewriteUrl(String rewriteUrl) {
+		this.rewriteUrl = rewriteUrl;
 	}
 	
 }

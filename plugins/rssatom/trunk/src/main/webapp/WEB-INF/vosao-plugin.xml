@@ -16,6 +16,8 @@
             value="" />
         <param name="atomTemplate" title="$rssatom.atom_template" 
             type="Text" value="" />
+        <param name="rewriteUrl" title="$rssatom.rewrite_url" type="String" 
+            value="" />
     </config>
     <entry-point-class>
         org.vosao.plugins.rssatom.RssatomEntryPoint

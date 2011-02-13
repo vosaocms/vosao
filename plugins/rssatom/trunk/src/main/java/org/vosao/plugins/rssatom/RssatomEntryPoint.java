@@ -23,6 +23,8 @@
 package org.vosao.plugins.rssatom;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
@@ -40,6 +42,10 @@ import org.vosao.utils.XmlUtil;
  */
 public class RssatomEntryPoint extends AbstractPluginEntryPoint {
 
+	private static final String FEED_PLUGIN_URL = "/_ah/plugin/rssatom/feed";
+	
+	private Map<String, String> rules;
+	
 	@Override
 	public void init() {
 		checkConfig();
@@ -90,11 +96,24 @@ public class RssatomEntryPoint extends AbstractPluginEntryPoint {
 			}
 			plugin.setConfigData(doc.asXML());
 			getDao().getPluginDao().save(plugin);
+			rules = null;
 		}
 	}
 	
 	@Override
 	public String getBundleName() {
 		return "org.vosao.plugins.rssatom.messages";
+	}
+	
+	@Override
+	public Map<String,String> getRewriteRules() {
+		if (rules == null) {
+			rules = new HashMap<String, String>();
+			RssatomConfig rssatomConfig = new RssatomConfig(getPlugin());
+			if (StringUtils.isNotEmpty(rssatomConfig.getRewriteUrl())) {
+				rules.put(rssatomConfig.getRewriteUrl(), FEED_PLUGIN_URL);
+			}
+		}
+		return rules;
 	}
 }

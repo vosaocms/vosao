@@ -66,7 +66,7 @@ public class CommentEntity extends BaseEntityImpl {
 		setProperty(entity, "pageUrl", pageUrl, true);
 		setProperty(entity, "name", name, false);
 		setTextProperty(entity, "content", content);
-		setProperty(entity, "publishDate", publishDate, false);
+		setProperty(entity, "publishDate", publishDate, true);
 		setProperty(entity, "disabled", disabled, true);
 	}
 

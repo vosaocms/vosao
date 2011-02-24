@@ -50,6 +50,8 @@ public class BaseDaoImpl<T extends BaseEntity>
 	protected static final Log logger = LogFactory.getLog(
 			BaseDaoImpl.class);
 
+	private static int QUERY_LIMIT = 100000;
+	
 	private Class clazz;
 	private String kind;
 
@@ -250,12 +252,21 @@ public class BaseDaoImpl<T extends BaseEntity>
 	}
 	
 	protected List<T> select(Query query, String queryId, Object[] params) {
+		return select(query, queryId, QUERY_LIMIT, params);
+	}
+
+	protected List<T> select(Query query, String queryId, int queryLimit, 
+			Object[] params) {
 		List<T> result = (List<T>) getQueryCache().getQuery(clazz, queryId, 
 				params);
 		if (result == null) {
 			getDao().getDaoStat().incQueryCalls();
 			PreparedQuery p = getDatastore().prepare(query);
-			int limit = p.countEntities() > 0 ? p.countEntities() : 1;
+			int limit = p.countEntities();
+			limit = limit > queryLimit ? queryLimit : limit;
+			if (limit == 0) {
+				limit = 1;
+			}
 			result = createModels(p.asList(withLimit(limit)));
 			getQueryCache().putQuery(clazz, queryId, params, 
 					(List<BaseEntity>)result);			

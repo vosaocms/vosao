@@ -51,4 +51,6 @@ public interface CommentDao extends BaseDao<CommentEntity> {
 	void disable(final List<Long> ids);
 	
 	void removeByPage(final String url);
+	
+	List<CommentEntity> getRecent(int limit);
 }

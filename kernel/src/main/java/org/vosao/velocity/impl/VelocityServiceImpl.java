@@ -317,5 +317,10 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 		}
 		return result;
 	}
+
+	@Override
+	public List<CommentVO> getRecentComments(int limit) {
+		return CommentVO.create(getDao().getCommentDao().getRecent(limit));
+	}
 	
 }

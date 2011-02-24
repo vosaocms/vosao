@@ -233,4 +233,5 @@ public interface VelocityService {
 	 */
 	List<FileVO> getResources(String path);
 	
+	List<CommentVO> getRecentComments(int limit);
 }

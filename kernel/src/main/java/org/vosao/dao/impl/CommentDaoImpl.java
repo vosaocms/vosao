@@ -96,5 +96,13 @@ public class CommentDaoImpl extends BaseDaoImpl<CommentEntity>
 		q.addFilter("pageUrl", EQUAL, url);
 		removeSelected(q);
 	}
+
+	@Override
+	public List<CommentEntity> getRecent(int limit) {
+		Query q = newQuery();
+		List<CommentEntity> result = select(q, "getRecent", limit, null);
+		Collections.sort(result, new CommentHelper.PublishDateDesc());
+		return result;
+	}
 	
 }

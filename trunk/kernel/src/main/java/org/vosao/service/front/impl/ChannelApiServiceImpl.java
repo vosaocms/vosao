@@ -20,33 +20,22 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service;
+package org.vosao.service.front.impl;
 
-import org.jabsorb.JSONRPCBridge;
 import org.vosao.service.front.ChannelApiService;
-import org.vosao.service.front.CommentService;
-import org.vosao.service.front.FormService;
-import org.vosao.service.front.LoginService;
-import org.vosao.service.front.SearchService;
+import org.vosao.service.impl.AbstractServiceImpl;
 
-public interface FrontService {
-	
-	void register(JSONRPCBridge bridge);
-	void unregister(JSONRPCBridge bridge);
+import com.google.appengine.api.channel.ChannelServiceFactory;
 
-	FormService getFormService();
-	void setFormService(FormService bean);
+/**
+ * @author Alexander Oleynik
+ */
+public class ChannelApiServiceImpl extends AbstractServiceImpl 
+		implements ChannelApiService {
 
-	LoginService getLoginService();
-	void setLoginService(LoginService bean);
-
-	CommentService getCommentService();
-	void setCommentService(CommentService bean);
-	
-	SearchService getSearchService();
-	void setSearchService(SearchService bean);
-	
-	ChannelApiService getChannelApiService();
-	void setChannelApiService(ChannelApiService bean);
+	@Override
+	public String createToken(String clientId) {
+		return ChannelServiceFactory.getChannelService().createChannel(clientId);
+	}
 
 }

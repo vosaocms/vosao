@@ -25,6 +25,8 @@ var folderId = Vosao.getQueryParam('folderId');
 var file = '';
 var editMode = fileId != '';
 var autosaveTimer = '';
+var editor = true;
+var aceEditor = false;
 
 $(function() {
 	$("#tabs").tabs();
@@ -46,7 +48,7 @@ function tabSelected(event, ui) {
 }
 
 function startAutosave() {
-	if (fileId != 'null') {
+	if (fileId != 'null' && $("#autosave:checked").length > 0) {
 		if (autosaveTimer == '') {
 			autosaveTimer = setInterval(saveContent, 
 					Vosao.AUTOSAVE_TIMEOUT * 1000);
@@ -62,7 +64,7 @@ function stopAutosave() {
 }
 
 function saveContent() {
-	var content = $("textarea").val();
+	var content = aceEditor ? $("#ace").text() : $("textarea").val();
 	Vosao.jsonrpc.fileService.updateContent(function(r) {
 		if (r.result == 'success') {
 			var now = new Date();
@@ -91,6 +93,16 @@ function loadFile() {
 	}, fileId);
 }
 
+function openAce(mode, content) {
+	$('#ace').text(content);
+	aceEditor = true;
+	editor = ace.edit("ace");
+    editor.setTheme("ace/theme/eclipse");
+    var Mode = require("ace/mode/" + mode).Mode;
+    editor.getSession().setMode(new Mode());
+    $('#content').hide();
+}
+
 function initFormFields() {
 	if (editMode) {
 		$('#filename').html(file.name);
@@ -103,6 +115,21 @@ function initFormFields() {
 		$('#download').html('<a href="' + file.link + '">' + messages('download') + '</a>');
 		if (file.textFile) {
 			$('.contentTab').show();
+			/*if (file.mimeType == 'text/css') {
+				openAce('css', file.content);
+			}
+			if (file.mimeType == 'text/xml') {
+				openAce('xml', file.content);
+			}
+			if (file.mimeType == 'text/html') {
+				openAce('html', file.content);
+			}
+			if (file.mimeType == 'text/javascript') {
+				openAce('javascript', file.content);
+			}
+			else {
+				$('#content').val(file.content);
+			}*/
 			$('#content').val(file.content);
 		} else {
 			$('.contentTab').hide();

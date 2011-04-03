@@ -20,33 +20,34 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service;
+package org.vosao.command;
 
-import org.jabsorb.JSONRPCBridge;
-import org.vosao.service.front.ChannelApiService;
-import org.vosao.service.front.CommentService;
-import org.vosao.service.front.FormService;
-import org.vosao.service.front.LoginService;
-import org.vosao.service.front.SearchService;
+import java.util.Map;
 
-public interface FrontService {
+import org.vosao.business.mq.AbstractMessage;
+import org.vosao.business.mq.QueueSpeed;
+
+public class CommandMessage extends AbstractMessage {
+
+	private String clientId;
+	private Map<String, String> params;
 	
-	void register(JSONRPCBridge bridge);
-	void unregister(JSONRPCBridge bridge);
+	public CommandMessage(String clientId, String commandClass, 
+			Map<String, String> params) {
+		super();
+		setTopic(commandClass);
+		setSpeed(QueueSpeed.MEDIUM);
+		setCommandClassName(commandClass);
+		this.clientId = clientId;		
+		this.params = params;
+	}
 
-	FormService getFormService();
-	void setFormService(FormService bean);
+	public Map<String, String> getParams() {
+		return params;
+	}
 
-	LoginService getLoginService();
-	void setLoginService(LoginService bean);
-
-	CommentService getCommentService();
-	void setCommentService(CommentService bean);
+	public String getClientId() {
+		return clientId;
+	}
 	
-	SearchService getSearchService();
-	void setSearchService(SearchService bean);
-	
-	ChannelApiService getChannelApiService();
-	void setChannelApiService(ChannelApiService bean);
-
 }

@@ -35,8 +35,22 @@ Vosao.javaMap = function(aMap) {
 	return {javaClass: 'java.util.HashMap', map: aMap};
 };
 
+Vosao.accents = { 'ÀÁÂÃÄÅ':'A',	'Æ':'AE', 'Ç':'C','ÈÉÊË':'E', 'ÌÍÎÏ':'I',
+	'Ð':'Th', 'Ñ':'N', 'ÒÓÔÕÖØ':'O', 'ÙÚÛÜ':'U', 'Ý':'Y', 'Þ':'Th',
+	'ß':'ss', 'àáâãäå':'a', 'æ':'ae', 'ç':'c', 'èéêë':'e', 'ìíîï':'i',
+	'ð':'o', 'ñ':'n', 'òóôõöø':'o', 'ùúûü':'u', 'ýÿ':'y', 'þ':'th'};
+
+Vosao.replaceAccents = function(s) {
+	$.each(Vosao.accents, function(n, value) {
+		for (var i=0; i < n.length; i++) {
+			s = s.replace(n.charAt(i), value);
+		}
+	});
+	return s.toLowerCase();
+};
+
 Vosao.urlFromTitle = function(title) {
-    return title.toLowerCase().replace(/\W/g, '-');
+    return Vosao.replaceAccents(title.toLowerCase()).replace(/\W/g, '-');
 };
 
 Vosao.nameFromTitle = function(title) {

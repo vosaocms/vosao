@@ -16,4 +16,6 @@
         <include path="/favicon.ico" />
     </static-files>
 	
+	<threadsafe>true</threadsafe>
+	
 </appengine-web-app>

@@ -22,7 +22,9 @@
 
 package org.vosao.plugins.superfish;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.dom4j.DocumentException;
@@ -97,12 +99,24 @@ public class SuperfishBackService extends AbstractServicePlugin {
 	public TreeItemDecorator<PageEntity> getTree() throws DocumentException {
 		TreeItemDecorator<PageEntity> root = getBusiness()
 				.getPageBusiness().getTree();
+		filterChildrenDefault(root);
 		PluginEntity plugin = getDao().getPluginDao().getByName("superfish");
 		SuperfishConfig config = SuperfishConfig.parse(plugin.getConfigData());
 		sortPages(root, config.getEnabledPages());
 		return root;
 	}
 	
+	private void filterChildrenDefault(TreeItemDecorator<PageEntity> root) {
+		List<TreeItemDecorator<PageEntity>> children = new ArrayList<TreeItemDecorator<PageEntity>>(); 
+		for (TreeItemDecorator<PageEntity> child : root.getChildren()) {
+			if (!child.getEntity().getFriendlyURL().endsWith("/_default")) {
+				children.add(child);
+				filterChildrenDefault(child);
+			}
+		}
+		root.setChildren(children);
+	}
+
 	private void sortPages(TreeItemDecorator<PageEntity> page, 
 			Map<String, Integer> enabledPages) {
 		if (page.isHasChildren()) {

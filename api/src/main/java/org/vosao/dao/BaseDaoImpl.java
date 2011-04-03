@@ -187,7 +187,16 @@ public class BaseDaoImpl<T extends BaseEntity>
 	}
 	
 	@Override
+	public T saveNoAudit(T model) {
+		return save(model, false);
+	}
+	
+	@Override
 	public T save(T model) {
+		return save(model, true);
+	}
+		
+	private T save(T model, boolean audit) {
 		getQueryCache().removeQueries(clazz);
 		Entity entity = null;
 		if (model.getId() != null) {
@@ -205,8 +214,10 @@ public class BaseDaoImpl<T extends BaseEntity>
 			entity = new Entity(getKind());
 			model.setCreateUserEmail(getCurrentUserEmail());
 		}
-		model.setModDate(new Date());
-		model.setModUserEmail(getCurrentUserEmail());
+		if (audit) {
+			model.setModDate(new Date());
+			model.setModUserEmail(getCurrentUserEmail());
+		}
 		model.save(entity);
 		getDatastore().put(entity);
 		model.setKey(entity.getKey());

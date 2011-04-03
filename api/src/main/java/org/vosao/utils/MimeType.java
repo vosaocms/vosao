@@ -213,6 +213,7 @@ public class MimeType {
 	 	"xls","application/vnd.ms-excel",
 	 	"xlt","application/vnd.ms-excel",
 	 	"xlw","application/vnd.ms-excel",
+	 	"xml","text/xml",
 	 	"xof","x-world/x-vrml",
 	 	"xpm","image/x-xpixmap",
 	 	"xwd","image/x-xwindowdump",

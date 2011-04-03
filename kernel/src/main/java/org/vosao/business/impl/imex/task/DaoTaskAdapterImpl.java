@@ -57,7 +57,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 
 	private static final Log logger = LogFactory.getLog(DaoTaskAdapterImpl.class);
 
-	private static final int TASK_DURATION = 20;
+	private static final int TASK_DURATION = 60 * 9;
 	
 	private int current;
 	private int start;
@@ -234,7 +234,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 			}
 		}
 		else {
-			getDao().getUserGroupDao().save(entity);
+			getDao().getUserGroupDao().saveNoAudit(entity);
 		}
 	}
 
@@ -253,7 +253,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 			}
 		}
 		else {
-			getDao().getMessageDao().save(entity);
+			getDao().getMessageDao().saveNoAudit(entity);
 		}
 	}
 
@@ -276,14 +276,14 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 		else {
 			//logger.info("import " + entity.getFriendlyURL()	+ " version=" 
 			//		+ entity.getVersion() + " current " + current);
-			getDao().getPageDao().save(entity);
+			getDao().getPageDao().saveNoAudit(entity);
 		}
 	}
 
 	@Override
 	public void commentSave(CommentEntity entity) throws DaoTaskException {
 		if (!isSkip()) {
-			getDao().getCommentDao().save(entity);
+			getDao().getCommentDao().saveNoAudit(entity);
 		}
 	}
 
@@ -316,7 +316,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 			}
 		}
 		else {
-			getDao().getStructureDao().save(entity);
+			getDao().getStructureDao().saveNoAudit(entity);
 		}
 	}
 
@@ -324,7 +324,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 	public void structureTemplateSave(StructureTemplateEntity entity) 
 			throws DaoTaskException {
 		if (!isSkip()) {
-			getDao().getStructureTemplateDao().save(entity);
+			getDao().getStructureTemplateDao().saveNoAudit(entity);
 		}
 	}
 
@@ -342,7 +342,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 			}
 		}
 		else {
-			getDao().getTemplateDao().save(entity);
+			getDao().getTemplateDao().saveNoAudit(entity);
 		}
 	}
 	
@@ -360,7 +360,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 			}
 		}
 		else {
-			getDao().getUserDao().save(entity);
+			getDao().getUserDao().saveNoAudit(entity);
 		}
 	}
 
@@ -378,7 +378,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 			}
 		}
 		else {
-			getDao().getPluginDao().save(entity);
+			getDao().getPluginDao().saveNoAudit(entity);
 		}
 	}
 
@@ -396,7 +396,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 			}
 		}
 		else {
-			getDao().getSeoUrlDao().save(entity);
+			getDao().getSeoUrlDao().saveNoAudit(entity);
 		}
 	}
 
@@ -422,7 +422,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 			}
 		}
 		else {
-			getDao().getTagDao().save(entity);
+			getDao().getTagDao().saveNoAudit(entity);
 		}
 	}
 
@@ -458,7 +458,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 			}
 		}
 		else {
-			getDao().getPageDependencyDao().save(entity);
+			getDao().getPageDependencyDao().saveNoAudit(entity);
 		}
 	}
 
@@ -476,7 +476,7 @@ public class DaoTaskAdapterImpl implements DaoTaskAdapter {
 			}
 		}
 		else {
-			getDao().getPageTagDao().save(entity);
+			getDao().getPageTagDao().saveNoAudit(entity);
 		}
 	}
 }

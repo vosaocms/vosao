@@ -148,7 +148,7 @@ public class PageExporterImpl extends AbstractExporter
 		pageElement.addElement("state").setText(page.getState().name());
 		pageElement.addElement("createUserEmail").setText(
 				page.getCreateUserEmail());
-		pageElement.addElement("modUserId").setText(
+		pageElement.addElement("modUserEmail").setText(
 				page.getModUserEmail());
 		if (page.getCreateDate() != null) {
 			pageElement.addElement("createDate").setText(

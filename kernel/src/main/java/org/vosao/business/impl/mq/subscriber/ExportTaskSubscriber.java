@@ -48,7 +48,7 @@ import org.vosao.entity.helper.UserHelper;
 import com.bradmcevoy.io.StreamUtils;
 
 /**
- * In 25sec task exports data to file located in /tmp folder with name stored in
+ * In 9min task exports data to file located in /tmp folder with name stored in
  * request parameters. Parameters: 
  * filename - file for export located in /tmp folder. 
  * exportType - type of export. 

@@ -88,6 +88,7 @@ public class StructureExporterImpl extends AbstractExporter
 		templateElement.addElement("name").setText(template.getName());
 		templateElement.addElement("type").setText(template.getTypeString());
 		templateElement.addElement("content").setText(template.getContent());
+		templateElement.addElement("headContent").setText(template.getHeadContent());
 	}	
 	
 	@Override
@@ -129,6 +130,7 @@ public class StructureExporterImpl extends AbstractExporter
             		template = new StructureTemplateEntity(name,
             			title, structure.getId(), type, content);
             	}
+            	template.setHeadContent(element.elementText("headContent"));
             	getDao().getStructureTemplateDao().save(template);
             }
 		}

@@ -22,21 +22,21 @@
 
 Vosao.PageSearchComponent = function(div) {
 	
-	var h = 'Search pages : <input name="query" type="text" /> '
-		+ '<input id="search" type="button" value="Search"/> '
-		+ '<input id="clear" type="button" value="Clear"/> '
+	var h = messages('pages.search_pages') + ' : <input name="query" type="text" /> '
+		+ '<input id="search" type="button" value="' + messages('search') + '"/> '
+		+ '<input id="clear" type="button" value="' + messages('clear') + '"/> '
 		+ '<span id="progress"></span> '
-		+ '<a id="enhancedSearch" href="#">Enhanced</a>'
+		+ '<a id="enhancedSearch" href="#">' + messages('enhanced') + '</a>'
 		+ '<div id="enhancedDiv">'
 		+ ' <div class="form-row">'
 		+ '  <input id="publishedSearch" type="checkbox" checked="checked"/>'
-		+ '   <label for="publishedSearch">Published</label>'
+		+ '   <label for="publishedSearch">' + messages('published') + '</label>'
 		+ '  <input id="unpublishedSearch" type="checkbox" checked="checked" />'
-		+ '   <label for="unpublishedSearch">Unpublished</label><br/>'
+		+ '   <label for="unpublishedSearch">' + messages('unpublished') + '</label><br/>'
 		+ ' </div>'
 		+ ' <div class="form-row">'
-		+ '  Change date <input class="datepicker" type="input" name="from" size="10"/> '
-		+ '  to <input class="datepicker" type="input" name="to" size="10"/>'
+		+ messages('change_date') + ' <input class="datepicker" type="input" name="from" size="10"/> '
+		+ messages('to') + ' <input class="datepicker" type="input" name="to" size="10"/>'
 		+ ' </div>'
 		+ '</div>'
 		+ '<div id="pageSearchResult"></div>';
@@ -76,9 +76,9 @@ Vosao.PageSearchComponent = function(div) {
 	
 	function onEnhancedSearch() {
 		$(div + ' #enhancedDiv').slideToggle();
-		var linkLabel = 'Enhanced';
-		if ($(div + ' #enhancedSearch').text() == 'Enhanced') {
-			linkLabel = 'Simple';
+		var linkLabel = messages('enhanced');
+		if ($(div + ' #enhancedSearch').text() == messages('enhanced')) {
+			linkLabel = messages('simple');
 		}	
 		$(div + ' #enhancedSearch').text(linkLabel);
 	}
@@ -93,7 +93,8 @@ Vosao.PageSearchComponent = function(div) {
 			$(div + ' #progress').html('');
 			return;
 		}
-		var h = '<div><a href="/cms/page/content.vm?id=' + m.id + '">' + m.title + '</a> Version: '
+		var h = '<div><a href="/cms/page/content.vm?id=' + m.id + '">' + m.title 
+			+ '</a> ' + messages('version') + ': '
 			+ m.version + '<br>' + m.content;
 		$(div + ' #pageSearchResult').append(h);
 	} 

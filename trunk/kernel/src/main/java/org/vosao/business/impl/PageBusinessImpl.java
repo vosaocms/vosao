@@ -147,6 +147,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	@Override 
 	public String render(PageEntity page, String template, 
 			String languageCode) {
+		VosaoContext.getInstance().getPageRenderingContext().setPage(page);
 		VelocityContext context = createContext(languageCode, page);
 		context.put("page", createPageRenderDecorator(page, languageCode));
 		return pagePostProcess(getSystemService().render(template, context), 
@@ -155,6 +156,7 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	
 	@Override
 	public String render(PageEntity page, String languageCode) {
+		VosaoContext.getInstance().getPageRenderingContext().setPage(page);
 		if (page.getTemplate() != null) {
 			TemplateEntity template = getDao().getTemplateDao().getById(
 					page.getTemplate());

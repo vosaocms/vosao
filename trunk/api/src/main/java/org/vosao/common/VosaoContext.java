@@ -30,17 +30,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.vosao.business.Business;
 import org.vosao.business.mq.MessageQueue;
+import org.vosao.business.page.PageRenderingContext;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.service.BackService;
 import org.vosao.service.FrontService;
 
-import com.google.appengine.api.utils.SystemProperty;
-
 /**
- * Though GAE is single threaded we can store request scoped data in 
- * thread local variable (development environment jetty is still multithreaded)
- * and set it in filter.
+ * Store request scoped data in thread local variable and set it in filter.
  * 
  * @author Alexander Oleynik
  */
@@ -59,6 +56,7 @@ public class VosaoContext {
 	private BackService backService;
 	private MessageQueue messageQueue;
 	private List<String> skipURLs;
+	private PageRenderingContext pageRenderingContext;
 	
 	private VosaoContext() {
 		requestCount = 0;
@@ -189,6 +187,13 @@ public class VosaoContext {
 
 	public void setConfig(ConfigEntity config) {
 		this.config = config;
+	}
+
+	public PageRenderingContext getPageRenderingContext() {
+		if (pageRenderingContext == null) {
+			pageRenderingContext = new PageRenderingContext();
+		}
+		return pageRenderingContext;
 	}
 
 }

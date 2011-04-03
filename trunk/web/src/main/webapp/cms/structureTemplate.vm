@@ -22,7 +22,10 @@
 
 #set ($title = $messages.get("structureTemplate.title"))
 
-#set ($head1 = '<script src="/static/js/cms/structureTemplate.js" type="text/javascript"></script>')
+#define ( $head1 )
+  <script src="/static/js/cms/structureTemplate.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="/static/css/structureTemplate.css" type="text/css" />
+#end
 
 <div id="tabs">
 
@@ -39,21 +42,19 @@
         <label>$messages.get("name")</label>
         <input id="name" type="text" />
     </div>
-    <!-- div class="form-row">
-        <label>$messages.get("template_type")</label>
-        <select id="type">
-            <option value="VELOCITY">Velocity</option>
-            <option value="XSLT">XSLT</option>
-        </select>
-    </div-->
     <div class="form-row">
-        <div>
-            <input id="autosave" type="checkbox" /><label for="autosave">$messages.get("autosave")</label>
+        <label>$messages.get("structureTemplate.content")</label>
+        <div id="contentDiv">
+            <input id="autosave" type="checkbox" /> <label for="autosave">$messages.get("autosave")</label>
             $messages.get("editor_size"):
             <a id="bigLink" href="#"> $messages.get("big")</a>
             <a id="smallLink" href="#"> $messages.get("small")</a>
         </div>
         <textarea id="content" rows="20" cols="80" wrap="off"></textarea>
+    </div>
+    <div class="form-row">
+        <label>$messages.get("structureTemplate.head_content")</label>
+        <textarea id="headContent" rows="8" cols="80" wrap="off"></textarea>
     </div>
     <div class="buttons">
         <input id="saveContinueButton" type="button" value="$messages.get("save_continue")" />

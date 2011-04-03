@@ -25,16 +25,22 @@ package org.vosao.business.impl.pagefilter.fragments;
 import org.apache.commons.lang.StringUtils;
 import org.vosao.business.Business;
 import org.vosao.business.impl.pagefilter.ContentFragment;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.PageEntity;
 
 public class PageHeadHtmlFragment implements ContentFragment {
 
 	@Override
 	public String get(Business business, PageEntity page) {
+		StringBuilder b = new StringBuilder("");
 		if (!StringUtils.isEmpty(page.getHeadHtml())) {
-			return page.getHeadHtml();
+			b.append(page.getHeadHtml());
 		}
-		return "";
+		for (String h : VosaoContext.getInstance().getPageRenderingContext()
+					.getHeadContents()) {
+			b.append(h).append("\n");
+		}
+		return b.toString();
 	}
 
 }

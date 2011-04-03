@@ -36,12 +36,14 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.vosao.business.PageBusiness;
 import org.vosao.business.vo.StructureFieldVO;
+import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.StructureEntity;
@@ -109,6 +111,12 @@ public class StructurePageRenderDecorator extends AbstractPageRenderDecorator {
 			context.put("page", this);
 			setContent(getSystemService().render(structureTemplate.getContent(), 
 					context));
+			if (StringUtils.isNotEmpty(structureTemplate.getHeadContent())) {
+				String headContent = getSystemService().render(
+						structureTemplate.getHeadContent(), context);
+				VosaoContext.getInstance().getPageRenderingContext()
+						.getHeadContents().add(headContent);
+			}
 		}
 		if (structureTemplate.isXSLT()) {
 			String xml = createContentXML(contentMap);

@@ -68,6 +68,8 @@ public class ContextFilter extends AbstractFilter implements Filter {
     	if (ctx.getBackService() == null) {
         	ctx.setBackService(new BackServiceImpl());
     	}
+    	ctx.getPageRenderingContext().clear();
     	chain.doFilter(request, response);
+    	ctx.getPageRenderingContext().clear();
     }
 }

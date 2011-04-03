@@ -72,6 +72,7 @@ public class StructureTemplateServiceImpl extends AbstractServiceImpl
 		entity.setName(vo.get("name"));
 		entity.setTitle(vo.get("title"));
 		entity.setContent(vo.get("content"));
+		entity.setHeadContent(vo.get("headContent"));
 		entity.setStructureId(Long.valueOf(vo.get("structureId")));
 		entity.setType(StructureTemplateType.valueOf(vo.get("type")));
 		List<String> errors = getBusiness().getStructureTemplateBusiness()

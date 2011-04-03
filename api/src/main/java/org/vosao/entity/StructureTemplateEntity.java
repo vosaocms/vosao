@@ -33,9 +33,7 @@ import org.vosao.enums.StructureTemplateType;
 import com.google.appengine.api.datastore.Entity;
 
 /**
- * 
  * @author Alexander Oleynik
- *
  */
 public class StructureTemplateEntity extends BaseEntityImpl {
 
@@ -46,6 +44,7 @@ public class StructureTemplateEntity extends BaseEntityImpl {
 	private Long structureId;
 	private StructureTemplateType type;
 	private String content;
+	private String headContent;
 	
 	public StructureTemplateEntity() {
 		type = StructureTemplateType.VELOCITY;
@@ -59,6 +58,7 @@ public class StructureTemplateEntity extends BaseEntityImpl {
 		structureId = getLongProperty(entity, "structureId");
 		type = StructureTemplateType.valueOf(getStringProperty(entity, "type"));
 		content = getTextProperty(entity, "content");
+		headContent = getTextProperty(entity, "headContent");
 	}
 	
 	@Override
@@ -69,6 +69,7 @@ public class StructureTemplateEntity extends BaseEntityImpl {
 		setProperty(entity, "structureId", structureId, true);
 		setProperty(entity, "type", type.name(), false);
 		setTextProperty(entity, "content", content);
+		setTextProperty(entity, "headContent", headContent);
 	}
 
 	public StructureTemplateEntity(String name, String title, Long structureId, 
@@ -131,5 +132,13 @@ public class StructureTemplateEntity extends BaseEntityImpl {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getHeadContent() {
+		return headContent;
+	}
+
+	public void setHeadContent(String headContent) {
+		this.headContent = headContent;
 	}
 }

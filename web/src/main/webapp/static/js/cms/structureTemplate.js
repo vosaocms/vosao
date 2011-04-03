@@ -106,14 +106,14 @@ function initStructureTemplateForm() {
 	if (structureTemplate != null) {
 		$('#name').val(structureTemplate.name);
 		$('#title').val(structureTemplate.title);
-		//$('#type').val(structureTemplate.typeString);
         $('#content').val(structureTemplate.content);
+        $('#headContent').val(structureTemplate.headContent);
 	}
 	else {
         $('#name').val('');
         $('#title').val('');
-        //$('#type').val('VELOCITY');
         $('#content').val('');
+        $('#headContent').val('');
 	}
 }
 
@@ -126,9 +126,10 @@ function onUpdate(cont) {
 	    id : structureTemplateId,
 	    name : Vosao.strip($('#name').val()),
 	    title : Vosao.strip($('#title').val()),
-	    type: 'VELOCITY', //$('#type').val(),
+	    type: 'VELOCITY', 
 	    structureId: String(structureId),
-        content : $('#content').val()
+        content : $('#content').val(),
+        headContent : $('#headContent').val()
 	});
 	Vosao.jsonrpc.structureTemplateService.save(function (r) {
 		if (r.result == 'success') {

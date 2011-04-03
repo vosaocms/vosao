@@ -39,6 +39,8 @@ public interface BaseDao<T extends BaseEntity>
 	
 	T save(final T model);
 	
+	T saveNoAudit(final T model);
+
 	T getById(final Long id);
 	
 	List<T> getById(final List<Long> ids);

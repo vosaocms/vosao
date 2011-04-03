@@ -38,7 +38,7 @@ public class ZipOutStreamTaskAdapterImpl implements ZipOutStreamTaskAdapter {
 	protected static final Log logger = LogFactory
 			.getLog(ZipOutStreamTaskAdapterImpl.class);
 
-	private static final int TASK_DURATION = 20;
+	private static final int TASK_DURATION = 60 * 9;
 	
 	private Business business;
 	private ByteArrayOutputStream outData;

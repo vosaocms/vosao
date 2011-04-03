@@ -111,7 +111,7 @@
     
     <properties>
       <gae.application.id>vosaocms</gae.application.id>
-      <gae.application.version>vosao-0-9</gae.application.version>
+      <gae.application.version>vosaocms-0-9</gae.application.version>
       <vosao.version>0.9</vosao.version>
       <vosao.version.full>0.9</vosao.version.full>
       <vosao.admin.username>admin</vosao.admin.username>

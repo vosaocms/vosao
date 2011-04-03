@@ -55,6 +55,7 @@
             <artifactId>all</artifactId>
             <version>1.4.3</version>
             <type>pom</type>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>

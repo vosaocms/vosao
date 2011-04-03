@@ -24,7 +24,6 @@ package org.vosao.business.impl.pagefilter;
 
 import org.vosao.business.Business;
 import org.vosao.business.impl.pagefilter.fragments.EditorPanelFragment;
-import org.vosao.business.impl.pagefilter.fragments.GoogleAnalyticsFragment;
 import org.vosao.entity.PageEntity;
 
 public class BodyBeginPageFilter extends AbstractPageFilter 
@@ -32,7 +31,6 @@ public class BodyBeginPageFilter extends AbstractPageFilter
 
 	public BodyBeginPageFilter(Business business) {
 		super(business);
-		getFragments().add(new GoogleAnalyticsFragment());
 		getFragments().add(new EditorPanelFragment());
 	}
 	

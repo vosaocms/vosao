@@ -23,6 +23,7 @@
 package org.vosao.business.impl.pagefilter;
 
 import org.vosao.business.Business;
+import org.vosao.business.impl.pagefilter.fragments.GoogleAnalyticsFragment;
 import org.vosao.business.impl.pagefilter.fragments.PageHeadHtmlFragment;
 import org.vosao.entity.PageEntity;
 
@@ -32,6 +33,7 @@ public class HeadEndPageFilter extends AbstractPageFilter
 	public HeadEndPageFilter(Business business) {
 		super(business);
 		getFragments().add(new PageHeadHtmlFragment());
+		getFragments().add(new GoogleAnalyticsFragment());
 	}
 	
 	@Override

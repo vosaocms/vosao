@@ -32,10 +32,12 @@ import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PluginEntity;
 import org.vosao.service.FrontService;
+import org.vosao.service.front.ChannelApiService;
 import org.vosao.service.front.CommentService;
 import org.vosao.service.front.FormService;
 import org.vosao.service.front.LoginService;
 import org.vosao.service.front.SearchService;
+import org.vosao.service.front.impl.ChannelApiServiceImpl;
 import org.vosao.service.front.impl.CommentServiceImpl;
 import org.vosao.service.front.impl.FormServiceImpl;
 import org.vosao.service.front.impl.LoginServiceImpl;
@@ -50,6 +52,7 @@ public class FrontServiceImpl implements FrontService, Serializable {
 	private FormService formService;
 	private CommentService commentService;
 	private SearchService searchService;
+	private ChannelApiService channelApiService;
 	
 	@Override
 	public void register(JSONRPCBridge bridge) {
@@ -57,6 +60,7 @@ public class FrontServiceImpl implements FrontService, Serializable {
 		bridge.registerObject("formFrontService", getFormService());
 		bridge.registerObject("commentFrontService", getCommentService());
 		bridge.registerObject("searchFrontService", getSearchService());
+		bridge.registerObject("channelApiFrontService", getChannelApiService());
 		registerPluginServices(bridge);
 	}
 	
@@ -66,6 +70,7 @@ public class FrontServiceImpl implements FrontService, Serializable {
 		bridge.unregisterObject("formFrontService");
 		bridge.unregisterObject("commentFrontService");
 		bridge.unregisterObject("searchFrontService");
+		bridge.unregisterObject("channelApiFrontService");
 		unregisterPluginServices(bridge);
 	}
 
@@ -164,5 +169,18 @@ public class FrontServiceImpl implements FrontService, Serializable {
 	public void setSearchService(SearchService bean) {
 		searchService = bean;
 	}
-	
+
+	@Override
+	public ChannelApiService getChannelApiService() {
+		if (channelApiService == null) {
+			channelApiService = new ChannelApiServiceImpl();
+		}
+		return channelApiService;
+	}
+
+	@Override
+	public void setChannelApiService(ChannelApiService bean) {
+		channelApiService = bean;
+	}
+
 }

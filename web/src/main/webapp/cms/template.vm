@@ -51,7 +51,7 @@
     </div>
     <div class="form-row">
         <div>
-            <input id="autosave" type="checkbox"> $messages.get("autosave")</input>
+            <input id="autosave" type="checkbox" /> <label for="autosave">$messages.get("autosave")</label>
             $messages.get("editor_size"): &nbsp;
             <a id="sizeLink" href="#">$messages.get("big")</a>&nbsp;
             <a id="wrapLink" href="#">$messages.get("wrap")</a>

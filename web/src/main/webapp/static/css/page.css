@@ -30,3 +30,6 @@
 	width: 80%;
 }
 
+#approveOnContentSaveDiv label {
+	float:none;
+}

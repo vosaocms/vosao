@@ -42,7 +42,7 @@
 
 <div style="padding-right:10px">
     <div style="float:right">
-        <input id="autosave" type="checkbox"> $messages.get("autosave")</input>
+        <input id="autosave" type="checkbox" /> <label for="autosave">$messages.get("autosave")</label>
     </div>
 	<div id="friendlyUrlDiv" class="form-row">
     	<label>$messages.get("page.friendly_url")</label>
@@ -63,7 +63,8 @@
 </div>
 <div class="buttons">
     <div id="approveOnContentSaveDiv" class="checkboxes">
-        <input id="approveOnContentSave" type="checkbox"> $messages.get("page.approve_save")
+        <input id="approveOnContentSave" type="checkbox" />
+            <label for="approveOnContentSave">$messages.get("page.approve_save")</label>
     </div> 
     <input id="saveContinueContentButton" type="button" 
         value="$messages.get("save_continue")" />

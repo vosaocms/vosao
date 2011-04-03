@@ -184,8 +184,17 @@
         <servlet-name>LogoutServlet</servlet-name>
         <url-pattern>/_ah/logout</url-pattern>
     </servlet-mapping>
+
     <servlet>
+        <servlet-name>ChannelCommandServlet</servlet-name>
+        <servlet-class>org.vosao.servlet.ChannelCommandServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ChannelCommandServlet</servlet-name>
+        <url-pattern>/_ah/channelCommand</url-pattern>
+    </servlet-mapping>
     
+    <servlet>
         <servlet-name>JSBundleServlet</servlet-name>
         <servlet-class>org.vosao.servlet.JSBundleServlet</servlet-class>
     </servlet>

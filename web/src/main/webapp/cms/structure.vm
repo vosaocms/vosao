@@ -64,7 +64,7 @@
 <div id="tab-2">
     <div class="form-row">
         <div>
-            <input id="autosave" type="checkbox"> $messages.get("autosave")</input>
+            <input id="autosave" type="checkbox" /><label for="autosave">$messages.get("autosave")</label>
             $messages.get("editor_size"):
             <a id="bigLink" href="#"> $messages.get("big")</a>
             <a id="smallLink" href="#"> $messages.get("small")</a>

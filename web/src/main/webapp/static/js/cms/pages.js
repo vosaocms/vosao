@@ -24,6 +24,7 @@ var parentURL = null;
 var root = null;
 var page = null;
 var showTitle = $.cookie("pages.showTitle") != 'names';
+var searchUI = null;
 
 $(function() {
     $("#page-dialog").dialog({ width: 400, autoOpen: false });
@@ -37,6 +38,7 @@ $(function() {
 function loadData() {
 	loadTree();
 	loadUser();
+    searchUI = Vosao.PageSearchComponent('#pageSearch');
 }
 
 function loadTree() {

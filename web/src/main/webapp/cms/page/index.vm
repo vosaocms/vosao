@@ -152,7 +152,7 @@
 <div class="buttons">
     <div id="approveOnPageSaveDiv" class="checkboxes">
         <input id="approveOnPageSave" type="checkbox"> 
-            $messages.get("page.approve_save")
+            <label for="approveOnPageSave">$messages.get("page.approve_save")</label>
     </div> 
     <input id="pageSaveButton" type="submit" 
         value="$messages.get("save")" />

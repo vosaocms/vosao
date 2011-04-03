@@ -20,33 +20,9 @@
  * email: vosao.dev@gmail.com
  */
 
-package org.vosao.service;
+package org.vosao.service.front;
 
-import org.jabsorb.JSONRPCBridge;
-import org.vosao.service.front.ChannelApiService;
-import org.vosao.service.front.CommentService;
-import org.vosao.service.front.FormService;
-import org.vosao.service.front.LoginService;
-import org.vosao.service.front.SearchService;
+public interface ChannelApiService {
 
-public interface FrontService {
-	
-	void register(JSONRPCBridge bridge);
-	void unregister(JSONRPCBridge bridge);
-
-	FormService getFormService();
-	void setFormService(FormService bean);
-
-	LoginService getLoginService();
-	void setLoginService(LoginService bean);
-
-	CommentService getCommentService();
-	void setCommentService(CommentService bean);
-	
-	SearchService getSearchService();
-	void setSearchService(SearchService bean);
-	
-	ChannelApiService getChannelApiService();
-	void setChannelApiService(ChannelApiService bean);
-
+	String createToken(String clientId);
 }

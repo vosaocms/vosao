@@ -557,7 +557,7 @@ public class PageServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse remove(String pageURL) {
-		getPageBusiness().remove(pageURL);
+		if (!"/".equals(pageURL)) getPageBusiness().remove(pageURL);
 		return ServiceResponse.createSuccessResponse(Messages.get("success"));
 	}
 

@@ -130,6 +130,7 @@ function loadUser() {
 }
 
 function onPageRemove(url) {
+	if (url == '/') return; 
 	if (confirm(messages('are_you_sure'))) {
 		Vosao.jsonrpc.pageService.remove(function(r) {
 			Vosao.showServiceMessages(r);

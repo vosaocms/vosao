@@ -1,0 +1,25 @@
+<vosao-plugin>
+    <name>rssatom</name>
+    <title>$rssatom.title</title>
+    <version>0.9</version>
+    <description>$rssatom.description</description>
+    <website>www.vosao.org</website>
+    <config>
+        <param name="title" title="$rssatom.feed_title" type="String" 
+            value="Site news" />
+        <param name="items" title="$rssatom.feed_items" type="Integer" 
+            value="10" />
+        <param name="itemSize" title="$rssatom.item_size" type="Integer" 
+            value="300" />
+        <param name="pages" title="$rssatom.pages" type="String" value="/" />
+        <param name="rssTemplate" title="$rssatom.rss_template" type="Text" 
+            value="" />
+        <param name="atomTemplate" title="$rssatom.atom_template" 
+            type="Text" value="" />
+        <param name="rewriteUrl" title="$rssatom.rewrite_url" type="String" 
+            value="" />
+    </config>
+    <entry-point-class>
+        org.vosao.plugins.rssatom.RssatomEntryPoint
+    </entry-point-class>
+</vosao-plugin>

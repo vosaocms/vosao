@@ -1,0 +1,11 @@
+<vosao-plugin>
+    <name>register</name>
+    <title>$register.title</title>
+    <version>0.9</version>
+    <description>$register.description</description>
+    <website>www.vosao.org</website>
+    <plugin-config-url>config.html</plugin-config-url>
+    <entry-point-class>
+        org.vosao.plugins.register.RegisterEntryPoint
+    </entry-point-class>
+</vosao-plugin>

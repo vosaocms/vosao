@@ -1,0 +1,66 @@
+#*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2010 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*#
+
+#set ($query = "?id=" + $esc.html($params.get("id")))
+#if ($params.exists('parent'))
+    #set ($query = $query + "&parent=" + $esc.html($params.get('parent'))) 
+#end 
+
+<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+    <li class="pageTab ui-corner-top ui-state-default">
+        <a href="index.vm${query}">$messages.get("page")</a>
+    </li>
+    <li class="contentTab ui-corner-top ui-state-default">
+        <a href="content.vm${query}">$messages.get("content")</a>
+    </li>
+    <li class="childrenTab ui-corner-top ui-state-default">
+        <a href="children.vm${query}">$messages.get("page.children_pages")</a>
+    </li>
+    <li class="commentsTab ui-corner-top ui-state-default">
+        <a href="comments.vm${query}">$messages.get("comments")</a>
+    </li>
+    <li class="securityTab ui-corner-top ui-state-default">
+        <a href="security.vm${query}">$messages.get("security")</a>
+    </li>
+    <li class="securityTab ui-corner-top ui-state-default">
+        <a id="resources" href="#">$messages.get("resources")</a>
+    </li>
+    <li class="securityTab ui-corner-top ui-state-default">
+        <a href="attributes.vm${query}">$messages.get("attributes")</a>
+    </li>
+</ul>
+
+<script type="text/javascript">
+
+$(function() {
+	$('#resources').click(onResources);
+});
+
+function onResources() {
+	Vosao.jsonrpc.folderService.createFolderByPath(function(r) {
+		jQuery.cookie('folderReturnPath', '/cms/page/content.vm?id=' + pageId, 
+		    {path:'/', expires: 10});
+		location.href = '/cms/folder.vm?tab=1&id=' + r.id;
+	}, '/page' + page.friendlyURL);
+}
+
+</script>

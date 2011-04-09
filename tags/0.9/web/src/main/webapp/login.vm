@@ -1,0 +1,88 @@
+#*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2010 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*#
+
+#set ($layout = "login-layout.vm")
+
+#set ($title = $messages.get("login.title")) 
+
+#set ($head1 = '<link rel="stylesheet" href="/static/css/login.css" type="text/css" />')
+#set ($head2 = '<script type="text/javascript">loggedIn = ' + $vosao.loggedIn + ';</script>')
+#set ($head3 = '<script type="text/javascript" src="/static/js/cms/login.js"></script>')
+    
+<div id="content">
+<div id="memo">
+    <img src="/static/images/login-logo.jpg" />
+    <p>$messages.get('login.sign_in')</p>
+    <p>$messages.get("login.visit")</p>
+    <p>$messages.get("login.bug")</p>
+    <p>$messages.get("login.forum")</p>
+</div>
+
+<div id="login-form">
+<form onsubmit="onLogin(); return false;">
+
+<h4>$messages.get("login.sign")</h4>
+<h3>$messages.get("login.sign_account")</h3>
+
+<div class="form-row">
+    <label>$messages.get("email")</label>
+    <input type="text" id="loginEmail" />
+</div>
+<div class="form-row">
+    <label>$messages.get("password")</label>
+    <input type="password" id="loginPassword" />
+</div>
+<div id="login-messages"> </div>
+<div class="buttons-dlg">
+    <input type="submit" value="$messages.get("login")" />
+    <br/>
+    <br/>
+    <a href="#" id="forgot">$messages.get("forgot_password")</a>
+</div>    
+
+</form>
+</div>
+
+<div class="clear"> </div>
+
+<div class="version">
+  <span>Vosao CMS $messages.get("version") $vosao.fullVersion</span>
+</div>
+
+</div>
+
+<div class="messages"> </div>
+
+<div id="forgot-dialog" style="display:none" title="$messages.get("forgot_password")">
+  <form id="forgotForm">
+    <p style="margin-bottom: 20px;">$messages.get("login.forgot_dialog")</p>
+    <div class="form-row">
+        <label style="width: 80px;">$messages.get("email")</label>
+        <input type="text" id="email" />
+    </div>
+    <div class="buttons-dlg">
+        <input type="submit" value="OK" />
+        <input id="forgotCancelButton" type="button" value="$messages.get("cancel")" />
+    </div>
+  </form>
+</div>
+

@@ -1,0 +1,176 @@
+#*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2010 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*#
+
+#set ($title = $messages.get("form"))
+
+#define ( $head1 )
+
+<link rel="stylesheet" href="/static/css/form.css" type="text/css" />
+
+<script type="text/javascript">
+    var formId = "$!params.get("id")";
+</script>
+
+<script src="/static/js/cms/plugins/form.js" type="text/javascript"></script>
+
+#end 
+
+<div id="tabs">
+<ul>
+    <li><a href="#tab-1">$messages.get("form")</a></li>
+    <li class="fieldsTab"><a href="#tab-2">$messages.get("fields")</a></li>
+    <li class="dataTab"><a href="#tab-3">$messages.get("saved_data")</a></li>
+</ul>
+
+<div id="tab-1">
+<form id="form">
+<div class="form-row">
+    <label>$messages.get("title")</label>
+    <input id="title" type="text" />
+</div>
+<div class="form-row">
+    <label>$messages.get("form.unique_name")</label>
+    <input id="name" type="text" />
+</div>
+<div class="form-row">
+    <label>$messages.get("form.email")</label>
+    <input id="email" type="text" />
+</div>
+<div class="form-row">
+    <label>$messages.get("letter_subject")</label>
+    <input id="letterSubject" type="text" />
+</div>
+<div class="form-row">
+    <label>$messages.get("form.send_title")</label>
+    <input id="sendButtonTitle" type="text"/>
+</div>
+<div class="form-row">
+    <label>$messages.get("form.reset_title")</label>
+    <input id="resetButtonTitle" type="text"/>
+</div>
+<div class="form-row">
+    <label>$messages.get("form.show_reset")</label>
+    <input id="showResetButton" type="checkbox"/>
+</div>
+<div class="form-row">
+    <label>$messages.get("enable_captcha")</label>
+    <input id="enableCaptcha" type="checkbox"/>
+</div>
+<div class="form-row">
+    <label>$messages.get("enable_save")</label>
+    <input id="enableSave" type="checkbox"/>
+</div>
+
+<div class="buttons">
+    <input id="saveButton" type="submit" value="$messages.get("save")" />
+    <input id="cancelButton" type="button" value="$messages.get("cancel")" />
+</div>
+</form>
+</div>
+
+<div id="tab-2" class="fieldsTab">
+    <div id="fieldsTable"> </div>
+    <div class="buttons">
+        <input id="addFieldButton" type="button" value="$messages.get("add_field")" />
+        <input id="deleteFieldButton" type="button" value="$messages.get("delete_fields")" />
+    </div>    
+</div>
+
+<div id="tab-3" class="dataTab">
+    <div id="dataTable"></div>
+    <div class="buttons">
+        <input id="deleteDataButton" type="button" value="$messages.get("delete")" />
+    </div>    
+</div>
+
+</div>
+
+<div id="field-dialog" style="display:none" title="$messages.get("form.field_details")">
+<form id="fieldForm">
+    <div id="field-messages" class="messages"> </div>
+    <div class="form-row">
+        <label>$messages.get("title")</label>
+        <input type="text" name="field.title" />
+    </div>
+    <div class="form-row">
+        <label>$messages.get("form.unique_name")</label>
+        <input type="text" name="field.name" />
+    </div>
+    <div class="form-row">
+        <label>$messages.get("form.field_type")</label>
+        <select id="fieldType" name="field.fieldType">
+            <option value="TEXT">Text</option>
+            <option value="CHECKBOX">Checkbox</option>
+            <option value="RADIO">Radiobox</option>
+            <option value="PASSWORD">Password</option>
+            <option value="LISTBOX">Listbox</option>
+            <option value="FILE">File upload</option>
+        </select>
+    </div>
+    <div class="form-row" id="field-width">
+        <label>$messages.get("form.width_chars")</label>
+        <input type="text" name="field.width" />
+    </div>
+    <div class="form-row" id="field-height">
+        <label>$messages.get("form.height_chars")</label>
+        <input type="text" name="field.height" />
+    </div>
+    <div class="form-row">
+        <label>$messages.get("mandatory")</label>
+        <input type="checkbox" name="field.mandatory" />
+    </div>
+    <div class="form-row" id="field-values">
+        <label>$messages.get("values")</label>
+        <textarea name="field.values"></textarea>
+    </div>
+    <div class="form-row" id="field-defaultValue">
+        <label>$messages.get("default_value")</label>
+        <input type="text" name="field.defaultValue"/>
+    </div>
+    <div id="regexDiv">
+    <div class="form-row" id="field-defaultValue">
+        <label>$messages.get("form.regex_code")</label>
+        <input type="text" name="field.regex"/>
+    </div>
+    <div class="form-row" id="field-defaultValue">
+        <label>$messages.get("form.regex_message")</label>
+        <select id="language"></select> 
+        <input type="text" name="field.regexMessage"/>
+    </div>
+    </div>
+    <div class="buttons-dlg">
+        <input id="saveAndAddButton" type="submit" value="$messages.get("save_add")" />
+        <input id="fieldSaveButton" type="button" value="$messages.get("save")" />
+        <input id="fieldCancelButton" type="button" value="$messages.get("cancel")" />
+    </div>
+</form>
+</div>
+
+<div id="formData-dialog" style="display:none" title="$messages.get("form.form_data")">
+<form id="formDataForm">
+    <div id="formData"></div>
+    <div class="buttons-dlg">
+        <input id="formDataSendButton" type="button" value="$messages.get("send")" />
+        <input id="formDataCancelButton" type="button" value="$messages.get("cancel")" />
+    </div>
+</form>
+</div>

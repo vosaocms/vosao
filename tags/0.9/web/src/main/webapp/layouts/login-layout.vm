@@ -1,0 +1,73 @@
+#*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2010 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*#
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <title>Vosao CMS - $title</title>
+
+    <link rel="stylesheet" href="/static/css/jquery-ui/redmond/jquery-ui.css" type="text/css" />
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" language="javascript"></script>
+    <script src="/static/js/jquery-ui.js" language="javascript"></script>
+    <script src="/static/js/jsonrpc.js" language="javascript"></script>
+
+    <script src="/i18n.js" language="javascript"></script>
+    <script src="/static/js/vosao.js" language="javascript"></script>
+    <script src="/static/js/cms.js" language="javascript"></script>
+
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
+
+    $!head1
+    $!head2
+    $!head3
+    $!head4
+    $!head5
+    $!head6
+    $!head7
+    $!head8
+    $!head9
+    $!head10
+    
+</head>
+<body>
+
+<div id="loading" style="display: none">$messages.get("loading")</div>
+
+<div id="topbar">
+    <div id="rightmenu" style="margin-right: 30px">
+        #parse('/layouts/locale.vm')
+    </div>
+    <span class="clear">&#160;</span>
+</div>
+
+<div id="wrapper">
+    $screen_content
+</div>
+
+</body>
+</html>

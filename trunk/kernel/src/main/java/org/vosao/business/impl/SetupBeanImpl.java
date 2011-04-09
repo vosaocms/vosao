@@ -96,7 +96,7 @@ public class SetupBeanImpl implements SetupBean {
 	private void initUsers() {
 		List<UserEntity> admins = getDao().getUserDao().getByRole(UserRole.ADMIN);
 		if (admins.size() == 0) {
-			UserEntity admin = new UserEntity("${vosao.admin.username)", 
+			UserEntity admin = new UserEntity("${vosao.admin.username}", 
 					BCrypt.hashpw("${vosao.admin.password}", BCrypt.gensalt()), 
 					"${vosao.admin.email}", 
 					UserRole.ADMIN);

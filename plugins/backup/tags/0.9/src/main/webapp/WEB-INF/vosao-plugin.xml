@@ -1,0 +1,14 @@
+<vosao-plugin>
+    <name>backup</name>
+    <title>$backup.title</title>
+    <version>0.9</version>
+    <description>$backup.description</description>
+    <website>www.vosao.org</website>
+    <config>
+        <param name="cron" title="$backup.cron" type="String" 
+        	value="every day" />
+    </config>
+    <entry-point-class>
+        org.vosao.plugins.backup.BackupEntryPoint
+    </entry-point-class>
+</vosao-plugin>

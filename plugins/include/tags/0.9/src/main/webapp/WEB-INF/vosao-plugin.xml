@@ -1,0 +1,14 @@
+<vosao-plugin>
+    <name>include</name>
+    <title>$include.title</title>
+    <version>0.9</version>
+    <description>$include.description</description>
+    <website>www.vosao.org</website>
+    <config>
+        <param name="expiration_time_secs" title="$include.expiration" 
+            type="Integer" value="3600"/>
+    </config>
+    <entry-point-class>
+        org.vosao.plugins.include.IncludeEntryPoint
+    </entry-point-class>
+</vosao-plugin>

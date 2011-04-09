@@ -37,6 +37,7 @@ import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.StructureTemplateEntity;
 import org.vosao.enums.StructureTemplateType;
+import org.vosao.utils.XmlUtil;
 
 /**
  * @author Alexander Oleynik
@@ -88,7 +89,7 @@ public class StructureExporterImpl extends AbstractExporter
 		templateElement.addElement("name").setText(template.getName());
 		templateElement.addElement("type").setText(template.getTypeString());
 		templateElement.addElement("content").setText(template.getContent());
-		templateElement.addElement("headContent").setText(template.getHeadContent());
+		templateElement.addElement("headContent").setText(XmlUtil.notNull(template.getHeadContent()));
 	}	
 	
 	@Override

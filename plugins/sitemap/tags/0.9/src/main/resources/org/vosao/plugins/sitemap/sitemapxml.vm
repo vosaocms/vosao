@@ -1,0 +1,17 @@
+#macro( renderSitemapXML $treeItem )
+<url>
+    <loc>http://${siteConfig.siteDomain}${treeItem.entity.friendlyURL}</loc>
+    <lastmod>$date.format("yyyy-MM-dd", $treeItem.entity.modDate)</lastmod>
+</url>
+  #if ($treeItem.hasChildren)
+      #foreach($child in $treeItem.children)
+
+#renderSitemapXML($child )
+
+      #end
+  #end
+#end
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+#renderSitemapXML($root)
+</urlset>

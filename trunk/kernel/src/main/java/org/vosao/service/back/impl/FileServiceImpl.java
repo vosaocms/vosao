@@ -101,6 +101,11 @@ public class FileServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public FileVO getFile(Long id) {
+		return getFile(id, "UTF-8");
+	}
+	
+	@Override
+	public FileVO getFile(Long id, String encoding) {
 		try {
 			FileEntity file = getDao().getFileDao().getById(id);
 			FileVO vo = new FileVO(file);
@@ -114,7 +119,7 @@ public class FileServiceImpl extends AbstractServiceImpl
 					.isImageFileExt(ext));
 			if (vo.isTextFile()) {
 				vo.setContent(new String(getDao().getFileDao()
-						.getFileContent(file), "UTF-8"));
+						.getFileContent(file), encoding));
 			}
 			return vo;
 		}

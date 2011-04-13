@@ -319,6 +319,19 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 	}
 
 	@Override
+	public FileVO getResource(String path) {
+		return getResource(path, "UTF-8");
+	}
+
+	@Override
+	public FileVO getResource(String path, String encoding) {
+		FileEntity file = getBusiness().getFileBusiness().findFile(path);
+		if (file == null) return null;
+		return VosaoContext.getInstance().getBackService().getFileService()
+				.getFile(file.getId(), encoding);
+	}
+
+	@Override
 	public List<CommentVO> getRecentComments(int limit) {
 		return CommentVO.create(getDao().getCommentDao().getRecent(limit));
 	}

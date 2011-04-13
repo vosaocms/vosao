@@ -233,5 +233,20 @@ public interface VelocityService {
 	 */
 	List<FileVO> getResources(String path);
 	
+	/**
+	 * Get resource by folder path.
+	 * @param path - resource path.
+	 * @param encoding - text file encoding.
+	 * @return - file resource.
+	 */
+	FileVO getResource(String path, String encoding);
+
+	/**
+	 * Get resource by folder path.
+	 * @param path - resource path.
+	 * @return - file resource.
+	 */
+	FileVO getResource(String path);
+
 	List<CommentVO> getRecentComments(int limit);
 }

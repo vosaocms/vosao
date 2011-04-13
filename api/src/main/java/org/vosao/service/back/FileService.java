@@ -43,5 +43,7 @@ public interface FileService extends AbstractService {
 
 	FileVO getFile(final Long id);
 	
+	FileVO getFile(final Long id, String encoding);
+
 	ServiceResponse saveFile(final Map<String, String> vo);
 }

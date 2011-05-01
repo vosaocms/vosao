@@ -54,7 +54,7 @@ import org.vosao.i18n.Messages;
  */
 public class SiteFilter extends AbstractFilter implements Filter {
     
-    private static final String[] SKIP_URLS = {
+    public static final String[] SKIP_URLS = {
 		"/_ah",
 		"/cms",
 		"/static",

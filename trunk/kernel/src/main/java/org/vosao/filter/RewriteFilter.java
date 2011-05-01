@@ -56,13 +56,16 @@ public class RewriteFilter extends AbstractFilter implements Filter {
     				.getRewriteUrlBusiness().rewrite(request.getServletPath());
         }
         
+        @Override
         public String getRequestURI() {
             return newURI;
         }
 
+        @Override
         public String getServletPath() {
             return newServletPath;
         }
+        
     }
     
     public RewriteFilter() {
@@ -71,10 +74,19 @@ public class RewriteFilter extends AbstractFilter implements Filter {
   
     public void doFilter(ServletRequest request, ServletResponse response, 
     		FilterChain chain) throws IOException, ServletException {
-    	HttpServletRequest newRequest = new RewrittenRequestWrapper(
-    			(HttpServletRequest)request);
-    	
-        chain.doFilter(newRequest, response);
+    	HttpServletRequest httpRequest = (HttpServletRequest)request;
+    	if (isSkipUrl(httpRequest.getServletPath())) {
+            chain.doFilter(request, response);
+    	}
+    	else {
+    		HttpServletRequest newRequest = new RewrittenRequestWrapper(httpRequest);
+    	    chain.doFilter(newRequest, response);
+    	}
+    }
+
+    private boolean isSkipUrl(String url) {
+    	for (String u : SiteFilter.SKIP_URLS) if (url.startsWith(u)) return true;
+    	return true;
     }
     
 }

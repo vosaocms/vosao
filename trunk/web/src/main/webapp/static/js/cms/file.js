@@ -152,16 +152,12 @@ function initFormFields() {
 function onUpdate() {
 	var vo = Vosao.javaMap( {
 		id : fileId,
-		folderId : folderId,
+		folderId : String(folderId),
 		title : $('#title').val(),
 		name : $('#name').val()
 	});
 	Vosao.jsonrpc.fileService.saveFile(function(r) {
-		if (r.result == 'success') {
-			location.href = '/cms/folder.vm?id=' + folderId;
-		} else {
-			Vosao.showServiceMessages(r);
-		}
+		Vosao.showServiceMessages(r);
 	}, vo);
 }
 

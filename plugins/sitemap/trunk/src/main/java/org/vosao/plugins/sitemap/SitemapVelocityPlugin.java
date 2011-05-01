@@ -132,6 +132,9 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 		StringBuilder path = new StringBuilder("/");
 		PageEntity page = getBusiness().getPageBusiness().getByUrl(
 				path.toString());
+		if (page == null) {
+			return "No published content found for " + path.toString();
+		}
 		b.append("<ul class=\"breadcrumbs\"><li><a href=\"/\">")
 				.append(page.getLocalTitle(language))
 				.append("</a></li>");
@@ -141,6 +144,9 @@ public class SitemapVelocityPlugin extends AbstractVelocityPlugin {
 				path.append("/").append(part);
 				b.append("<li>");
 				page = getBusiness().getPageBusiness().getByUrl(path.toString());
+				if (page == null) {
+					return "No published content found for " + path.toString();
+				}
 				if (path.toString().equals(url)) {
 					b.append(page.getLocalTitle(language));
 				}

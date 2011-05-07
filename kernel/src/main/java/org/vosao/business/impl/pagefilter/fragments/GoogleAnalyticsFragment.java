@@ -47,6 +47,7 @@ public class GoogleAnalyticsFragment implements ContentFragment {
 		+ "var _gaq = _gaq || [];\n"
 		+ "_gaq.push(['_setAccount', '" + id + "']);\n"
 		+ "_gaq.push(['_trackPageview']);\n"
+		+ "_gaq.push(['_trackPageLoadTime']);\n"
 		+ "(function() {\n"
 		+ "var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n"
 		+ "ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';\n"

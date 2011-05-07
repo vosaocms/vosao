@@ -1,10 +1,6 @@
 #macro( superfishMenu $treeItem)
   <li>
-    #if ($treeItem.entity.localTitle)
-    <a href="$treeItem.entity.friendlyURL">$treeItem.entity.getLocalTitle($language.code)</a>
-    #else
-    <a href="$treeItem.entity.friendlyURL">$treeItem.entity.title</a>
-    #end
+    <a href="$treeItem.entity.friendlyURL">$treeItem.entity.localTitle</a>
   #if ($treeItem.hasChildren)
     <ul>
       #foreach($child in $treeItem.children)
@@ -18,11 +14,7 @@
 <ul class="sf-menu">
     #if($config.showHomepage)
     <li>
-      #if($root.entity.localTitle)
-      <a href="/">$root.entity.getLocalTitle($language.code)</a>
-      #else
-      <a href="/">$root.entity.title</a>
-      #end     
+      <a href="/">$root.entity.localTitle</a>
     </li>  
     #end
     #foreach($page in $root.children)

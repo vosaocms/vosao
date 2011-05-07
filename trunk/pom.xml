@@ -113,7 +113,7 @@
       <gae.application.id>vosaocms</gae.application.id>
       <gae.application.version>vosaocms-0-9</gae.application.version>
       <vosao.version>0.9</vosao.version>
-      <vosao.version.full>0.9.2</vosao.version.full>
+      <vosao.version.full>0.9.3</vosao.version.full>
       <vosao.admin.username>admin</vosao.admin.username>
       <vosao.admin.email>admin@test.com</vosao.admin.email>
       <vosao.admin.password>admin</vosao.admin.password>

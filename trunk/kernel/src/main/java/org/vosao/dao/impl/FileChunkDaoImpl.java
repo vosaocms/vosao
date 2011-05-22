@@ -80,7 +80,7 @@ public class FileChunkDaoImpl extends BaseDaoImpl<FileChunkEntity>
 	private List<FileChunkEntity> getByFile(Long fileId) {
 		Query q = newQuery();
 		q.addFilter("fileId", EQUAL, fileId);
-		List<FileChunkEntity> result = selectNotCache(q, "getByFile", params(fileId));
+		List<FileChunkEntity> result = selectNotCache(q);
 		Collections.sort(result, new Comparator<FileChunkEntity>() {
 				@Override
 				public int compare(FileChunkEntity o1, FileChunkEntity o2) {

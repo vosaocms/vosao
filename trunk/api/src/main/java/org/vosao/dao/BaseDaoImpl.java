@@ -22,8 +22,6 @@
 
 package org.vosao.dao;
 
-import static com.google.appengine.api.datastore.FetchOptions.Builder.withLimit;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -168,13 +166,8 @@ public class BaseDaoImpl<T extends BaseEntity>
 		getDao().getDaoStat().incQueryCalls();
 		PreparedQuery p = getDatastore().prepare(q);
 		List<Key> keys = new ArrayList<Key>();
-		int limit = p.countEntities();
-		if (limit == 0) {
-			limit = 1;
-		}
-		List<Entity> list = p.asList(withLimit(limit));
 		int count = 0;
-		for (Entity entity : list) {
+		for (Entity entity : p.asIterable()) {
 			keys.add(entity.getKey());
 			// GAE Datastore one call delete limit
 			if (count++ >= 499) {
@@ -230,10 +223,7 @@ public class BaseDaoImpl<T extends BaseEntity>
 				clazz.getName(), null);
 		if (result == null) {
 			Query q = newQuery();
-			getDao().getDaoStat().incQueryCalls();
-			PreparedQuery p = getDatastore().prepare(q);
-			int limit = p.countEntities() > 0 ? p.countEntities() : 1;
-			result = createModels(p.asList(withLimit(limit)));
+			result = selectNotCache(q);
 			getQueryCache().putQuery(clazz, clazz.getName(), null, 
 					(List<BaseEntity>)result);
 		}
@@ -272,25 +262,21 @@ public class BaseDaoImpl<T extends BaseEntity>
 				params);
 		if (result == null) {
 			getDao().getDaoStat().incQueryCalls();
-			PreparedQuery p = getDatastore().prepare(query);
-			int limit = p.countEntities();
-			limit = limit > queryLimit ? queryLimit : limit;
-			if (limit == 0) {
-				limit = 1;
-			}
-			result = createModels(p.asList(withLimit(limit)));
+			result = selectNotCache(query);
 			getQueryCache().putQuery(clazz, queryId, params, 
 					(List<BaseEntity>)result);			
 		}
 		return result;
 	}
 
-	protected List<T> selectNotCache(Query query, String queryId, 
-			Object[] params) {
+	protected List<T> selectNotCache(Query query) {
 		getDao().getDaoStat().incQueryCalls();
 		PreparedQuery p = getDatastore().prepare(query);
-		int limit = p.countEntities() > 0 ? p.countEntities() : 1;
-		return createModels(p.asList(withLimit(limit)));
+		List<Entity> entities = new ArrayList<Entity>();
+		for (Entity entity : p.asIterable()) {
+			entities.add(entity);
+		}
+		return createModels(entities);
 	}
 
 	protected T selectOne(Query query, String queryId, Object[] params) {
@@ -329,7 +315,11 @@ public class BaseDaoImpl<T extends BaseEntity>
 	
 	protected int count(Query query) {
 		getDao().getDaoStat().incQueryCalls();
-		return getDatastore().prepare(query).countEntities();
+		query.setKeysOnly();
+		PreparedQuery p = getDatastore().prepare(query);
+		int count = 0;
+		for (Entity entity : p.asIterable()) count++;
+		return count;
 	}
 
 	@Override

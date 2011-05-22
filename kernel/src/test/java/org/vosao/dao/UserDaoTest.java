@@ -144,4 +144,13 @@ public class UserDaoTest extends AbstractDaoTest {
 				.size());
 	}
 	
+	public void test1000limit() {
+		int limit = 2000;
+		for (int i = 0; i < limit; i++) {
+			userTool.addUser("user" + i, UserRole.USER);
+		}
+		assertEquals(limit, getDao().getUserDao().select().size());
+		assertEquals(limit, getDao().getUserDao().count());
+	}
+	
 }

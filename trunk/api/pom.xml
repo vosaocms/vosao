@@ -42,7 +42,7 @@
         <dependency>
             <groupId>com.google.appengine</groupId>
             <artifactId>all</artifactId>
-            <version>1.4.3</version>
+            <version>1.5.0</version>
             <type>pom</type>
         </dependency>
         

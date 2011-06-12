@@ -45,7 +45,10 @@
         </div-->
         <div id="pageSearch"></div>
         <div style="float:left">
-          <div id="showTitleDiv"><a href="#">$messages.show_names</a></div>
+          <div id="showTitleDiv">
+            <span id="showTitle">$messages.show_names</span>
+            <span id="invertOrder">$messages.invert_order</span>
+          </div>
           <ul id="pages-tree"><img src="/static/images/ajax-loader.gif" /></ul>
         </div>
         <div style="clear:both"></div>  

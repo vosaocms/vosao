@@ -24,6 +24,7 @@ var parentURL = null;
 var root = null;
 var page = null;
 var showTitle = $.cookie("pages.showTitle") != 'names';
+var invertOrder = $.cookie("pages.invertOrder") == 'true';
 var searchUI = null;
 
 $(function() {
@@ -33,6 +34,7 @@ $(function() {
     $('#pageForm').submit(function() {onSave(); return false;});
     $('#title').change(onTitleChange);
     renderShowTitle();
+    renderInvertOrder();
 });
 
 function loadData() {
@@ -44,6 +46,9 @@ function loadData() {
 function loadTree() {
 	Vosao.jsonrpc.pageService.getTree(function(r) {
 		root = r;
+		if (invertOrder) {
+			invertChildrenOrder(r);
+		}
 		$('#pages-tree').html(renderPage(r));
 		$("#pages-tree").treeview({
 			animated: "fast",
@@ -267,11 +272,43 @@ function onShowTitle(flag) {
 
 function renderShowTitle() {
 	if (showTitle) {
-		$('#showTitleDiv').html('<a href="#" onclick="onShowTitle(false)">'
+		$('#showTitle').html('<a href="#" onclick="onShowTitle(false)">'
 				+ messages('show_names') + '</a>');
 	}
 	else {
-		$('#showTitleDiv').html('<a href="#" onclick="onShowTitle(true)">'
+		$('#showTitle').html('<a href="#" onclick="onShowTitle(true)">'
 				+ messages('show_titles') + '</a>');
+	}
+}
+
+function onInvertOrder(flag) {
+	invertOrder = flag;
+	renderInvertOrder();
+	if (invertOrder) {
+		$.cookie("pages.invertOrder", 'true', {path:'/', expires: 10});
+	}
+	else {
+		$.cookie("pages.invertOrder", 'false', {path:'/', expires: 10});
+	}
+	loadData();
+}
+
+function renderInvertOrder() {
+	if (invertOrder) {
+		$('#invertOrder').html('<a href="#" onclick="onInvertOrder(false)">'
+				+ messages('restore_order') + '</a>');
+	}
+	else {
+		$('#invertOrder').html('<a href="#" onclick="onInvertOrder(true)">'
+				+ messages('invert_order') + '</a>');
+	}
+}
+
+function invertChildrenOrder(vo) {
+	vo.children.list.reverse();
+	if (vo.hasChildren) {
+		$.each(vo.children.list, function (n, value) {
+			invertChildrenOrder(value);
+		});
 	}
 }

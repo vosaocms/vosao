@@ -38,6 +38,7 @@ public class PluginHeadFragment	implements ContentFragment {
 				.selectEnabled()) {
 			PluginEntryPoint entryPoint = business.getPluginBusiness()
 					.getEntryPoint(plugin);
+			if (entryPoint == null) continue;
 			if (entryPoint.isHeadInclude()) {
 				entryPoint.setHeadInclude(false);
 				if (!StringUtils.isEmpty(plugin.getPageHeader())) {

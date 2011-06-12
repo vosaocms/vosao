@@ -267,14 +267,16 @@ public class PluginLoader {
 		}
 		List<Long> ids = new ArrayList<Long>();
 		ids.add(listResource.getId());
-		try {
-			String list = new String(listResource.getContent(), "UTF-8");
-			String[] resources = list.split(",");
-			for (String id : resources) {
-				ids.add(Long.valueOf(id));
+		if (listResource.getContent() != null && listResource.getContent().length > 0) {
+			try {
+				String list = new String(listResource.getContent(), "UTF-8");
+				String[] resources = list.split(",");
+				for (String id : resources) {
+					ids.add(Long.valueOf(id));
+				}
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
 			}
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
 		}
 		getDao().getPluginResourceDao().remove(ids);
 	}

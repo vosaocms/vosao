@@ -54,6 +54,7 @@ public class Messages {
 		new Locale("ru"),
 		new Locale("cs"),
 		new Locale("tr"),
+		new Locale("pt", "BR"),
 		Locale.JAPANESE,
 		Locale.TRADITIONAL_CHINESE,
 		Locale.SIMPLIFIED_CHINESE};

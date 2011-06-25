@@ -29,6 +29,7 @@
     <a href="#" onclick="Vosao.changeLanguage('ru')">Русский</a>
     <a href="#" onclick="Vosao.changeLanguage('cs')">Česky</a>
     <a href="#" onclick="Vosao.changeLanguage('tr')">Türkçe</a>
+    <a href="#" onclick="Vosao.changeLanguage('pt_BR')">Brazilian Portuguese</a>
     <a href="#" onclick="Vosao.changeLanguage('ja')">日本語</a>
     <a href="#" onclick="Vosao.changeLanguage('zh_TW')">中文(繁體)</a>
     <a href="#" onclick="Vosao.changeLanguage('zh_CN')">中文(简体)</a>

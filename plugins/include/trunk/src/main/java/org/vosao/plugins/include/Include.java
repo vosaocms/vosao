@@ -48,7 +48,7 @@ public class Include
 		if (charset == null)
 			return load(con.getInputStream());
 		else
-			return load(new InputStreamReader(con.getInputStream()));
+			return load(new InputStreamReader(con.getInputStream(), charset));
 	}
 	
 	public static Include load(final byte[] bytes)

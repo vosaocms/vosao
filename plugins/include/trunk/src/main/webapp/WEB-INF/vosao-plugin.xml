@@ -1,7 +1,7 @@
 <vosao-plugin>
     <name>include</name>
     <title>$include.title</title>
-    <version>0.9</version>
+    <version>0.9.1</version>
     <description>$include.description</description>
     <website>www.vosao.org</website>
     <config>

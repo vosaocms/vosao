@@ -33,4 +33,5 @@ public interface RegisterFrontService {
 	ServiceResponse register(Map<String, String> vo, String challenge,
 			String response, HttpServletRequest request);
 	
+	ServiceResponse changePassword(Long userId, String oldPassword, String newPassword);
 }

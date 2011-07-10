@@ -33,6 +33,7 @@ import net.tanesha.recaptcha.ReCaptchaResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.Business;
+import org.vosao.common.BCrypt;
 import org.vosao.common.PluginException;
 import org.vosao.entity.ConfigEntity;
 import org.vosao.entity.UserEntity;
@@ -126,6 +127,23 @@ public class RegisterFrontServiceImpl extends AbstractRegisterService
 				fromAddress, "", toAddress);
 		if (error != null) {
 			throw new PluginException(error);
+		}
+	}
+
+	@Override
+	public ServiceResponse changePassword(Long userId, String oldPassword,
+			String newPassword) {
+		UserEntity user = getDao().getUserDao().getById(userId);
+		if (user == null) {
+			return ServiceResponse.createErrorResponse(Messages.get("user.user_not_found"));
+		}
+		if (user.getPassword().equals(BCrypt.hashpw(oldPassword, BCrypt.gensalt()))) {
+			user.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt()));
+			getDao().getUserDao().save(user);
+			return ServiceResponse.createSuccessResponse(Messages.get("success"));
+		}
+		else {
+			return ServiceResponse.createSuccessResponse(Messages.get("password_incorrect"));
 		}
 	}
 	

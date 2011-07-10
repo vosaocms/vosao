@@ -96,7 +96,7 @@ public class FieldServiceImpl extends AbstractServiceImpl
 	}
 
 	@Override
-	public void remove(List<String> ids) {
+	public ServiceResponse remove(List<String> ids) {
 		if (ids.size() > 0) {
 			FieldEntity field = null;
 			FormEntity form = null;
@@ -108,11 +108,12 @@ public class FieldServiceImpl extends AbstractServiceImpl
 				}
 			}
 			if (form == null) {
-				return;
+				return ServiceResponse.createErrorResponse("not_found");
 			}
 			getDao().getFieldDao().remove(StrUtil.toLong(ids));
 			getBusiness().getFieldBusiness().checkOrder(form);
 		}
+		return ServiceResponse.createSuccessResponse(Messages.get("success"));
 	}
 
 	@Override

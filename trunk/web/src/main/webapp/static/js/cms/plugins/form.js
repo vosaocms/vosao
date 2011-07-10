@@ -296,7 +296,7 @@ function onDeleteFields() {
 	if (confirm(messages('are_you_sure'))) {
 		Vosao.jsonrpc.fieldService.remove(function(r) {
 			if (r.result == 'success') {
-			    Vosao.info(ids.length + ' ' + messages('form.success_fields_delete') 
+			    Vosao.info(ids.length + ' ' + messages('form.success_field_delete') 
 			        + '.');
 			    loadFields();
 			}

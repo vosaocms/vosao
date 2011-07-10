@@ -69,14 +69,14 @@
 <input id="recaptchaResponse" type="hidden" />
 #end
 #set($formSend = "Send")
-#if(!$form.sendButtonTitle)
+#if($form.sendButtonTitle != "")
     #set($formSend = $form.sendButtonTitle)
 #end
 <div class="form-buttons">
   <input type="submit" value="$formSend" />
 #if($form.showResetButton)
 #set($formReset = "Reset")
-#if(!$form.resetButtonTitle)
+#if($form.resetButtonTitle != "")
     #set($formReset = $form.resetButtonTitle)
 #end
   <input type="reset" value="$formReset" />

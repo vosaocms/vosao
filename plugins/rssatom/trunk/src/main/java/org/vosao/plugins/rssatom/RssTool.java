@@ -55,10 +55,15 @@ public class RssTool {
 	}
 	
 	public String getDescription(PageEntity page) {
-		RssatomConfig rssatomConfig = new RssatomConfig(getPlugin());
 		String defaultLanguage = getBusiness().getDefaultLanguage();
 		String lang = StringUtils.isEmpty(defaultLanguage) ? 
 				"en" : defaultLanguage;
+		
+		return getDescription(page, lang);
+	}
+
+	public String getDescription(PageEntity page, String lang) {
+		RssatomConfig rssatomConfig = new RssatomConfig(getPlugin());
 		page.setSkipPostProcessing(true);
 		String content = StrUtil.extractTextFromHTML(
 				getBusiness().getPageBusiness().render(page, PAGE_TEMPLATE, lang));

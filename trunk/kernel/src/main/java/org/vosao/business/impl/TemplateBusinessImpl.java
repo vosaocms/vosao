@@ -27,12 +27,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.vosao.business.TemplateBusiness;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.i18n.Messages;
-
-import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 
 /**
  * 
@@ -52,13 +51,13 @@ public class TemplateBusinessImpl extends AbstractBusinessImpl
 				errors.add(Messages.get("template.already_exists"));
 			}
 		}
-		if (StringUtil.isEmpty(template.getUrl())) {
+		if (StringUtils.isEmpty(template.getUrl())) {
 			errors.add(Messages.get("url_is_empty"));
 		}
-		if (StringUtil.isEmpty(template.getTitle())) {
+		if (StringUtils.isEmpty(template.getTitle())) {
 			errors.add(Messages.get("title_is_empty"));
 		}
-		if (StringUtil.isEmpty(template.getContent())) {
+		if (StringUtils.isEmpty(template.getContent())) {
 			errors.add(Messages.get("content_is_empty"));
 		}
 		return errors;

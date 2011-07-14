@@ -25,14 +25,13 @@ package org.vosao.business.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.vosao.business.GroupBusiness;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.GroupEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.entity.UserGroupEntity;
 import org.vosao.i18n.Messages;
-
-import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 
 /**
  * @author Alexander Oleynik
@@ -55,7 +54,7 @@ public class GroupBusinessImpl extends AbstractBusinessImpl
 				errors.add(Messages.get("group_already_exists"));
 			}
 		}
-		if (StringUtil.isEmpty(group.getName())) {
+		if (StringUtils.isEmpty(group.getName())) {
 			errors.add(Messages.get("name_is_empty"));
 		}
 		return errors;

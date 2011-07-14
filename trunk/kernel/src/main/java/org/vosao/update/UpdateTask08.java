@@ -24,6 +24,7 @@ package org.vosao.update;
 
 import java.util.Map;
 
+import org.json.JSONObject;
 import org.vosao.business.Business;
 import org.vosao.dao.Dao;
 import org.vosao.entity.PluginEntity;
@@ -31,7 +32,6 @@ import org.vosao.utils.EntityUtil;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.repackaged.org.json.JSONObject;
 
 /**
  * 

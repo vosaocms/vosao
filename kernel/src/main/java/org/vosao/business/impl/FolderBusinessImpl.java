@@ -38,8 +38,6 @@ import org.vosao.entity.FolderEntity;
 import org.vosao.i18n.Messages;
 import org.vosao.utils.FolderUtil;
 
-import com.google.appengine.repackaged.com.google.common.base.StringUtil;
-
 /**
  * @author Alexander Oleynik
  */
@@ -84,7 +82,7 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 		String[] names = path.split("/");
 		TreeItemDecorator<FolderEntity> current = root;
 		for (String name : names) {
-			if (!StringUtil.isEmpty(name)) {
+			if (!StringUtils.isEmpty(name)) {
 				TreeItemDecorator<FolderEntity> child = findByChildName(
 					current, name);
 				if (child == null) {
@@ -125,10 +123,10 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 		if (!haveWriteAccess(securityFolder)) {
 			errors.add(Messages.get("access_denied"));
 		}
-		if (StringUtil.isEmpty(folder.getTitle())) {
+		if (StringUtils.isEmpty(folder.getTitle())) {
 			errors.add(Messages.get("title_is_empty"));
 		}
-		if (StringUtil.isEmpty(folder.getName())) {
+		if (StringUtils.isEmpty(folder.getName())) {
 			errors.add(Messages.get("name_is_empty"));
 		}
 		return errors;

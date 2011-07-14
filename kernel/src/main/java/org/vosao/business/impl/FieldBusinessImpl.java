@@ -26,14 +26,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.vosao.business.FieldBusiness;
 import org.vosao.entity.FieldEntity;
 import org.vosao.entity.FormEntity;
 import org.vosao.enums.FieldType;
 import org.vosao.i18n.Messages;
 import org.vosao.utils.ParamUtil;
-
-import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 
 public class FieldBusinessImpl extends AbstractBusinessImpl 
 	implements FieldBusiness {
@@ -54,10 +53,10 @@ public class FieldBusinessImpl extends AbstractBusinessImpl
 				}
 			}
 		}
-		if (StringUtil.isEmpty(field.getName())) {
+		if (StringUtils.isEmpty(field.getName())) {
 			errors.add(Messages.get("name_is_empty"));
 		}
-		if (StringUtil.isEmpty(field.getTitle())) {
+		if (StringUtils.isEmpty(field.getTitle())) {
 			errors.add(Messages.get("title_is_empty"));
 		}
 		return errors;

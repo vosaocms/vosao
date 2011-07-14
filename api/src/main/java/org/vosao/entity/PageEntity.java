@@ -31,9 +31,7 @@ import static org.vosao.utils.EntityUtil.getTextProperty;
 import static org.vosao.utils.EntityUtil.setProperty;
 import static org.vosao.utils.EntityUtil.setTextProperty;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -51,7 +49,6 @@ import org.vosao.utils.FolderUtil;
 import org.vosao.utils.UrlUtil;
 
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.repackaged.org.json.JSONException;
 
 /**
  * @author Alexander Oleynik

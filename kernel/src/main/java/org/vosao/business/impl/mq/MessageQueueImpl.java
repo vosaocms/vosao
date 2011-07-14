@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -56,7 +57,6 @@ import org.vosao.servlet.MessageQueueServlet;
 import org.vosao.utils.StreamUtil;
 
 import com.google.appengine.api.labs.taskqueue.Queue;
-import com.google.appengine.repackaged.com.google.common.util.Base64;
 
 /**
  * 
@@ -124,7 +124,7 @@ public class MessageQueueImpl implements MessageQueue {
 			return;
 		}
 		queue.add(url(MessageQueueServlet.MQ_URL)
-				.param("message", Base64.encode(StreamUtil.toBytes(message))));
+				.param("message", Base64.encodeBase64(StreamUtil.toBytes(message))));
 	}
 
 	@Override

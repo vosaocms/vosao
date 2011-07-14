@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.vosao.business.UserBusiness;
 import org.vosao.common.VosaoContext;
@@ -36,8 +37,6 @@ import org.vosao.i18n.Messages;
 import org.vosao.utils.EmailUtil;
 import org.vosao.utils.HashUtil;
 import org.vosao.utils.StreamUtil;
-
-import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 
 /**
  * 
@@ -61,7 +60,7 @@ public class UserBusinessImpl extends AbstractBusinessImpl
 				errors.add(Messages.get("user_already_exists"));
 			}
 		}
-		if (StringUtil.isEmpty(user.getEmail())) {
+		if (StringUtils.isEmpty(user.getEmail())) {
 			errors.add(Messages.get("email_is_empty"));
 		}
 		return errors;

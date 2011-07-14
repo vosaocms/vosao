@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.vosao.business.FileBusiness;
 import org.vosao.business.FolderBusiness;
 import org.vosao.business.FolderPermissionBusiness;
@@ -38,15 +39,13 @@ import org.vosao.i18n.Messages;
 import org.vosao.utils.FolderUtil;
 import org.vosao.utils.MimeType;
 
-import com.google.appengine.repackaged.com.google.common.base.StringUtil;
-
 public class FileBusinessImpl extends AbstractBusinessImpl 
 	implements FileBusiness {
 
 	@Override
 	public List<String> validateBeforeUpdate(final FileEntity entity) {
 		List<String> errors = new ArrayList<String>();
-		if (StringUtil.isEmpty(entity.getFilename())) {
+		if (StringUtils.isEmpty(entity.getFilename())) {
 			errors.add(Messages.get("filename_is_empty"));
 		}
 		else {
@@ -59,7 +58,7 @@ public class FileBusinessImpl extends AbstractBusinessImpl
 				errors.add(Messages.get("file_already_exists"));
 			}
 		}
-		if (StringUtil.isEmpty(entity.getTitle())) {
+		if (StringUtils.isEmpty(entity.getTitle())) {
 			errors.add(Messages.get("title_is_empty"));
 		}
 		return errors;

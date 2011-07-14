@@ -33,13 +33,12 @@ import org.vosao.entity.GroupEntity;
 import org.vosao.entity.helper.GroupHelper;
 import org.vosao.enums.ContentPermissionType;
 import org.vosao.i18n.Messages;
+import org.vosao.service.ServiceException;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.back.ContentPermissionService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.ContentPermissionVO;
 import org.vosao.utils.UrlUtil;
-
-import com.google.appengine.repackaged.com.google.protobuf.ServiceException;
 
 /**
  * 

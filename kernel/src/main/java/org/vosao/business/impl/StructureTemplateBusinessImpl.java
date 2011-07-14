@@ -25,12 +25,11 @@ package org.vosao.business.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.vosao.business.StructureTemplateBusiness;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.StructureTemplateEntity;
 import org.vosao.i18n.Messages;
-
-import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 
 /**
  * @author Alexander Oleynik
@@ -55,10 +54,10 @@ public class StructureTemplateBusinessImpl extends AbstractBusinessImpl
 				errors.add(Messages.get("structureTemplate.already_exists"));
 			}
 		}
-		if (StringUtil.isEmpty(entity.getTitle())) {
+		if (StringUtils.isEmpty(entity.getTitle())) {
 			errors.add(Messages.get("title_is_empty"));
 		}
-		if (StringUtil.isEmpty(entity.getName())) {
+		if (StringUtils.isEmpty(entity.getName())) {
 			errors.add(Messages.get("name_is_empty"));
 		}
 		return errors;

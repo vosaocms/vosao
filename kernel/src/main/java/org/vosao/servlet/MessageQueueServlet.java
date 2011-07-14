@@ -28,13 +28,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.binary.Base64;
 import org.vosao.business.mq.Message;
-import org.vosao.business.mq.Subscriber;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.helper.UserHelper;
 import org.vosao.utils.StreamUtil;
-
-import com.google.appengine.repackaged.com.google.common.util.Base64;
 
 /**
  * 
@@ -64,7 +62,7 @@ public class MessageQueueServlet extends AbstractServlet {
 		}
 		try {
 			Message message = (Message)StreamUtil.toObject(
-					Base64.decode(request.getParameter("message")));
+					Base64.decodeBase64(request.getParameter("message")));
 			VosaoContext.getInstance().setUser(UserHelper.ADMIN);
 			getMessageQueue().execute(message);
 		}

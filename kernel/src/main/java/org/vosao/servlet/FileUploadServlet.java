@@ -66,7 +66,7 @@ public class FileUploadServlet extends AbstractServlet {
 	
 	private static final long serialVersionUID = 6098745782027999297L;
 
-	private static final long MAX_SIZE = 10000000;
+	private static final long MAX_SIZE = 128000000;
 
 	private static final String FOLDER_PARAM = "folderId";
 	

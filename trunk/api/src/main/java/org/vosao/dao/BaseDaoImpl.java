@@ -37,6 +37,7 @@ import org.vosao.utils.EntityUtil;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
@@ -49,6 +50,7 @@ public class BaseDaoImpl<T extends BaseEntity>
 			BaseDaoImpl.class);
 
 	private static int QUERY_LIMIT = 100000;
+	private static int CHUNK_SIZE = 1000;
 	
 	private Class clazz;
 	private String kind;
@@ -167,7 +169,7 @@ public class BaseDaoImpl<T extends BaseEntity>
 		PreparedQuery p = getDatastore().prepare(q);
 		List<Key> keys = new ArrayList<Key>();
 		int count = 0;
-		for (Entity entity : p.asIterable()) {
+		for (Entity entity : p.asIterable(FetchOptions.Builder.withChunkSize(CHUNK_SIZE))) {
 			keys.add(entity.getKey());
 			// GAE Datastore one call delete limit
 			if (count++ >= 499) {
@@ -273,7 +275,7 @@ public class BaseDaoImpl<T extends BaseEntity>
 		getDao().getDaoStat().incQueryCalls();
 		PreparedQuery p = getDatastore().prepare(query);
 		List<Entity> entities = new ArrayList<Entity>();
-		for (Entity entity : p.asIterable()) {
+		for (Entity entity : p.asIterable(FetchOptions.Builder.withChunkSize(CHUNK_SIZE))) {
 			entities.add(entity);
 		}
 		return createModels(entities);
@@ -318,7 +320,7 @@ public class BaseDaoImpl<T extends BaseEntity>
 		query.setKeysOnly();
 		PreparedQuery p = getDatastore().prepare(query);
 		int count = 0;
-		for (Entity entity : p.asIterable()) count++;
+		for (Entity entity : p.asIterable(FetchOptions.Builder.withChunkSize(CHUNK_SIZE))) count++;
 		return count;
 	}
 

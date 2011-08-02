@@ -81,13 +81,13 @@ public class EntityCacheImpl implements EntityCache, Serializable {
 
 	@Override
 	public Map<Long, BaseEntity> getEntities(Class clazz, List<Long> ids) {
+		List<String> keys = new ArrayList<String>(); 
+		Map<Long, BaseEntity> result = new HashMap<Long, BaseEntity>();
+		for (Long id : ids) {
+			keys.add(getEntityKey(clazz, id));
+			result.put(id, null);
+		}
 		try {
-			List<String> keys = new ArrayList<String>(); 
-			Map<Long, BaseEntity> result = new HashMap<Long, BaseEntity>();
-			for (Long id : ids) {
-				keys.add(getEntityKey(clazz, id));
-				result.put(id, null);
-			}
 			Map items = getCache().getAll(keys);
 			for (CacheItem item : (Collection<CacheItem>)items.values()) {
 				if (item != null) {
@@ -101,12 +101,11 @@ public class EntityCacheImpl implements EntityCache, Serializable {
 					
 				}
 			}
-			return result;
 		}
 		catch (Exception e) {
 			logger.error(e.getMessage());
 		}
-		return null;
+		return result;
 	}
 
 	@Override

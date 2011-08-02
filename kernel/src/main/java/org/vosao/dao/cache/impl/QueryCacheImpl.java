@@ -138,21 +138,20 @@ public class QueryCacheImpl implements QueryCache, Serializable {
 	}
 	
 	private Map<Long, BaseEntity> loadEntities(Class clazz, List<Key> keys) {
+		Map<Long, BaseEntity> result = new HashMap<Long, BaseEntity>();
 		try {
 			getDaoStat().incGetCalls();
 			Map<Key, Entity> loaded = getSystemService().getDatastore().get(keys);
-			Map<Long, BaseEntity> result = new HashMap<Long, BaseEntity>();
 			for (Key key : loaded.keySet()) {
 				BaseEntity model = (BaseEntity)clazz.newInstance();
 				model.load(loaded.get(key));
 				result.put(model.getId(), model);
 			}
-			return result;
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			return null;
 		}
+		return result;
 	}
 
 	@Override

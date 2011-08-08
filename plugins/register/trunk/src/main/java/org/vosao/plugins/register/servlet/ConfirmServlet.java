@@ -64,7 +64,7 @@ public class ConfirmServlet extends HttpServlet {
 				url = config.getConfirmPageUrl() + "?status=ok&userEmail=" 
 					+ reg.getEmail();
 			}
-			url = config.getConfirmPageUrl() + "?status=error";
+			else url = config.getConfirmPageUrl() + "?status=error";
 		}
 		response.sendRedirect(url);		
 	}

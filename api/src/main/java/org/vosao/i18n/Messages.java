@@ -32,9 +32,12 @@ import java.util.MissingResourceException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.ConfigEntity;
+import org.vosao.entity.LanguageEntity;
 
 /**
  * Message bundle helper class for creatng localized messages from Java code.
@@ -44,8 +47,12 @@ import org.vosao.entity.ConfigEntity;
  */
 public class Messages {
 
+	private static final Log logger  = LogFactory.getLog(Messages.class);
+	
 	public static final String LOCALE_KEY = "locale";
 
+	public static final String I18N_CACHE_KEY = "i18n_";
+	
 	private static final Locale[] supportedLocales = {
 		Locale.ENGLISH,
 		Locale.GERMAN,
@@ -110,6 +117,12 @@ public class Messages {
 	 */
 	public static String getJSMessages() {
 		VosaoContext ctx = VosaoContext.getInstance();
+		String cached = (String)getBusiness().getSystemService().getCache().get(
+				I18N_CACHE_KEY + ctx.getLanguage());
+		
+		logger.debug("checking is i18n_" + ctx.getLanguage() + " in cache: " + (cached != null ? "yes":"no"));
+		
+		if (cached != null) return cached;	
 		Map<String, String> messages = new HashMap<String, String>();
 		VosaoResourceBundle defaultBundle = getDefaultBundle();
 		for (String key : Collections.list(defaultBundle.getKeys())) {
@@ -154,7 +167,22 @@ public class Messages {
 				.append("'\n");
 		}
 		result.append("};");
-		return result.toString();
+		
+		cached = result.toString();
+		getBusiness().getSystemService().getCache().put(
+				I18N_CACHE_KEY + ctx.getLanguage(), cached);
+
+		logger.debug("put i18n_" + ctx.getLanguage() + " to cache");
+		
+		return cached;
+	}
+	
+	public static void resetCache() {
+		VosaoContext ctx = VosaoContext.getInstance();
+		for (LanguageEntity language : ctx.getBusiness().getDao().getLanguageDao().select()) {
+			getBusiness().getSystemService().getCache().remove(
+					I18N_CACHE_KEY + language.getCode());
+		}
 	}
 	
 	private static String filterForJS(String msg) {

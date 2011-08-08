@@ -48,6 +48,7 @@ import org.vosao.business.vo.PluginPropertyVO;
 import org.vosao.common.PluginException;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.PluginEntity;
+import org.vosao.i18n.Messages;
 import org.vosao.service.BackService;
 import org.vosao.service.FrontService;
 import org.vosao.service.plugin.PluginServiceManager;
@@ -80,6 +81,7 @@ public class PluginBusinessImpl extends AbstractBusinessImpl
 	public void install(String filename, byte[] data) throws IOException, 
 			PluginException, DocumentException {
 		getPluginLoader().install(filename, data);
+		Messages.resetCache();
 	}
 	
 	@Override

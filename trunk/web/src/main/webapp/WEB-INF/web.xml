@@ -68,6 +68,15 @@
     </filter-mapping>    
 
     <filter>
+        <filter-name>RestFilter</filter-name>
+        <filter-class>org.vosao.filter.RestFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>RestFilter</filter-name>
+        <url-pattern>/rest/*</url-pattern>
+    </filter-mapping>    
+
+    <filter>
         <filter-name>RewriteFilter</filter-name>
         <filter-class>org.vosao.filter.RewriteFilter</filter-class>
     </filter>

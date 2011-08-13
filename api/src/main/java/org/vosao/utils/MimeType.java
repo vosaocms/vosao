@@ -233,7 +233,7 @@ public class MimeType {
 		}
 	}
 
-	private static String DEFAULT = "application/octet-stream";
+	public static String DEFAULT = "application/octet-stream";
 	
 	public static String getContentTypeByExt(final String ext) {
 		String key = ext.toLowerCase();

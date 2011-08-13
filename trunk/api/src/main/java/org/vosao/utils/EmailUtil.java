@@ -90,6 +90,9 @@ public class EmailUtil {
                 attachment.setFileName(item.getFilename());
                 String mimeType = MimeType.getContentTypeByExt(
                 		FolderUtil.getFileExt(item.getFilename()));
+                if (mimeType.equals("text/plain")) {
+                	mimeType = MimeType.DEFAULT;  
+                }
                 DataSource ds = new ByteArrayDataSource(item.getData(), mimeType);
                 attachment.setDataHandler(new DataHandler(ds));
                 mp.addBodyPart(attachment);

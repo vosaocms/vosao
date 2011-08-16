@@ -145,7 +145,7 @@ public class PageEntity extends BaseEntityImpl {
 	public void save(Entity entity) {
 		super.save(entity);
 		setTextProperty(entity, "title", title);
-		setProperty(entity, "friendlyURL", friendlyURL, true);
+		setProperty(entity, "friendlyURL", friendlyURL.toLowerCase(), true);
 		setProperty(entity, "parentUrl", parentUrl, true);
 		setProperty(entity, "template", template, true);
 		setProperty(entity, "publishDate", publishDate, true);

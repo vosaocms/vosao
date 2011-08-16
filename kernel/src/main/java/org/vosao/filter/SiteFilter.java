@@ -98,7 +98,7 @@ public class SiteFilter extends AbstractFilter implements Filter {
     	ctx.setSkipURLs(skipURLs);
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
         HttpServletResponse httpResponse = (HttpServletResponse)response;
-        String url = httpRequest.getServletPath();
+        String url = httpRequest.getServletPath().toLowerCase();
         if (url.startsWith("/_ah/plugin")) {
         	if (processPluginServlet(request, response)) {
         		return;
@@ -107,6 +107,12 @@ public class SiteFilter extends AbstractFilter implements Filter {
         if (ctx.isSkipUrl(url)) {
             chain.doFilter(request, response);
             return;
+        }
+        if (url.endsWith("/") && url.length() > 1) {
+        	httpResponse.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+        	httpResponse.setHeader("Location", url.substring(0, url.length() - 1));
+        	httpResponse.setHeader("Connection", "close");
+        	return;
         }
         if (!isLoggedIn(httpRequest) && servedFromCache(url, httpResponse)) {
         	return;

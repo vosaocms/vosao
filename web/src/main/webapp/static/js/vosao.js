@@ -154,7 +154,7 @@ Vosao.createJSONRpc = function() {
 			}
 		}
 		Vosao.jsonrpcInitialized = true;
-	}, '/JSON-RPC/');
+	}, '/json-rpc/');
 };
 
 Vosao.createJSONRpc();

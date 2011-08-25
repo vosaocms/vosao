@@ -62,7 +62,7 @@ public class SiteFilter extends AbstractFilter implements Filter {
 		"/file",
 		"/setup",
 		"/update",
-		"/JSON-RPC",
+		"/json-rpc",
 		"/favicon.ico",
 		"/i18n.js"};
     

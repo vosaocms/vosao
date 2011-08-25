@@ -85,7 +85,9 @@ public class RewriteFilter extends AbstractFilter implements Filter {
     }
 
     private boolean isSkipUrl(String url) {
-    	for (String u : SiteFilter.SKIP_URLS) if (url.startsWith(u)) return true;
+    	for (String u : SiteFilter.SKIP_URLS) {
+    		if (url.startsWith(u)) return true;
+    	}
     	return false;
     }
     

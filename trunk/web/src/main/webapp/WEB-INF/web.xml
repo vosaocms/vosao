@@ -64,7 +64,7 @@
     </filter>
     <filter-mapping>
         <filter-name>ServiceFilter</filter-name>
-        <url-pattern>/JSON-RPC/*</url-pattern>
+        <url-pattern>/json-rpc/*</url-pattern>
     </filter-mapping>    
 
     <filter>
@@ -119,7 +119,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>org.jabsorb.JSONRPCServlet</servlet-name>
-        <url-pattern>/JSON-RPC/*</url-pattern>
+        <url-pattern>/json-rpc/*</url-pattern>
     </servlet-mapping>
 
     <servlet>

@@ -90,10 +90,10 @@ public abstract class BaseEntityImpl implements BaseEntity {
 
 	@Override
 	public void save(Entity entity) {
-		setProperty(entity, "createUserEmail", createUserEmail, false);
-		setProperty(entity, "createDate", createDate, false);
-		setProperty(entity, "modUserEmail", modUserEmail, false);
-		setProperty(entity, "modDate", modDate, false);
+		setProperty(entity, "createUserEmail", createUserEmail, true);
+		setProperty(entity, "createDate", createDate, true);
+		setProperty(entity, "modUserEmail", modUserEmail, true);
+		setProperty(entity, "modDate", modDate, true);
 	}
 
 	@Override

@@ -65,6 +65,19 @@ public interface PageBusiness {
 
 	/**
 	 * Security filtered dao version.
+	 * @return list of pages.
+	 */
+	List<PageEntity> getByParentApproved(final String url);
+	
+	/**
+	 * Security filtered dao version.
+	 * @return list of pages.
+	 */
+	List<PageEntity> getByParentApproved(final String url,	Date startDate, 
+			Date endDate);
+
+	/**
+	 * Security filtered dao version.
 	 */
 	void remove(final List<Long> ids);
 

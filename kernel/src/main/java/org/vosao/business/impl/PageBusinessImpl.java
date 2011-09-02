@@ -387,6 +387,18 @@ public class PageBusinessImpl extends AbstractBusinessImpl
 	}
 
 	@Override
+	public List<PageEntity> getByParentApproved(String url) {
+		return securityFilter(getDao().getPageDao().getByParentApproved(url));
+	}
+
+	@Override
+	public List<PageEntity> getByParentApproved(
+			final String url, Date startDate, Date endDate) {
+		return securityFilter(getDao().getPageDao().getByParentApproved(
+				url, startDate, endDate));
+	}
+
+	@Override
 	public void remove(List<Long> ids) {
 		List<Long> removeIds = new ArrayList<Long>();
 		PageMessage message = new PageMessage(Topic.PAGES_DELETED);

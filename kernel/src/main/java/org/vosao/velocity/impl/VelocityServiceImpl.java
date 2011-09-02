@@ -27,10 +27,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.print.attribute.standard.MediaSize.Engineering;
-
 import org.vosao.business.Business;
-import org.vosao.business.decorators.TreeItemDecorator;
 import org.vosao.business.page.impl.StructurePageRenderDecorator;
 import org.vosao.business.vo.StructureFieldVO;
 import org.vosao.common.AbstractServiceBeanImpl;
@@ -68,7 +65,7 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 	
 	@Override
 	public PageEntity findPage(String path) {
-		PageEntity page = getDao().getPageDao().getByUrl(path);
+		PageEntity page = getBusiness().getPageBusiness().getByUrl(path);
 		if (page == null) {
 			return new PageEntity(Messages.get("page.not_found", path), 
 					Messages.get("page.not_found", path), null);
@@ -78,18 +75,19 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 
 	@Override
 	public List<PageEntity> findPageChildren(String path) {
-		return getDao().getPageDao().getByParentApproved(path);
+		return getBusiness().getPageBusiness().getByParentApproved(path);
 	}
 
 	@Override
 	public List<CommentVO> getCommentsByPage(String pageUrl) {
+		// TODO add security check
 		return CommentVO.create(getDao().getCommentDao().getByPage(
 				pageUrl, false));
 	}
 
 	@Override
 	public String findContent(String path, String aLanguageCode) {
-		PageEntity page = getDao().getPageDao().getByUrl(path);
+		PageEntity page = getBusiness().getPageBusiness().getByUrl(path);
 		if (page != null) {
 			return getBusiness().getPageBusiness().createPageRenderDecorator(
 				page, aLanguageCode).getContent();
@@ -105,7 +103,7 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 	@Override
 	public String findStructureContent(String path, String field,
 			String aLanguageCode) {
-		PageEntity page = getDao().getPageDao().getByUrl(path);
+		PageEntity page = getBusiness().getPageBusiness().getByUrl(path);
 		if (page != null) {
 			if (field != null) {
 				if (page.isStructured() 
@@ -143,8 +141,7 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 
 	@Override
 	public List<String> findChildrenContent(String path, String aLanguageCode) {
-		List<PageEntity> pages = getDao().getPageDao().getByParentApproved(
-				path);
+		List<PageEntity> pages = getBusiness().getPageBusiness().getByParentApproved(path);
 		List<String> result = new ArrayList<String>();
 		for (PageEntity page : pages) {
 			result.add(getBusiness().getPageBusiness()
@@ -221,7 +218,7 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 	@Override
 	public String renderStructureContent(String path,
 			String structureTemplateName) {
-		PageEntity page = getDao().getPageDao().getByUrl(path);
+		PageEntity page = getBusiness().getPageBusiness().getByUrl(path);
 		if (page != null) {
 			if (!page.isStructured()) {
 				return Messages.get("page.not_structural");
@@ -251,7 +248,7 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 	@Override
 	public List<PageEntity> findPageChildren(String path, Date startDate,
 			Date endDate) {
-		return getDao().getPageDao().getByParentApproved(path, startDate, 
+		return getBusiness().getPageBusiness().getByParentApproved(path, startDate, 
 				endDate);
 	}
 
@@ -333,6 +330,7 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 
 	@Override
 	public List<CommentVO> getRecentComments(int limit) {
+		// TODO add security check
 		return CommentVO.create(getDao().getCommentDao().getRecent(limit));
 	}
 	

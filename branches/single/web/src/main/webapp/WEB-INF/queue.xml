@@ -1,0 +1,17 @@
+<queue-entries>
+
+  <queue>
+    <name>mq-high</name>
+    <rate>10/s</rate>
+    <bucket-size>3</bucket-size>
+  </queue>
+  <queue>
+    <name>mq-medium</name>
+    <rate>1/s</rate>
+  </queue>
+  <queue>
+    <name>mq-low</name>
+    <rate>6/m</rate>
+  </queue>
+
+</queue-entries>

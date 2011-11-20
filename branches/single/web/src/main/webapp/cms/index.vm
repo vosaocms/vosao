@@ -1,0 +1,63 @@
+#*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2010 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*#
+
+#set ($title = $messages.get("index.title"))
+
+<div id="main-panel">
+    <div>
+        <img src="/static/images/pages.png" />
+        <a href="/cms/pages.vm">
+            $messages.get("index.content_pages")
+        </a>
+        <p>$messages.get("index.content_pages.description")</p>
+    </div>
+#if ($vosao.user.admin)
+    <div>
+        <img src="/static/images/templates.png" />
+        <a href="/cms/templates.vm">
+            $messages.get("index.design_templates")
+        </a>
+        <p>$messages.get("index.design_templates.description")</p>
+    </div>
+#end    
+    <div>
+        <img src="/static/images/folders.png" />
+        <a href="/cms/folders.vm">
+            $messages.get("index.file_resources_storage")
+        </a>
+        <p>$messages.get("index.file_resources_storage.description")</p>
+    </div>
+#if ($vosao.user.admin)
+    <div>
+        <img src="/static/images/config.png" />
+        <a href="/cms/config/index.vm">
+            $messages.get("index.site_configuration")
+        </a>
+        <p>$messages.get("index.site_configuration.description")</p>
+    </div>
+    <div>
+        <img src="/static/images/plugins.png" />
+        <a href="/cms/plugins/index.vm">$messages.get("index.plugins")</a>
+        <p>$messages.get("index.plugins.description")</p>
+    </div>
+#end    
+</div>

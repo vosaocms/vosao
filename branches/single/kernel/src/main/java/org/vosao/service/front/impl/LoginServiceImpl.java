@@ -22,15 +22,21 @@
 
 package org.vosao.service.front.impl;
 
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.vosao.business.SetupBean;
 import org.vosao.business.mq.Topic;
 import org.vosao.business.mq.message.SimpleMessage;
 import org.vosao.common.BCrypt;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.UserEntity;
 import org.vosao.filter.AuthenticationFilter;
+import org.vosao.filter.LanguageFilter;
 import org.vosao.i18n.Messages;
 import org.vosao.service.ServiceResponse;
 import org.vosao.service.front.LoginService;
@@ -110,5 +116,22 @@ public class LoginServiceImpl extends AbstractServiceImpl
 		}
 	}
 	
+	@Override
+	public Map<String, String> getSystemProperties() {
+		Map<String, String> result = new HashMap<String, String>();
+		result.put("version", SetupBean.VERSION);
+		result.put("fullVersion", SetupBean.FULLVERSION);
+		return result;
+	}
+
+	@Override
+	public ServiceResponse setLanguage(String language) {
+		Locale locale = LanguageFilter.getLocale(language);
+		logger.info("Locale " + locale.getDisplayName());
+		VosaoContext.getInstance().setLocale(locale);
+		VosaoContext.getInstance().getRequest().getSession(true)
+				.setAttribute(Messages.LOCALE_KEY, locale);
+		return ServiceResponse.createSuccessResponse(Messages.get("success"));
+	}
 
 }

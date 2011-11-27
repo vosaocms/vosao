@@ -22,6 +22,8 @@
 
 package org.vosao.service.front;
 
+import java.util.Map;
+
 import org.vosao.service.AbstractService;
 import org.vosao.service.ServiceResponse;
 
@@ -37,4 +39,8 @@ public interface LoginService extends AbstractService {
 	ServiceResponse logout();
 	
 	ServiceResponse forgotPassword(String email);
+	
+	Map<String, String> getSystemProperties();
+	
+	ServiceResponse setLanguage(String language);
 }

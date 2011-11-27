@@ -99,17 +99,6 @@
     </filter-mapping>    
 
     <servlet>
-        <servlet-name>velocity</servlet-name>
-        <servlet-class>
-            org.apache.velocity.tools.view.VelocityLayoutServlet
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>velocity</servlet-name>
-        <url-pattern>*.vm</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>org.jabsorb.JSONRPCServlet</servlet-name>
         <servlet-class>org.jabsorb.JSONRPCServlet</servlet-class>
         <init-param>
@@ -213,7 +202,7 @@
     </servlet-mapping>
 
 	<welcome-file-list>
-		<welcome-file>index.vm</welcome-file>
+		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 
 	<session-config>

@@ -37,7 +37,7 @@ if (Vosao == undefined) {
  */
 Vosao.AUTOSAVE_TIMEOUT = 60;
 
-Vosao.ENGLISH_CODE = default_language;
+Vosao.ENGLISH_CODE = 'en';
 
 //************************** Utility functions *********************************
 
@@ -114,6 +114,26 @@ Vosao.message = function(s) {
 	return s;
 };
 
+Vosao.addCSSFile = function(css) {
+	$('head').append('<link rel="stylesheet" href="' + css + '" type="text/css" />');
+}
+
+Vosao.addCSSFiles = function(cssFiles) {
+	$.each(cssFiles, function(i, css) {
+		$('head').append('<link rel="stylesheet" href="' + css + '" type="text/css" />');
+	});
+}
+
+Vosao.removeCSSFile = function(css) {
+	$('head link[href="' + css + '"]').remove();
+}
+
+Vosao.removeCSSFiles = function(cssFiles) {
+	$.each(cssFiles, function(i, css) {
+		$('head link[href="' + css + '"]').remove();
+	});
+}
+
 // GAE Channel API channel for current page.
 // page should include <script type="text/javascript" src="/_ah/channel/jsapi"></script>
 // before vosao.js
@@ -149,13 +169,8 @@ Vosao.sendChannelCommand = function(cmd, paramsObj) {
 	xhr.send();
 };
 
-$(function() {
-	$('#languageSelect').click(function() {
-		$('#languageDiv').show();
-		setTimeout(function() {
-	        $('#languageDiv').hide();
-		}, 5000);
-	});
-});
-
-
+Vosao.changeLanguageCall = function(lang) {
+	Vosao.jsonrpc.loginFrontService.setLanguage(function(r) {
+		location.reload();
+	}, lang);
+};

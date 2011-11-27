@@ -1,4 +1,5 @@
-<%/*
+// file View.js
+/*
  Vosao CMS. Simple CMS for Google App Engine.
  
  Copyright (C) 2009-2011 Vosao development team.
@@ -18,19 +19,24 @@
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
  email: vosao.dev@gmail.com
-*/%>
+*/
 
-<a id="languageSelect"><%= messages("language") %></a>
-<div id="languageDiv">
-    <a onclick="Vosao.changeLanguageCall('en')">English</a>
-    <a onclick="Vosao.changeLanguageCall('de')">Deutsch</a>
-    <a onclick="Vosao.changeLanguageCall('es')">Español</a>
-    <a onclick="Vosao.changeLanguageCall('sv')">Swedish</a>
-    <a onclick="Vosao.changeLanguageCall('ru')">Русский</a>
-    <a onclick="Vosao.changeLanguageCall('cs')">Česky</a>
-    <a onclick="Vosao.changeLanguageCall('tr')">Türkçe</a>
-    <a onclick="Vosao.changeLanguageCall('pt_BR')">Brazilian Portuguese</a>
-    <a onclick="Vosao.changeLanguageCall('ja')">日本語</a>
-    <a onclick="Vosao.changeLanguageCall('zh_TW')">中文(繁體)</a>
-    <a onclick="Vosao.changeLanguageCall('zh_CN')">中文(简体)</a>
-</div>
+define([], function() {
+	
+	console.log('Loading View.js');
+	
+	return Backbone.View.extend({
+		
+		el: $('#content'),
+		
+		render: function() {
+			this.el.html(...);
+		},
+		
+		remove: function() {
+			this.el.html('');
+		}
+		
+	});
+	
+});

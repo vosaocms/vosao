@@ -20,17 +20,20 @@
  email: vosao.dev@gmail.com
 */%>
 
-<a id="languageSelect"><%= messages("language") %></a>
-<div id="languageDiv">
-    <a onclick="Vosao.changeLanguageCall('en')">English</a>
-    <a onclick="Vosao.changeLanguageCall('de')">Deutsch</a>
-    <a onclick="Vosao.changeLanguageCall('es')">Español</a>
-    <a onclick="Vosao.changeLanguageCall('sv')">Swedish</a>
-    <a onclick="Vosao.changeLanguageCall('ru')">Русский</a>
-    <a onclick="Vosao.changeLanguageCall('cs')">Česky</a>
-    <a onclick="Vosao.changeLanguageCall('tr')">Türkçe</a>
-    <a onclick="Vosao.changeLanguageCall('pt_BR')">Brazilian Portuguese</a>
-    <a onclick="Vosao.changeLanguageCall('ja')">日本語</a>
-    <a onclick="Vosao.changeLanguageCall('zh_TW')">中文(繁體)</a>
-    <a onclick="Vosao.changeLanguageCall('zh_CN')">中文(简体)</a>
+<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+    <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+        <li class="ui-corner-top ui-state-default">
+            <a href="#pages"><%= messages("pages") %></a>
+        </li>
+        <li class="ui-corner-top ui-tabs-selected ui-state-active">
+            <a href="#structures"><%= messages("structures") %></a>
+        </li>
+    </ul>
+    <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+        <div id="structures"><img src="/static/images/ajax-loader.gif" /></div>
+        <div class="buttons">
+            <input id="addButton" type="button" value="<%= messages("add") %>"/>
+            <input id="deleteButton" type="button" value="<%= messages("delete") %>"/>
+        </div>    
+    </div>
 </div>

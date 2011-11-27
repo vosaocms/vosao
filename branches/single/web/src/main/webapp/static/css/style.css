@@ -24,6 +24,7 @@ h1, h2 {
 
 a, a:visited, .ui-widget-content a {
 	color: blue;
+	cursor: pointer;
 }
 a:hover, .ui-widget-content a:hover {
     color: #148fd5;

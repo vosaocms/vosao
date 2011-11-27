@@ -23,7 +23,7 @@
 
 
 define(['text!template/pages.html',
-        '/static/js/jquery.treeview.pack.js',
+        'jquery.treeview',
         'order!view/pages/PageSearchComponent'], function(tmpl) {
 	
 	var parentURL = null;

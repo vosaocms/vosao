@@ -9,6 +9,8 @@ require.config({
 		"jquery.cookie" : '/static/js/jquery.cookie',
 		"jquery-ui" : '/static/js/jquery-ui',
 		"jquery.xmldom" : '/static/js/jquery.xmldom',
+		"jquery.form" : '/static/js/jquery.form',
+		"jquery.treeview" : '/static/js/jquery.treeview',
 		jsonrpc : '/static/js/jsonrpc',
 		vosao : '/static/js/vosao',
 		cms : '/static/js/cms',

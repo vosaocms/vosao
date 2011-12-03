@@ -21,7 +21,6 @@
  email: vosao.dev@gmail.com
 */
 
-
 define(['text!template/pages.html',
         'jquery.treeview',
         'order!view/pages/PageSearchComponent'], function(tmpl) {
@@ -81,33 +80,33 @@ define(['text!template/pages.html',
 		var published_link = ' <img src="/static/images/'+ p +'.png" title="' 
 			+ published_msg + '" width="16px" />';
 		if (!vo.entity.hasPublishedVersion) {
-			published_link = ' <a href="#" onclick="Vosao.app.pagesView.onPagePublish(' 
+			published_link = ' <a onclick="Vosao.app.pagesView.onPagePublish(' 
 				+ vo.entity.id + ')">'
 				+ '<img src="/static/images/'+ p +'.png" title="' 
 				+ published_msg + '" width="16px" /></a>';
 		}
 		var html = '<li> ' + published_link
 		
-				+ ' <a href="page/content.vm?id=' + vo.entity.id + '" title="'
+				+ ' <a href="#page/content/' + vo.entity.id + '" title="'
 				+ messages('page.edit_content') + '" class="content-link">'
 				+ title + '</a> '
 				
 				+ '<span class="page_edit" style="display:none">'
 				
 				+ '<a title="' + messages('add_child') 
-				+ '" href="#" onclick="Vosao.app.pagesView.onPageAdd(\'' + vo.entity.friendlyURL
+				+ '" onclick="Vosao.app.pagesView.onPageAdd(\'' + vo.entity.friendlyURL
 				+ '\')"><img src="/static/images/add.png"/></a> '
 				
 				+ '<a title="' + messages('remove') 
-				+ '" href="#" onclick="Vosao.app.pagesView.onPageRemove(\'' 
+				+ '" onclick="Vosao.app.pagesView.onPageRemove(\'' 
 				+ vo.entity.friendlyURL + '\')">'
 				+ '<img src="/static/images/02_x.png" /></a> '
 				
-				+ '<a href="page/index.vm?id=' + vo.entity.id + '" title="'
+				+ '<a href="#page/' + vo.entity.id + '" title="'
 				+ messages('page.edit_properties') + '">'
 				+ '<img src="/static/images/pencil.png" /></a> '
 				
-				+ '<a href="#" onclick="Vosao.app.pagesView.onChangeTitle(' + vo.entity.id + ')" title="'
+				+ '<a onclick="Vosao.app.pagesView.onChangeTitle(' + vo.entity.id + ')" title="'
 				+ messages('page.edit_url_title') + '">'
 				+ '<img src="/static/images/globe.png" /></a>'
 				

@@ -24,10 +24,13 @@
 define(['view/LoginView', 'view/PagesView', 'view/IndexView',
         'view/StructuresView', 'view/StructureView', 'view/StructureTemplateView',
         'view/TemplatesView', 'view/TemplateView',
+        'view/page/PageView',
+        
         'text!template/topbar.html', 'text!template/locale.html'], 
 function(LoginView, PagesView, IndexView, 
 		StructuresView, StructureView, StructureTemplateView,
 		TemplatesView, TemplateView,
+		PageView,
 		topbarTmpl, localeTmpl){
 	
 	console.log("app.js");
@@ -51,10 +54,15 @@ function(LoginView, PagesView, IndexView,
 		structureTemplateView: new StructureTemplateView(),
 		templatesView: new TemplatesView(),
 		templateView: new TemplateView(),
+		pageView: new PageView(),
 
 		routes: {
 			'index': 			'index',
 			'pages': 			'pages',
+			
+			'page/content/:id': 'editContent',
+			'page/:id': 		'editPage',
+
 			'structures':		'structures',
 			'structure':		'addStructure',
 			'structure/:id':	'editStructure',
@@ -127,6 +135,16 @@ function(LoginView, PagesView, IndexView,
 			this.show(this.templateView);
 		},
 
+		editContent: function(id) {
+			this.pageView.editContent(id);
+			this.show(this.pageView);
+		},
+		
+		editPage: function(id) {
+			this.pageView.editPage(id);
+			this.show(this.pageView);
+		},
+		
 		// Event handlers
 		
 		login: function() {

@@ -91,7 +91,8 @@ function(tmpl, localeTmpl, loginTopbarTmpl) {
 		
 		render: function() {
 			Vosao.addCSSFile(this.css);
-			this.el.html(_.template(tmpl, {messages: messages}));
+			//this.el.html(_.template(tmpl, {messages: messages}));
+			this.el.html($.jqote(tmpl, {messages: messages}));
 			$("#forgot-dialog").dialog({ width: 400, autoOpen: false });
 			
 			// defining event handlers here due to JQuery-UI - Backbone issue

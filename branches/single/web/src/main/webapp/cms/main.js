@@ -11,10 +11,12 @@ require.config({
 		"jquery.xmldom" : '/static/js/jquery.xmldom',
 		"jquery.form" : '/static/js/jquery.form',
 		"jquery.treeview" : '/static/js/jquery.treeview',
+		"jquery.jquote2" : 'libs/jquery.jquote2.min',
 		jsonrpc : '/static/js/jsonrpc',
 		vosao : '/static/js/vosao',
 		cms : '/static/js/cms',
 		i18n : '/i18n',
+		ckeditor: '/static/ckeditor/ckeditor',
 		"back-services" : '/static/js/back-services'
 	}
 });
@@ -23,8 +25,8 @@ require([
 
 	// Load our app module and pass it to our definition function
 	'app', 
-	'jquery.cookie', 'jquery-ui', 'jquery.xmldom', 'order!i18n',
-	'order!jsonrpc', 'order!vosao', 'order!cms', 'order!back-services'
+	'jquery.cookie', 'jquery-ui', 'jquery.xmldom', 'jquery.jquote2', 
+	'order!i18n', 'order!jsonrpc', 'order!vosao', 'order!cms', 'order!back-services'
 
 ], function(App) {
 	

@@ -23,10 +23,8 @@
 define(['view/page/context'], function(ctx) {
 
 var versions = [];
-var pages = {};
 
 function initVersionDialog() {
-    $("#version-dialog").dialog({ width: 400, autoOpen: false });
     $('#addVersionLink').click(onAddVersion);
     $('#versionCancelButton').click(onVersionTitleCancel);
     $('#versionForm').submit(function() {onVersionTitleSave(); return false;});
@@ -43,26 +41,25 @@ function callLoadVersions() {
 function loadVersions() {
 	var r = ctx.pageRequest.versions; 
     versions = [];
-    pages = {};
+    ctx.pages = {};
     $.each(r.list, function (i, value) {
-        pages[String(value.version)] = value;
+    	ctx.pages[String(value.version)] = value;
         versions.push(String(value.version));
     });
     versions.sort();
     var h = '';
     $.each(versions, function (i, version) {
-        var vPage = pages[version];
+        var vPage = ctx.pages[version];
         h += '<div>';
         if (ctx.pageId != vPage.id) {
             h += '<a class="button ui-state-default ui-corner-all"\
                title="' + vPage.versionTitle + '"\
-               onclick="onVersionSelect(\'' + version + '\')">Version ' 
-               + version +'</a>';
+               data-version="' + version + '">Version ' + version +'</a>';
         }
         else {
             h += '<a class="button ui-state-default ui-state-active \
                ui-corner-all" title="' + vPage.versionTitle 
-               + '" onclick="onVersionSelect(\'' + version + '\')" \
+               + '" data-version="' + version + '" \
                ><span class="ui-icon ui-icon-triangle-1-e"></span> \
                Version ' + version + '</a>';
         }
@@ -72,11 +69,17 @@ function loadVersions() {
         }
     });
     $('#versions .vertical-buttons-panel').html(h);
+    $('#versions a').click(function() {
+    	var v = $(this).attr('data-version');
+    	if (v) {
+    		onVersionSelect(v);
+    	}
+    });
 }
 
 function onVersionDelete(version) {
 	if (confirm(messages('are_you_sure'))) {
-		var delPage = pages[version];
+		var delPage = ctx.pages[version];
 		Vosao.jsonrpc.pageService.deletePageVersion(function(r) {
 			if (version == String(page.version)) {
 				if (versions.length == 1) {
@@ -89,7 +92,7 @@ function onVersionDelete(version) {
 						previousVersion = versions[versions
 								.indexOf(version) - 1];
 					}
-					ctx.pageId = pages[previousVersion].id;
+					ctx.pageId = ctx.pages[previousVersion].id;
 					ctx.loadData();
 				}
 			} else {
@@ -123,23 +126,24 @@ function onVersionTitleCancel() {
 }
 
 function onVersionSelect(version) {
-	var selPage = pages[version];
+	var selPage = ctx.pages[version];
 	ctx.pageId = selPage.id;
 	ctx.loadData();
 }
 
 function showAuditInfo() {
-	$('#pageState').html(page.stateString == 'EDIT' ? 
+	$('#pageState').html(ctx.page.stateString == 'EDIT' ? 
 			messages('edit') : messages('approved'));
-	$('#pageCreateDate').html(page.createDateTimeString);
-	$('#pageModDate').html(page.modDateTimeString);
-	$('#pageCreateUser').html(page.createUserEmail);
-	$('#pageModUser').html(page.modUserEmail);
+	$('#pageCreateDate').html(ctx.page.createDateTimeString);
+	$('#pageModDate').html(ctx.page.modDateTimeString);
+	$('#pageCreateUser').html(ctx.page.createUserEmail);
+	$('#pageModUser').html(ctx.page.modUserEmail);
 }
 
 	return {
 		initVersionDialog : initVersionDialog,
-		loadVersions : loadVersions
+		loadVersions : loadVersions,
+		showAuditInfo: showAuditInfo
 	};
 
 });

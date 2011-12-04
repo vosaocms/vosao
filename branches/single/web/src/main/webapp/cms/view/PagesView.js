@@ -195,19 +195,6 @@ define(['text!template/pages.html',
 		return result;
 	}
 
-	function onChangeTitle(id) {
-		var pageItem = findPage(id);
-		page = pageItem.entity;
-		$('#ui-dialog-title-page-dialog').text(messages('pages.change_page'));
-		parentURL = page.parentUrl == '/' ? '' : page.parentUrl;
-		$('#page-dialog').dialog('open');
-		$('#parentURL').html(parentURL + '/');
-		$('#title').val(page.title);
-		$('#url').val(page.pageFriendlyURL);
-		$('#url').attr('disabled', pageItem.children.list.length > 0);
-		$('#title').focus();
-	}
-
 	function renderShowTitle() {
 		if (showTitle) {
 			$('#showTitle').html('<a href="#" onclick="Vosao.app.pagesView.onShowTitle(false)">'
@@ -265,6 +252,7 @@ define(['text!template/pages.html',
 		},
 		
 		remove: function() {
+		    $("#page-dialog").dialog('destroy').remove();
 			this.el.html('');
 			Vosao.removeCSSFiles(this.css);
 		},
@@ -334,6 +322,19 @@ define(['text!template/pages.html',
 				$.cookie("pages.showTitle", 'names', {path:'/', expires: 10});
 			}
 			loadData();
+		},
+		
+		onChangeTitle: function(id) {
+			var pageItem = findPage(id);
+			page = pageItem.entity;
+			$('#ui-dialog-title-page-dialog').text(messages('pages.change_page'));
+			parentURL = page.parentUrl == '/' ? '' : page.parentUrl;
+			$('#page-dialog').dialog('open');
+			$('#parentURL').html(parentURL + '/');
+			$('#title').val(page.title);
+			$('#url').val(page.pageFriendlyURL);
+			$('#url').attr('disabled', pageItem.children.list.length > 0);
+			$('#title').focus();
 		}
 
 

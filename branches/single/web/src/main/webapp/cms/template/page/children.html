@@ -1,4 +1,4 @@
-#*
+<%/*
  Vosao CMS. Simple CMS for Google App Engine.
  
  Copyright (C) 2009-2010 Vosao development team.
@@ -18,51 +18,29 @@
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
  email: vosao.dev@gmail.com
-*#
+*/%>
 
-#parse('/cms/page/head.vm')
-  
-#define ( $head6 )
-  <script type="text/javascript" src="/static/js/cms/page/children.js"></script>
-  <link rel="stylesheet" href="/static/css/children.css" type="text/css" />
-#end
+<div id="children"> </div>
+<div class="buttons">
+    <input id="addChildButton" type="button" value="<%= messages("add_child_page") %>" />
+    <input id="deleteChildButton" type="button" value="<%= messages("delete_pages") %>" />
+    <input id="defaultSettingsButton" type="button" value="<%= messages("default_settings") %>" />
+</div>    
 
-#parse('/cms/page/versionsBox.vm')
-
-#parse('/cms/page/breadcrumbs.vm')
-
-<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all"
-    style="margin-top: 14px;">
-
-#parse('/cms/page/tab.vm')
-
-<div id="tab-1" class="childrenTab ui-tabs-panel ui-widget-content ui-corner-bottom">
-    <div id="children"> </div>
-    <div class="buttons">
-        <input id="addChildButton" type="button" value="$messages.get("add_child_page")" />
-        <input id="deleteChildButton" type="button" value="$messages.get("delete_pages")" />
-        <input id="defaultSettingsButton" type="button" value="$messages.get("default_settings")" />
-    </div>    
-</div>
-
-</div>
-
-#parse('/cms/page/versionDialog.vm')
-
-<div id="page-dialog" style="display:none" title="$messages.get("pages.new_page")">
+<div id="page-dialog" style="display:none" title="<%= messages("pages.new_page") %>">
   <form id="pageForm">
     <div class="form-row">
-        <label>$messages.get("pages.page_title")</label>
+        <label><%= messages("pages.page_title") %></label>
         <input id="title"/>
     </div>
     <div class="form-row">
-        <label>$messages.get("pages.page_url")</label>
+        <label><%= messages("pages.page_url") %></label>
         <span id="parentURL"></span> <input id="url"/>
     </div>
     <div id="pageMessages"></div>
     <div class="buttons-dlg">
-        <input id="saveDlgButton" type="submit" value="$messages.get("save")" />
-        <input id="cancelDlgButton" type="button" value="$messages.get("cancel")" />
+        <input id="saveDlgButton" type="submit" value="<%= messages("save") %>" />
+        <input id="cancelDlgButton" type="button" value="<%= messages("cancel") %>" />
     </div>
   </form>  
 </div>

@@ -1,4 +1,4 @@
-#*
+<%/*
  Vosao CMS. Simple CMS for Google App Engine.
  
  Copyright (C) 2009-2010 Vosao development team.
@@ -18,33 +18,14 @@
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
  email: vosao.dev@gmail.com
-*#
+*/%>
 
-#parse('/cms/page/head.vm')
-
-#set ($head6 = '<script type="text/javascript" src="/static/js/cms/page/comments.js"></script>')
-    
-#parse('/cms/page/versionsBox.vm')
-
-#parse('/cms/page/breadcrumbs.vm')
-
-<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all"
-    style="margin-top: 14px;">
-
-#parse('/cms/page/tab.vm')
-
-<div id="tab-1" class="commentsTab ui-tabs-panel ui-widget-content ui-corner-bottom">
-    <div id="comments"> </div>
-    <div class="buttons">
-        <input id="enableCommentsButton" type="button" 
-            value="$messages.get("enable_comments")" />
-        <input id="disableCommentsButton" type="button" 
-            value="$messages.get("disable_comments")" />
-        <input id="deleteCommentsButton" type="button" 
-            value="$messages.get("delete_comments")" />
-    </div>    
-</div>
-
-</div>
-
-#parse('/cms/page/versionDialog.vm')
+<div id="comments"> </div>
+<div class="buttons">
+    <input id="enableCommentsButton" type="button" 
+        value="<%= messages("enable_comments") %>" />
+    <input id="disableCommentsButton" type="button" 
+        value="<%= messages("disable_comments") %>" />
+    <input id="deleteCommentsButton" type="button" 
+        value="<%= messages("delete_comments") %>" />
+</div>    

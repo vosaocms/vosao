@@ -114,6 +114,7 @@ function(tmpl, localeTmpl, loginTopbarTmpl) {
 		},
 		
 		remove: function() {
+    		$('#forgot-dialog').dialog('destroy').remove();
 			this.el.html('');
 			Vosao.removeCSSFile(this.css);
 		}

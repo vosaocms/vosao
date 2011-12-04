@@ -21,7 +21,12 @@
  email: vosao.dev@gmail.com
 */
 
-define(['view/page/ContentView'], function(ContentView) {
+define(['view/page/context',
+        'view/page/ContentView', 'view/page/IndexView', 'view/page/ChildrenView',
+        'view/page/CommentsView', 'view/page/SecurityView', 
+        'view/page/AttributesView'], 
+function(ctx, ContentView, IndexView, ChildrenView, CommentsView, SecurityView, 
+		 AttributesView) {
     
     console.log('Loading PageRouter.js');
     
@@ -31,38 +36,73 @@ define(['view/page/ContentView'], function(ContentView) {
         
         currentView: null,
         contentView: new ContentView(),
+        indexView: new IndexView(),
+        childrenView: new ChildrenView(),
+        commentsView: new CommentsView(),
+        securityView: new SecurityView(),
+        attributesView: new AttributesView(),
 
         initialize: function(options) {
             this.pageView = options.view;
         },
-        
+
         show: function(view) {
+        	if (Vosao.app.currentView != this.pageView) {
+        		Vosao.app.show(this.pageView);
+        	}
             if (this.currentView) {
                 this.currentView.remove();
                 this.currentView = null;
             }
+    	    $('ul.ui-tabs-nav li').removeClass('ui-state-active')
+    			.removeClass('ui-tabs-selected')
+    			.addClass('ui-state-default');
+    	    
             view.render();
             this.currentView = view;
         },
         
         routes: {
-            
+            'page/children/:id':	'children',
+            'page/comments/:id':	'comments',
+            'page/security/:id':	'security',
+            'page/attributes/:id':	'attributes'
         },
 
         showCmd: function(cmd) {
-            if (cmd == 'editContent') this.editContent(this.pageView.pageId);
-            if (cmd == 'editPage') this.editPage(this.pageView.pageId);
+            if (cmd == 'editContent') this.editContent(ctx.pageId);
+            if (cmd == 'editPage') this.editPage(ctx.pageId);
         },
         
         editContent: function(id) {
-            this.contentView.edit(id);
+        	ctx.pageId = id;
             this.show(this.contentView);
         },
         
         editPage: function(id) {
-            alert('TODO');
-        }
+        	ctx.pageId = id;
+            this.show(this.indexView);
+        },
+            
+        children: function(id) {
+        	ctx.pageId = id;
+            this.show(this.childrenView);
+        },
         
+        comments: function(id) {
+        	ctx.pageId = id;
+            this.show(this.commentsView);
+        },
+
+        security: function(id) {
+        	ctx.pageId = id;
+            this.show(this.securityView);
+        },
+
+        attributes: function(id) {
+        	ctx.pageId = id;
+            this.show(this.attributesView);
+        }
     });
     
 });

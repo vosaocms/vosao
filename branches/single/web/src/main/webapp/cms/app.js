@@ -83,10 +83,10 @@ function(LoginView, PagesView, IndexView,
 				this.currentView.remove();
 				this.currentView = null;
 			}
+			this.currentView = view;
 			$('#content').hide();
 			view.render();
 			$('#content').fadeIn();
-			this.currentView = view;
 		},
 		
 		pages: function() {

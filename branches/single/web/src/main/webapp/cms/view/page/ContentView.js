@@ -30,7 +30,6 @@ function(contentHtml, ctx, version, breadcrumbs) {
 	
 	var contents = null;
 	var titles = null;
-	var currentLanguage = '';
 	var languages = null;
 	var contentEditor = null;
 	var etalonContent = '';
@@ -38,11 +37,9 @@ function(contentHtml, ctx, version, breadcrumbs) {
 	var contentEditors = null;
 	var browseId = '';
 	var editTextarea = false;
-	var isDefault = false;
 
-	ctx.loadData = loadData;
-	
 	function postRender() {
+		ctx.loadData = loadData;
 		ctx.editMode = ctx.pageId != '';
 	    $("#restore-dialog").dialog({ width: 400, autoOpen: false });
 	    Vosao.initJSONRpc(loadData);
@@ -60,7 +57,8 @@ function(contentHtml, ctx, version, breadcrumbs) {
 	    $('#approveButton').click(onPageApprove);
 	    $('#restoreButton').click(onRestore);
 	    $('#contentCancelButton').click(onPageCancel);
-	    $('ul.ui-tabs-nav li:nth-child(2)').addClass('ui-state-active')
+	    $('ul.ui-tabs-nav li:nth-child(2)')
+	    		.addClass('ui-state-active')
 	    		.addClass('ui-tabs-selected')
 	    		.removeClass('ui-state-default');
 	    $('#restoreForm').submit(function() {onRestoreSave(); return false;});
@@ -177,7 +175,7 @@ function(contentHtml, ctx, version, breadcrumbs) {
 			titles : getTitles(),
 			content : getEditorContent(),
 			approve : String($('#approveOnPageSave:checked, #approveOnContentSave:checked').size() > 0),
-			languageCode : currentLanguage
+			languageCode : ctx.currentLanguage
 		});
 		Vosao.jsonrpc.pageService.savePage(function(r) {
 			if (r.result == 'success') {
@@ -288,7 +286,7 @@ function(contentHtml, ctx, version, breadcrumbs) {
 	}
 
 	function isContentChanged() {
-		return contents[currentLanguage] != getEditorContent();
+		return contents[ctx.currentLanguage] != getEditorContent();
 	}
 
 	function onAutosave() {
@@ -300,7 +298,7 @@ function(contentHtml, ctx, version, breadcrumbs) {
 	}
 
 	function onPagePreview() {
-		var url = ctx.page.friendlyURL + '?language=' + currentLanguage 
+		var url = ctx.page.friendlyURL + '?language=' + ctx.currentLanguage 
 			+ '&version=' + ctx.page.version;
 		window.open(url, "preview");
 	}
@@ -312,14 +310,14 @@ function(contentHtml, ctx, version, breadcrumbs) {
 	function onLanguageChange() {
 		if (!isContentChanged()
 				|| confirm(messages('are_you_sure_changes_lost'))) {
-			currentLanguage = $('#language').val();
-			if (contents[currentLanguage] == undefined) {
-				contents[currentLanguage] = '';
+			ctx.currentLanguage = $('#language').val();
+			if (contents[ctx.currentLanguage] == undefined) {
+				contents[ctx.currentLanguage] = '';
 			}
-			setEditorContent(contents[currentLanguage]);
+			setEditorContent(contents[ctx.currentLanguage]);
 			$('#titleLocal').val(getTitle());
 		} else {
-			$('#language').val(currentLanguage);
+			$('#language').val(ctx.currentLanguage);
 		}
 	}
 
@@ -330,16 +328,16 @@ function(contentHtml, ctx, version, breadcrumbs) {
 			$.each(r.list, function(i, value) {
 				contents[value.languageCode] = value.content;
 			});
-			if (!currentLanguage) {
+			if (!ctx.currentLanguage) {
 				if (languages[Vosao.ENGLISH_CODE] != undefined) {
-					currentLanguage = Vosao.ENGLISH_CODE;
+					ctx.currentLanguage = Vosao.ENGLISH_CODE;
 				}
 				else {
-					currentLanguage = r.list[0].languageCode;
+					ctx.currentLanguage = r.list[0].languageCode;
 				}
 			}
-			$('#language').val(currentLanguage);
-			setEditorContent(contents[currentLanguage]);
+			$('#language').val(ctx.currentLanguage);
+			setEditorContent(contents[ctx.currentLanguage]);
 			$('#titleLocal').val(getTitle());
 		} else {
 			setEditorContent('');
@@ -425,7 +423,7 @@ function(contentHtml, ctx, version, breadcrumbs) {
 			$('#page-content').html(h);
 			$('#page-content').css('float','left');
 		    $(".datepicker").datepicker({dateFormat:'dd.mm.yy'});
-			contentEditors = [];
+			contentEditors = {};
 			if (!editTextarea) {
 			  $.each(ctx.pageRequest.structureFields.list, function(i, field) {
 				if (field.type == 'TEXTAREA') {
@@ -460,17 +458,17 @@ function(contentHtml, ctx, version, breadcrumbs) {
 	}
 
 	function getTitle() {
-		if (titles[currentLanguage] == undefined) {
+		if (titles[ctx.currentLanguage] == undefined) {
 			return '';
 		}
-		return titles[currentLanguage];
+		return titles[ctx.currentLanguage];
 	}
 
 	function getTitles() {
 		if (!ctx.editMode) {
 			return '{' + Vosao.ENGLISH_CODE + ':"' + $('#title').val() +'"}';
 		}
-		titles[currentLanguage] = $('#titleLocal').val();
+		titles[ctx.currentLanguage] = $('#titleLocal').val();
 		var result = '{';
 		var count = 0;
 		$.each(titles, function(lang, value) {
@@ -495,21 +493,21 @@ function(contentHtml, ctx, version, breadcrumbs) {
 			if (r.result == 'success') {
 				location.reload();
 			}
-		}, ctx.pageId, pageType, currentLanguage);
+		}, ctx.pageId, pageType, ctx.currentLanguage);
 	}
 
 	function onEditTextarea() {
 		editTextarea = true;
 		$('#ckedit').text(messages('page.edit_ckeditor')).click(onEditCKEditor);
 		showContentEditor();
-		setEditorContent(contents[currentLanguage]);
+		setEditorContent(contents[ctx.currentLanguage]);
 	}
 
 	function onEditCKEditor() {
 		editTextarea = false;
 		$('#ckedit').text(messages('page.edit_textarea')).click(onEditTextarea);
 		showContentEditor();
-		setEditorContent(contents[currentLanguage]);
+		setEditorContent(contents[ctx.currentLanguage]);
 	}
 
 	function onResetCache() {
@@ -522,7 +520,7 @@ function(contentHtml, ctx, version, breadcrumbs) {
 
 	function checkDefault() {
 		if (ctx.page.friendlyURL.endsWith('/_default')) {
-			isDefault = true;
+			ctx.isDefault = true;
 			$('.securityTab, .commentsTab, .childrenTab, #approveOnContentSaveDiv'
 				+ ', #contentPreviewButton, #versions, #resetCacheButton, #restoreButton'
 				+ ', #approveButton, #friendlyUrlDiv').hide();
@@ -572,16 +570,7 @@ function(contentHtml, ctx, version, breadcrumbs) {
 		
 		remove: function() {
 			this.el.html('');
-		},
-		
-		edit: function(id) {
-			ctx.pageId = id;
-			ctx.pageParentUrl = '';
-		},
-		
-		create: function(parentUrl) {
-			ctx.pageParentUrl = parentUrl;
-			ctx.pageId = '';
+		    $("#restore-dialog, #file-upload").dialog('destroy').remove();
 		}
 		
 	});

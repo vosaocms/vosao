@@ -16,7 +16,6 @@ require.config({
 		vosao : '/static/js/vosao',
 		cms : '/static/js/cms',
 		i18n : '/i18n',
-		ckeditor: '/static/ckeditor/ckeditor',
 		"back-services" : '/static/js/back-services'
 	}
 });

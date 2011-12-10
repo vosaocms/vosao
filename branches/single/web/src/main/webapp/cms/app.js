@@ -24,13 +24,15 @@
 define(['view/LoginView', 'view/PagesView', 'view/IndexView',
         'view/StructuresView', 'view/StructureView', 'view/StructureTemplateView',
         'view/TemplatesView', 'view/TemplateView',
-        'view/page/PageView',
+        'view/page/PageView', 'view/ProfileView', 'view/plugins/PluginsView',
+        'view/plugins/ConfigView', 'view/plugins/FormsView',
         
         'text!template/topbar.html', 'text!template/locale.html'], 
 function(LoginView, PagesView, IndexView, 
 		StructuresView, StructureView, StructureTemplateView,
 		TemplatesView, TemplateView,
-		PageView,
+		PageView, ProfileView, 
+		PluginsView, PluginsConfigView, PluginsFormsView,
 		topbarTmpl, localeTmpl){
 	
 	console.log("app.js");
@@ -57,6 +59,10 @@ function(LoginView, PagesView, IndexView,
 		templatesView: new TemplatesView(),
 		templateView: new TemplateView(),
 		pageView: new PageView(),
+		profileView: new ProfileView(),
+		pluginsView: new PluginsView(),
+		pluginsConfigView: new PluginsConfigView(),
+		pluginsFormsView: new PluginsFormsView(),
 
 		routes: {
 			'index': 			'index',
@@ -71,6 +77,13 @@ function(LoginView, PagesView, IndexView,
 
 			'addStructureTemplate/:id'	: 'addStructureTemplate',
 			'structureTemplate/:id' 	: 'structureTemplate',
+
+			'profile':			'profile',
+			'logout':			'logout',
+			
+			'plugins':			'plugins',
+			'plugins/config':	'pluginsConfig',
+			'plugins/forms':	'pluginsForms',
 			
 			'templates':		'templates',
 			'template':			'createTemplate',
@@ -145,6 +158,34 @@ function(LoginView, PagesView, IndexView,
 		editPage: function(id) {
 			this.pageView.editPage(id);
 			this.show(this.pageView);
+		},
+		
+		profile: function(id) {
+			this.show(this.profileView);
+		},
+
+		plugins: function() {
+			this.show(this.pluginsView);
+		},
+		
+		pluginsConfig: function() {
+			this.show(this.pluginsConfigView);
+		},
+
+		pluginsForms: function() {
+			this.show(this.pluginsFormsView);
+		},
+
+		logout: function() {
+	        Vosao.jsonrpc.loginFrontService.logout(function (r, e) {
+	            if (Vosao.serviceFailed(e)) return;
+	            if (r.result == 'success') {
+	                location.href = '/';
+	            }
+	            else {
+	                Vosao.showServiceMessages(r);
+	            }
+	        });
 		},
 		
 		// Event handlers

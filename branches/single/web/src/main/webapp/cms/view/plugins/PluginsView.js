@@ -1,4 +1,4 @@
-// file View.js
+// file PluginsView.js
 /*
  Vosao CMS. Simple CMS for Google App Engine.
  
@@ -21,16 +21,16 @@
  email: vosao.dev@gmail.com
 */
 
-define([], function() {
+define(['text!template/plugins/index.html'], function(tmpl) {
 	
-	console.log('Loading View.js');
+	console.log('Loading PluginsView.js');
 	
 	return Backbone.View.extend({
 		
 		el: $('#content'),
 		
 		render: function() {
-			this.el.html(...);
+			this.el.html(_.template(tmpl, {messages:messages}));
 		},
 		
 		remove: function() {

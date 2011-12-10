@@ -41,6 +41,8 @@ function(LoginView, PagesView, IndexView,
 			this.bind("login", this.login, this);
 			this.currentView = this.loginView.render();
 			$('#loading').html(messages('loading'));
+			$('.splash').hide();
+			$('#topbar, #wrapper').fadeIn();
 		},
 
 		// Views

@@ -196,6 +196,9 @@ define(['text!template/templates.html', 'jquery.form'], function(tmpl) {
 		},
 		
 		remove: function() {
+			$('#import-dialog, #export-dialog, #structures-dialog')
+					.dialog('destroy').remove();
+			
 			this.el.html('');
 		}
 		

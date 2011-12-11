@@ -1,4 +1,4 @@
-#*
+<%/*
  Vosao CMS. Simple CMS for Google App Engine.
  
  Copyright (C) 2009-2010 Vosao development team.
@@ -18,20 +18,11 @@
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
  email: vosao.dev@gmail.com
-*#
-
-#set ($title = $messages.get("plugins.seo_urls"))
-
-#define ( $head1 )
-
-<link rel="stylesheet" href="/static/css/form.css" type="text/css" />
-<script src="/static/js/cms/plugins/seo-urls.js" type="text/javascript"></script>
-
-#end    
+*/%>
 
 <div id="tabs">
 <ul>
-    <li><a href="#tab-1">$messages.get("plugins.seo_urls")</a></li>
+    <li><a href="#tab-1"><%= messages("plugins.seo_urls") %></a></li>
 </ul>
 
 <div id="tab-1">
@@ -39,25 +30,25 @@
 <div id="urls"><img src="/static/images/ajax-loader.gif" /></div>
 
 <div class="buttons">
-    <input id="addButton" type="button" value="$messages.get("add")" />
-    <input id="removeButton" type="button" value="$messages.get("remove")" />
+    <input id="addButton" type="button" value="<%= messages("add") %>" />
+    <input id="removeButton" type="button" value="<%= messages("remove") %>" />
 </div>
 
-<div id="url-dialog" style="display:none" title="$messages.get("seo_urls.details")">
+<div id="url-dialog" style="display:none" title="<%= messages("seo_urls.details") %>">
   <form id="seoForm">
     <div id="url-messages" class="messages"> </div>
     <div class="form-row">
-        <label>$messages.get("seo_urls.from_link")</label>
+        <label><%= messages("seo_urls.from_link") %></label>
         <input id="fromLink" type="text" />
     </div>
     <div class="form-row">
-        <label>$messages.get("seo_urls.to_link")</label>
+        <label><%= messages("seo_urls.to_link") %></label>
         <input id="toLink" type="text" />
     </div>
     <div class="buttons-dlg">
-        <input id="saveAndAddButton" type="button" value="$messages.get("save_add")" />
-        <input id="saveDlgButton" type="submit" value="$messages.get("save")" />
-        <input id="cancelDlgButton" type="button" value="$messages.get("cancel")" />
+        <input id="saveAndAddButton" type="button" value="<%= messages("save_add") %>" />
+        <input id="saveDlgButton" type="submit" value="<%= messages("save") %>" />
+        <input id="cancelDlgButton" type="button" value="<%= messages("cancel") %>" />
     </div>
   </form>
 </div>
@@ -65,4 +56,3 @@
 </div>
 
 </div>
-

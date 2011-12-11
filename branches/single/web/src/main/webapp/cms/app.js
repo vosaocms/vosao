@@ -25,14 +25,16 @@ define(['view/LoginView', 'view/PagesView', 'view/IndexView',
         'view/StructuresView', 'view/StructureView', 'view/StructureTemplateView',
         'view/TemplatesView', 'view/TemplateView',
         'view/page/PageView', 'view/ProfileView', 'view/plugins/PluginsView',
-        'view/plugins/ConfigView', 'view/plugins/FormsView',
+        'view/plugins/ConfigView', 'view/plugins/FormsView', 'view/plugins/FormView',
+        'view/plugins/SeoUrlsView',
         
         'text!template/topbar.html', 'text!template/locale.html'], 
 function(LoginView, PagesView, IndexView, 
 		StructuresView, StructureView, StructureTemplateView,
 		TemplatesView, TemplateView,
 		PageView, ProfileView, 
-		PluginsView, PluginsConfigView, PluginsFormsView,
+		PluginsView, PluginsConfigView, PluginsFormsView, PluginsFormView,
+		SeoUrlsView,
 		topbarTmpl, localeTmpl){
 	
 	console.log("app.js");
@@ -63,6 +65,8 @@ function(LoginView, PagesView, IndexView,
 		pluginsView: new PluginsView(),
 		pluginsConfigView: new PluginsConfigView(),
 		pluginsFormsView: new PluginsFormsView(),
+		pluginsFormView: new PluginsFormView(),
+		pluginsSeoUrlsView: new SeoUrlsView(),
 
 		routes: {
 			'index': 			'index',
@@ -84,6 +88,9 @@ function(LoginView, PagesView, IndexView,
 			'plugins':			'plugins',
 			'plugins/config':	'pluginsConfig',
 			'plugins/forms':	'pluginsForms',
+			'plugins/form':		'pluginsFormNew',
+			'plugins/form/:id':	'pluginsFormEdit',
+			'plugins/seo-urls':	'pluginsSeoUrls',
 			
 			'templates':		'templates',
 			'template':			'createTemplate',
@@ -176,6 +183,20 @@ function(LoginView, PagesView, IndexView,
 			this.show(this.pluginsFormsView);
 		},
 
+		pluginsFormNew: function() {
+			this.pluginsFormView.setId('');
+			this.show(this.pluginsFormView);
+		},
+		
+		pluginsFormEdit: function(id) {
+			this.pluginsFormView.setId(id);
+			this.show(this.pluginsFormView);
+		},
+
+		pluginsSeoUrls: function() {
+			this.show(this.pluginsSeoUrlsView);
+		},
+		
 		logout: function() {
 	        Vosao.jsonrpc.loginFrontService.logout(function (r, e) {
 	            if (Vosao.serviceFailed(e)) return;
@@ -193,6 +214,7 @@ function(LoginView, PagesView, IndexView,
 		login: function() {
 			Vosao.jsonrpcInitialized = false;
 			Vosao.createJSONRpc();
+		    Vosao.initJSONRpcSystem(Vosao.initBackServices);
 			Vosao.initJSONRpc(function() {
 				Vosao.jsonrpc.userService.getLoggedIn(function(user) {
 					Vosao.app.user = user;

@@ -1,0 +1,156 @@
+<%/*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2011 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*/%>
+
+<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+
+<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+    <li class="ui-corner-top ui-state-default">
+        <a href="#config"><%= messages("config.title") %></a>
+    </li>
+    <li class="ui-corner-top ui-state-default">
+        <a href="#config/comments"><%= messages("comments") %></a>
+    </li>
+    <li class="ui-corner-top ui-state-default">
+        <a href="#config/languages"><%= messages("languages") %></a>
+    </li>
+    <li class="ui-corner-top ui-state-default">
+        <a href="#config/messages"><%= messages("message_bundle") %></a>
+    </li>
+    <li class="ui-corner-top ui-state-default">
+        <a href="#config/users"><%= messages("users") %></a>
+    </li>
+    <li class="ui-corner-top ui-state-default">
+        <a href="#config/groups"><%= messages("groups") %></a>
+    </li>
+    <li class="ui-corner-top ui-state-default">
+        <a href="#config/tags"><%= messages("tags") %></a>
+    </li>
+    <li class="ui-corner-top ui-state-default">
+        <a href="#config/attributes"><%= messages("attributes") %></a>
+    </li>
+</ul>
+
+<div id="tab-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom"></div>
+
+</div>
+
+<div id="import-dialog" title="<%= messages("config.import_site") %>" style="display:none">
+<form id="upload" action="/cms/upload" method="post" enctype="multipart/form-data">
+    <%= messages("file_upload") %>:
+    <input type="hidden" name="fileType" value="import" />
+    <input type="file" name="uploadFile" />
+    <div class="buttons-dlg">
+        <input type="submit" value="<%= messages("send") %>" />
+        <input id="importCancelButton" type="button" value="<%= messages("cancel") %>" />
+    </div>    
+</form>
+</div>
+
+<div id="afterUpload-dialog" style="display:none" title="<%= messages("status_window") %>">
+  <form id="okForm">
+    <p class="message"></p>
+    <div class="buttons-dlg">
+        <input id="okButton" type="submit" value="OK" />
+    </div>
+  </form>
+</div>
+
+<div id="export-dialog" style="display:none" title="<%= messages("export_window") %>">
+  <form id="exportForm">
+    <div class="form-row">
+    <input type="radio" name="exportType" value="full" />
+        <%= messages("config.full_export") %> <br/>
+    <input type="radio" name="exportType" value="site" checked="checked"/>
+        <%= messages("config.export_site") %> <br/>
+    <input type="radio" name="exportType" value="resources"/>
+        <%= messages("resources") %> <br/>
+    </div>
+    <div id="exportInfo" class="form-row"></div>    
+    <div id="timer" class="form-row"></div>
+    <div class="buttons-dlg">
+        <input id="exportDialogButton" type="submit" value="<%= messages("export") %>" />
+        <input id="exportCancelButton" type="button" value="<%= messages("cancel") %>" />
+    </div>
+  </form>
+</div>
+
+<div id="stat-dialog" style="display:none" title="<%= messages("stat") %>">
+    <div class="form-row">
+    	<label><%= messages("pages") %>:</label>
+    	<span id="statPages"></span>
+    </div>
+    <div class="form-row">
+    	<label><%= messages("stat.page_permissions") %>:</label>
+    	<span id="statPagePermissions"></span>
+    </div>
+    <div class="form-row">
+    	<label><%= messages("structures") %>:</label>
+    	<span id="statStructures"></span>
+    </div>
+    <div class="form-row">
+    	<label><%= messages("stat.structure_templates") %>:</label>
+    	<span id="statStructureTemplates"></span>
+    </div>
+    <div class="form-row">
+    	<label><%= messages("templates") %>:</label>
+    	<span id="statTemplates"></span>
+    </div>
+    <div class="form-row">
+    	<label><%= messages("folders") %>:</label>
+    	<span id="statFolders"></span>
+    </div>
+    <div class="form-row">
+    	<label><%= messages("stat.folder_permissions") %>:</label>
+    	<span id="statFolderPermissions"></span>
+    </div>
+    <div class="form-row">
+    	<label><%= messages("files") %>:</label>
+    	<span id="statFiles"></span>
+    </div>
+    <div class="form-row">
+    	<label><%= messages("languages") %>:</label>
+    	<span id="statLanguages"></span>
+    </div>
+    <div class="form-row">
+    	<label><%= messages("messages") %>:</label>
+    	<span id="statMessages"></span>
+    </div>
+    <div class="form-row">
+    	<label><%= messages("users") %>:</label>
+    	<span id="statUsers"></span>
+    </div>
+    <div class="form-row">
+    	<label><%= messages("groups") %>:</label>
+    	<span id="statGroups"></span>
+    </div>
+    <div class="form-row">
+    	<label><%= messages("tags") %>:</label>
+    	<span id="statTags"></span>
+    </div>
+    <div class="form-row">
+    	<label><b><%= messages("stat.total") %>:</b></label>
+    	<span id="statTotal" style="font-weight:bold;"></span>
+    </div>
+    <div class="buttons-dlg">
+        <input id="statOKButton" type="button" value="OK" />
+    </div>
+</div>

@@ -1,0 +1,52 @@
+<%/*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2011 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*/%>
+
+<div id="groups"> </div>
+<div class="buttons">
+    <input id="addGroupButton" type="button" value="<%= messages("add") %>" />
+    <input id="removeGroupButton" type="button" value="<%= messages("remove") %>" />
+</div>
+
+<div id="group-dialog" style="display:none" title="<%= messages("config.group_details") %>">
+  <form id="groupForm">
+    <div class="messages"> </div>
+    <div class="form-row">
+        <label><%= messages("config.group_name") %></label>
+        <input id="groupName" type="text"/>
+    </div>
+    <div class="buttons-dlg">
+        <input id="groupSaveDlgButton" type="submit" value="<%= messages("save") %>" />
+        <input id="groupCancelDlgButton" type="button" value="<%= messages("cancel") %>" />
+    </div>
+  </form>  
+</div>
+
+<div id="user-group-dialog" style="display:none" title="<%= messages("config.group_users") %>">
+  <form id="userGroupForm">
+    <div id="groupUsers"> </div>
+    <div class="buttons-dlg">
+        <input id="userGroupSaveDlgButton" type="submit" value="<%= messages("save") %>" />
+        <input id="userGroupCancelDlgButton" type="button" value="<%= messages("cancel") %>" />
+    </div>
+  </form>  
+</div>
+

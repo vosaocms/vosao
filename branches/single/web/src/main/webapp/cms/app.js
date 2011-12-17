@@ -24,17 +24,18 @@
 define(['view/LoginView', 'view/PagesView', 'view/IndexView',
         'view/StructuresView', 'view/StructureView', 'view/StructureTemplateView',
         'view/TemplatesView', 'view/TemplateView',
-        'view/page/PageView', 'view/ProfileView', 'view/plugins/PluginsView',
-        'view/plugins/ConfigView', 'view/plugins/FormsView', 'view/plugins/FormView',
-        'view/plugins/SeoUrlsView',
+        'view/page/PageView', 'view/ProfileView', 
+        'view/plugins/PluginsView', 'view/plugins/ConfigView', 'view/plugins/FormsView', 
+        'view/plugins/FormView', 'view/plugins/SeoUrlsView',
+        'view/config/ConfigView',
         
         'text!template/topbar.html', 'text!template/locale.html'], 
 function(LoginView, PagesView, IndexView, 
 		StructuresView, StructureView, StructureTemplateView,
 		TemplatesView, TemplateView,
 		PageView, ProfileView, 
-		PluginsView, PluginsConfigView, PluginsFormsView, PluginsFormView,
-		SeoUrlsView,
+		PluginsView, PluginsConfigView, PluginsFormsView, PluginsFormView, SeoUrlsView,
+		ConfigView,
 		topbarTmpl, localeTmpl){
 	
 	console.log("app.js");
@@ -67,6 +68,7 @@ function(LoginView, PagesView, IndexView,
 		pluginsFormsView: new PluginsFormsView(),
 		pluginsFormView: new PluginsFormView(),
 		pluginsSeoUrlsView: new SeoUrlsView(),
+		configView: new ConfigView(),
 
 		routes: {
 			'index': 			'index',
@@ -94,8 +96,10 @@ function(LoginView, PagesView, IndexView,
 			
 			'templates':		'templates',
 			'template':			'createTemplate',
-			'template/:id':		'editTemplate'
+			'template/:id':		'editTemplate',
 			
+			'config':			'config'
+				
 		},
 		
 		// Routes handlers
@@ -197,6 +201,10 @@ function(LoginView, PagesView, IndexView,
 			this.show(this.pluginsSeoUrlsView);
 		},
 		
+		config: function() {
+			this.show(this.configView);
+		},
+
 		logout: function() {
 	        Vosao.jsonrpc.loginFrontService.logout(function (r, e) {
 	            if (Vosao.serviceFailed(e)) return;

@@ -63,7 +63,7 @@
         <a href="#page/security/<%= id %>"><%= messages("security") %></a>
     </li>
     <li class="securityTab ui-corner-top ui-state-default">
-        <a id="resources"><%= messages("resources") %></a>
+        <a href="#page/resources/<%= id %>"><%= messages("resources") %></a>
     </li>
     <li class="securityTab ui-corner-top ui-state-default">
         <a href="#page/attributes/<%= id %>"><%= messages("attributes") %></a>
@@ -87,19 +87,3 @@
     </div>
   </form>
 </div>
-
-<script type="text/javascript">
-
-$(function() {
-	$('#resources').click(onResources);
-});
-
-function onResources() {
-	Vosao.jsonrpc.folderService.createFolderByPath(function(r) {
-		jQuery.cookie('folderReturnPath', '#page/content/<%= id %>', 
-		    {path:'/', expires: 10});
-		location.href = '#folder/1/' + r.id;
-	}, '/page' + page.friendlyURL);
-}
-
-</script>

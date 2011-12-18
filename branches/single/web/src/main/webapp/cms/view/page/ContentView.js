@@ -392,7 +392,7 @@ function(contentHtml, ctx, version, breadcrumbs) {
 		    	contentEditor = CKEDITOR.replace('pcontent', {
 		    		height: 350, width: 'auto',
 		    		filebrowserUploadUrl : '/cms/upload',
-		    		filebrowserBrowseUrl : '/cms/fileBrowser.vm',
+		    		filebrowserBrowseUrl : 'fileBrowser.html',
 		    		toolbar : 'Vosao'
 		    	});
 		    }
@@ -412,15 +412,20 @@ function(contentHtml, ctx, version, breadcrumbs) {
 				}
 				if (field.type == 'RESOURCE') {
 					h += '<input id="field' + field.name + '" size="60"/> '
-						+ '<a href="#" onclick="browseResources(\'field' + field.name 
-						+ '\')">' + messages('browse') + '</a>'
-						+ ' <a href="#" onclick="uploadResources(\'field' + field.name
-						+ '\')">' 
+						+ '<a class="browse" data-name="field' + field.name + '">' 
+						+ messages('browse') + '</a>'
+						+ ' <a class="upload" data-name="field' + field.name + '">' 
 						+ messages('upload') + '</a>';
 				}
 				h += '</div>';
 			});
 			$('#page-content').html(h);
+			$('#page-content .browse').click(function() {
+				browseResources($(this).attr('data-name'));
+			});
+			$('#page-content .upload').click(function() {
+				uploadResources($(this).attr('data-name'));
+			});
 			$('#page-content').css('float','left');
 		    $(".datepicker").datepicker({dateFormat:'dd.mm.yy'});
 			contentEditors = {};
@@ -431,7 +436,7 @@ function(contentHtml, ctx, version, breadcrumbs) {
 						var ckeditor = CKEDITOR.replace('field' + field.name, {
 					        height: 150, width: 'auto',
 					        filebrowserUploadUrl : '/cms/upload',
-					        filebrowserBrowseUrl : '/cms/fileBrowser.vm',
+					        filebrowserBrowseUrl : 'fileBrowser.html',
 					        toolbar : 'Vosao'
 					    });
 						contentEditors[field.name] = ckeditor;
@@ -446,7 +451,7 @@ function(contentHtml, ctx, version, breadcrumbs) {
 		browseId = id;
 		$.cookie('fileBrowserPath', '/page' + ctx.page.friendlyURL, 
 				{path:'/', expires: 10});
-		window.open('/cms/fileBrowser.vm?mode=page');
+		window.open('fileBrowser.html?mode=page');
 	}
 
 	function setResource(path) {
@@ -571,7 +576,12 @@ function(contentHtml, ctx, version, breadcrumbs) {
 		remove: function() {
 			this.el.html('');
 		    $("#restore-dialog, #file-upload").dialog('destroy').remove();
+		},
+		
+		setResource: function(path) {
+			setResource(path);
 		}
+
 		
 	});
 	

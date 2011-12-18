@@ -27,7 +27,8 @@ define(['view/LoginView', 'view/PagesView', 'view/IndexView',
         'view/page/PageView', 'view/ProfileView', 
         'view/plugins/PluginsView', 'view/plugins/ConfigView', 'view/plugins/FormsView', 
         'view/plugins/FormView', 'view/plugins/SeoUrlsView',
-        'view/config/ConfigView',
+        'view/config/ConfigView', 'view/FoldersView', 'view/FolderView',
+        'view/FileView',
         
         'text!template/topbar.html', 'text!template/locale.html'], 
 function(LoginView, PagesView, IndexView, 
@@ -35,7 +36,7 @@ function(LoginView, PagesView, IndexView,
 		TemplatesView, TemplateView,
 		PageView, ProfileView, 
 		PluginsView, PluginsConfigView, PluginsFormsView, PluginsFormView, SeoUrlsView,
-		ConfigView,
+		ConfigView, FoldersView, FolderView, FileView, 
 		topbarTmpl, localeTmpl){
 	
 	console.log("app.js");
@@ -44,7 +45,12 @@ function(LoginView, PagesView, IndexView,
 
 		initialize:function() {
 			this.bind("login", this.login, this);
-			this.currentView = this.loginView.render();
+			if (Vosao.loggedIn) {
+				this.login();
+			}
+			else {
+				this.currentView = this.loginView.render();
+			}
 			$('#loading').html(messages('loading'));
 			$('.splash').hide();
 			$('#topbar, #wrapper').fadeIn();
@@ -53,6 +59,7 @@ function(LoginView, PagesView, IndexView,
 		// Views
 		
 		currentView: null,
+		
 		indexView: new IndexView(),
 		loginView: new LoginView(),
 		pagesView: new PagesView(),
@@ -69,6 +76,9 @@ function(LoginView, PagesView, IndexView,
 		pluginsFormView: new PluginsFormView(),
 		pluginsSeoUrlsView: new SeoUrlsView(),
 		configView: new ConfigView(),
+		foldersView: new FoldersView(),
+		folderView: new FolderView(),
+		fileView: new FileView(),
 
 		routes: {
 			'index': 			'index',
@@ -98,7 +108,12 @@ function(LoginView, PagesView, IndexView,
 			'template':			'createTemplate',
 			'template/:id':		'editTemplate',
 			
-			'config':			'config'
+			'config':			'config',
+			'folders':			'folders',
+			'folder/:id':		'editFolder',
+			'addFolder/:id':	'addFolder',
+			'file/:id':			'editFile',
+			'addFile/:id':		'addFile'
 				
 		},
 		
@@ -203,6 +218,34 @@ function(LoginView, PagesView, IndexView,
 		
 		config: function() {
 			this.show(this.configView);
+		},
+
+		folders: function() {
+			this.show(this.foldersView);
+		},
+		
+		editFolder: function(id) {
+			this.folderView.setFolderId(id);
+			this.folderView.setFolderParentId('');
+			this.show(this.folderView);
+		},
+		
+		addFolder: function(id) {
+			this.folderView.setFolderId('');
+			this.folderView.setFolderParentId(id);
+			this.show(this.folderView);
+		},
+
+		editFile: function(id) {
+			this.fileView.setFileId(id);
+			this.fileView.setFolderId('');
+			this.show(this.fileView);
+		},
+		
+		addFile: function(id) {
+			this.fileView.setFileId('');
+			this.fileView.setFolderId(id);
+			this.show(this.fileView);
 		},
 
 		logout: function() {

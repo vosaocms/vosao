@@ -69,6 +69,10 @@ function(pageHtml, PageRouter, ctx) {
 		editPage: function(id) {
 			ctx.pageId = id;
 			this.viewCmd = 'editPage';
+		},
+		
+		setResource: function(path) {
+			this.router.contentView.setResource(path);
 		}
 		
 	});

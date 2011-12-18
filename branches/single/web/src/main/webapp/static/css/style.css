@@ -159,6 +159,17 @@ input[type=text], input[type=password], select {
     background-color: #eef;
 }
 
+#fileBrowser {
+	display: none;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+}
+
+
 /* forms */
 .form-row label {
     width: 200px;

@@ -33,7 +33,7 @@ require([
 		Vosao.jsonrpc.loginFrontService.getSystemProperties(function(p) {
 			Vosao.version = p.map.version;
 			Vosao.fullVersion = p.map.fullVersion;
-		
+			Vosao.loggedIn = p.map.loggedIn === 'true';
 			Vosao.app = new App();
 		});
 	});

@@ -121,6 +121,7 @@ public class LoginServiceImpl extends AbstractServiceImpl
 		Map<String, String> result = new HashMap<String, String>();
 		result.put("version", SetupBean.VERSION);
 		result.put("fullVersion", SetupBean.FULLVERSION);
+		result.put("loggedIn", new Boolean(VosaoContext.getInstance().getUser() != null).toString());
 		return result;
 	}
 

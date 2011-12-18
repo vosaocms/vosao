@@ -66,7 +66,8 @@ function(ctx, ContentView, IndexView, ChildrenView, CommentsView, SecurityView,
             'page/children/:id':	'children',
             'page/comments/:id':	'comments',
             'page/security/:id':	'security',
-            'page/attributes/:id':	'attributes'
+            'page/attributes/:id':	'attributes',
+            'page/resources/:id':	'resources'
         },
 
         showCmd: function(cmd) {
@@ -102,6 +103,21 @@ function(ctx, ContentView, IndexView, ChildrenView, CommentsView, SecurityView,
         attributes: function(id) {
         	ctx.pageId = id;
             this.show(this.attributesView);
+        },
+        
+        resources: function(id) {
+    		Vosao.jsonrpc.pageService.getPageRequest(function(r) {
+    			ctx.pageRequest = r;
+    			ctx.pageId = id;
+    			ctx.page = ctx.pageRequest.page;
+    			
+            	Vosao.jsonrpc.folderService.createFolderByPath(function(r) {
+            		jQuery.cookie('folderReturnPath', '#page/content/' + ctx.pageId, 
+            		    {path:'/', expires: 10});
+            		location.href = '#folder/' + r.id;
+            	}, '/page' + ctx.page.friendlyURL);
+
+    		}, id, '');
         }
     });
     

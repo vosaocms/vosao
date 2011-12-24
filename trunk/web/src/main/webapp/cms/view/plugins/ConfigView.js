@@ -69,8 +69,8 @@ function(tmpl) {
 	            + '<td>' + Vosao.message(plugin.description)  + '</td>'
 	            + '<td>' + plugin.website + '</td>'
 	            + '<td>' + state + '</td>'
-	            + '<td><a title="Uninstall" class="removeLink" data-index="' + i + ')">\
-	            <img src="/static/images/02_x.png"/></a></td></tr>';
+	            + '<td><a title="Uninstall" class="removeLink" data-index="' + i + '">'
+	            + '<img src="/static/images/02_x.png"/></a></td></tr>';
 	    });
 	    $('#plugins').html(html + '</table>');
 	    $('#plugins tr:even').addClass('even');
@@ -104,7 +104,7 @@ function(tmpl) {
 
 	function onAfterUploadOk() {
 	    $("#afterUpload-dialog").dialog('close');
-	    loadData();
+	    location.reload();
 	}
 
 	function onRemove(i) {

@@ -325,7 +325,8 @@ function(tmpl) {
 		yo: 'Yoruba',
 
 		za: 'Zhuang',
-		zh: 'Chinese',
+		'zh-CN': 'Simplified Chinese',
+		'zh-TW': 'Traditional Chinese',
 		zu: 'Zulu',
 	};
 

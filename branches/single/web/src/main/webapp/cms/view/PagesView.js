@@ -241,10 +241,12 @@ define(['text!template/pages.html',
 			Vosao.addCSSFiles(this.css);
 			this.el.html(_.template(tmpl, {messages: messages}));
 			
-		    $("#page-dialog").dialog({ width: 400, autoOpen: false });
+			$("#page-dialog").dialog({ width: 400, autoOpen: false });
 			Vosao.initJSONRpc(loadData);
-			$('#cancelDlgButton').click(this.onPageCancel);
-		    $('#pageForm').submit(function() {this.onSave(); return false;});
+			$('#cancelDlgButton').click(function() {
+				$('#page-dialog').dialog('close');				
+			});
+		    $('#pageForm').submit(function() {onSave(); return false;});
 		    $('#title').change(this.onTitleChange);
 		    renderShowTitle();
 		    renderInvertOrder();
@@ -277,10 +279,6 @@ define(['text!template/pages.html',
 			$('#url').removeAttr('disabled');
 			$('#title').focus();
 			page = null;
-		},
-
-		onPageCancel: function() {
-			$('#page-dialog').dialog('close');
 		},
 
 		onTitleChange: function() {

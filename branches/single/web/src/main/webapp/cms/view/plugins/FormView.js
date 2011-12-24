@@ -21,7 +21,7 @@
  email: vosao.dev@gmail.com
 */
 
-define(['text!template/plugins/form.html'], function(tmpl) {
+define(['text!template/plugins/form.html'], function(html) {
 	
 	console.log('Loading FormView.js');
 	
@@ -385,7 +385,7 @@ define(['text!template/plugins/form.html'], function(tmpl) {
 			enableSave : String($('#enableSave:checked').size() > 0)
 		});
 		Vosao.jsonrpc.formService.saveForm(function (r) {
-			if (r.result = 'success') {
+			if (r.result == 'success') {
 				if (!editMode) {
 					formId = r.message;
 					editMode = true;
@@ -576,9 +576,11 @@ define(['text!template/plugins/form.html'], function(tmpl) {
 		
 		el: $('#content'),
 		
+		tmpl: _.template(html),
+		
 		render: function() {
 			Vosao.addCSSFile(this.css);
-			this.el.html(_.template(tmpl, {messages:messages}));
+			this.el.html(this.tmpl({messages:messages}));
 			postRender();
 		},
 		

@@ -141,7 +141,7 @@ function(tmpl) {
 	}
 
 	function onAfterUploadOk() {
-	    window.location.reload();
+	    loadData();
 	}
 
 	function loadConfig() {

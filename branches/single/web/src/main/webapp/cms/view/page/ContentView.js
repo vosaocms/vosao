@@ -496,7 +496,8 @@ function(contentHtml, ctx, version, breadcrumbs) {
 		Vosao.jsonrpc.pageService.restore(function(r) {
 			Vosao.showServiceMessages(r);
 			if (r.result == 'success') {
-				location.reload();
+				$("#restore-dialog").dialog('close');
+				loadData();
 			}
 		}, ctx.pageId, pageType, ctx.currentLanguage);
 	}

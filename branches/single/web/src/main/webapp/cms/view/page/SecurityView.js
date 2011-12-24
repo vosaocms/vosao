@@ -138,7 +138,7 @@ function(securityHtml, ctx, version, breadcrumbs) {
 				checkbox = '<input type="checkbox" value="' + value.id + '">';
 				editLink = '<a data-id="' + value.id + '"> ' + value.group.name + '</a>';
 			}
-			var l = value.allLanguages ? messages('all_languages') : value.languages;
+			var l = value.allLanguages ? messages('page.all_languages') : value.languages;
 			h += '<tr><td>' + checkbox + '</td><td>' + editLink + '</td><td>'
 				+ getPermissionName(value.permission) + '</td><td>' + l 
 				+ '</td></tr>';

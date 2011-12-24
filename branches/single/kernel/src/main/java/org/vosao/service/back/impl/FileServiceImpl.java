@@ -154,7 +154,7 @@ public class FileServiceImpl extends AbstractServiceImpl
 			getBusiness().getSystemService().getFileCache().remove(cacheUrl);
 			getDao().getFileDao().save(file);
 			return ServiceResponse.createSuccessResponse(
-					Messages.get("file.success_update"));
+					Messages.get("file.success_update"), file.getId());
 		}
 		else {
 			return ServiceResponse.createErrorResponse(

@@ -39,7 +39,7 @@ function(html) {
 		editMode = fileId != '';
 		$("#tabs").tabs();
 		$("#tabs").bind('tabsselect', tabSelected);
-		Vosao.initJSONRpc(loadFile);
+		Vosao.initJSONRpc(loadData);
 		$('#fileForm').submit(function() {onUpdate(); return false});
 		$('#cancelButton').click(onCancel);
 		$('#autosave').change(onAutosave);
@@ -91,7 +91,7 @@ function(html) {
 		}
 	}
 
-	function loadFile() {
+	function loadData() {
 		Vosao.jsonrpc.fileService.getFile(function(r) {
 			file = r;
 			if (editMode) {
@@ -166,6 +166,9 @@ function(html) {
 		});
 		Vosao.jsonrpc.fileService.saveFile(function(r) {
 			Vosao.showServiceMessages(r);
+			if (r.result == 'success') {
+				location.href = '#file/' + r.data;
+			}
 		}, vo);
 	}
 

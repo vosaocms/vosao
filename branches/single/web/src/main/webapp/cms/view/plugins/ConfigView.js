@@ -31,6 +31,7 @@ function(tmpl) {
 	function postRender() {
 	    $("#tabs").tabs();
 	    $("#import-dialog").dialog({ width: 400, autoOpen: false });
+	    $("#afterUpload-dialog").dialog({autoOpen: false});
 	    Vosao.initJSONRpc(loadData);
 	    $('#upload').ajaxForm(afterUpload);
 	    $('#installButton').click(onInstall);
@@ -98,11 +99,12 @@ function(tmpl) {
 	    }   
 	    $("#import-dialog").dialog("close");
 	    $("#afterUpload-dialog .message").text(msg);
-	    $("#afterUpload-dialog").dialog();
+	    $("#afterUpload-dialog").dialog('open');
 	}
 
 	function onAfterUploadOk() {
-	    window.location.reload();
+	    $("#afterUpload-dialog").dialog('close');
+	    loadData();
 	}
 
 	function onRemove(i) {
@@ -127,7 +129,7 @@ function(tmpl) {
 		},
 		
 		remove: function() {
-			$('#import-dialog').dialog('destroy').remove();
+			$('#import-dialog, #afterUpload-dialog').dialog('destroy').remove();
 			this.el.html('');
 		}
 		

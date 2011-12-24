@@ -290,6 +290,9 @@ a.button span.ui-icon {
 .ui-widget {
 	font-size: 1em;
 }
+.ui-dialog {
+	box-shadow: 0 0 10px #666;
+}
 
 .tag {
     padding: 4px 8px;

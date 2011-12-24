@@ -47,7 +47,7 @@ define(['text!template/templates.html', 'jquery.form'], function(tmpl) {
 	    }   
 	    $("#import-dialog").dialog("close");
 	    $("#afterUpload-dialog .message").text(msg);
-	    $("#afterUpload-dialog").dialog();
+	    $("#afterUpload-dialog").dialog('open');
 	}
 
 	function onImport() {
@@ -59,6 +59,7 @@ define(['text!template/templates.html', 'jquery.form'], function(tmpl) {
 	}
 
 	function onAfterUploadOk() {
+	    $("#afterUpload-dialog").dialog('close');
 	    initData();
 	}
 
@@ -116,6 +117,7 @@ define(['text!template/templates.html', 'jquery.form'], function(tmpl) {
 	}
 
 	function onStartExport() {
+		$("#structures-dialog").dialog("close");
 		clockSeconds = 0;
 		showClock();
 		var ids = [];
@@ -179,6 +181,7 @@ define(['text!template/templates.html', 'jquery.form'], function(tmpl) {
 		    $("#import-dialog").dialog({ width: 400, autoOpen: false });
 		    $("#export-dialog").dialog({ width: 400, autoOpen: false });
 		    $("#structures-dialog").dialog({ width: 400, autoOpen: false });
+		    $("#afterUpload-dialog").dialog({autoOpen: false});
 		    $('#upload').ajaxForm(afterUpload);
 		    initData();
 		    $("#tabs").tabs();
@@ -196,7 +199,7 @@ define(['text!template/templates.html', 'jquery.form'], function(tmpl) {
 		},
 		
 		remove: function() {
-			$('#import-dialog, #export-dialog, #structures-dialog')
+			$('#import-dialog, #export-dialog, #structures-dialog, #afterUpload-dialog')
 					.dialog('destroy').remove();
 			
 			this.el.html('');

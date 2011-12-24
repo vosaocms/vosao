@@ -35,8 +35,8 @@ function(tmpl) {
 	    initLanguagesList();
 	    $('#selectFromListRadio').click(function() { onShowLanguageSelect(true); });
 	    $('#notInListRadio').click(function() { onShowLanguageSelect(false); });
-	    $('#selectLanguage').change(onSelectLanguageChange);
 	    $('#languageForm').submit(function() {onLanguageSave(); return false});
+	    $('#selectLanguage').change(onSelectLanguageChange);
 	    $('#languageCancelButton').click(onLanguageCancel);
 	    $('#addLanguageButton').click(onAddLanguage);
 	    $('#removeLanguageButton').click(onRemoveLanguage);
@@ -53,13 +53,11 @@ function(tmpl) {
 
 	function onAddLanguage() {
 	    language = null;
-	    $('#languageCode').val('');
-	    $('#languageTitle').val('');
-	    $('#language-dialog .message').html('');
 		$('#language-dialog').dialog('open');
 	    $('#languageSelection').show();
 	    $('#listed-language').show();
 	    $('#not-listed-language').hide();
+		$('#language-dialog .messages').html('');
 	}
 
 	function onRemoveLanguage() {
@@ -155,11 +153,11 @@ function(tmpl) {
 	        language = r;
 	        $('#languageCode').val(r.code);
 	        $('#languageTitle').val(r.title);
-	        $('#language-dialog .message').html('');
 	        $('#language-dialog').dialog('open');
 	        $('#languageSelection').hide();
 	        $('#listed-language').hide();
 	        $('#not-listed-language').show();
+			$('#language-dialog .messages').html('');
 	    }, id);
 	}
 
@@ -338,6 +336,8 @@ function(tmpl) {
 			    + '</option>\n';
 		}
 		$('#selectLanguage').html(h);
+		$('#selectLanguage').val('ru');
+		onSelectLanguageChange();
 	}
 
 	function onShowLanguageSelect(show) {

@@ -41,7 +41,7 @@ public class PluginResourceDaoImpl extends
 		Query q = newQuery();
 		q.addFilter("url", FilterOperator.EQUAL, url);
 		q.addFilter("pluginName", FilterOperator.EQUAL, plugin);
-		return selectOne(q, "getByUrl", params(url));
+		return selectOne(q, "getByUrl", params(url, plugin));
 	}
 
 }

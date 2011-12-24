@@ -1,0 +1,61 @@
+<%/*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2010 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*/%>
+  
+<div id="permissions"> </div>
+<div class="buttons">
+    <input id="addPermissionButton" type="button" 
+        value="<%= messages("add_permission") %>" />
+    <input id="deletePermissionButton" type="button" 
+        value="<%= messages("delete_permission") %>" />
+</div>    
+
+<div id="permission-dialog" style="display:none" title="<%= messages("permission_details") %>">
+  <form id="permissionForm">
+    <div class="form-row">
+        <label><%= messages("group") %></label>
+        <select id="groupSelect"></select>
+        <span id="groupName"></span>        
+    </div>
+    <div id="permissionList" class="form-row">
+        <fieldset>
+            <legend><%= messages("permission") %></legend>
+            <input type="radio" name="permission" value="DENIED"/> <%= messages("denied") %> <br />
+            <input type="radio" name="permission" value="READ" /> <%= messages("read") %> <br />
+            <input type="radio" name="permission" value="WRITE" /> <%= messages("read_write") %> <br />
+            <input type="radio" name="permission" value="PUBLISH" /> <%= messages("read_write_publish") %> <br />
+            <input type="radio" name="permission" value="ADMIN" /> <%= messages("read_write_publish_grant") %> <br />
+        </fieldset>        
+    </div>
+    <div class="form-row">
+        <label><%= messages("page.all_languages") %></label>
+        <input id="allLanguages" type="checkbox" checked="checked" />
+    </div>    
+    <div id ="permLanguages" class="form-row" style="display:none"> </div>
+    <div class="buttons-dlg">
+        <input id="permissionSaveButton" type="submit" 
+            value="<%= messages("save") %>" />
+        <input id="permissionCancelButton" type="button" 
+            value="<%= messages("cancel") %>" />
+    </div>
+  </form>
+</div>
+

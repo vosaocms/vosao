@@ -72,8 +72,8 @@ public class AuthenticationFilter extends AbstractFilter implements Filter {
 					+ (httpRequest.getQueryString() == null ? "" : 
 						"?" + httpRequest.getQueryString());
 				session.setAttribute(ORIGINAL_VIEW_KEY, originalUrl);
-				httpResponse.sendRedirect(httpRequest.getContextPath()
-						+ LOGIN_VIEW);
+				//httpResponse.sendRedirect(httpRequest.getContextPath()
+				//		+ LOGIN_VIEW);
 				return;
 			}
 		}

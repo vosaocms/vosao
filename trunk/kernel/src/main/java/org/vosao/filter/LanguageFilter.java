@@ -71,7 +71,7 @@ public class LanguageFilter extends AbstractFilter implements Filter {
         chain.doFilter(request, response);
     }
     
-    private Locale getLocale(String language) {
+    public static Locale getLocale(String language) {
     	int undescore = language.indexOf("_");
     	if (undescore != -1) {
     		String[] codes = language.split("_");

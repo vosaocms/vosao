@@ -33,6 +33,7 @@ public class ServiceResponse {
 	private String result;
 	private String message;
 	private List<String> messages;
+	private Object data;
 	
 	public static ServiceResponse createErrorResponse(final String msg) {
 		return new ServiceResponse(ERROR_RESULT, msg);
@@ -47,6 +48,11 @@ public class ServiceResponse {
 
 	public static ServiceResponse createSuccessResponse(final String msg) {
 		return new ServiceResponse(SUCCESS_RESULT, msg);
+	}
+
+	public static ServiceResponse createSuccessResponse(final String msg, 
+			final Object data) {
+		return new ServiceResponse(SUCCESS_RESULT, msg, data);
 	}
 
 	public static ServiceResponse createSuccessResponse(final String msg, 
@@ -66,6 +72,13 @@ public class ServiceResponse {
 		this.message = message;
 	}
 	
+	public ServiceResponse(String result, String message, Object data) {
+		this();
+		this.result = result;
+		this.message = message;
+		this.data = data;
+	}
+
 	public String getResult() {
 		return result;
 	}
@@ -85,5 +98,13 @@ public class ServiceResponse {
 
 	public void setMessages(List<String> messages) {
 		this.messages = messages;
+	}
+
+	public Object getData() {
+		return data;
+	}
+
+	public void setData(Object data) {
+		this.data = data;
 	}
 }

@@ -1,0 +1,78 @@
+<%/*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2011 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*/%>
+
+<div id="memo">
+    <img src="/static/images/login-logo.jpg" />
+    <p><%= messages('login.sign_in') %></p>
+    <p><%= messages("login.visit") %></p>
+    <p><%= messages("login.bug") %></p>
+    <p><%= messages("login.forum") %></p>
+</div>
+
+<div id="login-form">
+<form id="login">
+
+<h4><%= messages("login.sign") %></h4>
+<h3><%= messages("login.sign_account") %></h3>
+
+<div class="form-row">
+    <label><%= messages("email") %></label>
+    <input type="text" id="loginEmail" value=""/>
+</div>
+<div class="form-row">
+    <label><%= messages("password") %></label>
+    <input type="password" id="loginPassword" value=""/>
+</div>
+<div id="login-messages"> </div>
+<div class="buttons-dlg">
+    <input type="submit" value="<%= messages("login") %>" />
+    <br/>
+    <br/>
+    <a id="forgot"><%= messages("forgot_password") %></a>
+</div>    
+
+</form>
+</div>
+
+<div class="clear"> </div>
+
+<div class="version">
+  <span>Vosao CMS <%= messages("version")%> <%= Vosao.fullVersion %></span>
+</div>
+
+
+<div class="messages"> </div>
+
+<div id="forgot-dialog" style="display:none" title="<%= messages("forgot_password") %>">
+  <form id="forgotForm">
+    <p style="margin-bottom: 20px;"><%= messages("login.forgot_dialog") %></p>
+    <div class="form-row">
+        <label style="width: 80px;"><%= messages("email") %></label>
+        <input type="text" id="email" />
+    </div>
+    <div class="buttons-dlg">
+        <input type="submit" value="OK" />
+        <input id="forgotCancelButton" type="button" value="<%= messages("cancel") %>" />
+    </div>
+  </form>
+</div>
+

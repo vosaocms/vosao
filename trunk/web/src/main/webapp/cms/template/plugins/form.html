@@ -1,0 +1,162 @@
+<%/*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2010 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*/%>
+
+<div id="tabs">
+<ul>
+    <li><a href="#tab-1"><%= messages("form") %></a></li>
+    <li class="fieldsTab"><a href="#tab-2"><%= messages("fields") %></a></li>
+    <li class="dataTab"><a href="#tab-3"><%= messages("saved_data") %></a></li>
+</ul>
+
+<div id="tab-1">
+<form id="form">
+<div class="form-row">
+    <label><%= messages("title") %></label>
+    <input id="title" type="text" />
+</div>
+<div class="form-row">
+    <label><%= messages("form.unique_name") %></label>
+    <input id="name" type="text" />
+</div>
+<div class="form-row">
+    <label><%= messages("form.email") %></label>
+    <input id="email" type="text" />
+</div>
+<div class="form-row">
+    <label><%= messages("letter_subject") %></label>
+    <input id="letterSubject" type="text" />
+</div>
+<div class="form-row">
+    <label><%= messages("form.send_title") %></label>
+    <input id="sendButtonTitle" type="text"/>
+</div>
+<div class="form-row">
+    <label><%= messages("form.reset_title") %></label>
+    <input id="resetButtonTitle" type="text"/>
+</div>
+<div class="form-row">
+    <label><%= messages("form.show_reset") %></label>
+    <input id="showResetButton" type="checkbox"/>
+</div>
+<div class="form-row">
+    <label><%= messages("enable_captcha") %></label>
+    <input id="enableCaptcha" type="checkbox"/>
+</div>
+<div class="form-row">
+    <label><%= messages("enable_save") %></label>
+    <input id="enableSave" type="checkbox"/>
+</div>
+
+<div class="buttons">
+    <input id="saveButton" type="submit" value="<%= messages("save") %>" />
+    <input id="cancelButton" type="button" value="<%= messages("cancel") %>" />
+</div>
+</form>
+</div>
+
+<div id="tab-2" class="fieldsTab">
+    <div id="fieldsTable"> </div>
+    <div class="buttons">
+        <input id="addFieldButton" type="button" value="<%= messages("add_field") %>" />
+        <input id="deleteFieldButton" type="button" value="<%= messages("delete_fields") %>" />
+    </div>    
+</div>
+
+<div id="tab-3" class="dataTab">
+    <div id="dataTable"></div>
+    <div class="buttons">
+        <input id="deleteDataButton" type="button" value="<%= messages("delete") %>" />
+    </div>    
+</div>
+
+</div>
+
+<div id="field-dialog" style="display:none" title="<%= messages("form.field_details") %>">
+<form id="fieldForm">
+    <div id="field-messages" class="messages"> </div>
+    <div class="form-row">
+        <label><%= messages("title") %></label>
+        <input type="text" name="field.title" />
+    </div>
+    <div class="form-row">
+        <label><%= messages("form.unique_name") %></label>
+        <input type="text" name="field.name" />
+    </div>
+    <div class="form-row">
+        <label><%= messages("form.field_type") %></label>
+        <select id="fieldType" name="field.fieldType">
+            <option value="TEXT">Text</option>
+            <option value="CHECKBOX">Checkbox</option>
+            <option value="RADIO">Radiobox</option>
+            <option value="PASSWORD">Password</option>
+            <option value="LISTBOX">Listbox</option>
+            <option value="FILE">File upload</option>
+        </select>
+    </div>
+    <div class="form-row" id="field-width">
+        <label><%= messages("form.width_chars") %></label>
+        <input type="text" name="field.width" />
+    </div>
+    <div class="form-row" id="field-height">
+        <label><%= messages("form.height_chars") %></label>
+        <input type="text" name="field.height" />
+    </div>
+    <div class="form-row">
+        <label><%= messages("mandatory") %></label>
+        <input type="checkbox" name="field.mandatory" />
+    </div>
+    <div class="form-row" id="field-values">
+        <label><%= messages("values") %></label>
+        <textarea name="field.values"></textarea>
+    </div>
+    <div class="form-row" id="field-defaultValue">
+        <label><%= messages("default_value") %></label>
+        <input type="text" name="field.defaultValue"/>
+    </div>
+    <div id="regexDiv">
+    <div class="form-row" id="field-defaultValue">
+        <label><%= messages("form.regex_code") %></label>
+        <input type="text" name="field.regex"/>
+    </div>
+    <div class="form-row" id="field-defaultValue">
+        <label><%= messages("form.regex_message") %></label>
+        <select id="language"></select> 
+        <input type="text" name="field.regexMessage"/>
+    </div>
+    </div>
+    <div class="buttons-dlg">
+        <input id="saveAndAddButton" type="submit" value="<%= messages("save_add") %>" />
+        <input id="fieldSaveButton" type="button" value="<%= messages("save") %>" />
+        <input id="fieldCancelButton" type="button" value="<%= messages("cancel") %>" />
+    </div>
+</form>
+</div>
+
+<div id="formData-dialog" style="display:none" title="<%= messages("form.form_data") %>">
+<form id="formDataForm">
+    <div id="formData"></div>
+    <div class="buttons-dlg">
+        <input id="formDataSendButton" type="button" value="<%= messages("send") %>" />
+        <input id="formDataCancelButton" type="button" value="<%= messages("cancel") %>" />
+    </div>
+</form>
+</div>

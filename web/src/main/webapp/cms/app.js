@@ -25,7 +25,8 @@ define(['view/LoginView', 'view/PagesView', 'view/IndexView',
         'view/StructuresView', 'view/StructureView', 'view/StructureTemplateView',
         'view/TemplatesView', 'view/TemplateView',
         'view/page/PageView', 'view/ProfileView', 
-        'view/plugins/PluginsView', 'view/plugins/ConfigView', 'view/plugins/FormsView', 
+        'view/plugins/PluginsView', 'view/plugins/PluginView', 
+        'view/plugins/ConfigView', 'view/plugins/FormsView', 
         'view/plugins/FormView', 'view/plugins/SeoUrlsView',
         'view/config/ConfigView', 'view/FoldersView', 'view/FolderView',
         'view/FileView',
@@ -35,7 +36,8 @@ function(LoginView, PagesView, IndexView,
 		StructuresView, StructureView, StructureTemplateView,
 		TemplatesView, TemplateView,
 		PageView, ProfileView, 
-		PluginsView, PluginsConfigView, PluginsFormsView, PluginsFormView, SeoUrlsView,
+		PluginsView, PluginView, 
+		PluginsConfigView, PluginsFormsView, PluginsFormView, SeoUrlsView,
 		ConfigView, FoldersView, FolderView, FileView, 
 		topbarTmpl, localeTmpl){
 	
@@ -71,6 +73,7 @@ function(LoginView, PagesView, IndexView,
 		pageView: new PageView(),
 		profileView: new ProfileView(),
 		pluginsView: new PluginsView(),
+		pluginView: new PluginView(),
 		pluginsConfigView: new PluginsConfigView(),
 		pluginsFormsView: new PluginsFormsView(),
 		pluginsFormView: new PluginsFormView(),
@@ -103,6 +106,7 @@ function(LoginView, PagesView, IndexView,
 			'plugins/form':		'pluginsFormNew',
 			'plugins/form/:id':	'pluginsFormEdit',
 			'plugins/seo-urls':	'pluginsSeoUrls',
+			'plugin/:id':		'plugin',
 			
 			'templates':		'templates',
 			'template':			'createTemplate',
@@ -258,6 +262,11 @@ function(LoginView, PagesView, IndexView,
 	                Vosao.showServiceMessages(r);
 	            }
 	        });
+		},
+		
+		plugin: function(id) {
+			this.pluginView.setPluginId(id);
+			this.show(this.pluginView);
 		},
 		
 		// Event handlers

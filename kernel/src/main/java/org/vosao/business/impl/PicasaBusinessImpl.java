@@ -83,7 +83,7 @@ public class PicasaBusinessImpl extends AbstractBusinessImpl
 	}
 
 	private String getPicasaURL(String albumId) {
-		return getPicasaURL() + "/albumid/" + albumId;
+		return getPicasaURL() + "/albumid/" + albumId + "?imgmax=d";
 	}
 	
 	@Override

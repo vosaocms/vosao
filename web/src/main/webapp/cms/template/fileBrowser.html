@@ -1,0 +1,63 @@
+<%/*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2011 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*/%>
+
+<div id="tabs">
+<ul>
+    <li><a href="#tab-1"><%= messages("fileBrowser.resources") %></a></li>
+    <li class="picasaTab"><a href="#tab-2">Picasa</a></li>
+    <li class="pagesTab"><a href="#tab-3"><%= messages("pages") %></a></li>
+</ul>
+
+<div id="tab-1">
+    <div class="browser-folders">
+        <ul id="folders-tree">
+            <img src="/static/images/ajax-loader.gif" />
+        </ul>
+    </div>
+    <div class="browser-files">
+        <div id="currentFolder"></div>
+        <div id="filesDiv">
+        <ul id="files">
+            <img src="/static/images/ajax-loader.gif" />
+        </ul>
+        <div class="clear"> </div>
+        </div>
+    </div>
+    <div class="clear"> </div>
+</div>
+
+<div id="tab-2">
+    <div id="albums"><img src="/static/images/ajax-loader.gif" /></div>
+    <hr class="clear picasa-hr" />
+    <p class="album-name"><%= messages("album") %> : <span id="album-location"></span></p>
+    <div id="photos"></div>
+    <div class="clear"></div>
+</div>
+
+<div id="tab-3">
+    <ul id="pages-tree">
+        <img src="/static/images/ajax-loader.gif" />
+    </ul>
+</div>
+
+</div>
+

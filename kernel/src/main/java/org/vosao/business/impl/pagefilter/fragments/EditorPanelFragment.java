@@ -39,16 +39,15 @@ public class EditorPanelFragment implements ContentFragment {
 				+ "padding: 4px; position: fixed; left: 0; top: 0; width: 100%;"
 				+ "background-color: white; opacity:0.2; z-index: 1;\">"
 				+ "<div style=\"float:left\">"
-				+ "<a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms/index.vm\">Vosao</a> CMS"
-				+ "<a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms/page/content.vm?id=");
-			code.append(page.getId()).append(
-				"&tab=1\">Edit page</a>"
-				+ "<a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms/pages.vm\">Content</a>"
-				+ "<a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms/folders.vm\">Resources</a>"
+				+ "<a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms\">Vosao</a> CMS"
+				+ "<a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms#page/content/");
+			code.append(page.getId()).append("\">Edit page</a>"
+				+ "<a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms#pages\">Content</a>"
+				+ "<a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms#folders\">Resources</a>"
 				+ "</div>"
 				+ "<div style=\"float:right;margin-right:10px;\">"
 				+ VosaoContext.getInstance().getUser().getEmail()
-				+ " | <a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms/profile.vm\">Profile</a>" 
+				+ " | <a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/cms#profile\">Profile</a>" 
 				+ " | <a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"http://code.google.com/p/vosao/issues/list\">Support</a>"
 				+ " | <a style=\"padding: 2px 4px; margin-left: 2px;\" href=\"/_ah/logout\">Logout</a>"
 				+ " | <a href=\"#\" onclick=\"hidePanel()\">Hide</a> "

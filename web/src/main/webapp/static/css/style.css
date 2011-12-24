@@ -23,7 +23,9 @@ h1, h2 {
 }
 
 a, a:visited, .ui-widget-content a {
-	color: blue;
+	color: #14427A;
+	cursor: pointer;
+	text-decoration: none;
 }
 a:hover, .ui-widget-content a:hover {
     color: #148fd5;
@@ -96,6 +98,7 @@ input[type=text], input[type=password], select {
 	width: 100%;
 	background-color: white;
 	z-index: 1;
+	display: none;
 }
 #leftmenu {
 	float: left;
@@ -115,6 +118,7 @@ input[type=text], input[type=password], select {
 
 #wrapper {
 	margin: 40px 20px 20px 20px;
+	display: none;
 }
 #wrapper textarea {
     font-family: monospace;
@@ -153,7 +157,20 @@ input[type=text], input[type=password], select {
 }
 #main-panel div:hover {
     background-color: #eef;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px #aaa;
 }
+
+#fileBrowser {
+	display: none;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+}
+
 
 /* forms */
 .form-row label {
@@ -275,6 +292,9 @@ a.button span.ui-icon {
 .ui-widget {
 	font-size: 1em;
 }
+.ui-dialog {
+	box-shadow: 0 0 10px #666;
+}
 
 .tag {
     padding: 4px 8px;
@@ -320,4 +340,16 @@ a.button span.ui-icon {
 
 .cke_dialog_body label {
     float:none;
+}
+
+.splash {
+	text-align: center;
+	width: 300px;
+	margin: 200px auto;
+}
+.splash h3 {
+	color: #DAE5EE;
+	text-shadow: 0 1px 1px black;
+	font-size: 34px;
+	margin: 20px 0;
 }

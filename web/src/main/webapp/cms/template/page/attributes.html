@@ -1,0 +1,79 @@
+<%/*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2010 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*/%>
+
+<div id="attributes"> </div>
+<div class="buttons">
+    <input id="addButton" type="button" 
+        value="<%= messages("add_attribute") %>" />
+    <input id="deleteButton" type="button" 
+        value="<%= messages("delete_attribute") %>" />
+</div>    
+
+<div id="attribute-dialog" style="display:none" title="<%= messages("attribute") %>">
+  <form id="attributeForm">
+    <div class="form-row">
+        <label><%= messages("name") %></label>
+        <input id="name" type="text"/>
+    </div>
+    <div class="form-row">
+        <label><%= messages("title") %></label>
+        <input id="title" type="text"/>
+    </div>
+    <div class="form-row">
+        <label><%= messages("default_value") %></label>
+        <input id="defaultValue" type="text"/>
+    </div>
+    <div class="form-row">
+        <label><%= messages("inherited") %></label>
+        <input type="checkbox" id="inherited" />
+    </div>
+    <div class="buttons-dlg">
+        <input id="saveButton" type="submit" value="<%= messages("save") %>" />
+        <input id="cancelButton" type="button" value="<%= messages("cancel") %>" />
+    </div>
+  </form>
+</div>
+
+<div id="attrValue-dialog" style="display:none" title="<%= messages("attribute") %>">
+  <form id="attrValueForm">
+    <div class="form-row">
+        <label><%= messages("name") %></label>
+        <span id="attrName" />
+    </div>
+    <div class="form-row">
+        <label><%= messages("language") %></label>
+        <select id="language"/>
+    </div>
+    <div class="form-row">
+        <label><%= messages("value") %></label>
+        <input id="value" type="text"/>
+    </div>
+    <div id="applyChildren" class="form-row">
+        <label><%= messages("page.apply_children") %></label>
+        <input type="checkbox" id="attrInherited" />
+    </div>
+    <div class="buttons-dlg">
+        <input id="saveValueButton" type="submit" value="<%= messages("save") %>" />
+        <input id="cancelValueButton" type="button" value="<%= messages("cancel") %>" />
+    </div>
+  </form>
+</div>

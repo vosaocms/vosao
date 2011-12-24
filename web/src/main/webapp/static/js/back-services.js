@@ -70,6 +70,3 @@ Vosao.initBackServices = function() {
 	Vosao.setupJSONRpcHooks();
 };
 
-$(function() {
-    Vosao.initJSONRpcSystem(Vosao.initBackServices);
-});

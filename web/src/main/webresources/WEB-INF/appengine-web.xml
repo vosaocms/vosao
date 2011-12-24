@@ -12,6 +12,7 @@
 	<sessions-enabled>true</sessions-enabled>
 	
 	<static-files>
+        <include path="/cms/**.*" />
         <include path="/static/**.*" />
         <include path="/favicon.ico" />
     </static-files>

@@ -24,12 +24,13 @@ var registrations = null;
 var config = null;
 
 $(function(){
+	$('#topbar, #wrapper').show();
 	localize();
     $("#tabs").tabs();
     Vosao.initJSONRpc(loadData);
     $('#configForm').submit(function() {onSave(); return false;});
     $('#cancelTemplateButton, #cancelButton').click(function() {
-    	location.href = "/cms/plugins/config.vm";
+    	location.href = "/cms/#plugins/config";
     });
 });
 

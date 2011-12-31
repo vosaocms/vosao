@@ -1,15 +1,19 @@
 * {
 	margin: 0;
 	padding: 0;
+}
+
+h1, h2, h3, h4, p, a {
     font-family: arial, sans-serif;
 }
+
 
 body, input {
 	font-size: 14px;
 }
 
 h1 {
-    background-color:#C8DFF4;
+	background-color:#C8DFF4;
     color:#222299;
     font-size:20px;
     padding-bottom:2px;

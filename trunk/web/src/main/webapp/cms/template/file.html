@@ -20,13 +20,6 @@
  email: vosao.dev@gmail.com
 */%>
 
-    <!-- script src="/static/js/ace/ace.js" type="text/javascript" charset="utf-8"></script> 
-    <script src="/static/js/ace/theme-eclipse.js" type="text/javascript" charset="utf-8"></script> 
-    <script src="/static/js/ace/mode-css.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/static/js/ace/mode-html.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/static/js/ace/mode-javascript.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/static/js/ace/mode-xml.js" type="text/javascript" charset="utf-8"></script-->
-
 <div id="tabs">
 <ul>
     <li><a href="#tab-1"><%= messages("file") %></a></li>
@@ -88,8 +81,7 @@
             <label for="autosave"><%= messages("autosave") %></label>
     </div>
     <div class="form-row">
-        <pre id="ace"></pre>
-        <textarea id="content" rows="20" cols="80"></textarea>
+        <textarea id="fileContent" rows="20" cols="80"></textarea>
     </div>
     <div class="buttons">
         <input id="saveContentButton" type="submit" value="<%= messages("save_continue") %>" />

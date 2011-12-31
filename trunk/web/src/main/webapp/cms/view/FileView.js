@@ -21,7 +21,8 @@
  email: vosao.dev@gmail.com
 */
 
-define(['text!template/file.html'], 
+define(['text!template/file.html', 'order!cm', 'order!cm-css',
+        'order!cm-js', 'order!cm-xml', 'order!cm-html'], 
 function(html) {
 	
 	console.log('Loading FileView.js');
@@ -33,12 +34,11 @@ function(html) {
 	var editMode = fileId != '';
 	var autosaveTimer = '';
 	var editor = true;
-	var aceEditor = false;
+	var cmEditor = false;
 
 	function postRender() {
 		editMode = fileId != '';
-		$("#tabs").tabs();
-		$("#tabs").bind('tabsselect', tabSelected);
+		$("#tabs").tabs({show: tabSelected});
 		Vosao.initJSONRpc(loadData);
 		$('#fileForm').submit(function() {onUpdate(); return false});
 		$('#cancelButton').click(onCancel);
@@ -50,6 +50,15 @@ function(html) {
 	function tabSelected(event, ui) {
 		if (ui.index == 1) {
 			startAutosave();
+			if (editor) {
+				editor.focus();
+				
+				$(editor.getScrollerElement())
+					.css('height', (0.6 * $(window).height()) + 'px')
+					.css('border', '1px solid silver');
+					
+				editor.refresh();
+			}
 		} else {
 			stopAutosave();
 		}
@@ -72,7 +81,8 @@ function(html) {
 	}
 
 	function saveContent() {
-		var content = aceEditor ? $("#ace").text() : $("textarea").val();
+		if (editor) editor.save();
+		var content = $("textarea").val();
 		Vosao.jsonrpc.fileService.updateContent(function(r) {
 			if (r.result == 'success') {
 				var now = new Date();
@@ -101,14 +111,26 @@ function(html) {
 		}, fileId);
 	}
 
-	function openAce(mode, content) {
-		$('#ace').text(content);
-		aceEditor = true;
-		editor = ace.edit("ace");
-	    editor.setTheme("ace/theme/eclipse");
-	    var Mode = require("ace/mode/" + mode).Mode;
-	    editor.getSession().setMode(new Mode());
-	    $('#content').hide();
+	function openCM(mimetype) {
+		cmEditor = true;
+		var mode = 'html';
+		if (file.mimeType == 'text/css') {
+			mode = 'css';
+		}
+		if (file.mimeType == 'text/xml') {
+			mode = 'xml';
+		}
+		if (file.mimeType == 'text/html') {
+			mode = 'htmlmixed';
+		}
+		if (file.mimeType.indexOf('javascript') != -1) {
+			mode = 'javascript';
+		}
+		editor = CodeMirror.fromTextArea(document.getElementById('fileContent'), {
+			lineNumbers: true,
+			theme: 'eclipse',
+			mode: mode
+		});
 	}
 
 	function initFormFields() {
@@ -123,22 +145,8 @@ function(html) {
 			$('#download').html('<a href="' + file.link + '">' + messages('download') + '</a>');
 			if (file.textFile) {
 				$('.contentTab').show();
-				/*if (file.mimeType == 'text/css') {
-					openAce('css', file.content);
-				}
-				if (file.mimeType == 'text/xml') {
-					openAce('xml', file.content);
-				}
-				if (file.mimeType == 'text/html') {
-					openAce('html', file.content);
-				}
-				if (file.mimeType == 'text/javascript') {
-					openAce('javascript', file.content);
-				}
-				else {
-					$('#content').val(file.content);
-				}*/
-				$('#content').val(file.content);
+				$('#fileContent').val(file.content);
+				openCM(file.mimetype);
 			} else {
 				$('.contentTab').hide();
 			}
@@ -179,21 +187,23 @@ function(html) {
 	
 	return Backbone.View.extend({
 		
-		css: '/static/css/file.css',
+		css: ['/static/js/codemirror/codemirror.css',
+		      '/static/js/codemirror/eclipse.css',
+		      '/static/css/file.css'],
 		
 		el: $('#content'),
 		
 		tmpl: _.template(html),
 		
 		render: function() {
-			Vosao.addCSSFile(this.css);
+			Vosao.addCSSFiles(this.css);
 			this.el.html(this.tmpl({messages:messages}));
 			postRender();
 		},
 		
 		remove: function() {
 			this.el.html('');
-			Vosao.removeCSSFile(this.css);
+			Vosao.removeCSSFiles(this.css);
 		},
 		
 		setFileId: function(id) {

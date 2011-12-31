@@ -16,7 +16,14 @@ require.config({
 		vosao : '/static/js/vosao',
 		cms : '/static/js/cms',
 		i18n : '/i18n',
-		"back-services" : '/static/js/back-services'
+		"back-services" : '/static/js/back-services',
+		
+	    'cm'				: "/static/js/codemirror/codemirror", 
+	    'cm-css'			: "/static/js/codemirror/css", 
+	    'cm-html'			: "/static/js/codemirror/htmlmixed",
+	    'cm-js'				: "/static/js/codemirror/javascript",
+	    'cm-xml'			: "/static/js/codemirror/xml"
+		
 	}
 });
 

@@ -28,8 +28,8 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.UserEntity;
 import org.vosao.filter.AuthenticationFilter;
 
@@ -46,16 +46,17 @@ public class ForgotPasswordServlet extends AbstractServlet {
 		UserEntity user = getDao().getUserDao().getByKey(key);
 		if (user == null || user.isDisabled()) {
 			RequestDispatcher dispatcher = getServletContext()
-					.getRequestDispatcher("/forgotPasswordFail.vm");
+					.getRequestDispatcher("/cms/forgotPasswordFail.html");
+			
 			dispatcher.forward(request,response);
 		}
 		else {
 			user.setForgotPasswordKey(null);
 			getDao().getUserDao().save(user);
-			HttpSession session = request.getSession(true);
-			session.setAttribute(AuthenticationFilter.USER_SESSION_ATTR, 
-					user.getEmail());
-			response.sendRedirect("/cms/profile.vm");
+			VosaoContext.getInstance().getSession().set(
+					AuthenticationFilter.USER_SESSION_ATTR, user.getEmail());
+			
+			response.sendRedirect("/cms/#profile");
 		}
 	}
 	

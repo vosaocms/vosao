@@ -61,7 +61,6 @@ public class UpdateTask06 implements UpdateTask {
 
 	@Override
 	public String update() throws UpdateException {
-		getBusiness().getSetupBean().clearSessions();
 		updatePlugins();
 		return "Successfully updated to 0.6 version.";
 	}

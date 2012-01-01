@@ -59,15 +59,6 @@
     </filter-mapping>    
 
     <filter>
-        <filter-name>ServiceFilter</filter-name>
-        <filter-class>org.vosao.filter.ServiceFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>ServiceFilter</filter-name>
-        <url-pattern>/json-rpc/*</url-pattern>
-    </filter-mapping>    
-
-    <filter>
         <filter-name>RestFilter</filter-name>
         <filter-class>org.vosao.filter.RestFilter</filter-class>
     </filter>
@@ -99,15 +90,15 @@
     </filter-mapping>    
 
     <servlet>
-        <servlet-name>org.jabsorb.JSONRPCServlet</servlet-name>
-        <servlet-class>org.jabsorb.JSONRPCServlet</servlet-class>
+        <servlet-name>org.vosao.servlet.ServiceServlet</servlet-name>
+        <servlet-class>org.vosao.servlet.ServiceServlet</servlet-class>
         <init-param>
             <param-name>gzip_threshold</param-name>
             <param-value>200</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>
-        <servlet-name>org.jabsorb.JSONRPCServlet</servlet-name>
+        <servlet-name>org.vosao.servlet.ServiceServlet</servlet-name>
         <url-pattern>/json-rpc/*</url-pattern>
     </servlet-mapping>
 
@@ -204,10 +195,6 @@
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
-
-	<session-config>
-		<session-timeout>600</session-timeout>
-	</session-config>
 
     <!-- Google AppStats -->
     

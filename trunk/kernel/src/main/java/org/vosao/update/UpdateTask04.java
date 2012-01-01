@@ -59,7 +59,6 @@ public class UpdateTask04 implements UpdateTask {
 
 	@Override
 	public String update() throws UpdateException {
-		getBusiness().getSetupBean().clearSessions();
 		updatePlugins();
 		return "Successfully updated to 0.4 version.";
 	}

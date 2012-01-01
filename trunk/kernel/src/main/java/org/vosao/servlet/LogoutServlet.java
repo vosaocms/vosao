@@ -27,8 +27,8 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import org.vosao.common.VosaoContext;
 import org.vosao.filter.AuthenticationFilter;
 
 /**
@@ -40,8 +40,10 @@ public class LogoutServlet extends AbstractServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession session = request.getSession(true);
-		session.setAttribute(AuthenticationFilter.USER_SESSION_ATTR, null);
+		VosaoContext.getInstance().getSession().set(
+				AuthenticationFilter.USER_SESSION_ATTR, (String)null);
+
+		VosaoContext.getInstance().getSession().save(response);
 		response.sendRedirect("/");
 	}
 	

@@ -26,8 +26,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang.StringUtils;
 import org.vosao.business.SetupBean;
 import org.vosao.business.mq.Topic;
@@ -75,32 +73,27 @@ public class LoginServiceImpl extends AbstractServiceImpl
 				return passwordIncorrect;
 			}
 		}
-		HttpSession session = VosaoContext.getInstance().getRequest()
-				.getSession(true);
-		session.setAttribute(AuthenticationFilter.USER_SESSION_ATTR, 
-				user.getEmail());
-		String originalView = (String) session.getAttribute(
-				AuthenticationFilter.ORIGINAL_VIEW_KEY);
+		VosaoContext ctx = VosaoContext.getInstance();
+		ctx.getSession().set(AuthenticationFilter.USER_SESSION_ATTR, user.getEmail());
+		String originalView = ctx.getSession().getString(AuthenticationFilter.ORIGINAL_VIEW_KEY);
 		logger.info(originalView);
 		if (originalView != null) {
-			session.removeAttribute(AuthenticationFilter.ORIGINAL_VIEW_KEY);
-			if (originalView.equals("/login.vm")) {
-				originalView = "/cms/index.vm";
-			}
+			ctx.getSession().remove(AuthenticationFilter.ORIGINAL_VIEW_KEY);
 		}
 		else {
-			originalView = "/cms/index.vm";
+			originalView = "/cms/";
 		}
 		getMessageQueue().publish(new SimpleMessage(Topic.LOGIN.name(), 
 				user.getEmail()));
+		
 		return ServiceResponse.createSuccessResponse(originalView);
 	}
 
 	@Override
 	public ServiceResponse logout() {
-		HttpSession session = VosaoContext.getInstance().getRequest()
-				.getSession(true);
-		session.setAttribute(AuthenticationFilter.USER_SESSION_ATTR, null);
+		VosaoContext.getInstance().getSession().set(
+				AuthenticationFilter.USER_SESSION_ATTR, (String)null);
+		
 		return ServiceResponse.createSuccessResponse(Messages.get(
 				"success_logout"));
 	}
@@ -130,8 +123,7 @@ public class LoginServiceImpl extends AbstractServiceImpl
 		Locale locale = LanguageFilter.getLocale(language);
 		logger.info("Locale " + locale.getDisplayName());
 		VosaoContext.getInstance().setLocale(locale);
-		VosaoContext.getInstance().getRequest().getSession(true)
-				.setAttribute(Messages.LOCALE_KEY, locale);
+		VosaoContext.getInstance().getSession().setLocale(locale);
 		return ServiceResponse.createSuccessResponse(Messages.get("success"));
 	}
 

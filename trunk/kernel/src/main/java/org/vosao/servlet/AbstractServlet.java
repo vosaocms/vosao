@@ -33,7 +33,7 @@ import org.vosao.dao.Dao;
 import org.vosao.global.SystemService;
 
 /**
- * Base spring servlet.
+ * Base servlet.
  * 
  * @author Aleksandr Oleynik
  */

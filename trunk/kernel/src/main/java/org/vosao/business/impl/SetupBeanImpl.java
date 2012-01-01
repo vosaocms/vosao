@@ -24,7 +24,9 @@ package org.vosao.business.impl;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
@@ -34,6 +36,7 @@ import org.vosao.business.mq.Topic;
 import org.vosao.business.mq.message.ImportMessage;
 import org.vosao.business.mq.message.SimpleMessage;
 import org.vosao.common.BCrypt;
+import org.vosao.common.Session;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.entity.ConfigEntity;
@@ -49,6 +52,7 @@ import org.vosao.enums.ContentPermissionType;
 import org.vosao.enums.FolderPermissionType;
 import org.vosao.enums.PageState;
 import org.vosao.enums.UserRole;
+import org.vosao.utils.CipherUtils;
 import org.vosao.utils.StreamUtil;
 
 public class SetupBeanImpl implements SetupBean {
@@ -61,7 +65,6 @@ public class SetupBeanImpl implements SetupBean {
 	
 	public void setup() {
 		log.info("setup...");
-		clearSessions();
 		clearCache();
 		initGroups();
 		initUsers();
@@ -82,12 +85,6 @@ public class SetupBeanImpl implements SetupBean {
 			getDao().getLanguageDao().save(lang);
 		}
 	}
-
-	@Override
-	public void clearSessions() {
-		getMessageQueue().publish(new SimpleMessage(
-				Topic.SESSION_CLEAN.name(), "start"));
-	} 
 
 	private void clearCache() {
 		getBusiness().getSystemService().getCache().clear();
@@ -215,6 +212,7 @@ public class SetupBeanImpl implements SetupBean {
 	        config.setSiteUserLoginUrl("/login");
 	        config.setCommentsTemplate(loadResource(
 	        		COMMENTS_TEMPLATE_FILE));
+	        config.setSessionKey(CipherUtils.generateKey());
 	        getDao().getConfigDao().save(config);
 		}
 	}

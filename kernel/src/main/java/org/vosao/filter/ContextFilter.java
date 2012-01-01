@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.vosao.business.impl.BusinessImpl;
 import org.vosao.business.impl.mq.MessageQueueImpl;
+import org.vosao.common.Session;
 import org.vosao.common.VosaoContext;
 import org.vosao.service.impl.BackServiceImpl;
 import org.vosao.service.impl.FrontServiceImpl;
@@ -69,7 +70,9 @@ public class ContextFilter extends AbstractFilter implements Filter {
         	ctx.setBackService(new BackServiceImpl());
     	}
     	ctx.getPageRenderingContext().clear();
+    	ctx.setSession(new Session((HttpServletRequest)request));
     	chain.doFilter(request, response);
     	ctx.getPageRenderingContext().clear();
+    	ctx.getSession().save((HttpServletResponse)response);
     }
 }

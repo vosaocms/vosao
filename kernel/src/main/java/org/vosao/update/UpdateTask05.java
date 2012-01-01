@@ -61,7 +61,6 @@ public class UpdateTask05 implements UpdateTask {
 
 	@Override
 	public String update() throws UpdateException {
-		getBusiness().getSetupBean().clearSessions();
 		updateStructureTemplates();
 		updateUsers();
 		updatePlugins();

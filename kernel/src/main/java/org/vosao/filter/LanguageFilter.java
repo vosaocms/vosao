@@ -31,10 +31,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.vosao.common.VosaoContext;
-import org.vosao.i18n.Messages;
 
 /**
  * 
@@ -50,23 +48,20 @@ public class LanguageFilter extends AbstractFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, 
     		FilterChain chain) throws IOException, ServletException {
     	HttpServletRequest httpRequest = (HttpServletRequest)request;
-    	HttpSession session = httpRequest.getSession(true);
     	VosaoContext ctx = VosaoContext.getInstance();
-    	if (session.getAttribute(Messages.LOCALE_KEY) == null) {
+    	if (ctx.getSession().getLocale() == null) {
     		ctx.setLocale(request.getLocale());
-    		session.setAttribute(Messages.LOCALE_KEY, 
-    				request.getLocale());
+    		ctx.getSession().setLocale(request.getLocale());
     	}
     	else {
-    		ctx.setLocale((Locale)session.getAttribute(
-    				Messages.LOCALE_KEY));
+    		ctx.setLocale(ctx.getSession().getLocale());
     	}
     	if (httpRequest.getParameter("language") != null) {
     		String languageCode = httpRequest.getParameter("language");
    			Locale locale = getLocale(languageCode);
    			logger.info("Locale " + locale.getDisplayName());
    			ctx.setLocale(locale);
-       		session.setAttribute(Messages.LOCALE_KEY, locale);
+       		ctx.getSession().setLocale(locale);
     	}
         chain.doFilter(request, response);
     }

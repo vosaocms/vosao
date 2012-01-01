@@ -43,11 +43,6 @@ public interface SetupBean {
 	void clear();
 
 	/**
-	 * Clear sessions.
-	 */
-	void clearSessions();
-
-	/**
 	 * Clear file cache.
 	 */
 	void clearFileCache();

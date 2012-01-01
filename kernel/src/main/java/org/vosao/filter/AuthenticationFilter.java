@@ -31,7 +31,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.vosao.common.BCrypt;
@@ -58,22 +57,19 @@ public class AuthenticationFilter extends AbstractFilter implements Filter {
 			FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
-		HttpSession session = httpRequest.getSession();
         String url = httpRequest.getServletPath();
         VosaoContext ctx = VosaoContext.getInstance();
         autoLogin(httpRequest);
-        String userEmail = (String)session.getAttribute(USER_SESSION_ATTR);
+        String userEmail = ctx.getSession().getString(USER_SESSION_ATTR);
         UserEntity user = getDao().getUserDao().getByEmail(userEmail);
 		if (user == null) {
-			session.removeAttribute(USER_SESSION_ATTR);
+			ctx.getSession().remove(USER_SESSION_ATTR);
 			ctx.setUser(null);
 			if (url.startsWith(CMS)) {
 				String originalUrl = httpRequest.getRequestURI() 
 					+ (httpRequest.getQueryString() == null ? "" : 
 						"?" + httpRequest.getQueryString());
-				session.setAttribute(ORIGINAL_VIEW_KEY, originalUrl);
-				//httpResponse.sendRedirect(httpRequest.getContextPath()
-				//		+ LOGIN_VIEW);
+				ctx.getSession().set(ORIGINAL_VIEW_KEY, originalUrl);
 				return;
 			}
 		}
@@ -103,7 +99,6 @@ public class AuthenticationFilter extends AbstractFilter implements Filter {
 		if (!BCrypt.checkpw(password, user.getPassword())) {
 			return;
 		}
-		HttpSession session = request.getSession();
-		session.setAttribute(USER_SESSION_ATTR, user.getEmail());
+		VosaoContext.getInstance().getSession().set(USER_SESSION_ATTR, user.getEmail());
 	}
 }

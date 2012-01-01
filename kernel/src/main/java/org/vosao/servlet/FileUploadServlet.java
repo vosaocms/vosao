@@ -33,7 +33,6 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
@@ -44,6 +43,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.vosao.business.mq.message.ImportMessage;
 import org.vosao.common.UploadException;
+import org.vosao.common.VosaoContext;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PageEntity;
@@ -85,7 +85,6 @@ public class FileUploadServlet extends AbstractServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		//logger.info("File upload...");
-		HttpSession session = request.getSession(true);
 		ServletFileUpload upload = new ServletFileUpload();
 		upload.setFileSizeMax(MAX_SIZE);
 		upload.setHeaderEncoding("UTF-8");
@@ -102,8 +101,9 @@ public class FileUploadServlet extends AbstractServlet {
 				InputStream filestream = null;
 				byte[] fileData = null;
 				parameters.put(IMAGE_UPLOAD_PAGE_ID, 
-						(String)session.getAttribute(
+						VosaoContext.getInstance().getSession().getString(
 								IMAGE_UPLOAD_PAGE_ID));
+				
 				if (request.getParameter("CKEditorFuncNum") != null) {
 					ckeditorFuncNum = request.getParameter("CKEditorFuncNum");
 				}

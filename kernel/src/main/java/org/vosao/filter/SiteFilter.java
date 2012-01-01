@@ -36,7 +36,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.vosao.business.impl.SetupBeanImpl;
@@ -148,9 +147,9 @@ public class SiteFilter extends AbstractFilter implements Filter {
     		httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
     	}
     	catch (AccessDeniedException e) {
-			HttpSession session = httpRequest.getSession(true);
-            String userEmail = (String)session.getAttribute(
+            String userEmail = ctx.getSession().getString(
             		AuthenticationFilter.USER_SESSION_ATTR);
+            
             UserEntity user = getDao().getUserDao().getByEmail(userEmail);
     		ConfigEntity config = ctx.getConfig();
     		if (user != null) {
@@ -161,8 +160,9 @@ public class SiteFilter extends AbstractFilter implements Filter {
     			renderMessage(httpResponse, Messages.get("login_not_configured"));
     			return;
     		}
-   			session.setAttribute(AuthenticationFilter.ORIGINAL_VIEW_KEY, 
+   			ctx.getSession().set(AuthenticationFilter.ORIGINAL_VIEW_KEY, 
    					httpRequest.getRequestURI());
+   			
    			httpResponse.sendRedirect(httpRequest.getContextPath()
    					+ config.getSiteUserLoginUrl());
     	}

@@ -57,6 +57,7 @@ public class ConfigEntity extends BaseEntityImpl {
 	private String defaultTimezone;
 	private String defaultLanguage;
 	private String site404Url;
+	private String sessionKey;
 
 	public ConfigEntity() {
 		commentsTemplate = "";
@@ -86,6 +87,7 @@ public class ConfigEntity extends BaseEntityImpl {
 		defaultTimezone = getStringProperty(entity, "defaultTimezone");
 		defaultLanguage = getStringProperty(entity, "defaultLanguage", "en");
 		site404Url = getStringProperty(entity, "site404Url");
+		sessionKey = getStringProperty(entity, "sessionKey");
 	}
 	
 	@Override
@@ -110,6 +112,7 @@ public class ConfigEntity extends BaseEntityImpl {
 		setProperty(entity, "defaultTimezone", defaultTimezone, false);
 		setProperty(entity, "defaultLanguage", defaultLanguage, false);
 		setProperty(entity, "site404Url", site404Url, false);
+		setProperty(entity, "sessionKey", sessionKey, false);
 	}
 
 	public String getGoogleAnalyticsId() {
@@ -311,5 +314,13 @@ public class ConfigEntity extends BaseEntityImpl {
 
 	public void setSite404Url(String site404Url) {
 		this.site404Url = site404Url;
+	}
+
+	public String getSessionKey() {
+		return sessionKey;
+	}
+
+	public void setSessionKey(String sessionKey) {
+		this.sessionKey = sessionKey;
 	}
 }

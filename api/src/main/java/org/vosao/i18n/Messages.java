@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.MissingResourceException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -49,8 +48,6 @@ public class Messages {
 
 	private static final Log logger  = LogFactory.getLog(Messages.class);
 	
-	public static final String LOCALE_KEY = "locale";
-
 	public static final String I18N_CACHE_KEY = "i18n_";
 	
 	private static final Locale[] supportedLocales = {
@@ -70,10 +67,8 @@ public class Messages {
 			new HashMap<Locale, VosaoResourceBundle>();
 	
 	private static VosaoResourceBundle getBundle(HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		Locale sessionLocale = (Locale)session.getAttribute(LOCALE_KEY);
-		Locale locale = sessionLocale != null ? sessionLocale : 
-			request.getLocale();
+		Locale sessionLocale = VosaoContext.getInstance().getSession().getLocale();
+		Locale locale = sessionLocale != null ? sessionLocale : request.getLocale();
 		return getBundle(locale);
 	}
 	

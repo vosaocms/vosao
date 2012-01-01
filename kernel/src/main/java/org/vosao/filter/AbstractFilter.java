@@ -73,7 +73,7 @@ public abstract class AbstractFilter {
 	}
 	
 	protected boolean isLoggedIn(final HttpServletRequest request) {
-		return request.getSession(true).getAttribute(
+		return VosaoContext.getInstance().getSession().getString(
 				AuthenticationFilter.USER_SESSION_ATTR) != null;
 	}
 

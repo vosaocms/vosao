@@ -48,6 +48,7 @@ public class VosaoContext {
 	private int requestCount;
 	private long startTime;
 	
+	private Session session;
 	private Locale locale;
 	private UserEntity user;
 	private ConfigEntity config;
@@ -194,6 +195,14 @@ public class VosaoContext {
 			pageRenderingContext = new PageRenderingContext();
 		}
 		return pageRenderingContext;
+	}
+
+	public Session getSession() {
+		return session;
+	}
+
+	public void setSession(Session session) {
+		this.session = session;
 	}
 
 }

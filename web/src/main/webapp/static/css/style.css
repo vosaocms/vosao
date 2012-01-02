@@ -122,7 +122,6 @@ input[type=text], input[type=password], select {
 
 #wrapper {
 	margin: 40px 20px 20px 20px;
-	display: none;
 }
 #wrapper textarea {
     font-family: monospace;

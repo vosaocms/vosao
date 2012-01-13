@@ -100,7 +100,8 @@ public class CommentDaoImpl extends BaseDaoImpl<CommentEntity>
 	@Override
 	public List<CommentEntity> getRecent(int limit) {
 		Query q = newQuery();
-		List<CommentEntity> result = select(q, "getRecent", limit, null);
+		q.addFilter("disabled", EQUAL, false);
+		List<CommentEntity> result = select(q, "getRecent", limit, params(false));
 		Collections.sort(result, new CommentHelper.PublishDateDesc());
 		return result;
 	}

@@ -338,7 +338,7 @@ function(contentHtml, ctx, version, breadcrumbs) {
 			}
 			$('#language').val(ctx.currentLanguage);
 			setEditorContent(contents[ctx.currentLanguage]);
-			$('#titleLocal').val(getTitle());
+			$('#titleLocal').val(Vosao.unescapeHtml(getTitle()));
 		} else {
 			setEditorContent('');
 		}
@@ -471,14 +471,14 @@ function(contentHtml, ctx, version, breadcrumbs) {
 
 	function getTitles() {
 		if (!ctx.editMode) {
-			return '{' + Vosao.ENGLISH_CODE + ':"' + $('#title').val() +'"}';
+			return '{' + Vosao.ENGLISH_CODE + ':"' + Vosao.escapeHtml($('#title').val()) +'"}';
 		}
 		titles[ctx.currentLanguage] = $('#titleLocal').val();
 		var result = '{';
 		var count = 0;
 		$.each(titles, function(lang, value) {
 			var coma = count++ == 0 ? '' : ',';
-			result += coma + lang + ':"' + value + '"';
+			result += coma + lang + ':"' + Vosao.escapeHtml(value) + '"';
 		});
 		return result + '}';
 	}

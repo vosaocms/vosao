@@ -36,7 +36,7 @@ public class Hit {
 		super();
 		title = page.getTitle();
 		localTitle = page.getLocalTitle(language);
-		url = page.getFriendlyURL() + "?lanaguge=" + language;
+		url = page.getFriendlyURL() + "?language=" + language;
 		content = aContent;
 	}
 

@@ -111,10 +111,21 @@ Vosao.selectTabFromQueryParam = function(tab) {
 };
 
 Vosao.escapeHtml = function(s) {
-	return s.replace(/&/g,'&amp;').                                         
-		replace(/>/g,'&gt;').                                           
-		replace(/</g,'&lt;').                                           
-		replace(/"/g,'&quot;');
+	return s.replace(/&/g,'&amp;')                                         
+		.replace(/>/g,'&gt;')                                           
+		.replace(/</g,'&lt;')                                           
+		.replace(/"/g,'&quot;')
+		.replace(/`/g,'&lsquo;')
+		.replace(/'/g,'&rsquo;');
+}
+
+Vosao.unescapeHtml = function(s) {
+	return s.replace(/&amp;/g,'&')                                         
+		.replace(/&gt;/g,'>')                                           
+		.replace(/&lt;/g,'<')                                           
+		.replace(/&quot;/g,'"')
+		.replace(/&lsquo;/g,'`')
+		.replace(/&rsquo;/g,"'");
 }
 
 Vosao.generateGUID = function() {

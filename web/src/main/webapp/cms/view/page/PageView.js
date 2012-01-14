@@ -28,7 +28,9 @@ function(pageHtml, PageRouter, ctx) {
 	
 	return Backbone.View.extend({
 		
-		css: '/static/css/page.css',
+		css: ['/static/js/codemirror/codemirror.css',
+		      '/static/js/codemirror/eclipse.css',
+		      '/static/css/page.css'],
 		
 		el: $('#content'),
 
@@ -43,7 +45,7 @@ function(pageHtml, PageRouter, ctx) {
 		},
 		
 		render: function() {
-			Vosao.addCSSFile(this.css);
+			Vosao.addCSSFiles(this.css);
 			this.el.html(this.tmpl({
 				messages : messages, 
 				id : ctx.pageId
@@ -58,7 +60,7 @@ function(pageHtml, PageRouter, ctx) {
 			}
 			$('#version-dialog').dialog('destroy').remove();
 			this.el.html('');
-			Vosao.removeCSSFile(this.css);
+			Vosao.removeCSSFiles(this.css);
 		},
 		
 		editContent: function(id) {

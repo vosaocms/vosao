@@ -42,15 +42,10 @@
         <input id="url" type="text" />
     </div>
     <div class="form-row">
-        <div>
-            <input id="autosave" type="checkbox" /> <label for="autosave"><%= messages("autosave") %></label>
-            <%= messages("editor_size") %>: &nbsp;
-            <a id="sizeLink"><%= messages("big") %></a>&nbsp;
-            <a id="wrapLink"><%= messages("wrap") %></a>
-        </div>
-        <div id="contentDiv">
-            <textarea id="tcontent" rows="20" cols="80" wrap="off"></textarea>
-        </div>
+        <input id="autosave" type="checkbox" /> <label for="autosave"><%= messages("autosave") %></label>
+    </div>
+    <div class="form-row">
+        <textarea id="tcontent" rows="20" cols="80"></textarea>
     </div>
     <div class="buttons">
         <input id="saveContinueButton" type="button" value="<%= messages("save_continue") %>" />

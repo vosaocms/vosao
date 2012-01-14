@@ -21,13 +21,15 @@
  email: vosao.dev@gmail.com
 */
 
-define(['text!template/config/comments.html'],
+define(['text!template/config/comments.html',
+        'order!cm', 'order!cm-css', 'order!cm-js', 'order!cm-xml', 'order!cm-html'],
 function(tmpl) {
 	
 	console.log('Loading CommentsView.js');
 	
-	var config = '';
-
+	var config = '',
+		editor = null;
+	
 	function postRender() {
 	    Vosao.initJSONRpc(loadData);
 	    $('#commentsForm').submit(function() {onSave(); return false;});
@@ -51,9 +53,21 @@ function(tmpl) {
 	function initFormFields() {
 	    $('#commentsEmail').val(config.commentsEmail);
 	    $('#commentsTemplate').val(config.commentsTemplate);
+		editor = CodeMirror.fromTextArea(document.getElementById('commentsTemplate'), {
+			lineNumbers: true,
+			theme: 'eclipse',
+			mode: 'htmlmixed'
+		});
+		editor.focus();
+		$(editor.getScrollerElement())
+			.css('height', (0.6 * $(window).height()) + 'px')
+			.css('border', '1px solid silver');
+		editor.refresh();
+	    
 	}
 
 	function onSave() {
+		editor.save();
 	    var vo = Vosao.javaMap({
 	        commentsEmail : $('#commentsEmail').val(),
 	        commentsTemplate : $('#commentsTemplate').val()       
@@ -72,9 +86,13 @@ function(tmpl) {
 
 	return Backbone.View.extend({
 		
+		css: ['/static/js/codemirror/codemirror.css',
+		      '/static/js/codemirror/eclipse.css'],
+
 		el: $('#tab-1'),
 		
 		render: function() {
+			Vosao.addCSSFiles(this.css);
 			this.el = $('#tab-1');
 			this.el.html(_.template(tmpl, {messages:messages}));
 			postRender();
@@ -82,6 +100,7 @@ function(tmpl) {
 		
 		remove: function() {
 			this.el.html('');
+			Vosao.removeCSSFiles(this.css);
 		}
 		
 	});

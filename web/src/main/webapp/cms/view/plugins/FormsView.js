@@ -21,22 +21,31 @@
  email: vosao.dev@gmail.com
 */
 
-define(['text!template/plugins/forms.html'], function(tmpl) {
+define(['text!template/plugins/forms.html',
+        'order!cm-css', 'order!cm-js', 'order!cm-xml', 'order!cm-html'], 
+function(tmpl) {
 	
 	console.log('Loading FormsView.js');
 	
-	var formConfig = '';
+	var formConfig = '',
+		templateEditor = null,
+		letterEditor = null;
 
 	function postRender() {
-	    $("#tabs").tabs();
+	    $("#tabs").tabs({show: tabSelected});
 	    Vosao.initJSONRpc(loadData);
 	    $('#addButton').click(onAdd);
 	    $('#deleteButton').click(onDelete);
-	    $('#editFormTemplateLink').click(function() { $('#formTemplate').toggle(); });
 	    $('#restoreFormTemplateLink').click(onFormTemplateRestore);
-	    $('#editFormLetterLink').click(function() { $('#letterTemplate').toggle(); });
 	    $('#restoreFormLetterLink').click(onFormLetterRestore);
 	    $('#saveButton').click(onSaveConfig);
+	}
+
+	function tabSelected(event, ui) {
+		if (ui.index == 1) {
+			templateEditor.refresh();
+			letterEditor.refresh();
+		}
 	}
 
 	function loadData() {
@@ -86,10 +95,24 @@ define(['text!template/plugins/forms.html'], function(tmpl) {
 	        formConfig = r;
 	        $('#formTemplate').val(r.formTemplate);
 	        $('#letterTemplate').val(r.letterTemplate);
+			templateEditor = CodeMirror.fromTextArea(document.getElementById('formTemplate'), {
+				lineNumbers: true,
+				theme: 'eclipse',
+				mode: "htmlmixed"
+			});
+			$(templateEditor.getScrollerElement()).css('border', '1px solid silver');
+			letterEditor = CodeMirror.fromTextArea(document.getElementById('letterTemplate'), {
+				lineNumbers: true,
+				theme: 'eclipse',
+				mode: "htmlmixed"
+			});
+			$(letterEditor.getScrollerElement()).css('border', '1px solid silver');
 	    });
 	}
 	    
 	function onSaveConfig() {
+		templateEditor.save();
+		letterEditor.save();
 	    var vo = Vosao.javaMap({
 	   	    formTemplate : $('#formTemplate').val(),
 	   	    letterTemplate : $('#letterTemplate').val()
@@ -102,29 +125,36 @@ define(['text!template/plugins/forms.html'], function(tmpl) {
 	function onFormTemplateRestore() {
 		Vosao.jsonrpc.formService.restoreFormTemplate(function (r) {
 			Vosao.showServiceMessages(r);
-	        loadFormConfig();
+	        $('.CodeMirror').remove();
+			loadFormConfig();
 	    });
 	}
 
 	function onFormLetterRestore() {
 		Vosao.jsonrpc.formService.restoreFormLetter(function (r) {
 			Vosao.showServiceMessages(r);
+	        $('.CodeMirror').remove();
 	        loadFormConfig();
 	    });
 	}
 	
 	
 	return Backbone.View.extend({
+
+		css: ['/static/js/codemirror/codemirror.css',
+		      '/static/js/codemirror/eclipse.css'],
 		
 		el: $('#content'),
 		
 		render: function() {
+			Vosao.addCSSFiles(this.css);
 			this.el.html(_.template(tmpl, {messages:messages}));
 			postRender();
 		},
 		
 		remove: function() {
 			this.el.html('');
+			Vosao.removeCSSFiles(this.css);
 		}
 		
 	});

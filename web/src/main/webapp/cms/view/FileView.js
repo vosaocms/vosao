@@ -33,8 +33,7 @@ function(html) {
 	var file = '';
 	var editMode = fileId != '';
 	var autosaveTimer = '';
-	var editor = true;
-	var cmEditor = false;
+	var editor = null;
 
 	function postRender() {
 		editMode = fileId != '';
@@ -112,7 +111,6 @@ function(html) {
 	}
 
 	function openCM(mimetype) {
-		cmEditor = true;
 		var mode = 'html';
 		if (file.mimeType == 'text/css') {
 			mode = 'css';

@@ -59,13 +59,10 @@
 
 <div id="tab-2">
     <div class="form-row">
-        <div>
-            <input id="autosave" type="checkbox" /><label for="autosave"><%= messages("autosave")%></label>
-            <%= messages("editor_size")%>:
-            <a id="bigLink" > <%= messages("big")%></a>
-            <a id="smallLink" > <%= messages("small")%></a>
-        </div>
-        <textarea id="xmlContent" rows="20" cols="80" wrap="off"></textarea>
+        <input id="autosave" type="checkbox" /><label for="autosave"><%= messages("autosave")%></label>
+    </div>
+    <div class="form-row">
+        <textarea id="xmlContent" rows="20" cols="80"></textarea>
     </div>
     <div class="buttons">
         <input id="saveContinueXMLButton" type="button" 

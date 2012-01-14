@@ -21,7 +21,9 @@
  email: vosao.dev@gmail.com
 */
 
-define(['text!template/structure.html'], function(tmpl) {
+define(['text!template/structure.html',
+        'order!cm', 'order!cm-css', 'order!cm-js', 'order!cm-xml', 'order!cm-html'], 
+function(tmpl) {
 	
 	console.log('Loading StructureView.js');
 	
@@ -32,6 +34,7 @@ define(['text!template/structure.html'], function(tmpl) {
 	var autosaveTimer = '';
 	var fields  = [];
 	var templates = [];
+	var editor = null;
 
 	function loadData() {
 		loadStructure();
@@ -67,8 +70,12 @@ define(['text!template/structure.html'], function(tmpl) {
 		onUpdate(true);
 	}
 
+	function autoSave() {
+		return $("#autosave:checked").length > 0;
+	}
+	
 	function onAutosave() {
-	    if ($("#autosave:checked").length > 0) {
+	    if (autoSave()) {
 	        startAutosave(); 
 	    }
 	    else {
@@ -97,6 +104,16 @@ define(['text!template/structure.html'], function(tmpl) {
 	        $('#title').val('');
 	        $('#xmlContent').val('');
 		}
+		editor = CodeMirror.fromTextArea(document.getElementById('xmlContent'), {
+			lineNumbers: true,
+			theme: 'eclipse',
+			mode: 'xml'
+		});
+		editor.focus();
+		$(editor.getScrollerElement())
+			.css('height', (0.6 * $(window).height()) + 'px')
+			.css('border', '1px solid silver');
+		editor.refresh();
 	}
 
 	function onCancel() {
@@ -104,6 +121,7 @@ define(['text!template/structure.html'], function(tmpl) {
 	}
 
 	function onUpdate(cont) {
+		editor.save();
 		var vo = Vosao.javaMap({
 		    id : structureId,
 		    title : $('#title').val(),
@@ -125,16 +143,6 @@ define(['text!template/structure.html'], function(tmpl) {
 				Vosao.showServiceMessages(r);
 			}			
 		}, vo);
-	}
-
-	function onBig() {
-		$('#xmlContent').attr('cols','120');
-	    $('#xmlContent').attr('rows','30');
-	}
-
-	function onSmall() {
-	    $('#xmlContent').attr('cols','80');
-	    $('#xmlContent').attr('rows','20');
 	}
 
 	function onFieldTitleChange() {
@@ -247,7 +255,7 @@ define(['text!template/structure.html'], function(tmpl) {
 	}
 
 	function saveFields(cont) {
-		$('#xmlContent').val(fieldsXML());
+		editor.setValue(fieldsXML());
 		onUpdate(cont);
 	}
 
@@ -303,18 +311,40 @@ define(['text!template/structure.html'], function(tmpl) {
 	    }
 	}
 	
+	function tabSelected(event, ui) {
+		if (ui.index == 1) {
+			if (autoSave()) {
+				startAutosave();
+			}
+			if (editor) {
+				editor.focus();
+				
+				$(editor.getScrollerElement())
+					.css('height', (0.6 * $(window).height()) + 'px')
+					.css('border', '1px solid silver');
+					
+				editor.refresh();
+			}
+		}
+		else {
+			stopAutosave();
+		}
+	}
+
 	
 	return Backbone.View.extend({
 		
+		css: ['/static/js/codemirror/codemirror.css',
+		      '/static/js/codemirror/eclipse.css'],
+
 		el: $('#content'),
 		
 		render: function() {
+			Vosao.addCSSFiles(this.css);
 			this.el.html(_.template(tmpl, {messages:messages}));
 			loadData();
-		    Vosao.selectTabFromQueryParam($("#tabs").tabs());
+		    Vosao.selectTabFromQueryParam($("#tabs").tabs({show: tabSelected}));
 		    $('#autosave').change(onAutosave);
-		    $('#bigLink').click(onBig);
-		    $('#smallLink').click(onSmall);
 		    $('#saveContinueXMLButton').click(onSaveContinueXML);
 		    $('#saveXMLButton').click(onSaveXML);
 		    $('#cancelXMLButton').click(onCancel);
@@ -339,6 +369,7 @@ define(['text!template/structure.html'], function(tmpl) {
 		
 		remove: function() {
 			this.el.html('');
+			Vosao.removeCSSFiles(this.css);
 		},
 		
 		onFieldUp: function(i) {

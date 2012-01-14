@@ -23,7 +23,8 @@
 
 define(['text!template/page/content.html',
         'view/page/context', 'view/page/version', 'view/page/breadcrumbs',
-        'jquery.form'], 
+        'jquery.form',
+        'order!cm', 'order!cm-css', 'order!cm-js', 'order!cm-xml', 'order!cm-html'], 
 function(contentHtml, ctx, version, breadcrumbs) {
 	
 	console.log('Loading ContentView.js');
@@ -216,6 +217,7 @@ function(contentHtml, ctx, version, breadcrumbs) {
 		if (!ctx.editMode) return '';
 		if (ctx.page.simple) {
 			if (editTextarea) {
+				contentEditor.save();
 				return $('#pcontent').val();
 			}
 			else {
@@ -233,6 +235,7 @@ function(contentHtml, ctx, version, breadcrumbs) {
 				if (field.type == 'TEXTAREA') {
 					var text = '';
 					if (editTextarea) {
+						contentEditors[field.name].save();
 						text = $('#field' + field.name).val();
 					}
 					else {
@@ -250,7 +253,7 @@ function(contentHtml, ctx, version, breadcrumbs) {
 	function setEditorContent(data) {
 		if (ctx.page.simple) {
 		    if (editTextarea) {
-		    	$('#pcontent').val(data);
+				contentEditor.setValue(data);
 		    }
 		    else {
 		    	contentEditor.setData(data);
@@ -270,16 +273,12 @@ function(contentHtml, ctx, version, breadcrumbs) {
 					});
 				}
 				if (field.type == 'TEXTAREA') {
-					if (editTextarea) {
-						$(domData).find(field.name).each(function() {
-							$('#field' + field.name).val($(this).text());					
-						});
-					}
-					else {
-						$(domData).find(field.name).each(function() {
-							contentEditors[field.name].setData($(this).text());					
-						});
-					}
+					$(domData).find(field.name).each(function() {
+						if (editTextarea) 
+							contentEditors[field.name].setValue($(this).text());
+						else 
+							contentEditors[field.name].setData($(this).text());
+					});
 				}
 			});
 		}
@@ -388,7 +387,18 @@ function(contentHtml, ctx, version, breadcrumbs) {
 		});
 		if (ctx.page.simple) {
 			$('#page-content').html('<textarea id="pcontent" rows="20" cols="80"></textarea>');
-		    if (!editTextarea) {
+			if (editTextarea) {
+				contentEditor = CodeMirror.fromTextArea(document.getElementById('pcontent'), {
+					lineNumbers: true,
+					theme: 'eclipse',
+					mode: 'htmlmixed'
+				});
+				contentEditor.focus();
+				$(contentEditor.getScrollerElement())
+					.css('height', (0.6 * $(window).height()) + 'px')
+					.css('border', '1px solid silver');
+			}
+			else {
 		    	contentEditor = CKEDITOR.replace('pcontent', {
 		    		height: 350, width: 'auto',
 		    		filebrowserUploadUrl : '/cms/upload',
@@ -429,21 +439,31 @@ function(contentHtml, ctx, version, breadcrumbs) {
 			$('#page-content').css('float','left');
 		    $(".datepicker").datepicker({dateFormat:'dd.mm.yy'});
 			contentEditors = {};
-			if (!editTextarea) {
-			  $.each(ctx.pageRequest.structureFields.list, function(i, field) {
+ 		    $.each(ctx.pageRequest.structureFields.list, function(i, field) {
 				if (field.type == 'TEXTAREA') {
-					if (contentEditors[field.name] == undefined) {
-						var ckeditor = CKEDITOR.replace('field' + field.name, {
-					        height: 150, width: 'auto',
-					        filebrowserUploadUrl : '/cms/upload',
-					        filebrowserBrowseUrl : 'fileBrowser.html',
-					        toolbar : 'Vosao'
-					    });
-						contentEditors[field.name] = ckeditor;
+					if (!contentEditors[field.name]) {
+						if (editTextarea) {
+							var el = document.getElementById('field' + field.name);
+							contentEditors[field.name] = CodeMirror.fromTextArea(el, {
+								lineNumbers: true,
+								theme: 'eclipse',
+								mode: 'htmlmixed'
+							});
+							$(contentEditors[field.name].getScrollerElement())
+								.css('width', ($('#pageForm .buttons').width() + 20) + 'px')
+								.css('border', '1px solid silver');
+						}
+						else {
+							contentEditors[field.name] = CKEDITOR.replace('field' + field.name, {
+								height: 150, width: 'auto',
+								filebrowserUploadUrl : '/cms/upload',
+								filebrowserBrowseUrl : 'fileBrowser.html',
+								toolbar : 'Vosao'
+							});
+						}
 					}
 				}
-			  });
-			}
+			});
 		}
 	}
 

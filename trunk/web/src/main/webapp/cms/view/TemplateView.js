@@ -21,7 +21,9 @@
  email: vosao.dev@gmail.com
 */
 
-define(['text!template/template.html', 'jquery.treeview'], function(tmpl) {
+define(['text!template/template.html', 'jquery.treeview',
+        'order!cm', 'order!cm-css', 'order!cm-js', 'order!cm-xml', 'order!cm-html'], 
+function(tmpl) {
 	
 	console.log('Loading TemplateView.js');
 	
@@ -30,7 +32,7 @@ define(['text!template/template.html', 'jquery.treeview'], function(tmpl) {
 	var template = '';
 	var editMode = templateId != '';
 	var autosaveTimer = '';
-	var smallEditor = true;
+	var editor = null;
 	    
 	function loadData() {
 		loadTemplate();
@@ -61,6 +63,7 @@ define(['text!template/template.html', 'jquery.treeview'], function(tmpl) {
 	}
 
 	function saveContent() {
+		if (editor) editor.save();
 	    var content = $("#tcontent").val();
 	    Vosao.jsonrpc.templateService.updateContent(function(r) {
 	        if (r.result == 'success') {
@@ -105,6 +108,16 @@ define(['text!template/template.html', 'jquery.treeview'], function(tmpl) {
 	        $('#url').val('');
 	        $('#tcontent').val('');
 		}
+		editor = CodeMirror.fromTextArea(document.getElementById('tcontent'), {
+			lineNumbers: true,
+			theme: 'eclipse',
+			mode: 'htmlmixed'
+		});
+		editor.focus();
+		$(editor.getScrollerElement())
+			.css('height', (0.6 * $(window).height()) + 'px')
+			.css('border', '1px solid silver');
+		editor.refresh();
 	}
 
 	function onCancel() {
@@ -112,6 +125,7 @@ define(['text!template/template.html', 'jquery.treeview'], function(tmpl) {
 	}
 
 	function onUpdate(cont) {
+		if (editor) editor.save();
 		var templateVO = Vosao.javaMap({
 		    id : templateId,
 		    title : $('#title').val(),
@@ -135,40 +149,6 @@ define(['text!template/template.html', 'jquery.treeview'], function(tmpl) {
 		}, templateVO);
 	}
 
-	function onSize() {
-		if (!smallEditor) {
-			$('#tcontent').attr('cols','80');
-			$('#tcontent').attr('rows','20');
-			$('#sizeLink').text(messages('big'));
-			smallEditor = true;
-		}
-		else {
-			$('#tcontent').attr('cols','120');
-			$('#tcontent').attr('rows','30');
-			$('#sizeLink').text(messages('small'));
-			smallEditor = false;
-		}
-	}
-
-	function onWrap() {
-		var wrap = $('#tcontent').attr('wrap');
-		var text = $('#tcontent').val();
-		var cols = $('#tcontent').attr('cols');
-		var rows = $('#tcontent').attr('rows');
-		if (wrap == 'off') {
-			$('#contentDiv').html('<textarea id="tcontent" cols="' + cols
-					+'" rows="' + rows + '"></textarea>');
-			$('#tcontent').val(text);
-			$('#wrapLink').text(' ' + messages('unwrap'));
-		}
-		if (wrap == undefined) {
-			$('#contentDiv').html('<textarea id="tcontent" cols="' + cols
-					+'" rows="' + rows + '" wrap="off"></textarea>');
-			$('#tcontent').val(text);
-			$('#wrapLink').text(' ' + messages('wrap'));
-		}
-	}
-
 	// Resources
 
 	function onResources() {
@@ -182,17 +162,17 @@ define(['text!template/template.html', 'jquery.treeview'], function(tmpl) {
 
 	return Backbone.View.extend({
 		
-		css: '/static/css/jquery.treeview.css',
+		css: ['/static/js/codemirror/codemirror.css',
+		      '/static/js/codemirror/eclipse.css',
+		      '/static/css/jquery.treeview.css'],
 		
 		el: $('#content'),
 		
 		render: function() {
-			Vosao.addCSSFile(this.css);
+			Vosao.addCSSFiles(this.css);
 			this.el.html(_.template(tmpl, {messages:messages}));
 			loadData();
 		    $('#autosave').change(onAutosave);
-		    $('#sizeLink').click(onSize);
-		    $('#wrapLink').click(onWrap);
 		    $('#saveContinueButton').click(onSaveContinue);
 		    $('#templateForm').submit(function() {onSave(); return false;});
 		    $('#cancelButton').click(onCancel);
@@ -200,8 +180,8 @@ define(['text!template/template.html', 'jquery.treeview'], function(tmpl) {
 		},
 		
 		remove: function() {
-			Vosao.removeCSSFile(this.css);
 			this.el.html('');
+			Vosao.removeCSSFiles(this.css);
 		},
 		
 		create: function() {

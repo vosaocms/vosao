@@ -21,16 +21,20 @@
  email: vosao.dev@gmail.com
 */
 
-define(['text!template/structureTemplate.html'], function(tmpl) {
+define(['text!template/structureTemplate.html',
+        'order!cm', 'order!cm-css', 'order!cm-js', 'order!cm-xml', 'order!cm-html'], 
+function(tmpl) {
 	
 	console.log('Loading StructureTemplateView.js');
 	
 	var structureTemplateId = ''; 
 	var structureId = ''; 
 
-	var structureTemplate = '';
-	var editMode = structureTemplateId != '';
-	var autosaveTimer = '';
+	var structureTemplate = '',
+	    editMode = structureTemplateId != '',
+	    autosaveTimer = '',
+	    editor = null, 
+	    headEditor = null;
 	    
 	function onTitleChange() {
 		if (editMode) {
@@ -108,8 +112,24 @@ define(['text!template/structureTemplate.html'], function(tmpl) {
 	        $('#vcontent').val('');
 	        $('#headContent').val('');
 		}
+		editor = createEditor('vcontent');
+		headEditor = createEditor('headContent');
 	}
 
+	function createEditor(id) {
+		var e = CodeMirror.fromTextArea(document.getElementById(id), {
+			lineNumbers: true,
+			theme: 'eclipse',
+			mode: 'htmlmixed'
+		});
+		e.focus();
+		$(e.getScrollerElement())
+			//.css('height', (0.6 * $(window).height()) + 'px')
+			.css('border', '1px solid silver');
+		e.refresh();
+		return e;
+	}
+	
 	function onCancel() {
 	    location.href = '#structure/' + structureId;
 	}
@@ -141,32 +161,22 @@ define(['text!template/structureTemplate.html'], function(tmpl) {
 		}, structureTemplateVO);
 	}
 
-	function onBig() {
-		$('#vcontent').attr('cols','120');
-	    $('#vcontent').attr('rows','30');
-	}
-
-	function onSmall() {
-	    $('#vcontent').attr('cols','80');
-	    $('#vcontent').attr('rows','20');
-	}
-
 	
 	return Backbone.View.extend({
 		
-		css: '/static/css/structureTemplate.css',
+		css: ['/static/js/codemirror/codemirror.css',
+		      '/static/js/codemirror/eclipse.css',
+		      '/static/css/structureTemplate.css'],
 		
 		el: $('#content'),
 		
 		render: function() {
-			Vosao.addCSSFile(this.css);
+			Vosao.addCSSFiles(this.css);
 			this.el.html(_.template(tmpl, {messages:messages}));
 			
 			loadStructureTemplate();
 		    $("#tabs").tabs();
 		    $('#autosave').change(onAutosave);
-		    $('#bigLink').click(onBig);
-		    $('#smallLink').click(onSmall);
 		    $('#saveContinueButton').click(onSaveContinue);
 		    $('#saveButton').click(onSave);
 		    $('#cancelButton').click(onCancel);
@@ -174,8 +184,8 @@ define(['text!template/structureTemplate.html'], function(tmpl) {
 		},
 		
 		remove: function() {
-			Vosao.removeCSSFile(this.css);
 			this.el.html('');
+			Vosao.removeCSSFiles(this.css);
 		},
 		
 		create: function(id) {

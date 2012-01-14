@@ -226,9 +226,9 @@ function(contentHtml, ctx, version, breadcrumbs) {
 			var xml = '<?xml version="1.0" encoding="utf-8"?>\n<content>\n';
 			$.each(ctx.pageRequest.structureFields.list, function(i, field) {
 				if (field.type == 'TEXT' || field.type == 'DATE' 
-					|| field.type == 'RESOURCE') {
-					xml += '<' + field.name + '>' + $('#field' + field.name).val()
-						+ '</' + field.name + '>\n';
+						|| field.type == 'RESOURCE') {
+					xml += '<' + field.name + '><![CDATA[' + $('#field' + field.name).val()
+						+ ']]></' + field.name + '>\n';
 				}
 				if (field.type == 'TEXTAREA') {
 					var text = '';

@@ -61,6 +61,7 @@ import org.vosao.service.back.TemplateService;
 import org.vosao.service.impl.AbstractServiceImpl;
 import org.vosao.service.vo.PageRequestVO;
 import org.vosao.service.vo.PageVO;
+import org.vosao.servlet.FileUploadServlet;
 import org.vosao.utils.DateUtil;
 import org.vosao.utils.StrUtil;
 import org.vosao.utils.StreamUtil;
@@ -417,6 +418,9 @@ public class PageServiceImpl extends AbstractServiceImpl
 				FolderEntity folder = getBusiness().getPageBusiness()
 						.getPageFolder(page.getFriendlyURL());
 				result.setFolderId(folder != null ? folder.getId() : null);
+
+				VosaoContext.getInstance().getSession().set(
+						FileUploadServlet.IMAGE_UPLOAD_PAGE_ID, id.toString());
 			}
 			else {
 				result.setPage(getPageBusiness().getPageDefaultSettings(

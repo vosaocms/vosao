@@ -156,8 +156,6 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 	public ServiceResponse cacheReset() {
 		getBusiness().getSystemService().getCache().clear();
 		getSetupBean().clearFileCache();
-		getMessageQueue().publish(new SimpleMessage(
-				Topic.SESSION_CLEAN.name(), "start"));
 		return ServiceResponse.createSuccessResponse(
 				Messages.get("successfull_reset", "Cache"));
 	}

@@ -45,7 +45,6 @@ import org.vosao.business.impl.mq.subscriber.IndexDeletedPages;
 import org.vosao.business.impl.mq.subscriber.PageCacheClear;
 import org.vosao.business.impl.mq.subscriber.PagePublishCron;
 import org.vosao.business.impl.mq.subscriber.Reindex;
-import org.vosao.business.impl.mq.subscriber.SessionCleanTaskSubscriber;
 import org.vosao.business.mq.Message;
 import org.vosao.business.mq.MessageQueue;
 import org.vosao.business.mq.QueueSpeed;
@@ -77,7 +76,6 @@ public class MessageQueueImpl implements MessageQueue {
 	private void registerSubscribers() {
 		subscribe(Topic.FILE_CHANGED, FileChangedSubscriber.class);
 		subscribe(Topic.EXPORT, ExportTaskSubscriber.class);
-		subscribe(Topic.SESSION_CLEAN, SessionCleanTaskSubscriber.class);
 		subscribe(Topic.IMPORT, ImportTaskSubscriber.class);
 
 		subscribe(Topic.PAGES_DELETED, IndexDeletedPages.class);

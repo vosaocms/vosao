@@ -10,11 +10,13 @@
 	</system-properties>
 
 	<static-files>
-        <include path="/cms/**.*" />
-        <include path="/static/**.*" />
-        <include path="/favicon.ico" />
+        <include path="/cms/**.*" expiration="1d/>
+        <include path="/static/**.*" expiration="1d/>
+        <include path="/favicon.ico" expiration="1d/>
     </static-files>
 	
 	<threadsafe>true</threadsafe>
-	
+	<warmup-requests-enabled>true</warmup-requests-enabled>
+    <precompilation-enabled>true</precompilation-enabled>
+   
 </appengine-web-app>

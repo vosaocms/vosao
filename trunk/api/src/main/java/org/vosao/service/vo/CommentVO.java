@@ -23,6 +23,7 @@
 package org.vosao.service.vo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.vosao.entity.CommentEntity;
@@ -70,6 +71,10 @@ public class CommentVO {
 
 	public String getPublishDateTime() {
 		return DateUtil.dateTimeToString(comment.getPublishDate());
+	}
+
+	public Date getDate() {
+		return comment.getPublishDate();
 	}
 
 	public boolean isDisabled() {

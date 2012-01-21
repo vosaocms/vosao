@@ -1,4 +1,3 @@
-// file app.js
 /*
  Vosao CMS. Simple CMS for Google App Engine.
  
@@ -41,8 +40,6 @@ function(LoginView, PagesView, IndexView,
 		ConfigView, FoldersView, FolderView, FileView, 
 		topbarTmpl, localeTmpl){
 	
-	console.log("app.js");
-
 	return Backbone.Router.extend({
 
 		initialize:function() {

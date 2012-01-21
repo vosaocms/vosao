@@ -3,7 +3,7 @@
 	padding: 0;
 }
 
-h1, h2, h3, h4, p, a, label, #crumbs, #rightmenu {
+h1, h2, h3, h4, p, a, label, #crumbs, #rightmenu, #loading {
     font-family: arial, sans-serif;
 }
 

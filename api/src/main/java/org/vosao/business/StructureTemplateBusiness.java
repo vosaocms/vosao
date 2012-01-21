@@ -25,6 +25,7 @@ package org.vosao.business;
 import java.util.List;
 
 import org.vosao.entity.StructureTemplateEntity;
+import org.vosao.entity.TemplateEntity;
 
 /**
  * @author Alexander Oleynik
@@ -39,4 +40,7 @@ public interface StructureTemplateBusiness {
 	 * @return list of reference integrity check messages.
 	 */
 	List<String> remove(List<Long> ids);
+	
+	StructureTemplateEntity save(StructureTemplateEntity template);
+
 }

@@ -82,7 +82,7 @@ input[type=text], input[type=password], select {
 	padding: 2px;
 }
 
-#loading{
+#loading {
     position: fixed;
     top: 0;
     left: 0;
@@ -352,8 +352,8 @@ a.button span.ui-icon {
 	margin: 200px auto;
 }
 .splash h3 {
-	color: #DAE5EE;
-	text-shadow: 0 1px 1px black;
+	color: #6EA7D1;
+	text-shadow: 0 2px 2px silver;
 	font-size: 34px;
 	margin: 20px 0;
 }

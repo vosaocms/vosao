@@ -90,13 +90,15 @@ function(tmpl) {
 			structureTemplate = null;
 	        initStructureTemplateForm();
 		}
-		Vosao.jsonrpc.structureTemplateService.getById(function (r) {
-			structureTemplate = r;
-			if (editMode) {
-				structureId = structureTemplate.structureId;
-			}
-			initStructureTemplateForm();
-		}, structureTemplateId);
+		else {
+			Vosao.jsonrpc.structureTemplateService.getById(function (r) {
+				structureTemplate = r;
+				if (editMode) {
+					structureId = structureTemplate.structureId;
+				}
+				initStructureTemplateForm();
+			}, structureTemplateId);
+		}
 	}
 
 	function initStructureTemplateForm() {
@@ -112,8 +114,16 @@ function(tmpl) {
 	        $('#vcontent').val('');
 	        $('#headContent').val('');
 		}
-		editor = createEditor('vcontent');
-		headEditor = createEditor('headContent');
+		if (!editor) {
+			editor = createEditor('vcontent');
+		} else {
+			editor.refresh();
+		}
+		if (!headEditor) {
+			headEditor = createEditor('headContent');
+		} else {
+			headEditor.refresh();
+		}
 	}
 
 	function createEditor(id) {
@@ -122,11 +132,9 @@ function(tmpl) {
 			theme: 'eclipse',
 			mode: 'htmlmixed'
 		});
-		e.focus();
 		$(e.getScrollerElement())
-			//.css('height', (0.6 * $(window).height()) + 'px')
+			.css('height', (0.6 * $(window).height()) + 'px')
 			.css('border', '1px solid silver');
-		e.refresh();
 		return e;
 	}
 	
@@ -135,6 +143,12 @@ function(tmpl) {
 	}
 
 	function onUpdate(cont) {
+		if (editor) {
+			editor.save();
+		}
+		if (headEditor) {
+			headEditor.save();
+		}
 		var structureTemplateVO = Vosao.javaMap({
 		    id : structureTemplateId,
 		    name : Vosao.strip($('#name').val()),
@@ -165,15 +179,15 @@ function(tmpl) {
 	return Backbone.View.extend({
 		
 		css: ['/static/js/codemirror/codemirror.css',
-		      '/static/js/codemirror/eclipse.css',
-		      '/static/css/structureTemplate.css'],
+		      '/static/js/codemirror/eclipse.css'],
 		
 		el: $('#content'),
 		
 		render: function() {
 			Vosao.addCSSFiles(this.css);
+			editor = null; 
+		    headEditor = null;
 			this.el.html(_.template(tmpl, {messages:messages}));
-			
 			loadStructureTemplate();
 		    $("#tabs").tabs();
 		    $('#autosave').change(onAutosave);

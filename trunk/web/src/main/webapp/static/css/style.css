@@ -101,7 +101,7 @@ input[type=text], input[type=password], select {
 	top: 0;
 	width: 100%;
 	background-color: white;
-	z-index: 1;
+	z-index: 100;
 	display: none;
 }
 #leftmenu {
@@ -141,6 +141,7 @@ input[type=text], input[type=password], select {
 	bottom: 0;
 	left: 15px;
 	clear:both;
+	z-index: 100;
 }
 
 /* home page */

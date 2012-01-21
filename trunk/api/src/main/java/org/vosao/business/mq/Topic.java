@@ -79,11 +79,6 @@ public enum Topic {
 	REINDEX,
 	
 	/**
-	 * SimpleMessage: message -> mode
-	 */
-	SESSION_CLEAN,
-	
-	/**
 	 * SimpleMessage: message -> entity name
 	 */
 	ENTITY_REMOVE;

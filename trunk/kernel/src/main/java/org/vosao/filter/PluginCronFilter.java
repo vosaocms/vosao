@@ -48,7 +48,6 @@ public class PluginCronFilter extends AbstractFilter implements Filter {
     private static final Log logger = LogFactory.getLog(PluginCronFilter.class);
 
     private static final String PLUGIN_CRON_URL = "/_ah/cron/plugin";
-    private static final String SESSION_CLEAN_CRON_URL = "/_ah/cron/session_clean";
     private static final String PAGE_PUBLISH_CRON_URL = "/_ah/cron/page_publish";
     
     public PluginCronFilter() {
@@ -64,12 +63,6 @@ public class PluginCronFilter extends AbstractFilter implements Filter {
         boolean processed = false;
         if (url.equals(PLUGIN_CRON_URL)) {
         	getBusiness().getPluginBusiness().cronSchedule(now);
-    		processed = true;
-        }
-        if (url.equals(SESSION_CLEAN_CRON_URL)) {
-    		getMessageQueue().publish(new SimpleMessage(
-    				Topic.SESSION_CLEAN, "start"));
-    		logger.info("Added new session clean task");
     		processed = true;
         }
         if (url.equals(PAGE_PUBLISH_CRON_URL)) {

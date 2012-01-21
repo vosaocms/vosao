@@ -78,7 +78,7 @@ public class StructureTemplateServiceImpl extends AbstractServiceImpl
 		List<String> errors = getBusiness().getStructureTemplateBusiness()
 				.validateBeforeUpdate(entity);
 		if (errors.isEmpty()) {
-			getDao().getStructureTemplateDao().save(entity);
+			getBusiness().getStructureTemplateBusiness().save(entity);
 			return ServiceResponse.createSuccessResponse(entity.getId()
 					.toString());
 		}

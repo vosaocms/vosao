@@ -38,6 +38,10 @@ define(['text!template/pages.html',
 	    searchUI = Vosao.PageSearchComponent('#pageSearch');
 	}
 
+	function isRoot() {
+		return page && page.friendlyURL == '/';
+	}
+	
 	function loadTree() {
 		Vosao.jsonrpc.pageService.getTree(function(r) {
 			root = r;
@@ -151,7 +155,7 @@ define(['text!template/pages.html',
 			id : page == null ? '' : String(page.id),
 			title : $('#title').val(),
 			url : $('#url').val(),
-			friendlyUrl : (page.friendlyURL == '/' ? '/' : parentURL + '/' + $('#url').val())
+			friendlyUrl : (isRoot() ? '/' : parentURL + '/' + $('#url').val())
 		};
 		var error = validate(vo);
 		if (!error) {
@@ -284,7 +288,7 @@ define(['text!template/pages.html',
 		onTitleChange: function() {
 			var url = $("#url").val();
 			var title = $("#title").val();
-			if (url == '' && !(page && page.friendlyURL == '/')) {
+			if (url == '' && !isRoot()) {
 				$("#url").val(Vosao.urlFromTitle(title));
 			}
 		},
@@ -331,7 +335,7 @@ define(['text!template/pages.html',
 			$('#parentURL').html(parentURL + '/');
 			$('#title').val(page.title);
 			$('#url').val(page.pageFriendlyURL);
-			$('#url').attr('disabled', pageItem.children.list.length > 0);
+			$('#url').attr('disabled', isRoot());
 			$('#title').focus();
 		}
 

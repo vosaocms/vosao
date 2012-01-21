@@ -136,7 +136,7 @@ define(['text!template/pages.html',
 				return messages('pages.coma_not_allowed');
 			}
 		}
-		if (vo.url == '') {
+		if (vo.url == '' && !(page && page.friendlyURL == '/')) {
 			return messages('pages.url_is_empty');
 		}
 		else {
@@ -151,7 +151,7 @@ define(['text!template/pages.html',
 			id : page == null ? '' : String(page.id),
 			title : $('#title').val(),
 			url : $('#url').val(),
-			friendlyUrl : parentURL + '/' + $('#url').val()
+			friendlyUrl : (page.friendlyURL == '/' ? '/' : parentURL + '/' + $('#url').val())
 		};
 		var error = validate(vo);
 		if (!error) {
@@ -284,7 +284,7 @@ define(['text!template/pages.html',
 		onTitleChange: function() {
 			var url = $("#url").val();
 			var title = $("#title").val();
-			if (url == '') {
+			if (url == '' && !(page && page.friendlyURL == '/')) {
 				$("#url").val(Vosao.urlFromTitle(title));
 			}
 		},

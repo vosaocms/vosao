@@ -9,5 +9,6 @@
     <url>/_ah/cron/page_publish</url>
     <description>Page cache reset for freshly published pages</description>
     <schedule>every 1 hours</schedule>
+    <target>pub</target>
   </cron>
 </cronentries>

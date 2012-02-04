@@ -141,6 +141,7 @@ function(tmpl) {
 	}
 
 	function onAfterUploadOk() {
+		$('#afterUpload-dialog').dialog('close');
 	    loadData();
 	}
 
@@ -309,6 +310,9 @@ function(tmpl) {
 		},
 		
 		remove: function() {
+		    $("#import-dialog, #afterUpload-dialog, #export-dialog, #stat-dialog")
+		    		.dialog('destroy').remove();
+		    
 			this.el.html('');
 		}
 		

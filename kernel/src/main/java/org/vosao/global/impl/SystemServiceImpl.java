@@ -48,8 +48,8 @@ import org.vosao.global.SystemService;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.labs.taskqueue.Queue;
-import com.google.appengine.api.labs.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.quota.QuotaService;
 import com.google.appengine.api.quota.QuotaServiceFactory;
 

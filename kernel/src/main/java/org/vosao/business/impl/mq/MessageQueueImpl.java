@@ -22,7 +22,7 @@
 
 package org.vosao.business.impl.mq;
 
-import static com.google.appengine.api.labs.taskqueue.TaskOptions.Builder.url;
+import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +55,7 @@ import org.vosao.global.SystemService;
 import org.vosao.servlet.MessageQueueServlet;
 import org.vosao.utils.StreamUtil;
 
-import com.google.appengine.api.labs.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.Queue;
 
 /**
  * 
@@ -121,7 +121,7 @@ public class MessageQueueImpl implements MessageQueue {
 			logger.error("Topic is null in message " + message);
 			return;
 		}
-		queue.add(url(MessageQueueServlet.MQ_URL)
+		queue.add(withUrl(MessageQueueServlet.MQ_URL)
 				.param("message", Base64.encodeBase64(StreamUtil.toBytes(message))));
 	}
 

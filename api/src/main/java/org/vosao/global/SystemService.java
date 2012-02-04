@@ -29,7 +29,7 @@ import org.apache.velocity.app.VelocityEngine;
 import org.vosao.entity.PageEntity;
 
 import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.labs.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.quota.QuotaService;
 
 /**

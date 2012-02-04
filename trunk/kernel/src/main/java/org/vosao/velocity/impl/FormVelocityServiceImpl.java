@@ -37,6 +37,7 @@ import org.vosao.entity.FormConfigEntity;
 import org.vosao.entity.FormDataEntity;
 import org.vosao.entity.FormEntity;
 import org.vosao.entity.helper.EntityHelper;
+import org.vosao.enums.FieldType;
 import org.vosao.global.SystemService;
 import org.vosao.i18n.Messages;
 import org.vosao.velocity.FormVelocityService;
@@ -67,9 +68,17 @@ public class FormVelocityServiceImpl implements FormVelocityService {
 			FormConfigEntity formConfig = getDao().getFormConfigDao().getConfig();
 			VelocityContext context = getPageBusiness().createContext(
 				getBusiness().getLanguage(), null);
+			
 			context.put("formConfig", formConfig);
 			context.put("form", form);
 			context.put("fields", fields);
+			boolean fileupload = false;
+			for (FieldEntity field : fields) {
+				if (field.getFieldType().equals(FieldType.FILE)) {
+					fileupload = true;
+				}
+			}
+			context.put("fileUpload", fileupload);
 			if (StringUtils.isEmpty(formConfig.getFormTemplate())) {
 				return Messages.get("form.template_is_empty");
 			}

@@ -52,36 +52,37 @@ function loadVersions() {
         var vPage = ctx.pages[version];
         h += '<div>';
         if (ctx.pageId != vPage.id) {
-            h += '<a class="button ui-state-default ui-corner-all"\
+            h += '<a class="select button ui-state-default ui-corner-all"\
                title="' + vPage.versionTitle + '"\
                data-version="' + version + '">Version ' + version +'</a>';
         }
         else {
-            h += '<a class="button ui-state-default ui-state-active \
+            h += '<a class="select button ui-state-default ui-state-active \
                ui-corner-all" title="' + vPage.versionTitle 
                + '" data-version="' + version + '" \
                ><span class="ui-icon ui-icon-triangle-1-e"></span> \
                Version ' + version + '</a>';
         }
         if (versions.length > 1) {
-        	h += '<img class="button" src="/static/images/delete-16.png" \
-        		onclick="onVersionDelete(\'' + version + '\')"/></div>';
+        	h += '<img class="delete button" src="/static/images/delete-16.png" data-version="' 
+        		+ version + '"/></div>';
         }
     });
     $('#versions .vertical-buttons-panel').html(h);
-    $('#versions a').click(function() {
-    	var v = $(this).attr('data-version');
-    	if (v) {
-    		onVersionSelect(v);
-    	}
+    $('#versions a.select').click(function() {
+   		onVersionSelect($(this).attr('data-version'));
     });
+    $('#versions img.delete').click(function() {
+   		onVersionDelete($(this).attr('data-version'));
+    });
+
 }
 
 function onVersionDelete(version) {
 	if (confirm(messages('are_you_sure'))) {
 		var delPage = ctx.pages[version];
 		Vosao.jsonrpc.pageService.deletePageVersion(function(r) {
-			if (version == String(page.version)) {
+			if (version == String(ctx.page.version)) {
 				if (versions.length == 1) {
 					location.href = '#pages';
 				} else {

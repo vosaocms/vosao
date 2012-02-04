@@ -138,20 +138,6 @@
             <version>0.0.7</version>
         </dependency>
 
-        <!-- Milton WebDAV -->
-
-        <dependency>
-            <groupId>com.ettrema</groupId>
-            <artifactId>milton-api</artifactId>
-            <version>1.5.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ettrema</groupId>
-            <artifactId>milton-servlet</artifactId>
-            <version>1.5.1</version>
-        </dependency>
-
         <!-- Google Picasa -->
 
         <dependency>

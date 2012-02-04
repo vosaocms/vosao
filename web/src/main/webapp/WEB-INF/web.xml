@@ -130,15 +130,6 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>WebdavServlet</servlet-name>
-        <servlet-class>org.vosao.servlet.WebdavServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>WebdavServlet</servlet-name>
-        <url-pattern>/_ah/webdav/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>ForgotPasswordServlet</servlet-name>
         <servlet-class>org.vosao.servlet.ForgotPasswordServlet</servlet-class>
     </servlet>

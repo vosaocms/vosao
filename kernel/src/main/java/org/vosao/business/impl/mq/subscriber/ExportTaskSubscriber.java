@@ -30,6 +30,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.vosao.business.ImportExportBusiness;
 import org.vosao.business.imex.task.TaskTimeoutException;
@@ -44,8 +45,6 @@ import org.vosao.entity.FolderEntity;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.TemplateEntity;
 import org.vosao.entity.helper.UserHelper;
-
-import com.bradmcevoy.io.StreamUtils;
 
 /**
  * In 9min task exports data to file located in /tmp folder with name stored in
@@ -171,7 +170,7 @@ public class ExportTaskSubscriber extends AbstractSubscriber {
 				while ((entry = in.getNextEntry()) != null) {
 					out.putNextEntry(entry);
 					if (!entry.isDirectory()) {
-		                StreamUtils.readTo(in, out, false, false);
+						IOUtils.copy(in, out);
 		            }
 		            out.closeEntry();
 				}

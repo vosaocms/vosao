@@ -81,7 +81,7 @@ public class LoginServiceImpl extends AbstractServiceImpl
 			ctx.getSession().remove(AuthenticationFilter.ORIGINAL_VIEW_KEY);
 		}
 		else {
-			originalView = "/cms/";
+			originalView = "/";
 		}
 		getMessageQueue().publish(new SimpleMessage(Topic.LOGIN.name(), 
 				user.getEmail()));

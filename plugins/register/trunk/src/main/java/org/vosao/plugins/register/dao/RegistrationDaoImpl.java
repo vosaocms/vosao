@@ -32,7 +32,7 @@ public class RegistrationDaoImpl extends BaseDaoImpl<RegistrationEntity>
 		implements RegistrationDao {
 
 	public RegistrationDaoImpl() {
-		super(RegistrationEntity.class, "register_RegistrationEntity");
+		super(RegistrationEntity.class);
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class RegistrationDaoImpl extends BaseDaoImpl<RegistrationEntity>
 	public RegistrationEntity getBySessionKey(String key) {
 		Query q = newQuery();
 		q.addFilter("sessionKey", FilterOperator.EQUAL, key);
-		return selectOne(q, "getByEmail", params(key));
+		return selectOne(q, "getBySessionKey", params(key));
 	}
 	
 }

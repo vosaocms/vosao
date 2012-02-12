@@ -31,7 +31,7 @@ public class RegisterConfigDaoImpl extends BaseDaoImpl<RegisterConfigEntity>
 		implements RegisterConfigDao {
 
 	public RegisterConfigDaoImpl() {
-		super(RegisterConfigEntity.class, "register_RegisterConfigEntity");
+		super(RegisterConfigEntity.class);
 	}
 
 	@Override

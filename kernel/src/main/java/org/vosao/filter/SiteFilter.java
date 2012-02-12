@@ -57,7 +57,6 @@ public class SiteFilter extends AbstractFilter implements Filter {
 		"/_ah",
 		"/cms",
 		"/static",
-		"/login.vm",
 		"/file",
 		"/setup",
 		"/update",

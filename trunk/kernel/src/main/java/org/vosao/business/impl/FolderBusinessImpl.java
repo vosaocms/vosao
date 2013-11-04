@@ -73,7 +73,13 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 
 	@Override
 	public TreeItemDecorator<FolderEntity> getTree() {
-		return getTree(getDao().getFolderDao().select());
+		long startTime = System.currentTimeMillis();
+		logger.info("---------FolderBusinessImpl.getTree start:" +startTime);
+		
+		List<FolderEntity> select = getDao().getFolderDao().select();		
+		logger.info("--------FolderBusinessImpl.getTree end" +(System.currentTimeMillis()-startTime));
+		TreeItemDecorator<FolderEntity> e= getTree(select);
+		return  e;
 	}
 	
 	@Override
@@ -302,8 +308,10 @@ public class FolderBusinessImpl extends AbstractBusinessImpl
 
 	@Override
 	public FolderEntity getByPath(String path) {
-		TreeItemDecorator<FolderEntity> result = findFolderByPath(getTree(), path);
-		return result != null ? result.getEntity() : null;
+		FolderEntity result = getDao().getFolderDao().getByPath(path);
+		return result != null ? result: null;
 	}
+	
+	
 	
 }

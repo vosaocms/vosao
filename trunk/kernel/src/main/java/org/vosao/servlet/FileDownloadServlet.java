@@ -52,45 +52,56 @@ public class FileDownloadServlet extends AbstractServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+			
 		String[] chain = FolderUtil.getPathChain(request.getPathInfo());
 		if (chain.length == 0) {
 			response.sendError(response.SC_NOT_FOUND, Messages.get(
 					"file.not_specified"));
 			return;
 		}
+		
+		
 		if (servedFromPublicCache(request.getPathInfo(), request, response)) {
 			logger.info("from public cache " + request.getPathInfo());
 			return;
 		}	
+		
+		
 		String filename = chain[chain.length-1];		
-		TreeItemDecorator<FolderEntity> tree = getBusiness().getFolderBusiness()
-				.getTree();
-		TreeItemDecorator<FolderEntity> folder = getBusiness().getFolderBusiness()
-				.findFolderByPath(tree, FolderUtil.getFilePath(
-						request.getPathInfo()));
+				
+		FolderEntity folder = getBusiness().getFolderBusiness()
+				.getByPath( FolderUtil.getFilePath(request.getPathInfo() ) );				
+		
+				
 		if (folder == null) {
 			response.sendError(response.SC_NOT_FOUND, Messages.get(
 					"folder.not_found", request.getPathInfo()));
 			return;
 		}
-		if (isAccessDenied(folder.getEntity())) {
+				
+		if (isAccessDenied(folder)) {
 			response.sendError(response.SC_FORBIDDEN, Messages.get(
 					"access_denied"));
 			return;
 		}
+				
 		if (servedFromCache(request.getPathInfo(), request, response)) {
 			logger.info("from cache " + request.getPathInfo());
 			return;
 		}
+			
 		FileEntity file = getDao().getFileDao().getByName(
-				folder.getEntity().getId(), filename);
+				folder.getId(), filename);
 		if (file != null) {
+			logger.info("not in cache " + request.getPathInfo());
 			byte[] content = getDao().getFileDao().getFileContent(file);
-			if (file.getSize() < CacheService.MEMCACHE_LIMIT) {
+			if (file.getSize() < CacheService.MEMCACHE_LIMIT) {				
+	
 				getSystemService().getFileCache().put(request.getPathInfo(), 
 						new FileCacheItem(file, content, 
 								VosaoContext.getInstance().getUser() == null));
-			}
+				
+				}
 			sendFile(file, content, request, response);
 		}
 		else {

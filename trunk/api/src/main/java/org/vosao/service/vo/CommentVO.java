@@ -62,7 +62,10 @@ public class CommentVO {
 	}
 
 	public String getContent() {
-		return comment.getContent();
+		
+		// keeping carriage return in HTML 
+		return comment.getContent().replace("\n", "<br/>");
+		
 	}
 
 	public String getPublishDate() {

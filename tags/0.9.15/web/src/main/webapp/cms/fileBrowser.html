@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Vosao CMS</title>
+    <link rel="stylesheet" href="/static/css/jquery-ui/redmond/jquery-ui.css" type="text/css" />
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
+</head>
+<body>
+    <div id="loading" style="display: none"></div>
+    <div id="wrapper" style="margin-top:10px">
+        <div id="content"></div>
+        <div class="messages"> </div>
+    </div>
+    <div class="splash">
+    	<h3>Running Vosao...</h3>
+    	<img src="/static/images/splash.gif"/>
+    </div>
+    
+    <script src="/cms/libs/underscore.js" type="text/javascript"></script>
+	<script src="libs/require-jquery.js"></script>
+    <script src="/cms/libs/backbone.js" type="text/javascript"></script>
+    
+    <script type="text/javascript">
+
+    require.config({
+        paths : {
+            text : 'libs/text',
+            order : 'libs/order',
+            "jquery.cookie" : '/static/js/jquery.cookie',
+            "jquery-ui" : '/static/js/jquery-ui',
+            "jquery.xmldom" : '/static/js/jquery.xmldom',
+            "jquery.form" : '/static/js/jquery.form',
+            "jquery.treeview" : '/static/js/jquery.treeview',
+            jsonrpc : '/static/js/jsonrpc',
+            vosao : '/static/js/vosao',
+            cms : '/static/js/cms',
+            i18n : '/i18n',
+            "back-services" : '/static/js/back-services'
+        }
+    });
+
+    require([
+        'view/FileBrowserView', 
+        'jquery-ui',  
+        'order!i18n', 'order!jsonrpc', 'order!vosao', 'order!cms', 'order!back-services'
+    ], function(FileBrowserView) {
+
+        $('#loading').html(messages('loading'));
+        $('.splash').hide();
+        $('#topbar, #wrapper').fadeIn();
+
+        var view = new FileBrowserView();
+    	view.render();
+        
+    });    
+    </script>
+</body>
+</html>

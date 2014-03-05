@@ -1,0 +1,101 @@
+<%/*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2010 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*/%>
+
+<form id="pageForm">
+
+<div style="padding-right:10px">
+    <div style="float:right">
+        <input id="autosave" type="checkbox" /> <label for="autosave"><%= messages("autosave") %></label>
+    </div>
+    <div id="friendlyUrlDiv" class="form-row">
+        <label><%= messages("page.friendly_url") %></label>
+        <span id="parentFriendlyUrl"></span>
+        <input id="friendlyUrl" type="text" />
+        <span id="friendlyUrlSpan"></span>
+    </div>
+    <div class="form-row">
+        <label><%= messages("page.select_language") %>:</label> 
+        <select id="language"></select>
+    </div>
+    <div class="form-row" style="margin-top:10px;">
+        <label><%= messages("title") %></label>
+        <input id="titleLocal" type="text" class="form-title" size="40" />
+    </div>
+    <div class="form-row" id="editorButtons">
+        <a id="ckedit"></a>
+    </div>
+    <div id="page-content"></div>
+</div>
+<div class="buttons">
+    <div id="approveOnContentSaveDiv" class="checkboxes">
+        <input id="approveOnContentSave" type="checkbox" />
+            <label for="approveOnContentSave"><%= messages("page.approve_save") %></label>
+    </div> 
+    <input id="saveContinueContentButton" type="button" 
+        value="<%= messages("save_continue") %>" />
+    <input id="saveContentButton" type="submit" 
+        value="<%= messages("save") %>" />
+    <input id="contentPreviewButton" type="button" 
+        value="<%= messages("preview") %>" />
+    <input id="approveButton" type="button" 
+        value="<%= messages("approve") %>" />
+    <input id="restoreButton" type="button" 
+        value="<%= messages("restore") %>" />
+    <input id="resetCacheButton" type="button" 
+        value="<%= messages("page.reset_cache") %>" />
+    <input id="contentCancelButton" type="button" 
+        value="<%= messages("cancel") %>" />
+</div>    
+
+</form>
+
+<div id="restore-dialog" style="display:none" title="<%= messages("page.restore_content") %>">
+  <form id="restoreForm">
+    <div class="form-row">
+        <input name="page" type="radio" value="home" checked="checked"/> 
+            <%= messages("home_page") %> <br/>        
+        <input name="page" type="radio" value="login" /> 
+            <%= messages("login_page") %> <br/>        
+        <input name="page" type="radio" value="search" /> 
+            <%= messages("search_page") %>         
+    </div>
+    <div class="buttons-dlg">
+        <input id="restoreSaveButton" type="submit" value="OK" />
+        <input id="restoreCancelButton" type="button" value="<%= messages("cancel") %>" />
+    </div>
+  </form>
+</div>
+
+<div id="file-upload" title="<%= messages("folder.upload_file") %>" style="display:none">
+    <form id="upload" action="/cms/upload" method="post" enctype="multipart/form-data">
+        <%= messages("file_upload") %>:
+        <input type="hidden" name="fileType" value="resource" />
+        <input type="hidden" name="folderId" />
+        <input type="file" name="uploadFile" multiple="true" />
+        <div class="buttons-dlg">
+            <input type="submit" value="<%= messages("send") %>" />
+            <input id="fileUploadCancelButton" type="button" 
+                value="<%= messages("cancel") %>" />
+        </div>
+    </form>
+</div>
+

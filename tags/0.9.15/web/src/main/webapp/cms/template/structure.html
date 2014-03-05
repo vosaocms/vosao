@@ -1,0 +1,81 @@
+<%/*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2010 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*/%>
+
+<div id="tabs">
+
+<ul>
+    <li><a href="#tab-1"><%= messages("structure") %></a></li>
+    <li><a href="#tab-2"><%= messages("structure.as_xml") %></a></li>
+    <li><a href="#tab-3"><%= messages("structure.templates") %></a></li>
+</ul>
+
+<div id="tab-1">
+    <div class="form-row">
+        <label><%= messages("title") %></label>
+        <input id="title" type="text" />
+    </div>
+    <div class="form-row">
+        <label><%= messages("fields") %></label>
+        <div id="fields"></div>    
+    </div>
+    <div class="form-row" style="margin-top: 20px;">
+        <span><%= messages("structure.field_title") %></span>
+        <input id="fieldTitle" type="text" /> &nbsp;
+        <span><%= messages("structure.tag_name") %></span> &nbsp;
+        <input id="fieldName" type="text" /> &nbsp;
+        <select id="fieldType"> &nbsp;
+            <option value="TEXT"><%= messages("text") %></option>
+            <option value="TEXTAREA"><%= messages("text_area") %></option>
+            <option value="RESOURCE"><%= messages("resource_link") %></option>
+            <option value="DATE"><%= messages("date") %></option>
+        </select>
+        <a id="addField"> <%= messages("add_field") %></a>
+    </div>
+    <div class="buttons">
+        <input id="saveContinueButton" type="button" value="<%= messages("save_continue")%>" />
+        <input id="saveButton" type="button" value="<%= messages("save")%>" />
+        <input id="cancelButton" type="button" value="<%= messages("cancel")%>" />
+    </div>
+</div>
+
+<div id="tab-2">
+    <div class="form-row">
+        <input id="autosave" type="checkbox" /><label for="autosave"><%= messages("autosave")%></label>
+    </div>
+    <div class="form-row">
+        <textarea id="xmlContent" rows="20" cols="80"></textarea>
+    </div>
+    <div class="buttons">
+        <input id="saveContinueXMLButton" type="button" 
+            value="<%= messages("save_continue")%>" />
+        <input id="saveXMLButton" type="button" value="<%= messages("save")%>" />
+        <input id="cancelXMLButton" type="button" value="<%= messages("cancel")%>" />
+    </div>
+</div>
+
+<div id="tab-3">
+    <div id="templates"><img src="/static/images/ajax-loader.gif" /></div>
+    <div class="buttons">
+        <input id="addTemplateButton" type="button" value="<%= messages("add")%>"/>
+        <input id="deleteTemplateButton" type="button" value="<%= messages("delete")%>"/>
+    </div></div>
+</div>

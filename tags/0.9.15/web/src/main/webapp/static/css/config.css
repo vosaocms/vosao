@@ -1,0 +1,24 @@
+label {
+	width: 300px;
+}
+
+#groupUsers {
+	margin: 0 auto;
+	width: 20em;
+}
+
+#pages {
+	clear: both;
+}
+
+#tag-dialog label {
+	width: 10em;
+}
+
+#stat-dialog label, #attribute-dialog label {
+	height: 20px;
+}
+
+#user-dialog label {
+	width: 150px;
+}

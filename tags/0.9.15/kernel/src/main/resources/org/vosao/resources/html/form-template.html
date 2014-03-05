@@ -1,0 +1,198 @@
+<div id="div-$form.name">
+
+<form id="form-$form.name" method="POST" action="/_ah/plugin/form/send" 
+#if ($fileUpload)
+enctype="multipart/form-data"
+#end
+>
+
+ <input type="hidden" name="form-name" value="$form.name" />
+
+ <div id="messages-$form.name"> </div>
+
+#foreach($field in $fields)
+<div class="field-$field.name">
+  <label>$field.title</label>
+
+#if ($field.fieldType == 'TEXT')
+    #if ($field.height > 1) 
+<textarea name="$field.name" rows="$field.height" cols="$field.width">$!field.defaultValue</textarea>
+    #else
+<input type="text" name="$field.name" value="$!field.defaultValue" 
+    size="$field.width" />
+    #end
+
+#elseif ($field.fieldType == 'PASSWORD')
+<input type="password" name="$field.name" size="$field.width" />
+
+#elseif ($field.fieldType == 'FILE')
+<input type="file" name="$field.name" />
+
+#elseif ($field.fieldType == 'CHECKBOX')
+    #set($i = 0)
+    #foreach($option in $field.options)
+        #if($option.selected)
+<input type="checkbox" checked="checked" name="$field.name$i" 
+    value="$option.value"/>$option.value
+<br/>
+        #else
+<input type="checkbox" name="$field.name$i" value="$option.value"/>$option.value
+<br/>
+        #end
+        #set($i = $i + 1)
+    #end
+
+#elseif ($field.fieldType == 'RADIO')
+    #foreach($option in $field.options)
+        #if($option.selected)
+<input type="radio" checked="checked" name="$field.name" 
+    value="$option.value"/>$option.value
+<br/>
+        #else
+<input type="radio" name="$field.name" value="$option.value"/>$option.value
+<br/>
+        #end
+    #end
+
+#elseif ($field.fieldType == 'LISTBOX')
+<select name="$field.name">
+    #foreach($option in $field.options)
+        #if($option.selected)
+<option value="$option.value" selected="selected">$option.value</option>
+        #else
+<option value="$option.value">$option.value</option>
+        #end
+    #end
+</select>
+#end
+
+</div>
+#end
+#if($form.enableCaptcha && $config.enableRecaptcha)
+<div id="recaptcha">&nbsp;</div>
+<input id="recaptchaChallenge" type="hidden" />
+<input id="recaptchaResponse" type="hidden" />
+#end
+#set($formSend = "Send")
+#if($form.sendButtonTitle != "")
+    #set($formSend = $form.sendButtonTitle)
+#end
+<div class="form-buttons">
+  <input type="submit" value="$formSend" />
+#if($form.showResetButton)
+#set($formReset = "Reset")
+#if($form.resetButtonTitle != "")
+    #set($formReset = $form.resetButtonTitle)
+#end
+  <input type="reset" value="$formReset" />
+#end
+</div>
+</form>
+</div>
+<script type="text/javascript">
+$(function() {
+  $('#form-$form.name').ajaxForm({
+    dataType:'json',
+    beforeSubmit: formValidate,
+    success: function(r) {
+      if (r.result == 'success') {
+         formInfo(r.message);
+         $('#form-$form.name')[0].reset();
+      }
+      else {
+         formError(r.message);
+      }
+#if($form.enableCaptcha && $config.enableRecaptcha)
+   	  Recaptcha.reload();
+#end 
+    },
+    error : function() {
+      formError('Error occured during form submition.');
+#if($form.enableCaptcha && $config.enableRecaptcha)
+      Recaptcha.reload();
+#end 
+    }
+  });
+
+#if($form.enableCaptcha && $config.enableRecaptcha)
+  Recaptcha.create('$config.recaptchaPublicKey',
+    'recaptcha', {
+        theme:'red', callback: Recaptcha.focus_response_field});
+#end 
+});
+
+function formInfo(msg) {
+    $('#messages-$form.name').html('<span class="info">' + msg + '</span>');
+}
+
+function formError(msg) {
+    $('#messages-$form.name').html('<span class="error">' + msg + '</span>');
+}
+
+function formValidate(values, jQuerySet, options) {
+	var valid = true;
+#foreach($field in $fields)
+
+#if ($field.fieldType == 'TEXT')
+#if ($field.mandatory)
+    var value = $('input[name="$field.name"], textarea[name="$field.name"]').val(); 
+    if (value == '') {
+        formError('$field.title is empty. Please provide the value.');
+        valid = false;
+    }
+#end
+#if ($field.regex && $field.regex != "")
+    var value = $('input[name="$field.name"], textarea[name="$field.name"]').val(); 
+    var filter = /$field.regex/; 
+    if (!filter.test(value)) {
+        formError('$field.getRegexMessage($language.code)');
+        valid = false;
+    }
+#end
+#end
+
+#if ($field.fieldType == 'PASSWORD')
+#if ($field.mandatory)
+    var value = $('input[name="$field.name"]').val(); 
+    if (value == '') {
+        formError('$field.title is empty. Please provide the value.');
+        valid = false;
+    }
+#end
+#end
+
+#if ($field.fieldType == 'FILE')
+#if ($field.mandatory)
+    var value = $('input[name="$field.name"]').val(); 
+    if (value == '') {
+        formError('$field.title is empty. Please provide the value.');
+        valid = false;
+    }
+#end
+#end
+
+#if ($field.fieldType == 'CHECKBOX')
+#if ($field.mandatory)
+    var checkedItems = $('input[name="$field.name"]:checked') > 0; 
+    if (checkedItems) {
+        formError('$field.title not selected. Please select.');
+        valid = false;
+    }
+#end    
+#end    
+
+#if ($field.fieldType == 'LISTBOX')
+#if ($field.mandatory)
+    var value = $('select[name="$field.name"]').val(); 
+    if (value == '') {
+        formError('$field.title is not selected. Please select.');
+        valid = false;
+    }
+#end
+#end
+
+#end	
+	return valid;
+}
+
+</script>

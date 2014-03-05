@@ -1,0 +1,47 @@
+<%/*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2011 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*/%>
+
+
+<ul id="tags"></ul>
+<div class="buttons">
+    <input id="addButton" type="button" value="<%= messages("add") %>" />
+</div>
+
+<div id="tag-dialog" style="display:none" title="<%= messages("config.tag_details") %>">
+  <form id="tagForm">
+    <div class="messages"> </div>
+    <div class="form-row">
+        <label><%= messages("title") %></label>
+        <input id="title" type="text"/>
+    </div>
+    <div class="form-row">
+        <label><%= messages("config.tag_name") %></label>
+        <input id="tagName" type="text"/>
+    </div>
+    <div id="pages"></div>
+    <div class="buttons-dlg">
+        <input id="tagSaveDlgButton" type="submit" value="<%= messages("save") %>" />
+        <input id="tagDeleteDlgButton" type="button" value="<%= messages("delete") %>" />
+        <input id="tagCancelDlgButton" type="button" value="<%= messages("cancel") %>" />
+    </div>
+  </form>  
+</div>

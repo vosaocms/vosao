@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+  <cron>
+    <url>/_ah/cron/plugin</url>
+    <description>Plugin cron job scheduler</description>
+    <schedule>every 1 minutes</schedule>
+  </cron>
+  <cron>
+    <url>/_ah/cron/page_publish</url>
+    <description>Page cache reset for freshly published pages</description>
+    <schedule>every 1 hours</schedule>
+    <target>pub</target>
+  </cron>
+</cronentries>

@@ -1,0 +1,61 @@
+<%/*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2011 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*/%>
+
+<div id="main-panel">
+    <div>
+        <img src="/static/images/pages.png" />
+        <a href="#pages">
+            <%= messages("index.content_pages") %>
+        </a>
+        <p><%= messages("index.content_pages.description") %></p>
+    </div>
+<% if (user.admin) { %>
+    <div>
+        <img src="/static/images/templates.png" />
+        <a href="#templates">
+            <%= messages("index.design_templates") %>
+        </a>
+        <p><%= messages("index.design_templates.description") %></p>
+    </div>
+<% } %>    
+    <div>
+        <img src="/static/images/folders.png" />
+        <a href="#folders">
+            <%= messages("index.file_resources_storage") %>
+        </a>
+        <p><%= messages("index.file_resources_storage.description") %></p>
+    </div>
+<% if (user.admin) { %>
+    <div>
+        <img src="/static/images/config.png" />
+        <a href="#config">
+            <%= messages("index.site_configuration") %>
+        </a>
+        <p><%= messages("index.site_configuration.description") %></p>
+    </div>
+    <div>
+        <img src="/static/images/plugins.png" />
+        <a href="#plugins"><%= messages("index.plugins") %></a>
+        <p><%= messages("index.plugins.description") %></p>
+    </div>
+<% } %>    
+</div>

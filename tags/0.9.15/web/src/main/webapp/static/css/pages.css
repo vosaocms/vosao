@@ -1,0 +1,51 @@
+.outline-link {
+    margin-bottom: 10px;
+}
+
+#pages-tree img {
+	position: relative;
+	top: 4px;
+}
+
+#page-dialog label {
+	height: 0;
+	float: none;
+}
+
+#page-dialog .form-row {
+    margin: 10px 0;
+}
+
+#showTitleDiv {
+	margin-bottom: 20px;
+}
+
+#pageSearch {
+    float: right;
+    border: 1px solid #8EB5CF;
+    -moz-border-radius-bottomleft:5px;
+    -moz-border-radius-bottomright:5px;
+    -moz-border-radius-topleft:5px;
+    -moz-border-radius-topright:5px;
+    border-radius: 5px;
+    padding: 8px 16px;
+}
+
+#pageSearch label {
+    float: none;
+}
+
+#enhancedDiv {
+    display: none;
+}
+#enhancedDiv .form-row {
+    padding-top: 10px;
+}
+
+#pageSearchResult {
+	max-width: 500px;
+}
+
+#pageSearchResult div {
+    margin-top: 10px;
+}

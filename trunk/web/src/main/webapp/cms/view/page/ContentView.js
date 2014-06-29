@@ -27,7 +27,7 @@ define(['text!template/page/content.html',
         'order!cm', 'order!cm-css', 'order!cm-js', 'order!cm-xml', 'order!cm-html'], 
 function(contentHtml, ctx, version, breadcrumbs) {
 	
-	console.log('Loading ContentView.js');
+	console.log('Loading ContentView.js - New');
 	
 	var contents = null;
 	var titles = null;
@@ -40,6 +40,9 @@ function(contentHtml, ctx, version, breadcrumbs) {
 	var editTextarea = false;
 
 	function postRender() {
+		
+		console.log('ContentView.js - postRender()');
+		
 		ctx.loadData = loadData;
 		ctx.editMode = ctx.pageId != '';
 	    $("#restore-dialog").dialog({ width: 400, autoOpen: false });
@@ -75,7 +78,15 @@ function(contentHtml, ctx, version, breadcrumbs) {
 	}
 
 	function loadData() {
+		console.log('ContentView.js - loadData()'); 
+		console.log('ContentView.js - pageService.getPageRequest'); 
+		console.log('ctx.pageId = ' + ctx.pageId);
+		console.log('ctx.pageParentUrl = ' + ctx.pageParentUrl);
+		
 		Vosao.jsonrpc.pageService.getPageRequest(function(r) {
+			
+			console.log('ContentView.js - loadData() - in callback');
+			
 			ctx.pageRequest = r;
 			ctx.page = ctx.pageRequest.page;
 			editTextarea = !ctx.pageRequest.config.enableCkeditor 
@@ -94,6 +105,7 @@ function(contentHtml, ctx, version, breadcrumbs) {
 			loadLanguages();
 			loadPage();
 			breadcrumbs.breadcrumbsShow();
+			console.log('ContentView.js - loadData() - end of callback');
 		}, ctx.pageId, ctx.pageParentUrl);
 	}
 
@@ -105,7 +117,10 @@ function(contentHtml, ctx, version, breadcrumbs) {
 			loadPage();
 		}, ctx.pageId, ctx.pageParentUrl);
 	}
-
+	
+	/*
+	 * Appelé par callLoadPage()
+	 */
 	function loadPage() {
 		ctx.pageId = ctx.page.id == null ? '' : String(ctx.page.id);
 		ctx.pageParentUrl = ctx.page.parentUrl;
@@ -129,6 +144,8 @@ function(contentHtml, ctx, version, breadcrumbs) {
 	}
 
 	function initPageForm() {
+		console.log("into initPageForm() ");
+		
 		var urlEnd = ctx.pageParentUrl == '/' ? '' : '/';
 		if (ctx.page.parentUrl == '' || ctx.page.parentUrl == null) {
 			$('#friendlyUrl').hide();
@@ -168,7 +185,10 @@ function(contentHtml, ctx, version, breadcrumbs) {
 		showContentEditor();
 		checkDefault();
 	}
-
+	
+	/*
+	 * Enregistrement de la page et rafraîchissement
+	 */
 	function onPageUpdate(continueFlag) {
 		var pageVO = Vosao.javaMap( {
 			id : ctx.pageId,
@@ -251,6 +271,12 @@ function(contentHtml, ctx, version, breadcrumbs) {
 	}
 
 	function setEditorContent(data) {
+		console.log("setEditorContent : ctx.page.simple = " + ctx.page.simple);
+		console.log("setEditorContent : ctx.page.structured = " + ctx.page.structured);
+		console.log("setEditorContent : contentEditor = " + contentEditor);
+		
+		if (data == null) data = '';
+		
 		if (ctx.page.simple) {
 		    if (editTextarea) {
 				contentEditor.setValue(data);
@@ -282,6 +308,7 @@ function(contentHtml, ctx, version, breadcrumbs) {
 				}
 			});
 		}
+		console.log("setEditorContent : exit from method");
 	}
 
 	function isContentChanged() {
@@ -321,26 +348,34 @@ function(contentHtml, ctx, version, breadcrumbs) {
 	}
 
 	function loadContents() {
+		
+		console.log("loadContents : ctx.currentLanguage = " + ctx.currentLanguage);
+		
 		if (ctx.pageRequest.contents != null) {
+			
+			console.log("loadContents : ctx.pageRequest.contents = " + ctx.pageRequest.contents);
+			
 			var r = ctx.pageRequest.contents;
 			contents = {};
 			$.each(r.list, function(i, value) {
 				contents[value.languageCode] = value.content;
 			});
-			if (!ctx.currentLanguage) {
-				if (languages[Vosao.ENGLISH_CODE] != undefined) {
-					ctx.currentLanguage = Vosao.ENGLISH_CODE;
-				}
-				else {
-					ctx.currentLanguage = r.list[0].languageCode;
-				}
-			}
+			 
+			console.log("loadContents : positionning ctx.currentLanguage...");				
+			
+			ctx.currentLanguage = ctx.pageRequest.config.defaultLanguage;
+				
+			console.log("loadContents : ctx.currentLanguage = " + ctx.currentLanguage);
+		
 			$('#language').val(ctx.currentLanguage);
 			setEditorContent(contents[ctx.currentLanguage]);
 			$('#titleLocal').val(Vosao.unescapeHtml(getTitle()));
 		} else {
+			console.log("loadContents : ctx.pageRequest.contents = " + ctx.pageRequest.contents);
 			setEditorContent('');
 		}
+		
+		console.log("loadContents : exit from function");
 	}
 
 	function onPageApprove() {
@@ -382,12 +417,19 @@ function(contentHtml, ctx, version, breadcrumbs) {
 	}
 
 	function showContentEditor() {
+		
 		$.each(CKEDITOR.instances, function(i,value) {
 			CKEDITOR.remove(value);
 		});
+		
 		if (ctx.page.simple) {
+			console.log("showContentEditor : ctx.page.simple = " + ctx.page.simple);
+			
 			$('#page-content').html('<textarea id="pcontent" rows="20" cols="80"></textarea>');
+			
 			if (editTextarea) {
+				console.log("showContentEditor : editTextarea = " + editTextarea);
+				
 				contentEditor = CodeMirror.fromTextArea(document.getElementById('pcontent'), {
 					lineNumbers: true,
 					theme: 'eclipse',
@@ -399,6 +441,8 @@ function(contentHtml, ctx, version, breadcrumbs) {
 					.css('border', '1px solid silver');
 			}
 			else {
+				console.log("showContentEditor : editTextarea = " + editTextarea);
+				
 		    	contentEditor = CKEDITOR.replace('pcontent', {
 		    		height: 350, width: 'auto',
 		    		filebrowserUploadUrl : '/cms/upload',
@@ -408,6 +452,9 @@ function(contentHtml, ctx, version, breadcrumbs) {
 		    }
 		}
 		if (ctx.page.structured) {
+			
+			console.log("showContentEditor : ctx.page.structured = " + ctx.page.structured);
+			
 			var h = '';
 			$.each(ctx.pageRequest.structureFields.list, function(i, field) {
 				h += '<div><div class="label">' + field.title + ':</div>';
@@ -442,7 +489,12 @@ function(contentHtml, ctx, version, breadcrumbs) {
  		    $.each(ctx.pageRequest.structureFields.list, function(i, field) {
 				if (field.type == 'TEXTAREA') {
 					if (!contentEditors[field.name]) {
+						
+						console.log("showContentEditor : contentEditors[field.name] = " + contentEditors[field.name]);
+						
 						if (editTextarea) {
+							console.log("showContentEditor : editTextarea = " + editTextarea);
+							
 							var el = document.getElementById('field' + field.name);
 							contentEditors[field.name] = CodeMirror.fromTextArea(el, {
 								lineNumbers: true,
@@ -454,6 +506,8 @@ function(contentHtml, ctx, version, breadcrumbs) {
 								.css('border', '1px solid silver');
 						}
 						else {
+							console.log("showContentEditor : editTextarea = " + editTextarea);
+							
 							contentEditors[field.name] = CKEDITOR.replace('field' + field.name, {
 								height: 150, width: 'auto',
 								filebrowserUploadUrl : '/cms/upload',
@@ -480,9 +534,12 @@ function(contentHtml, ctx, version, breadcrumbs) {
 
 	function loadTitles() {
 		titles = ctx.page.titles.map;
+		console.log('titles =' + titles);
 	}
 
 	function getTitle() {
+		console.log('getTitle() =' + titles[ctx.currentLanguage]);
+		
 		if (titles[ctx.currentLanguage] == undefined) {
 			return '';
 		}
@@ -589,8 +646,12 @@ function(contentHtml, ctx, version, breadcrumbs) {
 		tmpl: _.template(contentHtml),
 		
 		render: function() {
+			
 			this.el = $('#tab-1');
 			this.el.html(this.tmpl({messages:messages}));
+			
+			console.log('ContentView.js - Backbone.View.extend.render()');
+			console.log('ctx.currentLanguage = ' + ctx.currentLanguage);
 			postRender();
 		},
 		

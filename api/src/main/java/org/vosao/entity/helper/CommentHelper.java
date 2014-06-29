@@ -41,4 +41,16 @@ public class CommentHelper {
 		}
 	}
 	
+	public static class PublishDateAsc implements Comparator<CommentEntity> {
+		@Override
+		public int compare(CommentEntity o1, CommentEntity o2) {
+			if (o1.getPublishDate().after(o2.getPublishDate())) {
+				return 1;
+			}
+			if (o1.getPublishDate().equals(o2.getPublishDate())) {
+				return 0;
+			}
+			return -1;
+		}
+	}
 }

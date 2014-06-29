@@ -27,6 +27,7 @@ import static com.google.appengine.api.datastore.Query.FilterOperator.EQUAL;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.vosao.dao.BaseDaoImpl;
 import org.vosao.dao.CommentDao;
 import org.vosao.entity.CommentEntity;
@@ -49,7 +50,7 @@ public class CommentDaoImpl extends BaseDaoImpl<CommentEntity>
 		Query q = newQuery();
 		q.addFilter("pageUrl", EQUAL, pageUrl);
 		List<CommentEntity> result = select(q, "getByPage", params(pageUrl));
-		Collections.sort(result, new CommentHelper.PublishDateDesc());
+		
 		return result;
 	}
 	
@@ -86,10 +87,32 @@ public class CommentDaoImpl extends BaseDaoImpl<CommentEntity>
 		q.addFilter("disabled", EQUAL, disabled);
 		List<CommentEntity> result = select(q, "getByPage", params(pageUrl, 
 				disabled));
-		Collections.sort(result, new CommentHelper.PublishDateDesc());
+		logger.info("Sorting by publishDate in Asc mode");
+		Collections.sort(result, new CommentHelper.PublishDateAsc());
 		return result;
 	}
 
+	@Override
+	public List<CommentEntity> getByPage(String pageUrl, boolean disabled, String ascdesc) {
+		
+		logger.info("into getBypage, ascdesc = " +  ascdesc);
+		
+		Query q = newQuery();
+		q.addFilter("pageUrl", EQUAL, pageUrl);
+		q.addFilter("disabled", EQUAL, disabled);
+		List<CommentEntity> result = select(q, "getByPage", params(pageUrl, 
+				disabled));
+		if (StringUtils.isNotEmpty(ascdesc) && ascdesc.equalsIgnoreCase("ASC")) {
+			logger.info("ordering by publishing date " +  ascdesc);
+			Collections.sort(result, new CommentHelper.PublishDateAsc());
+		}
+		else {
+			logger.info("ordering by publishing date desc");
+			Collections.sort(result, new CommentHelper.PublishDateDesc());
+		}
+		return result;
+	}
+	
 	@Override
 	public void removeByPage(String url) {
 		Query q = newQuery();

@@ -60,6 +60,7 @@ function(indexHtml, ctx, version, breadcrumbs) {
 	}
 
 	function loadData() {
+		console.log('IndexView.js - into loadData()');
 		Vosao.jsonrpc.pageService.getPageRequest(function(r) {
 			ctx.pageRequest = r;
 			ctx.page = ctx.pageRequest.page;
@@ -89,12 +90,12 @@ function(indexHtml, ctx, version, breadcrumbs) {
 	}
 
 	function loadPage() {
+		console.log('IndexView.js - into loadPage()');
 		if (ctx.editMode) {
 			ctx.pageId = String(ctx.page.id);
 			ctx.pageParentUrl = ctx.page.parentUrl;
 			version.loadVersions();
 			loadLanguages();
-			loadContents();
 			showTags();
 		} else {
 			ctx.pages['1'] = ctx.page;
@@ -104,6 +105,7 @@ function(indexHtml, ctx, version, breadcrumbs) {
 	}
 
 	function loadTemplates() {
+		console.log('IndexView.js - into loadTemplates()');
 		var r = ctx.pageRequest.templates;
 		var html = '';
 	    $.each(r.list, function (n,value) {
@@ -326,6 +328,7 @@ function(indexHtml, ctx, version, breadcrumbs) {
 	}
 
 	function loadStructures() {
+		console.log('IndexView.js - into loadStructures()');
 		var h = '';
 		$.each(ctx.pageRequest.structures.list, function(i, struct) {
 			var sel = i == 0 ? 'selected="selected"' : '';
@@ -359,36 +362,24 @@ function(indexHtml, ctx, version, breadcrumbs) {
 	}
 
 	function loadLanguages() {
+		
+		console.log('IndexView.js - into loadLanguages()');
+		
 		var r = ctx.pageRequest.languages;
 		languages = {};
 		var h = '';
 		$.each(r.list, function(i, value) {
 			languages[value.code] = value;
 		});
+				
+		console.log("loadLanguages : positionning ctx.currentLanguage...");				
+		
+		ctx.currentLanguage = ctx.pageRequest.config.defaultLanguage;
+			
+		console.log("loadLanguages : ctx.currentLanguage = " + ctx.currentLanguage);
 	}
 
-	function loadContents() {
-		if (ctx.editMode) {
-			var r = ctx.pageRequest.contents;
-			var allowedLangs = {};
-			if (ctx.pageRequest.pagePermission.allLanguages) {
-				allowedLangs = languages;
-			}
-			else {
-				$.each(ctx.pageRequest.pagePermission.languagesList.list, 
-						function(i, value) {
-					allowedLangs[value] = languages[value];
-				});
-			}
-			if (allowedLangs[Vosao.ENGLISH_CODE] != undefined) {
-				ctx.currentLanguage = Vosao.ENGLISH_CODE;
-			}
-			else {
-				ctx.currentLanguage = r.list[0].languageCode;
-			}
-		}
-	}
-
+	
 	// Tags
 
 	function onAddTag() {

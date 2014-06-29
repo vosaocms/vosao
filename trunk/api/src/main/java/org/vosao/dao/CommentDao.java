@@ -45,6 +45,15 @@ public interface CommentDao extends BaseDao<CommentEntity> {
 	 * @return found comments ordered by publishDate desc.
 	 */
 	List<CommentEntity> getByPage(final String pageUrl, boolean disabled);
+	
+	/**
+	 * Get comments by page's friendlyURL and ordering by publishDate asc or desc.
+	 * @param pageUrl - page friendlyURL.
+	 * @param disabled - disabled flag.
+	 * @param ascdesc - ordering
+	 * @return found comments ordered by publishDate asc or desc.
+	 */
+	List<CommentEntity> getByPage(final String pageUrl, boolean disabled, String ascdesc);
 
 	void enable(final List<Long> ids);
 	

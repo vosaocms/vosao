@@ -22,6 +22,7 @@
 
 package org.vosao.velocity.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -32,11 +33,14 @@ import org.vosao.business.page.impl.StructurePageRenderDecorator;
 import org.vosao.business.vo.StructureFieldVO;
 import org.vosao.common.AbstractServiceBeanImpl;
 import org.vosao.common.VosaoContext;
+import org.vosao.entity.CommentEntity;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.PageTagEntity;
 import org.vosao.entity.StructureEntity;
 import org.vosao.entity.StructureTemplateEntity;
+import org.vosao.entity.TagEntity;
 import org.vosao.entity.UserEntity;
 import org.vosao.entity.helper.PageHelper;
 import org.vosao.enums.UserRole;
@@ -85,6 +89,14 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 				pageUrl, false));
 	}
 
+	@Override
+	public List<CommentVO> getCommentsByPage(String pageUrl, String ascdesc) {
+		// TODO add security check
+		return CommentVO.create(getDao().getCommentDao().getByPage(
+				pageUrl, false, ascdesc));
+	}
+	
+	
 	@Override
 	public String findContent(String path, String aLanguageCode) {
 		PageEntity page = getBusiness().getPageBusiness().getByUrl(path);
@@ -333,5 +345,6 @@ public class VelocityServiceImpl extends AbstractServiceBeanImpl
 		// TODO add security check
 		return CommentVO.create(getDao().getCommentDao().getRecent(limit));
 	}
+	
 	
 }

@@ -151,6 +151,8 @@ public interface VelocityService {
 
 	List<CommentVO> getCommentsByPage(final String pageUrl);
 	
+	List<CommentVO> getCommentsByPage(final String pageUrl, String ascdesc);
+	
 	/**
 	 * Find approved last version page content by friendlyURL and language.
 	 * @param path - page friendlyURL.
@@ -249,4 +251,5 @@ public interface VelocityService {
 	FileVO getResource(String path);
 
 	List<CommentVO> getRecentComments(int limit);
+	
 }

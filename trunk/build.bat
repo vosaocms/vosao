@@ -1,1 +1,3 @@
-mvn -Dappname=vosaocms clean install
+call mvn -Dappname=gazlet clean package
+
+pause

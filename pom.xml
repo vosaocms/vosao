@@ -63,11 +63,6 @@
     </pluginRepositories>
     
     <repositories>
-    	<!-- pour dev local en javascript --> 
-		<!--  repository>
-            <id>vosao-repo</id>
-            <url>file://C:/repository</url>
-        </repository-->
         <repository>
             <id>vosao-maven-repo</id>
             <url>http://vosao.googlecode.com/svn/repository</url>
@@ -93,8 +88,8 @@
     </repositories>
     
     <modules>
-        <!--module>api</module>
-        <module>kernel</module-->
+        <module>api</module>
+        <module>kernel</module>
         <module>web</module>
     </modules>
     

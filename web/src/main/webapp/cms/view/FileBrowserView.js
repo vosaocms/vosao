@@ -43,6 +43,7 @@ function(html) {
 		window.scrollbars.visible = true;
 	    adjustFilesDivHeight();
 	    $(window).resize(adjustFilesDivHeight);
+	    
 	}
 
 	function adjustFilesDivHeight() {
@@ -51,15 +52,21 @@ function(html) {
 	}
 
 	function loadData() {
+		
+		// loads Folder Tab 
 		loadFolderTree();
+		// loads 'Pages' Tab 
 		loadTree();
+		// loda 'Picasa' Tab 
 		loadConfig();
 	}
 
 	function loadFolderTree() {
 		Vosao.jsonrpc.folderService.getTree(function(rootItem) {
 	        rootFolder = rootItem;
+	        // #folders-tree is the id of the <ul> that is the tree root
 	        $("#folders-tree").html(renderFolderList(rootItem));
+	        // callback when clicking on a tree link
 	        $("#folders-tree a").click(function() {
 	        	onFolderSelected($(this).attr('data-id'));    	
 	        });
@@ -68,7 +75,12 @@ function(html) {
 	    });
 	}
 
+	/**
+	 * Selecting the folder to open 
+	 */
 	function selectFolder() {
+		
+		// the article images path is set by cookie in ContentView.js
 	   	if ($.cookie('fileBrowserPath')) {
 	   		Vosao.jsonrpc.folderService.getFolderByPath(function(r) {
 	   			if (r) {
@@ -78,7 +90,6 @@ function(html) {
 	   		   		onFolderSelected(rootFolder.entity.id);
 	   			}
 	   		}, $.cookie('fileBrowserPath'));
-			$.cookie('fileBrowserPath', null, {path:'/', expires: 10});
 	   	}
 	   	else {
 	   		onFolderSelected(rootFolder.entity.id);
@@ -163,7 +174,10 @@ function(html) {
        		window.close();
 	   	}
 	} 
-
+	
+	/**
+	 * Loading 'Pages' Tab 
+	 */
 	function loadTree() {
 		Vosao.jsonrpc.pageService.getTree(function(r) {
 			$('#pages-tree').html(renderPage(r));
@@ -267,15 +281,25 @@ function(html) {
 		
 		css: ['/static/css/jquery.treeview.css', '/static/css/fileBrowser.css'],
 		
+		// browser DOM object reference in this view 
 		el: $('#content'),
 		
+		// Compile the template using underscore
+		// html is 'function' parameter ...
 		tmpl: _.template(html),
 		
+		// function called by fileBrower.html 
 		render: function() {
+			
 			Vosao.addCSSFiles(this.css);
+			
+			// Load the compiled HTML into the Backbone "el"
 			this.el.html(this.tmpl({messages:messages}));
+			
 			postRender();
+			
 			this.el.fadeIn();
+			
 		},
 		
 		remove: function() {

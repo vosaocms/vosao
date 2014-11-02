@@ -21,7 +21,7 @@
     <script src="/cms/libs/backbone.js" type="text/javascript"></script>
     
     <script type="text/javascript">
-
+	
     require.config({
         paths : {
             text : 'libs/text',
@@ -48,7 +48,9 @@
         $('#loading').html(messages('loading'));
         $('.splash').hide();
         $('#topbar, #wrapper').fadeIn();
-
+		
+        console.log('Loading FileBrowserView.js from fileBrowser.html');
+        
         var view = new FileBrowserView();
     	view.render();
         

@@ -37,6 +37,16 @@
             <organization>portalteam.net</organization>
             <timezone>+2</timezone>
         </developer>
+        <developer>
+            <id>emilio</id>
+            <name>Emilio</name>
+            <email>emilio24107@gmail.com</email>
+            <roles>
+                <role>Maintenance Developer</role>
+            </roles>
+            <organization>jexposecvu.com</organization>
+            <timezone>+2</timezone>
+        </developer>
     </developers>
         
     <scm>
@@ -53,6 +63,11 @@
     </pluginRepositories>
     
     <repositories>
+    	<!-- pour dev local en javascript --> 
+		<!--  repository>
+            <id>vosao-repo</id>
+            <url>file://C:/repository</url>
+        </repository-->
         <repository>
             <id>vosao-maven-repo</id>
             <url>http://vosao.googlecode.com/svn/repository</url>
@@ -78,8 +93,8 @@
     </repositories>
     
     <modules>
-        <module>api</module>
-        <module>kernel</module>
+        <!--module>api</module>
+        <module>kernel</module-->
         <module>web</module>
     </modules>
     
@@ -113,7 +128,7 @@
       <gae.application.id>vosaocms</gae.application.id>
       <gae.application.version>vosaocms-0-9</gae.application.version>
       <vosao.version>0.9</vosao.version>
-      <vosao.version.full>0.9.16</vosao.version.full>
+      <vosao.version.full>0.9.17</vosao.version.full>
       <vosao.admin.username>admin</vosao.admin.username>
       <vosao.admin.email>admin@test.com</vosao.admin.email>
       <vosao.admin.password>admin</vosao.admin.password>

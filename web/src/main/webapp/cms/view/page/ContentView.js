@@ -53,8 +53,8 @@ function(contentHtml, ctx, version, breadcrumbs) {
 	    version.initVersionDialog();
 	    $('#autosave').change(onAutosave);
 	    $('#language').change(onLanguageChange);
-	    $('#saveContinueContentButton').click(function(){onPageUpdate(true)});
-	    $('#pageForm').submit(function() {onPageUpdate(false); return false;});
+	    $('#saveContinueContentButton').click(function(){onPageUpdate(true, false)});
+	    $('#pageForm').submit(function() {onPageUpdate(false, false); return false;});
 	    $('#contentPreviewButton').click(onPagePreview);
 	    $('#approveButton').click(onPageApprove);
 	    $('#restoreButton').click(onRestore);
@@ -180,7 +180,7 @@ function(contentHtml, ctx, version, breadcrumbs) {
 	/*
 	 * Enregistrement de la page et rafraîchissement
 	 */
-	function onPageUpdate(continueFlag) {
+	function onPageUpdate(continueFlag, autosave) {
 		var pageVO = Vosao.javaMap( {
 			id : ctx.pageId,
 			friendlyUrl : $('#parentFriendlyUrl').text() + $('#friendlyUrl').val(),
@@ -195,7 +195,7 @@ function(contentHtml, ctx, version, breadcrumbs) {
 				if (!continueFlag) {
 					location.href = '#pages';
 				}
-				else {
+				else if (!autosave){
 					callLoadPage();
 				}
 			} else {
@@ -214,7 +214,7 @@ function(contentHtml, ctx, version, breadcrumbs) {
 	}
 
 	function saveContentByTimer() {
-		onPageUpdate(true);
+		onPageUpdate(true, true);
 	}
 
 	function stopAutosave() {

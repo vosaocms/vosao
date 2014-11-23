@@ -22,6 +22,7 @@
 
 package org.vosao.search;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -32,13 +33,13 @@ import java.util.List;
  */
 public interface SearchIndex {
 
-	void updateIndex(Long pageId);
+	void updateIndex(Long pageId) throws IOException;
 
-	void removeFromIndex(Long pageId);
+	void removeFromIndex(Long pageId) ;
 
 	List<Hit> search(SearchResultFilter filter, String query, int textSize);
 	
-	void saveIndex();
+	void saveIndex() throws IOException;
 	
 	String getLanguage();
 

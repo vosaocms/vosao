@@ -41,6 +41,8 @@ public class SearchServiceImpl extends AbstractServiceImpl
 	@Override
 	public SearchResult searchFilter(List<String> sections, String text, int start, 
 			int count, int textSize) {
+		
+		logger.info("into searchFilter");
 		String query = text.toLowerCase();
 		String language = getBusiness().getLanguage();
 		String defaultLanguage = getBusiness().getDefaultLanguage();
@@ -49,6 +51,8 @@ public class SearchServiceImpl extends AbstractServiceImpl
 				query, start, count, language, textSize);
 		
 		if (!language.equals(defaultLanguage)) {
+			
+			logger.info("Searching in defaultLanguage = " + defaultLanguage);
 			SearchResult enResult = getBusiness().getSearchEngine().search(
 					new SectionSearchFilter(sections),
 					query, start, count, defaultLanguage, textSize);
@@ -60,6 +64,7 @@ public class SearchServiceImpl extends AbstractServiceImpl
 			result.setCount(result.getCount() + enResult.getCount());
 			result.getHits().addAll(enResult.getHits());
 		}
+		logger.info("out of searchFilter");
 		return result;
 	}
 

@@ -22,7 +22,7 @@
 
 package org.vosao.search.impl;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,20 +30,17 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vosao.business.Business;
-import org.vosao.business.mq.QueueSpeed;
-import org.vosao.business.mq.Topic;
 import org.vosao.business.mq.message.IndexMessage;
-import org.vosao.business.mq.message.PageMessage;
 import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.entity.LanguageEntity;
-import org.vosao.entity.PageEntity;
 import org.vosao.search.Hit;
 import org.vosao.search.SearchEngine;
 import org.vosao.search.SearchIndex;
 import org.vosao.search.SearchResult;
 import org.vosao.search.SearchResultFilter;
 import org.vosao.utils.ListUtil;
+import org.vosao.utils.StreamUtil;
 
 /**
  *  
@@ -69,10 +66,14 @@ public class SearchEngineImpl implements SearchEngine {
 	}
 	
 	@Override
-	public void reindex() {
+	public void reindex()  {
 		for (LanguageEntity language : getDao().getLanguageDao().select()) {
 			getSearchIndex(language.getCode()).clear();
-			getSearchIndex(language.getCode()).saveIndex();
+			try {
+				getSearchIndex(language.getCode()).saveIndex();
+			} catch (IOException e) {
+				logger.error(StreamUtil.getStackTrace(e));
+			}
 		}
 		getBusiness().getMessageQueue().publish(new IndexMessage());
 	}
@@ -81,17 +82,27 @@ public class SearchEngineImpl implements SearchEngine {
 	public SearchResult search(SearchResultFilter filter, String query, 
 			int start, int count, String language, int textSize) {
 		// Search in language index first for all results
+		
+		logger.info("into engine.search : language = " + language);
+		
 		List<Hit> hits = getSearchIndex(language).search(filter, query, textSize);
+		
 		// Search in all other languages for all results
 		for (LanguageEntity lang : getDao().getLanguageDao().select()) {
 			if (!lang.getCode().equals(language)) {
+				
+				logger.info("Searching in " + lang.getCode());
+				
 				hits.addAll(getSearchIndex(lang.getCode()).search(filter, query, 
 						textSize));
 			}
 		}
 		// paginate result and return
 		SearchResult result = new SearchResult();
+		
+		logger.info("Number of hits = " + hits.size());
 		result.setCount(hits.size());
+		
 		int startIndex = start < hits.size() ? start : hits.size();
 		int endIndex = startIndex + count;
 		if (count == -1) {
@@ -101,11 +112,13 @@ public class SearchEngineImpl implements SearchEngine {
 			endIndex = hits.size();
 		}
 		result.setHits(ListUtil.slice(hits, startIndex, count));
+		
+		logger.info("out of engine.search");
 		return result;
 	}
 
 	@Override
-	public void updateIndex(Long pageId) {
+	public void updateIndex(Long pageId) throws IOException {
 		for (LanguageEntity language : getDao().getLanguageDao().select()) {
 			getSearchIndex(language.getCode()).updateIndex(pageId);
 		}
@@ -117,9 +130,9 @@ public class SearchEngineImpl implements SearchEngine {
 			getSearchIndex(language.getCode()).removeFromIndex(pageId);
 		}
 	}
-
+ 
 	@Override
-	public void saveIndex() {
+	public void saveIndex() throws IOException {
 		for (LanguageEntity language : getDao().getLanguageDao().select()) {
 			getSearchIndex(language.getCode()).saveIndex();
 		}

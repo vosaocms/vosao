@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import java.io.IOException;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -44,6 +46,7 @@ import org.vosao.search.Hit;
 import org.vosao.search.SearchIndex;
 import org.vosao.search.SearchResultFilter;
 import org.vosao.utils.StrUtil;
+import org.vosao.utils.StreamUtil;
 
 public class SearchIndexImpl implements SearchIndex {
 
@@ -57,12 +60,19 @@ public class SearchIndexImpl implements SearchIndex {
 	private Date indexModDate;
 
 	public SearchIndexImpl(String aLanguage) {
-		language = aLanguage;
-		loadIndex();
+		
+		try {			
+			language = aLanguage;
+			
+			loadIndex();
+		} catch (IOException e) {
+			
+			logger.error(StreamUtil.getStackTrace(e));
+		}
 	}
 	
 	@Override
-	public void updateIndex(Long pageId) {
+	public void updateIndex(Long pageId) throws IOException {
 		PageEntity page = getDao().getPageDao().getById(pageId);
 		if (page == null) {
 			return;
@@ -109,18 +119,15 @@ public class SearchIndexImpl implements SearchIndex {
 	}
 	
 	@Override
-	public void saveIndex() {
-		try {
-			byte[] indexContent = StrUtil.zipStringToBytes(indexToString());
-			FileEntity file = getBusiness().getFileBusiness()
-					.saveFile(getIndexFilename(), indexContent);
-			indexModDate = file.getLastModifiedTime();
-			getBusiness().getSystemService().getCache().getMemcache().put(
-					getIndexKey(), indexModDate);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+	public void saveIndex() throws IOException {
+		
+		byte[] indexContent = StrUtil.zipStringToBytes(indexToString());
+		FileEntity file = getBusiness().getFileBusiness()
+				.saveFile(getIndexFilename(), indexContent);
+		indexModDate = file.getLastModifiedTime();
+		getBusiness().getSystemService().getCache().getMemcache().put(
+				getIndexKey(), indexModDate);
+		
 	}
 
 	private String indexToString() {
@@ -142,39 +149,51 @@ public class SearchIndexImpl implements SearchIndex {
 	@Override
 	public List<Hit> search(SearchResultFilter filter, String query, 
 			int textSize) {
-		try {
 		
-		refreshIndex();
+		logger.info("into index.search in " + language);
 		List<Hit> result = new ArrayList<Hit>();
-		List<Long> pages = new ArrayList<Long>(getPageIds(query));
-		for (Long pageId : pages) {
-			PageEntity page = getDao().getPageDao().getById(pageId);
-			if (page != null) {
-				if (filter != null && !filter.check(page)) {
-					continue;
-				}
-				ContentEntity content = getBusiness().getPageBusiness()
-						.getPageContent(page, language);
-				if (content != null) {
-					String text = StrUtil.extractSearchTextFromHTML(
-							content.getContent());
-					if (text.length() > textSize) {
-						text = text.substring(0, textSize);
+				
+		try {
+			refreshIndex();
+			
+			List<Long> pages = new ArrayList<Long>(getPageIds(query));
+			
+			logger.info("Number of pages found = " + pages.size());
+			
+			for (Long pageId : pages) {
+				PageEntity page = getDao().getPageDao().getById(pageId);
+				if (page != null) {
+					if (filter != null && !filter.check(page)) {
+						logger.info("page skipped by filter");
+						continue;
 					}
-					result.add(new Hit(page, text, language));
+					ContentEntity content = getBusiness().getPageBusiness()
+							.getPageContent(page, language);
+					if (content != null) {
+						logger.info("Content found for pageId = " + pageId + " in " + language);
+						String text = StrUtil.extractSearchTextFromHTML(
+								content.getContent());
+						if (text.length() > textSize) {
+							text = text.substring(0, textSize);
+						}
+						result.add(new Hit(page, text, language));
+					}
+					else {
+						logger.error("Content not found for pageId = " + pageId);
+					}
 				}
-			}
-			else {
-				logger.error("Page not found " + pageId + ". Rebuild index.");
-			}
-		}	
+				else {
+					logger.error("Page not found " + pageId + ". Rebuild index.");
+				}
+			}	
+			
+		} catch (IOException e) {
+			
+			logger.error(StreamUtil.getStackTrace(e));
+		}
+		logger.info("out of index.search");
 		return result;
 		
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return Collections.EMPTY_LIST;
-		}
 	}
 
 	private Set<Long> getPageIds(String query) {
@@ -204,9 +223,16 @@ public class SearchIndexImpl implements SearchIndex {
 	}	
 	
 	private Set<Long> getPageKeys(String word) {
+		logger.info("into index.getPageKeys");
 		if (getIndex().containsKey(word)) {
+			logger.info("word " + word + " found");
+			logger.info("out of index.getPageKeys");
 			return getIndex().get(word);
 		}
+		else {
+			logger.info("word + " + word + " NOT found");
+		}
+		logger.info("out of index.getPageKeys without found pageIds");
 		return Collections.EMPTY_SET;
 	}
 
@@ -214,7 +240,7 @@ public class SearchIndexImpl implements SearchIndex {
 		return INDEX_MOD_DATE + getLanguage();
 	}
 	
-	private void refreshIndex() {
+	private void refreshIndex() throws IOException {
 		Date date = (Date) getBusiness().getSystemService().getCache()
 				.getMemcache().get(getIndexKey());
 		if (index == null || date == null || !date.equals(indexModDate)) {
@@ -226,35 +252,36 @@ public class SearchIndexImpl implements SearchIndex {
 		return "/tmp/index_" + getLanguage() + ".bin";
 	}
 	
-	private void loadIndex() {
-		try {
-			index = new HashMap<String, Set<Long>>();
-			indexModDate = null;
-			FileEntity file = getBusiness().getFileBusiness()
-					.findFile(getIndexFilename());
-			if (file == null) {
-				logger.error("Search index not found. " + getIndexFilename());
-				return;
-			}
-			byte[] data = getDao().getFileDao().getFileContent(file);
-			if (data != null) {
-				String strIndex = StrUtil.unzipStringFromBytes(data);
-				indexFromString(strIndex);
-				indexModDate = file.getLastModifiedTime();
-				Date dt = (Date)getBusiness().getSystemService().getCache()
-						.getMemcache().get(getIndexKey());
-				if (dt == null || dt.before(indexModDate)) {
-					getBusiness().getSystemService().getCache().getMemcache()
-							.put(getIndexKey(), indexModDate);
-				}
-			}
-			else {
-				logger.error("Search index is empty. " + getIndexFilename());
+	private void loadIndex() throws IOException {					
+		
+		logger.info("into loadIndex");
+		
+		index = new HashMap<String, Set<Long>>();
+		indexModDate = null;
+		FileEntity file = getBusiness().getFileBusiness()
+				.findFile(getIndexFilename());
+		if (file == null) {
+			logger.error("Index File not found. " + getIndexFilename());
+			logger.info("out of loadIndex");
+			return;
+		}
+		byte[] data = getDao().getFileDao().getFileContent(file);
+		if (data != null) {
+			String strIndex = StrUtil.unzipStringFromBytes(data);
+			indexFromString(strIndex);
+			indexModDate = file.getLastModifiedTime();
+			Date dt = (Date)getBusiness().getSystemService().getCache()
+					.getMemcache().get(getIndexKey());
+			if (dt == null || dt.before(indexModDate)) {
+				getBusiness().getSystemService().getCache().getMemcache()
+						.put(getIndexKey(), indexModDate);
 			}
 		}
-		catch (Exception e) {
-			e.printStackTrace();
+		else {
+			logger.error("Search index is empty. " + getIndexFilename());
 		}
+		logger.info("out of loadIndex");
+			
 	}
 
 	private void indexFromString(String data) {
@@ -290,6 +317,7 @@ public class SearchIndexImpl implements SearchIndex {
 
 	private Map<String, Set<Long>> getIndex() {
 		if (index == null) {
+			logger.info("index null");
 			index = new HashMap<String, Set<Long>>();
 		}
 		return index;

@@ -22,12 +22,14 @@
 
 package org.vosao.search;
 
+import java.io.IOException;
+
 
 public interface SearchEngine {
 
-	void updateIndex(Long pageId);
+	void updateIndex(Long pageId) throws IOException;
 
-	void removeFromIndex(Long pageId);
+	void removeFromIndex(Long pageId) ;
 
 	SearchResult search(SearchResultFilter filter, String query, int start, 
 			int count, String language, int textSize);
@@ -37,5 +39,5 @@ public interface SearchEngine {
 	 */
 	void reindex();
 	
-	void saveIndex();
+	void saveIndex() throws IOException;
 }

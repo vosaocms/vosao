@@ -22,6 +22,8 @@
 
 package org.vosao.business.impl.mq.subscriber;
 
+import java.io.IOException;
+
 import org.vosao.business.impl.mq.AbstractSubscriber;
 import org.vosao.business.mq.Message;
 import org.vosao.business.mq.message.IndexMessage;
@@ -29,6 +31,7 @@ import org.vosao.common.RequestTimeoutException;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.helper.UserHelper;
+import org.vosao.utils.StreamUtil;
 
 /**
  * Reindex pages.
@@ -51,18 +54,26 @@ public class Reindex extends AbstractSubscriber {
 			logger.info("Reindex finished. Reindexed " + count + " pages.");
 		}
 		catch (RequestTimeoutException e) {
-			getBusiness().getSearchEngine().saveIndex();
+			String stackTrace = StreamUtil.getStackTrace(e);
+			logger.error(stackTrace);
+			
+			try {
+				getBusiness().getSearchEngine().saveIndex();
+			} catch (IOException e1) {				
+				logger.error(StreamUtil.getStackTrace(e1));
+			}
+			
 			getBusiness().getMessageQueue().publish(new IndexMessage(
 					currentNumber));
 			logger.info("Reindexed " + count + " pages");
 		}
-		catch(Exception e) {
-			logger.error(e.getMessage());
-			e.printStackTrace();
+		catch(IOException e) {
+			String stackTrace = StreamUtil.getStackTrace(e);
+			logger.error(stackTrace);
 		}
 	}
 	
-	private void reindexPage(PageEntity page) throws RequestTimeoutException {
+	private void reindexPage(PageEntity page) throws RequestTimeoutException, IOException {
 		currentNumber++;
 		if (getBusiness().getSystemService().getRequestCPUTimeSeconds() > 20) {
 			throw new RequestTimeoutException();

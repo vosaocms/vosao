@@ -23,6 +23,7 @@
 package org.vosao.business.impl.mq.subscriber;
 
 import java.util.Set;
+import java.io.IOException;
 
 import org.vosao.business.impl.mq.AbstractSubscriber;
 import org.vosao.business.mq.Message;
@@ -30,6 +31,7 @@ import org.vosao.business.mq.message.PageMessage;
 import org.vosao.common.VosaoContext;
 import org.vosao.entity.PageEntity;
 import org.vosao.entity.helper.UserHelper;
+import org.vosao.utils.StreamUtil;
 
 /**
  * Reindex changed pages.
@@ -54,9 +56,10 @@ public class IndexChangedPages extends AbstractSubscriber {
 			}
 			getBusiness().getSearchEngine().saveIndex();
 		}
-		catch(Exception e) {
-			logger.error(e.getMessage());
-			e.printStackTrace();
+		
+		catch(IOException e) {
+			String stackTrace = StreamUtil.getStackTrace(e);
+			logger.error(stackTrace);
 		}
 	}
 	

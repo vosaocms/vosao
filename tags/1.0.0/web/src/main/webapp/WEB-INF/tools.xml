@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tools>
+    <toolbox scope="application">
+        <tool key="messages" class="org.vosao.i18n.MessagesTool" />
+        <tool key="vosao" class="org.vosao.velocity.impl.VosaoTool" />
+    </toolbox>
+</tools>

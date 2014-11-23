@@ -1,0 +1,150 @@
+<%/*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2011 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*/%>
+
+<form id="pageForm">
+
+<div id="titleDiv" class="form-row">
+    <label><%= messages("title") %></label>
+    <input id="title" type="text" class="form-title" size="40" />
+</div>
+<div class="form-row">
+    <label><%= messages("page.friendly_url") %></label>
+    <span id="parentFriendlyUrl"></span>
+    <input id="friendlyUrl" type="text" />
+    <span id="friendlyUrlSpan"></span>
+</div>
+<div class="form-row">
+    <label><%= messages("restful") %></label>
+    <input id="restful" type="checkbox" />
+</div>
+<div class="form-row">
+    <label><%= messages("template") %></label>
+    <select id="templates"></select>
+</div>
+<div class="form-row">
+    <label><%= messages("page.publication_date") %></label>
+    <input id="publishDate" type="text" class="datepicker" size="9"/>
+    <input id="publishTime" type="text" size="5"/>
+    -
+    <input id="endPublishDate" type="text" class="datepicker" size="9"/>
+    <input id="endPublishTime" type="text" size="5"/>
+</div>
+<div class="form-row">
+    <label><%= messages("enable_comments") %></label>
+    <input id="commentsEnabled" type="checkbox" />
+</div>
+<div class="form-row">
+    <label><%= messages("page.include_search") %></label>
+    <input id="searchable" type="checkbox" />
+</div>
+<div class="form-row">
+    <label><%= messages("page.velocity_processing") %></label>
+    <input id="velocityProcessing" type="checkbox" />
+</div>
+<div class="form-row">
+    <label><%= messages("page.wiki_processing") %></label>
+    <input id="wikiProcessing" type="checkbox" />
+</div>
+<div class="form-row">
+    <label><%= messages("config.enable_ckeditor") %></label>
+    <input id="enableCkeditor" type="checkbox" />
+</div>
+<div class="form-row">
+    <label><%= messages("page.skip_postprocessing") %></label>
+    <input id="skipPostProcessing" type="checkbox" />
+</div>
+<div class="form-row">
+    <label><%= messages("page.cache_enabled") %></label>
+    <input id="cached" type="checkbox" />
+</div>
+<div id="dependenciesDiv" class="form-row">
+    <label><%= messages("cache_dependencies") %></label>
+    <input id="dependencies" type="text" class="form-title" size="60" />
+</div>
+
+<div class="form-row">
+    <label><%= messages("page.type") %></label>
+    <select id="pageType">
+        <option value="SIMPLE"><%= messages("simple") %></option>
+        <option value="STRUCTURED"><%= messages("structured") %></option>
+    </select>
+</div>
+
+<div id="structuredControls">
+<div class="form-row">
+    <label><%= messages("structure") %></label>
+    <select id="structure"></select>
+</div>
+<div class="form-row">
+    <label><%= messages("page.structure_template") %></label>
+    <select id="structureTemplate"></select>
+</div>
+</div>
+
+<div id="tagsDiv" class="form-row">
+    <label><%= messages("tags") %></label>
+    <a id="addTag" href="#"><%= messages("add_tag") %></a>
+    <span id="tags"></span>
+</div>
+
+<div class="form-row">
+    <a id="metadata" href="#"><%= messages("page.metadata") %></a>
+</div>
+<div id="meta" style="display:none">
+<div class="form-row">
+    <label><%= messages("page.meta_keywords") %></label>
+    <textarea id="keywords" rows="5" cols="80"></textarea>
+</div>
+<div class="form-row">
+    <label><%= messages("page.meta_description") %></label>
+    <textarea id="description" rows="5" cols="80"></textarea>
+</div>
+<div class="form-row">
+    <label><%= messages("page.head_content") %></label>
+    <textarea id="headHtml" rows="5" cols="80"></textarea>
+</div>
+<div class="form-row">
+    <label><%= messages("content_type") %></label>
+    <input id="contentType" type="text" class="form-title" />
+</div>
+</div>
+
+<div class="buttons">
+    <div id="approveOnPageSaveDiv" class="checkboxes">
+        <input id="approveOnPageSave" type="checkbox"> 
+            <label for="approveOnPageSave"><%= messages("page.approve_save") %></label>
+    </div> 
+    <input id="pageSaveButton" type="submit" 
+        value="<%= messages("save") %>" />
+    <input id="pagePreview" type="button" 
+        value="<%= messages("preview") %>" />
+    <input id="pageCancelButton" type="button" 
+        value="<%= messages("cancel") %>" />
+</div>    
+
+</form>
+
+<div id="tag-dialog" style="display:none" title="<%= messages("select_tag") %>">
+    <ul id="tagTree"></ul>
+</div>
+
+

@@ -1,0 +1,11 @@
+<!-- Indices written at Fri, 18 Jun 2010 20:08:17 UTC -->
+
+<datastore-indexes autoGenerate="true">
+
+    <!-- Used 9 times in query history -->
+    <datastore-index kind="PageEntity" ancestor="false" source="auto">
+        <property name="parentUrl" direction="asc"/>
+        <property name="publishDate" direction="asc"/>
+    </datastore-index>
+
+</datastore-indexes>

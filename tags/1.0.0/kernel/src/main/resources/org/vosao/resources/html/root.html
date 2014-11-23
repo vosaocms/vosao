@@ -1,0 +1,32 @@
+<h1>Welcome to Vosao CMS default site!</h1>
+ 
+<p>This is a site root page</p><p><a href="/cms/">CMS Configuration</a></p>
+<p>Admin user : admin@test.com</p>
+<p>Admin password: admin</p>
+
+<p>This is automatically generated root page for your site. You can change it in 
+cms configuration area.</p>
+
+<form id="searchForm">
+    <input type="text" id="query"/>
+    <input type="submit" value="Search"/>
+</form>
+
+<p>Good luck!</p>
+<p>Vosao CMS team.</p>
+
+
+<script type="text/javascript">
+
+$(function() {
+	$('#searchForm').submit(function(){onSearch(); return false;});
+});
+
+function onSearch() {
+	var query = $('#query').val();
+	if (query) {
+	    location.href = '/search?query=' + query;
+	}
+}
+
+</script>

@@ -1,0 +1,134 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.vosao</groupId>
+    <artifactId>vosaocms</artifactId>
+    <version>1.0</version>
+    <packaging>pom</packaging>   
+    <name>Vosao CMS</name>
+    <url>http://www.vosao.org</url>
+    <description>Vosao CMS for Google App Engine</description>
+
+    <issueManagement>
+        <system>Google Code</system>
+        <url>http://code.google.com/p/vosao/issues/list</url>
+    </issueManagement>
+    
+    <developers>
+        <developer>
+            <id>oleynik</id>
+            <name>Alex</name>
+            <email>kinyelo@gmail.com</email>
+            <roles>
+                <role>Java Developer</role>
+                <role>Architect</role>
+            </roles>
+            <organization>portalteam.net</organization>
+            <timezone>+2</timezone>
+        </developer>
+        <developer>
+            <id>yuri</id>
+            <name>Yuri</name>
+            <email>yuri.voloshenyuk@gmail.com</email>
+            <roles>
+                <role>Java Developer</role>
+            </roles>
+            <organization>portalteam.net</organization>
+            <timezone>+2</timezone>
+        </developer>
+        <developer>
+            <id>emilio</id>
+            <name>Emilio</name>
+            <email>emilio24107@gmail.com</email>
+            <roles>
+                <role>Maintenance Developer</role>
+            </roles>
+            <organization>jexposecvu.com</organization>
+            <timezone>+2</timezone>
+        </developer>
+    </developers>
+        
+    <scm>
+        <connection>scm:svn:http://vosao.googlecode.com/svn/trunk/</connection>
+        <developerConnection>scm:svn:https://vosao.googlecode.com/svn/trunk/</developerConnection>
+        <url>http://code.google.com/p/vosao/source/browse/</url>
+    </scm>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>datanucleus</id>
+            <url>http://www.datanucleus.org/downloads/maven2</url>
+        </pluginRepository>
+    </pluginRepositories>
+    
+    <repositories>
+        <repository>
+            <id>vosao-maven-repo</id>
+            <url>http://vosao.googlecode.com/svn/repository</url>
+        </repository>
+        <repository>
+            <id>mvnsearch</id>
+            <url>http://www.mvnsearch.org/maven2</url>
+        </repository>
+        <repository>
+            <id>datanucleus</id>
+            <url>http://www.datanucleus.org/downloads/maven2</url>
+        </repository>
+        <repository>
+            <id>info-bliki-repository</id>
+            <url>http://gwtwiki.googlecode.com/svn/maven-repository/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    
+    <modules>
+        <module>api</module>
+        <module>kernel</module>
+        <module>web</module>
+    </modules>
+    
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <configuration>
+                    <linkXref>true</linkXref>
+                    <sourceEncoding>utf-8</sourceEncoding>
+                    <targetJdk>1.5</targetJdk>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin
+                </artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </reporting>
+    
+    <properties>
+      <gae.application.id>vosaocms</gae.application.id>
+      <gae.application.version>vosaocms-1-0</gae.application.version>
+      <vosao.version>1.0</vosao.version>
+      <vosao.version.full>1.0.0</vosao.version.full>
+      <vosao.admin.username>admin</vosao.admin.username>
+      <vosao.admin.email>admin@test.com</vosao.admin.email>
+      <vosao.admin.password>admin</vosao.admin.password>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+    
+</project>

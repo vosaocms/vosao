@@ -1,0 +1,58 @@
+<%/*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2010 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*/%>
+
+<div id="tabs">
+
+<ul>
+    <li><a href="#tab-1"><%= messages("structureTemplate.title") %></a></li>
+</ul>
+
+<div id="tab-1">
+    <div class="form-row">
+        <label><%= messages("title") %></label>
+        <input id="title" type="text" />
+    </div>
+    <div class="form-row">
+        <label><%= messages("name") %></label>
+        <input id="name" type="text" />
+    </div>
+    <div class="form-row">
+        <label><%= messages("structureTemplate.content") %></label>
+        <input id="autosave" type="checkbox" /> <label for="autosave"><%= messages("autosave") %></label>
+    </div>    
+    <div class="form-row">
+        <textarea id="vcontent" rows="20" cols="80"></textarea>
+    </div>
+    <div class="form-row">
+        <label><%= messages("structureTemplate.head_content") %></label>
+    </div>    
+    <div class="form-row">
+        <textarea id="headContent" rows="8" cols="80"></textarea>
+    </div>
+    <div class="buttons">
+        <input id="saveContinueButton" type="button" value="<%= messages("save_continue") %>" />
+        <input id="saveButton" type="button" value="<%= messages("save") %>" />
+        <input id="cancelButton" type="button" value="<%= messages("cancel") %>" />
+    </div>
+</div>
+
+</div>

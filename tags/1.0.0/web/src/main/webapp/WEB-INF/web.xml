@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5">
+
+    <filter>
+        <filter-name>ContextFilter</filter-name>
+        <filter-class>org.vosao.filter.ContextFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ContextFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>    
+
+    <filter>
+        <filter-name>InitFilter</filter-name>
+        <filter-class>org.vosao.filter.InitFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>InitFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>    
+
+    <filter>
+        <filter-name>UpdateFilter</filter-name>
+        <filter-class>org.vosao.filter.UpdateFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>UpdateFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>    
+
+    <filter>
+        <filter-name>LanguageFilter</filter-name>
+        <filter-class>org.vosao.filter.LanguageFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LanguageFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>    
+
+    <filter>
+        <filter-name>PluginCronFilter</filter-name>
+        <filter-class>org.vosao.filter.PluginCronFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>PluginCronFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>    
+
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>org.vosao.filter.AuthenticationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>    
+
+    <filter>
+        <filter-name>RestFilter</filter-name>
+        <filter-class>org.vosao.filter.RestFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>RestFilter</filter-name>
+        <url-pattern>/rest/*</url-pattern>
+    </filter-mapping>    
+
+    <filter>
+        <filter-name>RewriteFilter</filter-name>
+        <filter-class>org.vosao.filter.RewriteFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>RewriteFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>    
+
+    <filter>
+        <filter-name>SiteFilter</filter-name>
+        <filter-class>org.vosao.filter.SiteFilter</filter-class>
+        <!-- init-param>
+        	<param-name>skipURL</param-name>
+        	<param-value>/api,/service</param-value>
+        </init-param-->
+    </filter>
+    <filter-mapping>
+        <filter-name>SiteFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>    
+
+    <servlet>
+        <servlet-name>org.vosao.servlet.ServiceServlet</servlet-name>
+        <servlet-class>org.vosao.servlet.ServiceServlet</servlet-class>
+        <init-param>
+            <param-name>gzip_threshold</param-name>
+            <param-value>200</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>org.vosao.servlet.ServiceServlet</servlet-name>
+        <url-pattern>/json-rpc/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>FileUpload</servlet-name>
+        <servlet-class>org.vosao.servlet.FileUploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FileUpload</servlet-name>
+        <url-pattern>/cms/upload</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>FileDownload</servlet-name>
+        <servlet-class>org.vosao.servlet.FileDownloadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FileDownload</servlet-name>
+        <url-pattern>/file/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>FormSend</servlet-name>
+        <servlet-class>org.vosao.servlet.FormSendServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FormSend</servlet-name>
+        <url-pattern>/_ah/plugin/form/send</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ForgotPasswordServlet</servlet-name>
+        <servlet-class>org.vosao.servlet.ForgotPasswordServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ForgotPasswordServlet</servlet-name>
+        <url-pattern>/_ah/changePassword</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>MessageQueueServlet</servlet-name>
+        <servlet-class>org.vosao.servlet.MessageQueueServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MessageQueueServlet</servlet-name>
+        <url-pattern>/_ah/queue/mq</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CacheResetServlet</servlet-name>
+        <servlet-class>org.vosao.servlet.CacheResetServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CacheResetServlet</servlet-name>
+        <url-pattern>/_ah/reset_cache</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>org.vosao.servlet.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/_ah/logout</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ChannelCommandServlet</servlet-name>
+        <servlet-class>org.vosao.servlet.ChannelCommandServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ChannelCommandServlet</servlet-name>
+        <url-pattern>/_ah/channelCommand</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>JSBundleServlet</servlet-name>
+        <servlet-class>org.vosao.servlet.JSBundleServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>JSBundleServlet</servlet-name>
+        <url-pattern>/i18n.js</url-pattern>
+    </servlet-mapping>
+
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+
+    <!-- Google AppStats -->
+    
+    <!-- filter>
+        <filter-name>appstats</filter-name>
+        <filter-class>com.google.appengine.tools.appstats.AppstatsFilter</filter-class>
+        <init-param>
+            <param-name>logMessage</param-name>
+            <param-value>Appstats available: /_ah/appstats/details?time={ID}</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>appstats</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <servlet>
+        <servlet-name>appstats</servlet-name>
+        <servlet-class>com.google.appengine.tools.appstats.AppstatsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>appstats</servlet-name>
+        <url-pattern>/_ah/appstats/*</url-pattern>
+    </servlet-mapping-->
+    
+    <!-- security-constraint>
+        <web-resource-collection>
+            <url-pattern>/setup</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint-->
+    
+</web-app>

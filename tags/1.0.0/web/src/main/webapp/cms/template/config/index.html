@@ -1,0 +1,102 @@
+<%/*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2011 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*/%>
+
+  <form id="configForm">
+    <div class="form-row">
+        <label><%= messages("config.db_version") %></label>
+        <span id="version" />
+    </div>
+    <div class="form-row">
+        <label>Google Analytics ID</label>
+        <input id="googleAnalyticsId" type="text" />
+    </div>
+    <div class="form-row">
+        <label><%= messages("config.site_owner_email") %></label>
+        <input id="siteEmail" type="text" />
+    </div>
+    <div class="form-row">
+        <label><%= messages("site_domain") %></label>
+        <input id="siteDomain" type="text" />
+    </div>
+    <div class="form-row">
+        <label><%= messages("config.enable_recaptcha") %></label>
+        <input id="enableRecaptcha" type="checkbox" />
+    </div>
+    <div id="recaptcha">
+        <div class="form-row">
+            <label><%= messages("config.recaptcha_public_key") %></label>
+            <input id="recaptchaPublicKey" type="text" size="40"/>
+        </div>
+        <div class="form-row">
+            <label><%= messages("config.recaptcha_private_key") %></label>
+            <input id="recaptchaPrivateKey" type="text" size="40"/>
+        </div>
+    </div>
+    <div class="form-row">
+        <label><%= messages("config.edit_extension") %></label>
+        <input id="editExt" type="text"/>
+    </div>
+    <div class="form-row">
+        <label><%= messages("config.login_url") %></label>
+        <input id="siteUserLoginUrl" type="text"/>
+    </div>
+    <div class="form-row">
+        <label><%= messages("config.404_url") %></label>
+        <input id="site404Url" type="text"/>
+    </div>
+    <div class="form-row">
+        <label><%= messages("config.enable_ckeditor") %></label>
+        <input id="enableCkeditor" type="checkbox" />
+    </div>
+    <div class="form-row">
+         <label><%= messages("profile.timezone") %></label>
+         <select id="timezone"></select>
+    </div>    
+    <div class="form-row">
+        <label><%= messages("page.select_language") %>:</label> 
+        <select id="language"></select>
+    </div>
+    <div class="form-row">
+        <label><%= messages("config.enable_picasa") %></label>
+        <input id="enablePicasa" type="checkbox" />
+    </div>
+    <div id="picasa">
+        <div class="form-row">
+            <label>Picasa <%= messages("user_email") %></label>
+            <input id="picasaUser" type="text" />
+        </div>
+        <div class="form-row">
+            <label>Picasa <%= messages("password") %></label>
+            <input id="picasaPassword" type="password" />
+        </div>
+    </div>
+    <div class="buttons">
+        <input id="saveButton" type="submit" value="<%= messages("save") %>" />
+        <input id="exportButton" type="button" value="<%= messages("export") %>" />
+        <input id="importButton" type="button" value="<%= messages("import") %>" />
+        <input id="reindexButton" type="button" value="<%= messages("config.create_search_index") %>" />
+        <input id="resetButton" type="button" value="<%= messages("reset") %>" />
+        <input id="loadDefaultSiteButton" type="button" value="<%= messages("config.load_default_site") %>" />
+        <input id="cacheResetButton" type="button" value="<%= messages("config.cache_reset") %>" />
+        <input id="statButton" type="button" value="<%= messages("stat") %>" />
+    </div>
+  </form>

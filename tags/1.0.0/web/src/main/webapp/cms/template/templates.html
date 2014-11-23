@@ -1,0 +1,80 @@
+<%/*
+ Vosao CMS. Simple CMS for Google App Engine.
+ 
+ Copyright (C) 2009-2010 Vosao development team.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ email: vosao.dev@gmail.com
+*/%>
+
+<div id="tabs">
+
+<ul>
+    <li><a href="#tab-1"><%= messages("templates") %></a></li>
+</ul>
+
+<div id="tab-1">
+    <div id="templates"><img src="/static/images/ajax-loader.gif" /></div>
+    <div class="buttons">
+        <input id="addButton" type="button" value="<%= messages("add")%>" />
+        <input id="deleteButton" type="button" value="<%= messages("delete")%>" />
+        <input id="exportButton" type="button" value="<%= messages("export")%>" />
+        <input id="importButton" type="button" value="<%= messages("import")%>" />
+    </div>
+</div>
+
+</div>
+
+<div id="import-dialog" title="<%= messages("templates.import_themes")%>" style="display:none">
+<form id="upload" action="/cms/upload" method="post" enctype="multipart/form-data">
+    <%= messages("file_upload")%>:
+    <input type="hidden" name="fileType" value="import" />
+    <input type="file" name="uploadFile" />
+    <div class="buttons-dlg">
+        <input type="submit" value="<%= messages("send")%>" />
+        <input id="importCancelButton" type="button" value="<%= messages("cancel")%>" />
+    </div>    
+</form>
+</div>
+
+<div id="afterUpload-dialog" style="display:none" title="<%= messages("status_window")%>">
+    <p class="message"></p>
+    <div class="buttons-dlg">
+        <input id="okButton" type="button" value="OK" />
+    </div>
+</div>
+
+<div id="export-dialog" style="display:none" title="<%= messages("export_window")%>">
+  <form id="exportForm">
+    <p><%= messages("templates.export_info")%></p>
+    <div id="exportInfo" class="form-row"></div>    
+    <div id="timer" class="form-row"></div>
+    <div class="buttons-dlg">
+        <input id="exportCancelButton" type="button" value="<%= messages("cancel")%>" />
+    </div>
+  </form>
+</div>
+
+<div id="structures-dialog" style="display:none" title="<%= messages("export_structures")%>">
+  <form id="structuresForm">
+    <p><%= messages("templates.structures_info")%></p>
+    <div id="structures"></div>    
+    <div class="buttons-dlg">
+        <input type="submit" value="<%= messages("export")%>" />
+        <input id="structuresCancelButton" type="button" value="<%= messages("cancel")%>" />
+    </div>
+  </form>
+</div>

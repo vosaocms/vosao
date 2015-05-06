@@ -24,6 +24,7 @@ package org.vosao.service.front;
 
 import java.util.List;
 
+import org.vosao.entity.PageEntity;
 import org.vosao.search.SearchResult;
 import org.vosao.service.AbstractService;
 
@@ -42,5 +43,8 @@ public interface SearchService extends AbstractService {
 			int count, int textSize);
 
 	SearchResult searchFilter(List<String> sections, String query);
+	
+	List<PageEntity> searchFilter(List<String> sections, String query, int start, 
+			int count); 
 
 }

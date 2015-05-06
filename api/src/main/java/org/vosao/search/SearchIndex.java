@@ -25,6 +25,8 @@ package org.vosao.search;
 import java.io.IOException;
 import java.util.List;
 
+import org.vosao.entity.PageEntity;
+
 /**
  * Search index of all site pages for one language.
  * 
@@ -38,6 +40,8 @@ public interface SearchIndex {
 	void removeFromIndex(Long pageId) ;
 
 	List<Hit> search(SearchResultFilter filter, String query, int textSize);
+	
+	public List<PageEntity> search(SearchResultFilter filter, String query);
 	
 	void saveIndex() throws IOException;
 	

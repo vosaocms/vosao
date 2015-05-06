@@ -23,6 +23,9 @@
 package org.vosao.search;
 
 import java.io.IOException;
+import java.util.List;
+
+import org.vosao.entity.PageEntity;
 
 
 public interface SearchEngine {
@@ -33,6 +36,9 @@ public interface SearchEngine {
 
 	SearchResult search(SearchResultFilter filter, String query, int start, 
 			int count, String language, int textSize);
+	
+	List<PageEntity> search(SearchResultFilter filter, String query, 
+			int start, int count, String language);
 	
 	/**
 	 * Start index creation procedure. Create index generator task.

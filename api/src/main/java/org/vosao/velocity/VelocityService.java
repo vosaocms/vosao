@@ -252,4 +252,15 @@ public interface VelocityService {
 
 	List<CommentVO> getRecentComments(int limit);
 	
+	/**
+	 * Text search in pages
+	 * @param sections
+	 * @param text
+	 * @param start
+	 * @param count
+	 * @return 
+	 */
+	public List<PageEntity> searchFilter(List<String> sections, String text, int start, 
+			int count);
+	
 }

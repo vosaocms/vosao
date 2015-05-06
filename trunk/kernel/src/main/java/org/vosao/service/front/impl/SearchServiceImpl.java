@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.vosao.entity.PageEntity;
 import org.vosao.search.Hit;
 import org.vosao.search.SearchResult;
 import org.vosao.service.front.SearchService;
@@ -66,6 +67,22 @@ public class SearchServiceImpl extends AbstractServiceImpl
 		}
 		logger.info("out of searchFilter");
 		return result;
+	}
+
+	@Override
+	public List<PageEntity> searchFilter(List<String> sections, String text, int start, 
+			int count) {
+		
+		logger.info("into searchFilter");
+		String query = text.toLowerCase();
+		String language = getBusiness().getLanguage();
+		
+		List<PageEntity> pages = getBusiness().getSearchEngine().search(
+				new SectionSearchFilter(sections),
+				query, start, count, language);
+		
+		logger.info("out of searchFilter");
+		return pages;
 	}
 
 	@Override

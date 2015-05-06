@@ -172,7 +172,7 @@ public class SearchIndexImpl implements SearchIndex {
 					if (content != null) {
 						logger.info("Content found for pageId = " + pageId + " in " + language);
 						String text = StrUtil.extractSearchTextFromHTML(
-								content.getContent());
+								content.getContent());						
 						if (text.length() > textSize) {
 							text = text.substring(0, textSize);
 						}
@@ -196,6 +196,51 @@ public class SearchIndexImpl implements SearchIndex {
 		
 	}
 
+	@Override
+	public List<PageEntity> search(SearchResultFilter filter, String query) {
+		
+		logger.info("into index.search in " + language);
+		List<PageEntity> result = new ArrayList<PageEntity>();
+				
+		try {
+			refreshIndex();
+			
+			List<Long> pages = new ArrayList<Long>(getPageIds(query));
+			
+			logger.info("Number of pages found = " + pages.size());
+			
+			for (Long pageId : pages) {
+				PageEntity page = getDao().getPageDao().getById(pageId);
+				if (page != null && page.isStructured()) {
+					if (filter != null && !filter.check(page)) {
+						logger.info("page skipped by filter");
+						continue;
+					}
+					ContentEntity content = getBusiness().getPageBusiness()
+							.getPageContent(page, language);
+					if (content != null) {
+						
+						result.add(page);
+					}
+					else {
+						logger.error("Content not found for pageId = " + pageId);
+					}
+				}
+				else {
+					logger.error("Page not found " + pageId + ". Rebuild index.");
+				}
+			}	
+			
+		} catch (IOException e) {
+			
+			logger.error(StreamUtil.getStackTrace(e));
+		}
+		logger.info("out of index.search");
+		return result;
+		
+	}
+
+	
 	private Set<Long> getPageIds(String query) {
 		String[] words = StrUtil.splitByWord(query);
 		if (words.length == 0) {

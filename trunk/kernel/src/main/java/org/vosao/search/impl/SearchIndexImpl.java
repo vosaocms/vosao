@@ -22,12 +22,14 @@
 
 package org.vosao.search.impl;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -102,6 +104,9 @@ public class SearchIndexImpl implements SearchIndex {
 			if (word.length() < 3) {
 				continue;
 			}
+			
+			word = StrUtil.removeAccents(word);
+			
 			if (!getIndex().containsKey(word)) {
 				getIndex().put(word, new HashSet<Long>());
 			}
@@ -242,18 +247,46 @@ public class SearchIndexImpl implements SearchIndex {
 
 	
 	private Set<Long> getPageIds(String query) {
-		String[] words = StrUtil.splitByWord(query);
-		if (words.length == 0) {
+		String[] tmpWords = StrUtil.splitByWord(query);
+		if (tmpWords.length == 0) {
 			return Collections.EMPTY_SET;
 		}
-		Set<Long> keys = getPageKeys(words[0]);
-		int i = 0;
-		for (String word : words) {
-			if (i++ > 0) {
-				keys = keysLogicalAnd(keys, getPageKeys(word));
-			}
+		
+		int nbWords = 0;
+		
+		/* 
+		 * query doesn't take account 
+		 * words with length < 3 
+		 */
+		for (String tmpWord : tmpWords) {
+			if (tmpWord.length() >= 3) 
+				nbWords++;
 		}
-		//logger.info("found keys " + keys.toString());
+		
+		String[] words = new String[nbWords];
+		
+		int i = 0;
+		for (String tmpWord : tmpWords) {
+			if (tmpWord.length() >= 3) { 
+				words[i] = tmpWord;
+				i++;
+			}
+		}			
+		
+		Set<Long> keys = null;
+		i = 0;
+		
+		for (String word : words) {	
+			if (i == 0) {
+				keys = getPageKeys(StrUtil.removeAccents(word));
+				i++;
+			}
+			
+			else {
+				keys = keysLogicalAnd(keys, getPageKeys(StrUtil.removeAccents(word)));
+			}			
+		}
+		
 		return keys;		
 	}	
 		

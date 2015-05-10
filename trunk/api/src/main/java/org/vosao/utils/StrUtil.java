@@ -27,6 +27,7 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -216,5 +217,13 @@ public class StrUtil {
 			}
 		}
 		return result;
+	}
+	/**
+	 * 
+	 * @param source
+	 * @return
+	 */
+	public static String removeAccents(String source) {
+		return Normalizer.normalize(source, Normalizer.Form.NFD).replaceAll("[\u0300-\u036F]", "");
 	}
 }

@@ -23,6 +23,7 @@
 package org.vosao.search.impl;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,7 @@ import org.vosao.common.VosaoContext;
 import org.vosao.dao.Dao;
 import org.vosao.entity.LanguageEntity;
 import org.vosao.entity.PageEntity;
+import org.vosao.entity.helper.PageHelper;
 import org.vosao.search.Hit;
 import org.vosao.search.SearchEngine;
 import org.vosao.search.SearchIndex;
@@ -136,7 +138,9 @@ public class SearchEngineImpl implements SearchEngine {
 				pages.addAll(getSearchIndex(lang.getCode()).search(filter, query));
 			}
 		}
-				
+		
+		Collections.sort(pages, PageHelper.PUBLISH_DATE);
+		
 		logger.info("Number of pages = " + pages.size());
 		
 		int startIndex = start < pages.size() ? start : pages.size();

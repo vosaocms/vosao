@@ -51,6 +51,7 @@ public class Messages {
 	public static final String I18N_CACHE_KEY = "i18n_";
 	
 	private static final Locale[] supportedLocales = {
+		Locale.FRANCE,
 		Locale.ENGLISH,
 		Locale.GERMAN,
 		new Locale("es"),
@@ -68,6 +69,7 @@ public class Messages {
 	
 	private static VosaoResourceBundle getBundle(HttpServletRequest request) {
 		Locale sessionLocale = VosaoContext.getInstance().getSession().getLocale();
+		
 		Locale locale = sessionLocale != null ? sessionLocale : request.getLocale();
 		return getBundle(locale);
 	}
@@ -78,6 +80,7 @@ public class Messages {
 
 	private static VosaoResourceBundle getBundle(Locale locale) {
 		if (!bundles.containsKey(locale)) {
+			
 			bundles.put(locale, new VosaoResourceBundle(locale));
 		}
 		return bundles.get(locale);
@@ -86,10 +89,13 @@ public class Messages {
 	public static String get(String key, Object...objects) {
 		VosaoContext ctx = VosaoContext.getInstance();
 		String pattern = "not found";
+		
 		if (isLocaleSupported(ctx.getLocale())) {
+			
 			pattern = getBundle(ctx.getRequest()).getString(key);
 		}
 		else {
+			
 			pattern = getDefaultBundle().getString(key);
 		}
 		if (objects != null) {
@@ -185,7 +191,9 @@ public class Messages {
 	}
 	
 	public static boolean isLocaleSupported(Locale locale) {
+		
 		for (Locale l : supportedLocales) {
+			
 			if (l.equals(locale)) {
 				return true;
 			}

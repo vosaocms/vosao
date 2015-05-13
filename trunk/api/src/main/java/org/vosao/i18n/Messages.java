@@ -52,6 +52,7 @@ public class Messages {
 	
 	private static final Locale[] supportedLocales = {
 		Locale.FRANCE,
+		Locale.FRENCH,
 		Locale.ENGLISH,
 		Locale.GERMAN,
 		new Locale("es"),

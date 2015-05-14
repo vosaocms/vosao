@@ -123,7 +123,7 @@
       <gae.application.id>vosaocms</gae.application.id>
       <gae.application.version>vosaocms-1-0</gae.application.version>
       <vosao.version>1.0</vosao.version>
-      <vosao.version.full>1.0.0</vosao.version.full>
+      <vosao.version.full>1.0.1</vosao.version.full>
       <vosao.admin.username>admin</vosao.admin.username>
       <vosao.admin.email>admin@test.com</vosao.admin.email>
       <vosao.admin.password>admin</vosao.admin.password>

@@ -1,3 +1,3 @@
-call mvn -Dappname=gazlet clean package
+call mvn -Dappname=vosao clean package
 
 pause

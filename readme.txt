@@ -4,43 +4,70 @@
                          --------------------------------
            
   Vosao CMS is a simple and easy to use tool for creating sites and hosting them
-on Google App Engine.
+on Google App Engine. Vosao CMS is developped in Java.
 According to Google free quota in most cases you will have free hosting for 
 your site. 
 
+1. Prerequisites
+=================
 
-1. Web resources
+	1) You must have a Google App Engine application : see https://cloud.google.com/appengine/
+
+	2) Download and install the GAE SDK for Java : see https://cloud.google.com/appengine/downloads
+
+2. Installing Vosao CMS
+==========================
+
+	1) Download the latest Vosao version (vosaocms-x.y.z.war)
+
+	2) Unpack vosaocms-x.y.z.war
+
+	3) In the unpacked directory, find the file WEB-INF/appengine-web.xml and change 
+       the application name to your appspot application name
+
+	4) Upload the CMS application by issuing the GAE SDK command line:
+	   {SDK bin directory}\appcfg.cmd update <unpacked war directory>
+	
+3. Using Vosao CMS :
+======================
+	
+	Your GAE application site is on http://<applicationname>.appspot.com
+	
+	The cms to create your site is at 
+			http://<applicationname>.appspot.com/cms/ 
+														(with end /) 
+			
+	Please authenticate with user/pwd admin@test.com/admin
+	
+	To launch default site go to "Configuration" and click "Load default site" 
+	
+	Default site example : http://monvosao.appspot.com
+
+3. Repository
 ================
 
-Vosao Home Page is at:
+New Vosao repository is on GitHub !
 
-    http://code.goole.com/p/vosao
+    https://github.com/vosaocms/vosao
     
-
-2. Mailing lists
-================
-
-In plans.
-
-
-3. Development
+    
+3. Building 
 ==============
 
-To start development on Vosao CMS codebase you will need perform some steps:
+To start development on Vosao CMS you will need to :
 
-1. Download App Engine SDK for Java. 
-   http://code.google.com/appengine/downloads.html
+1. Retrieve 'vosaocms' project from GitHub Repository with Eclipse eGit plugin. 
+   Create a local repository named 'vosao'
 
-2. Unpack it in some directory.
+2. Configure "web/ant.properties" and "web/ant-macros" with your GAE SDK directory.
 
-3. Configure ant.properties with sdk directory.
+3. Install and configure Maven
 
-4. You will need Java SDK and maven.
-
-
+4. Launch 'build.bat'. The 'war' is created in "web/target" directory
 
 Have fun,
 
+  Emilio,
   Vosao development team
   
  

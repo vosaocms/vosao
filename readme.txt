@@ -51,19 +51,19 @@ New Vosao repository is on GitHub !
     https://github.com/vosaocms/vosao
     
     
-3. Building 
+4. Building 
 ==============
 
 To start development on Vosao CMS you will need to :
 
-1. Retrieve 'vosaocms' project from GitHub Repository with Eclipse eGit plugin. 
-   Create a local repository named 'vosao'
+	1) Retrieve 'vosaocms' project from GitHub Repository with Eclipse eGit plugin. 
+   	   Create a local repository named 'vosao'
 
-2. Configure "web/ant.properties" and "web/ant-macros" with your GAE SDK directory.
+	2) Configure "web/ant.properties" and "web/ant-macros" with your GAE SDK directory.
 
-3. Install and configure Maven
+	3) Install and configure Maven
 
-4. Launch 'build.bat'. The 'war' is created in "web/target" directory
+	4) Launch 'build.bat'. The 'war' is created in "web/target" directory
 
 Have fun,
 

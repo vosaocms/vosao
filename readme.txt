@@ -21,11 +21,11 @@ your site.
 	1) Download the latest Vosao version (vosaocms-x.y.z.war) from Vosao Google Drive.
 	   see : 
 	   
-	   https://drive.google.com/folderview?id=0B5kyNpiXIjiiV0lsa2ZRZHVFRjQ&usp=sharing
+		   https://drive.google.com/folderview?id=0B5kyNpiXIjiiV0lsa2ZRZHVFRjQ&usp=sharing
 	   
 	   Vosao Google Group : 
 	   
-	   https://groups.google.com/forum/#!forum/vosao-cms-development	
+		   https://groups.google.com/forum/#!forum/vosao-cms-development	
 		
 	2) Unpack vosaocms-x.y.z.war
 

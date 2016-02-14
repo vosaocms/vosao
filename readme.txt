@@ -18,8 +18,15 @@ your site.
 2. Installing Vosao CMS
 ==========================
 
-	1) Download the latest Vosao version (vosaocms-x.y.z.war)
-
+	1) Download the latest Vosao version (vosaocms-x.y.z.war) from Vosao Google Drive.
+	   see : 
+	   
+	   https://drive.google.com/folderview?id=0B5kyNpiXIjiiV0lsa2ZRZHVFRjQ&usp=sharing
+	   
+	   Vosao Google Group : 
+	   
+	   https://groups.google.com/forum/#!forum/vosao-cms-development	
+		
 	2) Unpack vosaocms-x.y.z.war
 
 	3) In the unpacked directory, find the file WEB-INF/appengine-web.xml and change 

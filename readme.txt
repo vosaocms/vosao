@@ -68,9 +68,16 @@ To start development on Vosao CMS you will need to :
 
 	2) Configure "web/ant.properties" and "web/ant-macros" with your GAE SDK directory.
 
-	3) Install and configure Maven
+	3) Install and configure Maven and Ant
 
 	4) Launch 'build.bat'. The 'war' is created in "web/target" directory
+
+
+4. Running locally
+====================
+
+	Launch web/run.bat 
+
 
 Have fun,
 

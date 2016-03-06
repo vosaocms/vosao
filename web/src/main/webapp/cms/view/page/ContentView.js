@@ -215,11 +215,13 @@ function(contentHtml, ctx, version, breadcrumbs) {
 
 	function saveContentByTimer() {
 		onPageUpdate(true, true);
+		console.log('Content saved by timer...');
 	}
 
 	function stopAutosave() {
 		if (autosaveTimer != '') {
 			clearInterval(autosaveTimer);
+			console.log('Autosave stopped.');
 			autosaveTimer = '';
 		}
 	}

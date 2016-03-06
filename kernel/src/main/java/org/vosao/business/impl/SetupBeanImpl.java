@@ -62,10 +62,14 @@ public class SetupBeanImpl implements SetupBean {
 	private static final String DEFAULT_SITE = "default.vz";
 	
 	private GroupEntity guests;
+		
+	public void init() {
+		log.info("init...");
+		initUsers();
+	}
 	
 	public void setup() {
 		log.info("setup...");
-		clearCache();
 		initGroups();
 		initUsers();
 		initTemplates();

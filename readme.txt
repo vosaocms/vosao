@@ -38,22 +38,22 @@ your site.
 3. Using Vosao CMS :
 ======================
 	
-	Your GAE application site is on http://<applicationname>.appspot.com
+	1) Go to your GAE application site is on http://<applicationname>.appspot.com
 	
-	The cms to create your site is at 
+	2) The cms to create your site is at 
 			http://<applicationname>.appspot.com/cms/ 
 														(with end /) 
 			
-	Please authenticate with user/pwd admin@test.com/admin
+	3) Please authenticate with user/pwd admin@test.com/admin
 	
-	To launch default site go to "Configuration" and click "Load default site" 
+	4) For first use, go to "Configuration" and click "Init" or "Load default site" button.
 	
-	Default site example : http://monvosao.appspot.com
+	   Default site example : http://monvosao.appspot.com
 
 3. Repository
 ================
 
-New Vosao repository is on GitHub !
+	New Vosao repository is on GitHub !
 
     https://github.com/vosaocms/vosao
     
@@ -70,14 +70,20 @@ To start development on Vosao CMS you will need to :
 
 	3) Install and configure Maven and Ant
 
-	4) Launch 'build.bat'. The 'war' is created in "web/target" directory
+	4) Launch 'build.bat'. The 'war' is created in "web/target" directory. 
+	   The former datastore in web/target/WEB-INF/appengine-generated is erased
 
 
 4. Running locally
 ====================
 
-	Launch web/run.bat 
+	1) Launch web/run.bat. If it doesn't exist yet, an empty datastore is created.
 
+	2) Go first to http://localhost:9000 to init default user (admin@test.com/admin)
+	
+	3) Login into http://localhost:9000/cms/
+	
+	4) Go to "Configuration" Panel and click to "Init" or "Load default Site" button
 
 Have fun,
 

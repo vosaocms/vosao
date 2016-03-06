@@ -41,14 +41,15 @@ import org.vosao.dao.cache.QueryCache;
 import org.vosao.entity.ConfigEntity;
 
 /**
- * Application initial database creation filter.
- * @author Alexander Oleynik
+ * Application initializing cms default user.
+ * @author Emilio Sanchez
  *
  */
 public class InitFilter extends AbstractFilter implements Filter {
     
     private static final Log logger = LogFactory.getLog(SiteFilter.class);
 
+    private static final String INIT_URL = "/init";
     
     public InitFilter() {
     	super();
@@ -56,7 +57,16 @@ public class InitFilter extends AbstractFilter implements Filter {
   
     public void doFilter(ServletRequest request, ServletResponse response, 
     		FilterChain chain) throws IOException, ServletException {
-        
+    	HttpServletRequest httpRequest = (HttpServletRequest)request;
+        HttpServletResponse httpResponse = (HttpServletResponse)response;
+        String url = httpRequest.getServletPath();
+        if (url.equals(INIT_URL)) {                      
+        	SetupBean setupBean = getBusiness().getSetupBean();
+        	setupBean.init();
+        	logger.info("Init was successfully completed.");
+        	httpResponse.sendRedirect("/cms/");
+        	return;
+        }
         
         chain.doFilter(request, response);
         

@@ -223,6 +223,9 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 
 	@Override
 	public ServiceResponse loadDefaultSite() {
+		getSetupBean().clear();
+		getSetupBean().clearFileCache();
+		getSetupBean().setup();  
 		getSetupBean().loadDefaultSite();
 		return ServiceResponse.createSuccessResponse(
 				Messages.get("success"));

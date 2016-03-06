@@ -31,13 +31,18 @@ public interface SetupBean {
 	
 	public static final String VERSION = "${vosao.version}";
 	public static final String FULLVERSION = "${vosao.version.full}";
-
+	
 	/**
-	 * Initial setup with default site.
+	 * setup with init user admin@test.com
+	 */
+	public void init(); 
+	
+	/**
+	 * setup with default site.
 	 */
 	void setup();
 	
-	/**
+		/**
 	 * Clear datastore before setup.
 	 */
 	void clear();
@@ -47,6 +52,9 @@ public interface SetupBean {
 	 */
 	void clearFileCache();
 	
+	/**
+	 * load starting site
+	 */
 	void loadDefaultSite();
 	
 }

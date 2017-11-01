@@ -638,6 +638,7 @@ function(contentHtml, ctx, version, breadcrumbs) {
 		remove: function() {
 			this.el.html('');
 		    $("#restore-dialog, #file-upload").dialog('destroy').remove();
+		    stopAutosave();
 		},
 		
 		setResource: function(path) {

@@ -2151,7 +2151,7 @@ var requirejs, require, define;
         //Indicate a the module is in process of loading.
         context.scriptCount += 1;
 
-        if (path.existsSync(url)) {
+        if (fs.existsSync(url)) {
             contents = fs.readFileSync(url, 'utf8');
 
             contents = req.makeNodeWrapper(contents);

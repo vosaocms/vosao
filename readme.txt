@@ -33,7 +33,7 @@ your site.
        the application name to your appspot application name
 
 	4) Upload the CMS application by issuing the GAE SDK command line:
-	   {SDK bin directory}\appcfg.cmd update <unpacked war directory>
+	   {SDK bin directory}\appcfg.cmd --oauth2 update <unpacked war directory>
 	
 3. Using Vosao CMS :
 ======================

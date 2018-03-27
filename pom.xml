@@ -38,13 +38,13 @@
             <timezone>+2</timezone>
         </developer>
         <developer>
-            <id>emilio</id>
-            <name>Emilio</name>
+            <id>Emile</id>
+            <name>Emile</name>
             <email>emilio24107@gmail.com</email>
             <roles>
                 <role>Java Developer</role>
             </roles>
-            <organization>jexposecvu.com</organization>
+            <organization>legoutdesexpos.com</organization>
             <timezone>+2</timezone>
         </developer>
     </developers>
@@ -63,28 +63,24 @@
     </pluginRepositories>
     
     <repositories>
+         <repository>
+             <id>central</id>
+             <name>Maven Central</name>
+             <url>http://repo1.maven.org/maven2/</url>
+         </repository>
         <repository>
-            <id>vosao-maven-repo</id>
-            <url>http://vosao.googlecode.com/svn/repository</url>
-        </repository>
-        <repository>
-            <id>mvnsearch</id>
-            <url>http://www.mvnsearch.org/maven2</url>
-        </repository>
-        <repository>
-            <id>datanucleus</id>
-            <url>http://www.datanucleus.org/downloads/maven2</url>
-        </repository>
-        <repository>
-            <id>info-bliki-repository</id>
-            <url>http://gwtwiki.googlecode.com/svn/maven-repository/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
+            <id>maven-repo</id>
+            <url>https://mvnrepository.com/artifact/</url>
+        </repository>          
+        <!-- local repository -->             
+	     <repository>
+	         <id>localrepo</id>
+	         <url>file://${basedir}/lib</url>
+	     </repository>             
+	      <repository>
+	         <id>samelocalrepo</id>
+	         <url>file://${basedir}/../lib</url>
+	     </repository> 
     </repositories>
     
     <modules>
@@ -120,10 +116,10 @@
     </reporting>
     
     <properties>
-      <gae.application.id>vosaocms</gae.application.id>
-      <gae.application.version>vosaocms-1-0-4</gae.application.version>
+      <gae.application.id>vuecritique</gae.application.id>
+      <gae.application.version>vuecritique-1-0-5</gae.application.version>
       <vosao.version>1.0</vosao.version>
-      <vosao.version.full>1.0.4</vosao.version.full>
+      <vosao.version.full>1.0.5</vosao.version.full>
       <vosao.admin.username>admin</vosao.admin.username>
       <vosao.admin.email>admin@test.com</vosao.admin.email>
       <vosao.admin.password>admin</vosao.admin.password>

@@ -30,7 +30,7 @@ import com.google.apphosting.api.ApiProxy;
 /**
  * project test environment
  */
-class TestEnvironment implements ApiProxy.Environment {
+abstract class TestEnvironment implements ApiProxy.Environment {
     /**
      * get GAE app id
      *

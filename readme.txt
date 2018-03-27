@@ -38,7 +38,7 @@ your site.
 3. Using Vosao CMS :
 ======================
 	
-	1) Go to your GAE application site is on http://<applicationname>.appspot.com
+	1) Go to your GAE application site which is on http://<applicationname>.appspot.com
 	
 	2) The cms to create your site is at 
 			http://<applicationname>.appspot.com/cms/ 
@@ -79,15 +79,15 @@ To start development on Vosao CMS you will need to :
 
 	1) Launch web/run.bat. If it doesn't exist yet, an empty datastore is created.
 
-	2) Go first to http://localhost:9000 to init default user (admin@test.com/admin)
+	2) Go first to http://localhost:8080 to init default user (admin@test.com/admin)
 	
-	3) Login into http://localhost:9000/cms/
+	3) Login into http://localhost:8080/cms/
 	
 	4) Go to "Configuration" Panel and click to "Init" or "Load default Site" button
 
 Have fun,
 
-  Emilio,
+  Emile Sanchez,
   Vosao development team
   
  

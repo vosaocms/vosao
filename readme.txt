@@ -85,7 +85,7 @@ To start development on Vosao CMS you will need to :
 	
 	4) Go to "Configuration" Panel and click to "Init" or "Load default Site" button
 
-Have fun,
+  Have fun,
 
   Emile Sanchez,
   Vosao development team

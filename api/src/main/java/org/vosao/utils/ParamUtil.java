@@ -26,7 +26,7 @@ import java.util.Date;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-import com.josephoconnell.html.HTMLInputFilter;
+
 
 /**
  * @author Alexander Oleynik
@@ -79,7 +79,6 @@ public class ParamUtil {
 		}
 	}
 
-	private static HTMLInputFilter xssFilter = new HTMLInputFilter();
 	
 	static public String filterXSS(String value) {
 		//return StringEscapeUtils.escapeHtml(xssFilter.filter(value));

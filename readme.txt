@@ -77,7 +77,7 @@ To start development on Vosao CMS you will need to :
 4. Running locally
 ====================
 
-	1) Launch web/run.bat. If it doesn't exist yet, an empty datastore is created.
+	1) Launch run.bat. If it doesn't exist yet, an empty datastore is created.
 
 	2) Go first to http://localhost:8080 to init default user (admin@test.com/admin)
 	

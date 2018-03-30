@@ -13,7 +13,10 @@ your site.
 
 	1) You must have a Google App Engine application : see https://cloud.google.com/appengine/
 
-	2) Download and install the GAE SDK for Java : see https://cloud.google.com/appengine/downloads
+	2) Download and unzip the GAE SDK for Java : see https://cloud.google.com/appengine/downloads
+	
+	3) Install a JRE 1.6 at least.
+	
 
 2. Installing Vosao CMS
 ==========================
@@ -63,21 +66,17 @@ your site.
 
 To start development on Vosao CMS you will need to :
 
-	1) Retrieve 'vosaocms' project from GitHub Repository with Eclipse eGit plugin. 
-   	   Create a local repository named 'vosao'
+	1) Install Git & retrieve 'vosaocms' project from this GitHub Repository. 
 
-	2) Configure "web/ant.properties" and "web/ant-macros" with your GAE SDK directory.
+	2) Install and configure Maven
 
-	3) Install and configure Maven and Ant
-
-	4) Launch 'build.bat'. The 'war' is created in "web/target" directory. 
-	   The former datastore in web/target/WEB-INF/appengine-generated is erased
+	3) Launch 'build.bat'. The 'war' is created in "web/target" directory. 
 
 
 4. Running locally
 ====================
 
-	1) Launch run.bat. If it doesn't exist yet, an empty datastore is created.
+	1) Launch 'run.bat'. If it doesn't exist yet, an empty datastore is created.
 
 	2) Go first to http://localhost:8080 to init default user (admin@test.com/admin)
 	

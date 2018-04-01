@@ -210,12 +210,6 @@
                 </configuration>
             </plugin>
         </plugins>
-        <resources>
-          <resource>
-            <directory>resources</directory>
-            <filtering>false</filtering>
-          </resource>
-        </resources>
     </build>
     
 </project>

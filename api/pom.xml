@@ -165,7 +165,7 @@
 
     <!-- Build Settings -->
     <build>
-        <sourceDirectory>src</sourceDirectory>
+        <sourceDirectory>target/filtered-sources</sourceDirectory>
         <testSourceDirectory>test</testSourceDirectory>
         <plugins>
             <plugin>
@@ -177,7 +177,15 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
-        </plugins>       
+        </plugins> 
+        <!-- replacing ${vosao.version} variables in java files  -->   
+        <resources>
+	        <resource>
+	          <directory>src</directory>
+	          <filtering>true</filtering>
+	          <targetPath>../filtered-sources</targetPath>
+	        </resource>
+      	</resources>      
     </build>
     
 </project>

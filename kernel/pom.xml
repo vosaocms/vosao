@@ -197,7 +197,7 @@
 
     <!-- Build Settings -->
     <build>
-        <sourceDirectory>src</sourceDirectory>
+        <sourceDirectory>target/filtered-sources</sourceDirectory>
         <testSourceDirectory>test</testSourceDirectory>
         <plugins>
             <plugin>
@@ -211,6 +211,12 @@
             </plugin>
         </plugins>
         <resources>
+        	<!-- replacing ${vosao.admin} variables in java files  -->  
+	        <resource>
+	            <directory>src</directory>
+	            <filtering>true</filtering>
+	            <targetPath>../filtered-sources</targetPath>
+	          </resource>
 	        <resource>
 	            <directory>src</directory>
 	            <includes>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="api/src/main/java"/>
-	<classpathentry kind="src" path="kernel/src/main/java"/>
-	<classpathentry kind="src" path="kernel/src/test/java"/>
-	<classpathentry kind="src" path="api/src/test/java"/>
+	<classpathentry kind="src" path="api/src"/>
+	<classpathentry kind="src" path="kernel/src"/>
+	<classpathentry kind="src" path="api/test"/>
+	<classpathentry kind="src" path="kernel/test"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="lib" path="web/target/vosaocms/WEB-INF/lib/activation-1.1.jar"/>
 	<classpathentry kind="lib" path="web/target/vosaocms/WEB-INF/lib/bliki-core-3.0.15.jar"/>

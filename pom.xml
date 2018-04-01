@@ -71,15 +71,13 @@
         <repository>
             <id>maven-repo</id>
             <url>https://mvnrepository.com/artifact/</url>
-        </repository>          
-                   
-
+        </repository>                             
     </repositories>
     
     <modules>
         <module>api</module>
         <module>kernel</module>
-        <!--module>web</module-->
+        <module>web</module>
     </modules>
     
     <reporting>

@@ -197,7 +197,8 @@
 
     <!-- Build Settings -->
     <build>
-        <sourceDirectory>target/filtered-sources/java</sourceDirectory>
+        <sourceDirectory>src</sourceDirectory>
+        <testSourceDirectory>test</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -211,12 +212,7 @@
         </plugins>
         <resources>
           <resource>
-            <directory>src/main/java</directory>
-            <filtering>true</filtering>
-            <targetPath>../filtered-sources/java</targetPath>
-          </resource>
-          <resource>
-            <directory>src/main/resources</directory>
+            <directory>resources</directory>
             <filtering>false</filtering>
           </resource>
         </resources>

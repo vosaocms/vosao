@@ -166,6 +166,7 @@ public class ConfigServiceImpl extends AbstractServiceImpl
 			
 		String filename = ExportTaskSubscriber.getExportFilename(exportType);
 		if (filename != null) {
+			// sends the asynchronous export message
 			getMessageQueue().publish(new ExportMessage.Builder()
 					.setFilename(filename)
 					.setExportType(exportType).create());

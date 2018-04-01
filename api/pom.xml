@@ -11,10 +11,16 @@
     <packaging>jar</packaging>
     <name>Vosao CMS java api</name>
     
+     <repositories>
+     	<!-- local repo for bliki  -->
+         <repository>
+	         <id>localrepo</id>
+	         <url>file://${basedir}/../local</url>
+	     </repository> 
+    </repositories>
+    
     <dependencies>
-        
         <!--unit test related dependencies-->
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -172,12 +178,12 @@
             </plugin>
         </plugins>
         <resources>
-        <resource>
-          <directory>src/main/java</directory>
-          <filtering>true</filtering>
-          <targetPath>../filtered-sources/java</targetPath>
-        </resource>
-      </resources>
+	        <resource>
+	          <directory>src/main/java</directory>
+	          <filtering>true</filtering>
+	          <targetPath>../filtered-sources/java</targetPath>
+	        </resource>
+      	</resources>
     </build>
     
 </project>

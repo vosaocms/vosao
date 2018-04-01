@@ -72,21 +72,14 @@
             <id>maven-repo</id>
             <url>https://mvnrepository.com/artifact/</url>
         </repository>          
-        <!-- local repository -->             
-	     <repository>
-	         <id>localrepo</id>
-	         <url>file://${basedir}/lib</url>
-	     </repository>             
-	      <repository>
-	         <id>samelocalrepo</id>
-	         <url>file://${basedir}/../lib</url>
-	     </repository> 
+                   
+
     </repositories>
     
     <modules>
         <module>api</module>
         <module>kernel</module>
-        <module>web</module>
+        <!--module>web</module-->
     </modules>
     
     <reporting>
@@ -106,8 +99,7 @@
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin
-                </artifactId>
+                <artifactId>cobertura-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>

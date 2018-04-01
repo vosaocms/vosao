@@ -11,6 +11,14 @@
     <packaging>jar</packaging>
     <name>Vosao CMS java kernel</name>
     
+    <repositories>
+        <!-- local repo for appengine-tools-api  -->          
+	      <repository>
+	         <id>localrepo</id>
+	         <url>file://${basedir}/../repo</url>
+	     </repository> 
+    </repositories>
+    
     <dependencies>
         <dependency>
             <groupId>org.vosao</groupId>

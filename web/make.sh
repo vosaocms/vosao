@@ -1,1 +1,0 @@
-mvn -Dappname=vosaocms package -o

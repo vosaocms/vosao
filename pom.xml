@@ -77,7 +77,7 @@
     <modules>
         <module>api</module>
         <module>kernel</module>
-        <!--module>web</module-->
+        <module>web</module>
     </modules>
     
     <reporting>

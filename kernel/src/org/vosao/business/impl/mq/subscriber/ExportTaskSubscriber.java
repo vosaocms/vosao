@@ -193,7 +193,7 @@ public class ExportTaskSubscriber extends AbstractSubscriber {
 		zip.setOutStream(out);
 		zip.setOutData(outData);
 		
-		/* si l'export existe dÈj‡ */
+		/*ES si l'export existe d√©j√† */
 		if (savedZip != null) {
 			
 			expLogger.info("savedZip != null");

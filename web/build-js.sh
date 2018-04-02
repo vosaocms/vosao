@@ -4,8 +4,8 @@ JS="../static/js"
 
 CM="$JS/codemirror"
 
-CMD="r.js -o name=main out=src/main/webapp/cms/main.min.js"\
-" baseUrl=./src/main/webapp/cms"\
+CMD="r.js -o name=main out=src/cms/main.min.js"\
+" baseUrl=./src/cms"\
 " excludeShallow=i18n,ckeditor,jquery-ui"\
 " paths.i18n=libs/i18n"\
 " paths.text=libs/text paths.order=libs/order"\

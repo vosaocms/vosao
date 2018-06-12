@@ -122,14 +122,14 @@ public class ResourceExporterImpl extends AbstractExporter
 				folder.getEntity().getId());
 		for (FileEntity file : files) {
 			String filePath = zipPath + file.getFilename();
-			if (!out.isSkip(filePath)) {
+			// skipping all ressources except from themes
+			if (!out.isSkip(filePath) && !filePath.startsWith("/theme")) {
 				out.putNextEntry(new ZipEntry(filePath));
-				// HERE
 				out.write(getDao().getFileDao().getFileContent(file));
 				out.closeEntry();
 				out.nextFile();
-			}
-		}
+			} 
+		} 
 	}
 
 	/**

@@ -85,9 +85,9 @@ public class ServiceServlet extends JSONRPCServlet {
             log.debug("jetty continuation resumed...");
         }
 
-        if (log.isDebugEnabled()) {
+  /*      if (log.isDebugEnabled()) {
             log.debug("receive: " + receiveString);
-        }
+        }*/
 
         // Process the request
         JSONObject json_req;
@@ -105,9 +105,9 @@ public class ServiceServlet extends JSONRPCServlet {
         String sendString = json_res.toString();
 
         // dump the received string
-        if (log.isDebugEnabled()) {
+ /*       if (log.isDebugEnabled()) {
             log.debug("send: " + sendString);
-        }
+        } */
 
         // Write the response
         byte[] bout = sendString.getBytes("UTF-8");

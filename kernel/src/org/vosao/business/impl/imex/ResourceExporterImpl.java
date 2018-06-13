@@ -41,6 +41,7 @@ import org.vosao.business.imex.PageExporter;
 import org.vosao.business.imex.ResourceExporter;
 import org.vosao.business.imex.task.TaskTimeoutException;
 import org.vosao.business.imex.task.ZipOutStreamTaskAdapter;
+import org.vosao.business.impl.mq.subscriber.ExportTaskSubscriber;
 import org.vosao.dao.DaoTaskException;
 import org.vosao.entity.FileEntity;
 import org.vosao.entity.FolderEntity;
@@ -122,13 +123,20 @@ public class ResourceExporterImpl extends AbstractExporter
 				folder.getEntity().getId());
 		for (FileEntity file : files) {
 			String filePath = zipPath + file.getFilename();
-			// skipping all ressources except from themes
-			if (!out.isSkip(filePath) && !filePath.startsWith("/theme")) {
-				// trace
-				out.putNextEntry(new ZipEntry(filePath));
-				out.write(getDao().getFileDao().getFileContent(file));
-				out.closeEntry();
-				out.nextFile();
+			logger.info("filePath =" + filePath);
+			
+			if (!out.isSkip(filePath)) {
+				// skipping all ressources in FULL export except from themes 
+				if (!out.getExportType().equals(ExportTaskSubscriber.TYPE_PARAM_FULL) || 
+					filePath.contains("theme")) 
+				{
+					logger.info("filePath =" + filePath);
+					out.putNextEntry(new ZipEntry(filePath));
+					out.write(getDao().getFileDao().getFileContent(file));
+					out.closeEntry();
+					out.nextFile();
+				
+				}
 			} 
 		} 
 	}

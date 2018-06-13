@@ -90,6 +90,7 @@ public class ExportTaskSubscriber extends AbstractSubscriber {
 			
 			// null
 			zipOutStreamTaskAdapter.setStartFile(msg.getCurrentFile());
+			zipOutStreamTaskAdapter.setExportType(msg.getExportType());
 			
 			/* 
 			 * Full export 

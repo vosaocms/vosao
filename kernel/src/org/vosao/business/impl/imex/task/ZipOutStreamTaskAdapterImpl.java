@@ -45,6 +45,7 @@ public class ZipOutStreamTaskAdapterImpl implements ZipOutStreamTaskAdapter {
 	private ZipOutputStream outStream;
 	private String startFile;
 	private String currentFile;
+	private String exportType;
 	private boolean started;
 	private boolean entryOpen;
 	private int fileCounter;
@@ -85,7 +86,18 @@ public class ZipOutStreamTaskAdapterImpl implements ZipOutStreamTaskAdapter {
 			started = true;
 		}
 	}
-
+	
+	@Override
+	public String getExportType() {
+		return exportType;
+	}
+	
+	@Override
+	public void setExportType(String exportType) {
+		this.exportType = exportType;
+	}
+	
+	
 	@Override
 	public String getCurrentFile() {
 		return currentFile;

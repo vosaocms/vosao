@@ -36,6 +36,10 @@ public interface ZipOutStreamTaskAdapter {
 	String getStartFile();
 
 	void setStartFile(String startFile);
+	
+	void setExportType(String exportType);
+	
+	String getExportType();
 
 	String getCurrentFile();
 

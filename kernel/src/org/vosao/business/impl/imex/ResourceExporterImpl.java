@@ -124,6 +124,7 @@ public class ResourceExporterImpl extends AbstractExporter
 			String filePath = zipPath + file.getFilename();
 			// skipping all ressources except from themes
 			if (!out.isSkip(filePath) && !filePath.startsWith("/theme")) {
+				// trace
 				out.putNextEntry(new ZipEntry(filePath));
 				out.write(getDao().getFileDao().getFileContent(file));
 				out.closeEntry();

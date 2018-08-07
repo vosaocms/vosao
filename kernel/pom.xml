@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.vosao</groupId>
         <artifactId>vosaocms</artifactId>
-        <version>1.0</version>
+        <version>1.1</version>
     </parent>    
     <artifactId>vosao-kernel</artifactId>
     <packaging>jar</packaging>
@@ -15,7 +15,7 @@
         <!-- local repo for appengine-tools-api  -->          
 	      <repository>
 	         <id>localrepo</id>
-	         <url>file://${basedir}/../repo</url>
+	         <url>file://${basedir}/../local</url>
 	     </repository> 
     </repositories>
     
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>org.vosao</groupId>
             <artifactId>vosao-api</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
         </dependency>
 
         <!--unit test related dependencies-->

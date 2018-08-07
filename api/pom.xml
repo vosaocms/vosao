@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.vosao</groupId>
         <artifactId>vosaocms</artifactId>
-        <version>1.1</version>
+        <version>1.2</version>
     </parent>    
     <artifactId>vosao-api</artifactId>
     <packaging>jar</packaging>
@@ -47,7 +47,7 @@
         <dependency>
     		<groupId>com.google.appengine</groupId>
     		<artifactId>appengine-api-1.0-sdk</artifactId>
-    		<version>1.8.1</version>
+    		<version>1.9.64</version>
 		</dependency>
                 
         <!-- Apache commons -->
@@ -173,8 +173,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.5.1</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins> 

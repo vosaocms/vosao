@@ -4,7 +4,7 @@
 	<classpathentry kind="src" path="kernel/src"/>
 	<classpathentry kind="src" path="api/test"/>
 	<classpathentry kind="src" path="kernel/test"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
@@ -30,9 +30,8 @@
 	<classpathentry kind="lib" path="web/target/vosaocms/WEB-INF/lib/velocity-1.6.3.jar"/>
 	<classpathentry kind="lib" path="web/target/vosaocms/WEB-INF/lib/velocity-tools-2.0.jar"/>
 	<classpathentry kind="lib" path="web/target/vosaocms/WEB-INF/lib/xml-apis-1.0.b2.jar"/>
-	<classpathentry kind="lib" path="web/target/vosaocms/WEB-INF/lib/appengine-api-1.0-sdk-1.8.1.jar"/>
-	<classpathentry kind="lib" path="web/target/vosaocms/WEB-INF/lib/appengine-tools-api-1.8.1.jar"/>
-	<classpathentry kind="lib" path="web/target/vosaocms/WEB-INF/lib/appengine-local-runtime-shared-1.9.63.jar"/>
+	<classpathentry kind="lib" path="web/target/vosaocms/WEB-INF/lib/appengine-api-1.0-sdk-1.9.64.jar"/>
+	<classpathentry kind="lib" path="web/target/vosaocms/WEB-INF/lib/appengine-local-runtime-shared-1.9.64.jar"/>
 	<classpathentry kind="lib" path="web/target/vosaocms/WEB-INF/lib/servlet-api-2.5-6.1.6.jar"/>
 	<classpathentry kind="lib" path="web/target/vosaocms/WEB-INF/lib/ant-1.6.5.jar"/>
 	<classpathentry kind="lib" path="web/target/vosaocms/WEB-INF/lib/antlr-2.7.2.jar"/>

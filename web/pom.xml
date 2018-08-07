@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.vosao</groupId>
 		<artifactId>vosaocms</artifactId>
-		<version>1.0</version>
+		<version>1.1</version>
 	</parent>
 	<artifactId>vosao-web</artifactId>
 	<packaging>war</packaging>
@@ -18,7 +18,7 @@
         <dependency>
             <groupId>org.vosao</groupId>
             <artifactId>vosao-kernel</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
             <type>jar</type>
         </dependency>
         

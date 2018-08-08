@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.vosao</groupId>
     <artifactId>vosaocms</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
     <packaging>pom</packaging>   
     <name>Vosao CMS</name>
     <url>http://www.vosao.org</url>
@@ -89,7 +89,7 @@
                 <configuration>
                     <linkXref>true</linkXref>
                     <sourceEncoding>utf-8</sourceEncoding>
-                    <targetJdk>1.6</targetJdk>
+                    <targetJdk>1.8</targetJdk>
                 </configuration>
             </plugin>
             <!-- generates jxr reports code analysis -->
@@ -110,9 +110,9 @@
     
     <properties>
       <gae.application.id>vuecritique</gae.application.id>
-      <gae.application.version>vuecritique-1-1-0</gae.application.version>
-      <vosao.version>1.1</vosao.version>
-      <vosao.version.full>1.1.0</vosao.version.full>
+      <gae.application.version>vuecritique-1-2-0</gae.application.version>
+      <vosao.version>1.2</vosao.version>
+      <vosao.version.full>1.2.0</vosao.version.full>
       <vosao.admin.username>admin</vosao.admin.username>
       <vosao.admin.email>admin@test.com</vosao.admin.email>
       <vosao.admin.password>admin</vosao.admin.password>

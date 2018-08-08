@@ -13,9 +13,9 @@ your site.
 
 	1) You must have a Google App Engine application : see https://cloud.google.com/appengine/
 
-	2) Download and unzip the GAE SDK for Java : see https://cloud.google.com/appengine/downloads
+	2) Download and install the latest GAE SDK for Java : see https://cloud.google.com/appengine/downloads
 	
-	3) Install a JRE 1.6 at least.
+	3) Install a JRE 1.8 at least.
 	
 
 2. Installing Vosao CMS
@@ -36,7 +36,7 @@ your site.
        the application name to your appspot application name
 
 	4) Upload the CMS application by issuing the GAE SDK command line:
-	   {SDK bin directory}\appcfg.cmd --oauth2 update <unpacked war directory>
+	   appcfg.cmd --oauth2 update <unpacked war directory>
 	
 3. Using Vosao CMS :
 ======================

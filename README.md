@@ -40,7 +40,8 @@ A default site example is at http://monvosao.appspot.com
 
 5 - When logging out, you are redirected to the default site home page.
 
-###Building
+### Building
+
 To start development on Vosao CMS you will need to :
 
 1 - Install Git & retrieve "vosaocms" project from this GitHub Repository.
@@ -49,7 +50,7 @@ To start development on Vosao CMS you will need to :
 
 3 - Launch __build.bat__. The war is created in "web/target" directory. 
 
-###Running locally
+### Running locally
 
 1 - Launch __run.bat__. An empty datastore is created, if it doesnt already exist.
 

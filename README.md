@@ -8,9 +8,7 @@ Vosao is animated through a Google Group at :
 
 https://groups.google.com/forum/#!forum/vosao-cms-development
 
-A default site example is at http://monvosao.appspot.com and the cms is at http://monvosao.appspot.com/cms/ (ending slash is important!)
-
-Feel free to authenticate and test the rendering with those credentials : "admin@test.com" / "admin".
+A default site example is at http://monvosao.appspot.com and the cms is at http://monvosao.appspot.com/cms/ (ending slash is important!). Feel free to authenticate and test the rendering with those credentials : "admin@test.com" / "admin".
 
 ### Prerequisites
 

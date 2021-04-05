@@ -74,6 +74,29 @@
         </repository>                             
     </repositories>
     
+    <dependencyManagement>
+		<dependencies>
+		  <dependency>
+			<groupId>com.google.cloud</groupId>
+			<artifactId>libraries-bom</artifactId>
+			<version>19.2.1</version>
+			<type>pom</type>
+			<scope>import</scope>
+		   </dependency>
+		 </dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+		<groupId>com.google.cloud</groupId>
+		  <artifactId>google-cloud-storage</artifactId>
+		</dependency>
+		<dependency>
+		  <groupId>com.google.guava</groupId>
+		  <artifactId>guava</artifactId>
+		</dependency>
+	 </dependencies>
+  
     <modules>
         <module>api</module>
         <module>kernel</module>

@@ -3,7 +3,7 @@
   <cron>
     <url>/_ah/cron/plugin</url>
     <description>Plugin cron job scheduler</description>
-    <schedule>every 1 hours</schedule>
+    <schedule>every 1 minutes</schedule>
   </cron>
   <cron>
     <url>/_ah/cron/page_publish</url>

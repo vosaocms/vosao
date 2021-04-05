@@ -60,6 +60,6 @@
 	<classpathentry kind="lib" path="web/target/vosaocms/WEB-INF/lib/struts-taglib-1.3.8.jar"/>
 	<classpathentry kind="lib" path="web/target/vosaocms/WEB-INF/lib/struts-tiles-1.3.8.jar"/>
 	<classpathentry kind="lib" path="web/target/vosaocms/WEB-INF/lib/xpp3-1.1.4c.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Emilio/Documents/Emilio/informatique/appengine-java-sdk-1.8.1/lib/testing/appengine-testing.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Emilio/Documents/Emilio/Loisirs/Informatique/appengine-java-sdk-1.9.64/lib/testing/appengine-testing.jar"/>
 	<classpathentry kind="output" path="web/target/vosaocms/WEB-INF/classes"/>
 </classpath>

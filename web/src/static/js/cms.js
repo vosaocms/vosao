@@ -134,43 +134,26 @@ Vosao.removeCSSFiles = function(cssFiles) {
 	});
 }
 
-// GAE Channel API channel for current page.
-// page should include <script type="text/javascript" src="/_ah/channel/jsapi"></script>
-// before vosao.js
-
-Vosao.clientId = Vosao.generateGUID();
-
-Vosao.channel = null;
-
-Vosao.socket = null;
-
-/**
- * Page Channel API initialization.
- */
-Vosao.initChannel = function(onOpened, onMessage, onError, onClose) {
-	Vosao.jsonrpc.channelApiFrontService.createToken(function(r) {
-		Vosao.channel = new goog.appengine.Channel(r);
-	    socket = Vosao.channel.open();
-	    socket.onopen = onOpened;
-	    socket.onmessage = onMessage;
-	    socket.onerror = onError;
-	    socket.onclose = onClose;
-	    Vosao.socket = socket;
-	}, Vosao.clientId);
-};
-
-Vosao.sendChannelCommand = function(cmd, paramsObj) {
-	var params = '&clientId=' + Vosao.clientId;
-	$.each(paramsObj, function(k, v){
-		params += '&' + k + '=' + v;
-	});
-	var xhr = new XMLHttpRequest();
-	xhr.open('POST', '/_ah/channelCommand?cmd=' + cmd + params, true);
-	xhr.send();
-};
-
 Vosao.changeLanguageCall = function(lang) {
 	Vosao.jsonrpc.loginFrontService.setLanguage(function(r) {
 		location.reload();
 	}, lang);
 };
+
+/**
+ * @deprecated Used by PageSearchComponent.js
+ * Page Channel API initialization.
+ * But goog.appengine.Channel(r) no longer exists as jsapi 
+ * ChannelApiFrontService should be removed on server side
+ */
+Vosao.initChannel = function(onOpened, onMessage, onError, onClose) {	
+};
+
+/**
+ * Used by PageSearchComponent.js
+ * @deprecated
+ */
+Vosao.sendChannelCommand = function(cmd, paramsObj) {
+	
+};
+

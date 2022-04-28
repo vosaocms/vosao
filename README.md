@@ -30,7 +30,7 @@ Feel free to authenticate and test the rendering with those credentials : "admin
 
 4 - Upload the CMS application by issuing the GAE SDK command line: 
 
-	appcfg.cmd --oauth2 update 'unpacked war directory'
+	gcloud app deploy WEB-INF/appengine-web.xml
 
 ### Using Vosao
 

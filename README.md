@@ -22,7 +22,7 @@ Feel free to authenticate and test the rendering with those credentials : "admin
 
 ### Installing Vosao
 
-1 - Download the latest Vosao version (vosaocms-1.x.y.war) from Vosao Google Drive. See : https://drive.google.com/folderviewid=0B5kyNpiXIjiiV0lsa2ZRZHVFRjQ&usp=sharing
+1 - Download the latest Vosao version (vosaocms-1.x.y.war) from Vosao Google Drive. See : https://drive.google.com/drive/folders/0B5kyNpiXIjiiV0lsa2ZRZHVFRjQ?resourcekey=0-Ac3G4UiCRVW2ik4g76RptQ
 
 2 - Unpack vosaocms-1.x.y.war
 

@@ -1,0 +1,11 @@
+cron:
+- description: "Plugin cron job scheduler"
+  url: /_ah/cron/plugin
+  schedule: every 24 hours
+- description: "Page cache reset for freshly published pages"
+  url: /_ah/cron/page_publish
+  schedule: every 1 hours
+  target: pub
+- description: "Clean up sessions"
+  url: /_ah/sessioncleanup?clear
+  schedule: every 24 hours

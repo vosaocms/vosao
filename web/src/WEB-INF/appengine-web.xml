@@ -18,5 +18,9 @@
 	<threadsafe>true</threadsafe>
 	<warmup-requests-enabled>true</warmup-requests-enabled>
     <precompilation-enabled>true</precompilation-enabled>
-   
+   	<sessions-enabled>true</sessions-enabled>
+   	<automatic-scaling>
+		<min-instances>1</min-instances>
+		<max-instances>1</max-instances>
+	</automatic-scaling>
 </appengine-web-app>
